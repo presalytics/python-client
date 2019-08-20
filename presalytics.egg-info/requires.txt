@@ -1,0 +1,6 @@
+urllib3>=1.15
+six>=1.10
+certifi
+python-dateutil
+presalytics_doc_converter
+presalytics_ooxml_automation

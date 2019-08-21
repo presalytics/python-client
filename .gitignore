@@ -418,3 +418,8 @@ venv/
 
 # Temp files
 tmp/
+
+# Python build files
+build/
+dist/
+.egg-info

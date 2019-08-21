@@ -10,7 +10,7 @@
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "presalytics"
-VERSION = "0.1.0"
+VERSION = "0.1.2"
 
 # To install the library, run the following
 #
@@ -23,6 +23,9 @@ REQUIRES = ["urllib3 >= 1.15",
     "six >= 1.10", 
     "certifi", 
     "python-dateutil",
+    "flask",
+    "requests",
+    "python-keycloak",
     "presalytics_doc_converter",
     "presalytics_ooxml_automation"]
 

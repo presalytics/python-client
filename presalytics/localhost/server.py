@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, jsonify
 import presalytics.client.auth
 
+
 app = Flask(__name__)
 
 @app.route('/auth', methods=['GET'])
@@ -12,7 +13,7 @@ def auth():
 def code():    
     if request.method == 'POST':
         data = request.json
-        q.put(data)
+        presalytics.client.auth.put_data_in_queue(data)
         resp = jsonify(success=True)
         return resp
 

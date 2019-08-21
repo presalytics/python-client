@@ -1,10 +1,11 @@
-import requests, os, webbrowser, json
+import requests, os, webbrowser, json, logging
 import importlib.util
 from queue import Queue
 from threading import Thread
 from datetime import datetime, timedelta
 from dateutil import parser as dateparser
 from keycloak.keycloak_openid import KeycloakOpenID
+from keycloak.exceptions import KeycloakGetError
 from presalytics.localhost.server import app
 from presalytics.lib.exceptions import MissingConfigException, MisConfiguredTokenException, InvalidTokenException
 from presalytics.lib.constants import (
@@ -22,8 +23,13 @@ from presalytics.lib.constants import (
     LOCALHOST_PORT
 )
 
+logger = logging.getLogger(__name__)
 
 q = Queue()
+
+def put_data_in_queue(data):
+    global q
+    q.put(data)
 
 class FlaskThread(Thread):
     def __init__(self, *args, **kwargs):
@@ -58,22 +64,41 @@ class TokenUtil(object):
                 raise MisConfiguredTokenException
         
     def is_api_access_token_expired(self):
-        expire_datetime = dateparser.parse(self.token['access_token_expire_time'])
-        if expire_datetime < datetime.now():
+        try:
+            expire_datetime = dateparser.parse(self.token['access_token_expire_time'])
+            if expire_datetime < datetime.now():
+                return True
+            return False
+        except:
             return True
-        return False
 
     def is_api_refresh_token_expired(self):
-        expire_datetime = dateparser.parse(self.token['refresh_token_expire_time'])
-        if expire_datetime < datetime.now():
+        try:
+            expire_datetime = dateparser.parse(self.token['refresh_token_expire_time'])
+            if expire_datetime < datetime.now():
+                return True
+            return False
+        except:
             return True
-        return False
  
     def _load_token_file(self):
         self.token = self.load_token_from_file(self.token_file)
 
     def _put_token_file(self):
         self.put_token_file(self.token, self.token_file)
+
+    def process_keycloak_token(self, keycloak_token):
+        access_token_expire_time = datetime.now() + timedelta(seconds=keycloak_token['expires_in'])
+        refresh_token_expire_time = datetime.now() + timedelta(seconds=keycloak_token['refresh_expires_in'])
+        
+        self.token = {
+            'access_token': keycloak_token['access_token'],
+            'refresh_token': keycloak_token['refresh_token'],
+            'access_token_expire_time': access_token_expire_time.isoformat(),
+            'refresh_token_expire_time': refresh_token_expire_time.isoformat()
+        }
+
+        return self.token
 
     @staticmethod
     def put_token_file(token, token_filepath):
@@ -87,7 +112,7 @@ class TokenUtil(object):
         return token
  
 class AuthenticationMixIn(object):
-    def __init__(self, config_file=None, *args, **kwargs):
+    def __init__(self, config_file=None, **kwargs):
         if config_file is None:
             config_file = os.getcwd() + os.path.sep + "config.py"
         if not os.path.exists(config_file):
@@ -95,44 +120,53 @@ class AuthenticationMixIn(object):
         config_spec = importlib.util.spec_from_file_location("config", config_file)
         config = importlib.util.module_from_spec(config_spec)
         config_spec.loader.exec_module(config)
-        if config.PRESALYTICS['PASSWORD'] is None:
-            self.direct_grant = False
-            self.password = None
-        else:
-            self.direct_grant = True
+        try:
+            self.username = config.PRESALYTICS['USERNAME']
+        except KeyError:
+            raise MissingConfigException("Mandatory configuration variable PRESALYTICS_USERNAME is missing from environment variables.  Please reconfigure and retry.")
+        try:
             self.password = config.PRESALYTICS['PASSWORD']
-        if config.PRESALYTICS['CLIENT_ID'] is None:
+            self.direct_grant = True
+        except KeyError:
+            self.password = None
+            self.direct_grant = True
+        try:
+            self.client_id = config.PRESALYTICS['CLIENT_ID']
+        except KeyError:
             self.client_id = DEFAULT_CLIENT_ID
-        else:
-            self.client_id = config.PRESALTYICS['CLIENT_ID']
+
         self.oidc = KeycloakOpenID(
             server_url=OIDC_AUTH_HOST,
             realm_name=OIDC_REALM,
             client_id=self.client_id,
-            verify=False
+            verify=True
         )
-        self.token_util = TokenUtil(TOKEN_FILE)
+        self.token_util = TokenUtil()
         self.token_util.token = self.refresh_token()
         self.server_thread = FlaskThread()
 
-        super(AuthenticationMixIn, self).__init__(*args, **kwargs)
+        super(AuthenticationMixIn, self).__init__(**kwargs)
 
 
     def login(self):
         if self.direct_grant:
-            if config_file is None:
-                config_file = os.getcwd() + os.path.sep + "config.py"
-            if not os.path.exists(config_file):
-                raise MissingConfigException
-            config_spec = importlib.util.spec_from_file_location("config", config_file)
-            config = importlib.util.module_from_spec(config_spec)
-            config_spec.loader.exec_module(config)
-            self.password = config.PRESALYTICS['PASSWORD']
-            token = self.oidc.token(username=self.username, password=self.password)
+            try:
+                keycloak_token = self.oidc.token(username=self.username, password=self.password)
+                self.token_util.process_keycloak_token(keycloak_token)
+            except KeycloakGetError as e:
+                if e.response_code == 404:
+                    logger.error("Received reponse code 404 from api authentication.  Indicates username does not exist.  Please recheck config and try again.")
+                elif e.response_code == 401:
+                    logger.error("Received 401 response code from api authentication.  This user's access to this resource is unauthorized")
+                elif e.response_code >= 500:
+                    logger.error("Server error.  Please try again later.")
+                else:
+                    logger.error(e.error_message)
+                raise MissingConfigException(e.error_message)
         else:
             url = self.oidc.auth_url(REDIRECT_URI)
             token = self._get_new_token_browser(url)
-        return token
+        return self.token_util.token
 
     def _get_new_token_browser(self, url):
         self.server_thread.start()
@@ -153,7 +187,7 @@ class AuthenticationMixIn(object):
     def refresh_token(self):
         if self.token_util.is_api_access_token_expired():
             if self.token_util.is_api_refresh_token_expired():
-                self.token_util.token = self.login()
+                self.login()
             else:
                 refresh_token = self.token_util.token["refresh_token"]
                 self.token_util.token = self.oidc.refresh_token(refresh_token)

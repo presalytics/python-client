@@ -423,3 +423,7 @@ tmp/
 build/
 dist/
 .egg-info
+
+# app specific files
+token.json
+presalytics.log

@@ -125,7 +125,7 @@ class AuthenticationMixIn(object):
         try:
             self.username = self.auth_config.PRESALYTICS['USERNAME']
         except KeyError:
-            raise MissingConfigException("Mandatory configuration variable PRESALYTICS_USERNAME is missing from environment variables.  Please reconfigure and retry.")
+            raise MissingConfigException("Mandatory configuration variable PRESALYTICS_USERNAME is missing from configuration.  Please reconfigure and retry.")
         try:
             self.password = self.auth_config.PRESALYTICS['PASSWORD']
             self.direct_grant = True

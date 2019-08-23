@@ -1,20 +1,29 @@
 #!/bin/bash
 
-# Script requires a quoted commit message as an argument
+# Script requires a version number as first argument and a quoted commit message as 2nd argument
 
 if [ -z "$1" ]
   then
-    echo "No argument supplied"
+    echo "No version number argument supplied"
     exit 2
 fi
+
+if [ -z "$2" ]
+  then
+    echo "No commit message argument supplied"
+    exit 2
+fi
+
 
 source ./../.env
 
 set -exv
 
 rm -r -f build dist presalytics.egg-info presalytics.log token.json
-git add .
-git commit -m "$1"
+EXPRESSION='s/VERSION = "[0-9]+\.[0-9]+\.[0-9]+"/VERSION = "'$1'"/g'
+sed -i -r "$EXPRESSION" setup.py
+git add -u
+git commit -m "$2"
 python3 setup.py sdist bdist_wheel
 twine upload dist/*
 git push origin master

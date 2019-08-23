@@ -14,7 +14,7 @@ if [ -z "$2" ]
     exit 2
 fi
 
-
+# incorporate env file from parent directory
 source ./../.env
 
 set -exv
@@ -26,6 +26,6 @@ git add -u
 git commit -m "$2"
 python3 setup.py sdist bdist_wheel
 twine upload dist/*
-rm -r -f build dist presalytics.egg-info presalytics.log token.json
+rm -r -f build dist presalytics.egg-info
 git push origin master
 

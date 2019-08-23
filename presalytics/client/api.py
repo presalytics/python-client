@@ -1,27 +1,19 @@
-import pkg_resources
 import presalytics_doc_converter
 import presalytics_ooxml_automation
 from .auth import AuthenticationMixIn
-
-def get_user_agent():
-    try:
-        VER = pkg_resources.require("presalytics")[0].version
-    except:
-        VER = 'build'
-    return "presalytics-python-client/{0}".format(VER)
 
 
 class DocConverterApiClientWithAuth(AuthenticationMixIn, presalytics_doc_converter.api_client.ApiClient):
     def __init__(self, config_file=None, **kwargs):
         AuthenticationMixIn.__init__(self, config_file=config_file)
         presalytics_doc_converter.api_client.ApiClient.__init__(self, **kwargs)
-        self.user_agent = get_user_agent()
+        self.update_configuration()
 
 class OoxmlAutomationApiClientWithAuth(AuthenticationMixIn, presalytics_ooxml_automation.api_client.ApiClient):
     def __init__(self, config_file=None, **kwargs):
         AuthenticationMixIn.__init__(self, config_file=config_file)
         presalytics_ooxml_automation.api_client.ApiClient.__init__(self, **kwargs)
-        self.user_agent = get_user_agent()
+        self.update_configuration()
 
 
 class Client(object):

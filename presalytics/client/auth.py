@@ -1,4 +1,4 @@
-import requests, os, webbrowser, json, logging
+import requests, os, webbrowser, json, logging, pkg_resources
 import importlib.util
 from queue import Queue
 from threading import Thread
@@ -116,22 +116,24 @@ class AuthenticationMixIn(object):
         if config_file is None:
             config_file = os.getcwd() + os.path.sep + "config.py"
         if not os.path.exists(config_file):
-            raise MissingConfigException
+            config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.py')
+            if not os.path.exists(config_file):
+                raise MissingConfigException
         config_spec = importlib.util.spec_from_file_location("config", config_file)
-        config = importlib.util.module_from_spec(config_spec)
-        config_spec.loader.exec_module(config)
+        self.auth_config = importlib.util.module_from_spec(config_spec)
+        config_spec.loader.exec_module(self.auth_config)
         try:
-            self.username = config.PRESALYTICS['USERNAME']
+            self.username = self.auth_config.PRESALYTICS['USERNAME']
         except KeyError:
             raise MissingConfigException("Mandatory configuration variable PRESALYTICS_USERNAME is missing from environment variables.  Please reconfigure and retry.")
         try:
-            self.password = config.PRESALYTICS['PASSWORD']
+            self.password = self.auth_config.PRESALYTICS['PASSWORD']
             self.direct_grant = True
         except KeyError:
             self.password = None
             self.direct_grant = True
         try:
-            self.client_id = config.PRESALYTICS['CLIENT_ID']
+            self.client_id = self.auth_config.PRESALYTICS['CLIENT_ID']
         except KeyError:
             self.client_id = DEFAULT_CLIENT_ID
 
@@ -149,23 +151,23 @@ class AuthenticationMixIn(object):
 
 
     def login(self):
-        if self.direct_grant:
-            try:
+        try:
+            if self.direct_grant:
                 keycloak_token = self.oidc.token(username=self.username, password=self.password)
-                self.token_util.process_keycloak_token(keycloak_token)
-            except KeycloakGetError as e:
-                if e.response_code == 404:
-                    logger.error("Received reponse code 404 from api authentication.  Indicates username does not exist.  Please recheck config and try again.")
-                elif e.response_code == 401:
-                    logger.error("Received 401 response code from api authentication.  This user's access to this resource is unauthorized")
-                elif e.response_code >= 500:
-                    logger.error("Server error.  Please try again later.")
-                else:
-                    logger.error(e.error_message)
-                raise MissingConfigException(e.error_message)
-        else:
-            url = self.oidc.auth_url(REDIRECT_URI)
-            token = self._get_new_token_browser(url)
+            else:
+                url = self.oidc.auth_url(REDIRECT_URI)
+                keycloak_token = self._get_new_token_browser(url)
+        except KeycloakGetError as e:
+            if e.response_code == 404:
+                logger.error("Received reponse code 404 from api authentication.  Indicates username does not exist.  Please recheck config and try again.")
+            elif e.response_code == 401:
+                logger.error("Received 401 response code from api authentication.  This user's access to this resource is unauthorized")
+            elif e.response_code >= 500:
+                logger.error("Server error.  Please try again later.")
+            else:
+                logger.error(e.error_message)
+            raise MissingConfigException(e.error_message)
+        self.token_util.process_keycloak_token(keycloak_token) 
         return self.token_util.token
 
     def _get_new_token_browser(self, url):
@@ -210,7 +212,7 @@ class AuthenticationMixIn(object):
                  _preload_content=True, _request_timeout=None, _host=None):
         """
         Overriding call_api to force token check, refresh on each api call, 
-        rather than at class initialized (good the ipython notebooks)
+        rather than at class initialized (good for ipython notebooks)
         """
 
         auth_header = self.get_auth_header()
@@ -222,6 +224,45 @@ class AuthenticationMixIn(object):
             query_params, header_params, body, post_params, files, response_type,
             auth_settings, async_req, _return_http_data_only, collection_formats, _preload_content,
             _request_timeout, _host)
+
+    def update_configuration(self):
+        """
+        updates the configuration from the base api client to parameters contained in the config file.
+        base api client must be initialized prior to calling this method (i.e., self.configuration cannot equal None),
+        so that configuration can automatically inherit default values.
+        Mostly used for debugging purposes, but self-hosted API endpoints may require injection of these parameters
+        """
+        if self.configuration is None:
+            raise MissingConfigException("Base API not yet configured, please reconstruct API initialization")
+        self.user_agent = AuthenticationMixIn._get_user_agent
+        if bool(self.auth_config.PRESALYTICS['HOSTS']):
+            self.set_host(self.auth_config.PRESALYTICS['HOSTS'])
+
+    
+    @staticmethod
+    def get_user_agent():
+        try:
+            VER = pkg_resources.require("presalytics")[0].version
+        except:
+            VER = 'build'
+        return "presalytics-python-client/{0}".format(VER)
+
+    _get_user_agent = get_user_agent.__func__()
+
+
+    def set_host(self, hosts_dict):
+        for parent_cls in self.__class__.__bases__:
+            module_name = parent_cls.__module__.split('.')[0]
+            if module_name != 'presalytics':
+                host_key = module_name.replace('presalytics_', '').upper()
+                try:
+                    self.configuration.host = hosts_dict[host_key]
+                    break
+                except KeyError:
+                    pass
+                
+
+
 
                 
 

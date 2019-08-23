@@ -13,7 +13,7 @@
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "presalytics_ooxml_automation"
-VERSION = "0.2.5"
+VERSION = "0.2.21"
 # To install the library, run the following
 #
 # python setup.py install
@@ -37,6 +37,6 @@ setup(
     install_requires=REQUIRES,
     packages=find_packages(),
     include_package_data=True,
-    long_description_content_type="text/markdown",
+    long_description_content_type='text/markdown',
     long_description=long_description
 )

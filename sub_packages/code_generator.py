@@ -11,10 +11,10 @@ from doc_converter.spec import SPEC as doc_converter_spec
 from ooxml_automation.spec import SPEC as ooxml_automation_spec
 
 
-DELETE_TMP_FILES = False
+DELETE_TMP_FILES = True
 
 env = Env()
-env.read_env()
+env.read_env()on
 
 CODEGEN_ENDPOINT="https://openapi-generator.presalytics.io/api/gen/clients/python"
 CODEGEN_DL_STUB="https://openapi-generator.presalytics.io/api/gen/download/"
@@ -22,13 +22,13 @@ CODEGEN_DIR=os.path.dirname(os.path.realpath(__file__))
 TMP_PATH = os.path.join(CODEGEN_DIR, "tmp")
 LIC_PATH = os.path.join(CODEGEN_DIR, "LICENSE")
 
-#git = Github(os.environ['GITHUB_USER'], os.environ['GITHUB_PASS'])
 
 CLIENT_SPECS = []
 CLIENT_SPECS.append(doc_converter_spec)
 CLIENT_SPECS.append(ooxml_automation_spec)
 GIT_SSH_COMMAND = 'ssh -i ~/.ssh/id_rsa'
 os.environ['GIT_SSH_COMMAND'] = GIT_SSH_COMMAND
+
 os.system("git config credential.helper presalytics-bot")
 
 HEADER = {
@@ -89,7 +89,6 @@ def git_push(local_repo_path, commit_message, git_remote):
 
 for spec in CLIENT_SPECS:
     try:
-
         if spec["update"] is True:
             new_ver = replace_ver(spec["setuppy_path"], spec["update_type"])
             payload = {
@@ -122,7 +121,8 @@ for spec in CLIENT_SPECS:
             os.system("git init")
             os.system("git remote add origin {}".format(spec["package_url"]))
             os.system("git pull origin master")
-            os.system("cp -a -R {0} {1}".format(os.path.join(TMP_PATH, "python-client"), LOC))
+            os.system("rm -r *")
+            os.system("cp -a -R {0} {1}".format(os.path.join(TMP_PATH, "python-client", spec["package_name"]), LOC))
             
 
             print("Adding static files")
@@ -136,7 +136,11 @@ for spec in CLIENT_SPECS:
 
 
             twine_command = "twine upload -u " + os.environ['PYPI_USER'] + " -p " + os.environ['PYPI_PASS'] + " " +  os.path.join(LOC, "dist", "*")
-            os.system(twine_command)
+            twine_missing = os.system(twine_command)
+            if twine_missing != 0:
+                message = "Global installation of twine not found. Please install outside of virtual environment."
+                print(message)
+                raise Exception(message)
 
             print("sending package to github repo origin")
             commit_message = "Automated {0} update, version {1} from presalytics codegen".format(spec["update_type"], new_ver)

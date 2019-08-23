@@ -14,7 +14,7 @@ from ooxml_automation.spec import SPEC as ooxml_automation_spec
 DELETE_TMP_FILES = True
 
 env = Env()
-env.read_env()on
+env.read_env()
 
 CODEGEN_ENDPOINT="https://openapi-generator.presalytics.io/api/gen/clients/python"
 CODEGEN_DL_STUB="https://openapi-generator.presalytics.io/api/gen/download/"

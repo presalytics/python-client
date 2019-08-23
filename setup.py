@@ -10,7 +10,7 @@
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "presalytics"
-VERSION = "0.1.2"
+VERSION = "0.1.8"
 
 # To install the library, run the following
 #
@@ -31,6 +31,7 @@ REQUIRES = ["urllib3 >= 1.15",
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
+    
 
 setup(
     name=NAME,

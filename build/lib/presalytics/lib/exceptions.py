@@ -5,8 +5,9 @@ class PresalyticsBaseException(Exception):
          super().__init__(*args, **kwargs)
 
 class MissingConfigException(PresalyticsBaseException):
-    def __init__(self):
-        message = "Configuration file missing.  Please please a config.ini file in working directory"
+    def __init__(self, message):
+        if message is None:
+            message = "Configuration file missing.  Please please a config.ini file in working directory"
         super().__init__(message)
 
 class MisConfiguredTokenException(PresalyticsBaseException):

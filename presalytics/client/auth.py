@@ -202,18 +202,26 @@ class AuthenticationMixIn(object):
         return auth_header
 
     
-    def __call_api(self, resource_path, method, path_params=None,
-            query_params=None, header_params=None, body=None, post_params=None,
-            files=None, response_type=None, auth_settings=None,
-            _return_http_data_only=None, collection_formats=None,
-            _preload_content=True, _request_timeout=None, _host=None):
+    def call_api(self, resource_path, method,
+                 path_params=None, query_params=None, header_params=None,
+                 body=None, post_params=None, files=None,
+                 response_type=None, auth_settings=None, async_req=None,
+                 _return_http_data_only=None, collection_formats=None,
+                 _preload_content=True, _request_timeout=None, _host=None):
         """
-        Overrideing __call_api to force token check, refresh on each api call, 
+        Overriding call_api to force token check, refresh on each api call, 
         rather than at class initialized (good the ipython notebooks)
         """
 
         auth_header = self.get_auth_header()
-        super(AuthenticationMixIn, self).__call_api(header_params=auth_header)
+        if header_params is not None:
+            header_params.update(auth_header)
+        else:
+            header_params = auth_header
+        return super(AuthenticationMixIn, self).call_api(resource_path, method, path_params,
+            query_params, header_params, body, post_params, files, response_type,
+            auth_settings, async_req, _return_http_data_only, collection_formats, _preload_content,
+            _request_timeout, _host)
 
                 
 

@@ -7,12 +7,11 @@ from environs import Env
 from tempfile import mkstemp
 from shutil import move
 from os import fdopen, remove
-from git import Repo
 from doc_converter.spec import SPEC as doc_converter_spec
 from ooxml_automation.spec import SPEC as ooxml_automation_spec
 
 
-DELETE_TMP_FILES = True
+DELETE_TMP_FILES = False
 
 env = Env()
 env.read_env()
@@ -89,62 +88,67 @@ def git_push(local_repo_path, commit_message, git_remote):
 
 
 for spec in CLIENT_SPECS:
-    new_ver = replace_ver(spec["setuppy_path"], spec["update_type"])
-    if spec["update"] is True:
-        payload = {
-            'openAPIUrl': spec['endpoint'],
-            'options' : {
-                'packageName': spec['package_name'],
-                'projectName': 'Presalytics API',
-                'packageVersion': new_ver
+    try:
+
+        if spec["update"] is True:
+            new_ver = replace_ver(spec["setuppy_path"], spec["update_type"])
+            payload = {
+                'openAPIUrl': spec['endpoint'],
+                'options' : {
+                    'packageName': spec['package_name'],
+                    'projectName': 'Presalytics API',
+                    'packageVersion': new_ver
+                }
+            
             }
-        
-        }
-        
-        LOC =  os.path.join(TMP_PATH, spec['package_name'])
+            
+            LOC =  os.path.join(TMP_PATH, spec['package_name'])
 
-        print("Sending {} api spec to code generator".format(spec['package_name']))
-        response = requests.post(CODEGEN_ENDPOINT, json=payload, headers=HEADER)
-        print("Response from openapi generator:")
-        pprint(response)
-        uid = response.json()['code']
-        link = CODEGEN_DL_STUB + uid
+            print("Sending {} api spec to code generator".format(spec['package_name']))
+            response = requests.post(CODEGEN_ENDPOINT, json=payload, headers=HEADER)
+            print("Response from openapi generator:")
+            pprint(response)
+            uid = response.json()['code']
+            link = CODEGEN_DL_STUB + uid
 
-        print("Downloading generated code for {} ".format(spec['package_name']))
-        file_response = requests.get(link)
-        
-        zipfile = ZipFile(BytesIO(file_response.content))
-        print("Placing {} client files in directory {}".format(spec['package_name'], LOC))
-        zipfile.extractall(TMP_PATH)
-        os.system("mkdir {0}".format(LOC))
-        os.chdir(LOC)
-        os.system("git init")
-        os.system("git remote add origin {}".format(spec["package_url"]))
-        os.system("git pull origin master")
-        os.system("cp -a -R {0} {1}".format(os.path.join(TMP_PATH, "python-client"), LOC))
-        
+            print("Downloading generated code for {} ".format(spec['package_name']))
+            file_response = requests.get(link)
+            
+            zipfile = ZipFile(BytesIO(file_response.content))
+            print("Placing {} client files in directory {}".format(spec['package_name'], LOC))
+            zipfile.extractall(TMP_PATH)
+            os.system("mkdir {0}".format(LOC))
+            os.chdir(LOC)
+            os.system("git init")
+            os.system("git remote add origin {}".format(spec["package_url"]))
+            os.system("git pull origin master")
+            os.system("cp -a -R {0} {1}".format(os.path.join(TMP_PATH, "python-client"), LOC))
+            
 
-        print("Adding static files")
-        shutil.copy(spec['readme_path'], LOC)
-        shutil.copy(spec['setuppy_path'], LOC)
-        shutil.copy(LIC_PATH, LOC)
-        # updating version info
+            print("Adding static files")
+            shutil.copy(spec['readme_path'], LOC)
+            shutil.copy(spec['setuppy_path'], LOC)
+            shutil.copy(LIC_PATH, LOC)
+            # updating version info
 
-        print("Creating distribution and uploading PyPi")
-        sandbox.run_setup(os.path.join(LOC, "setup.py"), ['clean', 'bdist_wheel'])
+            print("Creating distribution and uploading PyPi")
+            sandbox.run_setup(os.path.join(LOC, "setup.py"), ['clean', 'bdist_wheel'])
 
 
-        twine_command = "twine upload -u " + os.environ['PYPI_USER'] + " -p " + os.environ['PYPI_PASS'] + " " +  os.path.join(LOC, "dist", "*")
-        os.system(twine_command)
+            twine_command = "twine upload -u " + os.environ['PYPI_USER'] + " -p " + os.environ['PYPI_PASS'] + " " +  os.path.join(LOC, "dist", "*")
+            os.system(twine_command)
 
-        print("sending package to github repo origin")
-        commit_message = "Automated {0} update, version {1} from presalytics codegen".format(spec["update_type"], new_ver)
-        git_push(LOC, commit_message, spec["package_url"])
-
-
-                
+            print("sending package to github repo origin")
+            commit_message = "Automated {0} update, version {1} from presalytics codegen".format(spec["update_type"], new_ver)
+            git_push(LOC, commit_message, spec["package_url"])
+    except:
+        print("Sub package generation unsuccessful.  Please debug and retry")
+    finally:                
         if DELETE_TMP_FILES:
-            shutil.rmtree(TMP_PATH)
+            try:
+                shutil.rmtree(TMP_PATH)
+            except:
+                pass
 
     # repo = git.get_repo("presalytics/" + spec['package_name'])
 

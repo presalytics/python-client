@@ -10,19 +10,15 @@ class test_client(unittest.TestCase):
         and establishes a connection to the server
     """
     def setUp(self):
-        self.config_file = os.path.join(os.path.dirname(__file__), 'test_files', 'config.py')
+        self.config_file = os.path.join(os.path.dirname(__file__), 'files', 'config.py')
 
-    def test_codelens(self):
-        pass
-
-    def test_client_connection(self):
+    def test_client(self):
         """ 
-        Tests for client connection to presalytics api
-        TODO: integration test - eliminate later or add mock
+        Tests for client configuration into presalytics api
         """
-        client = Client(self.config_file)
-        hello = client.doc_converter.say_hello()
-        self.assertEqual("hello world!", hello.text)
+        client = Client(config_file=self.config_file)
+        username = os.environ["PRESALYTICS_USERNAME"]
+        self.assertEqual(client.doc_converter.api_client.username, username)
 
 
 if __name__ == '__main__':

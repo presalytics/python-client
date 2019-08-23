@@ -422,7 +422,7 @@ tmp/
 # Python build files
 build/
 dist/
-.egg-info
+*.egg-info
 
 # app specific files
 token.json

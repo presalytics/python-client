@@ -12,6 +12,7 @@ presalytics/client/auth.py
 presalytics/lib/__init__.py
 presalytics/lib/constants.py
 presalytics/lib/exceptions.py
+presalytics/lib/logger.py
 presalytics/localhost/__init__.py
 presalytics/localhost/server.py
 presalytics/presentation/__init__.py

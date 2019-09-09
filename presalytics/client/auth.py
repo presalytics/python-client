@@ -222,8 +222,6 @@ class AuthenticationMixIn(object):
             header_params = auth_header
         if _return_http_data_only is None:
             _return_http_data_only = False        
-        if response_type is None:
-            response_type=True
         return super(AuthenticationMixIn, self).call_api(resource_path, method, path_params,
             query_params, header_params, body, post_params, files, response_type,
             auth_settings, async_req, _return_http_data_only, collection_formats, _preload_content,

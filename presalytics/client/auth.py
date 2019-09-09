@@ -220,7 +220,7 @@ class AuthenticationMixIn(object):
             header_params.update(auth_header)
         else:
             header_params = auth_header
-        _preload_content = self.set_preload_content
+        # _preload_content = self.set_preload_content
         return super(AuthenticationMixIn, self).call_api(resource_path, method, path_params,
             query_params, header_params, body, post_params, files, response_type,
             auth_settings, async_req, _return_http_data_only, collection_formats, _preload_content,

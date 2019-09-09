@@ -246,7 +246,7 @@ class AuthenticationMixIn(object):
             VER = pkg_resources.require("presalytics")[0].version
         except:
             VER = 'build'
-        return "presalytics-python-client/{0}".format(VER)
+        return "presalytics-python-client/{0}".format(VER)   
 
     _get_user_agent = get_user_agent.__func__()
 

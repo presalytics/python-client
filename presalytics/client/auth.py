@@ -209,7 +209,7 @@ class AuthenticationMixIn(object):
                  body=None, post_params=None, files=None,
                  response_type=None, auth_settings=None, async_req=None,
                  _return_http_data_only=None, collection_formats=None,
-                 _preload_content=True, _request_timeout=None, _host=None):
+                 _preload_content=None, _request_timeout=None, _host=None):
         """
         Overriding call_api to force token check, refresh on each api call, 
         rather than at class initialized (good for ipython notebooks)
@@ -220,8 +220,8 @@ class AuthenticationMixIn(object):
             header_params.update(auth_header)
         else:
             header_params = auth_header
-        if _return_http_data_only is None:
-            _return_http_data_only = False        
+        if _preload_content is None:
+            _preload_content = False #Default to False, model detection not yet supported by openapi generator, can mannually overridee        
         return super(AuthenticationMixIn, self).call_api(resource_path, method, path_params,
             query_params, header_params, body, post_params, files, response_type,
             auth_settings, async_req, _return_http_data_only, collection_formats, _preload_content,

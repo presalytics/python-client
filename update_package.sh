@@ -27,5 +27,5 @@ git commit -m "$2"
 python3 setup.py sdist bdist_wheel
 twine upload dist/*
 rm -r -f build dist presalytics.egg-info
-git push origin master
+git push origin master 
 

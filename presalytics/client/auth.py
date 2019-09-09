@@ -220,8 +220,7 @@ class AuthenticationMixIn(object):
             header_params.update(auth_header)
         else:
             header_params = auth_header
-        if _preload_content is None:
-            _preload_content = False #Default to False, model detection not yet supported by openapi generator, can mannually overridee        
+        _preload_content = self.set_preload_content
         return super(AuthenticationMixIn, self).call_api(resource_path, method, path_params,
             query_params, header_params, body, post_params, files, response_type,
             auth_settings, async_req, _return_http_data_only, collection_formats, _preload_content,
@@ -262,6 +261,15 @@ class AuthenticationMixIn(object):
                     break
                 except KeyError:
                     pass
+
+
+    def set_preload_content(self):
+        """ 
+        Defaults _preload_content to False.
+        If _preload_content functionality is needed, the set self.preload_content to True prior to making api call
+        TODO: write model resolver for OPENAPI generator so _preload_content does not need to be fed a response_type to work
+        """
+        self.preload_content = False # Defualt preload content to false
                 
 
 

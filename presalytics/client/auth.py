@@ -20,7 +20,8 @@ from presalytics.lib.constants import (
     REDIRECT_URI,
     TOKEN_FILE,
     LOCALHOST_SERVER,
-    LOCALHOST_PORT
+    LOCALHOST_PORT,
+    JWT_KEY
 )
 
 logger = logging.getLogger(__name__)
@@ -169,6 +170,26 @@ class AuthenticationMixIn(object):
             raise MissingConfigException(e.error_message)
         self.token_util.process_keycloak_token(keycloak_token) 
         return self.token_util.token
+    
+    def delegated_login(self, original_token, audience=None):
+        """ Requires developer account and authorized client credentials """
+        decoded_token = self.oidc.decode_token(original_token, JWT_KEY)
+        kwargs = {
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "grant_type": "urn:ietf:params:oauth:grant-type:token-exchange",
+            "subject_token": original_token,
+            "requested_subject": decoded_token["sub"]
+        }
+        if audience is not None:
+            kwargs.update(
+                {
+                    "audience": audience
+                }
+            )
+        keycloak_token = self.oidc.token(kwargs)
+        return keycloak_token
+
 
     def _get_new_token_browser(self, url):
         self.server_thread.start()

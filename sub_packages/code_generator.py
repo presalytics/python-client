@@ -9,6 +9,7 @@ from shutil import move
 from os import fdopen, remove
 from doc_converter.spec import SPEC as doc_converter_spec
 from ooxml_automation.spec import SPEC as ooxml_automation_spec
+from story.spec import SPEC as story_spec
 
 
 DELETE_TMP_FILES = True
@@ -26,6 +27,7 @@ LIC_PATH = os.path.join(CODEGEN_DIR, "LICENSE")
 CLIENT_SPECS = []
 CLIENT_SPECS.append(doc_converter_spec)
 CLIENT_SPECS.append(ooxml_automation_spec)
+CLIENT_SPECS.append(story_spec)
 GIT_SSH_COMMAND = 'ssh -i ~/.ssh/id_rsa'
 os.environ['GIT_SSH_COMMAND'] = GIT_SSH_COMMAND
 

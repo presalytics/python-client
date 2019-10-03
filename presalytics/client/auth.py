@@ -137,6 +137,12 @@ class AuthenticationMixIn(object):
             self.client_id = self.auth_config.PRESALYTICS['CLIENT_ID']
         except KeyError:
             self.client_id = DEFAULT_CLIENT_ID
+        try:
+            self.client_secret = self.auth_config.PRESALYTICS['CLIENT_SECRET']
+            self.confidential_client = True
+        except KeyError:
+            self.client_secret = None
+            self.confidential_client = False
 
         self.oidc = KeycloakOpenID(
             server_url=OIDC_AUTH_HOST,
@@ -188,7 +194,8 @@ class AuthenticationMixIn(object):
                 }
             )
         keycloak_token = self.oidc.token(kwargs)
-        return keycloak_token
+        self.token_util.process_keycloak_token(keycloak_token)
+        return self.token_util.token
 
 
     def _get_new_token_browser(self, url):

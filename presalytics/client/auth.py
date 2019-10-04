@@ -197,8 +197,7 @@ class AuthenticationMixIn(object):
             "client_id": self.client_id,
             "client_secret": self.client_secret,
             "grant_type": "urn:ietf:params:oauth:grant-type:token-exchange",
-            "subject_token": original_token,
-            "requested_subject": decoded_token["sub"]
+            "subject_token": original_token
         }
         if audience is not None:
             kwargs.update(
@@ -235,8 +234,11 @@ class AuthenticationMixIn(object):
                 else:
                     self.token_util.token = None
             else:
-                refresh_token = self.token_util.token["refresh_token"]
-                self.token_util.token = self.oidc.refresh_token(refresh_token)
+                try:
+                    refresh_token = self.token_util.token["refresh_token"]
+                    self.token_util.token = self.oidc.refresh_token(refresh_token)
+                except KeycloakGetError:
+                    self.login()
             self.token_util._put_token_file()
         return self.token_util.token
 

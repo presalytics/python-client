@@ -206,9 +206,9 @@ class AuthenticationMixIn(object):
                     "audience": audience
                 }
             )
-        keycloak_token = self.oidc.token(kwargs)
+        keycloak_token = self.oidc.token(**kwargs)
         self.token_util.process_keycloak_token(keycloak_token)
-        return self.token_util.token
+        return self.token_util.token["access_token"]
 
 
     def _get_new_token_browser(self, url):

@@ -111,18 +111,28 @@ class TokenUtil(object):
         with open(token_filepath, 'r') as token_file:
             token = json.load(token_file)
         return token
+
+class AuthConfig(object):
+    def __init__(self, config_dict):
+        self.PRESALYTICS = config_dict
  
 class AuthenticationMixIn(object):
-    def __init__(self, config_file=None, **kwargs):
-        if config_file is None:
-            config_file = os.getcwd() + os.path.sep + "config.py"
-        if not os.path.exists(config_file):
-            config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.py')
+    def __init__(self, config=None, config_file=None, **kwargs):
+        if config:
+            if "PRESALYTICS" in config:
+                self.auth_config = AuthConfig(config["PRESALYTICS"])
+            else:
+                self.auth_config = AuthConfig(config)
+        else:
+            if config_file is None:
+                config_file = os.getcwd() + os.path.sep + "config.py"
             if not os.path.exists(config_file):
-                raise MissingConfigException
-        config_spec = importlib.util.spec_from_file_location("config", config_file)
-        self.auth_config = importlib.util.module_from_spec(config_spec)
-        config_spec.loader.exec_module(self.auth_config)
+                config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.py')
+                if not os.path.exists(config_file):
+                    raise MissingConfigException("Could not initialize. Config file 'config.py' not found.")
+            config_spec = importlib.util.spec_from_file_location("config", config_file)
+            self.auth_config = importlib.util.module_from_spec(config_spec)
+            config_spec.loader.exec_module(self.auth_config)
         try:
             self.username = self.auth_config.PRESALYTICS['USERNAME']
         except KeyError:

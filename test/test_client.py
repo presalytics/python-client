@@ -20,7 +20,11 @@ class test_client(unittest.TestCase):
         username = os.environ["PRESALYTICS_USERNAME"]
         self.assertEqual(client.doc_converter.api_client.username, username)
         self.assertEqual(client.ooxml_automation.api_client.configuration.host, os.environ["OOXML_AUTOMATION_HOST"])
-        
+
+    def test_module_config(self):
+        from test.files.config import PRESALYTICS
+        client = Client(config=PRESALYTICS)
+        self.assertIsNotNone(client.ooxml_automation.api_client.client_id)
 
 
 if __name__ == '__main__':

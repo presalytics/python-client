@@ -117,7 +117,8 @@ class AuthConfig(object):
         self.PRESALYTICS = config_dict
  
 class AuthenticationMixIn(object):
-    def __init__(self, config=None, config_file=None, **kwargs):
+    def __init__(self, config=None, config_file=None, delegate_login=False, **kwargs):
+        self._delegate_login = delegate_login
         if config:
             if "PRESALYTICS" in config:
                 self.auth_config = AuthConfig(config["PRESALYTICS"])
@@ -187,6 +188,8 @@ class AuthenticationMixIn(object):
         self.token_util.process_keycloak_token(keycloak_token) 
         return self.token_util.token
     
+
+    
     def delegated_login(self, original_token, audience=None):
         """ Requires developer account and authorized client credentials """
         decoded_token = self.oidc.decode_token(original_token, JWT_KEY)
@@ -227,7 +230,10 @@ class AuthenticationMixIn(object):
     def refresh_token(self):
         if self.token_util.is_api_access_token_expired():
             if self.token_util.is_api_refresh_token_expired():
-                self.login()
+                if not self._delegate_login: # do not automatically log in at init
+                    self.login()
+                else:
+                    self.token_util.token = None
             else:
                 refresh_token = self.token_util.token["refresh_token"]
                 self.token_util.token = self.oidc.refresh_token(refresh_token)

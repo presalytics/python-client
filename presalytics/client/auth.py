@@ -211,6 +211,23 @@ class AuthenticationMixIn(object):
 
 
     def _get_new_token_browser(self, url):
+        """
+        Change this code to leverage website
+        generate OTP as uuid
+        open website at standard login screen with query string params:
+        - OTP - uuid 
+        - type - auth_code
+        
+        to website, add:
+        - step to login to process query string
+        - endpoint POST /account/{username}/ with payload OTP, return encrypted access code
+        - store auth_code in lieu of token in server side session
+
+        - loop, querying new endpoint until LOGIN_TIMEOUT
+        - on successfull login decrypt auth_code with OPT
+        - send auth code to token endpoint to receive token
+        """
+
         self.server_thread.start()
         webbrowser.open_new(url)
         auth_code = None

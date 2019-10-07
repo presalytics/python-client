@@ -7,5 +7,8 @@ except KeyError:
     use_logger = True
 
 if use_logger:
-    import presalytics.lib.logger 
+    try:
+        import presalytics.lib.logger
+    except:
+        pass 
 

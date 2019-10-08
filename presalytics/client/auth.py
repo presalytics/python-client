@@ -290,7 +290,7 @@ class AuthenticationMixIn(object):
                 auth_settings, async_req, _return_http_data_only, collection_formats, _preload_content,
                 _request_timeout, _host)
         except Exception as e:
-            if e._class__.__name__ == "ApiException":
+            if type(e).__name__ == "ApiException":
                 raise ApiException(default_exception=e)
             else:
                 t, v, tb = sys.exc_info()

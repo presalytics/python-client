@@ -1,5 +1,6 @@
-import requests, os, webbrowser, json, logging, pkg_resources
+import requests, os, webbrowser, json, logging, pkg_resources, sys
 import importlib.util
+from six import reraise
 from queue import Queue
 from threading import Thread
 from datetime import datetime, timedelta
@@ -7,7 +8,7 @@ from dateutil import parser as dateparser
 from keycloak.keycloak_openid import KeycloakOpenID
 from keycloak.exceptions import KeycloakGetError
 from presalytics.localhost.server import app
-from presalytics.lib.exceptions import MissingConfigException, MisConfiguredTokenException, InvalidTokenException
+from presalytics.lib.exceptions import MissingConfigException, MisConfiguredTokenException, InvalidTokenException, ApiException
 from presalytics.lib.constants import (
     HOST, 
     PORT, 
@@ -283,11 +284,18 @@ class AuthenticationMixIn(object):
             header_params.update(auth_header)
         else:
             header_params = auth_header
-        # _preload_content = self.set_preload_content
-        return super(AuthenticationMixIn, self).call_api(resource_path, method, path_params,
-            query_params, header_params, body, post_params, files, response_type,
-            auth_settings, async_req, _return_http_data_only, collection_formats, _preload_content,
-            _request_timeout, _host)
+        try:
+            return super(AuthenticationMixIn, self).call_api(resource_path, method, path_params,
+                query_params, header_params, body, post_params, files, response_type,
+                auth_settings, async_req, _return_http_data_only, collection_formats, _preload_content,
+                _request_timeout, _host)
+        except Exception as e:
+            if e._class__.__name__ == "ApiException":
+                raise ApiException(default_exception=e)
+            else:
+                t, v, tb = sys.exc_info()
+                reraise(t, v, tb)
+
 
     def update_configuration(self):
         """
@@ -324,16 +332,6 @@ class AuthenticationMixIn(object):
                     break
                 except KeyError:
                     pass
-
-
-    def set_preload_content(self):
-        """ 
-        Defaults _preload_content to False.
-        If _preload_content functionality is needed, the set self.preload_content to True prior to making api call
-        TODO: write model resolver for OPENAPI generator so _preload_content does not need to be fed a response_type to work
-        """
-        self.preload_content = False # Defualt preload content to false
-                
 
 
 

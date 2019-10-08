@@ -20,4 +20,10 @@ class InvalidTokenException(PresalyticsBaseException):
         message = "Configuration file missing.  Please please a config.ini file in working directory"
         super().__init__(message)
 
+class ApiException(PresalyticsBaseException):
+    def __init__(self, default_exception=None):
+        if default_exception is not None:
+            for key, val in default_exception.__dict__:
+                setattr(self, key, val)
+
 

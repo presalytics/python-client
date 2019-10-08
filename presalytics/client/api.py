@@ -19,7 +19,7 @@ class OoxmlAutomationApiClientWithAuth(AuthenticationMixIn, presalytics_ooxml_au
 class StoryApiClientWithAuth(AuthenticationMixIn, presalytics_story.api_client.ApiClient):
     def __init__(self, **kwargs):
         AuthenticationMixIn.__init__(self, **kwargs)
-        presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
+        presalytics_story.api_client.ApiClient.__init__(self)
         self.update_configuration()
 
 

@@ -118,8 +118,9 @@ class AuthConfig(object):
         self.PRESALYTICS = config_dict
  
 class AuthenticationMixIn(object):
-    def __init__(self, config=None, config_file=None, delegate_login=False, **kwargs):
+    def __init__(self, config=None, config_file=None, delegate_login=False, ignore_api_exceptions=False, **kwargs):
         self._delegate_login = delegate_login
+        self._ignore_api_exceptions = ignore_api_exceptions
         if config:
             if "PRESALYTICS" in config:
                 self.auth_config = AuthConfig(config["PRESALYTICS"])
@@ -291,7 +292,10 @@ class AuthenticationMixIn(object):
                 _request_timeout, _host)
         except Exception as e:
             if type(e).__name__ == "ApiException":
-                raise ApiException(default_exception=e)
+                if self._ignore_api_exceptions:
+                    return e.body, e.status, e.headers
+                else:
+                    raise ApiException(default_exception=e)
             else:
                 t, v, tb = sys.exc_info()
                 reraise(t, v, tb)

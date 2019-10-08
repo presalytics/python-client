@@ -18,4 +18,11 @@ try:
 except KeyError:
     pass
 
+try:
+    story_host = {
+        'STORY' : os.environ['STORY_HOST']
+    }
+    PRESALYTICS['HOSTS'].update(story_host)
+except KeyError:
+    pass
 

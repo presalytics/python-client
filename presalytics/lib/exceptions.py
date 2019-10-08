@@ -23,7 +23,21 @@ class InvalidTokenException(PresalyticsBaseException):
 class ApiException(PresalyticsBaseException):
     def __init__(self, default_exception=None):
         if default_exception is not None:
-            for key, val in default_exception.__dict__:
-                setattr(self, key, val)
+            _attrs = [a for a in dir(default_exception) if not a.startswith('__')]
+            for key in _attrs:
+                setattr(self, key, getattr(default_exception, key))
+    
+    def __str__(self):
+        """Custom error messages for exception"""
+        try:
+            error_message = "({0})\n"\
+                            "Reason: {1}\n".format(self.status, self.reason)
+
+            if self.body:
+                error_message += "HTTP response body: {0}\n".format(self.body)
+
+            return error_message
+        except:
+             return "An unknown error occured.  Please set default_exception to learn more."
 
 

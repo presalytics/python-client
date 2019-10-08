@@ -3,7 +3,9 @@ Unit test for Client class
 """
 import unittest
 import os
+import uuid
 from presalytics.client.api import Client
+from presalytics.lib.exceptions import ApiException
 
 class test_client(unittest.TestCase):
     """ Test whether client accurately creates a configuration
@@ -25,6 +27,20 @@ class test_client(unittest.TestCase):
         from test.files.config import PRESALYTICS
         client = Client(config=PRESALYTICS)
         self.assertIsNotNone(client.ooxml_automation.api_client.client_id)
+
+    def test_api_exception(self):
+        exception_client = Client(config_file=self.config_file)
+        bad_story_id = str(uuid.uuid4())
+        try:
+            body, status, headers = exception_client.story.story_id_get(bad_story_id)
+        except Exception as e:
+            self.assertEqual(ApiException, e.__class__)
+        ignore_client = Client(config_file=self.config_file, ignore_api_exceptions=True)
+        body, status, headers = ignore_client.story.story_id_get(bad_story_id)
+        self.assertEqual(status, 404)
+
+
+        
 
 
 if __name__ == '__main__':

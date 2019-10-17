@@ -1,7 +1,7 @@
 import os
 
 SPEC = {
-        "update": False,
+        "update": True,
         "update_type": "patch",
         "endpoint": "https://api.presalytics.io/ooxml-automation/docs/v1-no-tags/openapi.json",
         "package_name": "presalytics_ooxml_automation",

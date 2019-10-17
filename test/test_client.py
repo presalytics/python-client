@@ -39,6 +39,22 @@ class test_client(unittest.TestCase):
         body, status, headers = ignore_client.story.story_id_get(bad_story_id)
         self.assertEqual(status, 404)
 
+    def test_file_download(self):
+        from test.files.config import PRESALYTICS
+        test_upload_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'files', 'star.pptx')
+        client = Client(config=PRESALYTICS)
+        try:
+            test_story = client.story.story_post_file(file=test_upload_file)
+            download_folder = os.path.dirname(os.path.abspath(__file__))
+            test_filename = "test-file.pptx"
+            client.download_file(test_story.id, test_story.ooxml_documents[0].ooxml_automation_id, filename=test_filename, download_folder=download_folder)
+            target_path = os.path.join(download_folder, test_filename)
+            self.assertTrue(os.path.exists(target_path))
+        finally:
+            try:
+                os.remove(target_path)
+            except:
+                pass
 
         
 

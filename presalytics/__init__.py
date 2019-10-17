@@ -10,5 +10,6 @@ if use_logger:
     try:
         import presalytics.lib.logger
     except:
-        pass 
+        pass
+
 

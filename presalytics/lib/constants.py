@@ -12,6 +12,6 @@ OIDC_REALM = "presalytics"
 DEFAULT_CLIENT_ID = "python-client"
 TOKEN_FILE = "token.json"
 LOCALHOST_SERVER = "127.0.0.1"
-LOCALHOST_PORT = 8052,
+LOCALHOST_PORT = 8052
 
 

@@ -156,6 +156,12 @@ class AuthenticationMixIn(object):
         except KeyError:
             self.client_secret = None
             self.confidential_client = False
+        try:
+            if self.auth_config.PRESALYTICS["DOWNLOADS_FOLDER"]:
+                os.environ["TMPDIR"] = self.auth_config.PRESALYTICS["DOWNLOADS_FOLDER"]
+        except KeyError:
+            os.environ["TMPDIR"] = os.getcwd()
+        
 
         self.oidc = KeycloakOpenID(
             server_url=OIDC_AUTH_HOST,

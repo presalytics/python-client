@@ -1,7 +1,8 @@
+import os, cgi
 import presalytics_doc_converter
 import presalytics_ooxml_automation
 import presalytics_story
-from .auth import AuthenticationMixIn
+from presalytics.client.auth import AuthenticationMixIn
 
 
 class DocConverterApiClientWithAuth(AuthenticationMixIn, presalytics_doc_converter.api_client.ApiClient):
@@ -33,3 +34,22 @@ class Client(object):
         story_api_client = StoryApiClientWithAuth(**kwargs)
         self.story =presalytics_story.DefaultApi(api_client=story_api_client)
 
+    def download_file(self, story_id, ooxml_automation_id, download_folder=None, filename=None, **kwargs):
+        response, status, headers = self.story.story_id_file_ooxmlautomationid_get_with_http_info(story_id, ooxml_automation_id, _preload_content=False)
+        if download_folder is None:
+            download_folder = os.getcwd()
+        if filename is None:            
+            cd_header = headers.get('Content-Disposition')
+            _, params = cgi.parse_header(cd_header)
+            filename = params["filename"]
+        filepath = os.path.join(download_folder, filename)
+        with open(filepath, 'wb') as f:
+            f.write(response.data)
+
+        
+        
+        
+        
+
+        
+        

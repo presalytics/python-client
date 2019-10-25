@@ -12,7 +12,7 @@ PRESALYTICS = {
 
 try:
     ooxml_host = {
-        'OOXML_AUTOMATION' : os.environ['OOXML_AUTOMATION_HOST']
+        'OOXML_AUTOMATION': os.environ['OOXML_AUTOMATION_HOST']
     }
     PRESALYTICS['HOSTS'].update(ooxml_host)
 except KeyError:
@@ -20,9 +20,17 @@ except KeyError:
 
 try:
     story_host = {
-        'STORY' : os.environ['STORY_HOST']
+        'STORY': os.environ['STORY_HOST']
     }
     PRESALYTICS['HOSTS'].update(story_host)
 except KeyError:
     pass
 
+
+try:
+    site_host = {
+        'SITE': os.environ['SITE_HOST']
+    }
+    PRESALYTICS['HOSTS'].update(site_host)
+except KeyError:
+    pass

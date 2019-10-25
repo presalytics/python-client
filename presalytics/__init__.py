@@ -8,8 +8,9 @@ except KeyError:
 
 if use_logger:
     try:
-        import presalytics.lib.logger
-    except:
+        from presalytics.lib.logger import configure_logger
+        configure_logger()
+    except Exception:
         pass
 
-
+from presalytics.client.api import Client as PresalyticsClient

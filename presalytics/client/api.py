@@ -21,7 +21,8 @@ from presalytics.lib.constants import (
     OIDC_AUTH_HOST,
     JWT_KEY,
     LOGIN_PATH,
-    API_CODE_URL
+    API_CODE_URL,
+    REDIRECT_URI
 )
 from presalytics.client.auth import AuthenticationMixIn, AuthConfig, TokenUtil
 
@@ -187,7 +188,7 @@ class Client(object):
                 data = json.loads(response.content)
                 break
         auth_code = data["authorization_code"]
-        token = self.oidc.token(username=self.username, grant_type="authorization_code", code=auth_code, redirect_uri=)
+        token = self.oidc.token(username=self.username, grant_type="authorization_code", code=auth_code, redirect_uri=REDIRECT_URI)
         return token
 
     def refresh_token(self):

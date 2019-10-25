@@ -187,7 +187,7 @@ class Client(object):
                 data = json.loads(response.content)
                 break
         auth_code = data["authorization_code"]
-        token = self.oidc.token(username=self.username, grant_type="code", code=auth_code)
+        token = self.oidc.token(username=self.username, grant_type="authorization_code", code=auth_code, redirect_uri=)
         return token
 
     def refresh_token(self):

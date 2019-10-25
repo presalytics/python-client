@@ -14,4 +14,4 @@ TOKEN_FILE = "token.json"
 LOCALHOST_SERVER = "127.0.0.1"
 LOCALHOST_PORT = 8052
 LOGIN_PATH = "/accounts/login/"
-API_CODE_URL = "/accounts/client-get-auth-code"
+API_CODE_URL = "/user/client-get-auth-code/"

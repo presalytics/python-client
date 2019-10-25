@@ -6,6 +6,7 @@ import requests
 import urllib.parse
 import importlib.util
 import logging
+import json
 from keycloak.keycloak_openid import KeycloakOpenID
 from keycloak.exceptions import KeycloakGetError
 from uuid import uuid4
@@ -165,17 +166,17 @@ class Client(object):
         }
         query_string = '?{}'.format(urllib.parse.urlencode(query))
         url = urllib.parse.urljoin(self.site_host, urllib.parse.urljoin(LOGIN_PATH, query_string))
-        webbrowser.open_new(url)
+        webbrowser.open_new_tab(url)
         auth_code = None
         payload = {
             "username": self.username,
-            "api_oip": api_otp
+            "api_otp": str(api_otp)
         }
 
-        auth_code_url = urllib.parse(self.site_host, API_CODE_URL)
+        auth_code_url = urllib.parse.urljoin(self.site_host, API_CODE_URL)
         interval = 0
         while True:
-            response = requests.post(auth_code_url, data=payload)
+            response = requests.post(auth_code_url, json=payload)
             if response.status_code != 200:
                 if interval <= self.login_timeout:
                     interval += self.login_sleep_interval
@@ -183,8 +184,9 @@ class Client(object):
                 else:
                     raise LoginTimeout
             else:
-                auth_code = response.data["auth_code"]
+                data = json.loads(response.content)
                 break
+        auth_code = data["authorization_code"]
         token = self.oidc.token(username=self.username, grant_type="code", code=auth_code)
         return token
 

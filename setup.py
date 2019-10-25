@@ -26,9 +26,9 @@ REQUIRES = ["urllib3 >= 1.15",
     "flask",
     "requests",
     "python-keycloak",
-    "presalytics_doc_converter",
-    "presalytics_ooxml_automation",
-    "presalytics_story"]
+    "presalytics-doc-converter",
+    "presalytics-ooxml-automation",
+    "presalytics-story"]
 
 with open("README.md", "r") as fh:
     long_description = fh.read()

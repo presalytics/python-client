@@ -46,6 +46,18 @@ class TemplateExtensionBase(ExtensionBase):
     def make_template(self):
         raise NotImplementedError
 
+    def get_styles(self):
+        """
+        Override as needed with an html style tag (as string)
+        """
+        return None
+
+    def get_scripts(self):
+        """
+        Override as needed with an html script tag (as string)
+        """
+        return None
+
 
 class ThemeExtensionBase(ExtensionBase):
     __extension_type__ = 'theme'

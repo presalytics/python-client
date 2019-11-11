@@ -29,27 +29,6 @@ from presalytics.client.auth import AuthenticationMixIn, AuthConfig, TokenUtil
 logger = logging.getLogger(__name__)
 
 
-class DocConverterApiClientWithAuth(AuthenticationMixIn, presalytics_doc_converter.api_client.ApiClient):
-    def __init__(self, **kwargs):
-        AuthenticationMixIn.__init__(self, **kwargs)
-        presalytics_doc_converter.api_client.ApiClient.__init__(self)
-        self.update_configuration()
-
-
-class OoxmlAutomationApiClientWithAuth(AuthenticationMixIn, presalytics_ooxml_automation.api_client.ApiClient):
-    def __init__(self, **kwargs):
-        AuthenticationMixIn.__init__(self, **kwargs)
-        presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
-        self.update_configuration()
-
-
-class StoryApiClientWithAuth(AuthenticationMixIn, presalytics_story.api_client.ApiClient):
-    def __init__(self, **kwargs):
-        AuthenticationMixIn.__init__(self, **kwargs)
-        presalytics_story.api_client.ApiClient.__init__(self)
-        self.update_configuration()
-
-
 class Client(object):
     """ Main PresalyticsClient base object """
     def __init__(
@@ -163,15 +142,17 @@ class Client(object):
         """
         api_otp = uuid4()
         query = {
-            "api_otp": api_otp
+            "api_otp": api_otp,
+            "client_id": self.client_id
         }
         query_string = '?{}'.format(urllib.parse.urlencode(query))
         url = urllib.parse.urljoin(self.site_host, urllib.parse.urljoin(LOGIN_PATH, query_string))
-        webbrowser.open_new_tab(url)
+        webbrowser.open_new_tab(url) 
         auth_code = None
         payload = {
             "username": self.username,
-            "api_otp": str(api_otp)
+            "api_otp": str(api_otp),
+            "client_id": self.client_id
         }
 
         auth_code_url = urllib.parse.urljoin(self.site_host, API_CODE_URL)
@@ -218,3 +199,24 @@ class Client(object):
         filepath = os.path.join(download_folder, filename)
         with open(filepath, 'wb') as f:
             f.write(response.data)
+
+
+class DocConverterApiClientWithAuth(AuthenticationMixIn, presalytics_doc_converter.api_client.ApiClient):
+    def __init__(self, parent: Client, **kwargs):
+        AuthenticationMixIn.__init__(self, **kwargs)
+        presalytics_doc_converter.api_client.ApiClient.__init__(self)
+        self.update_configuration()
+
+
+class OoxmlAutomationApiClientWithAuth(AuthenticationMixIn, presalytics_ooxml_automation.api_client.ApiClient):
+    def __init__(self, parent: Client, **kwargs):
+        AuthenticationMixIn.__init__(self, **kwargs)
+        presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
+        self.update_configuration()
+
+
+class StoryApiClientWithAuth(AuthenticationMixIn, presalytics_story.api_client.ApiClient):
+    def __init__(self, parent: Client, **kwargs):
+        AuthenticationMixIn.__init__(self, **kwargs)
+        presalytics_story.api_client.ApiClient.__init__(self)
+        self.update_configuration()

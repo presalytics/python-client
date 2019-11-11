@@ -1,0 +1,32 @@
+presalyticsStory: 0.1.1
+info:
+  revision: 0.1.1
+  dateCreated: '2019-11-7'
+  dateModified: '2019-11-7'
+  createdBy: Kevin
+  modifiedBy: Kevin
+  revisionNotes: IntialCreate 
+title: Test-story
+description: tests whether the story revealer can render a matplotlib plot
+pages:
+  - useTemplate: true
+    templateName: title_with_single_widget
+    additionalProperties:
+      title: Example plot 
+    widgets:
+      - name: MatplotlibPlt
+        data:
+          moduleName: test_plots
+          plotName: test_plt_1
+themes:
+  - name: white
+extensions:
+  - name: MatplotlibPlt
+    moduleName: presalytics.lib.widgets
+    type: widget
+  - type: template
+    name: title_with_single_widget
+    moduleName: presalytics.lib.templates
+  - type: theme
+    name: white
+    moduleName: presalytics.lib.themes

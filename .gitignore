@@ -416,6 +416,10 @@ ASALocalRun/
 # Python virtual enviroments
 venv/
 
+#mypy
+
+.mypy_cache/
+
 # Temp files
 tmp/
 

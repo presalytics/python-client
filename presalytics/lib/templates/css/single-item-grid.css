@@ -1,0 +1,16 @@
+
+.page {
+    padding: 5px;
+}
+
+.single-item-grid {
+    grid-template-columns: 5% auto 5%;
+    grid-template-rows: 5% 90% 5%;
+}
+
+.item-main {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: stretch;
+    align-self: stretch;
+}

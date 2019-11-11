@@ -17,18 +17,3 @@ class StoryWriter(object):
 
         dummy_dict = {}
         return dummy_dict
-
-
-class Revealer(object):
-    """
-    This class renders 'Story Outines' to reveal.js presentations
-    """
-    def __init__(self, story_outline):
-        self.story_outline = story_outline
-        pass
-
-    def render(self, include_scripts=False):
-        return ''
-
-logger.info("Presalytics story teller import complete")
-    

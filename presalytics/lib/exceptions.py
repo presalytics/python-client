@@ -1,6 +1,11 @@
+import logging
+
+logger = logging.getLogger('presalytics.lib.exceptions')
+
+
 class PresalyticsBaseException(Exception):
     def __init__(self, *args, **kwargs):
-        default_message = 'An Error occur in the presalytics module.  Consult log for stacktrace.'
+        default_message = "An Error occur in the presalytics module.  Consult log for stacktrace."
         if not (args or kwargs):
             args = (default_message,)
             super().__init__(*args, **kwargs)
@@ -28,6 +33,13 @@ class InvalidTokenException(PresalyticsBaseException):
 class LoginTimeout(PresalyticsBaseException):
     def __init__(self):
         message = "User took too long to login on website to obtain token.  Please try again."
+        super().__init__(message)
+
+
+class ValidationError(PresalyticsBaseException):
+    def __init__(self, message):
+        if not message:
+            message = "Validation Error occured"
         super().__init__(message)
 
 

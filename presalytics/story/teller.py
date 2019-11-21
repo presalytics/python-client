@@ -1,8 +1,8 @@
-import json
 import logging
 
 logger = logging.getLogger('presalytics.teller')
 logger.info("Importing presalytics story teller")
+
 
 class StoryWriter(object):
     """

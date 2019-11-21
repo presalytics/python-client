@@ -9,24 +9,27 @@ info:
 title: Test-story
 description: tests whether the story revealer can render a matplotlib plot
 pages:
-  - useTemplate: true
-    templateName: title_with_single_widget
+  - name: TestPage
+    kind: TitleWithSingleItem
     additionalProperties:
       title: Example plot 
     widgets:
-      - name: MatplotlibPlt
+      - name: test_plot_1
+        kind: matplotlib_pyplot
         data:
-          moduleName: test_plots
-          plotName: test_plt_1
+          temp: data
+        plugins:
+        - name: mpld3
+          type: script
+          config:
+            temp: data
+        additionalProperties:
+          module: test.files.test_plots
 themes:
-  - name: white
-extensions:
-  - name: MatplotlibPlt
-    moduleName: presalytics.lib.widgets
-    type: widget
-  - type: template
-    name: title_with_single_widget
-    moduleName: presalytics.lib.templates
-  - type: theme
-    name: white
-    moduleName: presalytics.lib.themes
+- name: white
+  kind: PluginOnly
+  plugins:
+  - name: external_links
+    type: style
+    config:
+      approved_styles_key: reveal.themes.white

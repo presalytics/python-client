@@ -4,19 +4,16 @@ import logging
 import pkg_resources
 import sys
 import weakref
-from dateutil import parser as dateparser
-from six import reraise
-from datetime import datetime, timedelta
-from presalytics.lib.exceptions import (
-    MissingConfigException,
-    MisConfiguredTokenException,
-    ApiException
-)
-from presalytics.lib.constants import TOKEN_FILE
-
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
+import dateutil
+import dateutil.parser
+import six
+import datetime
+import presalytics.lib.exceptions
+import presalytics.lib.constants
+import typing
+if typing.TYPE_CHECKING:
     from presalytics.client.api import Client
+
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +21,7 @@ logger = logging.getLogger(__name__)
 class TokenUtil(object):
     def __init__(self, token=None, token_file=None):
         if token_file is None:
-            self.token_file = TOKEN_FILE
+            self.token_file = presalytics.lib.constants.TOKEN_FILE
         else:
             self.token_file = token_file
         try:
@@ -41,12 +38,12 @@ class TokenUtil(object):
                 }
                 self._put_token_file()
             except Exception:
-                raise MisConfiguredTokenException
+                raise presalytics.lib.exceptions.MisConfiguredTokenException()
 
     def is_api_access_token_expired(self):
         try:
-            expire_datetime = dateparser.parse(self.token['access_token_expire_time'])
-            if expire_datetime < datetime.now():
+            expire_datetime = dateutil.parser.parse(self.token['access_token_expire_time'])
+            if expire_datetime < datetime.datetime.now():
                 return True
             return False
         except Exception:
@@ -54,8 +51,8 @@ class TokenUtil(object):
 
     def is_api_refresh_token_expired(self):
         try:
-            expire_datetime = dateparser.parse(self.token['refresh_token_expire_time'])
-            if expire_datetime < datetime.now():
+            expire_datetime = dateutil.parser.parse(self.token['refresh_token_expire_time'])
+            if expire_datetime < datetime.datetime.now():
                 return True
             return False
         except Exception:
@@ -68,8 +65,8 @@ class TokenUtil(object):
         self.put_token_file(self.token, self.token_file)
 
     def process_keycloak_token(self, keycloak_token):
-        access_token_expire_time = datetime.now() + timedelta(seconds=keycloak_token['expires_in'])
-        refresh_token_expire_time = datetime.now() + timedelta(seconds=keycloak_token['refresh_expires_in'])
+        access_token_expire_time = datetime.datetime.now() + datetime.timedelta(seconds=keycloak_token['expires_in'])
+        refresh_token_expire_time = datetime.datetime.now() + datetime.timedelta(seconds=keycloak_token['refresh_expires_in'])
 
         self.token = {
             'access_token': keycloak_token['access_token'],
@@ -139,10 +136,10 @@ class AuthenticationMixIn(object):
                 if self._ignore_api_exceptions:
                     return e.body, e.status, e.headers
                 else:
-                    raise ApiException(default_exception=e)
+                    raise presalytics.lib.exceptions.ApiException(default_exception=e)
             else:
                 t, v, tb = sys.exc_info()
-                reraise(t, v, tb)
+                six.reraise(t, v, tb)
 
     def update_configuration(self):
         """
@@ -152,7 +149,7 @@ class AuthenticationMixIn(object):
         Mostly used for debugging purposes, but self-hosted API endpoints may require injection of these parameters
         """
         if self.configuration is None:
-            raise MissingConfigException("Base API not yet configured, please reconstruct API initialization")
+            raise presalytics.lib.exceptions.MissingConfigException("Base API not yet configured, please reconstruct API initialization")
         self.user_agent = AuthenticationMixIn._get_user_agent
         if bool(self.auth_config.PRESALYTICS['HOSTS']):
             self.set_host(self.parent.auth_config.PRESALYTICS['HOSTS'])

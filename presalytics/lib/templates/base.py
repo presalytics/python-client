@@ -1,81 +1,80 @@
-from abc import abstractmethod
-from typing import Sequence, Dict
-from jinja2 import FileSystemLoader, Environment
-from lxml.html import etree
-from presalytics.story.extension_base import TemplateExtensionBase, WidgetComponentClass
-from presalytics.story.components import WidgetComponent
+import os
+import typing
+import jinja2
+import presalytics.story.outline
+import presalytics.story.components
+import presalytics.lib.util as util
+if typing.TYPE_CHECKING:
+    from presalytics.story.components import WidgetBase
+    from presalytics.story.outline import Page
 
-class JinjaTemplateBuilder(TemplateExtensionBase):
-    fail_silently: bool
-    template_paths: Sequence[str]
-    context: Dict
-    widgets: Sequence[WidgetComponentClass]
-    css_file: str
-    js_file: str
 
-    def __init__(
-        self, 
-        widgets=[],
-        template_context={}, 
-        template_paths=[], 
-        fail_silently=True, 
-        *args, **kwargs):
+class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
+    __css__: typing.Sequence[str]
+    __template_file__: str
+    __template_paths__: typing.List[str]
+    template_paths: typing.List[str]
 
-        self.fail_silently = fail_silently
-        self.template_paths = template_paths
-        self.context = template_context
-        self.widgets = widgets
-        self.context[widgets] = widgets
-        self.template_paths.append('./html') # Look last in the default 'files' folder
-        super().__init__(self, widgets=widgets, *args, **kwargs)
+    __template_paths__ = []
 
-    @abstractmethod
+    def __init__(self, page: 'Page', **kwargs) -> None:
+        super().__init__(page, **kwargs)
+        pkg_templates = os.path.join(os.path.dirname(__file__), "html")
+        self.template_paths = [pkg_templates]
+        if len(self.__template_paths__) > 0:
+            self.template_paths[0:0] = self.__template_paths__
+
+    @classmethod
+    def deserialize(cls, component, **kwargs):
+        return cls(component, **kwargs)
+
+    @util.classproperty
+    def __plugins__(cls):
+        plugin_list = []
+        for id in cls.__css__:
+            new_item = {
+                'type': 'style',
+                'name': 'local',
+                'config': {
+                    'css_file_id': id
+                }
+            }
+            plugin_list.append(new_item)
+        return plugin_list
+
+    def serialize(self):
+        updated_plugins = []
+        for plugin_data in self.__plugins__:
+            updated_plugins.append(presalytics.story.outline.Plugin(**plugin_data))
+        self.outline_page.plugins = updated_plugins
+        return self.outline_page
+
     def get_template_name(self):
-        raise NotImplementedError
+        """
+        Requires subclasses have either a "__template___" property or override this method
+        """
+        if self.__template_file__:
+            return self.__template_file__
+        else:
+            raise NotImplementedError
 
-    def make_template(self):
-        env = self.load_jinja_template()
-        template = env.get_template(self.get_template_name())
-        template.render(self.context)
+    def render(self, **kwargs) -> str:
+        template = self.load_jinja_template()
+        context = {
+            "widgets": self.widgets,
+            "widget_index": 0
+        }
+        if self.outline_page.additional_properties:
+            context.update(self.outline_page.additional_properties)
+        return template.render(**context)
 
-    def load_jinja_template(self):
-        loader = FileSystemLoader(self.template_paths)
-        env = Environment(loader=loader)
-        return env
+    def load_jinja_template(self) -> jinja2.Template:
+        loader = jinja2.FileSystemLoader(self.template_paths)
+        env = jinja2.Environment(loader=loader)
+        return env.get_template(self.get_template_name())
 
-    def load_css_file(self):
-        css_file = self.__annotations__['css_file']
-        if css_file is not None:
-            with open(css_file, 'r') as file:
-                css = file.read()
-            style = etree.Element("style")
-            style.text = css
-            return style.tostring()
-    
-    def get_styles(self):
-        return self.load_css_file()
-
-
-    def load_js_file(self):
-        js_file = self.__annotations__['js_file']
-        if js_file is not None:
-            with open(js_file, 'r') as file:
-                js = file.read()
-            script = etree.Element("script")
-            script.text = js
-            return script.tostring()
-    
-    def get_scripts(self):
-        return self.load_js_file()
-
-        
-        
 
 class TitleWithSingleItem(JinjaTemplateBuilder):
-    css_file = './css/single-item-grid.css'
-
-    def get_template_name(self):
-        return 'title_with_single_widget.html'
-
-
-
+    __component_kind__ = 'TitleWithSingleItem'
+    __css__ = ['single_item_grid']
+    __template_file__ = 'title_with_single_widget.html'

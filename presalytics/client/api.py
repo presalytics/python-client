@@ -7,24 +7,15 @@ import urllib.parse
 import importlib.util
 import logging
 import json
-from keycloak.keycloak_openid import KeycloakOpenID
-from keycloak.exceptions import KeycloakGetError
+import keycloak
 from uuid import uuid4
 import presalytics_doc_converter
 import presalytics_ooxml_automation
 import presalytics_story
-from presalytics.lib.exceptions import LoginTimeout, MissingConfigException
-from presalytics.lib.constants import (
-    HOST,
-    OIDC_REALM,
-    DEFAULT_CLIENT_ID,
-    OIDC_AUTH_HOST,
-    JWT_KEY,
-    LOGIN_PATH,
-    API_CODE_URL,
-    REDIRECT_URI
-)
-from presalytics.client.auth import AuthenticationMixIn, AuthConfig, TokenUtil
+import presalytics.lib.exceptions
+import presalytics.lib.constants as cnst
+import presalytics.client.auth
+
 
 logger = logging.getLogger(__name__)
 
@@ -40,23 +31,23 @@ class Client(object):
 
         if config:
             if "PRESALYTICS" in config:
-                self.auth_config = AuthConfig(config["PRESALYTICS"])
+                self.auth_config = presalytics.client.auth.AuthConfig(config["PRESALYTICS"])
             else:
-                self.auth_config = AuthConfig(config)
+                self.auth_config = presalytics.client.auth.AuthConfig(config)
         else:
             if config_file is None:
                 config_file = os.getcwd() + os.path.sep + "config.py"
             if not os.path.exists(config_file):
                 config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.py')
                 if not os.path.exists(config_file):
-                    raise MissingConfigException("Could not initialize. Config file 'config.py' not found.")
+                    raise presalytics.lib.exceptions.MissingConfigException("Could not initialize. Config file 'config.py' not found.")
             config_spec = importlib.util.spec_from_file_location("config", config_file)
             self.auth_config = importlib.util.module_from_spec(config_spec)
             config_spec.loader.exec_module(self.auth_config)
         try:
             self.username = self.auth_config.PRESALYTICS['USERNAME']
         except KeyError:
-            raise MissingConfigException("Mandatory configuration variable PRESALYTICS_USERNAME is missing from configuration.  Please reconfigure and retry.")
+            raise presalytics.lib.exceptions.MissingConfigException("Mandatory configuration variable PRESALYTICS_USERNAME is missing from configuration.  Please reconfigure and retry.")
         try:
             self.password = self.auth_config.PRESALYTICS['PASSWORD']
             self.direct_grant = True
@@ -66,7 +57,7 @@ class Client(object):
         try:
             self.client_id = self.auth_config.PRESALYTICS['CLIENT_ID']
         except KeyError:
-            self.client_id = DEFAULT_CLIENT_ID
+            self.client_id = cnst.DEFAULT_CLIENT_ID
         try:
             self.client_secret = self.auth_config.PRESALYTICS['CLIENT_SECRET']
             self.confidential_client = True
@@ -77,17 +68,17 @@ class Client(object):
         try:
             self.site_host = self.auth_config.PRESALYTICS["HOSTS"]["SITE"]
         except KeyError:
-            self.site_host = HOST
+            self.site_host = cnst.HOST
         self.login_sleep_interval = 5  # seconds
         self.login_timeout = 60  # seconds
         self._delegate_login = delegate_login
-        self.oidc = KeycloakOpenID(
-            server_url=OIDC_AUTH_HOST,
-            realm_name=OIDC_REALM,
+        self.oidc = keycloak.KeycloakOpenID(
+            server_url=cnst.OIDC_AUTH_HOST,
+            realm_name=cnst.OIDC_REALM,
             client_id=self.client_id,
             verify=True
         )
-        self.token_util = TokenUtil()
+        self.token_util = presalytics.client.auth.TokenUtil()
         self.token_util.token = self.refresh_token()
 
         doc_converter_api_client = DocConverterApiClientWithAuth(self, **kwargs)
@@ -103,7 +94,7 @@ class Client(object):
                 keycloak_token = self.oidc.token(username=self.username, password=self.password)
             else:
                 keycloak_token = self._get_new_token_browser()
-        except KeycloakGetError as e:
+        except keycloak.exceptions.KeycloakGetError as e:
             if e.response_code == 404:
                 logger.error("Received reponse code 404 from api authentication.  Indicates username does not exist.  Please recheck config and try again.")
             elif e.response_code == 401:
@@ -112,13 +103,13 @@ class Client(object):
                 logger.error("Server error.  Please try again later.")
             else:
                 logger.error(e.error_message)
-            raise MissingConfigException(e.error_message)
+            raise presalytics.lib.exceptions.MissingConfigException(e.error_message)
         self.token_util.process_keycloak_token(keycloak_token)
         return self.token_util.token
 
     def delegated_login(self, original_token, audience=None):
         """ Requires developer account and authorized client credentials """
-        self.oidc.decode_token(original_token, JWT_KEY)
+        self.oidc.decode_token(original_token, cnst.JWT_KEY)
         kwargs = {
             "client_id": self.client_id,
             "client_secret": self.client_secret,
@@ -146,7 +137,7 @@ class Client(object):
             "client_id": self.client_id
         }
         query_string = '?{}'.format(urllib.parse.urlencode(query))
-        url = urllib.parse.urljoin(self.site_host, urllib.parse.urljoin(LOGIN_PATH, query_string))
+        url = urllib.parse.urljoin(self.site_host, urllib.parse.urljoin(cnst.LOGIN_PATH, query_string))
         webbrowser.open_new_tab(url) 
         auth_code = None
         payload = {
@@ -155,7 +146,7 @@ class Client(object):
             "client_id": self.client_id
         }
 
-        auth_code_url = urllib.parse.urljoin(self.site_host, API_CODE_URL)
+        auth_code_url = urllib.parse.urljoin(self.site_host, cnst.API_CODE_URL)
         interval = 0
         while True:
             response = requests.post(auth_code_url, json=payload)
@@ -164,12 +155,12 @@ class Client(object):
                     interval += self.login_sleep_interval
                     time.sleep(self.login_sleep_interval)
                 else:
-                    raise LoginTimeout
+                    raise presalytics.lib.exceptions.LoginTimeout()
             else:
                 data = json.loads(response.content)
                 break
         auth_code = data["authorization_code"]
-        token = self.oidc.token(username=self.username, grant_type="authorization_code", code=auth_code, redirect_uri=REDIRECT_URI)
+        token = self.oidc.token(username=self.username, grant_type="authorization_code", code=auth_code, redirect_uri=cnst.REDIRECT_URI)
         return token
 
     def refresh_token(self):
@@ -183,7 +174,7 @@ class Client(object):
                 try:
                     refresh_token = self.token_util.token["refresh_token"]
                     self.token_util.token = self.oidc.refresh_token(refresh_token)
-                except KeycloakGetError:
+                except keycloak.exceptions.KeycloakGetError:
                     self.login()
             self.token_util._put_token_file()
         return self.token_util.token
@@ -201,22 +192,22 @@ class Client(object):
             f.write(response.data)
 
 
-class DocConverterApiClientWithAuth(AuthenticationMixIn, presalytics_doc_converter.api_client.ApiClient):
+class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics_doc_converter.api_client.ApiClient):
     def __init__(self, parent: Client, **kwargs):
-        AuthenticationMixIn.__init__(self, **kwargs)
+        presalytics.client.auth.AuthenticationMixIn.__init__(self, **kwargs)
         presalytics_doc_converter.api_client.ApiClient.__init__(self)
         self.update_configuration()
 
 
-class OoxmlAutomationApiClientWithAuth(AuthenticationMixIn, presalytics_ooxml_automation.api_client.ApiClient):
+class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics_ooxml_automation.api_client.ApiClient):
     def __init__(self, parent: Client, **kwargs):
-        AuthenticationMixIn.__init__(self, **kwargs)
+        presalytics.client.auth.AuthenticationMixIn.__init__(self, **kwargs)
         presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
         self.update_configuration()
 
 
-class StoryApiClientWithAuth(AuthenticationMixIn, presalytics_story.api_client.ApiClient):
+class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics_story.api_client.ApiClient):
     def __init__(self, parent: Client, **kwargs):
-        AuthenticationMixIn.__init__(self, **kwargs)
+        presalytics.client.auth.AuthenticationMixIn.__init__(self, **kwargs)
         presalytics_story.api_client.ApiClient.__init__(self)
         self.update_configuration()

@@ -3,7 +3,8 @@
 {% block page_content %}
     <div class="single-item-grid">
         <div class="single-item">
-            {{ widget }}
+            {{ widgets[widget_index].to_html() }}
+            {% set widget_index = widget_index + 1 %}
         </div>
     </div>
 {% endblock %}

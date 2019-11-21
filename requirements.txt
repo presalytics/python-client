@@ -6,7 +6,7 @@ Click==7.0
 cycler==0.10.0
 ddt==1.2.1
 docutils==0.15.2
-ecdsa==0.13.2
+ecdsa==0.13.3
 entrypoints==0.3
 environs==5.2.1
 flake8==3.7.8

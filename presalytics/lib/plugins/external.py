@@ -15,7 +15,7 @@ script_map = {
         'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js'
 
     },
-    'mpld3': 'https://raw.githubusercontent.com/mpld3/mpld3/master/mpld3/js/mpld3.v0.3.1.dev1.min.js',
+    'mpld3': 'https://presalytics.io/static/mpld3/mpld3.min.js',
 }
 
 

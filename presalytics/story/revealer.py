@@ -171,7 +171,7 @@ class Revealer(presalytics.story.components.Renderer):
 
     def make_base(self):
         base = lxml.etree.Element("div", attrib={"class": "reveal"})
-        lxml.etree.SubElement(base, "div", attrib={"class": "slides"})
+        lxml.etree.SubElement(reveal_base, "div", attrib={"class": "slides"})
         return base
 
     def package_as_standalone(self):

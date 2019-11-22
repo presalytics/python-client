@@ -4,6 +4,7 @@ import presalytics.lib.exceptions
 
 script_map = {
     'd3': 'https://cdnjs.cloudflare.com/ajax/libs/d3/5.12.0/d3.min.js',
+    'd3v3': 'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js',
     'reveal': {
         'base': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js',
         'marked': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/marked.js',

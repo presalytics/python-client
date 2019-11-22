@@ -5,6 +5,7 @@ import webbrowser
 import logging
 import collections
 import typing
+import tempfile
 import lxml
 import lxml.html
 import lxml.etree
@@ -274,6 +275,8 @@ class Revealer(presalytics.story.components.Renderer):
             os.mkdir(theme_path)
 
     def present(self, files_path=None, debug=True, port=8080, host='127.0.0.1'):
+        if not files_path:
+            files_path = tempfile.gettempdir()
         html = self.package_as_standalone().decode('utf-8')
         id = presalytics.story.util.to_title_case(self.story_outline.title)
         self.make_local_folders(files_path)

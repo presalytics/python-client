@@ -13,21 +13,28 @@ class Mpld3Plugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
             'config': {
                 'approved_scripts_key': 'reveal.base'
             }
+        },
+        {
+            'type': 'script',
+            'name': 'external_scripts',
+            'config': {
+                'approved_scripts_key': 'd3'
+            }
+        },
+        {
+            'type': 'script',
+            'name': 'external_scripts',
+            'config': {
+                'approved_scripts_key': 'mpld3'
+            }
         }
     ]
 
-    template = """
-    <script type="text/javascript>
-        mpld3.draw_figure(
-            {{ id }},
-            {{ fig_json }}
-        );
-    </script>
-    """
+    template = '<script type="text/javascript">mpld3.draw_figure({{ id|safe }},{{ fig_json|tojson }});</script>'
 
     def to_script(self, config, **kwargs):
         render_config = {
             'id': config["id"],
-            'fig_json': json.dumps(config["plot_dict"])
+            'fig_json': config["plot_dict"]
         }
         return self.render(render_config)

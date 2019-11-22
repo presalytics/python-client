@@ -48,22 +48,13 @@ class Revealer(presalytics.story.components.Renderer):
         self.story_outline = story_outline
         self.story_outline.validate()
         self.base = self.make_base()
-        reveal_script_config = {
+        reveal_plugin_config = {
             'type': 'script',
-            'name': 'external_scripts',
-            'config': {
-                'approved_scripts_key': 'reveal.base'
-            }
-        }
-        reveal_style_config = {
-            'type': 'style',
-            'name': 'external_links',
-            'config': {
-                'approved_styles_key': 'reveal.base'
-            }
+            'name': 'reveal',
+            'config': {}
         }
         self.update_outline_from_instances()
-        self.plugins = [reveal_script_config, reveal_style_config]
+        self.plugins = [reveal_plugin_config]
         self.get_component_implicit_plugins()
         outline_plugins = presalytics.lib.plugins.base.PluginManager.get_plugins_from_nested_dict(story_outline.to_dict())
         self.plugins.extend(outline_plugins)
@@ -200,7 +191,7 @@ class Revealer(presalytics.story.components.Renderer):
             head,
             body
         )
-        return lxml.html.tostring(html)
+        return lxml.html.tostring(html, pretty_print=True)
 
     def render_plugin(self, plugin):
         plugin_type = plugin['type']
@@ -231,7 +222,7 @@ class Revealer(presalytics.story.components.Renderer):
         """
         reveal_base = self.base
         for page in self.story_outline.pages:
-            slide = lxml.etree.SubElement(reveal_base, "div", attrib={"class": "slides"})
+            slide = lxml.etree.SubElement(reveal_base, "section")
             page_html = self.render_page(page)
             slide_fragment = lxml.html.fragment_fromstring(page_html)
             slide.append(slide_fragment)
@@ -274,7 +265,7 @@ class Revealer(presalytics.story.components.Renderer):
         if not os.path.exists(theme_path):
             os.mkdir(theme_path)
 
-    def present(self, files_path=None, debug=True, port=8080, host='127.0.0.1'):
+    def present(self, files_path=None, debug=True, port=8082, host='127.0.0.1'):
         if not files_path:
             files_path = tempfile.gettempdir()
         html = self.package_as_standalone().decode('utf-8')

@@ -11,7 +11,12 @@ class JinjaPluginMakerMixin(object):
         super(JinjaPluginMakerMixin, self).__init__(*args, *kwargs)
 
     def render(self, config: typing.Dict):
-        template = jinja2.Environment(loader=jinja2.BaseLoader()).from_string(self.get_template())
+        options = {
+            "loader": jinja2.BaseLoader()
+        }
+        if config.get("jinja_options", None):
+            options.update(config.pop("jinja_options"))
+        template = jinja2.Environment(**options).from_string(self.get_template())
         return template.render(config)
 
     def get_template(self) -> str:

@@ -4,8 +4,10 @@ import presalytics.lib
 import presalytics.lib.widgets
 import presalytics.lib.widgets.matplotlib
 
-plt.plot([1, 2, 3, 4])
-plt.ylabel('Y-axis')
-plt.xlabel('X-Axis')
+fig, ax = plt.subplots()
 
-test_plot_1 = presalytics.lib.widgets.matplotlib.MatplotlibPyplot(plt, 'test_plot_1', module=__name__)
+ax.plot([3,1,4,1,5], 'ks-', mec='w', mew=5, ms=20)
+ax.set_title("test plot")
+
+
+test_plot_1 = presalytics.lib.widgets.matplotlib.MatplotlibFigure(fig, 'test_plot_1', module=__name__)

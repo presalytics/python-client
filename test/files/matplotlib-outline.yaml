@@ -15,7 +15,7 @@ pages:
       title: Example plot 
     widgets:
       - name: test_plot_1
-        kind: matplotlib_pyplot
+        kind: matplotlib_figure
         data:
           temp: data
         plugins:

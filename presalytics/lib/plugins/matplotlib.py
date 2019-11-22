@@ -35,6 +35,6 @@ class Mpld3Plugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
     def to_script(self, config, **kwargs):
         render_config = {
             'id': config["id"],
-            'fig_json': config["plot_dict"]
+            'fig_json': config["figure_dict"]
         }
         return self.render(render_config)

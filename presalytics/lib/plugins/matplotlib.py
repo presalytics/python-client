@@ -30,7 +30,7 @@ class Mpld3Plugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
         }
     ]
 
-    template = '<script type="text/javascript">mpld3.draw_figure({{ id|safe }},{{ fig_json|tojson }});</script>'
+    template = '<script type="text/javascript">mpld3.draw_figure("{{ id|safe }}",{{ fig_json|tojson }});</script>'
 
     def to_script(self, config, **kwargs):
         render_config = {

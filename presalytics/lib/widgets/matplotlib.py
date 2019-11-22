@@ -30,7 +30,7 @@ class MatplotlibPyplot(presalytics.story.components.WidgetBase):
         self.outline_widget = self.serialize()
 
     def to_html(self):
-        return '<div id={0} class="mpld3"></div>'.format(self.plot_id)
+        return '<div id="{0}" class="mpld3"></div>'.format(self.plot_id)
 
     @classmethod
     def deserialize(cls, outline, **kwargs):

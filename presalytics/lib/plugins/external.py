@@ -16,6 +16,7 @@ script_map = {
 
     },
     'mpld3': 'https://presalytics.io/static/mpld3/mpld3.min.js',
+    'ooxml': 'https://presalytics.io/static/ooxml/ooxml.js'
 }
 
 

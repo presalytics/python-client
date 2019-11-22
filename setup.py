@@ -10,7 +10,7 @@
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "presalytics"
-VERSION = "0.2.1"
+VERSION = "0.2.2"
 
 # To install the library, run the following
 #
@@ -28,7 +28,12 @@ REQUIRES = ["urllib3 >= 1.15",
     "python-keycloak",
     "presalytics-doc-converter",
     "presalytics-ooxml-automation",
-    "presalytics-story"]
+    "presalytics-story",
+    "environs",
+    "matplotlib",
+    "lxml",
+    "pyyaml",
+    "mpld3"]
 
 with open("README.md", "r") as fh:
     long_description = fh.read()

@@ -1,7 +1,7 @@
 import os
 
 SPEC = {
-        "update": True,
+        "update": False,
         "update_type": "patch",
         "endpoint": "https://api.presalytics.io/story/openapi.json",
         "package_name": "presalytics_story",

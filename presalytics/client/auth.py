@@ -107,7 +107,7 @@ class AuthenticationMixIn(object):
         rather than at class initialized (good for ipython notebooks)
         """
 
-        auth_header = self.parent.get_auth_header()
+        auth_header = self.parent().get_auth_header()
         if header_params is not None:
             header_params.update(auth_header)
         else:

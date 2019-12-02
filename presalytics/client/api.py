@@ -166,7 +166,7 @@ class Client(object):
     def get_auth_header(self):
         self.refresh_token()
         auth_header = {
-            "Authorization": "Bearer " + self.parent.token_util.token["access_token"]
+            "Authorization": "Bearer " + self.token_util.token["access_token"]
         }
         return auth_header
 

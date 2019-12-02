@@ -28,45 +28,29 @@ class Client(object):
             config_file=None,
             delegate_login=False,
             **kwargs):
-
-        if config:
-            if "PRESALYTICS" in config:
-                self.auth_config = presalytics.client.auth.AuthConfig(config["PRESALYTICS"])
-            else:
-                self.auth_config = presalytics.client.auth.AuthConfig(config)
-        else:
-            if config_file is None:
-                config_file = os.getcwd() + os.path.sep + "config.py"
-            if not os.path.exists(config_file):
-                config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.py')
-                if not os.path.exists(config_file):
-                    raise presalytics.lib.exceptions.MissingConfigException("Could not initialize. Config file 'config.py' not found.")
-            config_spec = importlib.util.spec_from_file_location("config", config_file)
-            self.auth_config = importlib.util.module_from_spec(config_spec)
-            config_spec.loader.exec_module(self.auth_config)
         try:
-            self.username = self.auth_config.PRESALYTICS['USERNAME']
+            self.username = presalytics.CONFIG['USERNAME']
         except KeyError:
             raise presalytics.lib.exceptions.MissingConfigException("Mandatory configuration variable PRESALYTICS_USERNAME is missing from configuration.  Please reconfigure and retry.")
         try:
-            self.password = self.auth_config.PRESALYTICS['PASSWORD']
+            self.password = presalytics.CONFIG['PASSWORD']
             self.direct_grant = True
         except KeyError:
             self.password = None
             self.direct_grant = False
         try:
-            self.client_id = self.auth_config.PRESALYTICS['CLIENT_ID']
+            self.client_id = presalytics.CONFIG['CLIENT_ID']
         except KeyError:
             self.client_id = cnst.DEFAULT_CLIENT_ID
         try:
-            self.client_secret = self.auth_config.PRESALYTICS['CLIENT_SECRET']
+            self.client_secret = presalytics.CONFIG['CLIENT_SECRET']
             self.confidential_client = True
         except KeyError:
             self.client_secret = None
             self.confidential_client = False
 
         try:
-            self.site_host = self.auth_config.PRESALYTICS["HOSTS"]["SITE"]
+            self.site_host = presalytics.CONFIG["HOSTS"]["SITE"]
         except KeyError:
             self.site_host = cnst.HOST
         self.login_sleep_interval = 5  # seconds
@@ -178,6 +162,13 @@ class Client(object):
                     self.login()
             self.token_util._put_token_file()
         return self.token_util.token
+
+    def get_auth_header(self):
+        self.parent.refresh_token()
+        auth_header = {
+            "Authorization": "Bearer " + self.parent.token_util.token["access_token"]
+        }
+        return auth_header
 
     def download_file(self, story_id, ooxml_automation_id, download_folder=None, filename=None, **kwargs):
         response, status, headers = self.story.story_id_file_ooxmlautomationid_get_with_http_info(story_id, ooxml_automation_id, _preload_content=False)

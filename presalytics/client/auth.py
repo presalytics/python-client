@@ -89,23 +89,11 @@ class TokenUtil(object):
         return token
 
 
-class AuthConfig(object):
-    def __init__(self, config_dict):
-        self.PRESALYTICS = config_dict
-
-
 class AuthenticationMixIn(object):
     def __init__(self, parent: 'Client', config=None, config_file=None, ignore_api_exceptions=False, **kwargs):
         self.parent: 'Client' = weakref.ref(parent)
         self._ignore_api_exceptions = ignore_api_exceptions
         super(AuthenticationMixIn, self).__init__(**kwargs)
-
-    def get_auth_header(self):
-        self.parent.refresh_token()
-        auth_header = {
-            "Authorization": "Bearer " + self.parent.token_util.token["access_token"]
-        }
-        return auth_header
 
     def call_api(
             self, resource_path, method,
@@ -119,7 +107,7 @@ class AuthenticationMixIn(object):
         rather than at class initialized (good for ipython notebooks)
         """
 
-        auth_header = self.get_auth_header()
+        auth_header = self.parent.get_auth_header()
         if header_params is not None:
             header_params.update(auth_header)
         else:

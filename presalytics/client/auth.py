@@ -139,8 +139,8 @@ class AuthenticationMixIn(object):
         if self.configuration is None:
             raise presalytics.lib.exceptions.MissingConfigException("Base API not yet configured, please reconstruct API initialization")
         self.user_agent = AuthenticationMixIn._get_user_agent
-        if bool(self.auth_config.PRESALYTICS['HOSTS']):
-            self.set_host(self.parent.auth_config.PRESALYTICS['HOSTS'])
+        if presalytics.CONFIG.get("HOSTS", None):
+            self.set_host(presalytics.CONFIG.get('HOSTS'))
 
     @staticmethod
     def get_user_agent():

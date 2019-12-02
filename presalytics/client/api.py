@@ -185,20 +185,20 @@ class Client(object):
 
 class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics_doc_converter.api_client.ApiClient):
     def __init__(self, parent: Client, **kwargs):
-        presalytics.client.auth.AuthenticationMixIn.__init__(self, **kwargs)
+        presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics_doc_converter.api_client.ApiClient.__init__(self)
         self.update_configuration()
 
 
 class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics_ooxml_automation.api_client.ApiClient):
     def __init__(self, parent: Client, **kwargs):
-        presalytics.client.auth.AuthenticationMixIn.__init__(self, **kwargs)
+        presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
         self.update_configuration()
 
 
 class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics_story.api_client.ApiClient):
     def __init__(self, parent: Client, **kwargs):
-        presalytics.client.auth.AuthenticationMixIn.__init__(self, **kwargs)
+        presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics_story.api_client.ApiClient.__init__(self)
         self.update_configuration()

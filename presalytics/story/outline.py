@@ -99,7 +99,7 @@ class OutlineBase(abc.ABC):
         ret = {}
         for key, val in self.__dict__.items():
             ret_key = "{}".format(to_camel_case(key))
-            ret_val = json.loads(json.dumps(val, cls=OutlineEncoder))
+            ret_val = json.loads(json.dumps(val, cls=OutlineEncoder), encoding='utf-8')
             ret[ret_key] = ret_val
         return ret
 

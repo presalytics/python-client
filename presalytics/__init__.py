@@ -1,4 +1,7 @@
-# Automatically configure default logger
+"""
+Presalytics python client
+https://presalytics.io
+"""
 import os
 import environs
 import logging
@@ -9,6 +12,54 @@ import presalytics.lib.plugins.base
 import presalytics.lib.config_loader
 import presalytics.story
 import presalytics.story.components
+from presalytics.client.api import Client
+from presalytics.lib.plugins.base import PluginBase
+from presalytics.lib.plugins.external import ApprovedExternalLinks, ApprovedExternalScripts
+from presalytics.lib.plugins.jinja import JinjaPluginMakerMixin
+from presalytics.lib.plugins.local import LocalStylesPlugin
+from presalytics.lib.plugins.matplotlib import Mpld3Plugin
+from presalytics.lib.plugins.ooxml import OoxmlTheme
+from presalytics.lib.plugins.reveal import RevealConfigPlugin
+from presalytics.lib.plugins.reveal_theme import RevealCustomTheme
+from presalytics.lib.templates.base import JinjaTemplateBuilder
+from presalytics.lib.widgets.matplotlib import MatplotlibFigure
+from presalytics.lib.widgets.ooxml import OoxmlEditorWidget, OoxmlFileWidget
+from presalytics.story.outline import StoryOutline
+from presalytics.story.revealer import Revealer
+from presalytics.story.components import WidgetBase, PageTemplateBase, Renderer, ThemeBase
+from presalytics.lib.tools.ooxml_tools import (
+    create_theme_from_ooxml_document,
+    create_pages_from_document,
+    create_outline_from_ooxml_file
+)
+__all__ = [
+    'CONFIG',
+    'COMPONENTS',
+    'PLUGINS',
+    'Client',
+    'PluginBase',
+    'ApprovedExternalLinks',
+    'ApprovedExternalScripts',
+    'JinjaPluginMakerMixin',
+    'LocalStylesPlugin',
+    'Mpld3Plugin',
+    'OoxmlTheme',
+    'RevealConfigPlugin',
+    'RevealCustomTheme',
+    'JinjaTemplateBuilder',
+    'MatplotlibFigure',
+    'OoxmlEditorWidget',
+    'OoxmlFileWidget',
+    'StoryOutline',
+    'Revealer',
+    'WidgetBase',
+    'PageTemplateBase',
+    'Renderer',
+    'ThemeBase',
+    'create_theme_from_ooxml_document',
+    'create_pages_from_document',
+    'create_outline_from_ooxml_file'
+]
 
 env = environs.Env()
 env.read_env()

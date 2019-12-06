@@ -27,13 +27,8 @@ class TestStory(unittest.TestCase):
         outline = presalytics.story.outline.StoryOutline.import_yaml(test_file)
         json_str = outline.dump()
         new_dict = json.loads(json_str)
-        self.assertEqual(new_dict["pages"][0]["widgets"][0]["data"]["plotName"], "test_plt_1")
+        self.assertEqual(new_dict["pages"][0]["widgets"][0]["data"]["temp"], "data")
         self.assertIsNotNone(json_str)
-
-    def test_render_matplotlib_plot(self):
-        test_file = os.path.join(os.path.dirname(__file__), 'files', 'matplotlib-outline.yaml')
-        outline = presalytics.story.outline.StoryOutline.import_yaml(test_file)
-        presalytics.story.revealer.Revealer(outline).present(files_path='/tmp')
 
     def test_plugins(self):
         from presalytics import PLUGINS

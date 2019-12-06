@@ -20,7 +20,7 @@ pages:
           temp: data
         plugins:
         - name: mpld3
-          type: script
+          kind: script
           config:
             temp: data
         additionalProperties:
@@ -30,6 +30,6 @@ themes:
   kind: PluginOnly
   plugins:
   - name: external_links
-    type: style
+    kind: style
     config:
       approved_styles_key: reveal.themes.white

@@ -14,6 +14,7 @@ import dateutil.parser
 import uuid
 import abc
 import typing
+import sys
 from presalytics.story.util import to_camel_case, to_snake_case
 from presalytics.lib.exceptions import ValidationError
 
@@ -29,19 +30,23 @@ class OutlineEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
+def get_current_spec_version():
+    return '0.1.1'
+
+
 class OutlineBase(abc.ABC):
     __client_ver__: str
     __annotations__: typing.Dict
     __required__: typing.Sequence[str]
+    additional_properites: typing.Dict
 
     __required__ = []
 
     def __init__(self, **kwargs):
-        for key, val in kwargs.items():
-            key_name = to_snake_case(key)
-            val = self.deserialize_child(key_name, val)
-            setattr(self, key_name, val)
-        self.validate()
+        if "additional_properties" in kwargs:
+            self.additional_properites = kwargs["additional_properties"]
+        else:
+            self.additional_properites = kwargs
 
     def validate(self):
         for key in self.__required__:
@@ -49,38 +54,16 @@ class OutlineBase(abc.ABC):
                 err_message = 'Could not load {0} object, source data missing "{1}" key'.format(self.__class__.__name__, key)
                 raise ValidationError(err_message)
 
-    def deserialize_child(self, key_name, val):
-        if key_name in self.__annotations__:
-            sub_type = self.__annotations__[key_name]
-            if inspect.isclass(sub_type) and not issubclass(sub_type, str):
-                if issubclass(sub_type, OutlineBase):
-                    val = sub_type(**val)
-                if issubclass(sub_type, typing.Sequence):
-                    try:
-                        list_type = sub_type.__args__[0]
-                        if issubclass(list_type, OutlineBase):
-                            for x in range(0, len(val)):
-                                val[x] = list_type(**val[x])
-                    except TypeError:
-                        pass
-                if issubclass(sub_type, typing.Dict):
-                    try:
-                        val_type = sub_type.__args__[1]
-                        if issubclass(val_type, OutlineBase):
-                            for child_key, child_val in val.items():
-                                updated_val = val_type({child_key, child_val})
-                                val.update(child_key, updated_val)
-                    except TypeError:
-                        pass
-                if issubclass(sub_type, datetime.datetime):
-                    val = dateutil.parser.parse(val)
-                if issubclass(sub_type, uuid.UUID):
-                    val = uuid.UUID(val)
-        return val
-
     @classmethod
     def deserialize(cls, json_obj):
-        return cls(**json_obj)
+        updated_obj = {}
+        for key, val in json_obj.items():
+            new_key = to_snake_case(key)
+            updated_obj.update({new_key: val})
+        for req in inspect.getargspec(cls).args:
+            if req not in updated_obj and req != 'self':
+                updated_obj.update({req: None})
+        return cls(**updated_obj)
 
     @classmethod
     def load(cls, json_str):
@@ -92,12 +75,23 @@ class OutlineBase(abc.ABC):
             obj = yaml.safe_load(file)
         return cls.deserialize(obj)
 
+    def export_yaml(self, filename):
+        with open(filename, 'w') as file:
+            yaml.dump(self.to_dict(), file)
+
     def dump(self):
         return json.dumps(self, cls=OutlineEncoder)
 
     def to_dict(self):
         ret = {}
         for key, val in self.__dict__.items():
+            if key not in self.__required__:
+                if isinstance(val, list):
+                    if len(val) == 0:
+                        continue
+                if isinstance(val, dict):
+                    if len(val.items()) == 0:
+                        continue
             ret_key = "{}".format(to_camel_case(key))
             ret_val = json.loads(json.dumps(val, cls=OutlineEncoder), encoding='utf-8')
             ret[ret_key] = ret_val
@@ -112,52 +106,113 @@ class Info(OutlineBase):
     modified_by: str
     revision_notes: str
 
+    def __init__(self,
+                 revision,
+                 date_created,
+                 date_modified,
+                 created_by,
+                 modified_by,
+                 revision_notes,
+                 **kwargs):
+        super(Info, self).__init__(**kwargs)
+        self.revision = revision
+        self.date_created = dateutil.parser.parse(date_created)
+        self.date_modified = dateutil.parser.parse(date_modified)
+        self.created_by = created_by
+        self.modified_by = modified_by
+        self.revision_notes = revision_notes
+
+
+class Plugin(OutlineBase):
+    kind: str
+    name: str
+    config: typing.Dict
+
+    __required__ = [
+        'kind',
+        'config',
+        'name'
+    ]
+
+    def __init__(self, kind, name, config, **kwargs):
+        super(Plugin, self).__init__(**kwargs)
+        self.kind = kind
+        self.name = name
+        self.config = config
+
 
 class Widget(OutlineBase):
     name: str
     kind: str
     data: typing.Dict[str, str]
-    plugins: typing.Sequence[str]
-    additional_properties: typing.Dict[str, str]
+    plugins: typing.Sequence
 
     __required__ = [
         'name',
         'data'
     ]
 
+    def __init__(self, name, kind, data, plugins, **kwargs):
+        super(Widget, self).__init__(**kwargs)
+        self.name = name
+        self.kind = kind
+        if data:
+            self.data = data
+        else:
+            self.data = {}
+        if plugins:
+            self.plugins = [Plugin.deserialize(x) for x in plugins]
+        else:
+            self.plugins = []
+
 
 class Page(OutlineBase):
     name: str
     kind: str
     widgets: typing.Sequence[Widget]
-    additional_properties: typing.Dict[str, str]
-    plugins: typing.List[typing.Dict]
+    plugins: typing.List[Plugin]
 
     __required__ = [
-        'name'
+        'name',
+        'kind'
     ]
+
+    def __init__(self, name, kind, widgets, plugins, **kwargs):
+        super(Page, self).__init__(**kwargs)
+        self.name = name
+        self.kind = kind
+        if widgets:
+            self.widgets = [Widget.deserialize(x) for x in widgets]
+        else:
+            self.widgets = []
+        if plugins:
+            self.plugins = [Plugin.deserialize(x) for x in plugins]
+        else:
+            self.plugins = []
 
 
 class Theme(OutlineBase):
     name: str
-    module_name: str
-    additional_properties: typing.Dict[str, str]
+    kind: str
+    data: typing.Dict
+    plugins: typing.List[Plugin]
 
     __required__ = [
         'name'
     ]
 
-
-class Plugin(OutlineBase):
-    type: str
-    name: str
-    config: typing.Dict
-
-    __required__ = [
-        'type',
-        'config',
-        'name'
-    ]
+    def __init__(self, name, kind, data, plugins, **kwargs):
+        super(Theme, self).__init__(**kwargs)
+        self.name = name
+        self.kind = kind
+        if data:
+            self.data = data
+        else:
+            self.data = {}
+        if plugins:
+            self.plugins = [Plugin.deserialize(x) for x in plugins]
+        else:
+            self.plugins = []
 
 
 class StoryOutline(OutlineBase):
@@ -174,3 +229,25 @@ class StoryOutline(OutlineBase):
         'pages',
         'title'
     ]
+
+    def __init__(self, presalytics_story, info, pages, description, title, themes, plugins, **kwargs):
+        super(StoryOutline, self).__init__(**kwargs)
+        self.presalytics_story = presalytics_story
+        self.info = Info.deserialize(info)
+        self.pages = [Page.deserialize(x) for x in pages]
+        if description:
+            self.description = description
+        else:
+            self.description = ""
+        if title:
+            self.title = title
+        else:
+            self.title = ""
+        if themes:
+            self.themes = [Theme.deserialize(x) for x in themes]
+        else:
+            self.themes = []
+        if plugins:
+            self.plugins = [Plugin.deserialize(x) for x in plugins]
+        else:
+            self.plugins = []

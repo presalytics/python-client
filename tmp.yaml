@@ -1,0 +1,35 @@
+description: tests whether the story revealer can render a matplotlib plot
+info:
+  createdBy: Kevin
+  dateCreated: '2019-11-07T00:00:00'
+  dateModified: '2019-11-07T00:00:00'
+  modifiedBy: Kevin
+  revision: 0.1.1
+  revisionNotes: IntialCreate
+pages:
+- additionalProperites:
+    title: Example plot
+  kind: TitleWithSingleItem
+  name: TestPage
+  widgets:
+  - additionalProperites:
+      module: test.files.test_plots
+    data:
+      temp: data
+    kind: matplotlib_figure
+    name: test_plot_1
+    plugins:
+    - config:
+        temp: data
+      kind: script
+      name: mpld3
+presalyticsStory: 0.1.1
+themes:
+- kind: PluginOnly
+  name: white
+  plugins:
+  - config:
+      approved_styles_key: reveal.themes.white
+    kind: style
+    name: external_links
+title: Test-story

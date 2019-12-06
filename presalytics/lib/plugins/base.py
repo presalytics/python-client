@@ -5,7 +5,6 @@ import collections
 import lxml
 import lxml.etree
 import presalytics
-import presalytics
 import presalytics.lib.exceptions
 import presalytics.lib.registry
 
@@ -233,7 +232,7 @@ class PluginManager(object):
     def add_plugin_to_dep_map(self, plugin):
         current_plugins = [x["plugin"] for x in self.dependency_map.values()]
         if plugin not in current_plugins:
-            lookup_key = plugin["type"] + "." + plugin["name"]
+            lookup_key = plugin["kind"] + "." + plugin["name"]
             plugin_class = presalytics.PLUGINS.get(lookup_key)
             if plugin_class is None:
                 message = "Required plugin {0} not found.".format(lookup_key)
@@ -286,7 +285,7 @@ class PluginManager(object):
         rendered_list = []
         for key in self.dependency_order:
             dep_map = self.dependency_map[key]
-            if dep_map["plugin"]["type"] == plugin_type:
+            if dep_map["plugin"]["kind"] == plugin_type:
                 plugin_config = dep_map["plugin"]
                 plugin_class = dep_map["class"]
                 plugin_instance = plugin_class()
@@ -301,7 +300,7 @@ class PluginManager(object):
                 if isinstance(val, list):
                     for list_item in val:
                         if isinstance(list_item, dict):
-                            if "config" in list_item and "name" in list_item and "type" in list_item:
+                            if "config" in list_item and "name" in list_item and "kind" in list_item:
                                 plugin_list.append(list_item)
             if isinstance(val, dict):
                 PluginManager.get_plugins_from_nested_dict(val, plugin_list)

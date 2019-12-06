@@ -212,12 +212,11 @@ class PageTemplateBase(ComponentBase):
 
     outline_page: 'Page'
     widgets: typing.List['WidgetBase']
-    widget_loader: 'WidgetBase'
     plugins: typing.List[typing.Dict]
 
     __component_type__ = 'page'
 
-    def __init__(self, page: 'Page', widget_loader: 'WidgetBase' = None) -> None:
+    def __init__(self, page: 'Page') -> None:
         self.outline_page = page
         self.widgets = self.get_page_widgets(self.outline_page)
 
@@ -274,9 +273,22 @@ class PageTemplateBase(ComponentBase):
             next_widget = self.load_widget(widget_outline)
             widget_instances.append(next_widget)
         return widget_instances
+    
+    def serialize(self):
+        return self.outline_page.dump()
+
+    @classmethod
+    def deseriailize(cls, component, **kwargs):
+        return cls(page=component)
 
 
 class ThemeBase(ComponentBase):
+    """
+    Themes are containers for plugins should be rendered once
+    across the entire document.  The init method should configure
+    parameters with get passed to plugins via serialization and 
+    deserialization.
+    """
     plugins: typing.Optional[typing.List['Plugin']]
 
     __component_type__ = 'theme'
@@ -285,11 +297,7 @@ class ThemeBase(ComponentBase):
         pass
 
     def render(self, **kwargs):
-        return self.make_theme()
-
-    @abc.abstractmethod
-    def make_theme(self):
-        raise NotImplementedError
+        pass
 
 
 class Renderer(ComponentBase):

@@ -9,6 +9,23 @@ if typing.TYPE_CHECKING:
     from presalytics.story.outline import Page
 
 
+class WidgetPage(presalytics.story.components.PageTemplateBase):
+    __component_kind__ = 'widget-page'
+
+    def __init__(self, page: 'Page', **kwargs):
+        super(WidgetPage, self).__init__(page)
+
+    @classmethod
+    def deseriailize(cls, component, **kwargs):
+        return cls(component, **kwargs)
+
+    def serialize(self):
+        return self.outline_page
+
+    def render(self, **kwargs):
+        self.widgets[0].to_html()
+
+
 class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
     __css__: typing.Sequence[str]
     __template_file__: str
@@ -33,7 +50,7 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
         plugin_list = []
         for id in cls.__css__:
             new_item = {
-                'type': 'style',
+                'kind': 'style',
                 'name': 'local',
                 'config': {
                     'css_file_id': id

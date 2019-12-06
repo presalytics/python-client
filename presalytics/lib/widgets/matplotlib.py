@@ -45,13 +45,13 @@ class MatplotlibFigure(presalytics.story.components.WidgetBase):
         }
         plugin_obj = presalytics.story.outline.Plugin(
             name='mpld3',
-            type='script',
+            kind='script',
             config=data
         )
         return presalytics.story.outline.Widget(
             name=self.name,
             kind=self.__component_kind__,
-            plugins=[plugin_obj],
+            plugins=[plugin_obj.to_dict()],
             data=data,
             additional_properties=self.additional_properties
-        )
+        ).to_dict()

@@ -1,3 +1,4 @@
+import datetime
 
 
 class classproperty(property):
@@ -9,3 +10,9 @@ class classproperty(property):
 
     def __delete__(self, obj):
         super(classproperty, self).__delete__(type(obj))
+
+
+def roundup_date_modified(current_datetime: datetime.datetime):
+    one_second = datetime.datetime(second=1)
+    rounddown = current_datetime.replace(microsecond=0)
+    return rounddown + one_second

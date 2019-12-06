@@ -43,6 +43,20 @@ class ValidationError(PresalyticsBaseException):
         super().__init__(message)
 
 
+class ApiError(PresalyticsBaseException):
+    def __init__(self, message=None):
+        if not message:
+            message = "A error occured while commuicating with the presaltyics API.  Please Check your configuration values and try again."
+        super().__init__(message)
+
+
+class InvalidConfigurationError(PresalyticsBaseException):
+    def __init__(self, message=None):
+        if not message:
+            message = "One of the input parameters to your component is incorrectly defined (e.g., a typo).  Please re-check and try again."
+        super().__init__(message)
+
+
 class ApiException(PresalyticsBaseException):
     def __init__(self, default_exception=None):
         if default_exception is not None:

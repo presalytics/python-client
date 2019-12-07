@@ -30,8 +30,10 @@ from presalytics.story.components import WidgetBase, PageTemplateBase, Renderer,
 from presalytics.lib.tools.ooxml_tools import (
     create_theme_from_ooxml_document,
     create_pages_from_ooxml_document,
-    create_outline_from_ooxml_file
+    create_story_from_ooxml_file,
+    create_outline_from_ooxml_document
 )
+
 __all__ = [
     'CONFIG',
     'COMPONENTS',

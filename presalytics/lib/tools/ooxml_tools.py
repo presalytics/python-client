@@ -15,7 +15,7 @@ def create_story_from_ooxml_file(filename: str) -> 'Story':
     story: 'Story'
 
     client = presalytics.Client()
-    story = client.story.story_post_file(filename)
+    story = client.story.story_post_file(file=filename)
     outline = presalytics.StoryOutline.deserialize(story.outline)
     for i in range(0, len(outline.pages)):
         page = outline.pages[i]

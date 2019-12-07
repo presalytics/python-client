@@ -20,7 +20,7 @@ class TestComponents(unittest.TestCase):
 
     def test_file_widget(self):
         test_file = os.path.join(os.path.dirname(__file__), "files", "star.pptx")
-        outline = presalytics.create_outline_from_ooxml_file(test_file)
+        outline = presalytics.create_story_from_ooxml_file(test_file)
         presalytics.Revealer(outline).present()
 
     def tearDown(self):

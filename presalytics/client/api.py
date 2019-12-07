@@ -55,7 +55,10 @@ class Client(object):
             self.site_host = cnst.HOST
         self.login_sleep_interval = 5  # seconds
         self.login_timeout = 60  # seconds
-        self._delegate_login = delegate_login
+        if delegate_login or presalytics.CONFIG.get("DELEGATE_LOGIN", False):
+            self._delegate_login = True
+        else:
+            self._delegate_login = False
         self.oidc = keycloak.KeycloakOpenID(
             server_url=cnst.OIDC_AUTH_HOST,
             realm_name=cnst.OIDC_REALM,

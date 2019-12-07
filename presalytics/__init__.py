@@ -23,13 +23,13 @@ from presalytics.lib.plugins.reveal import RevealConfigPlugin
 from presalytics.lib.plugins.reveal_theme import RevealCustomTheme
 from presalytics.lib.templates.base import JinjaTemplateBuilder
 from presalytics.lib.widgets.matplotlib import MatplotlibFigure
-from presalytics.lib.widgets.ooxml import OoxmlEditorWidget, OoxmlFileWidget
+from presalytics.lib.widgets.ooxml import OoxmlEditorWidget, OoxmlFileWidget, OoxmlEndpointMap
 from presalytics.story.outline import StoryOutline
 from presalytics.story.revealer import Revealer
 from presalytics.story.components import WidgetBase, PageTemplateBase, Renderer, ThemeBase
 from presalytics.lib.tools.ooxml_tools import (
     create_theme_from_ooxml_document,
-    create_pages_from_document,
+    create_pages_from_ooxml_document,
     create_outline_from_ooxml_file
 )
 __all__ = [
@@ -50,6 +50,7 @@ __all__ = [
     'MatplotlibFigure',
     'OoxmlEditorWidget',
     'OoxmlFileWidget',
+    'OoxmlEndpointMap',
     'StoryOutline',
     'Revealer',
     'WidgetBase',

@@ -4,15 +4,35 @@ import presalytics.story.outline
 import presalytics.client.api
 import presalytics.lib.widgets.ooxml
 import presalytics.lib.themes.ooxml
+
 if typing.TYPE_CHECKING:
+    from presalytics_story.models import Story
+    from presalytics_ooxml_automation import Document
     from presalytics.story.components import ThemeBase
 
 
-def create_outline_from_ooxml_file(filename: str,
-                                   title: str = None,
-                                   description: str = None,
-                                   themes: typing.Sequence['ThemeBase'] = None
-                                   ) -> presalytics.story.outline.StoryOutline:
+def create_story_from_ooxml_file(filename: str) -> 'Story':
+    story: 'Story'
+
+    client = presalytics.Client()
+    story = client.story.story_post_file(filename)
+    outline = presalytics.StoryOutline.deserialize(story.outline)
+    for i in range(0, len(outline.pages)):
+        page = outline.pages[i]
+        for j in range(0, len(page.widgets)):
+            widget = page.widgets[j]
+            inst = presalytics.OoxmlFileWidget.deseriailize(widget)
+            presalytics.COMPONENTS.register(inst)
+            outline.pages[i].widgets[j] = inst.serialize()
+    return story
+
+
+def create_outline_from_ooxml_document(story: 'Story',
+                                       ooxml_document: 'Document',
+                                       title: str = None,
+                                       description: str = None,
+                                       themes: typing.Sequence['ThemeBase'] = None):
+
     info = presalytics.story.outline.Info(
         revision=0,
         date_created=datetime.datetime.now().isoformat(),
@@ -25,13 +45,14 @@ def create_outline_from_ooxml_file(filename: str,
     if title:
         _title = title
     else:
-        _title = filename
+        _title = ""
 
     if description:
         _description = description
     else:
         _description = ""
-    pages = create_pages_from_document(filename)
+
+    pages = create_pages_from_ooxml_document(story, ooxml_document)
 
     if themes:
         _themes = themes
@@ -51,16 +72,21 @@ def create_outline_from_ooxml_file(filename: str,
     return outline
 
 
-def create_pages_from_document(filename):
+def create_pages_from_ooxml_document(story: 'Story', ooxml_document: 'Document'):
     pages = []
-    client = presalytics.client.api.Client()
-    document, status, headers = client.ooxml_automation.documents_post_with_http_info(filename)
-    child_objects = client.ooxml_automation.documents_childobjects_get_id(document.id)
-    if document.document_type == "pptx":
+    client = presalytics.Client()
+    child_objects = client.ooxml_automation.documents_childobjects_get_id(ooxml_document.id)
+    document_type = client.ooxml_automation.documents_documenttype_get_id(ooxml_document.document_type_id)
+    if document_type.file_extension == "pptx":
         slides_meta = [x for x in child_objects if x.type == "Slides.Slide"]
-        endpoint = presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SLIDE
+        ep_map = presalytics.OoxmlEndpointMap(presalytics.OoxmlEndpointMap.SLIDE)
         for slide in slides_meta:
-            widget = presalytics.lib.widgets.ooxml.OoxmlFileWidget(filename, endpoint_id=endpoint, object_name=slide.name)
+            widget = presalytics.OoxmlFileWidget(
+                filename=ooxml_document.filename,
+                name=slide.name,
+                endpoint_map=ep_map,
+                object_name=slide.name
+            )
             page = {
                 "kind": "widget-page",
                 "name": "page-{}".format(slide.name),

@@ -179,52 +179,52 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         self.update()
         self.svg_html = self.get_svg(self.object_ooxml_id)
 
-        def update(self):
-            # if the file exists locally and has been modified or is new, update attributes ooxml_object_id and ooxml_document_id (i.e., reupload) -store data in prevision version
-            search_paths = presalytics.autodiscover_paths.append(os.getcwd())
-            for path in search_paths:
-                if os.path.exists(self.filename):
-                    # update only the file has been modified sine last time
-                    this_file_last_modified = datetime.datetime.utcfromtimestamp(os.path.getmtime(self.filename))
-                    if self.file_last_modified is None or self.file_last_modified <= this_file_last_modified:
-                        client = presalytics.client.api.Client()
-                        document, status, headers = client.ooxml_automation.documents_post(filename)
-                        if status >= 299:
-                            raise presalytics.lib.exceptions.ApiError()
-                        self.document_ooxml_id = document.id
-                        # Get object tree, compare to object name
-                        child_tree = client.ooxml_automation.documents_childobjects_get_id(self.document_ooxml_id)
-                        target_dto = None
+    def update(self):
+        # if the file exists locally and has been modified or is new, update attributes ooxml_object_id and ooxml_document_id (i.e., reupload) -store data in prevision version
+        search_paths = presalytics.autodiscover_paths.append(os.getcwd())
+        for path in search_paths:
+            if os.path.exists(self.filename):
+                # update only the file has been modified sine last time
+                this_file_last_modified = datetime.datetime.utcfromtimestamp(os.path.getmtime(self.filename))
+                if self.file_last_modified is None or self.file_last_modified <= this_file_last_modified:
+                    client = presalytics.client.api.Client()
+                    document, status, headers = client.ooxml_automation.documents_post(filename)
+                    if status >= 299:
+                        raise presalytics.lib.exceptions.ApiError()
+                    self.document_ooxml_id = document.id
+                    # Get object tree, compare to object name
+                    child_tree = client.ooxml_automation.documents_childobjects_get_id(self.document_ooxml_id)
+                    target_dto = None
 
+                    try:
+                        target_dto = next(x for x in child_tree if x.name == self.object_name)
+                    except StopIteration:
+                        pass
+                    # if name not in object or _object_name is none, get first item of type in end_point id
+                    if not target_dto:
                         try:
-                            target_dto = next(x for x in child_tree if x.name == self.object_name)
+                            target_dto = next(x for x in child_tree if x.type == self.endpoint_map.endpoint_id)
                         except StopIteration:
-                            pass
-                        # if name not in object or _object_name is none, get first item of type in end_point id
-                        if not target_dto:
-                            try:
-                                target_dto = next(x for x in child_tree if x.type == self.endpoint_map.endpoint_id)
-                            except StopIteration:
-                                message = "Child tree of document {0} does not have a child object of type {1} or name {2}.".format(self.ooxml_id, self.endpoint_map.endpoint_id, self.object_name)
-                                raise presalytics.lib.exceptions.InvalidConfigurationError(message)
-                        # set widget parameters for recreation server-side (without file)
-                        self.object_ooxml_id = target_dto.id
-                        self.file_last_modified = presalytics.lib.util.roundup_date_modified(this_file_last_modified)
+                            message = "Child tree of document {0} does not have a child object of type {1} or name {2}.".format(self.ooxml_id, self.endpoint_map.endpoint_id, self.object_name)
+                            raise presalytics.lib.exceptions.InvalidConfigurationError(message)
+                    # set widget parameters for recreation server-side (without file)
+                    self.object_ooxml_id = target_dto.id
+                    self.file_last_modified = presalytics.lib.util.roundup_date_modified(this_file_last_modified)
 
-        @classmethod
-        def deserialize(cls, component, **kwargs):
-            init_args = {
-                "filename": component.data["filename"],
-                "endpoint_map": OoxmlEndpointMap(component.data["endpoint_id"]),
-                "object_name": component.data["object_name"],
-                "name": component.name
-            }
-            if "ooxml_document_id" in component.data:
-                init_args.update(
-                    {
-                        "ooxml_document_id": component.data["ooxml_document_id"]
-                    }
-                )
+    @classmethod
+    def deserialize(cls, component, **kwargs):
+        init_args = {
+            "filename": component.data["filename"],
+            "endpoint_map": OoxmlEndpointMap(component.data["endpoint_id"]),
+            "object_name": component.data["object_name"],
+            "name": component.name
+        }
+        if "ooxml_document_id" in component.data:
+            init_args.update(
+                {
+                    "ooxml_document_id": component.data["ooxml_document_id"]
+                }
+            )
             if "ooxml_object_id" in component.data:
                 init_args.update(
                     {
@@ -244,21 +244,21 @@ class OoxmlFileWidget(OoxmlWidgetBase):
                     }
                 )
             return cls(**init_args)
-        
-        def serialize(self):
-            self.update()
-            data = {
-                "filename": self.filename,
-                "object_name": self.object_name,
-                "endpoint_id": self.endpoint_map.endpoint_id,
-                "ooxml_document_id": self.ooxml_document_id,
-                "ooxml_object_id": self.ooxml_object_id,
-                "file_last_modified": self.file_last_modifed.isoformat()
-            }
-            widget = presalytics.story.outline.Widget(
-                name=self.name,
-                kind=self.__component_kind__,
-                data=data,
-                plugins=None
-            )
-            return widget
+
+    def serialize(self, **kwargs):
+        self.update()
+        data = {
+            "filename": self.filename,
+            "object_name": self.object_name,
+            "endpoint_id": self.endpoint_map.endpoint_id,
+            "ooxml_document_id": self.ooxml_document_id,
+            "ooxml_object_id": self.ooxml_object_id,
+            "file_last_modified": self.file_last_modifed.isoformat()
+        }
+        widget = presalytics.story.outline.Widget(
+            name=self.name,
+            kind=self.__component_kind__,
+            data=data,
+            plugins=None
+        )
+        return widget

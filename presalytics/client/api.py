@@ -164,7 +164,8 @@ class Client(object):
                     refresh_token = self.token_util.token["refresh_token"]
                     self.token_util.token = self.oidc.refresh_token(refresh_token)
                 except keycloak.exceptions.KeycloakGetError:
-                    self.login()
+                    if not self._delegate_login:
+                        self.login()
             self.token_util._put_token_file()
         return self.token_util.token
 

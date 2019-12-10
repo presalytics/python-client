@@ -24,9 +24,8 @@ class Client(object):
     """ Main PresalyticsClient base object """
     def __init__(
             self,
-            config=None,
-            config_file=None,
             delegate_login=False,
+            token=None,
             **kwargs):
         try:
             self.username = presalytics.CONFIG['USERNAME']
@@ -66,6 +65,9 @@ class Client(object):
             verify=True
         )
         self.token_util = presalytics.client.auth.TokenUtil()
+        if token:
+            self.token_util.token = token
+            self.token_util._put_token_file()
         self.token_util.token = self.refresh_token()
 
         doc_converter_api_client = DocConverterApiClientWithAuth(self, **kwargs)
@@ -94,7 +96,7 @@ class Client(object):
         self.token_util.process_keycloak_token(keycloak_token)
         return self.token_util.token
 
-    def delegated_login(self, original_token, audience=None):
+    def exchange_token(self, original_token, audience=None):
         """ Requires developer account and authorized client credentials """
         self.oidc.decode_token(original_token, cnst.JWT_KEY)
         kwargs = {

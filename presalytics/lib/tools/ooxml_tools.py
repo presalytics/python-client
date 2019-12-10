@@ -11,10 +11,12 @@ if typing.TYPE_CHECKING:
     from presalytics.story.components import ThemeBase
 
 
-def create_story_from_ooxml_file(filename: str) -> 'Story':
+def create_story_from_ooxml_file(filename: str,
+                                 delegate_login=False,
+                                 token=None) -> 'Story':
     story: 'Story'
 
-    client = presalytics.Client()
+    client = presalytics.Client(delegate_login=delegate_login, token=token)
     story = client.story.story_post_file(file=filename)
     outline = presalytics.StoryOutline.deserialize(story.outline)
     for i in range(0, len(outline.pages)):
@@ -31,7 +33,9 @@ def create_outline_from_ooxml_document(story: 'Story',
                                        ooxml_document: 'Document',
                                        title: str = None,
                                        description: str = None,
-                                       themes: typing.Sequence['ThemeBase'] = None):
+                                       themes: typing.Sequence['ThemeBase'] = None,
+                                       delegate_login=False,
+                                       token=None):
 
     info = presalytics.story.outline.Info(
         revision=0,
@@ -52,7 +56,7 @@ def create_outline_from_ooxml_document(story: 'Story',
     else:
         _description = ""
 
-    pages = create_pages_from_ooxml_document(story, ooxml_document)
+    pages = create_pages_from_ooxml_document(story, ooxml_document, delegate_login=delegate_login, token=token)
 
     if themes:
         _themes = themes
@@ -72,9 +76,12 @@ def create_outline_from_ooxml_document(story: 'Story',
     return outline
 
 
-def create_pages_from_ooxml_document(story: 'Story', ooxml_document: 'Document'):
+def create_pages_from_ooxml_document(story: 'Story', 
+                                     ooxml_document: 'Document',
+                                     delegate_login=False,
+                                     token=None):
     pages = []
-    client = presalytics.Client()
+    client = presalytics.Client(delegate_login=delegate_login, token=token)
     child_objects = client.ooxml_automation.documents_childobjects_get_id(ooxml_document.id)
     document_type = client.ooxml_automation.documents_documenttype_get_id(ooxml_document.document_type_id)
     if document_type.file_extension == "pptx":
@@ -97,8 +104,10 @@ def create_pages_from_ooxml_document(story: 'Story', ooxml_document: 'Document')
     return pages
 
 
-def create_theme_from_ooxml_document(document_id: str):
-    client = presalytics.Client()
+def create_theme_from_ooxml_document(document_id: str,
+                                     delegate_login=False,
+                                     token=None):
+    client = presalytics.Client(delegate_login=delegate_login, token=token)
     document = client.ooxml_automation.documents_get_id(document_id)
     ooxml_theme = client.ooxml_automation.theme_themes_get_id(document.theme_id)
     theme_name = ooxml_theme.name

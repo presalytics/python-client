@@ -68,7 +68,8 @@ class Client(object):
         if token:
             self.token_util.token = token
             self.token_util._put_token_file()
-        self.token_util.token = self.refresh_token()
+        if not self._delegate_login:
+            self.token_util.token = self.refresh_token()
 
         doc_converter_api_client = DocConverterApiClientWithAuth(self, **kwargs)
         self.doc_converter = presalytics_doc_converter.DefaultApi(api_client=doc_converter_api_client)

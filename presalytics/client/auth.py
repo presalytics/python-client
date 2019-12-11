@@ -91,7 +91,6 @@ class TokenUtil(object):
 
 class AuthenticationMixIn(object):
     def __init__(self, parent: 'Client', config=None, config_file=None, ignore_api_exceptions=False, **kwargs):
-        self.parent: 'Client' = weakref.ref(parent)
         self._ignore_api_exceptions = ignore_api_exceptions
         super(AuthenticationMixIn, self).__init__(**kwargs)
 

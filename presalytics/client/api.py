@@ -9,12 +9,13 @@ import logging
 import json
 import keycloak
 from uuid import uuid4
-import presalytics_doc_converter
-import presalytics_ooxml_automation
-import presalytics_story
+import presalytics
 import presalytics.lib.exceptions
 import presalytics.lib.constants as cnst
 import presalytics.client.auth
+import presalytics.client.presalytics_ooxml_automation.api_client
+import presalytics.client.presalytics_story.api_client
+import presalytics.client.presalytics_doc_converter.api_client
 
 
 logger = logging.getLogger(__name__)
@@ -72,11 +73,11 @@ class Client(object):
             self.token_util.token = self.refresh_token()
 
         doc_converter_api_client = DocConverterApiClientWithAuth(self, **kwargs)
-        self.doc_converter = presalytics_doc_converter.DefaultApi(api_client=doc_converter_api_client)
+        self.doc_converter = presalytics.client.presalytics_doc_converter.DefaultApi(api_client=doc_converter_api_client)
         ooxml_automation_api_client = OoxmlAutomationApiClientWithAuth(self, **kwargs)
-        self.ooxml_automation = presalytics_ooxml_automation.DefaultApi(api_client=ooxml_automation_api_client)
+        self.ooxml_automation = presalytics.client.presalytics_ooxml_automation.DefaultApi(api_client=ooxml_automation_api_client)
         story_api_client = StoryApiClientWithAuth(self, **kwargs)
-        self.story = presalytics_story.DefaultApi(api_client=story_api_client)
+        self.story = presalytics.client.presalytics_story.DefaultApi(api_client=story_api_client)
 
     def login(self):
         try:
@@ -128,7 +129,7 @@ class Client(object):
         }
         query_string = '?{}'.format(urllib.parse.urlencode(query))
         url = urllib.parse.urljoin(self.site_host, urllib.parse.urljoin(cnst.LOGIN_PATH, query_string))
-        webbrowser.open_new_tab(url) 
+        webbrowser.open_new_tab(url)
         auth_code = None
         payload = {
             "username": self.username,
@@ -190,22 +191,22 @@ class Client(object):
             f.write(response.data)
 
 
-class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics_doc_converter.api_client.ApiClient):
+class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_doc_converter.api_client.ApiClient):
     def __init__(self, parent: Client, **kwargs):
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
-        presalytics_doc_converter.api_client.ApiClient.__init__(self)
+        presalytics.client.presalytics_doc_converter.api_client.ApiClient.__init__(self)
         self.update_configuration()
 
 
-class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics_ooxml_automation.api_client.ApiClient):
+class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_ooxml_automation.api_client.ApiClient):
     def __init__(self, parent: Client, **kwargs):
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
-        presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
+        presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
         self.update_configuration()
 
 
-class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics_story.api_client.ApiClient):
+class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_story.api_client.ApiClient):
     def __init__(self, parent: Client, **kwargs):
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
-        presalytics_story.api_client.ApiClient.__init__(self)
+        presalytics.client.presalytics_story.api_client.ApiClient.__init__(self)
         self.update_configuration()

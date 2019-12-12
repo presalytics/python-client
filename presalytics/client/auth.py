@@ -94,6 +94,7 @@ class AuthenticationMixIn(object):
         self._ignore_api_exceptions = ignore_api_exceptions
         self.parent = weakref.ref(parent)
         super(AuthenticationMixIn, self).__init__()
+        self.update_configuration()
 
     def call_api(
             self, resource_path, method,

@@ -156,11 +156,12 @@ class AuthenticationMixIn(object):
 
     def set_host(self, hosts_dict):
         for parent_cls in self.__class__.__bases__:
-            module_name = parent_cls.__module__.split('.')[0]
-            if module_name != 'presalytics':
-                host_key = module_name.replace('presalytics_', '').upper()
-                try:
-                    self.configuration.host = hosts_dict[host_key]
-                    break
-                except KeyError:
-                    pass
+            if parent_cls.__name__ == 'ApiClient':
+                for k, v in hosts_dict.items():
+                    if k.lower() in parent_cls.__module__:
+                        host_key = k
+                        break
+        try:
+            self.configuration.host = hosts_dict[host_key]
+        except (KeyError, UnboundLocalError):
+            pass

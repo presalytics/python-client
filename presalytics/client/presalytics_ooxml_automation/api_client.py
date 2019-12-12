@@ -77,7 +77,7 @@ class ApiClient(object):
             self.default_headers[header_name] = header_value
         self.cookie = cookie
         # Set default User-Agent.
-        self.user_agent = 'OpenAPI-Generator/0.2.75/python'
+        self.user_agent = 'OpenAPI-Generator/0.2.79/python'
         self.client_side_validation = configuration.client_side_validation
 
     def __del__(self):
@@ -279,7 +279,7 @@ class ApiClient(object):
             if klass in self.NATIVE_TYPES_MAPPING:
                 klass = self.NATIVE_TYPES_MAPPING[klass]
             else:
-                klass = getattr(presalytics_ooxml_automation.models, klass)
+                klass = getattr(presalytics.client.presalytics_ooxml_automation.models, klass)
 
         if klass in self.PRIMITIVE_TYPES:
             return self.__deserialize_primitive(data, klass)

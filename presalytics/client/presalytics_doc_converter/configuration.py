@@ -80,7 +80,7 @@ class Configuration(six.with_metaclass(TypeWithDefault, object)):
         self.logger = {}
         """Logging Settings
         """
-        self.logger["package_logger"] = logging.getLogger("presalytics_doc_converter")
+        self.logger["package_logger"] = logging.getLogger("presalytics.client.presalytics_doc_converter")
         self.logger["urllib3_logger"] = logging.getLogger("urllib3")
         self.logger_format = '%(asctime)s %(levelname)s %(message)s'
         """Log format
@@ -266,7 +266,7 @@ class Configuration(six.with_metaclass(TypeWithDefault, object)):
                "OS: {env}\n"\
                "Python Version: {pyversion}\n"\
                "Version of the API: 0.1\n"\
-               "SDK Package Version: 0.2.34".\
+               "SDK Package Version: 0.2.38".\
                format(env=sys.platform, pyversion=sys.version)
 
     def get_host_settings(self):

@@ -45,13 +45,13 @@ class OoxmlEndpointMap(object):
         self.root_url = urllib.parse.urljoin(self.baseurl, self.endpoint_id)
 
     def get_id_url(self, id):
-        return urllib.parse.urljoin(self.root_url, str(id))
+        return os.path.join(self.root_url, id)
 
     def get_svg_url(self, id):
-        return urllib.parse.urljoin(self.root_url, "/Svg/" + str(id))
+        return os.path.join(self.root_url, "Svg", id)
     
     def get_xml_url(self, id):
-        return urllib.parse.urljoin(self.root_url, "/OpenOfficeXml/" + str(id))
+        return os.path.join(self.root_url, "OpenOfficeXml" + id)
 
 
 class OoxmlWidgetBase(presalytics.story.components.WidgetBase):

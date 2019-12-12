@@ -88,8 +88,8 @@ def update_imports(tmp_dir_path, package_name):
     replace2 = "import {}".format(new_import_path)
     find3 = "klass = getattr({}.models, klass)".format(package_name)
     replace3 = "klass = getattr({}.models, klass)".format(new_import_path)
-    find4 = 'logging.getLogger("{}'.format(package_name)
-    replace4 = 'logging.getLogger("{}'.format(new_import_path)
+    find4 = 'logging.getLogger(\"{}'.format(package_name)
+    replace4 = 'logging.getLogger(\"{}'.format(new_import_path)
 
     for dname, dirs, files in os.walk(tmp_dir_path):
         for fname in files:

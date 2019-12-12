@@ -1,5 +1,6 @@
 import datetime
 import typing
+import presalytics
 import presalytics.story.outline
 import presalytics.client.api
 import presalytics.lib.widgets.ooxml
@@ -86,13 +87,15 @@ def create_pages_from_ooxml_document(story: 'Story',
     document_type = client.ooxml_automation.documents_documenttype_typeid_get_typeid_type_id(ooxml_document.document_type_id)
     if document_type.file_extension == "pptx":
         slides_meta = [x for x in child_objects if x.object_type == "Slide.Slides"]
-        ep_map = presalytics.OoxmlEndpointMap(presalytics.OoxmlEndpointMap.SLIDE)
+        ep_map = presalytics.OoxmlEndpointMap(presalytics.OoxmlEndpointMap.SLIDE, baseurl=presalytics.Con)
         for slide in slides_meta:
             widget = presalytics.OoxmlFileWidget(
                 filename=ooxml_document.filename,
                 name=slide.entity_name,
                 endpoint_map=ep_map,
-                object_name=slide.entity_name
+                object_name=slide.entity_name,
+                object_ooxml_id=slide.entity_id,
+                document_ooxml_id=ooxml_document.id
             )
             page = {
                 "kind": "widget-page",

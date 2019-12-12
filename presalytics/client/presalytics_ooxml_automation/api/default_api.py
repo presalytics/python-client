@@ -17,8 +17,8 @@ import re  # noqa: F401
 # python 2 and python 3 compatibility library
 import six
 
-from presalytics_ooxml_automation.api_client import ApiClient
-from presalytics_ooxml_automation.exceptions import (
+from presalytics.client.presalytics_ooxml_automation.api_client import ApiClient
+from presalytics.client.presalytics_ooxml_automation.exceptions import (
     ApiTypeError,
     ApiValueError
 )

@@ -18,8 +18,8 @@ import re  # noqa: F401
 # python 2 and python 3 compatibility library
 import six
 
-from presalytics_doc_converter.api_client import ApiClient
-from presalytics_doc_converter.exceptions import (
+from presalytics.client.presalytics_doc_converter.api_client import ApiClient
+from presalytics.client.presalytics_doc_converter.exceptions import (
     ApiTypeError,
     ApiValueError
 )

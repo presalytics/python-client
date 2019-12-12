@@ -4,7 +4,8 @@ from environs import Env
 env = Env()
 env.read_env()
 
-host = env("STORY_HOST", "https://api.presalytics.io")
+host = "https://api.presalytics.io"
+# host = env("STORY_HOST", "https://api.presalytics.io")
 
 SPEC = {
         "update": True,

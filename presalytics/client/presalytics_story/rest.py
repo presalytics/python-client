@@ -24,7 +24,7 @@ import six
 from six.moves.urllib.parse import urlencode
 import urllib3
 
-from presalytics_story.exceptions import ApiException, ApiValueError
+from presalytics.client.presalytics_story.exceptions import ApiException, ApiValueError
 
 
 logger = logging.getLogger(__name__)

@@ -80,13 +80,21 @@ def replace_ver(file_path, update_type):
     return new_ver
 
 
-def git_push(local_repo_path, commit_message, git_remote):
-    
-    
-    os.system("git add .")
-    os.system('git commit -m "{0}"'.format(commit_message))
-    os.system("git push origin master")
-
+def update_imports(tmp_dir_path, package_name):
+    new_import_path = "presalytics.client.{}".format(package_name)
+    find1 = "from {}".format(package_name)
+    replace1 = "from {}".format(new_import_path)
+    find2 = "import {}".format(package_name)
+    replace2 = "import {}".format(new_import_path)
+    for dname, dirs, files in os.walk(tmp_dir_path):
+        for fname in files:
+            fpath = os.path.join(dname, fname)
+            with open(fpath) as f:
+                s = f.read()
+            s = s.replace(find1, replace1)
+            s = s.replace(find2, replace2)
+            with open(fpath, "w") as f:
+                f.write(s)
 
 for spec in CLIENT_SPECS:
     try:
@@ -100,7 +108,6 @@ for spec in CLIENT_SPECS:
                     'packageVersion': new_ver
                 }
             }
-            LOC = os.path.join(TMP_PATH, spec['package_name'])
 
             print("Sending {} api spec to code generator".format(spec['package_name']))
             response = requests.post(CODEGEN_ENDPOINT, json=payload, headers=HEADER)
@@ -113,8 +120,8 @@ for spec in CLIENT_SPECS:
             file_response = requests.get(link)
 
             zipfile = ZipFile(BytesIO(file_response.content))
-            print("Placing {} client files in directory {}".format(spec['package_name'], LOC))
             zipfile.extractall(TMP_PATH)
+            update_imports(TMP_PATH, spec["package_name"])
             source_dir = os.path.join(os.path.dirname(__file__), "tmp", "python-client", spec["package_name"])
             root = os.path.dirname(os.path.dirname(__file__))
             target_dir = os.path.join(root, "presalytics", "client", spec["package_name"])
@@ -123,6 +130,7 @@ for spec in CLIENT_SPECS:
             except Exception:
                 pass
             shutil.copytree(source_dir, target_dir)
+            print("Subpackage {0} successfull updated in {1}".format(spec["package_name"], target_dir))
     except Exception:
         print("Sub package generation unsuccessful.  Please debug and retry")
     finally:

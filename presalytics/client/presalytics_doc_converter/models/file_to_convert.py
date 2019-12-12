@@ -16,7 +16,7 @@ import re  # noqa: F401
 
 import six
 
-from presalytics_doc_converter.configuration import Configuration
+from presalytics.client.presalytics_doc_converter.configuration import Configuration
 
 
 class FileToConvert(object):

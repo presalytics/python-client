@@ -14,33 +14,33 @@
 
 from __future__ import absolute_import
 
-__version__ = "0.1.26"
+__version__ = "0.1.31"
 
 # import apis into sdk package
-from presalytics_story.api.permissions_api import PermissionsApi
-from presalytics_story.api.story_api import StoryApi
-from presalytics_story.api.story_collaborators_api import StoryCollaboratorsApi
+from presalytics.client.presalytics_story.api.permissions_api import PermissionsApi
+from presalytics.client.presalytics_story.api.story_api import StoryApi
+from presalytics.client.presalytics_story.api.story_collaborators_api import StoryCollaboratorsApi
 
 # import ApiClient
-from presalytics_story.api_client import ApiClient
-from presalytics_story.configuration import Configuration
-from presalytics_story.exceptions import OpenApiException
-from presalytics_story.exceptions import ApiTypeError
-from presalytics_story.exceptions import ApiValueError
-from presalytics_story.exceptions import ApiKeyError
-from presalytics_story.exceptions import ApiException
+from presalytics.client.presalytics_story.api_client import ApiClient
+from presalytics.client.presalytics_story.configuration import Configuration
+from presalytics.client.presalytics_story.exceptions import OpenApiException
+from presalytics.client.presalytics_story.exceptions import ApiTypeError
+from presalytics.client.presalytics_story.exceptions import ApiValueError
+from presalytics.client.presalytics_story.exceptions import ApiKeyError
+from presalytics.client.presalytics_story.exceptions import ApiException
 # import models into sdk package
-from presalytics_story.models.base_model import BaseModel
-from presalytics_story.models.ooxml_document import OoxmlDocument
-from presalytics_story.models.ooxml_document_all_of import OoxmlDocumentAllOf
-from presalytics_story.models.outline import Outline
-from presalytics_story.models.permission_type import PermissionType
-from presalytics_story.models.permission_type_all_of import PermissionTypeAllOf
-from presalytics_story.models.problem_detail import ProblemDetail
-from presalytics_story.models.story import Story
-from presalytics_story.models.story_all_of import StoryAllOf
-from presalytics_story.models.story_collaborator import StoryCollaborator
-from presalytics_story.models.story_collaborator_all_of import StoryCollaboratorAllOf
-from presalytics_story.models.story_outline_history import StoryOutlineHistory
-from presalytics_story.models.story_outline_history_all_of import StoryOutlineHistoryAllOf
+from presalytics.client.presalytics_story.models.base_model import BaseModel
+from presalytics.client.presalytics_story.models.ooxml_document import OoxmlDocument
+from presalytics.client.presalytics_story.models.ooxml_document_all_of import OoxmlDocumentAllOf
+from presalytics.client.presalytics_story.models.outline import Outline
+from presalytics.client.presalytics_story.models.permission_type import PermissionType
+from presalytics.client.presalytics_story.models.permission_type_all_of import PermissionTypeAllOf
+from presalytics.client.presalytics_story.models.problem_detail import ProblemDetail
+from presalytics.client.presalytics_story.models.story import Story
+from presalytics.client.presalytics_story.models.story_all_of import StoryAllOf
+from presalytics.client.presalytics_story.models.story_collaborator import StoryCollaborator
+from presalytics.client.presalytics_story.models.story_collaborator_all_of import StoryCollaboratorAllOf
+from presalytics.client.presalytics_story.models.story_outline_history import StoryOutlineHistory
+from presalytics.client.presalytics_story.models.story_outline_history_all_of import StoryOutlineHistoryAllOf
 

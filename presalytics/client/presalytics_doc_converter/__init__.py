@@ -15,19 +15,19 @@
 
 from __future__ import absolute_import
 
-__version__ = "0.2.29"
+__version__ = "0.2.34"
 
 # import apis into sdk package
-from presalytics_doc_converter.api.default_api import DefaultApi
+from presalytics.client.presalytics_doc_converter.api.default_api import DefaultApi
 
 # import ApiClient
-from presalytics_doc_converter.api_client import ApiClient
-from presalytics_doc_converter.configuration import Configuration
-from presalytics_doc_converter.exceptions import OpenApiException
-from presalytics_doc_converter.exceptions import ApiTypeError
-from presalytics_doc_converter.exceptions import ApiValueError
-from presalytics_doc_converter.exceptions import ApiKeyError
-from presalytics_doc_converter.exceptions import ApiException
+from presalytics.client.presalytics_doc_converter.api_client import ApiClient
+from presalytics.client.presalytics_doc_converter.configuration import Configuration
+from presalytics.client.presalytics_doc_converter.exceptions import OpenApiException
+from presalytics.client.presalytics_doc_converter.exceptions import ApiTypeError
+from presalytics.client.presalytics_doc_converter.exceptions import ApiValueError
+from presalytics.client.presalytics_doc_converter.exceptions import ApiKeyError
+from presalytics.client.presalytics_doc_converter.exceptions import ApiException
 # import models into sdk package
-from presalytics_doc_converter.models.file_to_convert import FileToConvert
+from presalytics.client.presalytics_doc_converter.models.file_to_convert import FileToConvert
 

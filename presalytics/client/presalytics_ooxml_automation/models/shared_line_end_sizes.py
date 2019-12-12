@@ -15,7 +15,7 @@ import re  # noqa: F401
 
 import six
 
-from presalytics_ooxml_automation.configuration import Configuration
+from presalytics.client.presalytics_ooxml_automation.configuration import Configuration
 
 
 class SharedLineEndSizes(object):

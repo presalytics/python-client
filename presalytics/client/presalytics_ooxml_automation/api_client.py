@@ -23,10 +23,10 @@ import tempfile
 import six
 from six.moves.urllib.parse import quote
 
-from presalytics_ooxml_automation.configuration import Configuration
-import presalytics_ooxml_automation.models
-from presalytics_ooxml_automation import rest
-from presalytics_ooxml_automation.exceptions import ApiValueError
+from presalytics.client.presalytics_ooxml_automation.configuration import Configuration
+import presalytics.client.presalytics_ooxml_automation.models
+from presalytics.client.presalytics_ooxml_automation import rest
+from presalytics.client.presalytics_ooxml_automation.exceptions import ApiValueError
 
 
 class ApiClient(object):
@@ -77,7 +77,7 @@ class ApiClient(object):
             self.default_headers[header_name] = header_value
         self.cookie = cookie
         # Set default User-Agent.
-        self.user_agent = 'OpenAPI-Generator/0.2.70/python'
+        self.user_agent = 'OpenAPI-Generator/0.2.75/python'
         self.client_side_validation = configuration.client_side_validation
 
     def __del__(self):

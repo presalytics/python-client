@@ -15,7 +15,7 @@ import re  # noqa: F401
 
 import six
 
-from presalytics_story.configuration import Configuration
+from presalytics.client.presalytics_story.configuration import Configuration
 
 
 class PermissionType(object):

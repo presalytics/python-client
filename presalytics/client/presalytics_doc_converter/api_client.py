@@ -24,10 +24,10 @@ import tempfile
 import six
 from six.moves.urllib.parse import quote
 
-from presalytics_doc_converter.configuration import Configuration
-import presalytics_doc_converter.models
-from presalytics_doc_converter import rest
-from presalytics_doc_converter.exceptions import ApiValueError
+from presalytics.client.presalytics_doc_converter.configuration import Configuration
+import presalytics.client.presalytics_doc_converter.models
+from presalytics.client.presalytics_doc_converter import rest
+from presalytics.client.presalytics_doc_converter.exceptions import ApiValueError
 
 
 class ApiClient(object):
@@ -78,7 +78,7 @@ class ApiClient(object):
             self.default_headers[header_name] = header_value
         self.cookie = cookie
         # Set default User-Agent.
-        self.user_agent = 'OpenAPI-Generator/0.2.29/python'
+        self.user_agent = 'OpenAPI-Generator/0.2.34/python'
         self.client_side_validation = configuration.client_side_validation
 
     def __del__(self):

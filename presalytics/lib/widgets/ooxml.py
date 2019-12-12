@@ -181,7 +181,8 @@ class OoxmlFileWidget(OoxmlWidgetBase):
 
     def update(self):
         # if the file exists locally and has been modified or is new, update attributes ooxml_object_id and ooxml_document_id (i.e., reupload) -store data in prevision version
-        search_paths = presalytics.autodiscover_paths.append(os.getcwd())
+        search_paths = presalytics.autodiscover_paths
+        search_paths.append(os.getcwd())
         for path in search_paths:
             if os.path.exists(self.filename):
                 # update only the file has been modified sine last time

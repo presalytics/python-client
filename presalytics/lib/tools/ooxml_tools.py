@@ -90,9 +90,9 @@ def create_pages_from_ooxml_document(story: 'Story',
         for slide in slides_meta:
             widget = presalytics.OoxmlFileWidget(
                 filename=ooxml_document.filename,
-                name=slide.name,
+                name=slide.object_name,
                 endpoint_map=ep_map,
-                object_name=slide.name
+                object_name=slide.object_name
             )
             page = {
                 "kind": "widget-page",

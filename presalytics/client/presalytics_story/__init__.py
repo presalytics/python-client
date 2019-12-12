@@ -14,12 +14,13 @@
 
 from __future__ import absolute_import
 
-__version__ = "0.1.31"
+__version__ = "0.1.38"
 
 # import apis into sdk package
 from presalytics.client.presalytics_story.api.permissions_api import PermissionsApi
 from presalytics.client.presalytics_story.api.story_api import StoryApi
 from presalytics.client.presalytics_story.api.story_collaborators_api import StoryCollaboratorsApi
+from presalytics.client.presalytics_story.api.default_api import DefaultApi
 
 # import ApiClient
 from presalytics.client.presalytics_story.api_client import ApiClient

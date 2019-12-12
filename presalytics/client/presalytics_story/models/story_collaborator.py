@@ -33,74 +33,95 @@ class StoryCollaborator(object):
                             and the value is json key in definition.
     """
     openapi_types = {
+        'id': 'str',
         'created_at': 'datetime',
         'created_by': 'str',
-        'id': 'str',
         'updated_at': 'datetime',
         'updated_by': 'str',
-        'email': 'str',
+        'user_id': 'str',
         'name': 'str',
-        'permission_type': 'PermissionType',
-        'permission_type_id': 'str',
+        'email': 'str',
         'story_id': 'str',
-        'user_id': 'str'
+        'permission_type': 'PermissionType',
+        'permission_type_id': 'str'
     }
 
     attribute_map = {
+        'id': 'id',
         'created_at': 'created_at',
         'created_by': 'created_by',
-        'id': 'id',
         'updated_at': 'updated_at',
         'updated_by': 'updated_by',
-        'email': 'email',
+        'user_id': 'user_id',
         'name': 'name',
-        'permission_type': 'permission_type',
-        'permission_type_id': 'permission_type_id',
+        'email': 'email',
         'story_id': 'story_id',
-        'user_id': 'user_id'
+        'permission_type': 'permission_type',
+        'permission_type_id': 'permission_type_id'
     }
 
-    def __init__(self, created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, email=None, name=None, permission_type=None, permission_type_id=None, story_id=None, user_id=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, user_id=None, name=None, email=None, story_id=None, permission_type=None, permission_type_id=None, local_vars_configuration=None):  # noqa: E501
         """StoryCollaborator - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
         self.local_vars_configuration = local_vars_configuration
 
+        self._id = None
         self._created_at = None
         self._created_by = None
-        self._id = None
         self._updated_at = None
         self._updated_by = None
-        self._email = None
+        self._user_id = None
         self._name = None
+        self._email = None
+        self._story_id = None
         self._permission_type = None
         self._permission_type_id = None
-        self._story_id = None
-        self._user_id = None
         self.discriminator = None
 
+        if id is not None:
+            self.id = id
         if created_at is not None:
             self.created_at = created_at
         if created_by is not None:
             self.created_by = created_by
-        if id is not None:
-            self.id = id
         if updated_at is not None:
             self.updated_at = updated_at
         if updated_by is not None:
             self.updated_by = updated_by
-        if email is not None:
-            self.email = email
+        if user_id is not None:
+            self.user_id = user_id
         if name is not None:
             self.name = name
+        if email is not None:
+            self.email = email
+        if story_id is not None:
+            self.story_id = story_id
         if permission_type is not None:
             self.permission_type = permission_type
         if permission_type_id is not None:
             self.permission_type_id = permission_type_id
-        if story_id is not None:
-            self.story_id = story_id
-        if user_id is not None:
-            self.user_id = user_id
+
+    @property
+    def id(self):
+        """Gets the id of this StoryCollaborator.  # noqa: E501
+
+
+        :return: The id of this StoryCollaborator.  # noqa: E501
+        :rtype: str
+        """
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        """Sets the id of this StoryCollaborator.
+
+
+        :param id: The id of this StoryCollaborator.  # noqa: E501
+        :type: str
+        """
+
+        self._id = id
 
     @property
     def created_at(self):
@@ -145,27 +166,6 @@ class StoryCollaborator(object):
         self._created_by = created_by
 
     @property
-    def id(self):
-        """Gets the id of this StoryCollaborator.  # noqa: E501
-
-
-        :return: The id of this StoryCollaborator.  # noqa: E501
-        :rtype: str
-        """
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        """Sets the id of this StoryCollaborator.
-
-
-        :param id: The id of this StoryCollaborator.  # noqa: E501
-        :type: str
-        """
-
-        self._id = id
-
-    @property
     def updated_at(self):
         """Gets the updated_at of this StoryCollaborator.  # noqa: E501
 
@@ -208,25 +208,25 @@ class StoryCollaborator(object):
         self._updated_by = updated_by
 
     @property
-    def email(self):
-        """Gets the email of this StoryCollaborator.  # noqa: E501
+    def user_id(self):
+        """Gets the user_id of this StoryCollaborator.  # noqa: E501
 
 
-        :return: The email of this StoryCollaborator.  # noqa: E501
+        :return: The user_id of this StoryCollaborator.  # noqa: E501
         :rtype: str
         """
-        return self._email
+        return self._user_id
 
-    @email.setter
-    def email(self, email):
-        """Sets the email of this StoryCollaborator.
+    @user_id.setter
+    def user_id(self, user_id):
+        """Sets the user_id of this StoryCollaborator.
 
 
-        :param email: The email of this StoryCollaborator.  # noqa: E501
+        :param user_id: The user_id of this StoryCollaborator.  # noqa: E501
         :type: str
         """
 
-        self._email = email
+        self._user_id = user_id
 
     @property
     def name(self):
@@ -248,6 +248,48 @@ class StoryCollaborator(object):
         """
 
         self._name = name
+
+    @property
+    def email(self):
+        """Gets the email of this StoryCollaborator.  # noqa: E501
+
+
+        :return: The email of this StoryCollaborator.  # noqa: E501
+        :rtype: str
+        """
+        return self._email
+
+    @email.setter
+    def email(self, email):
+        """Sets the email of this StoryCollaborator.
+
+
+        :param email: The email of this StoryCollaborator.  # noqa: E501
+        :type: str
+        """
+
+        self._email = email
+
+    @property
+    def story_id(self):
+        """Gets the story_id of this StoryCollaborator.  # noqa: E501
+
+
+        :return: The story_id of this StoryCollaborator.  # noqa: E501
+        :rtype: str
+        """
+        return self._story_id
+
+    @story_id.setter
+    def story_id(self, story_id):
+        """Sets the story_id of this StoryCollaborator.
+
+
+        :param story_id: The story_id of this StoryCollaborator.  # noqa: E501
+        :type: str
+        """
+
+        self._story_id = story_id
 
     @property
     def permission_type(self):
@@ -290,48 +332,6 @@ class StoryCollaborator(object):
         """
 
         self._permission_type_id = permission_type_id
-
-    @property
-    def story_id(self):
-        """Gets the story_id of this StoryCollaborator.  # noqa: E501
-
-
-        :return: The story_id of this StoryCollaborator.  # noqa: E501
-        :rtype: str
-        """
-        return self._story_id
-
-    @story_id.setter
-    def story_id(self, story_id):
-        """Sets the story_id of this StoryCollaborator.
-
-
-        :param story_id: The story_id of this StoryCollaborator.  # noqa: E501
-        :type: str
-        """
-
-        self._story_id = story_id
-
-    @property
-    def user_id(self):
-        """Gets the user_id of this StoryCollaborator.  # noqa: E501
-
-
-        :return: The user_id of this StoryCollaborator.  # noqa: E501
-        :rtype: str
-        """
-        return self._user_id
-
-    @user_id.setter
-    def user_id(self, user_id):
-        """Sets the user_id of this StoryCollaborator.
-
-
-        :param user_id: The user_id of this StoryCollaborator.  # noqa: E501
-        :type: str
-        """
-
-        self._user_id = user_id
 
     def to_dict(self):
         """Returns the model properties as a dict"""

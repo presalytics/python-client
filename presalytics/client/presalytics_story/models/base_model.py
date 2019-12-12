@@ -33,44 +33,65 @@ class BaseModel(object):
                             and the value is json key in definition.
     """
     openapi_types = {
+        'id': 'str',
         'created_at': 'datetime',
         'created_by': 'str',
-        'id': 'str',
         'updated_at': 'datetime',
         'updated_by': 'str'
     }
 
     attribute_map = {
+        'id': 'id',
         'created_at': 'created_at',
         'created_by': 'created_by',
-        'id': 'id',
         'updated_at': 'updated_at',
         'updated_by': 'updated_by'
     }
 
-    def __init__(self, created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, local_vars_configuration=None):  # noqa: E501
         """BaseModel - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
         self.local_vars_configuration = local_vars_configuration
 
+        self._id = None
         self._created_at = None
         self._created_by = None
-        self._id = None
         self._updated_at = None
         self._updated_by = None
         self.discriminator = None
 
+        if id is not None:
+            self.id = id
         if created_at is not None:
             self.created_at = created_at
         if created_by is not None:
             self.created_by = created_by
-        if id is not None:
-            self.id = id
         if updated_at is not None:
             self.updated_at = updated_at
         if updated_by is not None:
             self.updated_by = updated_by
+
+    @property
+    def id(self):
+        """Gets the id of this BaseModel.  # noqa: E501
+
+
+        :return: The id of this BaseModel.  # noqa: E501
+        :rtype: str
+        """
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        """Sets the id of this BaseModel.
+
+
+        :param id: The id of this BaseModel.  # noqa: E501
+        :type: str
+        """
+
+        self._id = id
 
     @property
     def created_at(self):
@@ -113,27 +134,6 @@ class BaseModel(object):
         """
 
         self._created_by = created_by
-
-    @property
-    def id(self):
-        """Gets the id of this BaseModel.  # noqa: E501
-
-
-        :return: The id of this BaseModel.  # noqa: E501
-        :rtype: str
-        """
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        """Sets the id of this BaseModel.
-
-
-        :param id: The id of this BaseModel.  # noqa: E501
-        :type: str
-        """
-
-        self._id = id
 
     @property
     def updated_at(self):

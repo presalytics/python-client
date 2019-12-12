@@ -33,39 +33,60 @@ class ProblemDetail(object):
                             and the value is json key in definition.
     """
     openapi_types = {
+        'title': 'str',
         'detail': 'str',
         'status': 'int',
-        'title': 'str',
         'type': 'str'
     }
 
     attribute_map = {
+        'title': 'title',
         'detail': 'detail',
         'status': 'status',
-        'title': 'title',
         'type': 'type'
     }
 
-    def __init__(self, detail=None, status=None, title=None, type=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, title=None, detail=None, status=None, type=None, local_vars_configuration=None):  # noqa: E501
         """ProblemDetail - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
         self.local_vars_configuration = local_vars_configuration
 
+        self._title = None
         self._detail = None
         self._status = None
-        self._title = None
         self._type = None
         self.discriminator = None
 
+        if title is not None:
+            self.title = title
         if detail is not None:
             self.detail = detail
         if status is not None:
             self.status = status
-        if title is not None:
-            self.title = title
         if type is not None:
             self.type = type
+
+    @property
+    def title(self):
+        """Gets the title of this ProblemDetail.  # noqa: E501
+
+
+        :return: The title of this ProblemDetail.  # noqa: E501
+        :rtype: str
+        """
+        return self._title
+
+    @title.setter
+    def title(self, title):
+        """Sets the title of this ProblemDetail.
+
+
+        :param title: The title of this ProblemDetail.  # noqa: E501
+        :type: str
+        """
+
+        self._title = title
 
     @property
     def detail(self):
@@ -108,27 +129,6 @@ class ProblemDetail(object):
         """
 
         self._status = status
-
-    @property
-    def title(self):
-        """Gets the title of this ProblemDetail.  # noqa: E501
-
-
-        :return: The title of this ProblemDetail.  # noqa: E501
-        :rtype: str
-        """
-        return self._title
-
-    @title.setter
-    def title(self, title):
-        """Sets the title of this ProblemDetail.
-
-
-        :param title: The title of this ProblemDetail.  # noqa: E501
-        :type: str
-        """
-
-        self._title = title
 
     @property
     def type(self):

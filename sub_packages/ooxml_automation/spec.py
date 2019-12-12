@@ -7,7 +7,7 @@ env.read_env()
 ooxml_host = env("OOXML_AUTOMATION_HOST", "https://api.presalytics.io")
 
 SPEC = {
-        "update": True,
+        "update": False,
         "update_type": "patch",
         "endpoint": "{0}/ooxml-automation/docs/v1-no-tags/openapi.json".format(ooxml_host),
         "package_name": "presalytics_ooxml_automation",

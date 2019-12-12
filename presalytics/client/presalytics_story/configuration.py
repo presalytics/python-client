@@ -49,7 +49,7 @@ class Configuration(six.with_metaclass(TypeWithDefault, object)):
     :param password: Password for HTTP basic authentication
     """
 
-    def __init__(self, host="https://api.presalytics.io/story",
+    def __init__(self, host="http://10.0.4.4:8080/story",
                  api_key={}, api_key_prefix={},
                  username="", password=""):
         """Constructor
@@ -276,7 +276,7 @@ class Configuration(six.with_metaclass(TypeWithDefault, object)):
                "OS: {env}\n"\
                "Python Version: {pyversion}\n"\
                "Version of the API: 0.3.1\n"\
-               "SDK Package Version: 0.1.31".\
+               "SDK Package Version: 0.1.38".\
                format(env=sys.platform, pyversion=sys.version)
 
     def get_host_settings(self):
@@ -286,7 +286,7 @@ class Configuration(six.with_metaclass(TypeWithDefault, object)):
         """
         return [
             {
-                'url': "https://api.presalytics.io/story",
+                'url': "http://10.0.4.4:8080/story",
                 'description': "http host",
             }
         ]

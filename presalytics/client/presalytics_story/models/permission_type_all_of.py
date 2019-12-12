@@ -33,86 +33,65 @@ class PermissionTypeAllOf(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'can_add_collaborators': 'bool',
-        'can_delete': 'bool',
+        'name': 'str',
         'can_edit': 'bool',
         'can_view': 'bool',
-        'name': 'str'
+        'can_add_collaborators': 'bool',
+        'can_delete': 'bool'
     }
 
     attribute_map = {
-        'can_add_collaborators': 'can_add_collaborators',
-        'can_delete': 'can_delete',
+        'name': 'name',
         'can_edit': 'can_edit',
         'can_view': 'can_view',
-        'name': 'name'
+        'can_add_collaborators': 'can_add_collaborators',
+        'can_delete': 'can_delete'
     }
 
-    def __init__(self, can_add_collaborators=None, can_delete=None, can_edit=None, can_view=None, name=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, name=None, can_edit=None, can_view=None, can_add_collaborators=None, can_delete=None, local_vars_configuration=None):  # noqa: E501
         """PermissionTypeAllOf - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
         self.local_vars_configuration = local_vars_configuration
 
-        self._can_add_collaborators = None
-        self._can_delete = None
+        self._name = None
         self._can_edit = None
         self._can_view = None
-        self._name = None
+        self._can_add_collaborators = None
+        self._can_delete = None
         self.discriminator = None
 
-        if can_add_collaborators is not None:
-            self.can_add_collaborators = can_add_collaborators
-        if can_delete is not None:
-            self.can_delete = can_delete
+        if name is not None:
+            self.name = name
         if can_edit is not None:
             self.can_edit = can_edit
         if can_view is not None:
             self.can_view = can_view
-        if name is not None:
-            self.name = name
+        if can_add_collaborators is not None:
+            self.can_add_collaborators = can_add_collaborators
+        if can_delete is not None:
+            self.can_delete = can_delete
 
     @property
-    def can_add_collaborators(self):
-        """Gets the can_add_collaborators of this PermissionTypeAllOf.  # noqa: E501
+    def name(self):
+        """Gets the name of this PermissionTypeAllOf.  # noqa: E501
 
 
-        :return: The can_add_collaborators of this PermissionTypeAllOf.  # noqa: E501
-        :rtype: bool
+        :return: The name of this PermissionTypeAllOf.  # noqa: E501
+        :rtype: str
         """
-        return self._can_add_collaborators
+        return self._name
 
-    @can_add_collaborators.setter
-    def can_add_collaborators(self, can_add_collaborators):
-        """Sets the can_add_collaborators of this PermissionTypeAllOf.
-
-
-        :param can_add_collaborators: The can_add_collaborators of this PermissionTypeAllOf.  # noqa: E501
-        :type: bool
-        """
-
-        self._can_add_collaborators = can_add_collaborators
-
-    @property
-    def can_delete(self):
-        """Gets the can_delete of this PermissionTypeAllOf.  # noqa: E501
+    @name.setter
+    def name(self, name):
+        """Sets the name of this PermissionTypeAllOf.
 
 
-        :return: The can_delete of this PermissionTypeAllOf.  # noqa: E501
-        :rtype: bool
-        """
-        return self._can_delete
-
-    @can_delete.setter
-    def can_delete(self, can_delete):
-        """Sets the can_delete of this PermissionTypeAllOf.
-
-
-        :param can_delete: The can_delete of this PermissionTypeAllOf.  # noqa: E501
-        :type: bool
+        :param name: The name of this PermissionTypeAllOf.  # noqa: E501
+        :type: str
         """
 
-        self._can_delete = can_delete
+        self._name = name
 
     @property
     def can_edit(self):
@@ -157,25 +136,46 @@ class PermissionTypeAllOf(object):
         self._can_view = can_view
 
     @property
-    def name(self):
-        """Gets the name of this PermissionTypeAllOf.  # noqa: E501
+    def can_add_collaborators(self):
+        """Gets the can_add_collaborators of this PermissionTypeAllOf.  # noqa: E501
 
 
-        :return: The name of this PermissionTypeAllOf.  # noqa: E501
-        :rtype: str
+        :return: The can_add_collaborators of this PermissionTypeAllOf.  # noqa: E501
+        :rtype: bool
         """
-        return self._name
+        return self._can_add_collaborators
 
-    @name.setter
-    def name(self, name):
-        """Sets the name of this PermissionTypeAllOf.
+    @can_add_collaborators.setter
+    def can_add_collaborators(self, can_add_collaborators):
+        """Sets the can_add_collaborators of this PermissionTypeAllOf.
 
 
-        :param name: The name of this PermissionTypeAllOf.  # noqa: E501
-        :type: str
+        :param can_add_collaborators: The can_add_collaborators of this PermissionTypeAllOf.  # noqa: E501
+        :type: bool
         """
 
-        self._name = name
+        self._can_add_collaborators = can_add_collaborators
+
+    @property
+    def can_delete(self):
+        """Gets the can_delete of this PermissionTypeAllOf.  # noqa: E501
+
+
+        :return: The can_delete of this PermissionTypeAllOf.  # noqa: E501
+        :rtype: bool
+        """
+        return self._can_delete
+
+    @can_delete.setter
+    def can_delete(self, can_delete):
+        """Sets the can_delete of this PermissionTypeAllOf.
+
+
+        :param can_delete: The can_delete of this PermissionTypeAllOf.  # noqa: E501
+        :type: bool
+        """
+
+        self._can_delete = can_delete
 
     def to_dict(self):
         """Returns the model properties as a dict"""

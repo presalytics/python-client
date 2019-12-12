@@ -33,91 +33,70 @@ class StoryAllOf(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'collaborators': 'list[StoryCollaborator]',
-        'ooxml_documents': 'list[OoxmlDocument]',
+        'title': 'str',
         'outline': 'str',
         'outline_history': 'list[StoryOutlineHistory]',
+        'collaborators': 'list[StoryCollaborator]',
         'revision': 'int',
-        'title': 'str'
+        'ooxml_documents': 'list[OoxmlDocument]'
     }
 
     attribute_map = {
-        'collaborators': 'collaborators',
-        'ooxml_documents': 'ooxml_documents',
+        'title': 'title',
         'outline': 'outline',
         'outline_history': 'outline_history',
+        'collaborators': 'collaborators',
         'revision': 'revision',
-        'title': 'title'
+        'ooxml_documents': 'ooxml_documents'
     }
 
-    def __init__(self, collaborators=None, ooxml_documents=None, outline=None, outline_history=None, revision=None, title=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, title=None, outline=None, outline_history=None, collaborators=None, revision=None, ooxml_documents=None, local_vars_configuration=None):  # noqa: E501
         """StoryAllOf - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
         self.local_vars_configuration = local_vars_configuration
 
-        self._collaborators = None
-        self._ooxml_documents = None
+        self._title = None
         self._outline = None
         self._outline_history = None
+        self._collaborators = None
         self._revision = None
-        self._title = None
+        self._ooxml_documents = None
         self.discriminator = None
 
-        if collaborators is not None:
-            self.collaborators = collaborators
-        if ooxml_documents is not None:
-            self.ooxml_documents = ooxml_documents
+        if title is not None:
+            self.title = title
         if outline is not None:
             self.outline = outline
         if outline_history is not None:
             self.outline_history = outline_history
+        if collaborators is not None:
+            self.collaborators = collaborators
         if revision is not None:
             self.revision = revision
-        if title is not None:
-            self.title = title
+        if ooxml_documents is not None:
+            self.ooxml_documents = ooxml_documents
 
     @property
-    def collaborators(self):
-        """Gets the collaborators of this StoryAllOf.  # noqa: E501
+    def title(self):
+        """Gets the title of this StoryAllOf.  # noqa: E501
 
 
-        :return: The collaborators of this StoryAllOf.  # noqa: E501
-        :rtype: list[StoryCollaborator]
+        :return: The title of this StoryAllOf.  # noqa: E501
+        :rtype: str
         """
-        return self._collaborators
+        return self._title
 
-    @collaborators.setter
-    def collaborators(self, collaborators):
-        """Sets the collaborators of this StoryAllOf.
-
-
-        :param collaborators: The collaborators of this StoryAllOf.  # noqa: E501
-        :type: list[StoryCollaborator]
-        """
-
-        self._collaborators = collaborators
-
-    @property
-    def ooxml_documents(self):
-        """Gets the ooxml_documents of this StoryAllOf.  # noqa: E501
+    @title.setter
+    def title(self, title):
+        """Sets the title of this StoryAllOf.
 
 
-        :return: The ooxml_documents of this StoryAllOf.  # noqa: E501
-        :rtype: list[OoxmlDocument]
-        """
-        return self._ooxml_documents
-
-    @ooxml_documents.setter
-    def ooxml_documents(self, ooxml_documents):
-        """Sets the ooxml_documents of this StoryAllOf.
-
-
-        :param ooxml_documents: The ooxml_documents of this StoryAllOf.  # noqa: E501
-        :type: list[OoxmlDocument]
+        :param title: The title of this StoryAllOf.  # noqa: E501
+        :type: str
         """
 
-        self._ooxml_documents = ooxml_documents
+        self._title = title
 
     @property
     def outline(self):
@@ -162,6 +141,27 @@ class StoryAllOf(object):
         self._outline_history = outline_history
 
     @property
+    def collaborators(self):
+        """Gets the collaborators of this StoryAllOf.  # noqa: E501
+
+
+        :return: The collaborators of this StoryAllOf.  # noqa: E501
+        :rtype: list[StoryCollaborator]
+        """
+        return self._collaborators
+
+    @collaborators.setter
+    def collaborators(self, collaborators):
+        """Sets the collaborators of this StoryAllOf.
+
+
+        :param collaborators: The collaborators of this StoryAllOf.  # noqa: E501
+        :type: list[StoryCollaborator]
+        """
+
+        self._collaborators = collaborators
+
+    @property
     def revision(self):
         """Gets the revision of this StoryAllOf.  # noqa: E501
 
@@ -183,25 +183,25 @@ class StoryAllOf(object):
         self._revision = revision
 
     @property
-    def title(self):
-        """Gets the title of this StoryAllOf.  # noqa: E501
+    def ooxml_documents(self):
+        """Gets the ooxml_documents of this StoryAllOf.  # noqa: E501
 
 
-        :return: The title of this StoryAllOf.  # noqa: E501
-        :rtype: str
+        :return: The ooxml_documents of this StoryAllOf.  # noqa: E501
+        :rtype: list[OoxmlDocument]
         """
-        return self._title
+        return self._ooxml_documents
 
-    @title.setter
-    def title(self, title):
-        """Sets the title of this StoryAllOf.
+    @ooxml_documents.setter
+    def ooxml_documents(self, ooxml_documents):
+        """Sets the ooxml_documents of this StoryAllOf.
 
 
-        :param title: The title of this StoryAllOf.  # noqa: E501
-        :type: str
+        :param ooxml_documents: The ooxml_documents of this StoryAllOf.  # noqa: E501
+        :type: list[OoxmlDocument]
         """
 
-        self._title = title
+        self._ooxml_documents = ooxml_documents
 
     def to_dict(self):
         """Returns the model properties as a dict"""

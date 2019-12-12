@@ -33,59 +33,80 @@ class OoxmlDocument(object):
                             and the value is json key in definition.
     """
     openapi_types = {
+        'id': 'str',
         'created_at': 'datetime',
         'created_by': 'str',
-        'id': 'str',
         'updated_at': 'datetime',
         'updated_by': 'str',
+        'story_id': 'str',
         'delete_target_on_story_delete': 'bool',
-        'ooxml_automation_id': 'str',
-        'story_id': 'str'
+        'ooxml_automation_id': 'str'
     }
 
     attribute_map = {
+        'id': 'id',
         'created_at': 'created_at',
         'created_by': 'created_by',
-        'id': 'id',
         'updated_at': 'updated_at',
         'updated_by': 'updated_by',
+        'story_id': 'story_id',
         'delete_target_on_story_delete': 'delete_target_on_story_delete',
-        'ooxml_automation_id': 'ooxml_automation_id',
-        'story_id': 'story_id'
+        'ooxml_automation_id': 'ooxml_automation_id'
     }
 
-    def __init__(self, created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, delete_target_on_story_delete=None, ooxml_automation_id=None, story_id=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, story_id=None, delete_target_on_story_delete=None, ooxml_automation_id=None, local_vars_configuration=None):  # noqa: E501
         """OoxmlDocument - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
         self.local_vars_configuration = local_vars_configuration
 
+        self._id = None
         self._created_at = None
         self._created_by = None
-        self._id = None
         self._updated_at = None
         self._updated_by = None
+        self._story_id = None
         self._delete_target_on_story_delete = None
         self._ooxml_automation_id = None
-        self._story_id = None
         self.discriminator = None
 
+        if id is not None:
+            self.id = id
         if created_at is not None:
             self.created_at = created_at
         if created_by is not None:
             self.created_by = created_by
-        if id is not None:
-            self.id = id
         if updated_at is not None:
             self.updated_at = updated_at
         if updated_by is not None:
             self.updated_by = updated_by
+        if story_id is not None:
+            self.story_id = story_id
         if delete_target_on_story_delete is not None:
             self.delete_target_on_story_delete = delete_target_on_story_delete
         if ooxml_automation_id is not None:
             self.ooxml_automation_id = ooxml_automation_id
-        if story_id is not None:
-            self.story_id = story_id
+
+    @property
+    def id(self):
+        """Gets the id of this OoxmlDocument.  # noqa: E501
+
+
+        :return: The id of this OoxmlDocument.  # noqa: E501
+        :rtype: str
+        """
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        """Sets the id of this OoxmlDocument.
+
+
+        :param id: The id of this OoxmlDocument.  # noqa: E501
+        :type: str
+        """
+
+        self._id = id
 
     @property
     def created_at(self):
@@ -130,27 +151,6 @@ class OoxmlDocument(object):
         self._created_by = created_by
 
     @property
-    def id(self):
-        """Gets the id of this OoxmlDocument.  # noqa: E501
-
-
-        :return: The id of this OoxmlDocument.  # noqa: E501
-        :rtype: str
-        """
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        """Sets the id of this OoxmlDocument.
-
-
-        :param id: The id of this OoxmlDocument.  # noqa: E501
-        :type: str
-        """
-
-        self._id = id
-
-    @property
     def updated_at(self):
         """Gets the updated_at of this OoxmlDocument.  # noqa: E501
 
@@ -193,6 +193,27 @@ class OoxmlDocument(object):
         self._updated_by = updated_by
 
     @property
+    def story_id(self):
+        """Gets the story_id of this OoxmlDocument.  # noqa: E501
+
+
+        :return: The story_id of this OoxmlDocument.  # noqa: E501
+        :rtype: str
+        """
+        return self._story_id
+
+    @story_id.setter
+    def story_id(self, story_id):
+        """Sets the story_id of this OoxmlDocument.
+
+
+        :param story_id: The story_id of this OoxmlDocument.  # noqa: E501
+        :type: str
+        """
+
+        self._story_id = story_id
+
+    @property
     def delete_target_on_story_delete(self):
         """Gets the delete_target_on_story_delete of this OoxmlDocument.  # noqa: E501
 
@@ -233,27 +254,6 @@ class OoxmlDocument(object):
         """
 
         self._ooxml_automation_id = ooxml_automation_id
-
-    @property
-    def story_id(self):
-        """Gets the story_id of this OoxmlDocument.  # noqa: E501
-
-
-        :return: The story_id of this OoxmlDocument.  # noqa: E501
-        :rtype: str
-        """
-        return self._story_id
-
-    @story_id.setter
-    def story_id(self, story_id):
-        """Sets the story_id of this OoxmlDocument.
-
-
-        :param story_id: The story_id of this OoxmlDocument.  # noqa: E501
-        :type: str
-        """
-
-        self._story_id = story_id
 
     def to_dict(self):
         """Returns the model properties as a dict"""

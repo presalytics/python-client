@@ -20,7 +20,7 @@ except KeyError:
 
 try:
     story_host = {
-        'STORY': os.environ['STORY_HOST']
+        'STORY': os.environ['STORY_HOST'] + "/story"
     }
     PRESALYTICS['HOSTS'].update(story_host)
 except KeyError:

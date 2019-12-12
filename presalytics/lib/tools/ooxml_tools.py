@@ -6,7 +6,7 @@ import presalytics.lib.widgets.ooxml
 import presalytics.lib.themes.ooxml
 
 if typing.TYPE_CHECKING:
-    from presalytics_story.models import Story
+    from presaltyics.client.presalytics_story import Story
     from presalytics.client.presalytics_ooxml_automation import Document
     from presalytics.story.components import ThemeBase
 

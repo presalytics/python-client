@@ -86,6 +86,11 @@ def update_imports(tmp_dir_path, package_name):
     replace1 = "from {}".format(new_import_path)
     find2 = "import {}".format(package_name)
     replace2 = "import {}".format(new_import_path)
+    find3 = "klass = getattr({}.models, klass)".format(package_name)
+    replace3 = "klass = getattr({}.models, klass)".format(new_import_path)
+    find4 = 'logging.getLogger("{}'.format(package_name)
+    replace4 = 'logging.getLogger("{}'.format(new_import_path)
+
     for dname, dirs, files in os.walk(tmp_dir_path):
         for fname in files:
             fpath = os.path.join(dname, fname)
@@ -93,6 +98,8 @@ def update_imports(tmp_dir_path, package_name):
                 s = f.read()
             s = s.replace(find1, replace1)
             s = s.replace(find2, replace2)
+            s = s.replace(find3, replace3)
+            s = s.replace(find4, replace4)
             with open(fpath, "w") as f:
                 f.write(s)
 

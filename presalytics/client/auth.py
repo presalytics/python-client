@@ -123,6 +123,9 @@ class AuthenticationMixIn(object):
             )
         except Exception as e:
             if type(e).__name__ == "ApiException":
+                d = json.loads(e.body)
+                d["detail"] = d["detail"] + " Host: {0}; Path: {1}; Method: {2}".format(self.configuration.host, resource_path, method)
+                e.body = json.dumps(d)  
                 if self._ignore_api_exceptions:
                     return e.body, e.status, e.headers
                 else:

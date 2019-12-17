@@ -84,7 +84,7 @@ def create_pages_from_ooxml_document(story: 'Story',
     pages = []
     client = presalytics.Client(delegate_login=delegate_login, token=token)
     child_objects = client.ooxml_automation.documents_childobjects_get_id(ooxml_document.id)
-    document_type = client.ooxml_automation.documents_documenttype_typeid_get_typeid_type_id(ooxml_document.document_type_id)
+    document_type = client.ooxml_automation.documents_documenttype_typeid_get_type_id(ooxml_document.document_type_id)
     if document_type.file_extension == "pptx":
         slides_meta = [x for x in child_objects if x.object_type == "Slide.Slides"]
         ep_map = presalytics.OoxmlEndpointMap(presalytics.OoxmlEndpointMap.SLIDE)

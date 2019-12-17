@@ -152,7 +152,7 @@ class Widget(OutlineBase):
         'data'
     ]
 
-    def __init__(self, name, kind, data, plugins, **kwargs):
+    def __init__(self, name, kind, data, plugins=None, **kwargs):
         super(Widget, self).__init__(**kwargs)
         self.name = name
         self.kind = kind
@@ -177,7 +177,7 @@ class Page(OutlineBase):
         'kind'
     ]
 
-    def __init__(self, name, kind, widgets, plugins, **kwargs):
+    def __init__(self, name, kind, widgets, plugins=None, **kwargs):
         super(Page, self).__init__(**kwargs)
         self.name = name
         self.kind = kind
@@ -201,7 +201,7 @@ class Theme(OutlineBase):
         'name'
     ]
 
-    def __init__(self, name, kind, data, plugins, **kwargs):
+    def __init__(self, name, kind, data, plugins=None, **kwargs):
         super(Theme, self).__init__(**kwargs)
         self.name = name
         self.kind = kind
@@ -230,7 +230,7 @@ class StoryOutline(OutlineBase):
         'title'
     ]
 
-    def __init__(self, presalytics_story, info, pages, description, title, themes, plugins, **kwargs):
+    def __init__(self, presalytics_story, info, pages, description, title, themes, plugins=None, **kwargs):
         super(StoryOutline, self).__init__(**kwargs)
         self.presalytics_story = presalytics_story
         self.info = Info.deserialize(info)

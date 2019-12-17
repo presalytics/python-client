@@ -97,11 +97,14 @@ def create_pages_from_ooxml_document(story: 'Story',
                 object_ooxml_id=slide.entity_id,
                 document_ooxml_id=ooxml_document.id
             )
-            page = {
-                "kind": "widget-page",
-                "name": "page-{}".format(slide.name),
-                "widgets": [widget.serialize()]
-            }
+            widget_kind = "widget-page"
+            widget_name = slide.entity_name
+            widgets = [widget.serialize()]
+            page = presalytics.story.outline.Page(
+                kind=widget_kind,
+                name=widget_name,
+                widgets=widgets
+            )
             pages.append(page)
     # TODO: insert excel chart handling here
     return pages

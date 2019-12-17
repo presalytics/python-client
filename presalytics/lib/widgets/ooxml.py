@@ -138,7 +138,7 @@ class OoxmlEditorWidget(OoxmlWidgetBase):
             data=data,
             kind=self.__component_kind__
         )
-        return widget
+        return widget.to_dict()
 
     def update_xml(self, old_xml: str, data: typing.Dict):
         raise NotImplementedError
@@ -273,4 +273,4 @@ class OoxmlFileWidget(OoxmlWidgetBase):
             data=data,
             plugins=None
         )
-        return widget
+        return widget.to_dict()

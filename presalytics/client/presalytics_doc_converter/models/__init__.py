@@ -16,3 +16,4 @@ from __future__ import absolute_import
 
 # import models into model package
 from presalytics.client.presalytics_doc_converter.models.file_to_convert import FileToConvert
+from presalytics.client.presalytics_doc_converter.models.file_url import FileUrl

@@ -15,7 +15,7 @@
 
 from __future__ import absolute_import
 
-__version__ = "0.2.39"
+__version__ = "0.2.40"
 
 # import apis into sdk package
 from presalytics.client.presalytics_doc_converter.api.default_api import DefaultApi
@@ -30,4 +30,5 @@ from presalytics.client.presalytics_doc_converter.exceptions import ApiKeyError
 from presalytics.client.presalytics_doc_converter.exceptions import ApiException
 # import models into sdk package
 from presalytics.client.presalytics_doc_converter.models.file_to_convert import FileToConvert
+from presalytics.client.presalytics_doc_converter.models.file_url import FileUrl
 

@@ -352,18 +352,17 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def chart_axisdatatypes_typeid_get_typeid_type_id(self, type_id2, **kwargs):  # noqa: E501
+    def chart_axisdatatypes_typeid_get_type_id(self, type_id, **kwargs):  # noqa: E501
         """AxisDataTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.chart_axisdatatypes_typeid_get_typeid_type_id(type_id2, async_req=True)
+        >>> thread = api.chart_axisdatatypes_typeid_get_type_id(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -376,20 +375,19 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.chart_axisdatatypes_typeid_get_typeid_type_id_with_http_info(type_id2, **kwargs)  # noqa: E501
+        return self.chart_axisdatatypes_typeid_get_type_id_with_http_info(type_id, **kwargs)  # noqa: E501
 
-    def chart_axisdatatypes_typeid_get_typeid_type_id_with_http_info(self, type_id2, **kwargs):  # noqa: E501
+    def chart_axisdatatypes_typeid_get_type_id_with_http_info(self, type_id, **kwargs):  # noqa: E501
         """AxisDataTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.chart_axisdatatypes_typeid_get_typeid_type_id_with_http_info(type_id2, async_req=True)
+        >>> thread = api.chart_axisdatatypes_typeid_get_type_id_with_http_info(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -406,7 +404,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['type_id2', 'type_id']  # noqa: E501
+        all_params = ['type_id']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -416,24 +414,22 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method chart_axisdatatypes_typeid_get_typeid_type_id" % key
+                    " to method chart_axisdatatypes_typeid_get_type_id" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
-        # verify the required parameter 'type_id2' is set
-        if self.api_client.client_side_validation and ('type_id2' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id2'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `type_id2` when calling `chart_axisdatatypes_typeid_get_typeid_type_id`")  # noqa: E501
+        # verify the required parameter 'type_id' is set
+        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['type_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `type_id` when calling `chart_axisdatatypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'type_id2' in local_var_params:
-            path_params['type_id'] = local_var_params['type_id2']  # noqa: E501
+        if 'type_id' in local_var_params:
+            path_params['type_id'] = local_var_params['type_id']  # noqa: E501
 
         query_params = []
-        if 'type_id' in local_var_params and local_var_params['type_id'] is not None:  # noqa: E501
-            query_params.append(('TypeId', local_var_params['type_id']))  # noqa: E501
 
         header_params = {}
 
@@ -1104,18 +1100,17 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def chart_plottype_typeid_get_typeid_type_id(self, type_id2, **kwargs):  # noqa: E501
+    def chart_plottype_typeid_get_type_id(self, type_id, **kwargs):  # noqa: E501
         """PlotType: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.chart_plottype_typeid_get_typeid_type_id(type_id2, async_req=True)
+        >>> thread = api.chart_plottype_typeid_get_type_id(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -1128,20 +1123,19 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.chart_plottype_typeid_get_typeid_type_id_with_http_info(type_id2, **kwargs)  # noqa: E501
+        return self.chart_plottype_typeid_get_type_id_with_http_info(type_id, **kwargs)  # noqa: E501
 
-    def chart_plottype_typeid_get_typeid_type_id_with_http_info(self, type_id2, **kwargs):  # noqa: E501
+    def chart_plottype_typeid_get_type_id_with_http_info(self, type_id, **kwargs):  # noqa: E501
         """PlotType: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.chart_plottype_typeid_get_typeid_type_id_with_http_info(type_id2, async_req=True)
+        >>> thread = api.chart_plottype_typeid_get_type_id_with_http_info(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -1158,7 +1152,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['type_id2', 'type_id']  # noqa: E501
+        all_params = ['type_id']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -1168,24 +1162,22 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method chart_plottype_typeid_get_typeid_type_id" % key
+                    " to method chart_plottype_typeid_get_type_id" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
-        # verify the required parameter 'type_id2' is set
-        if self.api_client.client_side_validation and ('type_id2' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id2'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `type_id2` when calling `chart_plottype_typeid_get_typeid_type_id`")  # noqa: E501
+        # verify the required parameter 'type_id' is set
+        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['type_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `type_id` when calling `chart_plottype_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'type_id2' in local_var_params:
-            path_params['type_id'] = local_var_params['type_id2']  # noqa: E501
+        if 'type_id' in local_var_params:
+            path_params['type_id'] = local_var_params['type_id']  # noqa: E501
 
         query_params = []
-        if 'type_id' in local_var_params and local_var_params['type_id'] is not None:  # noqa: E501
-            query_params.append(('TypeId', local_var_params['type_id']))  # noqa: E501
 
         header_params = {}
 
@@ -1424,18 +1416,17 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def chart_rowcol_typeid_get_typeid_type_id(self, type_id2, **kwargs):  # noqa: E501
+    def chart_rowcol_typeid_get_type_id(self, type_id, **kwargs):  # noqa: E501
         """RowCol: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.chart_rowcol_typeid_get_typeid_type_id(type_id2, async_req=True)
+        >>> thread = api.chart_rowcol_typeid_get_type_id(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -1448,20 +1439,19 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.chart_rowcol_typeid_get_typeid_type_id_with_http_info(type_id2, **kwargs)  # noqa: E501
+        return self.chart_rowcol_typeid_get_type_id_with_http_info(type_id, **kwargs)  # noqa: E501
 
-    def chart_rowcol_typeid_get_typeid_type_id_with_http_info(self, type_id2, **kwargs):  # noqa: E501
+    def chart_rowcol_typeid_get_type_id_with_http_info(self, type_id, **kwargs):  # noqa: E501
         """RowCol: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.chart_rowcol_typeid_get_typeid_type_id_with_http_info(type_id2, async_req=True)
+        >>> thread = api.chart_rowcol_typeid_get_type_id_with_http_info(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -1478,7 +1468,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['type_id2', 'type_id']  # noqa: E501
+        all_params = ['type_id']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -1488,24 +1478,22 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method chart_rowcol_typeid_get_typeid_type_id" % key
+                    " to method chart_rowcol_typeid_get_type_id" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
-        # verify the required parameter 'type_id2' is set
-        if self.api_client.client_side_validation and ('type_id2' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id2'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `type_id2` when calling `chart_rowcol_typeid_get_typeid_type_id`")  # noqa: E501
+        # verify the required parameter 'type_id' is set
+        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['type_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `type_id` when calling `chart_rowcol_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'type_id2' in local_var_params:
-            path_params['type_id'] = local_var_params['type_id2']  # noqa: E501
+        if 'type_id' in local_var_params:
+            path_params['type_id'] = local_var_params['type_id']  # noqa: E501
 
         query_params = []
-        if 'type_id' in local_var_params and local_var_params['type_id'] is not None:  # noqa: E501
-            query_params.append(('TypeId', local_var_params['type_id']))  # noqa: E501
 
         header_params = {}
 
@@ -1852,18 +1840,17 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def chart_rownameformattypes_typeid_get_typeid_type_id(self, type_id2, **kwargs):  # noqa: E501
+    def chart_rownameformattypes_typeid_get_type_id(self, type_id, **kwargs):  # noqa: E501
         """RowNameFormatTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.chart_rownameformattypes_typeid_get_typeid_type_id(type_id2, async_req=True)
+        >>> thread = api.chart_rownameformattypes_typeid_get_type_id(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -1876,20 +1863,19 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.chart_rownameformattypes_typeid_get_typeid_type_id_with_http_info(type_id2, **kwargs)  # noqa: E501
+        return self.chart_rownameformattypes_typeid_get_type_id_with_http_info(type_id, **kwargs)  # noqa: E501
 
-    def chart_rownameformattypes_typeid_get_typeid_type_id_with_http_info(self, type_id2, **kwargs):  # noqa: E501
+    def chart_rownameformattypes_typeid_get_type_id_with_http_info(self, type_id, **kwargs):  # noqa: E501
         """RowNameFormatTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.chart_rownameformattypes_typeid_get_typeid_type_id_with_http_info(type_id2, async_req=True)
+        >>> thread = api.chart_rownameformattypes_typeid_get_type_id_with_http_info(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -1906,7 +1892,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['type_id2', 'type_id']  # noqa: E501
+        all_params = ['type_id']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -1916,24 +1902,22 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method chart_rownameformattypes_typeid_get_typeid_type_id" % key
+                    " to method chart_rownameformattypes_typeid_get_type_id" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
-        # verify the required parameter 'type_id2' is set
-        if self.api_client.client_side_validation and ('type_id2' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id2'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `type_id2` when calling `chart_rownameformattypes_typeid_get_typeid_type_id`")  # noqa: E501
+        # verify the required parameter 'type_id' is set
+        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['type_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `type_id` when calling `chart_rownameformattypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'type_id2' in local_var_params:
-            path_params['type_id'] = local_var_params['type_id2']  # noqa: E501
+        if 'type_id' in local_var_params:
+            path_params['type_id'] = local_var_params['type_id']  # noqa: E501
 
         query_params = []
-        if 'type_id' in local_var_params and local_var_params['type_id'] is not None:  # noqa: E501
-            query_params.append(('TypeId', local_var_params['type_id']))  # noqa: E501
 
         header_params = {}
 
@@ -3148,18 +3132,17 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def documents_documenttype_typeid_get_typeid_type_id(self, type_id2, **kwargs):  # noqa: E501
+    def documents_documenttype_typeid_get_type_id(self, type_id, **kwargs):  # noqa: E501
         """DocumentType: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.documents_documenttype_typeid_get_typeid_type_id(type_id2, async_req=True)
+        >>> thread = api.documents_documenttype_typeid_get_type_id(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -3172,20 +3155,19 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.documents_documenttype_typeid_get_typeid_type_id_with_http_info(type_id2, **kwargs)  # noqa: E501
+        return self.documents_documenttype_typeid_get_type_id_with_http_info(type_id, **kwargs)  # noqa: E501
 
-    def documents_documenttype_typeid_get_typeid_type_id_with_http_info(self, type_id2, **kwargs):  # noqa: E501
+    def documents_documenttype_typeid_get_type_id_with_http_info(self, type_id, **kwargs):  # noqa: E501
         """DocumentType: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.documents_documenttype_typeid_get_typeid_type_id_with_http_info(type_id2, async_req=True)
+        >>> thread = api.documents_documenttype_typeid_get_type_id_with_http_info(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -3202,7 +3184,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['type_id2', 'type_id']  # noqa: E501
+        all_params = ['type_id']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -3212,24 +3194,22 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method documents_documenttype_typeid_get_typeid_type_id" % key
+                    " to method documents_documenttype_typeid_get_type_id" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
-        # verify the required parameter 'type_id2' is set
-        if self.api_client.client_side_validation and ('type_id2' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id2'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `type_id2` when calling `documents_documenttype_typeid_get_typeid_type_id`")  # noqa: E501
+        # verify the required parameter 'type_id' is set
+        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['type_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `type_id` when calling `documents_documenttype_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'type_id2' in local_var_params:
-            path_params['type_id'] = local_var_params['type_id2']  # noqa: E501
+        if 'type_id' in local_var_params:
+            path_params['type_id'] = local_var_params['type_id']  # noqa: E501
 
         query_params = []
-        if 'type_id' in local_var_params and local_var_params['type_id'] is not None:  # noqa: E501
-            query_params.append(('TypeId', local_var_params['type_id']))  # noqa: E501
 
         header_params = {}
 
@@ -4020,18 +4000,17 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def shared_colortypes_typeid_get_typeid_type_id(self, type_id2, **kwargs):  # noqa: E501
+    def shared_colortypes_typeid_get_type_id(self, type_id, **kwargs):  # noqa: E501
         """ColorTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.shared_colortypes_typeid_get_typeid_type_id(type_id2, async_req=True)
+        >>> thread = api.shared_colortypes_typeid_get_type_id(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -4044,20 +4023,19 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.shared_colortypes_typeid_get_typeid_type_id_with_http_info(type_id2, **kwargs)  # noqa: E501
+        return self.shared_colortypes_typeid_get_type_id_with_http_info(type_id, **kwargs)  # noqa: E501
 
-    def shared_colortypes_typeid_get_typeid_type_id_with_http_info(self, type_id2, **kwargs):  # noqa: E501
+    def shared_colortypes_typeid_get_type_id_with_http_info(self, type_id, **kwargs):  # noqa: E501
         """ColorTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.shared_colortypes_typeid_get_typeid_type_id_with_http_info(type_id2, async_req=True)
+        >>> thread = api.shared_colortypes_typeid_get_type_id_with_http_info(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -4074,7 +4052,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['type_id2', 'type_id']  # noqa: E501
+        all_params = ['type_id']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -4084,24 +4062,22 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method shared_colortypes_typeid_get_typeid_type_id" % key
+                    " to method shared_colortypes_typeid_get_type_id" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
-        # verify the required parameter 'type_id2' is set
-        if self.api_client.client_side_validation and ('type_id2' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id2'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `type_id2` when calling `shared_colortypes_typeid_get_typeid_type_id`")  # noqa: E501
+        # verify the required parameter 'type_id' is set
+        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['type_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `type_id` when calling `shared_colortypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'type_id2' in local_var_params:
-            path_params['type_id'] = local_var_params['type_id2']  # noqa: E501
+        if 'type_id' in local_var_params:
+            path_params['type_id'] = local_var_params['type_id']  # noqa: E501
 
         query_params = []
-        if 'type_id' in local_var_params and local_var_params['type_id'] is not None:  # noqa: E501
-            query_params.append(('TypeId', local_var_params['type_id']))  # noqa: E501
 
         header_params = {}
 
@@ -4340,18 +4316,17 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def shared_dashtypes_typeid_get_typeid_type_id(self, type_id2, **kwargs):  # noqa: E501
+    def shared_dashtypes_typeid_get_type_id(self, type_id, **kwargs):  # noqa: E501
         """DashTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.shared_dashtypes_typeid_get_typeid_type_id(type_id2, async_req=True)
+        >>> thread = api.shared_dashtypes_typeid_get_type_id(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -4364,20 +4339,19 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.shared_dashtypes_typeid_get_typeid_type_id_with_http_info(type_id2, **kwargs)  # noqa: E501
+        return self.shared_dashtypes_typeid_get_type_id_with_http_info(type_id, **kwargs)  # noqa: E501
 
-    def shared_dashtypes_typeid_get_typeid_type_id_with_http_info(self, type_id2, **kwargs):  # noqa: E501
+    def shared_dashtypes_typeid_get_type_id_with_http_info(self, type_id, **kwargs):  # noqa: E501
         """DashTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.shared_dashtypes_typeid_get_typeid_type_id_with_http_info(type_id2, async_req=True)
+        >>> thread = api.shared_dashtypes_typeid_get_type_id_with_http_info(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -4394,7 +4368,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['type_id2', 'type_id']  # noqa: E501
+        all_params = ['type_id']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -4404,24 +4378,22 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method shared_dashtypes_typeid_get_typeid_type_id" % key
+                    " to method shared_dashtypes_typeid_get_type_id" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
-        # verify the required parameter 'type_id2' is set
-        if self.api_client.client_side_validation and ('type_id2' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id2'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `type_id2` when calling `shared_dashtypes_typeid_get_typeid_type_id`")  # noqa: E501
+        # verify the required parameter 'type_id' is set
+        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['type_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `type_id` when calling `shared_dashtypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'type_id2' in local_var_params:
-            path_params['type_id'] = local_var_params['type_id2']  # noqa: E501
+        if 'type_id' in local_var_params:
+            path_params['type_id'] = local_var_params['type_id']  # noqa: E501
 
         query_params = []
-        if 'type_id' in local_var_params and local_var_params['type_id'] is not None:  # noqa: E501
-            query_params.append(('TypeId', local_var_params['type_id']))  # noqa: E501
 
         header_params = {}
 
@@ -4876,18 +4848,17 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def shared_effecttypes_typeid_get_typeid_type_id(self, type_id2, **kwargs):  # noqa: E501
+    def shared_effecttypes_typeid_get_type_id(self, type_id, **kwargs):  # noqa: E501
         """EffectTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.shared_effecttypes_typeid_get_typeid_type_id(type_id2, async_req=True)
+        >>> thread = api.shared_effecttypes_typeid_get_type_id(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -4900,20 +4871,19 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.shared_effecttypes_typeid_get_typeid_type_id_with_http_info(type_id2, **kwargs)  # noqa: E501
+        return self.shared_effecttypes_typeid_get_type_id_with_http_info(type_id, **kwargs)  # noqa: E501
 
-    def shared_effecttypes_typeid_get_typeid_type_id_with_http_info(self, type_id2, **kwargs):  # noqa: E501
+    def shared_effecttypes_typeid_get_type_id_with_http_info(self, type_id, **kwargs):  # noqa: E501
         """EffectTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.shared_effecttypes_typeid_get_typeid_type_id_with_http_info(type_id2, async_req=True)
+        >>> thread = api.shared_effecttypes_typeid_get_type_id_with_http_info(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -4930,7 +4900,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['type_id2', 'type_id']  # noqa: E501
+        all_params = ['type_id']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -4940,24 +4910,22 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method shared_effecttypes_typeid_get_typeid_type_id" % key
+                    " to method shared_effecttypes_typeid_get_type_id" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
-        # verify the required parameter 'type_id2' is set
-        if self.api_client.client_side_validation and ('type_id2' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id2'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `type_id2` when calling `shared_effecttypes_typeid_get_typeid_type_id`")  # noqa: E501
+        # verify the required parameter 'type_id' is set
+        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['type_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `type_id` when calling `shared_effecttypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'type_id2' in local_var_params:
-            path_params['type_id'] = local_var_params['type_id2']  # noqa: E501
+        if 'type_id' in local_var_params:
+            path_params['type_id'] = local_var_params['type_id']  # noqa: E501
 
         query_params = []
-        if 'type_id' in local_var_params and local_var_params['type_id'] is not None:  # noqa: E501
-            query_params.append(('TypeId', local_var_params['type_id']))  # noqa: E501
 
         header_params = {}
 
@@ -5304,18 +5272,17 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def shared_filltypes_typeid_get_typeid_type_id(self, type_id2, **kwargs):  # noqa: E501
+    def shared_filltypes_typeid_get_type_id(self, type_id, **kwargs):  # noqa: E501
         """FillTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.shared_filltypes_typeid_get_typeid_type_id(type_id2, async_req=True)
+        >>> thread = api.shared_filltypes_typeid_get_type_id(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -5328,20 +5295,19 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.shared_filltypes_typeid_get_typeid_type_id_with_http_info(type_id2, **kwargs)  # noqa: E501
+        return self.shared_filltypes_typeid_get_type_id_with_http_info(type_id, **kwargs)  # noqa: E501
 
-    def shared_filltypes_typeid_get_typeid_type_id_with_http_info(self, type_id2, **kwargs):  # noqa: E501
+    def shared_filltypes_typeid_get_type_id_with_http_info(self, type_id, **kwargs):  # noqa: E501
         """FillTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.shared_filltypes_typeid_get_typeid_type_id_with_http_info(type_id2, async_req=True)
+        >>> thread = api.shared_filltypes_typeid_get_type_id_with_http_info(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -5358,7 +5324,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['type_id2', 'type_id']  # noqa: E501
+        all_params = ['type_id']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -5368,24 +5334,22 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method shared_filltypes_typeid_get_typeid_type_id" % key
+                    " to method shared_filltypes_typeid_get_type_id" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
-        # verify the required parameter 'type_id2' is set
-        if self.api_client.client_side_validation and ('type_id2' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id2'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `type_id2` when calling `shared_filltypes_typeid_get_typeid_type_id`")  # noqa: E501
+        # verify the required parameter 'type_id' is set
+        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['type_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `type_id` when calling `shared_filltypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'type_id2' in local_var_params:
-            path_params['type_id'] = local_var_params['type_id2']  # noqa: E501
+        if 'type_id' in local_var_params:
+            path_params['type_id'] = local_var_params['type_id']  # noqa: E501
 
         query_params = []
-        if 'type_id' in local_var_params and local_var_params['type_id'] is not None:  # noqa: E501
-            query_params.append(('TypeId', local_var_params['type_id']))  # noqa: E501
 
         header_params = {}
 
@@ -6604,18 +6568,17 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def shared_lineendsizes_typeid_get_typeid_type_id(self, type_id2, **kwargs):  # noqa: E501
+    def shared_lineendsizes_typeid_get_type_id(self, type_id, **kwargs):  # noqa: E501
         """LineEndSizes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.shared_lineendsizes_typeid_get_typeid_type_id(type_id2, async_req=True)
+        >>> thread = api.shared_lineendsizes_typeid_get_type_id(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -6628,20 +6591,19 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.shared_lineendsizes_typeid_get_typeid_type_id_with_http_info(type_id2, **kwargs)  # noqa: E501
+        return self.shared_lineendsizes_typeid_get_type_id_with_http_info(type_id, **kwargs)  # noqa: E501
 
-    def shared_lineendsizes_typeid_get_typeid_type_id_with_http_info(self, type_id2, **kwargs):  # noqa: E501
+    def shared_lineendsizes_typeid_get_type_id_with_http_info(self, type_id, **kwargs):  # noqa: E501
         """LineEndSizes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.shared_lineendsizes_typeid_get_typeid_type_id_with_http_info(type_id2, async_req=True)
+        >>> thread = api.shared_lineendsizes_typeid_get_type_id_with_http_info(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -6658,7 +6620,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['type_id2', 'type_id']  # noqa: E501
+        all_params = ['type_id']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -6668,24 +6630,22 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method shared_lineendsizes_typeid_get_typeid_type_id" % key
+                    " to method shared_lineendsizes_typeid_get_type_id" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
-        # verify the required parameter 'type_id2' is set
-        if self.api_client.client_side_validation and ('type_id2' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id2'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `type_id2` when calling `shared_lineendsizes_typeid_get_typeid_type_id`")  # noqa: E501
+        # verify the required parameter 'type_id' is set
+        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['type_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `type_id` when calling `shared_lineendsizes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'type_id2' in local_var_params:
-            path_params['type_id'] = local_var_params['type_id2']  # noqa: E501
+        if 'type_id' in local_var_params:
+            path_params['type_id'] = local_var_params['type_id']  # noqa: E501
 
         query_params = []
-        if 'type_id' in local_var_params and local_var_params['type_id'] is not None:  # noqa: E501
-            query_params.append(('TypeId', local_var_params['type_id']))  # noqa: E501
 
         header_params = {}
 
@@ -6924,18 +6884,17 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def shared_lineendtypes_typeid_get_typeid_type_id(self, type_id2, **kwargs):  # noqa: E501
+    def shared_lineendtypes_typeid_get_type_id(self, type_id, **kwargs):  # noqa: E501
         """LineEndTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.shared_lineendtypes_typeid_get_typeid_type_id(type_id2, async_req=True)
+        >>> thread = api.shared_lineendtypes_typeid_get_type_id(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -6948,20 +6907,19 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.shared_lineendtypes_typeid_get_typeid_type_id_with_http_info(type_id2, **kwargs)  # noqa: E501
+        return self.shared_lineendtypes_typeid_get_type_id_with_http_info(type_id, **kwargs)  # noqa: E501
 
-    def shared_lineendtypes_typeid_get_typeid_type_id_with_http_info(self, type_id2, **kwargs):  # noqa: E501
+    def shared_lineendtypes_typeid_get_type_id_with_http_info(self, type_id, **kwargs):  # noqa: E501
         """LineEndTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.shared_lineendtypes_typeid_get_typeid_type_id_with_http_info(type_id2, async_req=True)
+        >>> thread = api.shared_lineendtypes_typeid_get_type_id_with_http_info(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -6978,7 +6936,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['type_id2', 'type_id']  # noqa: E501
+        all_params = ['type_id']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -6988,24 +6946,22 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method shared_lineendtypes_typeid_get_typeid_type_id" % key
+                    " to method shared_lineendtypes_typeid_get_type_id" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
-        # verify the required parameter 'type_id2' is set
-        if self.api_client.client_side_validation and ('type_id2' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id2'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `type_id2` when calling `shared_lineendtypes_typeid_get_typeid_type_id`")  # noqa: E501
+        # verify the required parameter 'type_id' is set
+        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['type_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `type_id` when calling `shared_lineendtypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'type_id2' in local_var_params:
-            path_params['type_id'] = local_var_params['type_id2']  # noqa: E501
+        if 'type_id' in local_var_params:
+            path_params['type_id'] = local_var_params['type_id']  # noqa: E501
 
         query_params = []
-        if 'type_id' in local_var_params and local_var_params['type_id'] is not None:  # noqa: E501
-            query_params.append(('TypeId', local_var_params['type_id']))  # noqa: E501
 
         header_params = {}
 
@@ -8656,18 +8612,17 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def slides_graphictypes_typeid_get_typeid_type_id(self, type_id2, **kwargs):  # noqa: E501
+    def slides_graphictypes_typeid_get_type_id(self, type_id, **kwargs):  # noqa: E501
         """GraphicTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_graphictypes_typeid_get_typeid_type_id(type_id2, async_req=True)
+        >>> thread = api.slides_graphictypes_typeid_get_type_id(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -8680,20 +8635,19 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.slides_graphictypes_typeid_get_typeid_type_id_with_http_info(type_id2, **kwargs)  # noqa: E501
+        return self.slides_graphictypes_typeid_get_type_id_with_http_info(type_id, **kwargs)  # noqa: E501
 
-    def slides_graphictypes_typeid_get_typeid_type_id_with_http_info(self, type_id2, **kwargs):  # noqa: E501
+    def slides_graphictypes_typeid_get_type_id_with_http_info(self, type_id, **kwargs):  # noqa: E501
         """GraphicTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_graphictypes_typeid_get_typeid_type_id_with_http_info(type_id2, async_req=True)
+        >>> thread = api.slides_graphictypes_typeid_get_type_id_with_http_info(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -8710,7 +8664,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['type_id2', 'type_id']  # noqa: E501
+        all_params = ['type_id']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -8720,24 +8674,22 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method slides_graphictypes_typeid_get_typeid_type_id" % key
+                    " to method slides_graphictypes_typeid_get_type_id" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
-        # verify the required parameter 'type_id2' is set
-        if self.api_client.client_side_validation and ('type_id2' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id2'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `type_id2` when calling `slides_graphictypes_typeid_get_typeid_type_id`")  # noqa: E501
+        # verify the required parameter 'type_id' is set
+        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['type_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `type_id` when calling `slides_graphictypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'type_id2' in local_var_params:
-            path_params['type_id'] = local_var_params['type_id2']  # noqa: E501
+        if 'type_id' in local_var_params:
+            path_params['type_id'] = local_var_params['type_id']  # noqa: E501
 
         query_params = []
-        if 'type_id' in local_var_params and local_var_params['type_id'] is not None:  # noqa: E501
-            query_params.append(('TypeId', local_var_params['type_id']))  # noqa: E501
 
         header_params = {}
 
@@ -9084,18 +9036,17 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def slides_groupelementtypes_typeid_get_typeid_type_id(self, type_id2, **kwargs):  # noqa: E501
+    def slides_groupelementtypes_typeid_get_type_id(self, type_id, **kwargs):  # noqa: E501
         """GroupElementTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_groupelementtypes_typeid_get_typeid_type_id(type_id2, async_req=True)
+        >>> thread = api.slides_groupelementtypes_typeid_get_type_id(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -9108,20 +9059,19 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.slides_groupelementtypes_typeid_get_typeid_type_id_with_http_info(type_id2, **kwargs)  # noqa: E501
+        return self.slides_groupelementtypes_typeid_get_type_id_with_http_info(type_id, **kwargs)  # noqa: E501
 
-    def slides_groupelementtypes_typeid_get_typeid_type_id_with_http_info(self, type_id2, **kwargs):  # noqa: E501
+    def slides_groupelementtypes_typeid_get_type_id_with_http_info(self, type_id, **kwargs):  # noqa: E501
         """GroupElementTypes: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_groupelementtypes_typeid_get_typeid_type_id_with_http_info(type_id2, async_req=True)
+        >>> thread = api.slides_groupelementtypes_typeid_get_type_id_with_http_info(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -9138,7 +9088,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['type_id2', 'type_id']  # noqa: E501
+        all_params = ['type_id']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -9148,24 +9098,22 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method slides_groupelementtypes_typeid_get_typeid_type_id" % key
+                    " to method slides_groupelementtypes_typeid_get_type_id" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
-        # verify the required parameter 'type_id2' is set
-        if self.api_client.client_side_validation and ('type_id2' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id2'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `type_id2` when calling `slides_groupelementtypes_typeid_get_typeid_type_id`")  # noqa: E501
+        # verify the required parameter 'type_id' is set
+        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['type_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `type_id` when calling `slides_groupelementtypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'type_id2' in local_var_params:
-            path_params['type_id'] = local_var_params['type_id2']  # noqa: E501
+        if 'type_id' in local_var_params:
+            path_params['type_id'] = local_var_params['type_id']  # noqa: E501
 
         query_params = []
-        if 'type_id' in local_var_params and local_var_params['type_id'] is not None:  # noqa: E501
-            query_params.append(('TypeId', local_var_params['type_id']))  # noqa: E501
 
         header_params = {}
 
@@ -15184,18 +15132,17 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def themes_intensity_typeid_get_typeid_type_id(self, type_id2, **kwargs):  # noqa: E501
+    def themes_intensity_typeid_get_type_id(self, type_id, **kwargs):  # noqa: E501
         """Intensity: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.themes_intensity_typeid_get_typeid_type_id(type_id2, async_req=True)
+        >>> thread = api.themes_intensity_typeid_get_type_id(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -15208,20 +15155,19 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.themes_intensity_typeid_get_typeid_type_id_with_http_info(type_id2, **kwargs)  # noqa: E501
+        return self.themes_intensity_typeid_get_type_id_with_http_info(type_id, **kwargs)  # noqa: E501
 
-    def themes_intensity_typeid_get_typeid_type_id_with_http_info(self, type_id2, **kwargs):  # noqa: E501
+    def themes_intensity_typeid_get_type_id_with_http_info(self, type_id, **kwargs):  # noqa: E501
         """Intensity: Get By Type Id  # noqa: E501
 
         This endpoint returns Type metadata from an integer type_id that can found on objects throughout the api.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.themes_intensity_typeid_get_typeid_type_id_with_http_info(type_id2, async_req=True)
+        >>> thread = api.themes_intensity_typeid_get_type_id_with_http_info(type_id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str type_id2: (required)
-        :param int type_id:
+        :param int type_id: (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -15238,7 +15184,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['type_id2', 'type_id']  # noqa: E501
+        all_params = ['type_id']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -15248,24 +15194,22 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method themes_intensity_typeid_get_typeid_type_id" % key
+                    " to method themes_intensity_typeid_get_type_id" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
-        # verify the required parameter 'type_id2' is set
-        if self.api_client.client_side_validation and ('type_id2' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id2'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `type_id2` when calling `themes_intensity_typeid_get_typeid_type_id`")  # noqa: E501
+        # verify the required parameter 'type_id' is set
+        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['type_id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `type_id` when calling `themes_intensity_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'type_id2' in local_var_params:
-            path_params['type_id'] = local_var_params['type_id2']  # noqa: E501
+        if 'type_id' in local_var_params:
+            path_params['type_id'] = local_var_params['type_id']  # noqa: E501
 
         query_params = []
-        if 'type_id' in local_var_params and local_var_params['type_id'] is not None:  # noqa: E501
-            query_params.append(('TypeId', local_var_params['type_id']))  # noqa: E501
 
         header_params = {}
 

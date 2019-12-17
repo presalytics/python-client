@@ -38,6 +38,10 @@ class SlideSlides(object):
         'ooxml_id': 'int',
         'svg_blob_url': 'str',
         'slide_document_url': 'str',
+        'base_element_blob_url': 'str',
+        'changed_base_element_blob_url': 'str',
+        'package_uri': 'str',
+        'name': 'str',
         'id': 'str'
     }
 
@@ -47,10 +51,14 @@ class SlideSlides(object):
         'ooxml_id': 'ooxmlId',
         'svg_blob_url': 'svgBlobUrl',
         'slide_document_url': 'slideDocumentUrl',
+        'base_element_blob_url': 'baseElementBlobUrl',
+        'changed_base_element_blob_url': 'changedBaseElementBlobUrl',
+        'package_uri': 'packageUri',
+        'name': 'name',
         'id': 'id'
     }
 
-    def __init__(self, document_id=None, number=None, ooxml_id=None, svg_blob_url=None, slide_document_url=None, id=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, document_id=None, number=None, ooxml_id=None, svg_blob_url=None, slide_document_url=None, base_element_blob_url=None, changed_base_element_blob_url=None, package_uri=None, name=None, id=None, local_vars_configuration=None):  # noqa: E501
         """SlideSlides - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -61,6 +69,10 @@ class SlideSlides(object):
         self._ooxml_id = None
         self._svg_blob_url = None
         self._slide_document_url = None
+        self._base_element_blob_url = None
+        self._changed_base_element_blob_url = None
+        self._package_uri = None
+        self._name = None
         self._id = None
         self.discriminator = None
 
@@ -71,6 +83,10 @@ class SlideSlides(object):
             self.ooxml_id = ooxml_id
         self.svg_blob_url = svg_blob_url
         self.slide_document_url = slide_document_url
+        self.base_element_blob_url = base_element_blob_url
+        self.changed_base_element_blob_url = changed_base_element_blob_url
+        self.package_uri = package_uri
+        self.name = name
         if id is not None:
             self.id = id
 
@@ -178,6 +194,90 @@ class SlideSlides(object):
         """
 
         self._slide_document_url = slide_document_url
+
+    @property
+    def base_element_blob_url(self):
+        """Gets the base_element_blob_url of this SlideSlides.  # noqa: E501
+
+
+        :return: The base_element_blob_url of this SlideSlides.  # noqa: E501
+        :rtype: str
+        """
+        return self._base_element_blob_url
+
+    @base_element_blob_url.setter
+    def base_element_blob_url(self, base_element_blob_url):
+        """Sets the base_element_blob_url of this SlideSlides.
+
+
+        :param base_element_blob_url: The base_element_blob_url of this SlideSlides.  # noqa: E501
+        :type: str
+        """
+
+        self._base_element_blob_url = base_element_blob_url
+
+    @property
+    def changed_base_element_blob_url(self):
+        """Gets the changed_base_element_blob_url of this SlideSlides.  # noqa: E501
+
+
+        :return: The changed_base_element_blob_url of this SlideSlides.  # noqa: E501
+        :rtype: str
+        """
+        return self._changed_base_element_blob_url
+
+    @changed_base_element_blob_url.setter
+    def changed_base_element_blob_url(self, changed_base_element_blob_url):
+        """Sets the changed_base_element_blob_url of this SlideSlides.
+
+
+        :param changed_base_element_blob_url: The changed_base_element_blob_url of this SlideSlides.  # noqa: E501
+        :type: str
+        """
+
+        self._changed_base_element_blob_url = changed_base_element_blob_url
+
+    @property
+    def package_uri(self):
+        """Gets the package_uri of this SlideSlides.  # noqa: E501
+
+
+        :return: The package_uri of this SlideSlides.  # noqa: E501
+        :rtype: str
+        """
+        return self._package_uri
+
+    @package_uri.setter
+    def package_uri(self, package_uri):
+        """Sets the package_uri of this SlideSlides.
+
+
+        :param package_uri: The package_uri of this SlideSlides.  # noqa: E501
+        :type: str
+        """
+
+        self._package_uri = package_uri
+
+    @property
+    def name(self):
+        """Gets the name of this SlideSlides.  # noqa: E501
+
+
+        :return: The name of this SlideSlides.  # noqa: E501
+        :rtype: str
+        """
+        return self._name
+
+    @name.setter
+    def name(self, name):
+        """Sets the name of this SlideSlides.
+
+
+        :param name: The name of this SlideSlides.  # noqa: E501
+        :type: str
+        """
+
+        self._name = name
 
     @property
     def id(self):

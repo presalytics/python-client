@@ -114,8 +114,21 @@ def create_theme_from_ooxml_document(document_id: str,
                                      delegate_login=False,
                                      token=None):
     client = presalytics.Client(delegate_login=delegate_login, token=token)
-    document = client.ooxml_automation.documents_get_id(document_id)
-    ooxml_theme = client.ooxml_automation.theme_themes_get_id(document.theme_id)
-    theme_name = ooxml_theme.name
-    theme = presalytics.lib.themes.ooxml.OoxmlTheme(theme_name, ooxml_theme.id)
+    child_objects = client.ooxml_automation.documents_childobjects_get_id(document_id)
+    themes = [x for x in child_objects if x.object_type == "Theme.Themes"]
+    if len(themes) > 1:
+        slide_no = None
+        for theme_data in themes:
+            theme_info = client.ooxml_automation.theme_themes_get_id(theme_data.entity_id)
+            parent_slide = client.ooxml_automation.slides_slides_get_id(theme_info.slide_id)
+            if slide_no is None:
+                slide_no = parent_slide.number
+            else:
+                if parent_slide.number < slide_no:
+                    theme_meta = theme_info
+                    if parent_slide.number == 0:
+                        break
+    else:
+        theme_meta = client.ooxml_automation.theme_themes_get_id(themes[0].entity_id)
+    theme = presalytics.lib.themes.ooxml.OoxmlTheme(theme_meta.name, theme_meta.id)
     return theme

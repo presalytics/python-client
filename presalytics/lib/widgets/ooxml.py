@@ -147,7 +147,7 @@ class OoxmlEditorWidget(OoxmlWidgetBase):
 class OoxmlFileWidget(OoxmlWidgetBase):
     object_name: typing.Optional[str]
     ooxml_id: str
-    file_last_modifed: datetime.datetime
+    file_last_modified: datetime.datetime
     previous_versions: typing.Dict[str, str]
 
     __component_kind__ = 'ooxml-file-object'
@@ -179,7 +179,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
             else:
                 self.name = filename
         self.prevision_ooxml_version = previous_ooxml_version
-        self.file_last_modifed = file_last_modified
+        self.file_last_modified = file_last_modified
         self.document_ooxml_id = document_ooxml_id
         self.object_ooxml_id = object_ooxml_id
         self.update()

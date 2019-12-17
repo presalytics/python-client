@@ -258,10 +258,15 @@ class OoxmlFileWidget(OoxmlWidgetBase):
             "filename": self.filename,
             "object_name": self.object_name,
             "endpoint_id": self.endpoint_map.endpoint_id,
-            "ooxml_document_id": self.ooxml_document_id,
-            "ooxml_object_id": self.ooxml_object_id,
-            "file_last_modified": self.file_last_modifed.isoformat()
+            "document_ooxml_id": self.document_ooxml_id,
+            "object_ooxml_id": self.object_ooxml_id
         }
+        if self.file_last_modified:
+            data.append(
+                {
+                    "file_last_modified": self.file_last_modifed.isoformat()
+                }
+            )
         widget = presalytics.story.outline.Widget(
             name=self.name,
             kind=self.__component_kind__,

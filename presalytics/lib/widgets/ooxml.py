@@ -226,16 +226,16 @@ class OoxmlFileWidget(OoxmlWidgetBase):
             "object_name": component.data["object_name"],
             "name": component.name
         }
-        if "ooxml_document_id" in component.data:
+        if "document_ooxml_id" in component.data:
             init_args.update(
                 {
-                    "ooxml_document_id": component.data["ooxml_document_id"]
+                    "document_ooxml_id": component.data["document_ooxml_id"]
                 }
             )
-            if "ooxml_object_id" in component.data:
+            if "object_ooxml_id" in component.data:
                 init_args.update(
                     {
-                        "ooxml_object_id": component.data["ooxml_object_id"]
+                        "object_ooxml_id": component.data["object_ooxml_id"]
                     }
                 )
             if "file_last_modified" in component.data:

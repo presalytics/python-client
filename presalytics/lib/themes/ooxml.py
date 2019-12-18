@@ -70,7 +70,7 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
             color_types_list = client.ooxml_automation.shared_colortypes_get()
         color_id = color_map[color_map_name]
         color_name = next(x.name for x in color_types_list if x.type_id == color_id)
-        key = presalytics.story.util.to_camel_case(color_name)
+        key = color_name[0].lower() + color_name[1:]
         color = theme_colors.get(key, None)
         return color
 

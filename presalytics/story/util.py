@@ -21,3 +21,14 @@ def to_camel_case(snake_str):
 def to_title_case(name_string):
     components = name_string.split('_')
     return ''.join(x[0].upper() + x[1:] for x in components)
+
+def camel_case_split(str): 
+    words = [[str[0]]] 
+  
+    for c in str[1:]: 
+        if words[-1][-1].islower() and c.isupper(): 
+            words.append(list(c)) 
+        else: 
+            words[-1].append(c) 
+  
+    return [''.join(word) for word in words] 

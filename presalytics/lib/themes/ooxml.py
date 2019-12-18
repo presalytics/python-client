@@ -3,6 +3,7 @@ import presalytics
 import presalytics.client.auth
 import presalytics.story.components
 import presalytics.story.outline
+import presalytics.story.util
 import presalytics.client.presalytics_ooxml_automation.models
 
 
@@ -68,8 +69,9 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
                 client = presalytics.Client()
             color_types_list = client.ooxml_automation.shared_colortypes_get()
         color_id = color_map[color_map_name]
-        color_name = [x.name for x in color_types_list if x.type_id == color_id][0]
-        color = theme_colors.get(color_name, None)
+        color_name = next(x.name for x in color_types_list if x.type_id == color_id)
+        key = presalytics.story.util.to_camel_case(color_name)
+        color = theme_colors.get(key, None)
         return color
 
             

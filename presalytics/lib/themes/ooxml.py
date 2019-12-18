@@ -41,10 +41,10 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
         color_types = client.ooxml_automation.shared_colortypes_get()
 
         mapped_colors = {
-            "background1": OoxmlTheme.map_color_type("background1", color_map_dict, color_types),
-            "background2": OoxmlTheme.map_color_type("background2", color_map_dict, color_types),
-            "text1": OoxmlTheme.map_color_type("text1", color_map_dict, color_types),
-            "text2": OoxmlTheme.map_color_type("text2", color_map_dict, color_types)
+            "background1": OoxmlTheme.map_color_type("background1", color_map_dict, colors, color_types),
+            "background2": OoxmlTheme.map_color_type("background2", color_map_dict, colors, color_types),
+            "text1": OoxmlTheme.map_color_type("text1", color_map_dict, colors, color_types),
+            "text2": OoxmlTheme.map_color_type("text2", color_map_dict, colors, color_types)
         }
         params = colors
         params.update(fonts)
@@ -55,6 +55,7 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
     def map_color_type(
             color_map_name: str,
             color_map: typing.Dict,
+            theme_colors: typing.Dict,
             color_types_list=None) -> str:
         if not color_types_list:
             if presalytics.CONFIG.get("DELEGATE_LOGIN", False):
@@ -68,7 +69,7 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
             color_types_list = client.ooxml_automation.shared_colortypes_get()
         color_id = color_map[color_map_name]
         color_name = [x.name for x in color_types_list if x.type_id == color_id][0]
-        color = color_map.get(color_name, None)
+        color = theme_colors.get(color_name, None)
         return color
 
             

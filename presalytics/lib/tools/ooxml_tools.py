@@ -63,7 +63,7 @@ def create_outline_from_ooxml_document(story: 'Story',
         _themes = themes
     else:
         ooxml_id = pages[0].widgets[0].data["document_ooxml_id"]
-        _themes = [create_theme_from_ooxml_document(ooxml_id, delegate_login, token)]
+        _themes = [ create_theme_from_ooxml_document(ooxml_id, delegate_login, token) ]
 
     outline = presalytics.story.outline.StoryOutline(
         presalytics_story=presalytics.story.outline.get_current_spec_version(),

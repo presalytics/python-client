@@ -161,7 +161,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
                  file_last_modified=None,
                  document_ooxml_id=None,
                  object_ooxml_id=None):
-        self.filename = filename
+        self.filename = os.path.basename(filename)
         if endpoint_map:
             self.endpoint_map = endpoint_map
         else:
@@ -266,7 +266,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
             "object_ooxml_id": self.object_ooxml_id
         }
         if self.file_last_modified:
-            data.append(
+            data.update(
                 {
                     "file_last_modified": self.file_last_modifed.isoformat()
                 }

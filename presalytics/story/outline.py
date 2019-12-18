@@ -56,6 +56,8 @@ class OutlineBase(abc.ABC):
 
     @classmethod
     def deserialize(cls, json_obj):
+        if type(json_obj) == cls:
+            return json_obj
         updated_obj = {}
         for key, val in json_obj.items():
             new_key = to_snake_case(key)

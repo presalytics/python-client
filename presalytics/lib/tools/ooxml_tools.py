@@ -72,7 +72,7 @@ def create_outline_from_ooxml_document(story: 'Story',
         description=_description,
         title=_title,
         themes=_themes,
-        plugins={}
+        plugins=[]
     )
     return outline
 
@@ -131,4 +131,4 @@ def create_theme_from_ooxml_document(document_id: str,
     else:
         theme_meta = client.ooxml_automation.theme_themes_get_id(themes[0].entity_id)
     theme = presalytics.lib.themes.ooxml.OoxmlTheme(theme_meta.name, theme_meta.id)
-    return theme
+    return theme.serialize().to_dict()

@@ -35,8 +35,9 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
         else:
             client = presalytics.Client()
         theme = client.ooxml_automation.theme_themes_details_get_id(self.ooxml_id)
-        colors = theme.colors
-        fonts = theme.fonts
+        extra_params = ['dateCreated', 'dateModified', 'userCreated', 'userModified', 'id', 'themeId']
+        colors = {k: v for k, v in theme.colors.items() if k not in extra_params}
+        fonts = {k: v for k, v in theme.fonts.items() if k not in extra_params}
         slide_details = client.ooxml_automation.slides_slides_details_get_id(theme.slide_id)
         color_map_dict = slide_details.slide_master["colorMap"]
         color_types = client.ooxml_automation.shared_colortypes_get()
@@ -47,8 +48,7 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
             "text1": OoxmlTheme.map_color_type("text1", color_map_dict, colors, color_types),
             "text2": OoxmlTheme.map_color_type("text2", color_map_dict, colors, color_types)
         }
-        extra_params = ['dateCreated', 'dateModified', 'userCreated', 'userModified']
-        color_params = {k: v for k, v in colors.items() if k not in extra_params}
+        color_params = colors
         color_params.update(mapped_colors)
         params = {k: v[2:] for k, v in color_params.items()}
         params.update(fonts)

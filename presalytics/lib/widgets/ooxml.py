@@ -268,7 +268,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         if self.file_last_modified:
             data.update(
                 {
-                    "file_last_modified": self.file_last_modifed.isoformat()
+                    "file_last_modified": self.file_last_modified.isoformat()
                 }
             )
         widget = presalytics.story.outline.Widget(

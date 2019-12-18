@@ -25,7 +25,7 @@ class OutlineEncoder(json.JSONEncoder):
             return obj.to_dict()
         if isinstance(obj, datetime.datetime):
             return obj.isoformat()
-        if isinstance(obj, uuid.uuid4):
+        if isinstance(obj, uuid.UUID):
             return str(obj)
         return json.JSONEncoder.default(self, obj)
 

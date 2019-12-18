@@ -48,7 +48,7 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
             "text1": OoxmlTheme.map_color_type("text1", color_map_dict, colors, color_types),
             "text2": OoxmlTheme.map_color_type("text2", color_map_dict, colors, color_types)
         }
-        color_params = colors
+        color_params = {k: v for k, v in colors.items() if k not in extra_params}
         color_params.update(mapped_colors)
         params = {k: v[2:] for k, v in color_params.items()}
         params.update(fonts)

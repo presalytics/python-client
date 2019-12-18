@@ -27,7 +27,7 @@ def create_story_from_ooxml_file(filename: str,
             inst = presalytics.OoxmlFileWidget.deserialize(widget)
             presalytics.COMPONENTS.register(inst)
             outline.pages[i].widgets[j] = inst.serialize()
-    return story
+    return outline
 
 
 def create_outline_from_ooxml_document(story: 'Story',
@@ -95,7 +95,8 @@ def create_pages_from_ooxml_document(story: 'Story',
                 endpoint_map=ep_map,
                 object_name=slide.entity_name,
                 object_ooxml_id=slide.entity_id,
-                document_ooxml_id=ooxml_document.id
+                document_ooxml_id=ooxml_document.id,
+                story_id=story.id
             )
             widget_kind = "widget-page"
             widget_name = slide.entity_name

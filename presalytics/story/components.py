@@ -69,7 +69,7 @@ class ComponentBase(abc.ABC):
         raise NotImplementedError
 
     @classmethod
-    def deseriailize(cls, component: typing.Type['OutlineBase'], **kwargs):
+    def deserialize(cls, component: typing.Type['OutlineBase'], **kwargs):
         raise NotImplementedError
 
 

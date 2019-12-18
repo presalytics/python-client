@@ -1,5 +1,6 @@
 import os
 import shutil
+import pathlib
 import unittest
 import presalytics
 
@@ -22,13 +23,11 @@ class TestComponents(unittest.TestCase):
     def test_file_widget(self):
         test_file = os.path.join(os.path.dirname(__file__), "files", "star.pptx")
         tmp_filename = os.path.join(os.path.dirname(__file__), os.path.basename(test_file))
-        tmp_dir = os.path.dirname(tmp_filename)
         shutil.copyfile(test_file, tmp_filename)
         outline = presalytics.create_story_from_ooxml_file(tmp_filename)
-        os.remove(tmp_filename)
-        shutil.copyfile(test_file, tmp_dir)
+        pathlib.Path(tmp_filename).touch()
         widget_data = outline.pages[0].widgets[0]
-        presalytics.OoxmlFileWidget.deseriailize(widget_data)
+        presalytics.OoxmlFileWidget.deserialize(widget_data)
         presalytics.Revealer(outline).present()
 
     def tearDown(self):

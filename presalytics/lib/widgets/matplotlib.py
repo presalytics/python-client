@@ -54,4 +54,4 @@ class MatplotlibFigure(presalytics.story.components.WidgetBase):
             plugins=[plugin_obj.to_dict()],
             data=data,
             additional_properties=self.additional_properties
-        ).to_dict()
+        )

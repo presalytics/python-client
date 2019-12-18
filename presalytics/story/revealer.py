@@ -49,7 +49,7 @@ class Revealer(presalytics.story.components.Renderer):
         self.story_outline.validate()
         self.base = self.make_base()
         reveal_plugin_config = {
-            'type': 'script',
+            'kind': 'script',
             'name': 'reveal',
             'config': {}
         }

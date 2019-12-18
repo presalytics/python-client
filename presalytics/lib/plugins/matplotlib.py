@@ -8,21 +8,21 @@ class Mpld3Plugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
 
     __dependencies__ = [
         {
-            'type': 'script',
+            'kind': 'script',
             'name': 'external_scripts',
             'config': {
                 'approved_scripts_key': 'reveal.base'
             }
         },
         {
-            'type': 'script',
+            'kind': 'script',
             'name': 'external_scripts',
             'config': {
                 'approved_scripts_key': 'd3v3'
             }
         },
         {
-            'type': 'script',
+            'kind': 'script',
             'name': 'external_scripts',
             'config': {
                 'approved_scripts_key': 'mpld3'

@@ -127,7 +127,7 @@ class OoxmlEditorWidget(OoxmlWidgetBase):
                    component.data["ooxml_id"],
                    component.data["endpoint_id"])
 
-    def serialize(self, **kwargs):
+    def make_outline_object(self):
         data = {
             "story_id": self.story_id,
             "ooxml_id": self.ooxml_id,
@@ -138,7 +138,7 @@ class OoxmlEditorWidget(OoxmlWidgetBase):
             data=data,
             kind=self.__component_kind__
         )
-        return widget.to_dict()
+        return widget
 
     def update_xml(self, old_xml: str, data: typing.Dict):
         raise NotImplementedError
@@ -160,6 +160,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
                  previous_ooxml_version={},
                  file_last_modified=None,
                  document_ooxml_id=None,
+                 story_id=None,
                  object_ooxml_id=None):
         self.filename = os.path.basename(filename)
         if endpoint_map:
@@ -185,6 +186,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
             self.file_last_modified = datetime.datetime.utcnow()
         self.document_ooxml_id = document_ooxml_id
         self.object_ooxml_id = object_ooxml_id
+        self.story_id = story_id
         self.update()
         self.svg_html = self.get_svg(self.object_ooxml_id)
 
@@ -254,16 +256,23 @@ class OoxmlFileWidget(OoxmlWidgetBase):
                         "prevision_ooxml_version": component.data["previous_ooxml_version"]
                     }
                 )
+            if "story_id" in component.data:
+                init_args.update(
+                    {
+                        "story_id": component.data["story_id"]
+                    }
+                )
             return cls(**init_args)
 
-    def serialize(self, **kwargs):
+    def serialize(self):
         self.update()
         data = {
             "filename": self.filename,
             "object_name": self.object_name,
             "endpoint_id": self.endpoint_map.endpoint_id,
             "document_ooxml_id": self.document_ooxml_id,
-            "object_ooxml_id": self.object_ooxml_id
+            "object_ooxml_id": self.object_ooxml_id,
+            "story_id": self.story_id
         }
         if self.file_last_modified:
             data.update(
@@ -277,4 +286,4 @@ class OoxmlFileWidget(OoxmlWidgetBase):
             data=data,
             plugins=None
         )
-        return widget.to_dict()
+        return widget

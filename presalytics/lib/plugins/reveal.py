@@ -7,14 +7,14 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
 
     __dependencies__ = [
         {
-            'type': 'script',
+            'kind': 'script',
             'name': 'external_scripts',
             'config': {
                 'approved_scripts_key': 'reveal.base'
             }
         },
         {
-            'type': 'style',
+            'kind': 'style',
             'name': 'external_links',
             'config': {
                 'approved_styles_key': 'reveal.base'

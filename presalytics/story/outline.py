@@ -38,15 +38,15 @@ class OutlineBase(abc.ABC):
     __client_ver__: str
     __annotations__: typing.Dict
     __required__: typing.Sequence[str]
-    additional_properites: typing.Dict
+    additional_properties: typing.Dict
 
     __required__ = []
 
     def __init__(self, **kwargs):
         if "additional_properties" in kwargs:
-            self.additional_properites = kwargs["additional_properties"]
+            self.additional_properties = kwargs["additional_properties"]
         else:
-            self.additional_properites = kwargs
+            self.additional_properties = kwargs
 
     def validate(self):
         for key in self.__required__:

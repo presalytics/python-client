@@ -21,12 +21,12 @@ class PluginBase(abc.ABC):
     Attributes:
     ----------
 
-    __plugin_type__: str
-        The __plugin_type__ is a static string that uniquely identifies this plugin to classes
+    __plugin_kind__: str
+        The __plugin_kind__ is a static string that uniquely identifies this plugin to classes
         the render story outlines (e.g., presaltyics.story.revealer.Revealer).
 
     """
-    __plugin_type__: str
+    __plugin_kind__: str
     __plugin_name__: str
     __dependencies__: typing.List[typing.Dict]
 
@@ -38,15 +38,15 @@ class PluginBase(abc.ABC):
         self.validate_metadata()
 
     def validate_metadata(self):
-        if self.__plugin_type__ == "" or self.__plugin_name__ == "":
-            message = "Plugin class {0} has not defined either __plugin_type__ or __plugin_name__ metadata".format(self.__class__.__name__)
+        if self.__plugin_kind__ == "" or self.__plugin_name__ == "":
+            message = "Plugin class {0} has not defined either __plugin_kind__ or __plugin_name__ metadata".format(self.__class__.__name__)
             raise presalytics.lib.exceptions.ValidationError(message)
 
     @abc.abstractmethod
     def get_tag(self, config: typing.Dict[str, typing.Any], **kwargs) -> str:
         """
         Generic method to be implemented by all inheriting classes. Allow plugin
-        to be render without knowledge of the underlying plugin type.
+        to be render without knowledge of the underlying plugin kind.
 
         Parameters:
         ----------
@@ -72,7 +72,7 @@ class ScriptPlugin(PluginBase):
     A script plugin render configures templated scripts to append to the body
     tag of an html document
     """
-    __plugin_type__ = 'script'
+    __plugin_kind__ = 'script'
 
     def get_tag(self, config, **kwargs):
         return self.to_script(config, **kwargs)
@@ -106,7 +106,7 @@ class StylePlugin(PluginBase):
     A script plugin render configures templated scripts to append to the body
     tag of an html document
     """
-    __plugin_type__ = 'style'
+    __plugin_kind__ = 'style'
 
     def get_tag(self, config, **kwargs):
         return self.to_style(config, **kwargs)
@@ -146,7 +146,7 @@ class PluginRegistry(presalytics.lib.registry.RegistryBase):
         return getattr(klass, "__plugin_name__", None)
 
     def get_type(self, klass):
-        return getattr(klass, "__plugin_type__", None)
+        return getattr(klass, "__plugin_kind__", None)
 
 
 class Graph():
@@ -281,11 +281,11 @@ class PluginManager(object):
     def get_scripts(self) -> typing.List[str]:
         return self.render_plugins('script')
 
-    def render_plugins(self, plugin_type: str) -> typing.List[str]:
+    def render_plugins(self, plugin_kind: str) -> typing.List[str]:
         rendered_list = []
         for key in self.dependency_order:
             dep_map = self.dependency_map[key]
-            if dep_map["plugin"]["kind"] == plugin_type:
+            if dep_map["plugin"]["kind"] == plugin_kind:
                 plugin_config = dep_map["plugin"]
                 plugin_class = dep_map["class"]
                 plugin_instance = plugin_class()

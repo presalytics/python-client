@@ -178,8 +178,11 @@ class OoxmlFileWidget(OoxmlWidgetBase):
                 self.name = self.object_name
             else:
                 self.name = filename
-        self.prevision_ooxml_version = previous_ooxml_version
-        self.file_last_modified = file_last_modified
+        self.previous_ooxml_version = previous_ooxml_version
+        if file_last_modified:
+            self.file_last_modified = file_last_modified
+        else:
+            self.file_last_modified = datetime.datetime.utcnow()
         self.document_ooxml_id = document_ooxml_id
         self.object_ooxml_id = object_ooxml_id
         self.update()
@@ -190,12 +193,13 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         search_paths = presalytics.autodiscover_paths
         search_paths.append(os.getcwd())
         for path in search_paths:
-            if os.path.exists(self.filename):
+            fpath = os.path.join(path, self.filename)
+            if os.path.exists(fpath):
                 # update only the file has been modified sine last time
-                this_file_last_modified = datetime.datetime.utcfromtimestamp(os.path.getmtime(self.filename))
+                this_file_last_modified = datetime.datetime.utcfromtimestamp(os.path.getmtime(fpath))
                 if self.file_last_modified is None or self.file_last_modified <= this_file_last_modified:
                     client = presalytics.client.api.Client()
-                    document, status, headers = client.ooxml_automation.documents_post(filename)
+                    document, status, headers = client.ooxml_automation.documents_post(file=fpath)
                     if status >= 299:
                         raise presalytics.lib.exceptions.ApiError()
                     self.document_ooxml_id = document.id

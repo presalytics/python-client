@@ -69,7 +69,8 @@ class OutlineBase(abc.ABC):
 
     @classmethod
     def load(cls, json_str):
-        return json.JSONDecoder(object_hook=cls.deserialize).decode(json)
+        json_obj = json.loads(json_str)
+        return cls.deserialize(json_obj)
 
     @classmethod
     def import_yaml(cls, yaml_file):

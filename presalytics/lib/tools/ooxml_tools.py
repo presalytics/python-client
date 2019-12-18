@@ -19,12 +19,12 @@ def create_story_from_ooxml_file(filename: str,
 
     client = presalytics.Client(delegate_login=delegate_login, token=token)
     story = client.story.story_post_file(file=filename)
-    outline = presalytics.StoryOutline.deserialize(story.outline)
+    outline = presalytics.StoryOutline.load(story.outline)
     for i in range(0, len(outline.pages)):
         page = outline.pages[i]
         for j in range(0, len(page.widgets)):
             widget = page.widgets[j]
-            inst = presalytics.OoxmlFileWidget.deseriailize(widget)
+            inst = presalytics.OoxmlFileWidget.deserialize(widget)
             presalytics.COMPONENTS.register(inst)
             outline.pages[i].widgets[j] = inst.serialize()
     return story
@@ -63,7 +63,7 @@ def create_outline_from_ooxml_document(story: 'Story',
         _themes = themes
     else:
         ooxml_id = pages[0].widgets[0].data["document_ooxml_id"]
-        _themes = [ create_theme_from_ooxml_document(ooxml_id, delegate_login, token) ]
+        _themes = [create_theme_from_ooxml_document(ooxml_id, delegate_login, token)]
 
     outline = presalytics.story.outline.StoryOutline(
         presalytics_story=presalytics.story.outline.get_current_spec_version(),

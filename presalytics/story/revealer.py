@@ -180,12 +180,14 @@ class Revealer(presalytics.story.components.Renderer):
         body.append(pres)
         body = self.strip_unauthorized_scripts(body)
         for scripts in self.plugin_mgr.get_scripts():
-            lxml_script = lxml.html.fragment_fromstring(scripts)
-            body.append(lxml_script)
+            lxml_scripts = lxml.html.fragments_fromstring(scripts)
+            for item in lxml_scripts:
+                body.append(item)
         head = E.HEAD()
         for link in self.plugin_mgr.get_styles():
-            lxml_link = lxml.html.fragment_fromstring(link)
-            head.append(lxml_link)
+            lxml_links = lxml.html.fragments_fromstring(link)
+            for item in lxml_links:
+                head.append(item)
         head = self.strip_unauthorized_scripts(head)
         html = E.HTML(
             head,

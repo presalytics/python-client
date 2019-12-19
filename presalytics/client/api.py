@@ -52,7 +52,7 @@ class Client(object):
         try:
             self.site_host = presalytics.CONFIG["HOSTS"]["SITE"]
         except KeyError:
-            self.site_host = cnst.HOST
+            self.site_host = cnst.SITE_HOST
         self.login_sleep_interval = 5  # seconds
         self.login_timeout = 60  # seconds
         if delegate_login or presalytics.CONFIG.get("DELEGATE_LOGIN", False):

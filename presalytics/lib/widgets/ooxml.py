@@ -203,7 +203,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         page: 'Page'
         widget: 'Widget'
 
-        search_paths = set(presalytics.autodiscover_paths)
+        search_paths = list(set(presalytics.autodiscover_paths))
         if os.getcwd() not in search_paths:
             search_paths.append(os.getcwd())
         for path in search_paths:

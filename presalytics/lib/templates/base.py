@@ -16,14 +16,14 @@ class WidgetPage(presalytics.story.components.PageTemplateBase):
         super(WidgetPage, self).__init__(page)
 
     @classmethod
-    def deseriailize(cls, component, **kwargs):
+    def deserialize(cls, component, **kwargs):
         return cls(component, **kwargs)
 
     def serialize(self):
         return self.outline_page
 
     def render(self, **kwargs):
-        self.widgets[0].to_html()
+        return self.widgets[0].to_html()
 
 
 class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):

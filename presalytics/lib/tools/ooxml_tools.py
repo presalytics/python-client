@@ -7,9 +7,10 @@ import presalytics.lib.widgets.ooxml
 import presalytics.lib.themes.ooxml
 
 if typing.TYPE_CHECKING:
-    from presaltyics.client.presalytics_story import Story
+    from presalytics.client.presalytics_story import Story
     from presalytics.client.presalytics_ooxml_automation import Document
     from presalytics.story.components import ThemeBase
+    from presalytics.story.outline import StoryOutline
 
 
 def create_story_from_ooxml_file(filename: str,
@@ -27,7 +28,8 @@ def create_story_from_ooxml_file(filename: str,
             inst = presalytics.OoxmlFileWidget.deserialize(widget)
             presalytics.COMPONENTS.register(inst)
             outline.pages[i].widgets[j] = inst.serialize()
-    return outline
+    story.outline = outline.dump()
+    return story
 
 
 def create_outline_from_ooxml_document(story: 'Story',

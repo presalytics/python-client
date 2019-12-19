@@ -77,13 +77,10 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
         color = theme_colors.get(key, None)
         return color
 
-            
-
-
     def serialize(self):
         plugin = presalytics.story.outline.Plugin(
-            kind='ooxml-theme',
-            name=self.name,
+            kind='style',
+            name='ooxml-theme',
             config=self.plugin_config
         )
         data = {

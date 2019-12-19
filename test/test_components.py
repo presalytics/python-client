@@ -24,11 +24,12 @@ class TestComponents(unittest.TestCase):
         test_file = os.path.join(os.path.dirname(__file__), "files", "star.pptx")
         tmp_filename = os.path.join(os.path.dirname(__file__), os.path.basename(test_file))
         shutil.copyfile(test_file, tmp_filename)
-        outline = presalytics.create_story_from_ooxml_file(tmp_filename)
+        story = presalytics.create_story_from_ooxml_file(tmp_filename)
         pathlib.Path(tmp_filename).touch()
-        widget_data = outline.pages[0].widgets[0]
+        story_outline = presalytics.StoryOutline.load(story.outline)
+        widget_data = story_outline.pages[0].widgets[0]
         presalytics.OoxmlFileWidget.deserialize(widget_data)
-        presalytics.Revealer(outline).present()
+        presalytics.Revealer(story_outline).present()
 
     def tearDown(self):
         pass

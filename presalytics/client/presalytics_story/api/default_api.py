@@ -1057,7 +1057,7 @@ class DefaultApi(object):
             collection_formats=collection_formats)
 
     def story_id_file_ooxmlautomationid_get(self, id, ooxml_automation_id, **kwargs):  # noqa: E501
-        """Story: Download Fpdated File  # noqa: E501
+        """Story: Download Updated File  # noqa: E501
 
         Redtreives updated story as open office xml file (e.g., .pptx, .docx, .xlsx)  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -1083,7 +1083,7 @@ class DefaultApi(object):
         return self.story_id_file_ooxmlautomationid_get_with_http_info(id, ooxml_automation_id, **kwargs)  # noqa: E501
 
     def story_id_file_ooxmlautomationid_get_with_http_info(self, id, ooxml_automation_id, **kwargs):  # noqa: E501
-        """Story: Download Fpdated File  # noqa: E501
+        """Story: Download Updated File  # noqa: E501
 
         Redtreives updated story as open office xml file (e.g., .pptx, .docx, .xlsx)  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -1165,6 +1165,131 @@ class DefaultApi(object):
             post_params=form_params,
             files=local_var_files,
             response_type='file',  # noqa: E501
+            auth_settings=auth_settings,
+            async_req=local_var_params.get('async_req'),
+            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
+            _preload_content=local_var_params.get('_preload_content', True),
+            _request_timeout=local_var_params.get('_request_timeout'),
+            collection_formats=collection_formats)
+
+    def story_id_file_post(self, id, **kwargs):  # noqa: E501
+        """Story: Upload a File To Existing Story  # noqa: E501
+
+        Upload a file to an existing story  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.story_id_file_post(id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str id: the id from the story object (required)
+        :param bool replace_existing: Indicates whether a put or post method would replace the existing contents
+        :param str obsolete_id: A primary key pointing to an obsolete item in the story. Item type is context-dependent
+        :param list[file] file:
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: Story
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+        kwargs['_return_http_data_only'] = True
+        return self.story_id_file_post_with_http_info(id, **kwargs)  # noqa: E501
+
+    def story_id_file_post_with_http_info(self, id, **kwargs):  # noqa: E501
+        """Story: Upload a File To Existing Story  # noqa: E501
+
+        Upload a file to an existing story  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.story_id_file_post_with_http_info(id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str id: the id from the story object (required)
+        :param bool replace_existing: Indicates whether a put or post method would replace the existing contents
+        :param str obsolete_id: A primary key pointing to an obsolete item in the story. Item type is context-dependent
+        :param list[file] file:
+        :param _return_http_data_only: response data without head status code
+                                       and headers
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: tuple(Story, status_code(int), headers(HTTPHeaderDict))
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+
+        local_var_params = locals()
+
+        all_params = ['id', 'replace_existing', 'obsolete_id', 'file']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
+
+        for key, val in six.iteritems(local_var_params['kwargs']):
+            if key not in all_params:
+                raise ApiTypeError(
+                    "Got an unexpected keyword argument '%s'"
+                    " to method story_id_file_post" % key
+                )
+            local_var_params[key] = val
+        del local_var_params['kwargs']
+        # verify the required parameter 'id' is set
+        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
+                                                        local_var_params['id'] is None):  # noqa: E501
+            raise ApiValueError("Missing the required parameter `id` when calling `story_id_file_post`")  # noqa: E501
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'id' in local_var_params:
+            path_params['id'] = local_var_params['id']  # noqa: E501
+
+        query_params = []
+        if 'replace_existing' in local_var_params and local_var_params['replace_existing'] is not None:  # noqa: E501
+            query_params.append(('replace_existing', local_var_params['replace_existing']))  # noqa: E501
+        if 'obsolete_id' in local_var_params and local_var_params['obsolete_id'] is not None:  # noqa: E501
+            query_params.append(('obsolete_id', local_var_params['obsolete_id']))  # noqa: E501
+
+        header_params = {}
+
+        form_params = []
+        local_var_files = {}
+        if 'file' in local_var_params:
+            local_var_files['file'] = local_var_params['file']  # noqa: E501
+            collection_formats['file'] = 'csv'  # noqa: E501
+
+        body_params = None
+        # HTTP header `Accept`
+        header_params['Accept'] = self.api_client.select_header_accept(
+            ['application/json'])  # noqa: E501
+
+        # HTTP header `Content-Type`
+        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
+            ['multipart/form-data'])  # noqa: E501
+
+        # Authentication setting
+        auth_settings = []  # noqa: E501
+
+        return self.api_client.call_api(
+            '/{id}/file', 'POST',
+            path_params,
+            query_params,
+            header_params,
+            body=body_params,
+            post_params=form_params,
+            files=local_var_files,
+            response_type='Story',  # noqa: E501
             auth_settings=auth_settings,
             async_req=local_var_params.get('async_req'),
             _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501

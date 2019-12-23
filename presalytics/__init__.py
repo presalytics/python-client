@@ -23,7 +23,7 @@ from presalytics.lib.plugins.reveal import RevealConfigPlugin
 from presalytics.lib.plugins.reveal_theme import RevealCustomTheme
 from presalytics.lib.templates.base import JinjaTemplateBuilder
 from presalytics.lib.widgets.matplotlib import MatplotlibFigure
-from presalytics.lib.widgets.ooxml import OoxmlEditorWidget, OoxmlFileWidget, OoxmlEndpointMap
+from presalytics.lib.widgets.ooxml import OoxmlFileWidget, OoxmlEndpointMap
 from presalytics.story.outline import StoryOutline
 from presalytics.story.revealer import Revealer
 from presalytics.story.components import WidgetBase, PageTemplateBase, Renderer, ThemeBase
@@ -32,6 +32,10 @@ from presalytics.lib.tools.ooxml_tools import (
     create_pages_from_ooxml_document,
     create_story_from_ooxml_file,
     create_outline_from_ooxml_document
+)
+from presalytics.lib.widgets.ooxml_editors import (
+    OoxmlEditorWidget,
+    change_shape_color
 )
 
 __all__ = [
@@ -50,7 +54,6 @@ __all__ = [
     'RevealCustomTheme',
     'JinjaTemplateBuilder',
     'MatplotlibFigure',
-    'OoxmlEditorWidget',
     'OoxmlFileWidget',
     'OoxmlEndpointMap',
     'StoryOutline',
@@ -61,7 +64,9 @@ __all__ = [
     'ThemeBase',
     'create_theme_from_ooxml_document',
     'create_pages_from_document',
-    'create_outline_from_ooxml_file'
+    'create_outline_from_ooxml_file',
+    'OoxmlEditorWidget',
+    'change_shape_color'
 ]
 
 env = environs.Env()

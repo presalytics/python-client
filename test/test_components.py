@@ -2,7 +2,10 @@ import os
 import shutil
 import pathlib
 import unittest
+import typing
 import presalytics
+if typing.TYPE_CHECKING:
+    from presalytics.client.presalytics_story import Story
 
 
 class TestComponents(unittest.TestCase):
@@ -18,7 +21,34 @@ class TestComponents(unittest.TestCase):
         presalytics.Revealer(outline).present(files_path='/tmp')
 
     def test_xml_widget(self):
-        pass
+        story: Story
+
+        test_file = os.path.join(os.path.dirname(__file__), "files", "star.pptx")
+        tmp_filename = os.path.join(os.path.dirname(__file__), os.path.basename(test_file))
+        shutil.copyfile(test_file, tmp_filename)
+        story = presalytics.create_story_from_ooxml_file(tmp_filename)
+        outline = presalytics.StoryOutline.load(story.outline)
+        old_widget = outline.pages[0].widgets[0]
+        client = presalytics.Client()
+        childs = client.ooxml_automation.documents_childobjects_get_id(old_widget.data["document_ooxml_id"])
+        object_type = presalytics.OoxmlEndpointMap.shape().get_object_type()
+        info = next(x for x in childs if x.object_type == object_type)
+        new_color = {
+            "object_name": info.entity_name,
+            "hex_color": "FFFFFF"
+        }
+        widget = presalytics.OoxmlEditorWidget(
+            name="test-editor",
+            story_id=story.id,
+            ooxml_document_id=story.ooxml_documents[0].ooxml_automation_id,
+            endpoint_id=info.object_type.split(".")[1],
+            transform_function=presalytics.change_shape_color,
+            transform_params=new_color
+        )
+        outline.pages[0].widgets[0] = widget.outline_widget
+        presalytics.COMPONENTS.register(widget)
+        presalytics.Revealer(outline).present()
+        os.remove(tmp_filename)
 
     def test_file_widget(self):
         test_file = os.path.join(os.path.dirname(__file__), "files", "star.pptx")

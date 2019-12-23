@@ -9926,7 +9926,7 @@ class DefaultApi(object):
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
-        :return: SlideShapeDetails
+        :return: SlideShapesDetails
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -9953,7 +9953,7 @@ class DefaultApi(object):
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
-        :return: tuple(SlideShapeDetails, status_code(int), headers(HTTPHeaderDict))
+        :return: tuple(SlideShapesDetails, status_code(int), headers(HTTPHeaderDict))
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -10008,7 +10008,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='SlideShapeDetails',  # noqa: E501
+            response_type='SlideShapesDetails',  # noqa: E501
             auth_settings=auth_settings,
             async_req=local_var_params.get('async_req'),
             _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
@@ -10034,7 +10034,7 @@ class DefaultApi(object):
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
-        :return: SlideShape
+        :return: SlideShapes
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -10061,7 +10061,7 @@ class DefaultApi(object):
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
-        :return: tuple(SlideShape, status_code(int), headers(HTTPHeaderDict))
+        :return: tuple(SlideShapes, status_code(int), headers(HTTPHeaderDict))
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -10116,7 +10116,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='SlideShape',  # noqa: E501
+            response_type='SlideShapes',  # noqa: E501
             auth_settings=auth_settings,
             async_req=local_var_params.get('async_req'),
             _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501

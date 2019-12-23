@@ -5,6 +5,8 @@ import requests
 import os
 import datetime
 import dateutil.parser
+import lxml
+import lxml.etree
 import presalytics
 import presalytics.client.api
 import presalytics.story.components
@@ -32,6 +34,35 @@ class OoxmlEndpointMap(object):
     TABLE = "Tables"
     THEME = "Themes"
 
+
+    def _build_object_type_map(self):
+        return {
+            "Chart": [
+                OoxmlEndpointMap.CHART,
+            ],
+            "Slide": [
+                OoxmlEndpointMap.GROUP,
+                OoxmlEndpointMap.SHAPE,
+                OoxmlEndpointMap.SHAPETREE, 
+                OoxmlEndpointMap.CONNECTION_SHAPE,
+                OoxmlEndpointMap.SLIDE
+            ],
+            "Table": [
+                OoxmlEndpointMap.TABLE
+            ],
+            "Theme": [
+                OoxmlEndpointMap.THEME
+            ],
+            "Shared": [
+                OoxmlEndpointMap.IMAGE
+            ],
+            "EMPTY": [
+                OoxmlEndpointMap.DOCUMENT
+            ]
+        }
+    
+    
+
     def __init__(self, endpoint, baseurl: str = None):
         if endpoint not in OoxmlEndpointMap.__dict__.values():
             raise presalytics.lib.exceptions.ValidationError("{0} is not a valid endpoint ID".format(endpoint))
@@ -47,15 +78,71 @@ class OoxmlEndpointMap(object):
         else:
             self.baseurl = baseurl
         self.root_url = urllib.parse.urljoin(self.baseurl, self.endpoint_id)
+        self.OBJECT_TYPE_MAP = self._build_object_type_map()
+    
+    def get_object_type(self):
+        for key, val in self.OBJECT_TYPE_MAP:
+            for test_ep in val:
+                if test_ep == self.endpoint_id:
+                    if key == "EMPTY":
+                        return self.endpoint_id
+                    else:
+                        return "{0}.{1}".format(key, self.endpoint_id)
+        message = "Invalid EndpointMap configuration: {0} is not in OBJECT_TYPE_MAP".format(self.endpoint_id)
+        raise presalytics.lib.exceptions.ValidationError(message)
 
     def get_id_url(self, id):
         return os.path.join(self.root_url, id)
 
     def get_svg_url(self, id):
         return os.path.join(self.root_url, "Svg", id)
-    
+
     def get_xml_url(self, id):
-        return os.path.join(self.root_url, "OpenOfficeXml" + id)
+        return os.path.join(self.root_url, "OpenOfficeXml", id)
+
+    @classmethod
+    def connection_shape(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.CONNECTION_SHAPE, baseurl)
+
+    @classmethod
+    def chart(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.CHART, baseurl)
+
+    @classmethod
+    def document(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.DOCUMENT, baseurl)
+
+    @classmethod
+    def image(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.IMAGE, baseurl)
+
+    @classmethod
+    def shape(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.SHAPE, baseurl)
+
+    @classmethod
+    def shapetree(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.SHAPETREE, baseurl)
+
+    @classmethod
+    def slide(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.SLIDE, baseurl)
+
+    @classmethod
+    def table(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.table, baseurl)
+
+    @classmethod
+    def chart(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.THEME, baseurl)
+
+
+
+
+
+
+    
+
 
 
 class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
@@ -90,62 +177,6 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
                 time.sleep(2)
                 svg_data = self.get_svg(id, timeout_iterator)
         return svg_data
-
-
-class OoxmlEditorWidget(OoxmlWidgetBase):
-    __component_kind__ = 'ooxml-xml-editor'
-
-    def __init__(self, name: str, story_id: str, ooxml_id: str, endpoint_map, data):
-        self.story_id = story_id
-        self.ooxml_id = ooxml_id
-        self.name = name
-        self.endpoint_map = endpoint_map
-        self.svg_html = self.update(data)
-        self.outline_widget = self.serialize()
-
-    def update(self, data: typing.Dict) -> str:
-        client = presalytics.client.api.Client()
-        auth_header = client.get_auth_header()
-        xml_url = self.endpoint_map.get_xml_url(self.ooxml_id)
-        xml_response = requests.get(xml_url, headers=auth_header)
-        if xml_response.status_code != 200:
-            raise presalytics.lib.exceptions.ApiException(default_exception=xml_response.content)
-        new_xml = self.update_xml(xml_response.text, data)
-        put_data = {
-            "id": self.ooxml_id,
-            "openOfficeXml": new_xml,
-            "type": self.endpoint_map.endpoint_id
-
-        }
-        xml_update_response = requests.put(xml_url, put_data, headers=auth_header)
-        if xml_response.status_code != 200:
-            raise presalytics.lib.exceptions.ApiException(default_exception=xml_update_response.content)
-        svg_data = self.get_svg(id)
-        return svg_data
-                
-
-    @classmethod
-    def deseriailize(cls, component, **kwargs):
-        return cls(component.name,
-                   component.data["story_id"],
-                   component.data["ooxml_id"],
-                   component.data["endpoint_id"])
-
-    def serialize(self, **kwargs):
-        data = {
-            "story_id": self.story_id,
-            "ooxml_id": self.ooxml_id,
-            "endpoint_id": self.endpoint_map.endpoint_id
-        }
-        widget = presalytics.story.outline.Widget(
-            name=self.name,
-            data=data,
-            kind=self.__component_kind__
-        )
-        return widget
-
-    def update_xml(self, old_xml: str, data: typing.Dict):
-        raise NotImplementedError
 
 
 class OoxmlFileWidget(OoxmlWidgetBase):

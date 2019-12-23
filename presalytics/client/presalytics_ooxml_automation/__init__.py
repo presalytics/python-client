@@ -14,7 +14,7 @@
 
 from __future__ import absolute_import
 
-__version__ = "0.2.81"
+__version__ = "0.2.82"
 
 # import apis into sdk package
 from presalytics.client.presalytics_ooxml_automation.api.default_api import DefaultApi
@@ -101,10 +101,10 @@ from presalytics.client.presalytics_ooxml_automation.models.slide_group_elements
 from presalytics.client.presalytics_ooxml_automation.models.slide_group_elements_details import SlideGroupElementsDetails
 from presalytics.client.presalytics_ooxml_automation.models.slide_groups import SlideGroups
 from presalytics.client.presalytics_ooxml_automation.models.slide_groups_details import SlideGroupsDetails
-from presalytics.client.presalytics_ooxml_automation.models.slide_shape import SlideShape
-from presalytics.client.presalytics_ooxml_automation.models.slide_shape_details import SlideShapeDetails
 from presalytics.client.presalytics_ooxml_automation.models.slide_shape_trees import SlideShapeTrees
 from presalytics.client.presalytics_ooxml_automation.models.slide_shape_trees_details import SlideShapeTreesDetails
+from presalytics.client.presalytics_ooxml_automation.models.slide_shapes import SlideShapes
+from presalytics.client.presalytics_ooxml_automation.models.slide_shapes_details import SlideShapesDetails
 from presalytics.client.presalytics_ooxml_automation.models.slide_slide_masters import SlideSlideMasters
 from presalytics.client.presalytics_ooxml_automation.models.slide_slide_masters_details import SlideSlideMastersDetails
 from presalytics.client.presalytics_ooxml_automation.models.slide_slides import SlideSlides

@@ -35,7 +35,8 @@ from presalytics.lib.tools.ooxml_tools import (
 )
 from presalytics.lib.widgets.ooxml_editors import (
     OoxmlEditorWidget,
-    change_shape_color
+    XmlTransformBase,
+    ChangeShapeColor
 )
 
 __all__ = [
@@ -66,7 +67,8 @@ __all__ = [
     'create_pages_from_document',
     'create_outline_from_ooxml_file',
     'OoxmlEditorWidget',
-    'change_shape_color'
+    'XmlTransformBase',
+    'ChangeShapeColor'
 ]
 
 env = environs.Env()

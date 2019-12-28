@@ -1,11 +1,13 @@
 import logging
 
-logger = logging.getLogger('presalytics.lib.exceptions')
-
 
 class PresalyticsBaseException(Exception):
     def __init__(self, *args, **kwargs):
         default_message = "An Error occur in the presalytics module.  Consult log for stacktrace."
+        message = args[0]
+        if len(message) > 0:
+            logger = logging.getLogger('presalytics.lib.exceptions')
+            logger.error(message)
         if not (args or kwargs):
             args = (default_message,)
             super().__init__(*args, **kwargs)

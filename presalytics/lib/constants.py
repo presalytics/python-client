@@ -1,6 +1,11 @@
 """ Constants for api.presalytics.io client """
+<<<<<<< HEAD
 HOST = "https://api.presaltyics.io"
 SITE_HOST = "https://presaltyics.io"
+=======
+SITE_HOST = "https://presalytics.io"
+API_HOST = "https://api.presalytics.io"
+>>>>>>> a4f52f649386e38007f7c1d3c94f89d2dcecc8e4
 OIDC_WELL_KNOWN = "https://auth.presalytics.io/auth/realms/presalytics/.well-known/openid-configuration"
 OIDC_TOKEN = "https://auth.presalytics.io/auth/realms/presalytics/protocol/openid-connect/token"
 PORT = 443
@@ -16,3 +21,4 @@ LOCALHOST_SERVER = "127.0.0.1"
 LOCALHOST_PORT = 8052
 LOGIN_PATH = "/accounts/login/"
 API_CODE_URL = "/user/client-get-auth-code/"
+API_LOGGEDIN_NEXT_URL = "/user/api-logged-in/"

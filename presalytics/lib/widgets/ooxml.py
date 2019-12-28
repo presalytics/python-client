@@ -81,7 +81,7 @@ class OoxmlEndpointMap(object):
         self.OBJECT_TYPE_MAP = self._build_object_type_map()
     
     def get_object_type(self):
-        for key, val in self.OBJECT_TYPE_MAP:
+        for key, val in self.OBJECT_TYPE_MAP.items():
             for test_ep in val:
                 if test_ep == self.endpoint_id:
                     if key == "EMPTY":

@@ -40,9 +40,9 @@ class TestComponents(unittest.TestCase):
         widget = presalytics.OoxmlEditorWidget(
             name="test-editor",
             story_id=story.id,
-            ooxml_document_id=story.ooxml_documents[0].ooxml_automation_id,
+            object_ooxml_id=info.entity_id,
             endpoint_id=info.object_type.split(".")[1],
-            transform_function=presalytics.change_shape_color,
+            transform_class=presalytics.ChangeShapeColor,
             transform_params=new_color
         )
         outline.pages[0].widgets[0] = widget.outline_widget

@@ -7,6 +7,7 @@ import urllib.parse
 import importlib.util
 import logging
 import json
+<<<<<<< HEAD
 import keycloak
 from uuid import uuid4
 import presalytics
@@ -17,8 +18,32 @@ import presalytics.client.presalytics_ooxml_automation.api_client
 import presalytics.client.presalytics_story.api_client
 import presalytics.client.presalytics_doc_converter.api_client
 
+=======
+from environs import Env
+from keycloak.keycloak_openid import KeycloakOpenID
+from keycloak.exceptions import KeycloakGetError
+from uuid import uuid4
+import presalytics_doc_converter
+import presalytics_ooxml_automation
+import presalytics_story
+from presalytics.lib.exceptions import LoginTimeout, MissingConfigException
+from presalytics.lib.constants import (
+    SITE_HOST,
+    OIDC_REALM,
+    DEFAULT_CLIENT_ID,
+    OIDC_AUTH_HOST,
+    JWT_KEY,
+    LOGIN_PATH,
+    API_CODE_URL,
+    REDIRECT_URI,
+    API_LOGGEDIN_NEXT_URL
+)
+from presalytics.client.auth import AuthenticationMixIn, AuthConfig, TokenUtil
+>>>>>>> a4f52f649386e38007f7c1d3c94f89d2dcecc8e4
 
 logger = logging.getLogger(__name__)
+
+env = Env()
 
 
 class Client(object):
@@ -48,11 +73,21 @@ class Client(object):
         except KeyError:
             self.client_secret = None
             self.confidential_client = False
-
+        self.verify_https = env.bool("VERIFY_HTTPS", True)
         try:
             self.site_host = presalytics.CONFIG["HOSTS"]["SITE"]
         except KeyError:
+<<<<<<< HEAD
             self.site_host = cnst.SITE_HOST
+=======
+            self.site_host = SITE_HOST
+
+        try:
+            self.api_post_login_url = self.auth_config.PRESALYTICS['API_POST_LOGIN_URL']
+        except KeyError:
+            self.api_post_login_url = API_LOGGEDIN_NEXT_URL
+
+>>>>>>> a4f52f649386e38007f7c1d3c94f89d2dcecc8e4
         self.login_sleep_interval = 5  # seconds
         self.login_timeout = 60  # seconds
         if delegate_login or presalytics.CONFIG.get("DELEGATE_LOGIN", False):
@@ -63,7 +98,7 @@ class Client(object):
             server_url=cnst.OIDC_AUTH_HOST,
             realm_name=cnst.OIDC_REALM,
             client_id=self.client_id,
-            verify=True
+            verify=self.verify_https
         )
         self.token_util = presalytics.client.auth.TokenUtil()
         if token:
@@ -72,12 +107,21 @@ class Client(object):
         if not self._delegate_login:
             self.token_util.token = self.refresh_token()
 
+<<<<<<< HEAD
         doc_converter_api_client = DocConverterApiClientWithAuth(self, **kwargs)
         self.doc_converter = presalytics.client.presalytics_doc_converter.DefaultApi(api_client=doc_converter_api_client)
         ooxml_automation_api_client = OoxmlAutomationApiClientWithAuth(self, **kwargs)
         self.ooxml_automation = presalytics.client.presalytics_ooxml_automation.DefaultApi(api_client=ooxml_automation_api_client)
         story_api_client = StoryApiClientWithAuth(self, **kwargs)
         self.story = presalytics.client.presalytics_story.DefaultApi(api_client=story_api_client)
+=======
+        doc_converter_api_client = DocConverterApiClientWithAuth(parent=self, **kwargs)
+        self.doc_converter = presalytics_doc_converter.DefaultApi(api_client=doc_converter_api_client)
+        ooxml_automation_api_client = OoxmlAutomationApiClientWithAuth(parent=self, **kwargs)
+        self.ooxml_automation = presalytics_ooxml_automation.DefaultApi(api_client=ooxml_automation_api_client)
+        story_api_client = StoryApiClientWithAuth(parent=self, **kwargs)
+        self.story = presalytics_story.DefaultApi(api_client=story_api_client)
+>>>>>>> a4f52f649386e38007f7c1d3c94f89d2dcecc8e4
 
     def login(self):
         try:
@@ -125,11 +169,18 @@ class Client(object):
         api_otp = uuid4()
         query = {
             "api_otp": api_otp,
-            "client_id": self.client_id
+            "client_id": self.client_id,
+            "next": self.api_post_login_url
         }
         query_string = '?{}'.format(urllib.parse.urlencode(query))
+<<<<<<< HEAD
         url = urllib.parse.urljoin(self.site_host, urllib.parse.urljoin(cnst.LOGIN_PATH, query_string))
         webbrowser.open_new_tab(url)
+=======
+        url = urllib.parse.urljoin(self.site_host, urllib.parse.urljoin(LOGIN_PATH, query_string))
+        logger.info("Opening browser tab to Login to Presalytics API")
+        webbrowser.open_new_tab(url) 
+>>>>>>> a4f52f649386e38007f7c1d3c94f89d2dcecc8e4
         auth_code = None
         payload = {
             "username": self.username,
@@ -140,7 +191,7 @@ class Client(object):
         auth_code_url = urllib.parse.urljoin(self.site_host, cnst.API_CODE_URL)
         interval = 0
         while True:
-            response = requests.post(auth_code_url, json=payload)
+            response = requests.post(auth_code_url, json=payload, verify=self.verify_https)
             if response.status_code != 200:
                 if interval <= self.login_timeout:
                     interval += self.login_sleep_interval
@@ -151,7 +202,12 @@ class Client(object):
                 data = json.loads(response.content)
                 break
         auth_code = data["authorization_code"]
+<<<<<<< HEAD
         token = self.oidc.token(username=self.username, grant_type="authorization_code", code=auth_code, redirect_uri=cnst.REDIRECT_URI)
+=======
+        token = self.oidc.token(username=self.username, grant_type="authorization_code", code=auth_code, redirect_uri=REDIRECT_URI)
+        assert token["access_token"] is not None
+>>>>>>> a4f52f649386e38007f7c1d3c94f89d2dcecc8e4
         return token
 
     def refresh_token(self):
@@ -193,20 +249,35 @@ class Client(object):
 
 class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_doc_converter.api_client.ApiClient):
     def __init__(self, parent: Client, **kwargs):
+<<<<<<< HEAD
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics.client.presalytics_doc_converter.api_client.ApiClient.__init__(self)
+=======
+        AuthenticationMixIn.__init__(self, parent, **kwargs)
+        presalytics_doc_converter.api_client.ApiClient.__init__(self)
+>>>>>>> a4f52f649386e38007f7c1d3c94f89d2dcecc8e4
         self.update_configuration()
 
 
 class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_ooxml_automation.api_client.ApiClient):
     def __init__(self, parent: Client, **kwargs):
+<<<<<<< HEAD
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
+=======
+        AuthenticationMixIn.__init__(self, parent, **kwargs)
+        presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
+>>>>>>> a4f52f649386e38007f7c1d3c94f89d2dcecc8e4
         self.update_configuration()
 
 
 class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_story.api_client.ApiClient):
     def __init__(self, parent: Client, **kwargs):
+<<<<<<< HEAD
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics.client.presalytics_story.api_client.ApiClient.__init__(self)
+=======
+        AuthenticationMixIn.__init__(self, parent, **kwargs)
+        presalytics_story.api_client.ApiClient.__init__(self)
+>>>>>>> a4f52f649386e38007f7c1d3c94f89d2dcecc8e4
         self.update_configuration()

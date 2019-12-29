@@ -8,7 +8,7 @@ import importlib.util
 import logging
 import json
 import keycloak
-from uuid import uuid4
+import environs
 import presalytics
 import presalytics.lib.exceptions
 import presalytics.lib.constants as cnst
@@ -16,11 +16,11 @@ import presalytics.client.auth
 import presalytics.client.presalytics_ooxml_automation.api_client
 import presalytics.client.presalytics_story.api_client
 import presalytics.client.presalytics_doc_converter.api_client
-
+from uuid import uuid4
 
 logger = logging.getLogger(__name__)
 
-env = Env()
+env = environs.Env()
 
 
 class Client(object):

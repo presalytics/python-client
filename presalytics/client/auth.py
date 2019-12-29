@@ -93,20 +93,9 @@ class TokenUtil(object):
 class AuthenticationMixIn(object):
     def __init__(self, parent: 'Client', ignore_api_exceptions=False, **kwargs):
         self._ignore_api_exceptions = ignore_api_exceptions
-<<<<<<< HEAD
         self.parent = weakref.ref(parent)
         super(AuthenticationMixIn, self).__init__()
         self.update_configuration()
-=======
-        super(AuthenticationMixIn, self).__init__(**kwargs)
-
-    def get_auth_header(self):
-        self.parent().refresh_token()
-        auth_header = {
-            "Authorization": "Bearer " + self.parent.token_util.token["access_token"]
-        }
-        return auth_header
->>>>>>> a4f52f649386e38007f7c1d3c94f89d2dcecc8e4
 
     def call_api(
             self, resource_path, method,
@@ -162,13 +151,8 @@ class AuthenticationMixIn(object):
         if self.configuration is None:
             raise presalytics.lib.exceptions.MissingConfigException("Base API not yet configured, please reconstruct API initialization")
         self.user_agent = AuthenticationMixIn._get_user_agent
-<<<<<<< HEAD
         if presalytics.CONFIG.get("HOSTS", None):
             self.set_host(presalytics.CONFIG.get('HOSTS'))
-=======
-        if bool(self.parent().auth_config.PRESALYTICS['HOSTS']):
-            self.set_host(self.parent().auth_config.PRESALYTICS['HOSTS'])
->>>>>>> a4f52f649386e38007f7c1d3c94f89d2dcecc8e4
 
     @staticmethod
     def get_user_agent():

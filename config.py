@@ -1,5 +1,5 @@
 """
-Base Configuration File for Presaltyics client
+Base Configuration File for presalytics client
 
 By default, the presalytics client attempts to read its configuration values from 
 an env file or the host machine's system environment values.

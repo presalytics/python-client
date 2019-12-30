@@ -38,7 +38,7 @@ setup(
     description="Story API",
     author_email="kevin@presalytics.io",
     url="http://github.com/presalytics/story-python-client",
-    keywords=["Presaltyics", "Story API"],
+    keywords=["presalytics", "Story API"],
     install_requires=REQUIRES,
     packages=find_packages(),
     include_package_data=True,

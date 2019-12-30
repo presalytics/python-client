@@ -23,7 +23,7 @@ class PluginBase(abc.ABC):
 
     __plugin_kind__: str
         The __plugin_kind__ is a static string that uniquely identifies this plugin to classes
-        the render story outlines (e.g., presaltyics.story.revealer.Revealer).
+        the render story outlines (e.g., presalytics.story.revealer.Revealer).
 
     """
     __plugin_kind__: str

@@ -1,6 +1,6 @@
 """ Constants for api.presalytics.io client """
-HOST = "https://api.presaltyics.io"
-SITE_HOST = "https://presaltyics.io"
+HOST = "https://api.presalytics.io"
+SITE_HOST = "https://presalytics.io"
 OIDC_WELL_KNOWN = "https://auth.presalytics.io/auth/realms/presalytics/.well-known/openid-configuration"
 OIDC_TOKEN = "https://auth.presalytics.io/auth/realms/presalytics/protocol/openid-connect/token"
 PORT = 443

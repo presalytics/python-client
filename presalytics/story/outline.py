@@ -3,7 +3,7 @@ Module helps serialize and deserialize presalytics story outlines to/from json y
 Allow downstream modules work seemlessly with json data
 
 Note: this module leverage type-checking at runtime, and may cause ciruclar references
-if you are incorporating type hints on presaltyics objects in modules that import this file.
+if you are incorporating type hints on presalytics objects in modules that import this file.
 The problem is solved using the TYPE_CHECKING boolean in the python's typing package.
 """
 import json

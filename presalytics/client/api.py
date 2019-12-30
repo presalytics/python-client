@@ -57,6 +57,10 @@ class Client(object):
             self.site_host = cnst.SITE_HOST
         self.login_sleep_interval = 5  # seconds
         self.login_timeout = 60  # seconds
+        try:
+            self.redirect_uri = presalytics.CONFIG["REDIRECT_URI"]
+        except KeyError:
+            self.redirect_uri = cnst.REDIRECT_URI
         if delegate_login or presalytics.CONFIG.get("DELEGATE_LOGIN", False):
             self._delegate_login = True
         else:
@@ -128,7 +132,7 @@ class Client(object):
         query = {
             "api_otp": api_otp,
             "client_id": self.client_id,
-            "next": self.api_post_login_url
+            "next": self.redirect_uri
         }
         query_string = '?{}'.format(urllib.parse.urlencode(query))
         url = urllib.parse.urljoin(self.site_host, urllib.parse.urljoin(cnst.LOGIN_PATH, query_string))
@@ -154,7 +158,7 @@ class Client(object):
                 data = json.loads(response.content)
                 break
         auth_code = data["authorization_code"]
-        token = self.oidc.token(username=self.username, grant_type="authorization_code", code=auth_code, redirect_uri=cnst.REDIRECT_URI)
+        token = self.oidc.token(username=self.username, grant_type="authorization_code", code=auth_code, redirect_uri=self.redirect_uri)
         return token
 
     def refresh_token(self):

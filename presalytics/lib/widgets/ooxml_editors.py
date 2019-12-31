@@ -83,6 +83,7 @@ class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
                  transform_class=None,
                  transform_params=None,
                  **kwargs):
+        super(OoxmlEditorWidget, self).__init__(**kwargs)    
         self.story_id = story_id
         self.object_ooxml_id = object_ooxml_id
         self.name = name
@@ -98,7 +99,11 @@ class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
         return new_xml_str
 
     def update(self):
-        client = presalytics.client.api.Client()
+        client = presalytics.client.api.Client(
+            delegate_login=self.delegate_login,
+            token=self.token,
+            cache_tokens=self.cache_tokens
+        )
         auth_header = client.get_auth_header()
         if self.transform:
             xml_url = self.endpoint_map.get_xml_url(self.object_ooxml_id)

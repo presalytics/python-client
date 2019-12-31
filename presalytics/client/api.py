@@ -157,8 +157,13 @@ class Client(object):
             else:
                 data = json.loads(response.content)
                 break
-        auth_code = data["authorization_code"]
-        token = self.oidc.token(username=self.username, grant_type="authorization_code", code=auth_code, redirect_uri=self.redirect_uri)
+        if data.get("token", None):
+            #  pick up otp token off presalytics backend
+            token = data.get("token")
+        else:
+            # support oidc authorization code flow
+            auth_code = data["authorization_code"]
+            token = self.oidc.token(username=self.username, grant_type="authorization_code", code=auth_code, redirect_uri=self.redirect_uri)
         return token
 
     def refresh_token(self):

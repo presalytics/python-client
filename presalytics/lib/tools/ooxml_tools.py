@@ -138,6 +138,7 @@ def create_theme_from_ooxml_document(document_id: str,
             parent_slide = client.ooxml_automation.slides_slides_get_id(theme_info.slide_id)
             if slide_no is None:
                 slide_no = parent_slide.number
+                theme_meta = theme_info
             else:
                 if parent_slide.number < slide_no:
                     theme_meta = theme_info
@@ -145,5 +146,11 @@ def create_theme_from_ooxml_document(document_id: str,
                         break
     else:
         theme_meta = client.ooxml_automation.theme_themes_get_id(themes[0].entity_id)
-    theme = presalytics.lib.themes.ooxml.OoxmlTheme(theme_meta.name, theme_meta.id)
+    theme = presalytics.lib.themes.ooxml.OoxmlTheme(
+        theme_meta.name, 
+        theme_meta.id, 
+        delegate_login=delegate_login, 
+        token=token, 
+        cache_tokens=cache_tokens
+    )
     return theme.serialize().to_dict()

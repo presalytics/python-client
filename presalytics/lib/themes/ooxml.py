@@ -15,25 +15,31 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
 
     __component_kind__ = 'ooxml-theme'
 
-    def __init__(self, name, ooxml_theme_id, plugin_config=None, always_refresh=False, **kwargs):
+    def __init__(self, 
+                 name, 
+                 ooxml_theme_id, 
+                 plugin_config=None, 
+                 always_refresh=False,
+                 delegate_login=False, 
+                 token=None, 
+                 cache_tokens=True,
+                 **kwargs):
         super(OoxmlTheme, self).__init__(**kwargs)
         self.name = name
         self.ooxml_id = ooxml_theme_id
         self.always_refresh = always_refresh
+        self.client_kwargs = {
+            "delegate_login": delegate_login,
+            "token": token,
+            "cache_tokens": cache_tokens
+        }
         if not plugin_config or self.always_refresh:
             if not plugin_config:
                 self.plugin_config = {}
             self.get_configuration()
 
     def get_configuration(self):
-        if presalytics.CONFIG.get("DELEGATE_LOGIN", False):
-            token = presalytics.client.auth.TokenUtil().token
-            client = presalytics.Client(
-                delegate_login=True,
-                token=token
-            )
-        else:
-            client = presalytics.Client()
+        client = presalytics.Client(**self.client_kwargs)
         theme = client.ooxml_automation.theme_themes_details_get_id(self.ooxml_id)
         extra_params = ['dateCreated', 'dateModified', 'userCreated', 'userModified', 'id', 'themeId']
         colors = {k: v for k, v in theme.colors.items() if k not in extra_params}
@@ -43,10 +49,10 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
         color_types = client.ooxml_automation.shared_colortypes_get()
 
         mapped_colors = {
-            "background1": OoxmlTheme.map_color_type("background1", color_map_dict, colors, color_types),
-            "background2": OoxmlTheme.map_color_type("background2", color_map_dict, colors, color_types),
-            "text1": OoxmlTheme.map_color_type("text1", color_map_dict, colors, color_types),
-            "text2": OoxmlTheme.map_color_type("text2", color_map_dict, colors, color_types)
+            "background1": self.map_color_type("background1", color_map_dict, colors, color_types),
+            "background2": self.map_color_type("background2", color_map_dict, colors, color_types),
+            "text1": self.map_color_type("text1", color_map_dict, colors, color_types),
+            "text2": self.map_color_type("text2", color_map_dict, colors, color_types)
         }
         color_params = {k: v for k, v in colors.items() if k not in extra_params}
         color_params.update(mapped_colors)
@@ -55,21 +61,15 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
 
         self.plugin_config = params
     
-    @staticmethod
+
     def map_color_type(
+            self,
             color_map_name: str,
             color_map: typing.Dict,
             theme_colors: typing.Dict,
             color_types_list=None) -> str:
         if not color_types_list:
-            if presalytics.CONFIG.get("DELEGATE_LOGIN", False):
-                token = presalytics.client.auth.TokenUtil().token
-                client = presalytics.Client(
-                    delegate_login=True,
-                    token=token
-                )
-            else:
-                client = presalytics.Client()
+            client = presalytics.Client(**self.client_kwargs)
             color_types_list = client.ooxml_automation.shared_colortypes_get()
         color_id = color_map[color_map_name]
         color_name = next(x.name for x in color_types_list if x.type_id == color_id)

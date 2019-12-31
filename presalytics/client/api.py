@@ -29,7 +29,7 @@ class Client(object):
             self,
             delegate_login=False,
             token=None,
-            cache_tokens=True
+            cache_tokens=True,
             **kwargs):
         try:
             self.username = presalytics.CONFIG['USERNAME']

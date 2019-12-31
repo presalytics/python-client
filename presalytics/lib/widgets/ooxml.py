@@ -111,6 +111,10 @@ class OoxmlEndpointMap(object):
     @classmethod
     def document(cls, baseurl=None):
         return cls(OoxmlEndpointMap.DOCUMENT, baseurl)
+    
+    @classmethod
+    def group(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.GROUP, baseurl)
 
     @classmethod
     def image(cls, baseurl=None):
@@ -133,7 +137,7 @@ class OoxmlEndpointMap(object):
         return cls(OoxmlEndpointMap.table, baseurl)
 
     @classmethod
-    def chart(cls, baseurl=None):
+    def theme(cls, baseurl=None):
         return cls(OoxmlEndpointMap.THEME, baseurl)
 
 

@@ -159,7 +159,7 @@ class Client(object):
                 break
         if data.get("token", None):
             #  pick up otp token off presalytics backend
-            token = data.get("token")
+            token = data.get("token") 
         else:
             # support oidc authorization code flow
             auth_code = data["authorization_code"]

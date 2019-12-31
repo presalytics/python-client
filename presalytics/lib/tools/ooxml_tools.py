@@ -19,14 +19,19 @@ def create_story_from_ooxml_file(filename: str,
                                  cache_tokens=True) -> 'Story':
     story: 'Story'
 
-    client = presalytics.Client(delegate_login=delegate_login, token=token, cache_tokens=cache_tokens)
+    kw = {
+        "delegate_login": delegate_login,
+        "token": token,
+        "cache_tokens": cache_tokens
+    }
+    client = presalytics.Client(**kw)
     story = client.story.story_post_file(file=filename)
     outline = presalytics.StoryOutline.load(story.outline)
     for i in range(0, len(outline.pages)):
         page = outline.pages[i]
         for j in range(0, len(page.widgets)):
             widget = page.widgets[j]
-            inst = presalytics.OoxmlFileWidget.deserialize(widget)
+            inst = presalytics.OoxmlFileWidget.deserialize(widget, **kw)
             presalytics.COMPONENTS.register(inst)
             outline.pages[i].widgets[j] = inst.serialize()
     story.outline = outline.dump()

@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class TokenUtil(object):
-    def __init__(self, token=None, token_file=None):
+    def __init__(self, token=None, token_file=None, token_cache=True):
         if token_file is None:
             self.token_file = presalytics.lib.constants.TOKEN_FILE
         else:
@@ -28,6 +28,7 @@ class TokenUtil(object):
             self._load_token_file()
         except Exception:
             pass
+        self.token_cache = token_cache
         if token is not None:
             try:
                 self.token = {
@@ -36,7 +37,8 @@ class TokenUtil(object):
                     'refresh_token': token["refresh_token"],
                     'refresh_token_expire_time': token["refresh_token_expire_time"]
                 }
-                self._put_token_file()
+                if self.token_cache:
+                    self._put_token_file()
             except Exception:
                 raise presalytics.lib.exceptions.MisConfiguredTokenException()
 
@@ -59,10 +61,12 @@ class TokenUtil(object):
             return True
 
     def _load_token_file(self):
-        self.token = self.load_token_from_file(self.token_file)
+        if self.token_cache:
+            self.token = self.load_token_from_file(self.token_file)
 
     def _put_token_file(self):
-        self.put_token_file(self.token, self.token_file)
+        if self.token_cache:
+            self.put_token_file(self.token, self.token_file)
 
     def process_keycloak_token(self, keycloak_token):
         access_token_expire_time = datetime.datetime.now() + datetime.timedelta(seconds=keycloak_token['expires_in'])

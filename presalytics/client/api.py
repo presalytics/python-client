@@ -29,6 +29,7 @@ class Client(object):
             self,
             delegate_login=False,
             token=None,
+            cache_tokens=True
             **kwargs):
         try:
             self.username = presalytics.CONFIG['USERNAME']
@@ -71,10 +72,11 @@ class Client(object):
             client_id=self.client_id,
             verify=self.verify_https
         )
-        self.token_util = presalytics.client.auth.TokenUtil()
+        self.token_util = presalytics.client.auth.TokenUtil(token_cache=cache_tokens)
         if token:
             self.token_util.token = token
-            self.token_util._put_token_file()
+            if self.token_util.token_cache:
+                self.token_util._put_token_file()
         if not self._delegate_login:
             self.token_util.token = self.refresh_token()
 
@@ -180,7 +182,8 @@ class Client(object):
                 except keycloak.exceptions.KeycloakGetError:
                     if not self._delegate_login:
                         self.login()
-            self.token_util._put_token_file()
+            if self.token_util.token_cache:
+                self.token_util._put_token_file()
         return self.token_util.token
 
     def get_auth_header(self):

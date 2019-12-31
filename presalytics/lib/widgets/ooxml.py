@@ -339,7 +339,9 @@ class OoxmlFileWidget(OoxmlWidgetBase):
                         "story_id": component.data["story_id"]
                     }
                 )
-            return cls(**init_args, **kwargs)
+            if len(kwargs.keys()) > 0:
+                init_args.update(kwargs)
+            return cls(**init_args)
 
     def serialize(self):
         self.update()

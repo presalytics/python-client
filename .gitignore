@@ -431,3 +431,4 @@ dist/
 # app specific files
 token.json
 presalytics.log
+tmp.*

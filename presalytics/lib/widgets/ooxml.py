@@ -68,13 +68,13 @@ class OoxmlEndpointMap(object):
             raise presalytics.lib.exceptions.ValidationError("{0} is not a valid endpoint ID".format(endpoint))
         self.endpoint_id = endpoint
         if not baseurl:
+            self.baseurl = OoxmlEndpointMap.BASE_URL
             custom_hosts = presalytics.CONFIG.get("HOSTS", None)
             if custom_hosts:
                 ooxml_host = custom_hosts.get("OOXML_AUTOMATION", None)
                 if ooxml_host:
                     self.baseurl = ooxml_host
-            if not self.baseurl:
-                self.baseurl = OoxmlEndpointMap.BASE_URL
+                
         else:
             self.baseurl = baseurl
         self.root_url = urllib.parse.urljoin(self.baseurl, self.endpoint_id)

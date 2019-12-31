@@ -72,7 +72,7 @@ def create_outline_from_ooxml_document(story: 'Story',
         _themes = themes
     else:
         ooxml_id = pages[0].widgets[0].data["document_ooxml_id"]
-        _themes = [create_theme_from_ooxml_document(ooxml_id, delegate_login, token)]
+        _themes = [create_theme_from_ooxml_document(ooxml_id, delegate_login=delegate_login, token=token)]
 
     outline = presalytics.story.outline.StoryOutline(
         presalytics_story=presalytics.story.outline.get_current_spec_version(),
@@ -106,7 +106,10 @@ def create_pages_from_ooxml_document(story: 'Story',
                 object_name=slide.entity_name,
                 object_ooxml_id=slide.entity_id,
                 document_ooxml_id=ooxml_document.id,
-                story_id=story.id
+                story_id=story.id,
+                delegate_login=delegate_login,
+                token=token,
+                cache_tokens=cache_tokens
             )
             widget_kind = "widget-page"
             widget_name = slide.entity_name

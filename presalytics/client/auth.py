@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 class TokenUtil(object):
     def __init__(self, token=None, token_file=None, token_cache=True):
+        self.token_cache = token_cache
         if token_file is None:
             self.token_file = presalytics.lib.constants.TOKEN_FILE
         else:
@@ -28,7 +29,6 @@ class TokenUtil(object):
             self._load_token_file()
         except Exception:
             pass
-        self.token_cache = token_cache
         if token is not None:
             try:
                 self.token = {

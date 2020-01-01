@@ -44,10 +44,12 @@ class Revealer(presalytics.story.components.Renderer):
             self,
             story_outline: 'StoryOutline',
             **kwargs):
-
+        
         self.story_outline = story_outline
+        logger.info("Initializing story render for {}".format(story_outline.title))
         self.story_outline.validate()
         self.base = self.make_base()
+        logger.info("Loading plugins")
         reveal_plugin_config = {
             'kind': 'script',
             'name': 'reveal',
@@ -59,6 +61,7 @@ class Revealer(presalytics.story.components.Renderer):
         outline_plugins = presalytics.lib.plugins.base.PluginManager.get_plugins_from_nested_dict(story_outline.to_dict())
         self.plugins.extend(outline_plugins)
         self.plugin_mgr = presalytics.lib.plugins.base.PluginManager(self.plugins)
+        logger.info("Revealer initilized.")
 
     @classmethod
     def deserialize(cls, component: 'StoryOutline', **kwargs):
@@ -268,8 +271,10 @@ class Revealer(presalytics.story.components.Renderer):
             os.mkdir(theme_path)
 
     def present(self, files_path=None, debug=True, port=8082, host='127.0.0.1'):
+        logger.info("Building story rendering at http://{0}:{1}".format(host, port))
         if not files_path:
             files_path = tempfile.gettempdir()
+        logger.info("Buidling standalone package for local rendering.")
         html = self.package_as_standalone().decode('utf-8')
         id = presalytics.story.util.to_title_case(self.story_outline.title)
         self.make_local_folders(files_path)
@@ -279,5 +284,6 @@ class Revealer(presalytics.story.components.Renderer):
         with open(html_file, 'w') as file:
             file.write(html)
         address = "http://{}:{}/story/{}".format(host, port, id)
+        loggier.info("Opening browser tab...")
         presalytics.story.server.Browser(address).start()
         presalytics.story.server.LocalServer(host=host, debug=debug, port=port, root_path=files_path).run()

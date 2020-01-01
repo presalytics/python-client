@@ -1,5 +1,6 @@
 import datetime
 import typing
+import logging
 import presalytics
 import presalytics.story.outline
 import presalytics.client.api
@@ -13,26 +14,34 @@ if typing.TYPE_CHECKING:
     from presalytics.story.outline import StoryOutline
 
 
+logger = logging.getLogger(__name__)
+
+
 def create_story_from_ooxml_file(filename: str,
                                  delegate_login=False,
                                  token=None,
                                  cache_tokens=True) -> 'Story':
     story: 'Story'
-
+    logger.info("Starting presalytics tool: create_story_from_ooxml_file")
     kw = {
         "delegate_login": delegate_login,
         "token": token,
         "cache_tokens": cache_tokens
     }
+    logger.info("Intializing presalytics client.")
     client = presalytics.Client(**kw)
+    logger.info("Sending file to presaltyics server for document processing and base story creation")
     story = client.story.story_post_file(file=filename)
+    logger.info("Creating local instances of file widgets")
     outline = presalytics.StoryOutline.load(story.outline)
     for i in range(0, len(outline.pages)):
         page = outline.pages[i]
         for j in range(0, len(page.widgets)):
             widget = page.widgets[j]
+            logger.info("Creating OoxmlFileWidget with name {}".format(widget.name))
             inst = presalytics.OoxmlFileWidget.deserialize(widget, **kw)
             presalytics.COMPONENTS.register(inst)
+            logger.info("Rewriting outline with widget {}".format(widget.name))
             outline.pages[i].widgets[j] = inst.serialize()
     story.outline = outline.dump()
     return story

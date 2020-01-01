@@ -331,11 +331,13 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
                         if key not in self.instances.keys():
                             self.instances[key] = klass
                     else:
+                        # For now. always show this error, good for user debugging, rather than developer debugging
                         message = '{0} instance missing "__component_kind__" or "name" attribute'.format(klass_type)
                         logger.error()
             except Exception:
-                message = "Unable to register instance {0} with type {1}".format(klass.__name__, klass_type)
-                logger.error(message)
+                if self.show_errors:
+                    message = "Unable to register instance {0} with type {1}".format(klass.__name__, klass_type)
+                    logger.error(message)
 
     def get_instance(self, key):
         return self.instances.get(key, None)

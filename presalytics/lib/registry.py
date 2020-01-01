@@ -71,12 +71,14 @@ class RegistryBase(abc.ABC):
                         if key not in self.registry.keys():
                             self.registry[key] = klass
                 except Exception:
-                    message = "Unable to register class {0} with type {1}".format(klass.__name__, klass_type)
-                    logger.error(message)
+                    if self.show_errors:
+                        message = "Unable to register class {0} with type {1}".format(klass.__name__, klass_type)
+                        logger.error(message)
         else:
             try:
-                message = "{0} is not a class".format(klass.__class__.__name__)
-                logger.error(message)
+                if self.show_errors:
+                    message = "{0} is not a class".format(klass.__class__.__name__)
+                    logger.error(message)
             except Exception:
                 pass
 
@@ -99,8 +101,9 @@ class RegistryBase(abc.ABC):
                         mod_spec.loader.exec_module(mod)
                         self.get_classes(mod)
                     except Exception:
-                        message = "Could not load classes from file {0}".format(name)
-                        logger.error(message)
+                        if self.show_errors:
+                            message = "Could not load classes from file {0}".format(name)
+                            logger.error(message)
         for finder, name, ispkg in pkgutil.iter_modules():
             if name.startswith('presalytics'):
                 mod = importlib.import_module(name)

@@ -14,7 +14,7 @@ def configure_logger(log_path=default_log_path, log_level='DEBUG', file_logger=T
         },
         'handlers': {
             'console': {
-                'level': 'DEBUG',
+                'level': log_level,
                 'class': 'logging.StreamHandler',
                 'formatter': 'default',
                 'stream': 'ext://sys.stdout'

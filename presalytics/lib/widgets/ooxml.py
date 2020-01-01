@@ -180,7 +180,7 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         response = requests.get(svg_url, headers=auth_header)
         svg_data = response.text
         if response.status_code != 200:
-            raise presalytics.lib.exceptions.ApiException(default_exception=response.content)
+            raise presalytics.lib.exceptions.ApiError(message=response.text)
         if response.text.startswith("Temp data"):
             if timeout_iterator > 5:
                 raise presalytics.lib.exceptions.ApiException()

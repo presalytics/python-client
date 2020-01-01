@@ -7,6 +7,7 @@ import datetime
 import dateutil.parser
 import lxml
 import lxml.etree
+import posixpath
 import presalytics
 import presalytics.client.api
 import presalytics.story.components
@@ -92,13 +93,13 @@ class OoxmlEndpointMap(object):
         raise presalytics.lib.exceptions.ValidationError(message)
 
     def get_id_url(self, id):
-        return os.path.join(self.root_url, id)
+        return posixpath.join(self.root_url, id)
 
     def get_svg_url(self, id):
-        return os.path.join(self.root_url, "Svg", id)
+        return posixpath.join(self.root_url, "Svg", id)
 
     def get_xml_url(self, id):
-        return os.path.join(self.root_url, "OpenOfficeXml", id)
+        return posixpath.join(self.root_url, "OpenOfficeXml", id)
 
     @classmethod
     def connection_shape(cls, baseurl=None):

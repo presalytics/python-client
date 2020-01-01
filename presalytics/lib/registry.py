@@ -112,6 +112,8 @@ class RegistryBase(abc.ABC):
                 self.get_classes_from_module(mod)
 
     def module_is_in_stackframe(self, module_name, frame=None) -> bool:
+        """Prevent cycles by skipping modules already loaded in the stack frame
+        """
         in_stack = False
         try:
             if not frame:
@@ -121,8 +123,13 @@ class RegistryBase(abc.ABC):
                 try:
                     frame_module = inspect.getmodule(frame).__spec__.name
                 except AttributeError:
+                    # vscode and spyder's parent controllers load __main__ without a module spec
                     if not getattr(inspect.getmodule(frame), "__spec__", None):
-                        return in_stack # vscode and spyder's parent controllers do this
+                        try:
+                            fname = inspect.getmodule(frame).__dict__['__file__']
+                            frame_module = os.path.basename(fname).replace(".py", "")
+                        except Exception:
+                            return True 
                     else:
                         return True # Don't load this module for unknown errors
                 except Exception:

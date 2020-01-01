@@ -49,7 +49,7 @@ class Configuration(six.with_metaclass(TypeWithDefault, object)):
     :param password: Password for HTTP basic authentication
     """
 
-    def __init__(self, host="http://localhost",
+    def __init__(self, host="https://api.presalytics.io/ooxml-automation",
                  api_key={}, api_key_prefix={},
                  username="", password=""):
         """Constructor
@@ -265,7 +265,7 @@ class Configuration(six.with_metaclass(TypeWithDefault, object)):
                "OS: {env}\n"\
                "Python Version: {pyversion}\n"\
                "Version of the API: 0.1.0-no-tags\n"\
-               "SDK Package Version: 0.2.82".\
+               "SDK Package Version: 0.2.83".\
                format(env=sys.platform, pyversion=sys.version)
 
     def get_host_settings(self):
@@ -275,7 +275,7 @@ class Configuration(six.with_metaclass(TypeWithDefault, object)):
         """
         return [
             {
-                'url': "",
+                'url': "https://api.presalytics.io/ooxml-automation",
                 'description': "No description provided",
             }
         ]

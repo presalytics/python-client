@@ -14,7 +14,7 @@
 
 from __future__ import absolute_import
 
-__version__ = "0.2.82"
+__version__ = "0.2.83"
 
 # import apis into sdk package
 from presalytics.client.presalytics_ooxml_automation.api.default_api import DefaultApi

@@ -15,6 +15,7 @@ class MatplotlibFigure(presalytics.story.components.WidgetBase):
         super().__init__(self, *args, **kwargs)
         self.fig = figure
         self.name = name
+        self.figure_dict = None
         if self.fig:
             self.figure_dict = mpld3.fig_to_dict(figure)
         else:

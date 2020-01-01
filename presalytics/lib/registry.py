@@ -51,12 +51,13 @@ class RegistryBase(abc.ABC):
         for loader, name, is_pkg in pkgutil.walk_packages(module.__path__, onerror=RegistryBase.onerror):
             full_name = module.__name__ + '.' + name
             try:
-                sub_module = importlib.import_module(full_name)
-                if sub_module.__name__.startswith('presalytics'):
-                    if is_pkg:
-                        self.get_classes_from_module(sub_module)
-                    else:
-                        self.get_classes(sub_module)
+                if not self.module_is_in_stackframe(full_name):
+                    sub_module = importlib.import_module(full_name)
+                    if sub_module.__name__.startswith('presalytics'):
+                        if is_pkg:
+                            self.get_classes_from_module(sub_module)
+                        else:
+                            self.get_classes(sub_module)
             except Exception:
                 pass
 
@@ -97,9 +98,10 @@ class RegistryBase(abc.ABC):
                     try:
                         mod_path = os.path.join(path, name)
                         mod_spec = importlib.util.spec_from_file_location(name, mod_path)
-                        mod = importlib.util.module_from_spec(mod_spec)
-                        mod_spec.loader.exec_module(mod)
-                        self.get_classes(mod)
+                        if not self.module_is_in_stackframe(mod_spec.name.replace(".py", "")):
+                            mod = importlib.util.module_from_spec(mod_spec)
+                            mod_spec.loader.exec_module(mod)
+                            self.get_classes(mod)
                     except Exception:
                         if self.show_errors:
                             message = "Could not load classes from file {0}".format(name)
@@ -108,6 +110,36 @@ class RegistryBase(abc.ABC):
             if name.startswith('presalytics'):
                 mod = importlib.import_module(name)
                 self.get_classes_from_module(mod)
+
+    def module_is_in_stackframe(self, module_name, frame=None) -> bool:
+        in_stack = False
+        try:
+            if not frame:
+                frame = inspect.currentframe()
+            frame_module = frame.f_globals['__name__']
+            if frame_module == '__main__':
+                try:
+                    frame_module = inspect.getmodule(frame).__spec__.name
+                except AttributeError:
+                    if not getattr(inspect.getmodule(frame), "__spec__", None):
+                        return in_stack # vscode and spyder's parent controllers do this
+                    else:
+                        return True # Don't load this module for unknown errors
+                except Exception:
+                    return True
+            if module_name == frame_module:
+                in_stack = True
+            else:
+                if frame.f_back:
+                    in_stack = self.module_is_in_stackframe(module_name, frame=frame.f_back)
+        except Exception:
+            # if something wonky happens, don't load this module
+            # if loaded in IronPython or Jython, this will probably fire (untested)
+            in_stack = True
+        finally:
+            del frame
+        return in_stack
+
 
     def register(self, klass):
         self.load_class(klass)

@@ -64,8 +64,9 @@ __all__ = [
     'Renderer',
     'ThemeBase',
     'create_theme_from_ooxml_document',
-    'create_pages_from_document',
-    'create_outline_from_ooxml_file',
+    'create_pages_from_ooxml_document',
+    'create_story_from_ooxml_file',
+    'create_outline_from_ooxml_document',
     'OoxmlEditorWidget',
     'XmlTransformBase',
     'ChangeShapeColor'
@@ -73,7 +74,6 @@ __all__ = [
 
 env = environs.Env()
 env.read_env()
-
 
 # A comma-separated list of paths to search of config.py, plugin classes, and component classes
 autodiscover_paths = env.list('AUTODISCOVER_PATHS', [])

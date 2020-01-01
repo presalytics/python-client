@@ -16,6 +16,8 @@ class TestComponents(unittest.TestCase):
         pass
 
     def test_render_matplotlib_plot(self):
+        presalytics.autodiscover_paths.append('test/files')
+        presalytics.COMPONENTS = presalytics.story.components.ComponentRegistry(autodiscover_paths=presalytics.autodiscover_paths)
         test_file = os.path.join(os.path.dirname(__file__), 'files', 'matplotlib-outline.yaml')
         outline = presalytics.StoryOutline.import_yaml(test_file)
         presalytics.Revealer(outline).present(files_path='/tmp')

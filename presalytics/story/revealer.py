@@ -198,12 +198,12 @@ class Revealer(presalytics.story.components.Renderer):
         )
         return lxml.html.tostring(html, pretty_print=True)
 
-    def render_plugin(self, plugin):
-        plugin_type = plugin['type']
-        plugin_config = plugin['config']
-        plugin_class = self.plugin_loader.load(plugin_type)
-        script_string = plugin_class().to_string(plugin_config)
-        return lxml.html.fragment_fromstring(script_string)
+    # def render_plugin(self, plugin):
+    #     plugin_type = plugin['type']
+    #     plugin_config = plugin['config']
+    #     plugin_class = self.plugin_loader.load(plugin_type)
+    #     script_string = plugin_class().to_string(plugin_config)
+    #     return lxml.html.fragment_fromstring(script_string)
 
     def strip_unauthorized_scripts(self, body):
         allowed_scripts = presalytics.lib.plugins.external.ALLOWED_SCRIPTS.flatten().values()
@@ -284,6 +284,6 @@ class Revealer(presalytics.story.components.Renderer):
         with open(html_file, 'w') as file:
             file.write(html)
         address = "http://{}:{}/story/{}".format(host, port, id)
-        loggier.info("Opening browser tab...")
+        logger.info("Opening browser tab...")
         presalytics.story.server.Browser(address).start()
         presalytics.story.server.LocalServer(host=host, debug=debug, port=port, root_path=files_path).run()

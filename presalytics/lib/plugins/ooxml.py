@@ -1,5 +1,6 @@
 import sass
 import os
+import posixpath
 import presalytics.lib.plugins.reveal_theme
 
 
@@ -8,8 +9,12 @@ class OoxmlTheme(presalytics.lib.plugins.reveal_theme.RevealCustomTheme):
 
     def to_style(self, config, **kwargs):
         base_path = os.path.join(os.path.dirname(__file__), 'scss')
+        if os.name == "nt":
+            import_path = posixpath.join(*base_path.split('\\'))
+        else:
+            import_path = base_path
         scss_file = os.path.join(base_path, 'overrides.tmpl')
-        config.update({'path': base_path})
+        config.update({'path': import_path})
         with open(scss_file, 'r') as file:
             scss_template_string = file.read()
         scss_string = scss_template_string.format(**config)

@@ -41,14 +41,16 @@ def configure_logger(log_path=default_log_path, log_level='DEBUG', file_logger=T
 
 def handle_exception(exc_type, exc_value, exc_traceback):
     """ Catches unhandled exceptions for logger """
-    if issubclass(exc_type, KeyboardInterrupt):
-        sys.__excepthook__(exc_type, exc_value, exc_traceback)
-        try:
-            logger = logging.getLogger('presalytics.exception_hook')
-            logger.error(exc_info=sys.exc_info())
-        except Exception:
-            pass
-        return
-
+    try:
+        logger = logging.getLogger('presalytics.exception_hook')
+        logger.error("--------------------------")
+        logger.error("UNHANDLED EXCEPTION: FATAL")
+        logger.error(msg="--------------------------", exc_info=(exc_type, exc_value, exc_traceback,))
+        logger.error("--------------------------")
+        logger.error("UNHANDLED EXCEPTION: FATAL")
+        logger.error("--------------------------")
+    except Exception:
+        pass
+    return
 
 sys.excepthook = handle_exception

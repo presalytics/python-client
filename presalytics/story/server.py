@@ -22,18 +22,24 @@ def shutdown():
 
 
 class LocalServer(object):
-    def __init__(self, host='127.0.0.1', debug=True, port=8080, root_path=None, **kwargs):
+    def __init__(self, 
+                 host='127.0.0.1', 
+                 debug=True, 
+                 port=8080, 
+                 root_path=None,
+                 use_reloader=False,
+                 **kwargs):
         self.host = host
         self.debug = debug
         self.port = port
         self.root_path = root_path
         if self.root_path is None:
             self.root_path = os.getcwd()
+        self.use_reloader = use_reloader
 
     def run(self):
-        app.use_reloader = False
         app.root_path = self.root_path
-        app.run(host=self.host, debug=self.debug, port=self.port)
+        app.run(host=self.host, debug=self.debug, port=self.port, use_reloader=self.use_reloader)
 
 
 class Browser(threading.Thread):

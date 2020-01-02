@@ -277,6 +277,8 @@ class Revealer(presalytics.story.components.Renderer):
         logger.info("Buidling standalone package for local rendering.")
         html = self.package_as_standalone().decode('utf-8')
         id = presalytics.story.util.to_title_case(self.story_outline.title)
+        if id == '':
+            id = 'blank'
         self.make_local_folders(files_path)
         template_folder = os.path.dirname(presalytics.lib.templates.base .__file__)
         shutil.copy(os.path.join(template_folder, "favicon.ico"), os.path.join(files_path, "static"))

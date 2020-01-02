@@ -7,7 +7,7 @@ import dateutil
 import dateutil.parser
 import six
 import datetime
-import urllib.parse
+import posixpath
 import presalytics
 import presalytics.lib.exceptions
 import presalytics.lib.constants
@@ -119,7 +119,7 @@ class AuthenticationMixIn(object):
         else:
             header_params = auth_header
         try:
-            endpoint = urllib.parse.urljoin(self.configuration.host, resource_path)
+            endpoint = posixpath.join(self.configuration.host, resource_path)
             logger.info("Sending {0} message to {1}".format(method, endpoint))
             response = super(AuthenticationMixIn, self).call_api(
                 resource_path, method, path_params,

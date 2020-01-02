@@ -78,7 +78,7 @@ class OoxmlEndpointMap(object):
                 
         else:
             self.baseurl = baseurl
-        self.root_url = urllib.parse.urljoin(self.baseurl, self.endpoint_id)
+        self.root_url = posixpath.join(self.baseurl, self.endpoint_id)
         self.OBJECT_TYPE_MAP = self._build_object_type_map()
     
     def get_object_type(self):

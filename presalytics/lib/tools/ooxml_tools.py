@@ -38,10 +38,10 @@ def create_story_from_ooxml_file(filename: str,
         page = outline.pages[i]
         for j in range(0, len(page.widgets)):
             widget = page.widgets[j]
-            logger.info("Creating OoxmlFileWidget with name {}".format(widget.name))
+            logger.info('Creating OoxmlFileWidget with name "{}"'.format(widget.name))
             inst = presalytics.OoxmlFileWidget.deserialize(widget, **kw)
             presalytics.COMPONENTS.register(inst)
-            logger.info("Rewriting outline with widget {}".format(widget.name))
+            logger.info('Rewriting outline with widget: "{}"'.format(widget.name))
             outline.pages[i].widgets[j] = inst.serialize()
     story.outline = outline.dump()
     return story

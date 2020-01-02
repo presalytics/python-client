@@ -244,7 +244,7 @@ class Revealer(presalytics.story.components.Renderer):
             if callable(deserialize_method):
                 page_instance = deserialize_method(page)
             else:
-                message = "Page component instance or class (kind) {0} unavailable in component registry".format(key)
+                message = 'Page component instance or class (kind) "{0}" unavailable in component registry'.format(key)
                 raise presalytics.lib.exceptions.MissingConfigException(message)
         return page_instance.render()
 

@@ -128,8 +128,14 @@ class RegistryBase(abc.ABC):
                         try:
                             fname = inspect.getmodule(frame).__dict__['__file__']
                             frame_module = os.path.basename(fname).replace(".py", "")
+                            if module_name == frame_module:
+                                return True
+                            else: 
+                                return False
+                        except AttributeError:
+                            return in_stack
                         except Exception:
-                            return True 
+                            return True
                     else:
                         return True # Don't load this module for unknown errors
                 except Exception:

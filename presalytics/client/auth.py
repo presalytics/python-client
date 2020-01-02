@@ -7,6 +7,7 @@ import dateutil
 import dateutil.parser
 import six
 import datetime
+import urllib.parse
 import presalytics
 import presalytics.lib.exceptions
 import presalytics.lib.constants
@@ -118,12 +119,16 @@ class AuthenticationMixIn(object):
         else:
             header_params = auth_header
         try:
-            return super(AuthenticationMixIn, self).call_api(
+            endpoint = urllib.parse.urljoin(self.configuration.host, resource_path)
+            logger.info("Sending {0} message to {1}".format(method, endpoint))
+            response = super(AuthenticationMixIn, self).call_api(
                 resource_path, method, path_params,
                 query_params, header_params, body, post_params, files, response_type,
                 auth_settings, async_req, _return_http_data_only, collection_formats, _preload_content,
                 _request_timeout, _host
             )
+            logger.info("{0} response received from {1}".format(method, endpoint))
+            return response
         except Exception as e:
             if type(e).__name__ == "ApiException":
                 try:

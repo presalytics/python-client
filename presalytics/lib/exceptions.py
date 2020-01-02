@@ -46,9 +46,15 @@ class ValidationError(PresalyticsBaseException):
 
 
 class ApiError(PresalyticsBaseException):
-    def __init__(self, message=None):
+    def __init__(self, message=None, status_code=None):
         if not message:
-            message = "A error occured while commuicating with the presalytics API.  Please Check your configuration values and try again."
+            if not status_code:
+                message = "A error occured while commuicating with the presalytics API.  Please Check your configuration values and try again."
+            else:
+                message = "Status Code: {0}".format(status_code)
+        else:
+            if status_code:
+                message = message + ".  Status Code: {0}".format(status_code)
         super().__init__(message)
 
 
@@ -69,8 +75,7 @@ class ApiException(PresalyticsBaseException):
     def __str__(self):
         """Custom error messages for exception"""
         try:
-            error_message = "({0})\n"\
-                            "Reason: {1}\n".format(self.status, self.reason)
+            error_message = "({0})\nReason: {1}\n".format(self.status, self.reason)
 
             if self.body:
                 error_message += "HTTP response body: {0}\n".format(self.body)

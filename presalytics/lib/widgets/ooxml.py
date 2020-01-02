@@ -180,10 +180,10 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         response = requests.get(svg_url, headers=auth_header)
         svg_data = response.text
         if response.status_code != 200:
-            raise presalytics.lib.exceptions.ApiError(message=response.text)
+            raise presalytics.lib.exceptions.ApiError(message=response.text, status_code=response.status_code)
         if response.text.startswith("Temp data"):
             if timeout_iterator > 5:
-                raise presalytics.lib.exceptions.ApiException()
+                raise presalytics.lib.exceptions.ApiError(message="Unable to download svg.  Please check for upstream processing errors.")
             else:
                 time.sleep(2)
                 svg_data = self.get_svg(id, timeout_iterator)

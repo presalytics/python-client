@@ -1,6 +1,13 @@
 import typing
+import presalytics
 import presalytics.lib.plugins.base
 import presalytics.lib.exceptions
+
+site_host = "https://presalytics.io"
+try:
+    site_host = presalytics.CONFIG["HOSTS"]["SITE"]
+except (KeyError, AttributeError):
+    pass
 
 script_map = {
     'd3': 'https://cdnjs.cloudflare.com/ajax/libs/d3/5.12.0/d3.min.js',
@@ -16,8 +23,8 @@ script_map = {
         'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js'
 
     },
-    'mpld3': 'https://presalytics.io/static/mpld3/mpld3.min.js',
-    'ooxml': 'https://presalytics.io/static/ooxml/ooxml.js'
+    'mpld3': '{0}/static/mpld3/mpld3.min.js'.format(site_host),
+    'ooxml': '{0}/static/ooxml/ooxml.js'.format(site_host)
 }
 
 

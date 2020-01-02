@@ -65,11 +65,6 @@ def create_outline_from_ooxml_document(story: 'Story',
         revision_notes='Created by via "create_outline_from_ooxml_file" method'
     )
 
-    if title:
-        _title = title
-    else:
-        _title = ""
-
     if description:
         _description = description
     else:
@@ -82,6 +77,11 @@ def create_outline_from_ooxml_document(story: 'Story',
     else:
         ooxml_id = pages[0].widgets[0].data["document_ooxml_id"]
         _themes = [create_theme_from_ooxml_document(ooxml_id, delegate_login=delegate_login, token=token)]
+
+    if title:
+        _title = title
+    else:
+        _title = pages[0].widgets[0].name
 
     outline = presalytics.story.outline.StoryOutline(
         presalytics_story=presalytics.story.outline.get_current_spec_version(),

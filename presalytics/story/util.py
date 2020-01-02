@@ -19,8 +19,12 @@ def to_camel_case(snake_str):
 
 
 def to_title_case(name_string):
-    components = name_string.split('_')
-    return ''.join(x[0].upper() + x[1:] for x in components)
+    try:
+        components = re.split('_| ', name_string)
+        return ''.join(x[0].upper() + x[1:] for x in components)
+    except Exception:
+        return name_string.replace(" ", "")
+
 
 def camel_case_split(str): 
     words = [[str[0]]] 

@@ -5,8 +5,9 @@ import presalytics.lib.exceptions
 
 site_host = "https://presalytics.io"
 try:
-    site_host = presalytics.CONFIG["HOSTS"]["SITE"]
-except (KeyError, AttributeError):
+    from config import PRESALYTICS
+    site_host = PRESALYTICS["HOSTS"]["SITE"]
+except (KeyError, AttributeError, ImportError, ModuleNotFoundError):
     pass
 
 script_map = {

@@ -119,7 +119,7 @@ class AuthenticationMixIn(object):
         else:
             header_params = auth_header
         try:
-            endpoint = self.configuration.host + "/" + resource_path
+            endpoint = self.configuration.host + resource_path
             logger.info("Sending {0} message to {1}".format(method, endpoint))
             response = super(AuthenticationMixIn, self).call_api(
                 resource_path, method, path_params,

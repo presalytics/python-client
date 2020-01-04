@@ -1,5 +1,6 @@
 import os
 import time
+import posixpath
 import flask
 import threading
 import webbrowser
@@ -12,6 +13,11 @@ app = flask.Flask(__name__)
 def story(id):
     template_name = str(id) + '.html'
     return flask.render_template(template_name)
+
+@app.route('/static/<subdir>/<path:filename>/')
+def static_subdir(subdir=None, filename=None):
+    directory = posixpath.join(app.static_folder, subdir)
+    return flask.send_from_directory(directory, filename)
 
 
 @app.route('/shutdown', methods=['POST'])
@@ -33,11 +39,12 @@ class LocalServer(object):
         self.debug = debug
         self.port = port
         self.root_path = self.make_local_folders(files_path=root_path)
-        self.static_dict = self.get_static_files_dict()
+        self.static_dir = os.path.join(self.root_path, "static")
         self.use_reloader = use_reloader
 
     def run(self):
         app.root_path = self.root_path
+        app.static_folder = self.static_dir
         app.run(host=self.host, 
                 debug=self.debug, 
                 port=self.port, 
@@ -81,6 +88,7 @@ class LocalServer(object):
                 key = os.path.basename(item)
                 value = os.path.abspath(item)
                 static_files_dict[key] = value
+        static_files_dict['favicon.ico'] = os.path.join(static, "favicon.ico")
         return static_files_dict
                 
 

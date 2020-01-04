@@ -248,28 +248,6 @@ class Revealer(presalytics.story.components.Renderer):
                 raise presalytics.lib.exceptions.MissingConfigException(message)
         return page_instance.render()
 
-    @staticmethod
-    def make_local_folders(files_path=None):
-        if files_path is None:
-            files_path = os.getcwd()
-        if not os.path.exists(files_path):
-            os.mkdir(files_path)
-        templates_path = os.path.join(files_path, "templates")
-        if not os.path.exists(templates_path):
-            os.mkdir(templates_path)
-        static_files_path = os.path.join(files_path, "static")
-        if not os.path.exists(static_files_path):
-            os.mkdir(static_files_path)
-        css_path = os.path.join(static_files_path, "css")
-        if not os.path.exists(css_path):
-            os.mkdir(css_path)
-        js_path = os.path.join(static_files_path, "js")
-        if not os.path.exists(js_path):
-            os.mkdir(js_path)
-        theme_path = os.path.join(css_path, "theme")
-        if not os.path.exists(theme_path):
-            os.mkdir(theme_path)
-
     def present(self, files_path=None, debug=True, port=8082, host='127.0.0.1'):
         logger.info("Building story rendering at http://{0}:{1}".format(host, port))
         if not files_path:
@@ -279,13 +257,13 @@ class Revealer(presalytics.story.components.Renderer):
         id = presalytics.story.util.to_title_case(self.story_outline.title)
         if id == '':
             id = 'blank'
-        self.make_local_folders(files_path)
-        template_folder = os.path.dirname(presalytics.lib.templates.base .__file__)
-        shutil.copy(os.path.join(template_folder, "favicon.ico"), os.path.join(files_path, "static"))
-        html_file = os.path.join(files_path, "templates", id + '.html')
+        server = presalytics.story.server.LocalServer(host=host, debug=debug, port=port, root_path=files_path)
+        pkg_templates_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "lib", "templates")
+        shutil.copy(os.path.join(pkg_templates_dir, "favicon.ico"), os.path.join(files_path, "presalytics", "static"))
+        html_file = os.path.join(files_path, "presalytics", "templates", id + '.html')
         with open(html_file, 'w') as file:
             file.write(html)
         address = "http://{}:{}/story/{}".format(host, port, id)
         logger.info("Opening browser tab...")
         presalytics.story.server.Browser(address).start()
-        presalytics.story.server.LocalServer(host=host, debug=debug, port=port, root_path=files_path).run()
+        server.run()

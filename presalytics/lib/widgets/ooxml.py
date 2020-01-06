@@ -250,6 +250,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
             client = presalytics.Client()
             self.token = client.token_util.token["access_token"]
         svg_container_div = lxml.html.Element("div", {
+            'class': 'svg-container',
             'data-jwt': self.token,
             'data-object-type': self.endpoint_map.endpoint_id,
             'data-object-id': self.object_ooxml_id

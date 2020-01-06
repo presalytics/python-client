@@ -130,6 +130,7 @@ class Client(object):
         Opens browser in on presalytics.io and prompts for user login.
         Retrieves authorization code from website and obtains api token
         """
+        logger.info("Opening new browser tab.  Please input login credentials...")
         api_otp = uuid4()
         query = {
             "api_otp": api_otp,

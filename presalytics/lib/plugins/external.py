@@ -25,7 +25,8 @@ script_map = {
 
     },
     'mpld3': '{0}/static/mpld3/mpld3.min.js'.format(site_host),
-    'ooxml': '{0}/static/ooxml/ooxml.js'.format(site_host)
+    'ooxml': '{0}/static/ooxml/ooxml.js'.format(site_host),
+    'jquery': 'https://code.jquery.com/jquery-3.4.1.min.js'
 }
 
 

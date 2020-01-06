@@ -23,8 +23,6 @@ class TestComponents(unittest.TestCase):
         presalytics.Revealer(outline).present()
 
     def test_xml_widget(self):
-        story: Story
-
         test_file = os.path.join(os.path.dirname(__file__), "files", "star.pptx")
         tmp_filename = os.path.join(os.path.dirname(__file__), os.path.basename(test_file))
         shutil.copyfile(test_file, tmp_filename)

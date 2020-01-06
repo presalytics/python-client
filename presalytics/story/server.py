@@ -14,9 +14,21 @@ def story(id):
     template_name = str(id) + '.html'
     return flask.render_template(template_name)
 
-@app.route('/static/<subdir>/<path:filename>/')
-def static_subdir(subdir=None, filename=None):
-    directory = posixpath.join(app.static_folder, subdir)
+@app.route('/img/<path:filename>/')
+def static_img(subdir=None, filename=None):
+    directory = os.path.join(app.static_folder, "img")
+    return flask.send_from_directory(directory, filename)
+
+
+@app.route('/js/<path:filename>/')
+def static_js(subdir=None, filename=None):
+    directory = os.path.join(app.static_folder, "js")
+    return flask.send_from_directory(directory, filename)
+
+
+@app.route('/css/<path:filename>/')
+def static_css(subdir=None, filename=None):
+    directory = os.path.join(app.static_folder, "css")
     return flask.send_from_directory(directory, filename)
 
 
@@ -48,8 +60,7 @@ class LocalServer(object):
         app.run(host=self.host, 
                 debug=self.debug, 
                 port=self.port, 
-                use_reloader=self.use_reloader,
-                static_files=self.static_dict)
+                use_reloader=self.use_reloader)
     
     def make_local_folders(self, files_path=None):
         if files_path is None:

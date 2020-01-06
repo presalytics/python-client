@@ -151,6 +151,13 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
             'name': 'external_scripts',
             'kind': 'script',
             'config': {
+                'approved_scripts_key': 'jquery'
+            }
+        },
+        {
+            'name': 'external_scripts',
+            'kind': 'script',
+            'config': {
                 'approved_scripts_key': 'ooxml'
             }
         }
@@ -236,7 +243,18 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         self.object_ooxml_id = object_ooxml_id
         self.story_id = story_id
         self.update()
-        self.svg_html = self.get_svg(self.object_ooxml_id)
+        self.svg_html = self.create_container()
+
+    def create_container(self):
+        if not self.token:
+            client = presalytics.Client()
+            self.token = client.token_util.token["access_token"]
+        svg_container_div = lxml.html.Element("div", {
+            'data-jwt': self.token,
+            'data-object-type': self.endpoint_map.endpoint_id,
+            'data-object-id': self.object_ooxml_id
+        })
+        return lxml.html.tostring(svg_container_div)
 
     def update(self):
         """

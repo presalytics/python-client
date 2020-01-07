@@ -135,7 +135,7 @@ class Client(object):
         query = {
             "api_otp": api_otp,
             "client_id": self.client_id,
-            "next": self.redirect_uri
+            "next": urllib.parse.urlparse(self.redirect_uri).path
         }
         query_string = '?{}'.format(urllib.parse.urlencode(query))
         url = urllib.parse.urljoin(self.site_host, urllib.parse.urljoin(cnst.LOGIN_PATH, query_string))
@@ -167,6 +167,8 @@ class Client(object):
             # support oidc authorization code flow
             auth_code = data["authorization_code"]
             token = self.oidc.token(username=self.username, grant_type="authorization_code", code=auth_code, redirect_uri=self.redirect_uri)
+        if token:
+            logger.info("Login Succeeded.  Proceeding.")
         return token
 
     def refresh_token(self):

@@ -31,6 +31,12 @@ def static_css(subdir=None, filename=None):
     directory = os.path.join(app.static_folder, "css")
     return flask.send_from_directory(directory, filename)
 
+@app.route('/favicon.ico')
+def static_css(subdir=None, filename=None):
+    return flask.send_from_directory(app.static_folder, filename)
+
+
+
 
 @app.route('/shutdown', methods=['POST'])
 def shutdown():

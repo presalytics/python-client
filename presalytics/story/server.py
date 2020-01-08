@@ -1,9 +1,17 @@
 import os
+import logging
 import time
 import posixpath
+import urllib.parse
 import flask
 import threading
 import webbrowser
+import requests
+import presalytics.lib.util
+import presalytics.lib.exceptions
+
+
+logger = logging.getLogger(__name__)
 
 
 app = flask.Flask(__name__)
@@ -58,6 +66,7 @@ class LocalServer(object):
         self.root_path = self.make_local_folders(files_path=root_path)
         self.static_dir = os.path.join(self.root_path, "static")
         self.use_reloader = use_reloader
+        self.get_preloaders()
 
     def run(self):
         app.root_path = self.root_path
@@ -93,7 +102,33 @@ class LocalServer(object):
         img_path = os.path.join(static_files_path, "img")
         if not os.path.exists(img_path):
             os.mkdir(img_path)
+        local_preloader_path = os.path.join(self.static_dir, "preloaders")
+        if not os.path.exists(local_preloader_path):
+            os.mkdir(local_preloader_path)
         return root
+
+    def get_preloaders(self):
+        preloaders = [
+            'bars.svg'
+        ]
+        host = presalytics.lib.util.get_site_host()
+        local_preloader_path = os.path.join(self.static_dir, "preloaders")
+        for img in preloaders:
+            try:
+                preloader_url = urllib.parse.urljoin(host, "/static/preloaders/" + img)
+                response = requests.get(preloader_url)
+                if response.status_code == 200:
+                    filename = os.path.join(local_preloader_path, img)
+                    open(filename, 'wb').write(response.content)
+                else:
+                    message = "Error downloading preloader " + img
+                    raise presalytics.lib.exceptions.ApiError(message=message, status_code=response.status_code)
+            except Exception as ex:
+                message = "Could not download preloader {0} from {1}".format(img, host)
+                logger.error(message)
+                # logger.exception(ex) # non-critical error
+
+
 
     def get_static_files_dict(self):
         static_files_dict = {}

@@ -15,27 +15,26 @@ def story(id):
     return flask.render_template(template_name)
 
 @app.route('/img/<path:filename>/')
-def static_img(subdir=None, filename=None):
+def static_img(filename=None):
     directory = os.path.join(app.static_folder, "img")
     return flask.send_from_directory(directory, filename)
 
 
 @app.route('/js/<path:filename>/')
-def static_js(subdir=None, filename=None):
+def static_js(filename=None):
     directory = os.path.join(app.static_folder, "js")
     return flask.send_from_directory(directory, filename)
 
 
 @app.route('/css/<path:filename>/')
-def static_css(subdir=None, filename=None):
+def static_css(filename=None):
     directory = os.path.join(app.static_folder, "css")
     return flask.send_from_directory(directory, filename)
 
+
 @app.route('/favicon.ico')
-def favicon(subdir=None, filename=None):
-    return flask.send_from_directory(app.static_folder, filename)
-
-
+def favicon():
+    return flask.send_from_directory(app.static_folder, 'favicon.ico')
 
 
 @app.route('/shutdown', methods=['POST'])

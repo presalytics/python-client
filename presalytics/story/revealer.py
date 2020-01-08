@@ -227,7 +227,8 @@ class Revealer(presalytics.story.components.Renderer):
         """
         reveal_base = self.base
         for page in self.story_outline.pages:
-            slide = lxml.etree.SubElement(reveal_base, "section")
+            slides_container = reveal_base[0]
+            slide = lxml.etree.SubElement(slides_container, "section")
             page_html = self.render_page(page)
             slide_fragment = lxml.html.fragment_fromstring(page_html)
             slide.append(slide_fragment)

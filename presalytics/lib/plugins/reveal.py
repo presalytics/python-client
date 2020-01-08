@@ -30,8 +30,15 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
         config.update({'reveal_config': reveal_config})
         return self.render(config)
 
-    template = '<script type="text/javascript"> window.onload = function(e){Reveal.initialize({{ reveal_config|tojson(indent=4) }});};</script>'
-
+    template = """
+    <script type="text/javascript"> 
+        window.onload = function(e) {
+            Reveal.initialize(
+                {{ reveal_config|tojson(indent=4) }}
+            );
+        };
+    </script>
+    """
     default_config = {
         'controls': True,  # Display presentation control arrows
         # Help the user learn the controls by providing hints, for example by

@@ -160,6 +160,13 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
             'config': {
                 'approved_scripts_key': 'ooxml'
             }
+        },
+        {
+            'name': 'external_links',
+            'kind': 'style',
+            'config': {
+                'approved_styles_key': 'preloaders'
+            }
         }
     ]
 
@@ -255,6 +262,9 @@ class OoxmlFileWidget(OoxmlWidgetBase):
             'data-object-type': self.endpoint_map.endpoint_id,
             'data-object-id': self.object_ooxml_id
         })
+        preloader_container_div = lxml.etree.SubElement(svg_container_div, "div", attrib={"class":"preloader-container"})
+        preload_svg = lxml.etree.SubElement(preloader_container_div, "svg", attrib={"viewBox": "0 0 200 200"})
+        lxml.etree.SubElement(preload_svg, "use", attrib={"xlink:href":"/static/preloaders/bars.svg"})
         return lxml.html.tostring(svg_container_div)
 
     def update(self):

@@ -47,7 +47,8 @@ styles_map = {
             'white': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css'
         },
         'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css'
-    }
+    },
+    'preloaders' : '{0}/static/css/preloaders.css'.format(site_host)
 }
 
 

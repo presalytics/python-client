@@ -264,7 +264,9 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         })
         preloader_container_div = lxml.etree.SubElement(svg_container_div, "div", attrib={"class":"preloader-container"})
         preload_svg = lxml.etree.SubElement(preloader_container_div, "svg", attrib={"viewBox": "0 0 200 200"})
-        lxml.etree.SubElement(preload_svg, "use", attrib={"xlink:href":"/static/preloaders/bars.svg"})
+        host = presalytics.lib.util.get_site_host()
+        preloader_url = urllib.parse.urljoin(host, "/static/preloaders/bars.svg")
+        lxml.etree.SubElement(preload_svg, "use", attrib={"xlink:href": preloader_url})
         return lxml.html.tostring(svg_container_div)
 
     def update(self):

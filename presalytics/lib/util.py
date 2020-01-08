@@ -1,5 +1,5 @@
 import datetime
-
+import presalytics.lib.constants
 
 class classproperty(property):
     def __get__(self, obj, objtype=None):
@@ -17,3 +17,12 @@ def roundup_date_modified(current_datetime: datetime.datetime):
     rounddown = current_datetime.replace(microsecond=0)
     return rounddown + one_second
     
+def get_site_host():
+    site_host = presalytics.lib.constants.SITE_HOST
+    try: 
+        site_host = presalytics.CONFIG["HOSTS"]["SITE"]
+    except (KeyError, AttributeError):
+        pass
+    return site_host
+
+        

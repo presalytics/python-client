@@ -102,7 +102,7 @@ class LocalServer(object):
         img_path = os.path.join(static_files_path, "img")
         if not os.path.exists(img_path):
             os.mkdir(img_path)
-        local_preloader_path = os.path.join(self.static_dir, "preloaders")
+        local_preloader_path = os.path.join(static_files_path, "preloaders")
         if not os.path.exists(local_preloader_path):
             os.mkdir(local_preloader_path)
         return root

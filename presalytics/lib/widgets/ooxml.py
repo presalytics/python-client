@@ -263,7 +263,8 @@ class OoxmlFileWidget(OoxmlWidgetBase):
             'data-object-id': self.object_ooxml_id
         })
         preloader_container_div = lxml.etree.SubElement(svg_container_div, "div", attrib={"class":"preloader-container"})
-        preload_svg = lxml.etree.SubElement(preloader_container_div, "svg", attrib={"viewBox": "0 0 200 200"})
+        preloader_row_div = lxml.etree.SubElement(preloader_container_div, "div", attrib={"class":"preloader-row"})
+        preload_svg = lxml.etree.SubElement(preloader_row_div, "svg", attrib={"viewBox": "0 0 200 200"})
         lxml.etree.SubElement(preload_svg, "use", attrib={"xlink:href": "/static/preloaders/bars.svg#dancing-bar-chart"})
         return lxml.html.tostring(svg_container_div)
 

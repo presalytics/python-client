@@ -30,13 +30,21 @@ class Client(object):
             delegate_login=False,
             token=None,
             cache_tokens=True,
+            username=None,
+            password=None,
             **kwargs):
         try:
-            self.username = presalytics.CONFIG['USERNAME']
+            if username:
+                self.username = username
+            else:
+                self.username = presalytics.CONFIG['USERNAME']
         except KeyError:
             raise presalytics.lib.exceptions.MissingConfigException("Mandatory configuration variable PRESALYTICS_USERNAME is missing from configuration.  Please reconfigure and retry.")
         try:
-            self.password = presalytics.CONFIG['PASSWORD']
+            if password:
+                self.password = password
+            else:
+                self.password = presalytics.CONFIG['PASSWORD']
             self.direct_grant = True
         except KeyError:
             self.password = None

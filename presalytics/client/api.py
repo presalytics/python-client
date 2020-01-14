@@ -33,13 +33,17 @@ class Client(object):
             username=None,
             password=None,
             **kwargs):
-        try:
-            if username:
-                self.username = username
-            else:
+    
+        if username:
+            self.username = username
+        else:
+            try:
                 self.username = presalytics.CONFIG['USERNAME']
-        except KeyError:
-            raise presalytics.lib.exceptions.MissingConfigException("Mandatory configuration variable PRESALYTICS_USERNAME is missing from configuration.  Please reconfigure and retry.")
+            except KeyError:
+                if token:
+                    self.username = None
+                else:
+                    raise presalytics.lib.exceptions.MissingConfigException("Mandatory configuration variable PRESALYTICS_USERNAME is missing from configuration.  Please reconfigure and retry.")
         try:
             if password:
                 self.password = password

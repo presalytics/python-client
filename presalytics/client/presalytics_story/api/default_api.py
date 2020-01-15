@@ -146,6 +146,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
+        :param bool include_relationships: Indicate whether the returned object should include child relationships
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -170,6 +171,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
+        :param bool include_relationships: Indicate whether the returned object should include child relationships
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -186,7 +188,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = []  # noqa: E501
+        all_params = ['include_relationships']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -206,6 +208,8 @@ class DefaultApi(object):
         path_params = {}
 
         query_params = []
+        if 'include_relationships' in local_var_params and local_var_params['include_relationships'] is not None:  # noqa: E501
+            query_params.append(('include_relationships', local_var_params['include_relationships']))  # noqa: E501
 
         header_params = {}
 

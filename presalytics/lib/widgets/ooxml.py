@@ -170,26 +170,16 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         }
     ]
 
-    def __init__(self, 
-                 delegate_login=False,
-                 token=None,
-                 cache_tokens=True,
-                 **kwargs):
-        self.delegate_login = delegate_login
-        self.token = token
-        self.cache_tokens = cache_tokens
+    def __init__(self, **kwargs):
         self.svg_html = None
+        super(OoxmlWidgetBase, self).__init__(**kwargs)
 
     def to_html(self, **kwargs):
         return self.svg_html
 
     def get_svg(self, id, timeout_iterator=0) -> str:
         svg_url = self.endpoint_map.get_svg_url(id)
-        client = presalytics.client.api.Client(
-            delegate_login=self.delegate_login,
-            token=self.token,
-            cache_tokens=self.cache_tokens
-        )
+        client = self.get_client()
         auth_header = client.get_auth_header()
         response = requests.get(svg_url, headers=auth_header)
         svg_data = response.text
@@ -253,9 +243,9 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         self.svg_html = self.create_container()
 
     def create_container(self):
-        if not self.token:
-            client = presalytics.Client()
-            self.token = client.token_util.token["access_token"]
+        
+        client = self.get_client()
+        self.token = client.token_util.token["access_token"]
         svg_container_div = lxml.html.Element("div", {
             'class': 'svg-container',
             'data-jwt': self.token,
@@ -286,11 +276,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
                 # update only the file has been modified sine last time
                 this_file_last_modified = datetime.datetime.utcfromtimestamp(os.path.getmtime(fpath))
                 if self.file_last_modified is None or self.file_last_modified <= this_file_last_modified:
-                    client = presalytics.client.api.Client(
-                        delegate_login=self.delegate_login,
-                        token=self.token,
-                        cache_tokens=self.cache_tokens
-                    )
+                    client = self.get_client()
                     story, status, headers = client.story.story_id_file_post_with_http_info(self.story_id, file=fpath, replace_existing=True, obsolete_id=self.document_ooxml_id)
                     if status >= 299:
                         raise presalytics.lib.exceptions.ApiError()

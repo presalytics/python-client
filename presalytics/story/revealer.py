@@ -44,7 +44,7 @@ class Revealer(presalytics.story.components.Renderer):
             self,
             story_outline: 'StoryOutline',
             **kwargs):
-        
+        super(Revealer, self).__init__(**kwargs)
         self.story_outline = story_outline
         logger.info("Initializing story render for {}".format(story_outline.title))
         self.story_outline.validate()
@@ -243,7 +243,7 @@ class Revealer(presalytics.story.components.Renderer):
             klass = presalytics.COMPONENTS.get(class_key)
             deserialize_method = getattr(klass, "deserialize", None)
             if callable(deserialize_method):
-                page_instance = deserialize_method(page)
+                page_instance = deserialize_method(page, client_info=self.client_info)
             else:
                 message = 'Page component instance or class (kind) "{0}" unavailable in component registry'.format(key)
                 raise presalytics.lib.exceptions.MissingConfigException(message)

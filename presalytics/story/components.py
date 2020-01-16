@@ -5,6 +5,7 @@ import logging
 import presalytics.lib
 import presalytics.lib.registry
 import presalytics.lib.exceptions
+import presalytics.client.api
 if typing.TYPE_CHECKING:
     from presalytics.story.outline import Widget, Page, Plugin, OutlineBase
 
@@ -57,8 +58,12 @@ class ComponentBase(abc.ABC):
 
     __plugins__ = []
 
-    def __init__(self, name, *args, **kwargs):
+    def __init__(self, name, client_info: typing.Dict = None, *args, **kwargs):
         self.name = name
+        if client_info:
+            self.client_info = client_info
+        else:
+            client_info = {}
 
     @abc.abstractmethod
     def render(self, **kwargs):
@@ -71,6 +76,9 @@ class ComponentBase(abc.ABC):
     @classmethod
     def deserialize(cls, component: typing.Type['OutlineBase'], **kwargs):
         raise NotImplementedError
+
+    def get_client(self):
+        return presalytics.client.api.Client(**self.client_info)
 
 
 class WidgetBase(ComponentBase):
@@ -216,9 +224,10 @@ class PageTemplateBase(ComponentBase):
 
     __component_type__ = 'page'
 
-    def __init__(self, page: 'Page') -> None:
+    def __init__(self, page: 'Page', **kwargs) -> None:
         self.outline_page = page
         self.widgets = self.get_page_widgets(self.outline_page)
+        super(PageTemplateBase, self).__init__(**kwargs)
 
     @abc.abstractmethod
     def render(self, **kwargs) -> str:
@@ -257,7 +266,7 @@ class PageTemplateBase(ComponentBase):
             klass = presalytics.COMPONENTS.get(class_key)
             deserialize_method = getattr(klass, "deserialize", None)
             if callable(deserialize_method):
-                widget_instance = deserialize_method(widget)
+                widget_instance = deserialize_method(widget, client_info=self.client_info)
             else:
                 message = "Widget component instance or class (kind) {0} unavailable in component registry".format(key)
                 raise presalytics.lib.exceptions.MissingConfigException(message)
@@ -302,6 +311,9 @@ class ThemeBase(ComponentBase):
 
 class Renderer(ComponentBase):
     __component_type__ = 'renderer'
+
+    def __init__(self, **kwargs):
+        super(Renderer, self).__init__(**kwargs)
 
 
 class ComponentRegistry(presalytics.lib.registry.RegistryBase):

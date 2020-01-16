@@ -58,8 +58,7 @@ class ComponentBase(abc.ABC):
 
     __plugins__ = []
 
-    def __init__(self, name, client_info: typing.Dict = None, *args, **kwargs):
-        self.name = name
+    def __init__(self, client_info: typing.Dict = None, *args, **kwargs):
         if client_info:
             self.client_info = client_info
         else:
@@ -115,7 +114,8 @@ class WidgetBase(ComponentBase):
         own custom initialization.
 
         """
-        super().__init__(self, name, *args, **kwargs)
+        super().__init__(self, *args, **kwargs)
+        self.name = name
         self.outline_widget = None
 
     def render(self, component, **kwargs):

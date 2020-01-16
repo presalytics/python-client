@@ -114,12 +114,12 @@ class WidgetBase(ComponentBase):
         own custom initialization.
 
         """
-        super().__init__(self, *args, **kwargs)
+        super(WidgetBase, self).__init__(*args, **kwargs)
         self.name = name
         self.outline_widget = None
 
     def render(self, component, **kwargs):
-        self.to_html(component, None, **kwargs)
+        self.to_html(component, **kwargs)
 
     @abc.abstractmethod
     def to_html(self, data: typing.Dict = None, **kwargs) -> str:
@@ -225,9 +225,10 @@ class PageTemplateBase(ComponentBase):
     __component_type__ = 'page'
 
     def __init__(self, page: 'Page', **kwargs) -> None:
+        super(PageTemplateBase, self).__init__(**kwargs)
         self.outline_page = page
         self.widgets = self.get_page_widgets(self.outline_page)
-        super(PageTemplateBase, self).__init__(**kwargs)
+        
 
     @abc.abstractmethod
     def render(self, **kwargs) -> str:

@@ -13,7 +13,7 @@ class WidgetPage(presalytics.story.components.PageTemplateBase):
     __component_kind__ = 'widget-page'
 
     def __init__(self, page: 'Page', **kwargs):
-        super(WidgetPage, self).__init__(page)
+        super(WidgetPage, self).__init__(page, **kwargs)
 
     @classmethod
     def deserialize(cls, component, **kwargs):

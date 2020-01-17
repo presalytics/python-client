@@ -5,8 +5,7 @@ import presalytics.lib.exceptions
 
 site_host = "https://presalytics.io"
 try:
-    from config import PRESALYTICS
-    site_host = PRESALYTICS["HOSTS"]["SITE"]
+    site_host = presalytics.CONFIG["HOSTS"]["SITE"]
 except (KeyError, AttributeError, ImportError, ModuleNotFoundError):
     pass
 

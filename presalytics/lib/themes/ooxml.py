@@ -20,19 +20,13 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
                  ooxml_theme_id, 
                  plugin_config=None, 
                  always_refresh=False,
-                 delegate_login=False, 
-                 token=None, 
-                 cache_tokens=True,
+                 client_info={},
                  **kwargs):
         super(OoxmlTheme, self).__init__(**kwargs)
         self.name = name
         self.ooxml_id = ooxml_theme_id
         self.always_refresh = always_refresh
-        self.client_kwargs = {
-            "delegate_login": delegate_login,
-            "token": token,
-            "cache_tokens": cache_tokens
-        }
+        self.client_kwargs = client_info
         if not plugin_config or self.always_refresh:
             if not plugin_config:
                 self.plugin_config = {}

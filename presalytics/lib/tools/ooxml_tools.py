@@ -17,19 +17,11 @@ if typing.TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def create_story_from_ooxml_file(filename: str,
-                                 delegate_login=False,
-                                 token=None,
-                                 cache_tokens=True) -> 'Story':
+def create_story_from_ooxml_file(filename: str, client_info={}) -> 'Story':
     story: 'Story'
     logger.info("Starting presalytics tool: create_story_from_ooxml_file")
-    kw = {
-        "delegate_login": delegate_login,
-        "token": token,
-        "cache_tokens": cache_tokens
-    }
     logger.info("Intializing presalytics client.")
-    client = presalytics.Client(**kw)
+    client = presalytics.Client(**client_info)
     logger.info("Sending file to presaltyics server for document processing and base story creation")
     story = client.story.story_post_file(file=filename)
     logger.info("Creating local instances of file widgets")
@@ -52,9 +44,7 @@ def create_outline_from_ooxml_document(story: 'Story',
                                        title: str = None,
                                        description: str = None,
                                        themes: typing.Sequence['ThemeBase'] = None,
-                                       delegate_login=False,
-                                       cache_tokens=False,
-                                       token=None):
+                                       client_info={}):
 
     info = presalytics.story.outline.Info(
         revision=0,
@@ -70,13 +60,13 @@ def create_outline_from_ooxml_document(story: 'Story',
     else:
         _description = ""
 
-    pages = create_pages_from_ooxml_document(story, ooxml_document, delegate_login=delegate_login, token=token)
+    pages = create_pages_from_ooxml_document(story, ooxml_document, client_info=client_info)
 
     if themes:
         _themes = themes
     else:
         ooxml_id = pages[0].widgets[0].data["document_ooxml_id"]
-        _themes = [create_theme_from_ooxml_document(ooxml_id, delegate_login=delegate_login, token=token)]
+        _themes = [create_theme_from_ooxml_document(ooxml_id, client_info=client_info)]
 
     if title:
         _title = title
@@ -97,11 +87,9 @@ def create_outline_from_ooxml_document(story: 'Story',
 
 def create_pages_from_ooxml_document(story: 'Story', 
                                      ooxml_document: 'Document',
-                                     delegate_login=False,
-                                     cache_tokens=False,
-                                     token=None):
+                                     client_info={}):
     pages = []
-    client = presalytics.Client(delegate_login=delegate_login, token=token, cache_tokens=cache_tokens)
+    client = presalytics.Client(**client_info)
     child_objects = client.ooxml_automation.documents_childobjects_get_id(ooxml_document.id)
     document_type = client.ooxml_automation.documents_documenttype_typeid_get_type_id(ooxml_document.document_type_id)
     if document_type.file_extension == "pptx":
@@ -116,9 +104,7 @@ def create_pages_from_ooxml_document(story: 'Story',
                 object_ooxml_id=slide.entity_id,
                 document_ooxml_id=ooxml_document.id,
                 story_id=story.id,
-                delegate_login=delegate_login,
-                token=token,
-                cache_tokens=cache_tokens
+                client_info=client_info
             )
             widget_kind = "widget-page"
             widget_name = slide.entity_name
@@ -133,11 +119,8 @@ def create_pages_from_ooxml_document(story: 'Story',
     return pages
 
 
-def create_theme_from_ooxml_document(document_id: str,
-                                     delegate_login=False,
-                                     cache_tokens=False,
-                                     token=None):
-    client = presalytics.Client(delegate_login=delegate_login, token=token, cache_tokens=cache_tokens)
+def create_theme_from_ooxml_document(document_id: str, client_info={}):
+    client = presalytics.Client(**client_info)
     child_objects = client.ooxml_automation.documents_childobjects_get_id(document_id)
     themes = [x for x in child_objects if x.object_type == "Theme.Themes"]
     if len(themes) > 1:
@@ -158,8 +141,6 @@ def create_theme_from_ooxml_document(document_id: str,
     theme = presalytics.lib.themes.ooxml.OoxmlTheme(
         theme_meta.name, 
         theme_meta.id, 
-        delegate_login=delegate_login, 
-        token=token, 
-        cache_tokens=cache_tokens
+        client_info
     )
     return theme.serialize().to_dict()

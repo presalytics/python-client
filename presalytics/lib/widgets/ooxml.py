@@ -170,9 +170,10 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         }
     ]
 
-    def __init__(self, **kwargs):
+    def __init__(self, name, **kwargs):
+        super(OoxmlWidgetBase, self).__init__(name, **kwargs)
         self.svg_html = None
-        super(OoxmlWidgetBase, self).__init__(**kwargs)
+
 
     def to_html(self, **kwargs):
         return self.svg_html
@@ -213,7 +214,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
                  story_id=None,
                  object_ooxml_id=None,
                  **kwargs):
-        super(OoxmlFileWidget, self).__init__(**kwargs)
+        super(OoxmlFileWidget, self).__init__(name, **kwargs)
         self.filename = os.path.basename(filename)
         if endpoint_map:
             self.endpoint_map = endpoint_map
@@ -332,33 +333,33 @@ class OoxmlFileWidget(OoxmlWidgetBase):
                     "document_ooxml_id": component.data["document_ooxml_id"]
                 }
             )
-            if "object_ooxml_id" in component.data:
-                init_args.update(
-                    {
-                        "object_ooxml_id": component.data["object_ooxml_id"]
-                    }
-                )
-            if "file_last_modified" in component.data:
-                init_args.update(
-                    {
-                        "file_last_modified": dateutil.parser.parse(component.data["file_last_modified"])
-                    }
-                )
-            if "previous_ooxml_version" in component.data:
-                init_args.update(
-                    {
-                        "previous_ooxml_version": component.data["previous_ooxml_version"]
-                    }
-                )
-            if "story_id" in component.data:
-                init_args.update(
-                    {
-                        "story_id": component.data["story_id"]
-                    }
-                )
-            if len(kwargs.keys()) > 0:
-                init_args.update(kwargs)
-            return cls(**init_args)
+        if "object_ooxml_id" in component.data:
+            init_args.update(
+                {
+                    "object_ooxml_id": component.data["object_ooxml_id"]
+                }
+            )
+        if "file_last_modified" in component.data:
+            init_args.update(
+                {
+                    "file_last_modified": dateutil.parser.parse(component.data["file_last_modified"])
+                }
+            )
+        if "previous_ooxml_version" in component.data:
+            init_args.update(
+                {
+                    "previous_ooxml_version": component.data["previous_ooxml_version"]
+                }
+            )
+        if "story_id" in component.data:
+            init_args.update(
+                {
+                    "story_id": component.data["story_id"]
+                }
+            )
+        if len(kwargs.keys()) > 0:
+            init_args.update(kwargs)
+        return cls(**init_args)
 
     def serialize(self):
         self.update()

@@ -141,6 +141,6 @@ def create_theme_from_ooxml_document(document_id: str, client_info={}):
     theme = presalytics.lib.themes.ooxml.OoxmlTheme(
         theme_meta.name, 
         theme_meta.id, 
-        client_info
+        client_info=client_info
     )
     return theme.serialize().to_dict()

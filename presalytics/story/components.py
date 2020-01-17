@@ -62,7 +62,7 @@ class ComponentBase(abc.ABC):
         if client_info:
             self.client_info = client_info
         else:
-            client_info = {}
+            self.client_info = {}   
 
     @abc.abstractmethod
     def render(self, **kwargs):

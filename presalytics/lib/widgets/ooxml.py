@@ -251,7 +251,8 @@ class OoxmlFileWidget(OoxmlWidgetBase):
             'class': 'svg-container',
             'data-jwt': self.token,
             'data-object-type': self.endpoint_map.endpoint_id,
-            'data-object-id': self.object_ooxml_id
+            'data-object-id': self.object_ooxml_id,
+            'style': "margin: 0 auto;"
         })
         preloader_container_div = lxml.etree.SubElement(svg_container_div, "div", attrib={"class":"preloader-container"})
         preloader_row_div = lxml.etree.SubElement(preloader_container_div, "div", attrib={"class":"preloader-row"})

@@ -255,8 +255,9 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         })
         preloader_container_div = lxml.etree.SubElement(svg_container_div, "div", attrib={"class":"preloader-container"})
         preloader_row_div = lxml.etree.SubElement(preloader_container_div, "div", attrib={"class":"preloader-row"})
-        preload_svg = lxml.etree.SubElement(preloader_row_div, "svg", attrib={"viewBox": "0 0 200 200"})
-        lxml.etree.SubElement(preload_svg, "use", attrib={"xlink:href": "/static/preloaders/bars.svg#dancing-bar-chart"})
+        preloader_file = os.path.join(os.path.dirname(__file__), "img", "preloader.svg")
+        svg = lxml.html.parse(preloader_file)
+        lxml.etree.SubElement(preloader_row_div, svg)
         return lxml.html.tostring(svg_container_div)
 
     def update(self):

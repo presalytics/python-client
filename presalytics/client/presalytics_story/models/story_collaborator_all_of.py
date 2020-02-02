@@ -38,7 +38,9 @@ class StoryCollaboratorAllOf(object):
         'email': 'str',
         'story_id': 'str',
         'permission_type': 'PermissionType',
-        'permission_type_id': 'str'
+        'permission_type_id': 'str',
+        'lead_id': 'int',
+        'active': 'bool'
     }
 
     attribute_map = {
@@ -47,10 +49,12 @@ class StoryCollaboratorAllOf(object):
         'email': 'email',
         'story_id': 'story_id',
         'permission_type': 'permission_type',
-        'permission_type_id': 'permission_type_id'
+        'permission_type_id': 'permission_type_id',
+        'lead_id': 'lead_id',
+        'active': 'active'
     }
 
-    def __init__(self, user_id=None, name=None, email=None, story_id=None, permission_type=None, permission_type_id=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, user_id=None, name=None, email=None, story_id=None, permission_type=None, permission_type_id=None, lead_id=None, active=None, local_vars_configuration=None):  # noqa: E501
         """StoryCollaboratorAllOf - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -62,6 +66,8 @@ class StoryCollaboratorAllOf(object):
         self._story_id = None
         self._permission_type = None
         self._permission_type_id = None
+        self._lead_id = None
+        self._active = None
         self.discriminator = None
 
         if user_id is not None:
@@ -76,6 +82,10 @@ class StoryCollaboratorAllOf(object):
             self.permission_type = permission_type
         if permission_type_id is not None:
             self.permission_type_id = permission_type_id
+        if lead_id is not None:
+            self.lead_id = lead_id
+        if active is not None:
+            self.active = active
 
     @property
     def user_id(self):
@@ -202,6 +212,48 @@ class StoryCollaboratorAllOf(object):
         """
 
         self._permission_type_id = permission_type_id
+
+    @property
+    def lead_id(self):
+        """Gets the lead_id of this StoryCollaboratorAllOf.  # noqa: E501
+
+
+        :return: The lead_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :rtype: int
+        """
+        return self._lead_id
+
+    @lead_id.setter
+    def lead_id(self, lead_id):
+        """Sets the lead_id of this StoryCollaboratorAllOf.
+
+
+        :param lead_id: The lead_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :type: int
+        """
+
+        self._lead_id = lead_id
+
+    @property
+    def active(self):
+        """Gets the active of this StoryCollaboratorAllOf.  # noqa: E501
+
+
+        :return: The active of this StoryCollaboratorAllOf.  # noqa: E501
+        :rtype: bool
+        """
+        return self._active
+
+    @active.setter
+    def active(self, active):
+        """Sets the active of this StoryCollaboratorAllOf.
+
+
+        :param active: The active of this StoryCollaboratorAllOf.  # noqa: E501
+        :type: bool
+        """
+
+        self._active = active
 
     def to_dict(self):
         """Returns the model properties as a dict"""

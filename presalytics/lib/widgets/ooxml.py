@@ -257,8 +257,12 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         preloader_row_div = lxml.etree.SubElement(preloader_container_div, "div", attrib={"class":"preloader-row"})
         preloader_file = os.path.join(os.path.dirname(__file__), "img", "preloader.svg")
         svg = lxml.html.parse(preloader_file)
-        lxml.etree.SubElement(preloader_row_div, svg)
-        return lxml.html.tostring(svg_container_div)
+        preloader_row_div.append(svg.getroot())
+        empty_parent_div = lxml.html.Element("div", {
+            'class': 'empty-parent bg-light'
+        })
+        empty_parent_div.append(svg_container_div)
+        return lxml.html.tostring(empty_parent_div)
 
     def update(self):
         """

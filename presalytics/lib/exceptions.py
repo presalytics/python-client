@@ -27,8 +27,9 @@ class MisConfiguredTokenException(PresalyticsBaseException):
 
 
 class InvalidTokenException(PresalyticsBaseException):
-    def __init__(self):
-        message = "Configuration file missing.  Please please a config.ini file in working directory"
+    def __init__(self, message=None):
+        if not message:
+            message = "This token is invalid.  Please login again to get a new token."
         super().__init__(message)
 
 

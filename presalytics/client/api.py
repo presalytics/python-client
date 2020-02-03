@@ -86,7 +86,12 @@ class Client(object):
         )
         self.token_util = presalytics.client.auth.TokenUtil(token_cache=cache_tokens)
         if token:
-            self.token_util.token = token
+            if token.get('access_token_expire_time', None):
+                self.token_util.token = token
+            elif token.get('expires_in', None):
+                self.token_util.process_keycloak_token(token)
+            else:
+                raise presalytics.lib.exceptions.InvalidTokenException(message="Unknown token format.")
             if self.token_util.token_cache:
                 self.token_util._put_token_file()
         if not self._delegate_login:
@@ -189,7 +194,7 @@ class Client(object):
                 if not self._delegate_login:  # do not automatically log in at init
                     self.login()
                 else:
-                    self.token_util.token = None
+                    raise presalytics.lib.exceptions.InvalidTokenException(message="This token has expired.")
             else:
                 try:
                     refresh_token = self.token_util.token["refresh_token"]

@@ -38,7 +38,8 @@ class StoryAllOf(object):
         'outline_history': 'list[StoryOutlineHistory]',
         'collaborators': 'list[StoryCollaborator]',
         'revision': 'int',
-        'ooxml_documents': 'list[OoxmlDocument]'
+        'ooxml_documents': 'list[OoxmlDocument]',
+        'is_public': 'bool'
     }
 
     attribute_map = {
@@ -47,10 +48,11 @@ class StoryAllOf(object):
         'outline_history': 'outline_history',
         'collaborators': 'collaborators',
         'revision': 'revision',
-        'ooxml_documents': 'ooxml_documents'
+        'ooxml_documents': 'ooxml_documents',
+        'is_public': 'is_public'
     }
 
-    def __init__(self, title=None, outline=None, outline_history=None, collaborators=None, revision=None, ooxml_documents=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, title=None, outline=None, outline_history=None, collaborators=None, revision=None, ooxml_documents=None, is_public=None, local_vars_configuration=None):  # noqa: E501
         """StoryAllOf - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -62,6 +64,7 @@ class StoryAllOf(object):
         self._collaborators = None
         self._revision = None
         self._ooxml_documents = None
+        self._is_public = None
         self.discriminator = None
 
         if title is not None:
@@ -76,6 +79,8 @@ class StoryAllOf(object):
             self.revision = revision
         if ooxml_documents is not None:
             self.ooxml_documents = ooxml_documents
+        if is_public is not None:
+            self.is_public = is_public
 
     @property
     def title(self):
@@ -202,6 +207,27 @@ class StoryAllOf(object):
         """
 
         self._ooxml_documents = ooxml_documents
+
+    @property
+    def is_public(self):
+        """Gets the is_public of this StoryAllOf.  # noqa: E501
+
+
+        :return: The is_public of this StoryAllOf.  # noqa: E501
+        :rtype: bool
+        """
+        return self._is_public
+
+    @is_public.setter
+    def is_public(self, is_public):
+        """Sets the is_public of this StoryAllOf.
+
+
+        :param is_public: The is_public of this StoryAllOf.  # noqa: E501
+        :type: bool
+        """
+
+        self._is_public = is_public
 
     def to_dict(self):
         """Returns the model properties as a dict"""

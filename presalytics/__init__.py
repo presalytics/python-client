@@ -54,8 +54,10 @@ from presalytics.lib.tools.ooxml_tools import (
     create_theme_from_ooxml_document,
     create_pages_from_ooxml_document,
     create_story_from_ooxml_file,
-    create_outline_from_ooxml_document
+    create_outline_from_ooxml_document,
+    get_mime_type_from_filename
 )
+from presalytics.lib.tools.story_tools import story_post_file_bytes
 from presalytics.lib.widgets.ooxml_editors import (
     OoxmlEditorWidget,
     XmlTransformBase,
@@ -90,7 +92,9 @@ __all__ = [
     'create_pages_from_ooxml_document',
     'create_story_from_ooxml_file',
     'create_outline_from_ooxml_document',
+    'get_mime_type_from_filename',
     'OoxmlEditorWidget',
     'XmlTransformBase',
-    'ChangeShapeColor'
+    'ChangeShapeColor',
+    'story_post_file_bytes'
 ]

@@ -239,9 +239,19 @@ class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMix
         presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
         self.update_configuration()
 
+    def get_mimetype(self, filename):
+        self.parent().ooxml_automation.documents_documenttype_get()
+
 
 class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_story.api_client.ApiClient):
     def __init__(self, parent: Client, **kwargs):
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics.client.presalytics_story.api_client.ApiClient.__init__(self)
         self.update_configuration()
+
+
+
+
+        
+
+

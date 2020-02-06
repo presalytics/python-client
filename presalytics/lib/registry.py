@@ -79,6 +79,7 @@ class RegistryBase(abc.ABC):
                         self.registry[key] = klass
             except Exception:
                 if self.show_errors:
+                    klass_type = self.get_type(klass)
                     message = "Unable to register class {0} with type {1}".format(klass.__name__, klass_type)
                     logger.error(message)
         else:

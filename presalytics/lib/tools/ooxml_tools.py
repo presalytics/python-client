@@ -31,7 +31,7 @@ def create_story_from_ooxml_file(filename: str, client_info={}) -> 'Story':
         for j in range(0, len(page.widgets)):
             widget = page.widgets[j]
             logger.info('Creating OoxmlFileWidget with name "{}"'.format(widget.name))
-            inst = presalytics.OoxmlFileWidget.deserialize(widget, **kw)
+            inst = presalytics.OoxmlFileWidget.deserialize(widget, **client_info)
             presalytics.COMPONENTS.register(inst)
             logger.info('Rewriting outline with widget: "{}"'.format(widget.name))
             outline.pages[i].widgets[j] = inst.serialize()
@@ -144,3 +144,12 @@ def create_theme_from_ooxml_document(document_id: str, client_info={}):
         client_info=client_info
     )
     return theme.serialize().to_dict()
+
+def get_mime_type_from_filename(client: presalytics.Client, filename) -> typing.Optional[str]:
+    doc_types = client.ooxml_automation.documents_documenttype_get()
+    file_extension = filename.split(".")[-1]
+    try:
+        return next(x.mime_type for x in doc_types if x.file_extension == file_extension)
+    except StopIteration:
+        return None
+        

@@ -4,6 +4,7 @@ import pathlib
 import unittest
 import typing
 import presalytics
+import io
 if typing.TYPE_CHECKING:
     from presalytics.client.presalytics_story import Story
 
@@ -60,6 +61,17 @@ class TestComponents(unittest.TestCase):
         widget_data = story_outline.pages[0].widgets[0]
         presalytics.OoxmlFileWidget.deserialize(widget_data)
         presalytics.Revealer(story_outline).present()
+
+    def test_bytesio_upload(self):
+        test_file = os.path.join(os.path.dirname(__file__), "files", "star.pptx")
+        with open(test_file, 'rb') as f:
+            _bytes = io.BytesIO(f.read())
+
+        client = presalytics.Client()
+        story = presalytics.story_post_file_bytes(client, _bytes, "testfile.pptx")
+        from presalytics.client.presalytics_story.models.story import Story
+        self.assertIsInstance(story, Story)
+
 
     def tearDown(self):
         pass

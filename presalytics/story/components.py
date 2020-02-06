@@ -331,26 +331,41 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
     def get_instance_name(self, klass):
         return getattr(klass, "name", None)
 
+    def get_instance_registry_key(self, klass):
+        key = None
+        klass_type = self.get_type(klass)
+        if klass_type:
+            klass_name = self.get_name(klass)
+            instance_name = self.get_instance_name(klass)
+            if instance_name and klass_name:
+                key = "{0}.{1}.{2}".format(klass_type, klass_name, instance_name)
+            else:
+                # For now. always show this error, good for user debugging, rather than developer debugging
+                message = '{0} instance missing "__component_kind__" or "name" attribute'.format(klass_type)
+                logger.error(message)
+        return key
+
+
     def load_class(self, klass):
         super().load_class(klass)
         if isinstance(klass, ComponentBase):
-            klass_type = self.get_type(klass)
             try:
-                if klass_type:
-                    klass_name = self.get_name(klass)
-                    instance_name = self.get_instance_name(klass)
-                    if instance_name and klass_name:
-                        key = "{0}.{1}.{2}".format(klass_type, klass_name, instance_name)
-                        if key not in self.instances.keys():
-                            self.instances[key] = klass
-                    else:
-                        # For now. always show this error, good for user debugging, rather than developer debugging
-                        message = '{0} instance missing "__component_kind__" or "name" attribute'.format(klass_type)
-                        logger.error()
+                key = self.get_instance_registry_key(klass)
+                if key:
+                    if key not in self.instances.keys():
+                        self.instances[key] = klass
+                    
             except Exception:
                 if self.show_errors:
+                    klass_type = self.get_type(klass)
                     message = "Unable to register instance {0} with type {1}".format(klass.__name__, klass_type)
                     logger.error(message)
 
     def get_instance(self, key):
         return self.instances.get(key, None)
+
+    def unregister(self, klass):
+        super().unregister(klass)
+        key = self.get_instance_registry_key(klass)
+        if key:
+            self.instances.pop(key)

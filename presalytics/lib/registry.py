@@ -61,20 +61,26 @@ class RegistryBase(abc.ABC):
             except Exception:
                 pass
 
+    def get_registry_key(self, klass):
+        key = None
+        klass_type = self.get_type(klass)
+        if klass_type:
+            klass_name = self.get_name(klass)
+            if klass_name:
+                key = "{0}.{1}".format(klass_type, klass_name)
+        return key
+
     def load_class(self, klass):
         if inspect.isclass(klass):
-            klass_type = self.get_type(klass)
-            if klass_type:
-                try:
-                    klass_name = self.get_name(klass)
-                    if klass_name:
-                        key = "{0}.{1}".format(klass_type, klass_name)
-                        if key not in self.registry.keys():
-                            self.registry[key] = klass
-                except Exception:
-                    if self.show_errors:
-                        message = "Unable to register class {0} with type {1}".format(klass.__name__, klass_type)
-                        logger.error(message)
+            try:
+                key = self.get_registry_key(klass)
+                if key:
+                    if key not in self.registry.keys():
+                        self.registry[key] = klass
+            except Exception:
+                if self.show_errors:
+                    message = "Unable to register class {0} with type {1}".format(klass.__name__, klass_type)
+                    logger.error(message)
         else:
             try:
                 if self.show_errors:
@@ -156,3 +162,8 @@ class RegistryBase(abc.ABC):
 
     def register(self, klass):
         self.load_class(klass)
+    
+    def unregister(self, klass):
+        key = self.get_registry_key(klass)
+        if key:
+            self.registry.pop(key)

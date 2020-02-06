@@ -16,3 +16,8 @@ Install using the pip package tool
 pip install presalytics
 '''
 
+You can also the latest develoment (potentially unstable) withe the command:
+
+''''bash
+pip install git+https://github.com/presalytics/python-client
+''''

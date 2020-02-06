@@ -62,7 +62,13 @@ class ComponentBase(abc.ABC):
         if client_info:
             self.client_info = client_info
         else:
-            self.client_info = {}   
+            self.client_info = {}
+            if kwargs.get('delegate_login', None)
+                self.client_info.update({'delegate_login': kwargs.get('delegate_login')})
+            if kwargs.get('cache_tokens', None)
+                self.client_info.update({'cache_tokens': kwargs.get('cache_tokens')})
+            if kwargs.get('token', None)
+                self.client_info.update({'token': kwargs.get('token')})
 
     @abc.abstractmethod
     def render(self, **kwargs):

@@ -241,9 +241,9 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         self.object_ooxml_id = object_ooxml_id
         self.story_id = story_id
         self.update()
-        self.svg_html = self.create_container()
+        self.svg_html = self.create_container(**kwargs)
 
-    def create_container(self):
+    def create_container(self, **kwargs):
         
         client = self.get_client()
         self.token = client.token_util.token["access_token"]

@@ -7,7 +7,6 @@ import dateutil
 import dateutil.parser
 import datetime
 import six
-import datetime
 import posixpath
 import presalytics
 import presalytics.lib.exceptions
@@ -47,7 +46,7 @@ class TokenUtil(object):
     def is_api_access_token_expired(self):
         try:
             expire_datetime = dateutil.parser.parse(self.token['access_token_expire_time']).replace(tzinfo=datetime.timezone.utc)
-            if expire_datetime < datetime.datetime.utcnow():
+            if expire_datetime < datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc):
                 return True
             return False
         except Exception:
@@ -56,7 +55,7 @@ class TokenUtil(object):
     def is_api_refresh_token_expired(self):
         try:
             expire_datetime = dateutil.parser.parse(self.token['refresh_token_expire_time']).replace(tzinfo=datetime.timezone.utc)
-            if expire_datetime < datetime.datetime.utcnow():
+            if expire_datetime < datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc):
                 return True
             return False
         except Exception:

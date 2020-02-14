@@ -33,6 +33,7 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
     template_paths: typing.List[str]
 
     __template_paths__ = []
+    __css__ = []
 
     def __init__(self, page: 'Page', **kwargs) -> None:
         super().__init__(page, **kwargs)

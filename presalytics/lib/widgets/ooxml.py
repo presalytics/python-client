@@ -64,10 +64,10 @@ class OoxmlEndpointMap(object):
     
     
 
-    def __init__(self, endpoint, baseurl: str = None):
-        if endpoint not in OoxmlEndpointMap.__dict__.values():
+    def __init__(self, endpoint_id, baseurl: str = None):
+        if endpoint_id not in OoxmlEndpointMap.__dict__.values():
             raise presalytics.lib.exceptions.ValidationError("{0} is not a valid endpoint ID".format(endpoint))
-        self.endpoint_id = endpoint
+        self.endpoint_id = endpoint_id
         if not baseurl:
             self.baseurl = OoxmlEndpointMap.BASE_URL
             custom_hosts = presalytics.CONFIG.get("HOSTS", None)
@@ -170,9 +170,41 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         }
     ]
 
-    def __init__(self, name, **kwargs):
+    def __init__(self, 
+                 name,
+                 story_id=None,
+                 object_ooxml_id=None,
+                 endpoint_map=None,
+                 **kwargs):
         super(OoxmlWidgetBase, self).__init__(name, **kwargs)
+        if object_ooxml_id:
+            self.object_ooxml_id = object_ooxml_id
+        if story_id:
+            self.story_id = story_id
+        if endpoint_map:
+            self.endpoint_map = endpoint_map
         self.svg_html = None
+
+    def create_container(self, **kwargs):
+        
+        client = self.get_client()
+        self.token = client.token_util.token["access_token"]
+        svg_container_div = lxml.html.Element("div", {
+            'class': 'svg-container',
+            'data-jwt': self.token,
+            'data-object-type': self.endpoint_map.endpoint_id,
+            'data-object-id': self.object_ooxml_id
+        })
+        preloader_container_div = lxml.etree.SubElement(svg_container_div, "div", attrib={"class":"preloader-container"})
+        preloader_row_div = lxml.etree.SubElement(preloader_container_div, "div", attrib={"class":"preloader-row"})
+        preloader_file = os.path.join(os.path.dirname(__file__), "img", "preloader.svg")
+        svg = lxml.html.parse(preloader_file)
+        preloader_row_div.append(svg.getroot())
+        empty_parent_div = lxml.html.Element("div", {
+            'class': 'empty-parent bg-light'
+        })
+        empty_parent_div.append(svg_container_div)
+        return lxml.html.tostring(empty_parent_div)
 
 
     def to_html(self, **kwargs):
@@ -206,63 +238,36 @@ class OoxmlFileWidget(OoxmlWidgetBase):
     def __init__(self,
                  filename,
                  name=None,
+                 story_id=None,
+                 object_ooxml_id=None,
                  endpoint_map=None,
                  object_name=None,
                  previous_ooxml_version={},
                  file_last_modified=None,
                  document_ooxml_id=None,
-                 story_id=None,
-                 object_ooxml_id=None,
                  **kwargs):
-        super(OoxmlFileWidget, self).__init__(name, **kwargs)
-        self.filename = os.path.basename(filename)
-        if endpoint_map:
-            self.endpoint_map = endpoint_map
-        else:
-            if filename.split(".")[-1] in ["pptx", "ppt"]:
-                self.endpoint_map = OoxmlEndpointMap(OoxmlEndpointMap.SLIDE)
         if object_name:
             self.object_name = object_name
         else:
             self.object_name = None
-        if name:
-            self.name = name
-        else:
+        if not name:
             if self.object_name:
-                self.name = self.object_name
+                name = self.object_name
             else:
-                self.name = filename
+                name = filename
+        super(OoxmlFileWidget, self).__init__(name, story_id, object_ooxml_id, endpoint_map, **kwargs)
+        self.filename = os.path.basename(filename)
+        if not self.endpoint_map:
+            if filename.split(".")[-1] in ["pptx", "ppt"]:
+                self.endpoint_map = OoxmlEndpointMap(OoxmlEndpointMap.SLIDE)
         self.previous_ooxml_version = previous_ooxml_version
         if file_last_modified:
-            self.file_last_modified = file_last_modified
+            self.file_last_modified = file_last_modified.replace(tzinfo=datetime.timezone.utc)
         else:
             self.file_last_modified = datetime.datetime.utcnow()
         self.document_ooxml_id = document_ooxml_id
-        self.object_ooxml_id = object_ooxml_id
-        self.story_id = story_id
         self.update()
         self.svg_html = self.create_container(**kwargs)
-
-    def create_container(self, **kwargs):
-        
-        client = self.get_client()
-        self.token = client.token_util.token["access_token"]
-        svg_container_div = lxml.html.Element("div", {
-            'class': 'svg-container',
-            'data-jwt': self.token,
-            'data-object-type': self.endpoint_map.endpoint_id,
-            'data-object-id': self.object_ooxml_id
-        })
-        preloader_container_div = lxml.etree.SubElement(svg_container_div, "div", attrib={"class":"preloader-container"})
-        preloader_row_div = lxml.etree.SubElement(preloader_container_div, "div", attrib={"class":"preloader-row"})
-        preloader_file = os.path.join(os.path.dirname(__file__), "img", "preloader.svg")
-        svg = lxml.html.parse(preloader_file)
-        preloader_row_div.append(svg.getroot())
-        empty_parent_div = lxml.html.Element("div", {
-            'class': 'empty-parent bg-light'
-        })
-        empty_parent_div.append(svg_container_div)
-        return lxml.html.tostring(empty_parent_div)
 
     def update(self):
         """
@@ -280,7 +285,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
             fpath = os.path.join(path, self.filename)
             if os.path.exists(fpath):
                 # update only the file has been modified sine last time
-                this_file_last_modified = datetime.datetime.utcfromtimestamp(os.path.getmtime(fpath))
+                this_file_last_modified = datetime.datetime.utcfromtimestamp(os.path.getmtime(fpath)).astimezone(tz=datetime.timezone.utc)
                 if self.file_last_modified is None or self.file_last_modified <= this_file_last_modified:
                     client = self.get_client()
                     story, status, headers = client.story.story_id_file_post_with_http_info(self.story_id, file=fpath, replace_existing=True, obsolete_id=self.document_ooxml_id)
@@ -347,7 +352,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         if "file_last_modified" in component.data:
             init_args.update(
                 {
-                    "file_last_modified": dateutil.parser.parse(component.data["file_last_modified"])
+                    "file_last_modified": dateutil.parser.parse(component.data["file_last_modified"]).replace(tzinfo=datetime.timezone.utc)
                 }
             )
         if "previous_ooxml_version" in component.data:

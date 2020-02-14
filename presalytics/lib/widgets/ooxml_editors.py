@@ -77,19 +77,17 @@ class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
 
     def __init__(self,
                  name: str,
-                 story_id: str,
-                 object_ooxml_id: str,
-                 endpoint_id,
+                 story_id,
+                 object_ooxml_id,
+                 endpoint_map,
                  transform_class=None,
                  transform_params=None,
                  **kwargs):
-        super(OoxmlEditorWidget, self).__init__(**kwargs)    
-        self.story_id = story_id
-        self.object_ooxml_id = object_ooxml_id
+        super(OoxmlEditorWidget, self).__init__(name, story_id=story_id, object_ooxml_id=object_ooxml_id, endpoint_map=endpoint_map, **kwargs)
         self.name = name
-        self.endpoint_map = presalytics.lib.widgets.ooxml.OoxmlEndpointMap(endpoint_id)
         self.transform = transform_class(transform_params)
-        self.svg_html = self.update()
+        self.svg_data = self.update()
+        self.svg_html = self.create_container(**self.client_info)
         self.outline_widget = self.serialize()
 
     def update_xml(self, xml_str) -> str:
@@ -117,10 +115,11 @@ class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
 
     @classmethod
     def deseriailize(cls, component, **kwargs):
+        endpoint_map = presalytics.lib.widgets.ooxml.OoxmlEndpointMap(component.data["endpoint_id"])
         return cls(component.name,
                    component.data["story_id"],
                    component.data["object_ooxml_id"],
-                   component.data["endpoint_id"]
+                   endpoint_map
                    )
 
     def serialize(self, **kwargs):

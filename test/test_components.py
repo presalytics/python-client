@@ -32,7 +32,8 @@ class TestComponents(unittest.TestCase):
         old_widget = outline.pages[0].widgets[0]
         client = presalytics.Client()
         childs = client.ooxml_automation.documents_childobjects_get_id(old_widget.data["document_ooxml_id"])
-        object_type = presalytics.OoxmlEndpointMap.shape().get_object_type()
+        endpoint_map = presalytics.OoxmlEndpointMap.shape() 
+        object_type = endpoint_map.get_object_type()
         info = next(x for x in childs if x.object_type == object_type)
         new_color = {
             "object_name": info.entity_name,
@@ -42,7 +43,7 @@ class TestComponents(unittest.TestCase):
             name="test-editor",
             story_id=story.id,
             object_ooxml_id=info.entity_id,
-            endpoint_id=info.object_type.split(".")[1],
+            endpoint_map=endpoint_map,
             transform_class=presalytics.ChangeShapeColor,
             transform_params=new_color
         )

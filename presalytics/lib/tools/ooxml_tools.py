@@ -48,8 +48,8 @@ def create_outline_from_ooxml_document(story: 'Story',
 
     info = presalytics.story.outline.Info(
         revision=0,
-        date_created=datetime.datetime.now().isoformat(),
-        date_modified=datetime.datetime.now().isoformat(),
+        date_created=datetime.datetime.utcnow().isoformat(),
+        date_modified=datetime.datetime.utcnow().isoformat(),
         created_by=presalytics.CONFIG.get("USERNAME", ""),
         modified_by=presalytics.CONFIG.get("USERNAME", ""),
         revision_notes='Created by via "create_outline_from_ooxml_file" method'

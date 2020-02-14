@@ -219,7 +219,7 @@ class Revealer(presalytics.story.components.Renderer):
 
     def update_info(self):
         info = self.story_outline.info
-        info.date_modified = datetime.datetime.now()
+        info.date_modified = datetime.datetime.utcnow()
 
     def render(self):
         """

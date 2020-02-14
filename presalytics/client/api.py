@@ -213,6 +213,11 @@ class Client(object):
         }
         return auth_header
 
+    def get_request_id_header(self):
+        return {
+            "X-Request-Id": str(uuid4())
+        }
+
     def download_file(self, story_id, ooxml_automation_id, download_folder=None, filename=None, **kwargs):
         response, status, headers = self.story.story_id_file_ooxmlautomationid_get_with_http_info(story_id, ooxml_automation_id, _preload_content=False)
         if download_folder is None:

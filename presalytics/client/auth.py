@@ -5,6 +5,7 @@ import sys
 import weakref
 import dateutil
 import dateutil.parser
+import datetime
 import six
 import datetime
 import posixpath
@@ -45,8 +46,8 @@ class TokenUtil(object):
 
     def is_api_access_token_expired(self):
         try:
-            expire_datetime = dateutil.parser.parse(self.token['access_token_expire_time'])
-            if expire_datetime < datetime.datetime.now():
+            expire_datetime = dateutil.parser.parse(self.token['access_token_expire_time']).replace(tzinfo=datetime.timezone.utc)
+            if expire_datetime < datetime.datetime.utcnow():
                 return True
             return False
         except Exception:
@@ -54,8 +55,8 @@ class TokenUtil(object):
 
     def is_api_refresh_token_expired(self):
         try:
-            expire_datetime = dateutil.parser.parse(self.token['refresh_token_expire_time'])
-            if expire_datetime < datetime.datetime.now():
+            expire_datetime = dateutil.parser.parse(self.token['refresh_token_expire_time']).replace(tzinfo=datetime.timezone.utc)
+            if expire_datetime < datetime.datetime.utcnow():
                 return True
             return False
         except Exception:
@@ -70,8 +71,8 @@ class TokenUtil(object):
             self.put_token_file(self.token, self.token_file)
 
     def process_keycloak_token(self, keycloak_token):
-        access_token_expire_time = datetime.datetime.now() + datetime.timedelta(seconds=keycloak_token['expires_in'])
-        refresh_token_expire_time = datetime.datetime.now() + datetime.timedelta(seconds=keycloak_token['refresh_expires_in'])
+        access_token_expire_time = datetime.datetime.utcnow() + datetime.timedelta(seconds=keycloak_token['expires_in'])
+        refresh_token_expire_time = datetime.datetime.utcnow() + datetime.timedelta(seconds=keycloak_token['refresh_expires_in'])
 
         self.token = {
             'access_token': keycloak_token['access_token'],
@@ -118,9 +119,14 @@ class AuthenticationMixIn(object):
             header_params.update(auth_header)
         else:
             header_params = auth_header
+        if not header_params.get("X-Request_Id"):
+            req_id = self.parent().get_request_id_header()
+            header_params.update(req_id)
+        request_id = header_params.get("X-Request-Id")
         try:
+
             endpoint = self.configuration.host + resource_path
-            logger.info("Sending {0} message to {1}".format(method, endpoint))
+            logger.info("Sending {0} message to {1}. Request Id: {2}".format(method, endpoint, request_id))
             response = super(AuthenticationMixIn, self).call_api(
                 resource_path, method, path_params,
                 query_params, header_params, body, post_params, files, response_type,
@@ -133,7 +139,7 @@ class AuthenticationMixIn(object):
             if type(e).__name__ == "ApiException":
                 try:
                     d = json.loads(e.body)
-                    addendum = " Host: {0}; Path: {1}; Method: {2}".format(self.configuration.host, resource_path, method)
+                    addendum = " Host: {0}; Path: {1}; Method: {2}; Request Id: {3}".format(self.configuration.host, resource_path, method, request_id)
                     try:
                         d["detail"] = d["detail"] + addendum
                     except TypeError:

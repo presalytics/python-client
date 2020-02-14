@@ -24,7 +24,7 @@ class OutlineEncoder(json.JSONEncoder):
         if issubclass(obj.__class__, OutlineBase):
             return obj.to_dict()
         if isinstance(obj, datetime.datetime):
-            return obj.isoformat()
+            return obj.replace(tzinfo=datetime.timezone.utc).isoformat()
         if isinstance(obj, uuid.UUID):
             return str(obj)
         return json.JSONEncoder.default(self, obj)
@@ -119,8 +119,8 @@ class Info(OutlineBase):
                  **kwargs):
         super(Info, self).__init__(**kwargs)
         self.revision = revision
-        self.date_created = dateutil.parser.parse(date_created)
-        self.date_modified = dateutil.parser.parse(date_modified)
+        self.date_created = dateutil.parser.parse(date_created).replace(tzinfo=datetime.timezone.utc)
+        self.date_modified = dateutil.parser.parse(date_modified).replace(tzinfo=datetime.timezone.utc)
         self.created_by = created_by
         self.modified_by = modified_by
         self.revision_notes = revision_notes

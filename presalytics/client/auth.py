@@ -155,6 +155,10 @@ class AuthenticationMixIn(object):
                 t, v, tb = sys.exc_info()
                 six.reraise(t, v, tb)
 
+    # def update_timezones(self, response)
+
+    #     return response
+
     def update_configuration(self):
         """
         updates the configuration from the base api client to parameters contained in the config file.
@@ -189,3 +193,13 @@ class AuthenticationMixIn(object):
             self.configuration.host = hosts_dict[host_key]
         except (KeyError, UnboundLocalError):
             pass
+
+    def _ApiClient__deserialize_datetime(self, string):
+        """Overwrites generated function to include UTC timezone on datetime object
+        needs to account for name-mangling in parent class
+        The string should be in iso8601 datetime format.
+
+        :param string: str.
+        :return: datetime.
+        """
+        return super()._ApiClient__deserialize_datetime(string).replace(tzinfo=datetime.timezone.utc)

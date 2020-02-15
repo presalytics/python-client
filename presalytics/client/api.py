@@ -24,7 +24,46 @@ env = environs.Env()
 
 
 class Client(object):
-    """ Main PresalyticsClient base object """
+    """ Class for interacting with Presalytics API endpoints
+
+    The Client class creates a simple interface for user to interactive with the 
+    Presaltyics API and is the primary building block user-built tools, stories, 
+    dashboards and interactive presentations.
+
+    A client instance wraps python functions around Presalytics API endpoints and
+    manages user authentication. On initialization, he client checks the status of 
+    a user authentication the expiry of their refresh an access tokens.  When needed,
+    the client will prompt (or raise a )
+
+    After authenication, users can the methods bound to the story, ooxml_automation, 
+    and doc_converter attributes to make calls in into the Presalytics API.
+
+
+    A note for server-side development:
+
+    By default, the client class automatically caches tokens in a file called 
+    "token.json", located in the python's current working directory.  If building a
+    client to operate in a multi-user environment, this behavior should be turned off.
+    To do this, ensure the following parameters are pass to the configuration: 
+    
+        cache_tokens = False,
+        delegate_login = True
+    
+    When delegate login is True, the client assumes that the application creating 
+    instances of the client object will handle user authentication.  The simplest way
+    to do this is to pass a token to the client via the "token" keyword argument.
+
+    Parameters:
+    ----------
+
+    Attributes:
+    ----------
+      
+    
+    
+    
+    
+    """
     def __init__(
             self,
             delegate_login=False,

@@ -308,7 +308,7 @@ class Revealer(presalytics.story.components.Renderer):
 <dl>
 <dt id="presalytics.story.revealer.Revealer"><code class="flex name class">
 <span>class <span class="ident">Revealer</span></span>
-<span>(</span><span>story_outline, **kwargs)</span>
+<span>(</span><span>story_outline: StoryOutline, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>This class renders 'Story Outines' to reveal.js presentations</p></section>
@@ -566,7 +566,7 @@ class Revealer(presalytics.story.components.Renderer):
 <h3>Static methods</h3>
 <dl>
 <dt id="presalytics.story.revealer.Revealer.deserialize"><code class="name flex">
-<span>def <span class="ident">deserialize</span></span>(<span>component, **kwargs)</span>
+<span>def <span class="ident">deserialize</span></span>(<span>component: StoryOutline, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -584,7 +584,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.story.revealer.Revealer.get_component_implicit_plugins"><code class="name flex">
-<span>def <span class="ident">get_component_implicit_plugins</span></span>(<span>self, sub_dict=None)</span>
+<span>def <span class="ident">get_component_implicit_plugins</span></span>(<span>self, sub_dict: Dict = None)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -722,7 +722,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.story.revealer.Revealer.render_page"><code class="name flex">
-<span>def <span class="ident">render_page</span></span>(<span>self, page)</span>
+<span>def <span class="ident">render_page</span></span>(<span>self, page: Page) -> str</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -748,7 +748,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.story.revealer.Revealer.serialize"><code class="name flex">
-<span>def <span class="ident">serialize</span></span>(<span>self)</span>
+<span>def <span class="ident">serialize</span></span>(<span>self) -> 'StoryOutline'</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -763,7 +763,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.story.revealer.Revealer.set_outline_data_from_instance"><code class="name flex">
-<span>def <span class="ident">set_outline_data_from_instance</span></span>(<span>self, inst)</span>
+<span>def <span class="ident">set_outline_data_from_instance</span></span>(<span>self, inst: ComponentBase)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -782,7 +782,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.story.revealer.Revealer.set_page_outline_data"><code class="name flex">
-<span>def <span class="ident">set_page_outline_data</span></span>(<span>self, inst)</span>
+<span>def <span class="ident">set_page_outline_data</span></span>(<span>self, inst: PageTemplateBase)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -804,7 +804,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.story.revealer.Revealer.set_theme_outline_data"><code class="name flex">
-<span>def <span class="ident">set_theme_outline_data</span></span>(<span>self, inst)</span>
+<span>def <span class="ident">set_theme_outline_data</span></span>(<span>self, inst: ThemeBase)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -826,7 +826,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.story.revealer.Revealer.set_widget_outline_data"><code class="name flex">
-<span>def <span class="ident">set_widget_outline_data</span></span>(<span>self, inst)</span>
+<span>def <span class="ident">set_widget_outline_data</span></span>(<span>self, inst: WidgetBase)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -906,7 +906,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.story.revealer.Revealer.update_outline_from_instances"><code class="name flex">
-<span>def <span class="ident">update_outline_from_instances</span></span>(<span>self, sub_dict=None)</span>
+<span>def <span class="ident">update_outline_from_instances</span></span>(<span>self, sub_dict: Dict = None)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>

@@ -552,7 +552,7 @@ the render story outlines (e.g., presalytics.story.revealer.Revealer).</p></sect
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.lib.plugins.base.PluginBase.get_tag"><code class="name flex">
-<span>def <span class="ident">get_tag</span></span>(<span>self, config, **kwargs)</span>
+<span>def <span class="ident">get_tag</span></span>(<span>self, config: Dict[str, Any], **kwargs) -> str</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Generic method to be implemented by all inheriting classes. Allow plugin
@@ -617,7 +617,7 @@ def get_tag(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
 </dd>
 <dt id="presalytics.lib.plugins.base.PluginManager"><code class="flex name class">
 <span>class <span class="ident">PluginManager</span></span>
-<span>(</span><span>plugins, ignore_errors=True)</span>
+<span>(</span><span>plugins: List[Dict], ignore_errors=True)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -749,7 +749,7 @@ def get_tag(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
 <h3>Static methods</h3>
 <dl>
 <dt id="presalytics.lib.plugins.base.PluginManager.get_plugins_from_nested_dict"><code class="name flex">
-<span>def <span class="ident">get_plugins_from_nested_dict</span></span>(<span>source_dict, plugin_list=[])</span>
+<span>def <span class="ident">get_plugins_from_nested_dict</span></span>(<span>source_dict: Dict, plugin_list: List[Dict] = []) -> List[Dict]</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -817,7 +817,7 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
 </details>
 </dd>
 <dt id="presalytics.lib.plugins.base.PluginManager.check_for_cyclic_dependencies"><code class="name flex">
-<span>def <span class="ident">check_for_cyclic_dependencies</span></span>(<span>self)</span>
+<span>def <span class="ident">check_for_cyclic_dependencies</span></span>(<span>self) -> NoneType</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -836,7 +836,7 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
 </details>
 </dd>
 <dt id="presalytics.lib.plugins.base.PluginManager.get_scripts"><code class="name flex">
-<span>def <span class="ident">get_scripts</span></span>(<span>self)</span>
+<span>def <span class="ident">get_scripts</span></span>(<span>self) -> List[str]</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -850,7 +850,7 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
 </details>
 </dd>
 <dt id="presalytics.lib.plugins.base.PluginManager.get_styles"><code class="name flex">
-<span>def <span class="ident">get_styles</span></span>(<span>self)</span>
+<span>def <span class="ident">get_styles</span></span>(<span>self) -> List[str]</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -898,7 +898,7 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
 </details>
 </dd>
 <dt id="presalytics.lib.plugins.base.PluginManager.render_plugins"><code class="name flex">
-<span>def <span class="ident">render_plugins</span></span>(<span>self, plugin_kind)</span>
+<span>def <span class="ident">render_plugins</span></span>(<span>self, plugin_kind: str) -> List[str]</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -1087,7 +1087,7 @@ tag of an html document</p></section>
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.lib.plugins.base.ScriptPlugin.to_script"><code class="name flex">
-<span>def <span class="ident">to_script</span></span>(<span>self, config, **kwargs)</span>
+<span>def <span class="ident">to_script</span></span>(<span>self, config: Dict[str, Any], **kwargs) -> str</span>
 </code></dt>
 <dd>
 <section class="desc"><p>The to_script method maps a dictionary to an html script tag.</p>
@@ -1199,7 +1199,7 @@ tag of an html document</p></section>
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.lib.plugins.base.StylePlugin.to_style"><code class="name flex">
-<span>def <span class="ident">to_style</span></span>(<span>self, config, **kwargs)</span>
+<span>def <span class="ident">to_style</span></span>(<span>self, config: Dict[str, Any], **kwargs) -> str</span>
 </code></dt>
 <dd>
 <section class="desc"><p>The to_style method maps a dictionary to an html style tag.</p>

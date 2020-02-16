@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.4" />
-<title>presalytics.lib.util API documentation</title>
+<title>presalytics.lib.config_loader API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,41 +17,51 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>presalytics.lib.util</code></h1>
+<h1 class="title">Module <code>presalytics.lib.config_loader</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L0-L27" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L0-L37" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">import datetime
-import presalytics.lib.constants
-
-class classproperty(property):
-    def __get__(self, obj, objtype=None):
-        return super(classproperty, self).__get__(objtype)
-
-    def __set__(self, obj, value):
-        super(classproperty, self).__set__(type(obj), value)
-
-    def __delete__(self, obj):
-        super(classproperty, self).__delete__(type(obj))
+<pre><code class="python">import pkgutil
+import importlib
+import os
+import typing
+import logging
+import importlib.util
 
 
-def roundup_date_modified(current_datetime: datetime.datetime):
-    one_second = datetime.timedelta(seconds=1)
-    rounddown = current_datetime.replace(microsecond=0)
-    return rounddown + one_second
-    
-def get_site_host():
-    site_host = presalytics.lib.constants.SITE_HOST
-    try: 
-        site_host = presalytics.CONFIG[&#34;HOSTS&#34;][&#34;SITE&#34;]
-    except (KeyError, AttributeError):
-        pass
-    return site_host
+logger = logging.getLogger(__name__)
 
+
+def load_config(additional_paths: typing.List[str] = []) -&gt; typing.Dict:
+    current_path = os.getcwd()
+    additional_paths.append(current_path)
+    config_dict = None
+    try:
+        for path in additional_paths:
+            for name in os.listdir(path):
+                if name == &#34;config.py&#34;:
+                    config_path = os.path.join(path, name)
+                    config_spec = importlib.util.spec_from_file_location(&#34;config&#34;, config_path)
+                    config_mod = importlib.util.module_from_spec(config_spec)
+                    config_spec.loader.exec_module(config_mod)
+                    config_dict = getattr(config_mod, &#34;PRESALYTICS&#34;, None)
+                    if not config_dict:
+                        config_dict = config_mod.__dict__
+                    if config_dict:
+                        break
+            if config_dict:
+                break
+        if config_dict:
+            return config_dict
+        else:
+            return {}
+    except Exception as ex:
+        logger.exception(ex)
+        return {}
         </code></pre>
 </details>
 </section>
@@ -62,94 +72,47 @@ def get_site_host():
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="presalytics.lib.util.get_site_host"><code class="name flex">
-<span>def <span class="ident">get_site_host</span></span>(<span>)</span>
+<dt id="presalytics.lib.config_loader.load_config"><code class="name flex">
+<span>def <span class="ident">load_config</span></span>(<span>additional_paths: List[str] = []) -> Dict</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L20-L26" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L12-L37" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">def get_site_host():
-    site_host = presalytics.lib.constants.SITE_HOST
-    try: 
-        site_host = presalytics.CONFIG[&#34;HOSTS&#34;][&#34;SITE&#34;]
-    except (KeyError, AttributeError):
-        pass
-    return site_host</code></pre>
-</details>
-</dd>
-<dt id="presalytics.lib.util.roundup_date_modified"><code class="name flex">
-<span>def <span class="ident">roundup_date_modified</span></span>(<span>current_datetime)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L15-L18" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def roundup_date_modified(current_datetime: datetime.datetime):
-    one_second = datetime.timedelta(seconds=1)
-    rounddown = current_datetime.replace(microsecond=0)
-    return rounddown + one_second</code></pre>
+<pre><code class="python">def load_config(additional_paths: typing.List[str] = []) -&gt; typing.Dict:
+    current_path = os.getcwd()
+    additional_paths.append(current_path)
+    config_dict = None
+    try:
+        for path in additional_paths:
+            for name in os.listdir(path):
+                if name == &#34;config.py&#34;:
+                    config_path = os.path.join(path, name)
+                    config_spec = importlib.util.spec_from_file_location(&#34;config&#34;, config_path)
+                    config_mod = importlib.util.module_from_spec(config_spec)
+                    config_spec.loader.exec_module(config_mod)
+                    config_dict = getattr(config_mod, &#34;PRESALYTICS&#34;, None)
+                    if not config_dict:
+                        config_dict = config_mod.__dict__
+                    if config_dict:
+                        break
+            if config_dict:
+                break
+        if config_dict:
+            return config_dict
+        else:
+            return {}
+    except Exception as ex:
+        logger.exception(ex)
+        return {}</code></pre>
 </details>
 </dd>
 </dl>
 </section>
 <section>
-<h2 class="section-title" id="header-classes">Classes</h2>
-<dl>
-<dt id="presalytics.lib.util.classproperty"><code class="flex name class">
-<span>class <span class="ident">classproperty</span></span>
-<span>(</span><span>...)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>property(fget=None, fset=None, fdel=None, doc=None) -&gt; property attribute</p>
-<p>fget is a function to be used for getting an attribute value, and likewise
-fset is a function for setting, and fdel a function for del'ing, an
-attribute.
-Typical use is to define a managed attribute x:</p>
-<p>class C(object):
-def getx(self): return self._x
-def setx(self, value): self._x = value
-def delx(self): del self._x
-x = property(getx, setx, delx, "I'm the 'x' property.")</p>
-<p>Decorators make defining new properties or modifying existing ones easy:</p>
-<p>class C(object):
-@property
-def x(self):
-"I am the 'x' property."
-return self._x
-@x.setter
-def x(self, value):
-self._x = value
-@x.deleter
-def x(self):
-del self._x</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L4-L12" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">class classproperty(property):
-    def __get__(self, obj, objtype=None):
-        return super(classproperty, self).__get__(objtype)
-
-    def __set__(self, obj, value):
-        super(classproperty, self).__set__(type(obj), value)
-
-    def __delete__(self, obj):
-        super(classproperty, self).__delete__(type(obj))</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>builtins.property</li>
-</ul>
-</dd>
-</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -165,15 +128,7 @@ del self._x</p></section>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="presalytics.lib.util.get_site_host" href="/python-client/presalytics/lib/util.html#presalytics.lib.util.get_site_host">get_site_host</a></code></li>
-<li><code><a title="presalytics.lib.util.roundup_date_modified" href="/python-client/presalytics/lib/util.html#presalytics.lib.util.roundup_date_modified">roundup_date_modified</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-classes">Classes</a></h3>
-<ul>
-<li>
-<h4><code><a title="presalytics.lib.util.classproperty" href="/python-client/presalytics/lib/util.html#presalytics.lib.util.classproperty">classproperty</a></code></h4>
-</li>
+<li><code><a title="presalytics.lib.config_loader.load_config" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.load_config">load_config</a></code></li>
 </ul>
 </li>
 </ul>

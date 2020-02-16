@@ -153,7 +153,7 @@ __all__ = [
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="presalytics.create_outline_from_ooxml_document"><code class="name flex">
-<span>def <span class="ident">create_outline_from_ooxml_document</span></span>(<span>story, ooxml_document, title=None, description=None, themes=None, client_info={})</span>
+<span>def <span class="ident">create_outline_from_ooxml_document</span></span>(<span><a title="presalytics.story" href="/python-client/presalytics/story/index.html">presalytics.story</a>: Story, ooxml_document: Document, title: str = None, description: str = None, themes: Sequence[_ForwardRef('<a title="presalytics.ThemeBase" href="/python-client/presalytics/index.html#presalytics.ThemeBase">ThemeBase</a>')] = None, client_info={})</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -209,7 +209,7 @@ __all__ = [
 </details>
 </dd>
 <dt id="presalytics.create_pages_from_ooxml_document"><code class="name flex">
-<span>def <span class="ident">create_pages_from_ooxml_document</span></span>(<span>story, ooxml_document, client_info={})</span>
+<span>def <span class="ident">create_pages_from_ooxml_document</span></span>(<span><a title="presalytics.story" href="/python-client/presalytics/story/index.html">presalytics.story</a>: Story, ooxml_document: Document, client_info={})</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -253,7 +253,7 @@ __all__ = [
 </details>
 </dd>
 <dt id="presalytics.create_story_from_ooxml_file"><code class="name flex">
-<span>def <span class="ident">create_story_from_ooxml_file</span></span>(<span>filename, client_info={})</span>
+<span>def <span class="ident">create_story_from_ooxml_file</span></span>(<span>filename: str, client_info={}) -> 'Story'</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -285,7 +285,7 @@ __all__ = [
 </details>
 </dd>
 <dt id="presalytics.create_theme_from_ooxml_document"><code class="name flex">
-<span>def <span class="ident">create_theme_from_ooxml_document</span></span>(<span>document_id, client_info={})</span>
+<span>def <span class="ident">create_theme_from_ooxml_document</span></span>(<span>document_id: str, client_info={})</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -322,7 +322,7 @@ __all__ = [
 </details>
 </dd>
 <dt id="presalytics.get_mime_type_from_filename"><code class="name flex">
-<span>def <span class="ident">get_mime_type_from_filename</span></span>(<span>client, filename)</span>
+<span>def <span class="ident">get_mime_type_from_filename</span></span>(<span><a title="presalytics.client" href="/python-client/presalytics/client/index.html">presalytics.client</a>: <a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client">Client</a>, filename) -> Union[str, NoneType]</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -341,7 +341,7 @@ __all__ = [
 </details>
 </dd>
 <dt id="presalytics.story_post_file_bytes"><code class="name flex">
-<span>def <span class="ident">story_post_file_bytes</span></span>(<span>client, binary_obj, filename, mime_type=None)</span>
+<span>def <span class="ident">story_post_file_bytes</span></span>(<span><a title="presalytics.client" href="/python-client/presalytics/client/index.html">presalytics.client</a>: <a title="presalytics.Client" href="/python-client/presalytics/index.html#presalytics.Client">Client</a>, binary_obj: BytesIO, filename: str, mime_type: str = None)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -464,7 +464,7 @@ tag of an html document</p></section>
 </dd>
 <dt id="presalytics.ChangeShapeColor"><code class="flex name class">
 <span>class <span class="ident">ChangeShapeColor</span></span>
-<span>(</span><span>function_params, *args, **kwargs)</span>
+<span>(</span><span>function_params: Dict, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Helper class that provides a standard way to create an ABC using
@@ -529,7 +529,7 @@ inheritance.</p></section>
 <h3>Static methods</h3>
 <dl>
 <dt id="presalytics.ChangeShapeColor.replace_color_on_target_shape"><code class="name flex">
-<span>def <span class="ident">replace_color_on_target_shape</span></span>(<span>shape_xml, new_color)</span>
+<span>def <span class="ident">replace_color_on_target_shape</span></span>(<span>shape_xml: <cyfunction Element at 0x7f5aed598df0>, new_color: str) -> <cyfunction Element at 0x7f5aed598df0></span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -1081,7 +1081,7 @@ to do this is to pass a token to the client via the "token" keyword argument.</p
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.JinjaPluginMakerMixin.get_template"><code class="name flex">
-<span>def <span class="ident">get_template</span></span>(<span>self)</span>
+<span>def <span class="ident">get_template</span></span>(<span>self) -> str</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -1098,7 +1098,7 @@ to do this is to pass a token to the client via the "token" keyword argument.</p
 </details>
 </dd>
 <dt id="presalytics.JinjaPluginMakerMixin.render"><code class="name flex">
-<span>def <span class="ident">render</span></span>(<span>self, config)</span>
+<span>def <span class="ident">render</span></span>(<span>self, config: Dict)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -1121,7 +1121,7 @@ to do this is to pass a token to the client via the "token" keyword argument.</p
 </dd>
 <dt id="presalytics.JinjaTemplateBuilder"><code class="flex name class">
 <span>class <span class="ident">JinjaTemplateBuilder</span></span>
-<span>(</span><span>page, **kwargs)</span>
+<span>(</span><span>page: Page, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Inherit from this base class to render templates to html via the
@@ -1262,7 +1262,7 @@ def deserialize(cls, component, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.JinjaTemplateBuilder.load_jinja_template"><code class="name flex">
-<span>def <span class="ident">load_jinja_template</span></span>(<span>self)</span>
+<span>def <span class="ident">load_jinja_template</span></span>(<span>self) -> jinja2.environment.Template</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -1357,7 +1357,7 @@ tag of an html document</p></section>
 </dd>
 <dt id="presalytics.MatplotlibFigure"><code class="flex name class">
 <span>class <span class="ident">MatplotlibFigure</span></span>
-<span>(</span><span>figure, name, *args, **kwargs)</span>
+<span>(</span><span>figure: Figure, name: str, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Inherit from this base class to create widget components that can be rendered to html via the
@@ -1532,7 +1532,7 @@ errors defaults to 'strict'.</p></section>
 </dd>
 <dt id="presalytics.OoxmlEditorWidget"><code class="flex name class">
 <span>class <span class="ident">OoxmlEditorWidget</span></span>
-<span>(</span><span>name, story_id, object_ooxml_id, endpoint_map, transform_class=None, transform_params=None, **kwargs)</span>
+<span>(</span><span>name: str, story_id, object_ooxml_id, endpoint_map, transform_class=None, transform_params=None, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Inherit from this base class to create widget components that can be rendered to html via the
@@ -1684,7 +1684,7 @@ def deseriailize(cls, component, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.OoxmlEditorWidget.update_xml"><code class="name flex">
-<span>def <span class="ident">update_xml</span></span>(<span>self, xml_str)</span>
+<span>def <span class="ident">update_xml</span></span>(<span>self, xml_str) -> str</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -1714,7 +1714,7 @@ def deseriailize(cls, component, **kwargs):
 </dd>
 <dt id="presalytics.OoxmlEndpointMap"><code class="flex name class">
 <span>class <span class="ident">OoxmlEndpointMap</span></span>
-<span>(</span><span>endpoint_id, baseurl=None)</span>
+<span>(</span><span>endpoint_id, baseurl: str = None)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -2546,7 +2546,7 @@ tag of an html document</p></section>
 </dd>
 <dt id="presalytics.PageTemplateBase"><code class="flex name class">
 <span>class <span class="ident">PageTemplateBase</span></span>
-<span>(</span><span>page, **kwargs)</span>
+<span>(</span><span>page: Page, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Inherit from this base class to render templates to html via the
@@ -2703,7 +2703,7 @@ def deseriailize(cls, component, **kwargs):
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.PageTemplateBase.get_page_widgets"><code class="name flex">
-<span>def <span class="ident">get_page_widgets</span></span>(<span>self, page)</span>
+<span>def <span class="ident">get_page_widgets</span></span>(<span>self, page: Page)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Converts the widgets within a presaltytics.story.outline.Page object to a list
@@ -2726,7 +2726,7 @@ of widgets subclassed from WidgetComponentBase</p></section>
 </details>
 </dd>
 <dt id="presalytics.PageTemplateBase.load_widget"><code class="name flex">
-<span>def <span class="ident">load_widget</span></span>(<span>self, widget)</span>
+<span>def <span class="ident">load_widget</span></span>(<span>self, widget: Widget)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Converts a presalytics.story.outline.Widget object to a subclass of WidgetComponentBase
@@ -2757,7 +2757,7 @@ via a presalytics.story.loaders.WidgetLoaderBase object.</p></section>
 </details>
 </dd>
 <dt id="presalytics.PageTemplateBase.render"><code class="name flex">
-<span>def <span class="ident">render</span></span>(<span>self, **kwargs)</span>
+<span>def <span class="ident">render</span></span>(<span>self, **kwargs) -> str</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Returns valid html that renders the template in a broswer with data loaded from widgets.</p>
@@ -2907,7 +2907,7 @@ the render story outlines (e.g., presalytics.story.revealer.Revealer).</p></sect
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.PluginBase.get_tag"><code class="name flex">
-<span>def <span class="ident">get_tag</span></span>(<span>self, config, **kwargs)</span>
+<span>def <span class="ident">get_tag</span></span>(<span>self, config: Dict[str, Any], **kwargs) -> str</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Generic method to be implemented by all inheriting classes. Allow plugin
@@ -3455,7 +3455,7 @@ errors defaults to 'strict'.</p></section>
 </details>
 </dd>
 <dt id="presalytics.RevealCustomTheme.get_font_link"><code class="name flex">
-<span>def <span class="ident">get_font_link</span></span>(<span>self, font_name)</span>
+<span>def <span class="ident">get_font_link</span></span>(<span>self, font_name) -> Union[str, NoneType]</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -3474,7 +3474,7 @@ errors defaults to 'strict'.</p></section>
 </details>
 </dd>
 <dt id="presalytics.RevealCustomTheme.get_fonts"><code class="name flex">
-<span>def <span class="ident">get_fonts</span></span>(<span>self, fonts)</span>
+<span>def <span class="ident">get_fonts</span></span>(<span>self, fonts: List[str])</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -3505,7 +3505,7 @@ errors defaults to 'strict'.</p></section>
 </dd>
 <dt id="presalytics.Revealer"><code class="flex name class">
 <span>class <span class="ident">Revealer</span></span>
-<span>(</span><span>story_outline, **kwargs)</span>
+<span>(</span><span>story_outline: <a title="presalytics.StoryOutline" href="/python-client/presalytics/index.html#presalytics.StoryOutline">StoryOutline</a>, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>This class renders 'Story Outines' to reveal.js presentations</p></section>
@@ -3763,7 +3763,7 @@ errors defaults to 'strict'.</p></section>
 <h3>Static methods</h3>
 <dl>
 <dt id="presalytics.Revealer.deserialize"><code class="name flex">
-<span>def <span class="ident">deserialize</span></span>(<span>component, **kwargs)</span>
+<span>def <span class="ident">deserialize</span></span>(<span>component: <a title="presalytics.StoryOutline" href="/python-client/presalytics/index.html#presalytics.StoryOutline">StoryOutline</a>, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -3781,7 +3781,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.Revealer.get_component_implicit_plugins"><code class="name flex">
-<span>def <span class="ident">get_component_implicit_plugins</span></span>(<span>self, sub_dict=None)</span>
+<span>def <span class="ident">get_component_implicit_plugins</span></span>(<span>self, sub_dict: Dict = None)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -3919,7 +3919,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.Revealer.render_page"><code class="name flex">
-<span>def <span class="ident">render_page</span></span>(<span>self, page)</span>
+<span>def <span class="ident">render_page</span></span>(<span>self, page: Page) -> str</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -3945,7 +3945,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.Revealer.serialize"><code class="name flex">
-<span>def <span class="ident">serialize</span></span>(<span>self)</span>
+<span>def <span class="ident">serialize</span></span>(<span>self) -> '<a title="presalytics.StoryOutline" href="/python-client/presalytics/index.html#presalytics.StoryOutline">StoryOutline</a>'</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -3960,7 +3960,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.Revealer.set_outline_data_from_instance"><code class="name flex">
-<span>def <span class="ident">set_outline_data_from_instance</span></span>(<span>self, inst)</span>
+<span>def <span class="ident">set_outline_data_from_instance</span></span>(<span>self, inst: ComponentBase)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -3979,7 +3979,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.Revealer.set_page_outline_data"><code class="name flex">
-<span>def <span class="ident">set_page_outline_data</span></span>(<span>self, inst)</span>
+<span>def <span class="ident">set_page_outline_data</span></span>(<span>self, inst: <a title="presalytics.PageTemplateBase" href="/python-client/presalytics/index.html#presalytics.PageTemplateBase">PageTemplateBase</a>)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -4001,7 +4001,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.Revealer.set_theme_outline_data"><code class="name flex">
-<span>def <span class="ident">set_theme_outline_data</span></span>(<span>self, inst)</span>
+<span>def <span class="ident">set_theme_outline_data</span></span>(<span>self, inst: <a title="presalytics.ThemeBase" href="/python-client/presalytics/index.html#presalytics.ThemeBase">ThemeBase</a>)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -4023,7 +4023,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.Revealer.set_widget_outline_data"><code class="name flex">
-<span>def <span class="ident">set_widget_outline_data</span></span>(<span>self, inst)</span>
+<span>def <span class="ident">set_widget_outline_data</span></span>(<span>self, inst: <a title="presalytics.WidgetBase" href="/python-client/presalytics/index.html#presalytics.WidgetBase">WidgetBase</a>)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -4103,7 +4103,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.Revealer.update_outline_from_instances"><code class="name flex">
-<span>def <span class="ident">update_outline_from_instances</span></span>(<span>self, sub_dict=None)</span>
+<span>def <span class="ident">update_outline_from_instances</span></span>(<span>self, sub_dict: Dict = None)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -4405,7 +4405,7 @@ own custom initialization.</p></section>
 <h3>Static methods</h3>
 <dl>
 <dt id="presalytics.WidgetBase.deserialize"><code class="name flex">
-<span>def <span class="ident">deserialize</span></span>(<span>widget, **kwargs)</span>
+<span>def <span class="ident">deserialize</span></span>(<span>widget: Widget, **kwargs) -> '<a title="presalytics.WidgetBase" href="/python-client/presalytics/index.html#presalytics.WidgetBase">WidgetBase</a>'</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Creates an instance of the widget from the data object in the presalytics.story.outline.Widget
@@ -4471,7 +4471,7 @@ def deserialize(cls, widget: &#39;Widget&#39;, **kwargs) -&gt; &#39;WidgetBase&#
 </details>
 </dd>
 <dt id="presalytics.WidgetBase.serialize"><code class="name flex">
-<span>def <span class="ident">serialize</span></span>(<span>self, **kwargs)</span>
+<span>def <span class="ident">serialize</span></span>(<span>self, **kwargs) -> 'Widget'</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Creates presalytics.story.outline.Widget object from instance data. This widget should
@@ -4511,7 +4511,7 @@ def serialize(self, **kwargs) -&gt; &#39;Widget&#39;:
 </details>
 </dd>
 <dt id="presalytics.WidgetBase.to_html"><code class="name flex">
-<span>def <span class="ident">to_html</span></span>(<span>self, data=None, **kwargs)</span>
+<span>def <span class="ident">to_html</span></span>(<span>self, data: Dict = None, **kwargs) -> str</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Returns valid html that renders the widget in a broswer.</p>
@@ -4568,7 +4568,7 @@ def to_html(self, data: typing.Dict = None, **kwargs) -&gt; str:
 </dd>
 <dt id="presalytics.XmlTransformBase"><code class="flex name class">
 <span>class <span class="ident">XmlTransformBase</span></span>
-<span>(</span><span>function_params, *args, **kwargs)</span>
+<span>(</span><span>function_params: Dict, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Helper class that provides a standard way to create an ABC using
@@ -4600,7 +4600,7 @@ inheritance.</p></section>
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.XmlTransformBase.execute"><code class="name flex">
-<span>def <span class="ident">execute</span></span>(<span>self, lxml_element)</span>
+<span>def <span class="ident">execute</span></span>(<span>self, lxml_element: <cyfunction Element at 0x7f5aed598df0>)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -4614,7 +4614,7 @@ inheritance.</p></section>
 </details>
 </dd>
 <dt id="presalytics.XmlTransformBase.transform_function"><code class="name flex">
-<span>def <span class="ident">transform_function</span></span>(<span>self, lxml_element, params)</span>
+<span>def <span class="ident">transform_function</span></span>(<span>self, lxml_element: <cyfunction Element at 0x7f5aed598df0>, params: Dict) -> <cyfunction Element at 0x7f5aed598df0></span>
 </code></dt>
 <dd>
 <section class="desc"></section>

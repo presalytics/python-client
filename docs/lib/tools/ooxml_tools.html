@@ -190,7 +190,7 @@ def get_mime_type_from_filename(client: presalytics.Client, filename) -&gt; typi
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="presalytics.lib.tools.ooxml_tools.create_outline_from_ooxml_document"><code class="name flex">
-<span>def <span class="ident">create_outline_from_ooxml_document</span></span>(<span>story, ooxml_document, title=None, description=None, themes=None, client_info={})</span>
+<span>def <span class="ident">create_outline_from_ooxml_document</span></span>(<span>story: Story, ooxml_document: Document, title: str = None, description: str = None, themes: Sequence[_ForwardRef('ThemeBase')] = None, client_info={})</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -246,7 +246,7 @@ def get_mime_type_from_filename(client: presalytics.Client, filename) -&gt; typi
 </details>
 </dd>
 <dt id="presalytics.lib.tools.ooxml_tools.create_pages_from_ooxml_document"><code class="name flex">
-<span>def <span class="ident">create_pages_from_ooxml_document</span></span>(<span>story, ooxml_document, client_info={})</span>
+<span>def <span class="ident">create_pages_from_ooxml_document</span></span>(<span>story: Story, ooxml_document: Document, client_info={})</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -290,7 +290,7 @@ def get_mime_type_from_filename(client: presalytics.Client, filename) -&gt; typi
 </details>
 </dd>
 <dt id="presalytics.lib.tools.ooxml_tools.create_story_from_ooxml_file"><code class="name flex">
-<span>def <span class="ident">create_story_from_ooxml_file</span></span>(<span>filename, client_info={})</span>
+<span>def <span class="ident">create_story_from_ooxml_file</span></span>(<span>filename: str, client_info={}) -> 'Story'</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -322,7 +322,7 @@ def get_mime_type_from_filename(client: presalytics.Client, filename) -&gt; typi
 </details>
 </dd>
 <dt id="presalytics.lib.tools.ooxml_tools.create_theme_from_ooxml_document"><code class="name flex">
-<span>def <span class="ident">create_theme_from_ooxml_document</span></span>(<span>document_id, client_info={})</span>
+<span>def <span class="ident">create_theme_from_ooxml_document</span></span>(<span>document_id: str, client_info={})</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -359,7 +359,7 @@ def get_mime_type_from_filename(client: presalytics.Client, filename) -&gt; typi
 </details>
 </dd>
 <dt id="presalytics.lib.tools.ooxml_tools.get_mime_type_from_filename"><code class="name flex">
-<span>def <span class="ident">get_mime_type_from_filename</span></span>(<span>client, filename)</span>
+<span>def <span class="ident">get_mime_type_from_filename</span></span>(<span>client: <a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client">Client</a>, filename) -> Union[str, NoneType]</span>
 </code></dt>
 <dd>
 <section class="desc"></section>

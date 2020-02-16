@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.4" />
-<title>presalytics.lib.config_loader API documentation</title>
+<title>presalytics.lib.tools.story_tools API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,52 +17,55 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>presalytics.lib.config_loader</code></h1>
+<h1 class="title">Module <code>presalytics.lib.tools.story_tools</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L0-L37" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/story_tools.py#L0-L40" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">import pkgutil
-import importlib
-import os
-import typing
+<pre><code class="python">import typing
 import logging
-import importlib.util
+import urllib.parse
+import requests
+import presalytics.lib.tools.ooxml_tools
+import presalytics.lib.exceptions
+if typing.TYPE_CHECKING:
+    from presalytics.client.api import Client
+    from io import BytesIO
 
 
 logger = logging.getLogger(__name__)
 
 
-def load_config(additional_paths: typing.List[str] = []) -&gt; typing.Dict:
-    current_path = os.getcwd()
-    additional_paths.append(current_path)
-    config_dict = None
+def story_post_file_bytes(client: &#39;Client&#39;, binary_obj: &#39;BytesIO&#39;, filename: str, mime_type: str = None):
+    if not mime_type:
+        mime_type = presalytics.lib.tools.ooxml_tools.get_mime_type_from_filename(client, filename)
+    _file = {&#39;file&#39;: (filename, binary_obj, mime_type,)}
+    headers = client.get_auth_header()
+    headers.update({
+        &#39;User-Agent&#39;: client.story.api_client.user_agent,
+        &#39;Accept&#39;: &#39;application/json&#39;
+    })
+    endpoint = urllib.parse.urljoin(client.story.api_client.configuration.host, &#39;story/file&#39;)
     try:
-        for path in additional_paths:
-            for name in os.listdir(path):
-                if name == &#34;config.py&#34;:
-                    config_path = os.path.join(path, name)
-                    config_spec = importlib.util.spec_from_file_location(&#34;config&#34;, config_path)
-                    config_mod = importlib.util.module_from_spec(config_spec)
-                    config_spec.loader.exec_module(config_mod)
-                    config_dict = getattr(config_mod, &#34;PRESALYTICS&#34;, None)
-                    if not config_dict:
-                        config_dict = config_mod.__dict__
-                    if config_dict:
-                        break
-            if config_dict:
-                break
-        if config_dict:
-            return config_dict
-        else:
-            return {}
+        resp = requests.post(endpoint, headers=headers, files=_file)
     except Exception as ex:
-        logger.exception(ex)
-        return {}
-        </code></pre>
+        message = &#34;An error occured in the presalytics API client&#34;
+        raise presalytics.lib.exceptions.ApiError(message=message, status_code=resp.status_code)
+    data = resp.json()
+    if resp.status_code &gt; 299:
+        logger.error(data[&#39;detail&#39;])
+        raise presalytics.lib.exceptions.ApiError(message=data[&#34;detail&#34;], status_code=resp.status_code)
+    else:
+        try:
+            story = client.story.api_client._ApiClient__deserialize(data, &#39;Story&#39;)
+            return story
+        except Exception as ex:
+            logger.error(&#34;Story object could not be deserialized.&#34;)
+            logger.exception(ex)
+        return data</code></pre>
 </details>
 </section>
 <section>
@@ -72,42 +75,43 @@ def load_config(additional_paths: typing.List[str] = []) -&gt; typing.Dict:
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="presalytics.lib.config_loader.load_config"><code class="name flex">
-<span>def <span class="ident">load_config</span></span>(<span>additional_paths=[])</span>
+<dt id="presalytics.lib.tools.story_tools.story_post_file_bytes"><code class="name flex">
+<span>def <span class="ident">story_post_file_bytes</span></span>(<span>client: Client, binary_obj: BytesIO, filename: str, mime_type: str = None)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L12-L37" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/story_tools.py#L15-L41" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">def load_config(additional_paths: typing.List[str] = []) -&gt; typing.Dict:
-    current_path = os.getcwd()
-    additional_paths.append(current_path)
-    config_dict = None
+<pre><code class="python">def story_post_file_bytes(client: &#39;Client&#39;, binary_obj: &#39;BytesIO&#39;, filename: str, mime_type: str = None):
+    if not mime_type:
+        mime_type = presalytics.lib.tools.ooxml_tools.get_mime_type_from_filename(client, filename)
+    _file = {&#39;file&#39;: (filename, binary_obj, mime_type,)}
+    headers = client.get_auth_header()
+    headers.update({
+        &#39;User-Agent&#39;: client.story.api_client.user_agent,
+        &#39;Accept&#39;: &#39;application/json&#39;
+    })
+    endpoint = urllib.parse.urljoin(client.story.api_client.configuration.host, &#39;story/file&#39;)
     try:
-        for path in additional_paths:
-            for name in os.listdir(path):
-                if name == &#34;config.py&#34;:
-                    config_path = os.path.join(path, name)
-                    config_spec = importlib.util.spec_from_file_location(&#34;config&#34;, config_path)
-                    config_mod = importlib.util.module_from_spec(config_spec)
-                    config_spec.loader.exec_module(config_mod)
-                    config_dict = getattr(config_mod, &#34;PRESALYTICS&#34;, None)
-                    if not config_dict:
-                        config_dict = config_mod.__dict__
-                    if config_dict:
-                        break
-            if config_dict:
-                break
-        if config_dict:
-            return config_dict
-        else:
-            return {}
+        resp = requests.post(endpoint, headers=headers, files=_file)
     except Exception as ex:
-        logger.exception(ex)
-        return {}</code></pre>
+        message = &#34;An error occured in the presalytics API client&#34;
+        raise presalytics.lib.exceptions.ApiError(message=message, status_code=resp.status_code)
+    data = resp.json()
+    if resp.status_code &gt; 299:
+        logger.error(data[&#39;detail&#39;])
+        raise presalytics.lib.exceptions.ApiError(message=data[&#34;detail&#34;], status_code=resp.status_code)
+    else:
+        try:
+            story = client.story.api_client._ApiClient__deserialize(data, &#39;Story&#39;)
+            return story
+        except Exception as ex:
+            logger.error(&#34;Story object could not be deserialized.&#34;)
+            logger.exception(ex)
+        return data</code></pre>
 </details>
 </dd>
 </dl>
@@ -123,12 +127,12 @@ def load_config(additional_paths: typing.List[str] = []) -&gt; typing.Dict:
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="presalytics.lib" href="/python-client/presalytics/lib/index.html">presalytics.lib</a></code></li>
+<li><code><a title="presalytics.lib.tools" href="/python-client/presalytics/lib/tools/index.html">presalytics.lib.tools</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="presalytics.lib.config_loader.load_config" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.load_config">load_config</a></code></li>
+<li><code><a title="presalytics.lib.tools.story_tools.story_post_file_bytes" href="/python-client/presalytics/lib/tools/story_tools.html#presalytics.lib.tools.story_tools.story_post_file_bytes">story_post_file_bytes</a></code></li>
 </ul>
 </li>
 </ul>

@@ -415,7 +415,7 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
 <dl>
 <dt id="presalytics.story.components.ComponentBase"><code class="flex name class">
 <span>class <span class="ident">ComponentBase</span></span>
-<span>(</span><span>client_info=None, *args, **kwargs)</span>
+<span>(</span><span>client_info: Dict = None, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>This class serves as the primary interface clas for the story components.
@@ -540,7 +540,7 @@ Used for component registration.</p></section>
 <h3>Static methods</h3>
 <dl>
 <dt id="presalytics.story.components.ComponentBase.deserialize"><code class="name flex">
-<span>def <span class="ident">deserialize</span></span>(<span>component, **kwargs)</span>
+<span>def <span class="ident">deserialize</span></span>(<span>component: Type[_ForwardRef('OutlineBase')], **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -813,7 +813,7 @@ inheritance.</p></section>
 </dd>
 <dt id="presalytics.story.components.PageTemplateBase"><code class="flex name class">
 <span>class <span class="ident">PageTemplateBase</span></span>
-<span>(</span><span>page, **kwargs)</span>
+<span>(</span><span>page: Page, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Inherit from this base class to render templates to html via the
@@ -970,7 +970,7 @@ def deseriailize(cls, component, **kwargs):
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.story.components.PageTemplateBase.get_page_widgets"><code class="name flex">
-<span>def <span class="ident">get_page_widgets</span></span>(<span>self, page)</span>
+<span>def <span class="ident">get_page_widgets</span></span>(<span>self, page: Page)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Converts the widgets within a presaltytics.story.outline.Page object to a list
@@ -993,7 +993,7 @@ of widgets subclassed from WidgetComponentBase</p></section>
 </details>
 </dd>
 <dt id="presalytics.story.components.PageTemplateBase.load_widget"><code class="name flex">
-<span>def <span class="ident">load_widget</span></span>(<span>self, widget)</span>
+<span>def <span class="ident">load_widget</span></span>(<span>self, widget: Widget)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Converts a presalytics.story.outline.Widget object to a subclass of WidgetComponentBase
@@ -1024,7 +1024,7 @@ via a presalytics.story.loaders.WidgetLoaderBase object.</p></section>
 </details>
 </dd>
 <dt id="presalytics.story.components.PageTemplateBase.render"><code class="name flex">
-<span>def <span class="ident">render</span></span>(<span>self, **kwargs)</span>
+<span>def <span class="ident">render</span></span>(<span>self, **kwargs) -> str</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Returns valid html that renders the template in a broswer with data loaded from widgets.</p>
@@ -1357,7 +1357,7 @@ own custom initialization.</p></section>
 <h3>Static methods</h3>
 <dl>
 <dt id="presalytics.story.components.WidgetBase.deserialize"><code class="name flex">
-<span>def <span class="ident">deserialize</span></span>(<span>widget, **kwargs)</span>
+<span>def <span class="ident">deserialize</span></span>(<span>widget: Widget, **kwargs) -> '<a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a>'</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Creates an instance of the widget from the data object in the presalytics.story.outline.Widget
@@ -1423,7 +1423,7 @@ def deserialize(cls, widget: &#39;Widget&#39;, **kwargs) -&gt; &#39;WidgetBase&#
 </details>
 </dd>
 <dt id="presalytics.story.components.WidgetBase.serialize"><code class="name flex">
-<span>def <span class="ident">serialize</span></span>(<span>self, **kwargs)</span>
+<span>def <span class="ident">serialize</span></span>(<span>self, **kwargs) -> 'Widget'</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Creates presalytics.story.outline.Widget object from instance data. This widget should
@@ -1463,7 +1463,7 @@ def serialize(self, **kwargs) -&gt; &#39;Widget&#39;:
 </details>
 </dd>
 <dt id="presalytics.story.components.WidgetBase.to_html"><code class="name flex">
-<span>def <span class="ident">to_html</span></span>(<span>self, data=None, **kwargs)</span>
+<span>def <span class="ident">to_html</span></span>(<span>self, data: Dict = None, **kwargs) -> str</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Returns valid html that renders the widget in a broswer.</p>

@@ -136,7 +136,7 @@ class TitleWithSingleItem(JinjaTemplateBuilder):
 <dl>
 <dt id="presalytics.lib.templates.base.JinjaTemplateBuilder"><code class="flex name class">
 <span>class <span class="ident">JinjaTemplateBuilder</span></span>
-<span>(</span><span>page, **kwargs)</span>
+<span>(</span><span>page: Page, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Inherit from this base class to render templates to html via the
@@ -277,7 +277,7 @@ def deserialize(cls, component, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.lib.templates.base.JinjaTemplateBuilder.load_jinja_template"><code class="name flex">
-<span>def <span class="ident">load_jinja_template</span></span>(<span>self)</span>
+<span>def <span class="ident">load_jinja_template</span></span>(<span>self) -> jinja2.environment.Template</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -324,7 +324,7 @@ def deserialize(cls, component, **kwargs):
 </dd>
 <dt id="presalytics.lib.templates.base.TitleWithSingleItem"><code class="flex name class">
 <span>class <span class="ident">TitleWithSingleItem</span></span>
-<span>(</span><span>page, **kwargs)</span>
+<span>(</span><span>page: Page, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Inherit from this base class to render templates to html via the
@@ -375,7 +375,7 @@ in the presalytics.lib.templates.base module.</p></section>
 </dd>
 <dt id="presalytics.lib.templates.base.WidgetPage"><code class="flex name class">
 <span>class <span class="ident">WidgetPage</span></span>
-<span>(</span><span>page, **kwargs)</span>
+<span>(</span><span>page: Page, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Inherit from this base class to render templates to html via the

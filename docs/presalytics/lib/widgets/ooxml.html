@@ -1,0 +1,1488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>presalytics.lib.widgets.ooxml API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>presalytics.lib.widgets.ooxml</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L0-L401" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">import typing
+import time
+import urllib.parse
+import requests
+import os
+import datetime
+import dateutil.parser
+import lxml
+import lxml.etree
+import posixpath
+import presalytics
+import presalytics.client.api
+import presalytics.story.components
+import presalytics.client
+import presalytics.lib.exceptions
+import presalytics.story.outline
+import presalytics.lib.util
+import presalytics.lib.plugins.ooxml
+if typing.TYPE_CHECKING:
+    from presalytics.story.outline import StoryOutline, Page, Widget
+    from presalytics.client.presalytics_story import Story as ApiStory
+
+
+class OoxmlEndpointMap(object):
+    BASE_URL = &#34;https://api.presalytics.io/ooxml-automation&#34;
+
+    CHART = &#34;Charts&#34;
+    CONNECTION_SHAPE = &#34;ConnectionShapes&#34;
+    DOCUMENT = &#34;Documents&#34;
+    GROUP = &#34;Groups&#34;
+    IMAGE = &#34;Images&#34;
+    SHAPE = &#34;Shapes&#34;
+    SHAPETREE = &#34;ShapeTrees&#34;
+    SLIDE = &#34;Slides&#34;
+    TABLE = &#34;Tables&#34;
+    THEME = &#34;Themes&#34;
+
+
+    def _build_object_type_map(self):
+        return {
+            &#34;Chart&#34;: [
+                OoxmlEndpointMap.CHART,
+            ],
+            &#34;Slide&#34;: [
+                OoxmlEndpointMap.GROUP,
+                OoxmlEndpointMap.SHAPE,
+                OoxmlEndpointMap.SHAPETREE, 
+                OoxmlEndpointMap.CONNECTION_SHAPE,
+                OoxmlEndpointMap.SLIDE
+            ],
+            &#34;Table&#34;: [
+                OoxmlEndpointMap.TABLE
+            ],
+            &#34;Theme&#34;: [
+                OoxmlEndpointMap.THEME
+            ],
+            &#34;Shared&#34;: [
+                OoxmlEndpointMap.IMAGE
+            ],
+            &#34;EMPTY&#34;: [
+                OoxmlEndpointMap.DOCUMENT
+            ]
+        }
+    
+    
+
+    def __init__(self, endpoint_id, baseurl: str = None):
+        if endpoint_id not in OoxmlEndpointMap.__dict__.values():
+            raise presalytics.lib.exceptions.ValidationError(&#34;{0} is not a valid endpoint ID&#34;.format(endpoint))
+        self.endpoint_id = endpoint_id
+        if not baseurl:
+            self.baseurl = OoxmlEndpointMap.BASE_URL
+            custom_hosts = presalytics.CONFIG.get(&#34;HOSTS&#34;, None)
+            if custom_hosts:
+                ooxml_host = custom_hosts.get(&#34;OOXML_AUTOMATION&#34;, None)
+                if ooxml_host:
+                    self.baseurl = ooxml_host
+                
+        else:
+            self.baseurl = baseurl
+        self.root_url = posixpath.join(self.baseurl, self.endpoint_id)
+        self.OBJECT_TYPE_MAP = self._build_object_type_map()
+    
+    def get_object_type(self):
+        for key, val in self.OBJECT_TYPE_MAP.items():
+            for test_ep in val:
+                if test_ep == self.endpoint_id:
+                    if key == &#34;EMPTY&#34;:
+                        return self.endpoint_id
+                    else:
+                        return &#34;{0}.{1}&#34;.format(key, self.endpoint_id)
+        message = &#34;Invalid EndpointMap configuration: {0} is not in OBJECT_TYPE_MAP&#34;.format(self.endpoint_id)
+        raise presalytics.lib.exceptions.ValidationError(message)
+
+    def get_id_url(self, id):
+        return posixpath.join(self.root_url, id)
+
+    def get_svg_url(self, id):
+        return posixpath.join(self.root_url, &#34;Svg&#34;, id)
+
+    def get_xml_url(self, id):
+        return posixpath.join(self.root_url, &#34;OpenOfficeXml&#34;, id)
+
+    @classmethod
+    def connection_shape(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.CONNECTION_SHAPE, baseurl)
+
+    @classmethod
+    def chart(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.CHART, baseurl)
+
+    @classmethod
+    def document(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.DOCUMENT, baseurl)
+    
+    @classmethod
+    def group(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.GROUP, baseurl)
+
+    @classmethod
+    def image(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.IMAGE, baseurl)
+
+    @classmethod
+    def shape(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.SHAPE, baseurl)
+
+    @classmethod
+    def shapetree(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.SHAPETREE, baseurl)
+
+    @classmethod
+    def slide(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.SLIDE, baseurl)
+
+    @classmethod
+    def table(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.table, baseurl)
+
+    @classmethod
+    def theme(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.THEME, baseurl)
+
+
+class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
+    endpoint_map: OoxmlEndpointMap
+    data: typing.Dict
+
+    __plugins__ = [
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;jquery&#39;
+            }
+        },
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;ooxml&#39;
+            }
+        },
+        {
+            &#39;name&#39;: &#39;external_links&#39;,
+            &#39;kind&#39;: &#39;style&#39;,
+            &#39;config&#39;: {
+                &#39;approved_styles_key&#39;: &#39;preloaders&#39;
+            }
+        }
+    ]
+
+    def __init__(self, 
+                 name,
+                 story_id=None,
+                 object_ooxml_id=None,
+                 endpoint_map=None,
+                 **kwargs):
+        super(OoxmlWidgetBase, self).__init__(name, **kwargs)
+        if object_ooxml_id:
+            self.object_ooxml_id = object_ooxml_id
+        if story_id:
+            self.story_id = story_id
+        if endpoint_map:
+            self.endpoint_map = endpoint_map
+        self.svg_html = None
+
+    def create_container(self, **kwargs):
+        
+        client = self.get_client()
+        self.token = client.token_util.token[&#34;access_token&#34;]
+        svg_container_div = lxml.html.Element(&#34;div&#34;, {
+            &#39;class&#39;: &#39;svg-container&#39;,
+            &#39;data-jwt&#39;: self.token,
+            &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
+            &#39;data-object-id&#39;: self.object_ooxml_id
+        })
+        preloader_container_div = lxml.etree.SubElement(svg_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-container&#34;})
+        preloader_row_div = lxml.etree.SubElement(preloader_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-row&#34;})
+        preloader_file = os.path.join(os.path.dirname(__file__), &#34;img&#34;, &#34;preloader.svg&#34;)
+        svg = lxml.html.parse(preloader_file)
+        preloader_row_div.append(svg.getroot())
+        empty_parent_div = lxml.html.Element(&#34;div&#34;, {
+            &#39;class&#39;: &#39;empty-parent bg-light&#39;
+        })
+        empty_parent_div.append(svg_container_div)
+        return lxml.html.tostring(empty_parent_div)
+
+
+    def to_html(self, **kwargs):
+        return self.svg_html
+
+    def get_svg(self, id, timeout_iterator=0) -&gt; str:
+        svg_url = self.endpoint_map.get_svg_url(id)
+        client = self.get_client()
+        auth_header = client.get_auth_header()
+        response = requests.get(svg_url, headers=auth_header)
+        svg_data = response.text
+        if response.status_code != 200:
+            raise presalytics.lib.exceptions.ApiError(message=response.text, status_code=response.status_code)
+        if response.text.startswith(&#34;Temp data&#34;):
+            if timeout_iterator &gt; 5:
+                raise presalytics.lib.exceptions.ApiError(message=&#34;Unable to download svg.  Please check for upstream processing errors.&#34;)
+            else:
+                time.sleep(2)
+                svg_data = self.get_svg(id, timeout_iterator)
+        return svg_data
+
+
+class OoxmlFileWidget(OoxmlWidgetBase):
+    object_name: typing.Optional[str]
+    ooxml_id: str
+    file_last_modified: datetime.datetime
+    previous_ooxml_version: typing.Dict[str, str]
+
+    __component_kind__ = &#39;ooxml-file-object&#39;
+
+    def __init__(self,
+                 filename,
+                 name=None,
+                 story_id=None,
+                 object_ooxml_id=None,
+                 endpoint_map=None,
+                 object_name=None,
+                 previous_ooxml_version={},
+                 file_last_modified=None,
+                 document_ooxml_id=None,
+                 **kwargs):
+        if object_name:
+            self.object_name = object_name
+        else:
+            self.object_name = None
+        if not name:
+            if self.object_name:
+                name = self.object_name
+            else:
+                name = filename
+        super(OoxmlFileWidget, self).__init__(name, story_id, object_ooxml_id, endpoint_map, **kwargs)
+        self.filename = os.path.basename(filename)
+        if not self.endpoint_map:
+            if filename.split(&#34;.&#34;)[-1] in [&#34;pptx&#34;, &#34;ppt&#34;]:
+                self.endpoint_map = OoxmlEndpointMap(OoxmlEndpointMap.SLIDE)
+        self.previous_ooxml_version = previous_ooxml_version
+        if file_last_modified:
+            self.file_last_modified = file_last_modified.replace(tzinfo=datetime.timezone.utc)
+        else:
+            self.file_last_modified = datetime.datetime.utcnow()
+        self.document_ooxml_id = document_ooxml_id
+        self.update()
+        self.svg_html = self.create_container(**kwargs)
+
+    def update(self):
+        &#34;&#34;&#34;
+        If the file is available locally, this renders that updated file and pushes
+        the updated rendering data to the server
+        &#34;&#34;&#34;
+        story: &#39;ApiStory&#39;
+        page: &#39;Page&#39;
+        widget: &#39;Widget&#39;
+
+        search_paths = list(set(presalytics.autodiscover_paths))
+        if os.getcwd() not in search_paths:
+            search_paths.append(os.getcwd())
+        for path in search_paths:
+            fpath = os.path.join(path, self.filename)
+            if os.path.exists(fpath):
+                # update only the file has been modified sine last time
+                this_file_last_modified = datetime.datetime.utcfromtimestamp(os.path.getmtime(fpath)).astimezone(tz=datetime.timezone.utc)
+                if self.file_last_modified is None or self.file_last_modified &lt;= this_file_last_modified:
+                    client = self.get_client()
+                    story, status, headers = client.story.story_id_file_post_with_http_info(self.story_id, file=fpath, replace_existing=True, obsolete_id=self.document_ooxml_id)
+                    if status &gt;= 299:
+                        raise presalytics.lib.exceptions.ApiError()
+                    self.previous_ooxml_version = {
+                        &#34;document_ooxml_id&#34;: self.document_ooxml_id,
+                        &#34;object_ooxml_id&#34;: self.object_ooxml_id
+                    }
+                    new_outline = presalytics.story.outline.StoryOutline.load(story.outline)
+                    for page in new_outline.pages:
+                        found = False
+                        for widget in page.widgets:
+                            if widget.name == self.object_name:
+                                self.document_ooxml_id = widget.data[&#34;document_ooxml_id&#34;]
+                                found = True
+                                break
+                        if found:
+                            break
+                    if not found:
+                        message = &#34;Unable to find widget object name {0} in new story outline.  Has this widget been deleted?&#34;.format(self.object_name)
+                        raise presalytics.lib.exceptions.ValidationError(message)
+
+                    # Get object tree, compare to object name
+                    child_tree = client.ooxml_automation.documents_childobjects_get_id(self.document_ooxml_id)
+                    target_dto = None
+
+                    try:
+                        target_dto = next(x for x in child_tree if x.entity_name == self.object_name)
+                    except StopIteration:
+                        pass
+                    # if name not in object or _object_name is none, get first item of type in end_point id
+                    if not target_dto:
+                        try:
+                            target_dto = next(x for x in child_tree if x.object_type.split(&#34;.&#34;)[1] == self.endpoint_map.endpoint_id)
+                        except StopIteration:
+                            message = &#34;Child tree of document {0} does not have a child object of type {1} or name {2}.&#34;.format(self.ooxml_id, self.endpoint_map.endpoint_id, self.object_name)
+                            raise presalytics.lib.exceptions.InvalidConfigurationError(message)
+                    # set widget parameters for recreation server-side (without file)
+                    self.object_ooxml_id = target_dto.entity_id
+                    self.file_last_modified = presalytics.lib.util.roundup_date_modified(this_file_last_modified)
+
+
+    @classmethod
+    def deserialize(cls, component, **kwargs):
+        init_args = {
+            &#34;filename&#34;: component.data[&#34;filename&#34;],
+            &#34;endpoint_map&#34;: OoxmlEndpointMap(component.data[&#34;endpoint_id&#34;]),
+            &#34;object_name&#34;: component.data[&#34;object_name&#34;],
+            &#34;name&#34;: component.name,
+        }
+        if &#34;document_ooxml_id&#34; in component.data:
+            init_args.update(
+                {
+                    &#34;document_ooxml_id&#34;: component.data[&#34;document_ooxml_id&#34;]
+                }
+            )
+        if &#34;object_ooxml_id&#34; in component.data:
+            init_args.update(
+                {
+                    &#34;object_ooxml_id&#34;: component.data[&#34;object_ooxml_id&#34;]
+                }
+            )
+        if &#34;file_last_modified&#34; in component.data:
+            init_args.update(
+                {
+                    &#34;file_last_modified&#34;: dateutil.parser.parse(component.data[&#34;file_last_modified&#34;]).replace(tzinfo=datetime.timezone.utc)
+                }
+            )
+        if &#34;previous_ooxml_version&#34; in component.data:
+            init_args.update(
+                {
+                    &#34;previous_ooxml_version&#34;: component.data[&#34;previous_ooxml_version&#34;]
+                }
+            )
+        if &#34;story_id&#34; in component.data:
+            init_args.update(
+                {
+                    &#34;story_id&#34;: component.data[&#34;story_id&#34;]
+                }
+            )
+        if len(kwargs.keys()) &gt; 0:
+            init_args.update(kwargs)
+        return cls(**init_args)
+
+    def serialize(self):
+        self.update()
+        data = {
+            &#34;filename&#34;: self.filename,
+            &#34;object_name&#34;: self.object_name,
+            &#34;endpoint_id&#34;: self.endpoint_map.endpoint_id,
+            &#34;document_ooxml_id&#34;: self.document_ooxml_id,
+            &#34;object_ooxml_id&#34;: self.object_ooxml_id,
+            &#34;story_id&#34;: self.story_id
+        }
+        if self.file_last_modified:
+            data.update(
+                {
+                    &#34;file_last_modified&#34;: self.file_last_modified.isoformat()
+                }
+            )
+        if self.previous_ooxml_version:
+            data.update(
+                {
+                    &#34;previous_ooxml_version&#34;: self.previous_ooxml_version
+                }
+            )
+        widget = presalytics.story.outline.Widget(
+            name=self.name,
+            kind=self.__component_kind__,
+            data=data,
+            plugins=None
+        )
+        return widget</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code class="flex name class">
+<span>class <span class="ident">OoxmlEndpointMap</span></span>
+<span>(</span><span>endpoint_id, baseurl=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L24-L142" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class OoxmlEndpointMap(object):
+    BASE_URL = &#34;https://api.presalytics.io/ooxml-automation&#34;
+
+    CHART = &#34;Charts&#34;
+    CONNECTION_SHAPE = &#34;ConnectionShapes&#34;
+    DOCUMENT = &#34;Documents&#34;
+    GROUP = &#34;Groups&#34;
+    IMAGE = &#34;Images&#34;
+    SHAPE = &#34;Shapes&#34;
+    SHAPETREE = &#34;ShapeTrees&#34;
+    SLIDE = &#34;Slides&#34;
+    TABLE = &#34;Tables&#34;
+    THEME = &#34;Themes&#34;
+
+
+    def _build_object_type_map(self):
+        return {
+            &#34;Chart&#34;: [
+                OoxmlEndpointMap.CHART,
+            ],
+            &#34;Slide&#34;: [
+                OoxmlEndpointMap.GROUP,
+                OoxmlEndpointMap.SHAPE,
+                OoxmlEndpointMap.SHAPETREE, 
+                OoxmlEndpointMap.CONNECTION_SHAPE,
+                OoxmlEndpointMap.SLIDE
+            ],
+            &#34;Table&#34;: [
+                OoxmlEndpointMap.TABLE
+            ],
+            &#34;Theme&#34;: [
+                OoxmlEndpointMap.THEME
+            ],
+            &#34;Shared&#34;: [
+                OoxmlEndpointMap.IMAGE
+            ],
+            &#34;EMPTY&#34;: [
+                OoxmlEndpointMap.DOCUMENT
+            ]
+        }
+    
+    
+
+    def __init__(self, endpoint_id, baseurl: str = None):
+        if endpoint_id not in OoxmlEndpointMap.__dict__.values():
+            raise presalytics.lib.exceptions.ValidationError(&#34;{0} is not a valid endpoint ID&#34;.format(endpoint))
+        self.endpoint_id = endpoint_id
+        if not baseurl:
+            self.baseurl = OoxmlEndpointMap.BASE_URL
+            custom_hosts = presalytics.CONFIG.get(&#34;HOSTS&#34;, None)
+            if custom_hosts:
+                ooxml_host = custom_hosts.get(&#34;OOXML_AUTOMATION&#34;, None)
+                if ooxml_host:
+                    self.baseurl = ooxml_host
+                
+        else:
+            self.baseurl = baseurl
+        self.root_url = posixpath.join(self.baseurl, self.endpoint_id)
+        self.OBJECT_TYPE_MAP = self._build_object_type_map()
+    
+    def get_object_type(self):
+        for key, val in self.OBJECT_TYPE_MAP.items():
+            for test_ep in val:
+                if test_ep == self.endpoint_id:
+                    if key == &#34;EMPTY&#34;:
+                        return self.endpoint_id
+                    else:
+                        return &#34;{0}.{1}&#34;.format(key, self.endpoint_id)
+        message = &#34;Invalid EndpointMap configuration: {0} is not in OBJECT_TYPE_MAP&#34;.format(self.endpoint_id)
+        raise presalytics.lib.exceptions.ValidationError(message)
+
+    def get_id_url(self, id):
+        return posixpath.join(self.root_url, id)
+
+    def get_svg_url(self, id):
+        return posixpath.join(self.root_url, &#34;Svg&#34;, id)
+
+    def get_xml_url(self, id):
+        return posixpath.join(self.root_url, &#34;OpenOfficeXml&#34;, id)
+
+    @classmethod
+    def connection_shape(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.CONNECTION_SHAPE, baseurl)
+
+    @classmethod
+    def chart(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.CHART, baseurl)
+
+    @classmethod
+    def document(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.DOCUMENT, baseurl)
+    
+    @classmethod
+    def group(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.GROUP, baseurl)
+
+    @classmethod
+    def image(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.IMAGE, baseurl)
+
+    @classmethod
+    def shape(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.SHAPE, baseurl)
+
+    @classmethod
+    def shapetree(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.SHAPETREE, baseurl)
+
+    @classmethod
+    def slide(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.SLIDE, baseurl)
+
+    @classmethod
+    def table(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.table, baseurl)
+
+    @classmethod
+    def theme(cls, baseurl=None):
+        return cls(OoxmlEndpointMap.THEME, baseurl)</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.BASE_URL"><code class="name">var <span class="ident">BASE_URL</span></code></dt>
+<dd>
+<section class="desc"><p>str(object='') -&gt; str
+str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
+<p>Create a new string object from the given object. If encoding or
+errors is specified, then the object must expose a data buffer
+that will be decoded using the given encoding and error handler.
+Otherwise, returns the result of object.<strong>str</strong>() (if defined)
+or repr(object).
+encoding defaults to sys.getdefaultencoding().
+errors defaults to 'strict'.</p></section>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.CHART"><code class="name">var <span class="ident">CHART</span></code></dt>
+<dd>
+<section class="desc"><p>str(object='') -&gt; str
+str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
+<p>Create a new string object from the given object. If encoding or
+errors is specified, then the object must expose a data buffer
+that will be decoded using the given encoding and error handler.
+Otherwise, returns the result of object.<strong>str</strong>() (if defined)
+or repr(object).
+encoding defaults to sys.getdefaultencoding().
+errors defaults to 'strict'.</p></section>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.CONNECTION_SHAPE"><code class="name">var <span class="ident">CONNECTION_SHAPE</span></code></dt>
+<dd>
+<section class="desc"><p>str(object='') -&gt; str
+str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
+<p>Create a new string object from the given object. If encoding or
+errors is specified, then the object must expose a data buffer
+that will be decoded using the given encoding and error handler.
+Otherwise, returns the result of object.<strong>str</strong>() (if defined)
+or repr(object).
+encoding defaults to sys.getdefaultencoding().
+errors defaults to 'strict'.</p></section>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.DOCUMENT"><code class="name">var <span class="ident">DOCUMENT</span></code></dt>
+<dd>
+<section class="desc"><p>str(object='') -&gt; str
+str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
+<p>Create a new string object from the given object. If encoding or
+errors is specified, then the object must expose a data buffer
+that will be decoded using the given encoding and error handler.
+Otherwise, returns the result of object.<strong>str</strong>() (if defined)
+or repr(object).
+encoding defaults to sys.getdefaultencoding().
+errors defaults to 'strict'.</p></section>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.GROUP"><code class="name">var <span class="ident">GROUP</span></code></dt>
+<dd>
+<section class="desc"><p>str(object='') -&gt; str
+str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
+<p>Create a new string object from the given object. If encoding or
+errors is specified, then the object must expose a data buffer
+that will be decoded using the given encoding and error handler.
+Otherwise, returns the result of object.<strong>str</strong>() (if defined)
+or repr(object).
+encoding defaults to sys.getdefaultencoding().
+errors defaults to 'strict'.</p></section>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.IMAGE"><code class="name">var <span class="ident">IMAGE</span></code></dt>
+<dd>
+<section class="desc"><p>str(object='') -&gt; str
+str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
+<p>Create a new string object from the given object. If encoding or
+errors is specified, then the object must expose a data buffer
+that will be decoded using the given encoding and error handler.
+Otherwise, returns the result of object.<strong>str</strong>() (if defined)
+or repr(object).
+encoding defaults to sys.getdefaultencoding().
+errors defaults to 'strict'.</p></section>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SHAPE"><code class="name">var <span class="ident">SHAPE</span></code></dt>
+<dd>
+<section class="desc"><p>str(object='') -&gt; str
+str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
+<p>Create a new string object from the given object. If encoding or
+errors is specified, then the object must expose a data buffer
+that will be decoded using the given encoding and error handler.
+Otherwise, returns the result of object.<strong>str</strong>() (if defined)
+or repr(object).
+encoding defaults to sys.getdefaultencoding().
+errors defaults to 'strict'.</p></section>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SHAPETREE"><code class="name">var <span class="ident">SHAPETREE</span></code></dt>
+<dd>
+<section class="desc"><p>str(object='') -&gt; str
+str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
+<p>Create a new string object from the given object. If encoding or
+errors is specified, then the object must expose a data buffer
+that will be decoded using the given encoding and error handler.
+Otherwise, returns the result of object.<strong>str</strong>() (if defined)
+or repr(object).
+encoding defaults to sys.getdefaultencoding().
+errors defaults to 'strict'.</p></section>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SLIDE"><code class="name">var <span class="ident">SLIDE</span></code></dt>
+<dd>
+<section class="desc"><p>str(object='') -&gt; str
+str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
+<p>Create a new string object from the given object. If encoding or
+errors is specified, then the object must expose a data buffer
+that will be decoded using the given encoding and error handler.
+Otherwise, returns the result of object.<strong>str</strong>() (if defined)
+or repr(object).
+encoding defaults to sys.getdefaultencoding().
+errors defaults to 'strict'.</p></section>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.TABLE"><code class="name">var <span class="ident">TABLE</span></code></dt>
+<dd>
+<section class="desc"><p>str(object='') -&gt; str
+str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
+<p>Create a new string object from the given object. If encoding or
+errors is specified, then the object must expose a data buffer
+that will be decoded using the given encoding and error handler.
+Otherwise, returns the result of object.<strong>str</strong>() (if defined)
+or repr(object).
+encoding defaults to sys.getdefaultencoding().
+errors defaults to 'strict'.</p></section>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.THEME"><code class="name">var <span class="ident">THEME</span></code></dt>
+<dd>
+<section class="desc"><p>str(object='') -&gt; str
+str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
+<p>Create a new string object from the given object. If encoding or
+errors is specified, then the object must expose a data buffer
+that will be decoded using the given encoding and error handler.
+Otherwise, returns the result of object.<strong>str</strong>() (if defined)
+or repr(object).
+encoding defaults to sys.getdefaultencoding().
+errors defaults to 'strict'.</p></section>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.chart"><code class="name flex">
+<span>def <span class="ident">chart</span></span>(<span>baseurl=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L108-L110" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@classmethod
+def chart(cls, baseurl=None):
+    return cls(OoxmlEndpointMap.CHART, baseurl)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.connection_shape"><code class="name flex">
+<span>def <span class="ident">connection_shape</span></span>(<span>baseurl=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L104-L106" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@classmethod
+def connection_shape(cls, baseurl=None):
+    return cls(OoxmlEndpointMap.CONNECTION_SHAPE, baseurl)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.document"><code class="name flex">
+<span>def <span class="ident">document</span></span>(<span>baseurl=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L112-L114" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@classmethod
+def document(cls, baseurl=None):
+    return cls(OoxmlEndpointMap.DOCUMENT, baseurl)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.group"><code class="name flex">
+<span>def <span class="ident">group</span></span>(<span>baseurl=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L116-L118" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@classmethod
+def group(cls, baseurl=None):
+    return cls(OoxmlEndpointMap.GROUP, baseurl)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.image"><code class="name flex">
+<span>def <span class="ident">image</span></span>(<span>baseurl=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L120-L122" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@classmethod
+def image(cls, baseurl=None):
+    return cls(OoxmlEndpointMap.IMAGE, baseurl)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.shape"><code class="name flex">
+<span>def <span class="ident">shape</span></span>(<span>baseurl=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L124-L126" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@classmethod
+def shape(cls, baseurl=None):
+    return cls(OoxmlEndpointMap.SHAPE, baseurl)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.shapetree"><code class="name flex">
+<span>def <span class="ident">shapetree</span></span>(<span>baseurl=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L128-L130" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@classmethod
+def shapetree(cls, baseurl=None):
+    return cls(OoxmlEndpointMap.SHAPETREE, baseurl)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.slide"><code class="name flex">
+<span>def <span class="ident">slide</span></span>(<span>baseurl=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L132-L134" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@classmethod
+def slide(cls, baseurl=None):
+    return cls(OoxmlEndpointMap.SLIDE, baseurl)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.table"><code class="name flex">
+<span>def <span class="ident">table</span></span>(<span>baseurl=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L136-L138" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@classmethod
+def table(cls, baseurl=None):
+    return cls(OoxmlEndpointMap.table, baseurl)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.theme"><code class="name flex">
+<span>def <span class="ident">theme</span></span>(<span>baseurl=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L140-L142" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@classmethod
+def theme(cls, baseurl=None):
+    return cls(OoxmlEndpointMap.THEME, baseurl)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_id_url"><code class="name flex">
+<span>def <span class="ident">get_id_url</span></span>(<span>self, id)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L95-L96" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_id_url(self, id):
+    return posixpath.join(self.root_url, id)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_object_type"><code class="name flex">
+<span>def <span class="ident">get_object_type</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L84-L93" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_object_type(self):
+    for key, val in self.OBJECT_TYPE_MAP.items():
+        for test_ep in val:
+            if test_ep == self.endpoint_id:
+                if key == &#34;EMPTY&#34;:
+                    return self.endpoint_id
+                else:
+                    return &#34;{0}.{1}&#34;.format(key, self.endpoint_id)
+    message = &#34;Invalid EndpointMap configuration: {0} is not in OBJECT_TYPE_MAP&#34;.format(self.endpoint_id)
+    raise presalytics.lib.exceptions.ValidationError(message)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_svg_url"><code class="name flex">
+<span>def <span class="ident">get_svg_url</span></span>(<span>self, id)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L98-L99" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_svg_url(self, id):
+    return posixpath.join(self.root_url, &#34;Svg&#34;, id)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_xml_url"><code class="name flex">
+<span>def <span class="ident">get_xml_url</span></span>(<span>self, id)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L101-L102" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_xml_url(self, id):
+    return posixpath.join(self.root_url, &#34;OpenOfficeXml&#34;, id)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlFileWidget"><code class="flex name class">
+<span>class <span class="ident">OoxmlFileWidget</span></span>
+<span>(</span><span>filename, name=None, story_id=None, object_ooxml_id=None, endpoint_map=None, object_name=None, previous_ooxml_version={}, file_last_modified=None, document_ooxml_id=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Inherit from this base class to create widget components that can be rendered to html via the
+presalytics.story.revealer.Revealer class.
+This component also need to build a method
+that allows the widget to be serialzed into a presalytics.story.outline.Widget object.</p>
+<h2 id="parameters">Parameters:</h2>
+<p>widget: Widget
+A presalytics.story.outline.Widget object use for initialized the component class.</p>
+<h2 id="attributes">Attributes:</h2>
+<p>outline_widget: Widget
+A presalytics.story.outline.Widget object</p>
+<p>css: List[str]
+A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
+in the presalytics.lib.templates.base module.</p>
+<p>js: List[str]
+A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
+in the presalytics.lib.templates.base module.</p>
+<p>Note: When inheriting from this base class, call "super().<strong>init</strong>(self, <em>args, </em>*kwargs)" before add your
+own custom initialization.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L230-L402" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class OoxmlFileWidget(OoxmlWidgetBase):
+    object_name: typing.Optional[str]
+    ooxml_id: str
+    file_last_modified: datetime.datetime
+    previous_ooxml_version: typing.Dict[str, str]
+
+    __component_kind__ = &#39;ooxml-file-object&#39;
+
+    def __init__(self,
+                 filename,
+                 name=None,
+                 story_id=None,
+                 object_ooxml_id=None,
+                 endpoint_map=None,
+                 object_name=None,
+                 previous_ooxml_version={},
+                 file_last_modified=None,
+                 document_ooxml_id=None,
+                 **kwargs):
+        if object_name:
+            self.object_name = object_name
+        else:
+            self.object_name = None
+        if not name:
+            if self.object_name:
+                name = self.object_name
+            else:
+                name = filename
+        super(OoxmlFileWidget, self).__init__(name, story_id, object_ooxml_id, endpoint_map, **kwargs)
+        self.filename = os.path.basename(filename)
+        if not self.endpoint_map:
+            if filename.split(&#34;.&#34;)[-1] in [&#34;pptx&#34;, &#34;ppt&#34;]:
+                self.endpoint_map = OoxmlEndpointMap(OoxmlEndpointMap.SLIDE)
+        self.previous_ooxml_version = previous_ooxml_version
+        if file_last_modified:
+            self.file_last_modified = file_last_modified.replace(tzinfo=datetime.timezone.utc)
+        else:
+            self.file_last_modified = datetime.datetime.utcnow()
+        self.document_ooxml_id = document_ooxml_id
+        self.update()
+        self.svg_html = self.create_container(**kwargs)
+
+    def update(self):
+        &#34;&#34;&#34;
+        If the file is available locally, this renders that updated file and pushes
+        the updated rendering data to the server
+        &#34;&#34;&#34;
+        story: &#39;ApiStory&#39;
+        page: &#39;Page&#39;
+        widget: &#39;Widget&#39;
+
+        search_paths = list(set(presalytics.autodiscover_paths))
+        if os.getcwd() not in search_paths:
+            search_paths.append(os.getcwd())
+        for path in search_paths:
+            fpath = os.path.join(path, self.filename)
+            if os.path.exists(fpath):
+                # update only the file has been modified sine last time
+                this_file_last_modified = datetime.datetime.utcfromtimestamp(os.path.getmtime(fpath)).astimezone(tz=datetime.timezone.utc)
+                if self.file_last_modified is None or self.file_last_modified &lt;= this_file_last_modified:
+                    client = self.get_client()
+                    story, status, headers = client.story.story_id_file_post_with_http_info(self.story_id, file=fpath, replace_existing=True, obsolete_id=self.document_ooxml_id)
+                    if status &gt;= 299:
+                        raise presalytics.lib.exceptions.ApiError()
+                    self.previous_ooxml_version = {
+                        &#34;document_ooxml_id&#34;: self.document_ooxml_id,
+                        &#34;object_ooxml_id&#34;: self.object_ooxml_id
+                    }
+                    new_outline = presalytics.story.outline.StoryOutline.load(story.outline)
+                    for page in new_outline.pages:
+                        found = False
+                        for widget in page.widgets:
+                            if widget.name == self.object_name:
+                                self.document_ooxml_id = widget.data[&#34;document_ooxml_id&#34;]
+                                found = True
+                                break
+                        if found:
+                            break
+                    if not found:
+                        message = &#34;Unable to find widget object name {0} in new story outline.  Has this widget been deleted?&#34;.format(self.object_name)
+                        raise presalytics.lib.exceptions.ValidationError(message)
+
+                    # Get object tree, compare to object name
+                    child_tree = client.ooxml_automation.documents_childobjects_get_id(self.document_ooxml_id)
+                    target_dto = None
+
+                    try:
+                        target_dto = next(x for x in child_tree if x.entity_name == self.object_name)
+                    except StopIteration:
+                        pass
+                    # if name not in object or _object_name is none, get first item of type in end_point id
+                    if not target_dto:
+                        try:
+                            target_dto = next(x for x in child_tree if x.object_type.split(&#34;.&#34;)[1] == self.endpoint_map.endpoint_id)
+                        except StopIteration:
+                            message = &#34;Child tree of document {0} does not have a child object of type {1} or name {2}.&#34;.format(self.ooxml_id, self.endpoint_map.endpoint_id, self.object_name)
+                            raise presalytics.lib.exceptions.InvalidConfigurationError(message)
+                    # set widget parameters for recreation server-side (without file)
+                    self.object_ooxml_id = target_dto.entity_id
+                    self.file_last_modified = presalytics.lib.util.roundup_date_modified(this_file_last_modified)
+
+
+    @classmethod
+    def deserialize(cls, component, **kwargs):
+        init_args = {
+            &#34;filename&#34;: component.data[&#34;filename&#34;],
+            &#34;endpoint_map&#34;: OoxmlEndpointMap(component.data[&#34;endpoint_id&#34;]),
+            &#34;object_name&#34;: component.data[&#34;object_name&#34;],
+            &#34;name&#34;: component.name,
+        }
+        if &#34;document_ooxml_id&#34; in component.data:
+            init_args.update(
+                {
+                    &#34;document_ooxml_id&#34;: component.data[&#34;document_ooxml_id&#34;]
+                }
+            )
+        if &#34;object_ooxml_id&#34; in component.data:
+            init_args.update(
+                {
+                    &#34;object_ooxml_id&#34;: component.data[&#34;object_ooxml_id&#34;]
+                }
+            )
+        if &#34;file_last_modified&#34; in component.data:
+            init_args.update(
+                {
+                    &#34;file_last_modified&#34;: dateutil.parser.parse(component.data[&#34;file_last_modified&#34;]).replace(tzinfo=datetime.timezone.utc)
+                }
+            )
+        if &#34;previous_ooxml_version&#34; in component.data:
+            init_args.update(
+                {
+                    &#34;previous_ooxml_version&#34;: component.data[&#34;previous_ooxml_version&#34;]
+                }
+            )
+        if &#34;story_id&#34; in component.data:
+            init_args.update(
+                {
+                    &#34;story_id&#34;: component.data[&#34;story_id&#34;]
+                }
+            )
+        if len(kwargs.keys()) &gt; 0:
+            init_args.update(kwargs)
+        return cls(**init_args)
+
+    def serialize(self):
+        self.update()
+        data = {
+            &#34;filename&#34;: self.filename,
+            &#34;object_name&#34;: self.object_name,
+            &#34;endpoint_id&#34;: self.endpoint_map.endpoint_id,
+            &#34;document_ooxml_id&#34;: self.document_ooxml_id,
+            &#34;object_ooxml_id&#34;: self.object_ooxml_id,
+            &#34;story_id&#34;: self.story_id
+        }
+        if self.file_last_modified:
+            data.update(
+                {
+                    &#34;file_last_modified&#34;: self.file_last_modified.isoformat()
+                }
+            )
+        if self.previous_ooxml_version:
+            data.update(
+                {
+                    &#34;previous_ooxml_version&#34;: self.previous_ooxml_version
+                }
+            )
+        widget = presalytics.story.outline.Widget(
+            name=self.name,
+            kind=self.__component_kind__,
+            data=data,
+            plugins=None
+        )
+        return widget</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></li>
+<li><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></li>
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlFileWidget.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>If the file is available locally, this renders that updated file and pushes
+the updated rendering data to the server</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L272-L329" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def update(self):
+    &#34;&#34;&#34;
+    If the file is available locally, this renders that updated file and pushes
+    the updated rendering data to the server
+    &#34;&#34;&#34;
+    story: &#39;ApiStory&#39;
+    page: &#39;Page&#39;
+    widget: &#39;Widget&#39;
+
+    search_paths = list(set(presalytics.autodiscover_paths))
+    if os.getcwd() not in search_paths:
+        search_paths.append(os.getcwd())
+    for path in search_paths:
+        fpath = os.path.join(path, self.filename)
+        if os.path.exists(fpath):
+            # update only the file has been modified sine last time
+            this_file_last_modified = datetime.datetime.utcfromtimestamp(os.path.getmtime(fpath)).astimezone(tz=datetime.timezone.utc)
+            if self.file_last_modified is None or self.file_last_modified &lt;= this_file_last_modified:
+                client = self.get_client()
+                story, status, headers = client.story.story_id_file_post_with_http_info(self.story_id, file=fpath, replace_existing=True, obsolete_id=self.document_ooxml_id)
+                if status &gt;= 299:
+                    raise presalytics.lib.exceptions.ApiError()
+                self.previous_ooxml_version = {
+                    &#34;document_ooxml_id&#34;: self.document_ooxml_id,
+                    &#34;object_ooxml_id&#34;: self.object_ooxml_id
+                }
+                new_outline = presalytics.story.outline.StoryOutline.load(story.outline)
+                for page in new_outline.pages:
+                    found = False
+                    for widget in page.widgets:
+                        if widget.name == self.object_name:
+                            self.document_ooxml_id = widget.data[&#34;document_ooxml_id&#34;]
+                            found = True
+                            break
+                    if found:
+                        break
+                if not found:
+                    message = &#34;Unable to find widget object name {0} in new story outline.  Has this widget been deleted?&#34;.format(self.object_name)
+                    raise presalytics.lib.exceptions.ValidationError(message)
+
+                # Get object tree, compare to object name
+                child_tree = client.ooxml_automation.documents_childobjects_get_id(self.document_ooxml_id)
+                target_dto = None
+
+                try:
+                    target_dto = next(x for x in child_tree if x.entity_name == self.object_name)
+                except StopIteration:
+                    pass
+                # if name not in object or _object_name is none, get first item of type in end_point id
+                if not target_dto:
+                    try:
+                        target_dto = next(x for x in child_tree if x.object_type.split(&#34;.&#34;)[1] == self.endpoint_map.endpoint_id)
+                    except StopIteration:
+                        message = &#34;Child tree of document {0} does not have a child object of type {1} or name {2}.&#34;.format(self.ooxml_id, self.endpoint_map.endpoint_id, self.object_name)
+                        raise presalytics.lib.exceptions.InvalidConfigurationError(message)
+                # set widget parameters for recreation server-side (without file)
+                self.object_ooxml_id = target_dto.entity_id
+                self.file_last_modified = presalytics.lib.util.roundup_date_modified(this_file_last_modified)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlWidgetBase"><code class="flex name class">
+<span>class <span class="ident">OoxmlWidgetBase</span></span>
+<span>(</span><span>name, story_id=None, object_ooxml_id=None, endpoint_map=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Inherit from this base class to create widget components that can be rendered to html via the
+presalytics.story.revealer.Revealer class.
+This component also need to build a method
+that allows the widget to be serialzed into a presalytics.story.outline.Widget object.</p>
+<h2 id="parameters">Parameters:</h2>
+<p>widget: Widget
+A presalytics.story.outline.Widget object use for initialized the component class.</p>
+<h2 id="attributes">Attributes:</h2>
+<p>outline_widget: Widget
+A presalytics.story.outline.Widget object</p>
+<p>css: List[str]
+A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
+in the presalytics.lib.templates.base module.</p>
+<p>js: List[str]
+A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
+in the presalytics.lib.templates.base module.</p>
+<p>Note: When inheriting from this base class, call "super().<strong>init</strong>(self, <em>args, </em>*kwargs)" before add your
+own custom initialization.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L145-L227" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
+    endpoint_map: OoxmlEndpointMap
+    data: typing.Dict
+
+    __plugins__ = [
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;jquery&#39;
+            }
+        },
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;ooxml&#39;
+            }
+        },
+        {
+            &#39;name&#39;: &#39;external_links&#39;,
+            &#39;kind&#39;: &#39;style&#39;,
+            &#39;config&#39;: {
+                &#39;approved_styles_key&#39;: &#39;preloaders&#39;
+            }
+        }
+    ]
+
+    def __init__(self, 
+                 name,
+                 story_id=None,
+                 object_ooxml_id=None,
+                 endpoint_map=None,
+                 **kwargs):
+        super(OoxmlWidgetBase, self).__init__(name, **kwargs)
+        if object_ooxml_id:
+            self.object_ooxml_id = object_ooxml_id
+        if story_id:
+            self.story_id = story_id
+        if endpoint_map:
+            self.endpoint_map = endpoint_map
+        self.svg_html = None
+
+    def create_container(self, **kwargs):
+        
+        client = self.get_client()
+        self.token = client.token_util.token[&#34;access_token&#34;]
+        svg_container_div = lxml.html.Element(&#34;div&#34;, {
+            &#39;class&#39;: &#39;svg-container&#39;,
+            &#39;data-jwt&#39;: self.token,
+            &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
+            &#39;data-object-id&#39;: self.object_ooxml_id
+        })
+        preloader_container_div = lxml.etree.SubElement(svg_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-container&#34;})
+        preloader_row_div = lxml.etree.SubElement(preloader_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-row&#34;})
+        preloader_file = os.path.join(os.path.dirname(__file__), &#34;img&#34;, &#34;preloader.svg&#34;)
+        svg = lxml.html.parse(preloader_file)
+        preloader_row_div.append(svg.getroot())
+        empty_parent_div = lxml.html.Element(&#34;div&#34;, {
+            &#39;class&#39;: &#39;empty-parent bg-light&#39;
+        })
+        empty_parent_div.append(svg_container_div)
+        return lxml.html.tostring(empty_parent_div)
+
+
+    def to_html(self, **kwargs):
+        return self.svg_html
+
+    def get_svg(self, id, timeout_iterator=0) -&gt; str:
+        svg_url = self.endpoint_map.get_svg_url(id)
+        client = self.get_client()
+        auth_header = client.get_auth_header()
+        response = requests.get(svg_url, headers=auth_header)
+        svg_data = response.text
+        if response.status_code != 200:
+            raise presalytics.lib.exceptions.ApiError(message=response.text, status_code=response.status_code)
+        if response.text.startswith(&#34;Temp data&#34;):
+            if timeout_iterator &gt; 5:
+                raise presalytics.lib.exceptions.ApiError(message=&#34;Unable to download svg.  Please check for upstream processing errors.&#34;)
+            else:
+                time.sleep(2)
+                svg_data = self.get_svg(id, timeout_iterator)
+        return svg_data</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></li>
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.widgets.ooxml.OoxmlFileWidget" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlFileWidget">OoxmlFileWidget</a></li>
+<li><a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget">OoxmlEditorWidget</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container"><code class="name flex">
+<span>def <span class="ident">create_container</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L188-L207" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def create_container(self, **kwargs):
+    
+    client = self.get_client()
+    self.token = client.token_util.token[&#34;access_token&#34;]
+    svg_container_div = lxml.html.Element(&#34;div&#34;, {
+        &#39;class&#39;: &#39;svg-container&#39;,
+        &#39;data-jwt&#39;: self.token,
+        &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
+        &#39;data-object-id&#39;: self.object_ooxml_id
+    })
+    preloader_container_div = lxml.etree.SubElement(svg_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-container&#34;})
+    preloader_row_div = lxml.etree.SubElement(preloader_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-row&#34;})
+    preloader_file = os.path.join(os.path.dirname(__file__), &#34;img&#34;, &#34;preloader.svg&#34;)
+    svg = lxml.html.parse(preloader_file)
+    preloader_row_div.append(svg.getroot())
+    empty_parent_div = lxml.html.Element(&#34;div&#34;, {
+        &#39;class&#39;: &#39;empty-parent bg-light&#39;
+    })
+    empty_parent_div.append(svg_container_div)
+    return lxml.html.tostring(empty_parent_div)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg"><code class="name flex">
+<span>def <span class="ident">get_svg</span></span>(<span>self, id, timeout_iterator=0)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L213-L227" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_svg(self, id, timeout_iterator=0) -&gt; str:
+    svg_url = self.endpoint_map.get_svg_url(id)
+    client = self.get_client()
+    auth_header = client.get_auth_header()
+    response = requests.get(svg_url, headers=auth_header)
+    svg_data = response.text
+    if response.status_code != 200:
+        raise presalytics.lib.exceptions.ApiError(message=response.text, status_code=response.status_code)
+    if response.text.startswith(&#34;Temp data&#34;):
+        if timeout_iterator &gt; 5:
+            raise presalytics.lib.exceptions.ApiError(message=&#34;Unable to download svg.  Please check for upstream processing errors.&#34;)
+        else:
+            time.sleep(2)
+            svg_data = self.get_svg(id, timeout_iterator)
+    return svg_data</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.story.components.WidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="presalytics.lib.widgets" href="/python-client/presalytics/lib/widgets/index.html">presalytics.lib.widgets</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap">OoxmlEndpointMap</a></code></h4>
+<ul class="two-column">
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.BASE_URL" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.BASE_URL">BASE_URL</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.CHART" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.CHART">CHART</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.CONNECTION_SHAPE" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.CONNECTION_SHAPE">CONNECTION_SHAPE</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.DOCUMENT" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.DOCUMENT">DOCUMENT</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.GROUP" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.GROUP">GROUP</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.IMAGE" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.IMAGE">IMAGE</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SHAPE" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SHAPE">SHAPE</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SHAPETREE" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SHAPETREE">SHAPETREE</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SLIDE" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SLIDE">SLIDE</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.TABLE" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.TABLE">TABLE</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.THEME" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.THEME">THEME</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.chart" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.chart">chart</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.connection_shape" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.connection_shape">connection_shape</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.document" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.document">document</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_id_url" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_id_url">get_id_url</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_object_type" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_object_type">get_object_type</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_svg_url" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_svg_url">get_svg_url</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_xml_url" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_xml_url">get_xml_url</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.group" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.group">group</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.image" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.image">image</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.shape" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.shape">shape</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.shapetree" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.shapetree">shapetree</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.slide" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.slide">slide</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.table" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.table">table</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.theme" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.theme">theme</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="presalytics.lib.widgets.ooxml.OoxmlFileWidget" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlFileWidget">OoxmlFileWidget</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlFileWidget.update" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlFileWidget.update">update</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container">create_container</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

@@ -1,0 +1,1597 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>presalytics.story.components API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>presalytics.story.components</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L0-L376" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">import abc
+import typing
+import os
+import logging
+import presalytics.lib
+import presalytics.lib.registry
+import presalytics.lib.exceptions
+import presalytics.client.api
+if typing.TYPE_CHECKING:
+    from presalytics.story.outline import Widget, Page, Plugin, OutlineBase
+
+
+logger = logging.getLogger(&#34;presalytics.story.components&#34;)
+
+
+class ComponentBase(abc.ABC):
+    &#34;&#34;&#34;
+    This class serves as the primary interface clas for the story components.  Instances of
+    this interface carry enough information to rendered to html.  Developers, analysts and
+    users should inherit from base class if they want components to be registered in the
+    rendering pipeline for presalytics stories.
+
+    Instance of this class must:
+    1. Initialize with a name parameter
+    2  Serialize to a subclass of presalytics.story.outline.OutlineBase
+    3. Deserialize from an instance of presalytics.story.OutlineBase
+    4. Render to html
+
+    The __component_type__ and __component_name__ metadata on subclasses is required in
+    order for instances to be registered in rendering pipeline for automatic updates
+
+    Attributes:
+    ----------
+
+    name: str
+        The name of the instance of the component.  Used in component as a key to lookup
+        instances to re-calcute during rendering
+
+    css: List[str]
+        A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
+        in the presalytics.lib.templates.base module.
+
+    js: List[str]
+        A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
+        in the presalytics.lib.templates.base module.
+
+    __component_type__: str
+        The idenifier for the component superclass (e.g. widget, page_template, renderer, theme).
+        Used for component registration.
+
+    __component_kind__:
+        An identifier for this component class.  Used for component registration.
+    &#34;&#34;&#34;
+    __component_type__: str
+    __component_kind__: str
+    __plugins__: typing.List[str]
+    name: str
+
+    __plugins__ = []
+
+    def __init__(self, client_info: typing.Dict = None, *args, **kwargs):
+        if client_info:
+            self.client_info = client_info
+        else:
+            self.client_info = {}
+            if kwargs.get(&#39;delegate_login&#39;, None):
+                self.client_info.update({&#39;delegate_login&#39;: kwargs.get(&#39;delegate_login&#39;)})
+            if kwargs.get(&#39;cache_tokens&#39;, None):
+                self.client_info.update({&#39;cache_tokens&#39;: kwargs.get(&#39;cache_tokens&#39;)})
+            if kwargs.get(&#39;token&#39;, None):
+                self.client_info.update({&#39;token&#39;: kwargs.get(&#39;token&#39;)})
+
+    @abc.abstractmethod
+    def render(self, **kwargs):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def serialize(self):
+        raise NotImplementedError
+
+    @classmethod
+    def deserialize(cls, component: typing.Type[&#39;OutlineBase&#39;], **kwargs):
+        raise NotImplementedError
+
+    def get_client(self):
+        return presalytics.client.api.Client(**self.client_info)
+
+
+class WidgetBase(ComponentBase):
+    &#34;&#34;&#34;
+    Inherit from this base class to create widget components that can be rendered to html via the
+    presalytics.story.revealer.Revealer class.  This component also need to build a method
+    that allows the widget to be serialzed into a presalytics.story.outline.Widget object.
+
+    Parameters:
+    ----------
+    widget: Widget
+        A presalytics.story.outline.Widget object use for initialized the component class.
+
+    Attributes:
+    ----------
+    outline_widget: Widget
+        A presalytics.story.outline.Widget object
+
+    css: List[str]
+        A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
+        in the presalytics.lib.templates.base module.
+
+    js: List[str]
+        A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
+        in the presalytics.lib.templates.base module.
+    &#34;&#34;&#34;
+    outline_widget: typing.Optional[&#39;Widget&#39;]
+
+    __component_type__ = &#39;widget&#39;
+
+    def __init__(self, name, *args, **kwargs) -&gt; None:
+        &#34;&#34;&#34;
+        Note: When inheriting from this base class, call &#34;super().__init__(self, *args, **kwargs)&#34; before add your
+        own custom initialization.
+
+        &#34;&#34;&#34;
+        super(WidgetBase, self).__init__(*args, **kwargs)
+        self.name = name
+        self.outline_widget = None
+
+    def render(self, component, **kwargs):
+        self.to_html(component, **kwargs)
+
+    @abc.abstractmethod
+    def to_html(self, data: typing.Dict = None, **kwargs) -&gt; str:
+        &#34;&#34;&#34;
+        Returns valid html that renders the widget in a broswer.
+
+        Parameters:
+        ----------
+        data: Dict
+            The data parameter is a dictionary should contain the minimum amount of that is required to
+            successfully render the object.  As the widget is update, data control how the disply of
+            information changes.
+        **kwargs:
+            Optional keyword arguments can be used in subclass to modify the behavior of the to_html function.
+            these keyword arguments should be geinvariant through successive updates to the chart.  For example,
+            keycloak argument should control the styling of the widget, which should not change as the data in
+            the object (e.g., a chart) is updated.  Keyword arguments are loaded via additional_properties
+            parameter in in the presalytics.story.outline.Widget object.
+
+        Returns
+        ----------
+        A string of containing an html fragment that will be loaded into a template in successive operations
+        &#34;&#34;&#34;
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def serialize(self, **kwargs) -&gt; &#39;Widget&#39;:
+        &#34;&#34;&#34;
+        Creates presalytics.story.outline.Widget object from instance data. This widget should
+        have the correct name, data and additional_properties so the same widget can be reconstituted
+        via the to_html method, given the same set of data.
+
+        Typically, this method will call an update method that run a local script with updates this
+        Widget&#39;s data Dictionary prior being loading into the Widget outline object for serialization.
+
+        Parameters:
+        ----------
+        **kwargs:
+            Optional keyword arguments can be used in subclass to modify the behavior of the to_html function.
+            these keyword arguments should be be invariant through successive updates to the chart. Overrides
+            for this widgets default additional_properties shoudl be loaded via these keyword argments.
+
+        &#34;&#34;&#34;
+        raise NotImplementedError
+
+    @classmethod
+    def deserialize(cls, widget: &#39;Widget&#39;, **kwargs) -&gt; &#39;WidgetBase&#39;:
+        &#34;&#34;&#34;
+        Creates an instance of the widget from the data object in the presalytics.story.outline.Widget
+        object. This method exists to ensure widgets can be portable across environments.  To clarify,
+        widgets built on the client-side via the __init__ method can be reconstructed server-side via
+        the deserialize method.  This allows decoupling of the widget generation/updating of data and
+        the rendering of the widget in a UI.  Renderers (e.g., presalytics.story.revealer.Revealer object)
+        need not know about how the data get updated, but can update the graphic with data generated by
+        the widget when the serialize method is called.
+
+        Parameters:
+        ----------
+
+        widget: Widget
+            A prealytics.story.outline.Widget object
+
+        Returns:
+        ----------
+
+        An instance the widget class
+        &#34;&#34;&#34;
+        raise NotImplementedError
+
+
+class PageTemplateBase(ComponentBase):
+    &#34;&#34;&#34;
+    Inherit from this base class to render templates to html via the
+    presalytics.story.revealer.Revealer class.
+
+    Parameters:
+    ----------
+    page: Page
+        A presalytics.story.outline.Page object for instalizing the class
+
+    Attributes:
+    ----------
+    outline_page: Page
+        A presalytics.story.outline.Page object
+
+    widgets: List[WidgetComponentBase]
+        A list widget that will be loaded into templates and rendered via placeholders.
+        These widgets must have a &#34;to_html(self, data, **kwargs)&#34; method.
+
+    css: List[str]
+        A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
+        in the presalytics.lib.templates.base module.
+
+    js: List[str]
+        A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
+        in the presalytics.lib.templates.base module.
+    &#34;&#34;&#34;
+
+    outline_page: &#39;Page&#39;
+    widgets: typing.List[&#39;WidgetBase&#39;]
+    plugins: typing.List[typing.Dict]
+
+    __component_type__ = &#39;page&#39;
+
+    def __init__(self, page: &#39;Page&#39;, **kwargs) -&gt; None:
+        super(PageTemplateBase, self).__init__(**kwargs)
+        self.outline_page = page
+        self.widgets = self.get_page_widgets(self.outline_page)
+        
+
+    @abc.abstractmethod
+    def render(self, **kwargs) -&gt; str:
+        &#34;&#34;&#34;
+        Returns valid html that renders the template in a broswer with data loaded from widgets.
+
+        Parameters:
+        ----------
+        widgets: Sequence[WidgetComponentBase]
+            List of widget instances a one to many different class that inhereit from the WidgetComponentBase
+            abstract class. Defaults tot he widget list that the class as initilazed with.
+
+        **kwargs:
+            Optional keyword arguments can be used in subclass to modify the behavior of the to_html function.
+            these keyword arguments should be geinvariant through successive updates to the chart.  For example,
+            keycloak argument should control the styling of the widget, which should not change as the data in
+            the object (e.g., a chart) is updated.  Keyword arguments are loaded via additional_properties
+            parameter in in the presalytics.story.outline.Widget object.
+
+        Returns
+        ----------
+        A string of containing an html fragment that will be loaded into a template in successive operations
+        &#34;&#34;&#34;
+        raise NotImplementedError
+
+    def load_widget(self, widget: &#39;Widget&#39;):
+        &#34;&#34;&#34;
+        Converts a presalytics.story.outline.Widget object to a subclass of WidgetComponentBase
+        via a presalytics.story.loaders.WidgetLoaderBase object.
+        &#34;&#34;&#34;
+        class_key = &#34;widget.&#34; + widget.kind
+        key = class_key + &#34;.&#34; + widget.name
+        if presalytics.COMPONENTS.get_instance(key):
+            widget_instance = presalytics.COMPONENTS.get_instance(key)
+        else:
+            klass = presalytics.COMPONENTS.get(class_key)
+            deserialize_method = getattr(klass, &#34;deserialize&#34;, None)
+            if callable(deserialize_method):
+                widget_instance = deserialize_method(widget, client_info=self.client_info)
+            else:
+                message = &#34;Widget component instance or class (kind) {0} unavailable in component registry&#34;.format(key)
+                raise presalytics.lib.exceptions.MissingConfigException(message)
+        return widget_instance
+
+    def get_page_widgets(self, page: &#39;Page&#39;):
+        &#34;&#34;&#34;
+        Converts the widgets within a presaltytics.story.outline.Page object to a list
+        of widgets subclassed from WidgetComponentBase
+        &#34;&#34;&#34;
+        widget_instances = []
+        for widget_outline in page.widgets:
+            next_widget = self.load_widget(widget_outline)
+            widget_instances.append(next_widget)
+        return widget_instances
+    
+    def serialize(self):
+        return self.outline_page.dump()
+
+    @classmethod
+    def deseriailize(cls, component, **kwargs):
+        return cls(page=component)
+
+
+class ThemeBase(ComponentBase):
+    &#34;&#34;&#34;
+    Themes are containers for plugins should be rendered once
+    across the entire document.  The init method should configure
+    parameters with get passed to plugins via serialization and 
+    deserialization.
+    &#34;&#34;&#34;
+    plugins: typing.Optional[typing.List[&#39;Plugin&#39;]]
+
+    __component_type__ = &#39;theme&#39;
+
+    def __init__(self, **kwargs):
+        pass
+
+    def render(self, **kwargs):
+        pass
+
+
+class Renderer(ComponentBase):
+    __component_type__ = &#39;renderer&#39;
+
+    def __init__(self, **kwargs):
+        super(Renderer, self).__init__(**kwargs)
+
+
+class ComponentRegistry(presalytics.lib.registry.RegistryBase):
+    def __init__(self, **kwargs):
+        self.instances = {}
+        super(ComponentRegistry, self).__init__(**kwargs)
+
+    def get_type(self, klass):
+        return getattr(klass, &#34;__component_type__&#34;, None)
+
+    def get_name(self, klass):
+        return getattr(klass, &#34;__component_kind__&#34;, None)
+
+    def get_instance_name(self, klass):
+        return getattr(klass, &#34;name&#34;, None)
+
+    def get_instance_registry_key(self, klass):
+        key = None
+        klass_type = self.get_type(klass)
+        if klass_type:
+            klass_name = self.get_name(klass)
+            instance_name = self.get_instance_name(klass)
+            if instance_name and klass_name:
+                key = &#34;{0}.{1}.{2}&#34;.format(klass_type, klass_name, instance_name)
+            else:
+                # For now. always show this error, good for user debugging, rather than developer debugging
+                message = &#39;{0} instance missing &#34;__component_kind__&#34; or &#34;name&#34; attribute&#39;.format(klass_type)
+                logger.error(message)
+        return key
+
+
+    def load_class(self, klass):
+        super().load_class(klass)
+        if isinstance(klass, ComponentBase):
+            try:
+                key = self.get_instance_registry_key(klass)
+                if key:
+                    if key not in self.instances.keys():
+                        self.instances[key] = klass
+                    
+            except Exception:
+                if self.show_errors:
+                    klass_type = self.get_type(klass)
+                    message = &#34;Unable to register instance {0} with type {1}&#34;.format(klass.__name__, klass_type)
+                    logger.error(message)
+
+    def get_instance(self, key):
+        return self.instances.get(key, None)
+
+    def unregister(self, klass):
+        super().unregister(klass)
+        key = self.get_instance_registry_key(klass)
+        if key:
+            self.instances.pop(key)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="presalytics.story.components.ComponentBase"><code class="flex name class">
+<span>class <span class="ident">ComponentBase</span></span>
+<span>(</span><span>client_info=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class serves as the primary interface clas for the story components.
+Instances of
+this interface carry enough information to rendered to html.
+Developers, analysts and
+users should inherit from base class if they want components to be registered in the
+rendering pipeline for presalytics stories.</p>
+<p>Instance of this class must:
+1. Initialize with a name parameter
+2
+Serialize to a subclass of presalytics.story.outline.OutlineBase
+3. Deserialize from an instance of presalytics.story.OutlineBase
+4. Render to html</p>
+<p>The <strong>component_type</strong> and <strong>component_name</strong> metadata on subclasses is required in
+order for instances to be registered in rendering pipeline for automatic updates</p>
+<h2 id="attributes">Attributes:</h2>
+<p>name: str
+The name of the instance of the component.
+Used in component as a key to lookup
+instances to re-calcute during rendering</p>
+<p>css: List[str]
+A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
+in the presalytics.lib.templates.base module.</p>
+<p>js: List[str]
+A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
+in the presalytics.lib.templates.base module.</p>
+<p><strong>component_type</strong>: str
+The idenifier for the component superclass (e.g. widget, page_template, renderer, theme).
+Used for component registration.</p>
+<p><strong>component_kind</strong>:
+An identifier for this component class.
+Used for component registration.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L16-L86" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class ComponentBase(abc.ABC):
+    &#34;&#34;&#34;
+    This class serves as the primary interface clas for the story components.  Instances of
+    this interface carry enough information to rendered to html.  Developers, analysts and
+    users should inherit from base class if they want components to be registered in the
+    rendering pipeline for presalytics stories.
+
+    Instance of this class must:
+    1. Initialize with a name parameter
+    2  Serialize to a subclass of presalytics.story.outline.OutlineBase
+    3. Deserialize from an instance of presalytics.story.OutlineBase
+    4. Render to html
+
+    The __component_type__ and __component_name__ metadata on subclasses is required in
+    order for instances to be registered in rendering pipeline for automatic updates
+
+    Attributes:
+    ----------
+
+    name: str
+        The name of the instance of the component.  Used in component as a key to lookup
+        instances to re-calcute during rendering
+
+    css: List[str]
+        A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
+        in the presalytics.lib.templates.base module.
+
+    js: List[str]
+        A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
+        in the presalytics.lib.templates.base module.
+
+    __component_type__: str
+        The idenifier for the component superclass (e.g. widget, page_template, renderer, theme).
+        Used for component registration.
+
+    __component_kind__:
+        An identifier for this component class.  Used for component registration.
+    &#34;&#34;&#34;
+    __component_type__: str
+    __component_kind__: str
+    __plugins__: typing.List[str]
+    name: str
+
+    __plugins__ = []
+
+    def __init__(self, client_info: typing.Dict = None, *args, **kwargs):
+        if client_info:
+            self.client_info = client_info
+        else:
+            self.client_info = {}
+            if kwargs.get(&#39;delegate_login&#39;, None):
+                self.client_info.update({&#39;delegate_login&#39;: kwargs.get(&#39;delegate_login&#39;)})
+            if kwargs.get(&#39;cache_tokens&#39;, None):
+                self.client_info.update({&#39;cache_tokens&#39;: kwargs.get(&#39;cache_tokens&#39;)})
+            if kwargs.get(&#39;token&#39;, None):
+                self.client_info.update({&#39;token&#39;: kwargs.get(&#39;token&#39;)})
+
+    @abc.abstractmethod
+    def render(self, **kwargs):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def serialize(self):
+        raise NotImplementedError
+
+    @classmethod
+    def deserialize(cls, component: typing.Type[&#39;OutlineBase&#39;], **kwargs):
+        raise NotImplementedError
+
+    def get_client(self):
+        return presalytics.client.api.Client(**self.client_info)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="presalytics.story.components.PageTemplateBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase">PageTemplateBase</a></li>
+<li><a title="presalytics.story.components.Renderer" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer">Renderer</a></li>
+<li><a title="presalytics.story.components.ThemeBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ThemeBase">ThemeBase</a></li>
+<li><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="presalytics.story.components.ComponentBase.deserialize"><code class="name flex">
+<span>def <span class="ident">deserialize</span></span>(<span>component, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L81-L83" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@classmethod
+def deserialize(cls, component: typing.Type[&#39;OutlineBase&#39;], **kwargs):
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.story.components.ComponentBase.get_client"><code class="name flex">
+<span>def <span class="ident">get_client</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L85-L86" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_client(self):
+    return presalytics.client.api.Client(**self.client_info)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.components.ComponentBase.render"><code class="name flex">
+<span>def <span class="ident">render</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L73-L75" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+def render(self, **kwargs):
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.components.ComponentBase.serialize"><code class="name flex">
+<span>def <span class="ident">serialize</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L77-L79" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+def serialize(self):
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="presalytics.story.components.ComponentRegistry"><code class="flex name class">
+<span>class <span class="ident">ComponentRegistry</span></span>
+<span>(</span><span>**kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Helper class that provides a standard way to create an ABC using
+inheritance.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L326-L377" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class ComponentRegistry(presalytics.lib.registry.RegistryBase):
+    def __init__(self, **kwargs):
+        self.instances = {}
+        super(ComponentRegistry, self).__init__(**kwargs)
+
+    def get_type(self, klass):
+        return getattr(klass, &#34;__component_type__&#34;, None)
+
+    def get_name(self, klass):
+        return getattr(klass, &#34;__component_kind__&#34;, None)
+
+    def get_instance_name(self, klass):
+        return getattr(klass, &#34;name&#34;, None)
+
+    def get_instance_registry_key(self, klass):
+        key = None
+        klass_type = self.get_type(klass)
+        if klass_type:
+            klass_name = self.get_name(klass)
+            instance_name = self.get_instance_name(klass)
+            if instance_name and klass_name:
+                key = &#34;{0}.{1}.{2}&#34;.format(klass_type, klass_name, instance_name)
+            else:
+                # For now. always show this error, good for user debugging, rather than developer debugging
+                message = &#39;{0} instance missing &#34;__component_kind__&#34; or &#34;name&#34; attribute&#39;.format(klass_type)
+                logger.error(message)
+        return key
+
+
+    def load_class(self, klass):
+        super().load_class(klass)
+        if isinstance(klass, ComponentBase):
+            try:
+                key = self.get_instance_registry_key(klass)
+                if key:
+                    if key not in self.instances.keys():
+                        self.instances[key] = klass
+                    
+            except Exception:
+                if self.show_errors:
+                    klass_type = self.get_type(klass)
+                    message = &#34;Unable to register instance {0} with type {1}&#34;.format(klass.__name__, klass_type)
+                    logger.error(message)
+
+    def get_instance(self, key):
+        return self.instances.get(key, None)
+
+    def unregister(self, klass):
+        super().unregister(klass)
+        key = self.get_instance_registry_key(klass)
+        if key:
+            self.instances.pop(key)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.registry.RegistryBase" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase">RegistryBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.story.components.ComponentRegistry.get_instance"><code class="name flex">
+<span>def <span class="ident">get_instance</span></span>(<span>self, key)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L370-L371" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_instance(self, key):
+    return self.instances.get(key, None)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.components.ComponentRegistry.get_instance_name"><code class="name flex">
+<span>def <span class="ident">get_instance_name</span></span>(<span>self, klass)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L337-L338" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_instance_name(self, klass):
+    return getattr(klass, &#34;name&#34;, None)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.components.ComponentRegistry.get_instance_registry_key"><code class="name flex">
+<span>def <span class="ident">get_instance_registry_key</span></span>(<span>self, klass)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L340-L352" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_instance_registry_key(self, klass):
+    key = None
+    klass_type = self.get_type(klass)
+    if klass_type:
+        klass_name = self.get_name(klass)
+        instance_name = self.get_instance_name(klass)
+        if instance_name and klass_name:
+            key = &#34;{0}.{1}.{2}&#34;.format(klass_type, klass_name, instance_name)
+        else:
+            # For now. always show this error, good for user debugging, rather than developer debugging
+            message = &#39;{0} instance missing &#34;__component_kind__&#34; or &#34;name&#34; attribute&#39;.format(klass_type)
+            logger.error(message)
+    return key</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.components.ComponentRegistry.get_name"><code class="name flex">
+<span>def <span class="ident">get_name</span></span>(<span>self, klass)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L334-L335" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_name(self, klass):
+    return getattr(klass, &#34;__component_kind__&#34;, None)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.components.ComponentRegistry.get_type"><code class="name flex">
+<span>def <span class="ident">get_type</span></span>(<span>self, klass)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L331-L332" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_type(self, klass):
+    return getattr(klass, &#34;__component_type__&#34;, None)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.components.ComponentRegistry.load_class"><code class="name flex">
+<span>def <span class="ident">load_class</span></span>(<span>self, klass)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L355-L368" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def load_class(self, klass):
+    super().load_class(klass)
+    if isinstance(klass, ComponentBase):
+        try:
+            key = self.get_instance_registry_key(klass)
+            if key:
+                if key not in self.instances.keys():
+                    self.instances[key] = klass
+                
+        except Exception:
+            if self.show_errors:
+                klass_type = self.get_type(klass)
+                message = &#34;Unable to register instance {0} with type {1}&#34;.format(klass.__name__, klass_type)
+                logger.error(message)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.components.ComponentRegistry.unregister"><code class="name flex">
+<span>def <span class="ident">unregister</span></span>(<span>self, klass)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L373-L377" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def unregister(self, klass):
+    super().unregister(klass)
+    key = self.get_instance_registry_key(klass)
+    if key:
+        self.instances.pop(key)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.lib.registry.RegistryBase" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase">RegistryBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.lib.registry.RegistryBase.module_is_in_stackframe" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.module_is_in_stackframe">module_is_in_stackframe</a></code></li>
+<li><code><a title="presalytics.lib.registry.RegistryBase.register" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.register">register</a></code></li>
+<li><code><a title="presalytics.lib.registry.RegistryBase.show_errors" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.show_errors">show_errors</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="presalytics.story.components.PageTemplateBase"><code class="flex name class">
+<span>class <span class="ident">PageTemplateBase</span></span>
+<span>(</span><span>page, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Inherit from this base class to render templates to html via the
+presalytics.story.revealer.Revealer class.</p>
+<h2 id="parameters">Parameters:</h2>
+<p>page: Page
+A presalytics.story.outline.Page object for instalizing the class</p>
+<h2 id="attributes">Attributes:</h2>
+<p>outline_page: Page
+A presalytics.story.outline.Page object</p>
+<p>widgets: List[WidgetComponentBase]
+A list widget that will be loaded into templates and rendered via placeholders.
+These widgets must have a "to_html(self, data, **kwargs)" method.</p>
+<p>css: List[str]
+A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
+in the presalytics.lib.templates.base module.</p>
+<p>js: List[str]
+A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
+in the presalytics.lib.templates.base module.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L199-L298" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class PageTemplateBase(ComponentBase):
+    &#34;&#34;&#34;
+    Inherit from this base class to render templates to html via the
+    presalytics.story.revealer.Revealer class.
+
+    Parameters:
+    ----------
+    page: Page
+        A presalytics.story.outline.Page object for instalizing the class
+
+    Attributes:
+    ----------
+    outline_page: Page
+        A presalytics.story.outline.Page object
+
+    widgets: List[WidgetComponentBase]
+        A list widget that will be loaded into templates and rendered via placeholders.
+        These widgets must have a &#34;to_html(self, data, **kwargs)&#34; method.
+
+    css: List[str]
+        A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
+        in the presalytics.lib.templates.base module.
+
+    js: List[str]
+        A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
+        in the presalytics.lib.templates.base module.
+    &#34;&#34;&#34;
+
+    outline_page: &#39;Page&#39;
+    widgets: typing.List[&#39;WidgetBase&#39;]
+    plugins: typing.List[typing.Dict]
+
+    __component_type__ = &#39;page&#39;
+
+    def __init__(self, page: &#39;Page&#39;, **kwargs) -&gt; None:
+        super(PageTemplateBase, self).__init__(**kwargs)
+        self.outline_page = page
+        self.widgets = self.get_page_widgets(self.outline_page)
+        
+
+    @abc.abstractmethod
+    def render(self, **kwargs) -&gt; str:
+        &#34;&#34;&#34;
+        Returns valid html that renders the template in a broswer with data loaded from widgets.
+
+        Parameters:
+        ----------
+        widgets: Sequence[WidgetComponentBase]
+            List of widget instances a one to many different class that inhereit from the WidgetComponentBase
+            abstract class. Defaults tot he widget list that the class as initilazed with.
+
+        **kwargs:
+            Optional keyword arguments can be used in subclass to modify the behavior of the to_html function.
+            these keyword arguments should be geinvariant through successive updates to the chart.  For example,
+            keycloak argument should control the styling of the widget, which should not change as the data in
+            the object (e.g., a chart) is updated.  Keyword arguments are loaded via additional_properties
+            parameter in in the presalytics.story.outline.Widget object.
+
+        Returns
+        ----------
+        A string of containing an html fragment that will be loaded into a template in successive operations
+        &#34;&#34;&#34;
+        raise NotImplementedError
+
+    def load_widget(self, widget: &#39;Widget&#39;):
+        &#34;&#34;&#34;
+        Converts a presalytics.story.outline.Widget object to a subclass of WidgetComponentBase
+        via a presalytics.story.loaders.WidgetLoaderBase object.
+        &#34;&#34;&#34;
+        class_key = &#34;widget.&#34; + widget.kind
+        key = class_key + &#34;.&#34; + widget.name
+        if presalytics.COMPONENTS.get_instance(key):
+            widget_instance = presalytics.COMPONENTS.get_instance(key)
+        else:
+            klass = presalytics.COMPONENTS.get(class_key)
+            deserialize_method = getattr(klass, &#34;deserialize&#34;, None)
+            if callable(deserialize_method):
+                widget_instance = deserialize_method(widget, client_info=self.client_info)
+            else:
+                message = &#34;Widget component instance or class (kind) {0} unavailable in component registry&#34;.format(key)
+                raise presalytics.lib.exceptions.MissingConfigException(message)
+        return widget_instance
+
+    def get_page_widgets(self, page: &#39;Page&#39;):
+        &#34;&#34;&#34;
+        Converts the widgets within a presaltytics.story.outline.Page object to a list
+        of widgets subclassed from WidgetComponentBase
+        &#34;&#34;&#34;
+        widget_instances = []
+        for widget_outline in page.widgets:
+            next_widget = self.load_widget(widget_outline)
+            widget_instances.append(next_widget)
+        return widget_instances
+    
+    def serialize(self):
+        return self.outline_page.dump()
+
+    @classmethod
+    def deseriailize(cls, component, **kwargs):
+        return cls(page=component)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.templates.base.JinjaTemplateBuilder" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder">JinjaTemplateBuilder</a></li>
+<li><a title="presalytics.lib.templates.base.WidgetPage" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.WidgetPage">WidgetPage</a></li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="presalytics.story.components.PageTemplateBase.deseriailize"><code class="name flex">
+<span>def <span class="ident">deseriailize</span></span>(<span>component, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L296-L298" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@classmethod
+def deseriailize(cls, component, **kwargs):
+    return cls(page=component)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.story.components.PageTemplateBase.get_page_widgets"><code class="name flex">
+<span>def <span class="ident">get_page_widgets</span></span>(<span>self, page)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Converts the widgets within a presaltytics.story.outline.Page object to a list
+of widgets subclassed from WidgetComponentBase</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L282-L291" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_page_widgets(self, page: &#39;Page&#39;):
+    &#34;&#34;&#34;
+    Converts the widgets within a presaltytics.story.outline.Page object to a list
+    of widgets subclassed from WidgetComponentBase
+    &#34;&#34;&#34;
+    widget_instances = []
+    for widget_outline in page.widgets:
+        next_widget = self.load_widget(widget_outline)
+        widget_instances.append(next_widget)
+    return widget_instances</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.components.PageTemplateBase.load_widget"><code class="name flex">
+<span>def <span class="ident">load_widget</span></span>(<span>self, widget)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Converts a presalytics.story.outline.Widget object to a subclass of WidgetComponentBase
+via a presalytics.story.loaders.WidgetLoaderBase object.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L263-L280" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def load_widget(self, widget: &#39;Widget&#39;):
+    &#34;&#34;&#34;
+    Converts a presalytics.story.outline.Widget object to a subclass of WidgetComponentBase
+    via a presalytics.story.loaders.WidgetLoaderBase object.
+    &#34;&#34;&#34;
+    class_key = &#34;widget.&#34; + widget.kind
+    key = class_key + &#34;.&#34; + widget.name
+    if presalytics.COMPONENTS.get_instance(key):
+        widget_instance = presalytics.COMPONENTS.get_instance(key)
+    else:
+        klass = presalytics.COMPONENTS.get(class_key)
+        deserialize_method = getattr(klass, &#34;deserialize&#34;, None)
+        if callable(deserialize_method):
+            widget_instance = deserialize_method(widget, client_info=self.client_info)
+        else:
+            message = &#34;Widget component instance or class (kind) {0} unavailable in component registry&#34;.format(key)
+            raise presalytics.lib.exceptions.MissingConfigException(message)
+    return widget_instance</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.components.PageTemplateBase.render"><code class="name flex">
+<span>def <span class="ident">render</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns valid html that renders the template in a broswer with data loaded from widgets.</p>
+<h2 id="parameters">Parameters:</h2>
+<p>widgets: Sequence[WidgetComponentBase]
+List of widget instances a one to many different class that inhereit from the WidgetComponentBase
+abstract class. Defaults tot he widget list that the class as initilazed with.</p>
+<p>**kwargs:
+Optional keyword arguments can be used in subclass to modify the behavior of the to_html function.
+these keyword arguments should be geinvariant through successive updates to the chart.
+For example,
+keycloak argument should control the styling of the widget, which should not change as the data in
+the object (e.g., a chart) is updated.
+Keyword arguments are loaded via additional_properties
+parameter in in the presalytics.story.outline.Widget object.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>string</code> of <code>containing</code> <code>an</code> <code>html</code> <code>fragment</code> <code>that</code> <code>will</code> <code>be</code> <code>loaded</code> <code>into</code> <code>a</code> <code>template</code> <code>in</code> <code>successive</code> <code>operations</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L239-L261" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+def render(self, **kwargs) -&gt; str:
+    &#34;&#34;&#34;
+    Returns valid html that renders the template in a broswer with data loaded from widgets.
+
+    Parameters:
+    ----------
+    widgets: Sequence[WidgetComponentBase]
+        List of widget instances a one to many different class that inhereit from the WidgetComponentBase
+        abstract class. Defaults tot he widget list that the class as initilazed with.
+
+    **kwargs:
+        Optional keyword arguments can be used in subclass to modify the behavior of the to_html function.
+        these keyword arguments should be geinvariant through successive updates to the chart.  For example,
+        keycloak argument should control the styling of the widget, which should not change as the data in
+        the object (e.g., a chart) is updated.  Keyword arguments are loaded via additional_properties
+        parameter in in the presalytics.story.outline.Widget object.
+
+    Returns
+    ----------
+    A string of containing an html fragment that will be loaded into a template in successive operations
+    &#34;&#34;&#34;
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.components.PageTemplateBase.serialize"><code class="name flex">
+<span>def <span class="ident">serialize</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L293-L294" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def serialize(self):
+    return self.outline_page.dump()</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="presalytics.story.components.Renderer"><code class="flex name class">
+<span>class <span class="ident">Renderer</span></span>
+<span>(</span><span>**kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class serves as the primary interface clas for the story components.
+Instances of
+this interface carry enough information to rendered to html.
+Developers, analysts and
+users should inherit from base class if they want components to be registered in the
+rendering pipeline for presalytics stories.</p>
+<p>Instance of this class must:
+1. Initialize with a name parameter
+2
+Serialize to a subclass of presalytics.story.outline.OutlineBase
+3. Deserialize from an instance of presalytics.story.OutlineBase
+4. Render to html</p>
+<p>The <strong>component_type</strong> and <strong>component_name</strong> metadata on subclasses is required in
+order for instances to be registered in rendering pipeline for automatic updates</p>
+<h2 id="attributes">Attributes:</h2>
+<p>name: str
+The name of the instance of the component.
+Used in component as a key to lookup
+instances to re-calcute during rendering</p>
+<p>css: List[str]
+A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
+in the presalytics.lib.templates.base module.</p>
+<p>js: List[str]
+A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
+in the presalytics.lib.templates.base module.</p>
+<p><strong>component_type</strong>: str
+The idenifier for the component superclass (e.g. widget, page_template, renderer, theme).
+Used for component registration.</p>
+<p><strong>component_kind</strong>:
+An identifier for this component class.
+Used for component registration.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L319-L323" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class Renderer(ComponentBase):
+    __component_type__ = &#39;renderer&#39;
+
+    def __init__(self, **kwargs):
+        super(Renderer, self).__init__(**kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer">Revealer</a></li>
+</ul>
+</dd>
+<dt id="presalytics.story.components.ThemeBase"><code class="flex name class">
+<span>class <span class="ident">ThemeBase</span></span>
+<span>(</span><span>**kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Themes are containers for plugins should be rendered once
+across the entire document.
+The init method should configure
+parameters with get passed to plugins via serialization and
+deserialization.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L301-L316" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class ThemeBase(ComponentBase):
+    &#34;&#34;&#34;
+    Themes are containers for plugins should be rendered once
+    across the entire document.  The init method should configure
+    parameters with get passed to plugins via serialization and 
+    deserialization.
+    &#34;&#34;&#34;
+    plugins: typing.Optional[typing.List[&#39;Plugin&#39;]]
+
+    __component_type__ = &#39;theme&#39;
+
+    def __init__(self, **kwargs):
+        pass
+
+    def render(self, **kwargs):
+        pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.themes.ooxml.OoxmlTheme" href="/python-client/presalytics/lib/themes/ooxml.html#presalytics.lib.themes.ooxml.OoxmlTheme">OoxmlTheme</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.story.components.ThemeBase.render"><code class="name flex">
+<span>def <span class="ident">render</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L315-L316" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def render(self, **kwargs):
+    pass</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="presalytics.story.components.WidgetBase"><code class="flex name class">
+<span>class <span class="ident">WidgetBase</span></span>
+<span>(</span><span>name, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Inherit from this base class to create widget components that can be rendered to html via the
+presalytics.story.revealer.Revealer class.
+This component also need to build a method
+that allows the widget to be serialzed into a presalytics.story.outline.Widget object.</p>
+<h2 id="parameters">Parameters:</h2>
+<p>widget: Widget
+A presalytics.story.outline.Widget object use for initialized the component class.</p>
+<h2 id="attributes">Attributes:</h2>
+<p>outline_widget: Widget
+A presalytics.story.outline.Widget object</p>
+<p>css: List[str]
+A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
+in the presalytics.lib.templates.base module.</p>
+<p>js: List[str]
+A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
+in the presalytics.lib.templates.base module.</p>
+<p>Note: When inheriting from this base class, call "super().<strong>init</strong>(self, <em>args, </em>*kwargs)" before add your
+own custom initialization.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L89-L196" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class WidgetBase(ComponentBase):
+    &#34;&#34;&#34;
+    Inherit from this base class to create widget components that can be rendered to html via the
+    presalytics.story.revealer.Revealer class.  This component also need to build a method
+    that allows the widget to be serialzed into a presalytics.story.outline.Widget object.
+
+    Parameters:
+    ----------
+    widget: Widget
+        A presalytics.story.outline.Widget object use for initialized the component class.
+
+    Attributes:
+    ----------
+    outline_widget: Widget
+        A presalytics.story.outline.Widget object
+
+    css: List[str]
+        A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
+        in the presalytics.lib.templates.base module.
+
+    js: List[str]
+        A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
+        in the presalytics.lib.templates.base module.
+    &#34;&#34;&#34;
+    outline_widget: typing.Optional[&#39;Widget&#39;]
+
+    __component_type__ = &#39;widget&#39;
+
+    def __init__(self, name, *args, **kwargs) -&gt; None:
+        &#34;&#34;&#34;
+        Note: When inheriting from this base class, call &#34;super().__init__(self, *args, **kwargs)&#34; before add your
+        own custom initialization.
+
+        &#34;&#34;&#34;
+        super(WidgetBase, self).__init__(*args, **kwargs)
+        self.name = name
+        self.outline_widget = None
+
+    def render(self, component, **kwargs):
+        self.to_html(component, **kwargs)
+
+    @abc.abstractmethod
+    def to_html(self, data: typing.Dict = None, **kwargs) -&gt; str:
+        &#34;&#34;&#34;
+        Returns valid html that renders the widget in a broswer.
+
+        Parameters:
+        ----------
+        data: Dict
+            The data parameter is a dictionary should contain the minimum amount of that is required to
+            successfully render the object.  As the widget is update, data control how the disply of
+            information changes.
+        **kwargs:
+            Optional keyword arguments can be used in subclass to modify the behavior of the to_html function.
+            these keyword arguments should be geinvariant through successive updates to the chart.  For example,
+            keycloak argument should control the styling of the widget, which should not change as the data in
+            the object (e.g., a chart) is updated.  Keyword arguments are loaded via additional_properties
+            parameter in in the presalytics.story.outline.Widget object.
+
+        Returns
+        ----------
+        A string of containing an html fragment that will be loaded into a template in successive operations
+        &#34;&#34;&#34;
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def serialize(self, **kwargs) -&gt; &#39;Widget&#39;:
+        &#34;&#34;&#34;
+        Creates presalytics.story.outline.Widget object from instance data. This widget should
+        have the correct name, data and additional_properties so the same widget can be reconstituted
+        via the to_html method, given the same set of data.
+
+        Typically, this method will call an update method that run a local script with updates this
+        Widget&#39;s data Dictionary prior being loading into the Widget outline object for serialization.
+
+        Parameters:
+        ----------
+        **kwargs:
+            Optional keyword arguments can be used in subclass to modify the behavior of the to_html function.
+            these keyword arguments should be be invariant through successive updates to the chart. Overrides
+            for this widgets default additional_properties shoudl be loaded via these keyword argments.
+
+        &#34;&#34;&#34;
+        raise NotImplementedError
+
+    @classmethod
+    def deserialize(cls, widget: &#39;Widget&#39;, **kwargs) -&gt; &#39;WidgetBase&#39;:
+        &#34;&#34;&#34;
+        Creates an instance of the widget from the data object in the presalytics.story.outline.Widget
+        object. This method exists to ensure widgets can be portable across environments.  To clarify,
+        widgets built on the client-side via the __init__ method can be reconstructed server-side via
+        the deserialize method.  This allows decoupling of the widget generation/updating of data and
+        the rendering of the widget in a UI.  Renderers (e.g., presalytics.story.revealer.Revealer object)
+        need not know about how the data get updated, but can update the graphic with data generated by
+        the widget when the serialize method is called.
+
+        Parameters:
+        ----------
+
+        widget: Widget
+            A prealytics.story.outline.Widget object
+
+        Returns:
+        ----------
+
+        An instance the widget class
+        &#34;&#34;&#34;
+        raise NotImplementedError</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.widgets.matplotlib.MatplotlibFigure" href="/python-client/presalytics/lib/widgets/matplotlib.html#presalytics.lib.widgets.matplotlib.MatplotlibFigure">MatplotlibFigure</a></li>
+<li><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="presalytics.story.components.WidgetBase.deserialize"><code class="name flex">
+<span>def <span class="ident">deserialize</span></span>(<span>widget, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Creates an instance of the widget from the data object in the presalytics.story.outline.Widget
+object. This method exists to ensure widgets can be portable across environments.
+To clarify,
+widgets built on the client-side via the <strong>init</strong> method can be reconstructed server-side via
+the deserialize method.
+This allows decoupling of the widget generation/updating of data and
+the rendering of the widget in a UI.
+Renderers (e.g., presalytics.story.revealer.Revealer object)
+need not know about how the data get updated, but can update the graphic with data generated by
+the widget when the serialize method is called.</p>
+<h2 id="parameters">Parameters:</h2>
+<p>widget: Widget
+A prealytics.story.outline.Widget object</p>
+<h2 id="returns">Returns:</h2>
+<p>An instance the widget class</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L174-L196" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@classmethod
+def deserialize(cls, widget: &#39;Widget&#39;, **kwargs) -&gt; &#39;WidgetBase&#39;:
+    &#34;&#34;&#34;
+    Creates an instance of the widget from the data object in the presalytics.story.outline.Widget
+    object. This method exists to ensure widgets can be portable across environments.  To clarify,
+    widgets built on the client-side via the __init__ method can be reconstructed server-side via
+    the deserialize method.  This allows decoupling of the widget generation/updating of data and
+    the rendering of the widget in a UI.  Renderers (e.g., presalytics.story.revealer.Revealer object)
+    need not know about how the data get updated, but can update the graphic with data generated by
+    the widget when the serialize method is called.
+
+    Parameters:
+    ----------
+
+    widget: Widget
+        A prealytics.story.outline.Widget object
+
+    Returns:
+    ----------
+
+    An instance the widget class
+    &#34;&#34;&#34;
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.story.components.WidgetBase.render"><code class="name flex">
+<span>def <span class="ident">render</span></span>(<span>self, component, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L127-L128" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def render(self, component, **kwargs):
+    self.to_html(component, **kwargs)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.components.WidgetBase.serialize"><code class="name flex">
+<span>def <span class="ident">serialize</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Creates presalytics.story.outline.Widget object from instance data. This widget should
+have the correct name, data and additional_properties so the same widget can be reconstituted
+via the to_html method, given the same set of data.</p>
+<p>Typically, this method will call an update method that run a local script with updates this
+Widget's data Dictionary prior being loading into the Widget outline object for serialization.</p>
+<h2 id="parameters">Parameters:</h2>
+<p>**kwargs:
+Optional keyword arguments can be used in subclass to modify the behavior of the to_html function.
+these keyword arguments should be be invariant through successive updates to the chart. Overrides
+for this widgets default additional_properties shoudl be loaded via these keyword argments.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L154-L172" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+def serialize(self, **kwargs) -&gt; &#39;Widget&#39;:
+    &#34;&#34;&#34;
+    Creates presalytics.story.outline.Widget object from instance data. This widget should
+    have the correct name, data and additional_properties so the same widget can be reconstituted
+    via the to_html method, given the same set of data.
+
+    Typically, this method will call an update method that run a local script with updates this
+    Widget&#39;s data Dictionary prior being loading into the Widget outline object for serialization.
+
+    Parameters:
+    ----------
+    **kwargs:
+        Optional keyword arguments can be used in subclass to modify the behavior of the to_html function.
+        these keyword arguments should be be invariant through successive updates to the chart. Overrides
+        for this widgets default additional_properties shoudl be loaded via these keyword argments.
+
+    &#34;&#34;&#34;
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.components.WidgetBase.to_html"><code class="name flex">
+<span>def <span class="ident">to_html</span></span>(<span>self, data=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns valid html that renders the widget in a broswer.</p>
+<h2 id="parameters">Parameters:</h2>
+<p>data: Dict
+The data parameter is a dictionary should contain the minimum amount of that is required to
+successfully render the object.
+As the widget is update, data control how the disply of
+information changes.
+**kwargs:
+Optional keyword arguments can be used in subclass to modify the behavior of the to_html function.
+these keyword arguments should be geinvariant through successive updates to the chart.
+For example,
+keycloak argument should control the styling of the widget, which should not change as the data in
+the object (e.g., a chart) is updated.
+Keyword arguments are loaded via additional_properties
+parameter in in the presalytics.story.outline.Widget object.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>string</code> of <code>containing</code> <code>an</code> <code>html</code> <code>fragment</code> <code>that</code> <code>will</code> <code>be</code> <code>loaded</code> <code>into</code> <code>a</code> <code>template</code> <code>in</code> <code>successive</code> <code>operations</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L130-L152" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+def to_html(self, data: typing.Dict = None, **kwargs) -&gt; str:
+    &#34;&#34;&#34;
+    Returns valid html that renders the widget in a broswer.
+
+    Parameters:
+    ----------
+    data: Dict
+        The data parameter is a dictionary should contain the minimum amount of that is required to
+        successfully render the object.  As the widget is update, data control how the disply of
+        information changes.
+    **kwargs:
+        Optional keyword arguments can be used in subclass to modify the behavior of the to_html function.
+        these keyword arguments should be geinvariant through successive updates to the chart.  For example,
+        keycloak argument should control the styling of the widget, which should not change as the data in
+        the object (e.g., a chart) is updated.  Keyword arguments are loaded via additional_properties
+        parameter in in the presalytics.story.outline.Widget object.
+
+    Returns
+    ----------
+    A string of containing an html fragment that will be loaded into a template in successive operations
+    &#34;&#34;&#34;
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="presalytics.story" href="/python-client/presalytics/story/index.html">presalytics.story</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.story.components.ComponentBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.story.components.ComponentBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.story.components.ComponentBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
+<li><code><a title="presalytics.story.components.ComponentBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.serialize">serialize</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="presalytics.story.components.ComponentRegistry" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry">ComponentRegistry</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.story.components.ComponentRegistry.get_instance" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.get_instance">get_instance</a></code></li>
+<li><code><a title="presalytics.story.components.ComponentRegistry.get_instance_name" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.get_instance_name">get_instance_name</a></code></li>
+<li><code><a title="presalytics.story.components.ComponentRegistry.get_instance_registry_key" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.get_instance_registry_key">get_instance_registry_key</a></code></li>
+<li><code><a title="presalytics.story.components.ComponentRegistry.get_name" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.get_name">get_name</a></code></li>
+<li><code><a title="presalytics.story.components.ComponentRegistry.get_type" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.get_type">get_type</a></code></li>
+<li><code><a title="presalytics.story.components.ComponentRegistry.load_class" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.load_class">load_class</a></code></li>
+<li><code><a title="presalytics.story.components.ComponentRegistry.unregister" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.unregister">unregister</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="presalytics.story.components.PageTemplateBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase">PageTemplateBase</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.story.components.PageTemplateBase.deseriailize" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.deseriailize">deseriailize</a></code></li>
+<li><code><a title="presalytics.story.components.PageTemplateBase.get_page_widgets" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.get_page_widgets">get_page_widgets</a></code></li>
+<li><code><a title="presalytics.story.components.PageTemplateBase.load_widget" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.load_widget">load_widget</a></code></li>
+<li><code><a title="presalytics.story.components.PageTemplateBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.render">render</a></code></li>
+<li><code><a title="presalytics.story.components.PageTemplateBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.serialize">serialize</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="presalytics.story.components.Renderer" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer">Renderer</a></code></h4>
+</li>
+<li>
+<h4><code><a title="presalytics.story.components.ThemeBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ThemeBase">ThemeBase</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.story.components.ThemeBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ThemeBase.render">render</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.story.components.WidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.render">render</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

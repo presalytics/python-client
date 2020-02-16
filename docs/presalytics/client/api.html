@@ -1,0 +1,1029 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>presalytics.client.api API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>presalytics.client.api</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L0-L300" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">import os
+import cgi
+import webbrowser
+import time
+import requests
+import urllib.parse
+import importlib.util
+import logging
+import json
+import keycloak
+import environs
+import presalytics
+import presalytics.lib.exceptions
+import presalytics.lib.constants as cnst
+import presalytics.client.auth
+import presalytics.client.presalytics_ooxml_automation.api_client
+import presalytics.client.presalytics_story.api_client
+import presalytics.client.presalytics_doc_converter.api_client
+from uuid import uuid4
+
+logger = logging.getLogger(__name__)
+
+env = environs.Env()
+
+
+class Client(object):
+    &#34;&#34;&#34; Class for interacting with Presalytics API endpoints
+
+    The Client class creates a simple interface for user to interactive with the 
+    Presaltyics API and is the primary building block user-built tools, stories, 
+    dashboards and interactive presentations.
+
+    A client instance wraps python functions around Presalytics API endpoints and
+    manages user authentication. On initialization, he client checks the status of 
+    a user authentication the expiry of their refresh an access tokens.  When needed,
+    the client will prompt (or raise a )
+
+    After authenication, users can the methods bound to the story, ooxml_automation, 
+    and doc_converter attributes to make calls in into the Presalytics API.
+
+
+    A note for server-side development:
+
+    By default, the client class automatically caches tokens in a file called 
+    &#34;token.json&#34;, located in the python&#39;s current working directory.  If building a
+    client to operate in a multi-user environment, this behavior should be turned off.
+    To do this, ensure the following parameters are pass to the configuration: 
+    
+        cache_tokens = False,
+        delegate_login = True
+    
+    When delegate login is True, the client assumes that the application creating 
+    instances of the client object will handle user authentication.  The simplest way
+    to do this is to pass a token to the client via the &#34;token&#34; keyword argument.
+
+    Parameters:
+    ----------
+
+    Attributes:
+    ----------
+      
+    
+    
+    
+    
+    &#34;&#34;&#34;
+    def __init__(
+            self,
+            delegate_login=False,
+            token=None,
+            cache_tokens=True,
+            username=None,
+            password=None,
+            **kwargs):
+    
+        if username:
+            self.username = username
+        else:
+            try:
+                self.username = presalytics.CONFIG[&#39;USERNAME&#39;]
+            except KeyError:
+                if token:
+                    self.username = None
+                else:
+                    raise presalytics.lib.exceptions.MissingConfigException(&#34;Configuration variable PRESALYTICS_USERNAME is required when client is not initalized with an API token.  Please reconfigure and retry.&#34;)
+        try:
+            if password:
+                self.password = password
+            else:
+                self.password = presalytics.CONFIG[&#39;PASSWORD&#39;]
+            self.direct_grant = True
+        except KeyError:
+            self.password = None
+            self.direct_grant = False
+        try:
+            self.client_id = presalytics.CONFIG[&#39;CLIENT_ID&#39;]
+        except KeyError:
+            self.client_id = cnst.DEFAULT_CLIENT_ID
+        try:
+            self.client_secret = presalytics.CONFIG[&#39;CLIENT_SECRET&#39;]
+            self.confidential_client = True
+        except KeyError:
+            self.client_secret = None
+            self.confidential_client = False
+        self.verify_https = env.bool(&#34;VERIFY_HTTPS&#34;, True)
+        try:
+            self.site_host = presalytics.CONFIG[&#34;HOSTS&#34;][&#34;SITE&#34;]
+        except KeyError:
+            self.site_host = cnst.SITE_HOST
+        self.login_sleep_interval = 5  # seconds
+        self.login_timeout = 60  # seconds
+        try:
+            self.redirect_uri = presalytics.CONFIG[&#34;REDIRECT_URI&#34;]
+        except KeyError:
+            self.redirect_uri = cnst.REDIRECT_URI
+        if delegate_login or presalytics.CONFIG.get(&#34;DELEGATE_LOGIN&#34;, False):
+            self._delegate_login = True
+        else:
+            self._delegate_login = False
+        self.oidc = keycloak.KeycloakOpenID(
+            server_url=cnst.OIDC_AUTH_HOST,
+            realm_name=cnst.OIDC_REALM,
+            client_id=self.client_id,
+            verify=self.verify_https
+        )
+        self.token_util = presalytics.client.auth.TokenUtil(token_cache=cache_tokens)
+        if token:
+            if token.get(&#39;access_token_expire_time&#39;, None):
+                self.token_util.token = token
+            elif token.get(&#39;expires_in&#39;, None):
+                self.token_util.process_keycloak_token(token)
+            else:
+                raise presalytics.lib.exceptions.InvalidTokenException(message=&#34;Unknown token format.&#34;)
+            if self.token_util.token_cache:
+                self.token_util._put_token_file()
+        if not self._delegate_login:
+            self.token_util.token = self.refresh_token()
+
+        doc_converter_api_client = DocConverterApiClientWithAuth(self, **kwargs)
+        self.doc_converter = presalytics.client.presalytics_doc_converter.DefaultApi(api_client=doc_converter_api_client)
+        ooxml_automation_api_client = OoxmlAutomationApiClientWithAuth(self, **kwargs)
+        self.ooxml_automation = presalytics.client.presalytics_ooxml_automation.DefaultApi(api_client=ooxml_automation_api_client)
+        story_api_client = StoryApiClientWithAuth(self, **kwargs)
+        self.story = presalytics.client.presalytics_story.DefaultApi(api_client=story_api_client)
+
+    def login(self):
+        try:
+            if self.direct_grant:
+                keycloak_token = self.oidc.token(username=self.username, password=self.password)
+            else:
+                keycloak_token = self._get_new_token_browser()
+        except keycloak.exceptions.KeycloakGetError as e:
+            if e.response_code == 404:
+                logger.error(&#34;Received reponse code 404 from api authentication.  Indicates username does not exist.  Please recheck config and try again.&#34;)
+            elif e.response_code == 401:
+                logger.error(&#34;Received 401 response code from api authentication.  This user&#39;s access to this resource is unauthorized&#34;)
+            elif e.response_code &gt;= 500:
+                logger.error(&#34;Server error.  Please try again later.&#34;)
+            else:
+                logger.error(e.error_message)
+            raise presalytics.lib.exceptions.MissingConfigException(e.error_message)
+        self.token_util.process_keycloak_token(keycloak_token)
+        return self.token_util.token
+
+    def exchange_token(self, original_token, audience=None):
+        &#34;&#34;&#34; Requires developer account and authorized client credentials &#34;&#34;&#34;
+        self.oidc.decode_token(original_token, cnst.JWT_KEY)
+        kwargs = {
+            &#34;client_id&#34;: self.client_id,
+            &#34;client_secret&#34;: self.client_secret,
+            &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:token-exchange&#34;,
+            &#34;subject_token&#34;: original_token
+        }
+        if audience is not None:
+            kwargs.update(
+                {
+                    &#34;audience&#34;: audience
+                }
+            )
+        keycloak_token = self.oidc.token(**kwargs)
+        self.token_util.process_keycloak_token(keycloak_token)
+        return self.token_util.token[&#34;access_token&#34;]
+
+    def _get_new_token_browser(self):
+        &#34;&#34;&#34;
+        Opens browser in on presalytics.io and prompts for user login.
+        Retrieves authorization code from website and obtains api token
+        &#34;&#34;&#34;
+        logger.info(&#34;Opening new browser tab.  Please input login credentials...&#34;)
+        api_otp = uuid4()
+        query = {
+            &#34;api_otp&#34;: api_otp,
+            &#34;client_id&#34;: self.client_id,
+            &#34;next&#34;: urllib.parse.urlparse(self.redirect_uri).path
+        }
+        query_string = &#39;?{}&#39;.format(urllib.parse.urlencode(query))
+        url = urllib.parse.urljoin(self.site_host, urllib.parse.urljoin(cnst.LOGIN_PATH, query_string))
+        webbrowser.open_new_tab(url)
+        auth_code = None
+        payload = {
+            &#34;username&#34;: self.username,
+            &#34;api_otp&#34;: str(api_otp),
+            &#34;client_id&#34;: self.client_id
+        }
+
+        auth_code_url = urllib.parse.urljoin(self.site_host, cnst.API_CODE_URL)
+        interval = 0
+        while True:
+            response = requests.post(auth_code_url, json=payload, verify=self.verify_https)
+            if response.status_code != 200:
+                if interval &lt;= self.login_timeout:
+                    interval += self.login_sleep_interval
+                    time.sleep(self.login_sleep_interval)
+                else:
+                    raise presalytics.lib.exceptions.LoginTimeout()
+            else:
+                data = json.loads(response.content)
+                break
+        if data.get(&#34;token&#34;, None):
+            #  pick up otp token off presalytics backend
+            token = data.get(&#34;token&#34;) 
+        else:
+            # support oidc authorization code flow
+            auth_code = data[&#34;authorization_code&#34;]
+            token = self.oidc.token(username=self.username, grant_type=&#34;authorization_code&#34;, code=auth_code, redirect_uri=self.redirect_uri)
+        if token:
+            logger.info(&#34;Login Succeeded.  Proceeding.&#34;)
+        return token
+
+    def refresh_token(self):
+        if self.token_util.is_api_access_token_expired():
+            if self.token_util.is_api_refresh_token_expired():
+                if not self._delegate_login:  # do not automatically log in at init
+                    self.login()
+                else:
+                    raise presalytics.lib.exceptions.InvalidTokenException(message=&#34;This token has expired.&#34;)
+            else:
+                try:
+                    refresh_token = self.token_util.token[&#34;refresh_token&#34;]
+                    self.token_util.token = self.oidc.refresh_token(refresh_token)
+                except keycloak.exceptions.KeycloakGetError:
+                    if not self._delegate_login:
+                        self.login()
+            if self.token_util.token_cache:
+                self.token_util._put_token_file()
+        return self.token_util.token
+
+    def get_auth_header(self):
+        self.refresh_token()
+        auth_header = {
+            &#34;Authorization&#34;: &#34;Bearer &#34; + self.token_util.token[&#34;access_token&#34;]
+        }
+        return auth_header
+
+    def get_request_id_header(self):
+        return {
+            &#34;X-Request-Id&#34;: str(uuid4())
+        }
+
+    def download_file(self, story_id, ooxml_automation_id, download_folder=None, filename=None, **kwargs):
+        response, status, headers = self.story.story_id_file_ooxmlautomationid_get_with_http_info(story_id, ooxml_automation_id, _preload_content=False)
+        if download_folder is None:
+            download_folder = os.getcwd()
+        if filename is None:
+            cd_header = headers.get(&#39;Content-Disposition&#39;)
+            _, params = cgi.parse_header(cd_header)
+            filename = params[&#34;filename&#34;]
+        filepath = os.path.join(download_folder, filename)
+        with open(filepath, &#39;wb&#39;) as f:
+            f.write(response.data)
+
+
+class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_doc_converter.api_client.ApiClient):
+    def __init__(self, parent: Client, **kwargs):
+        presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
+        presalytics.client.presalytics_doc_converter.api_client.ApiClient.__init__(self)
+        self.update_configuration()
+
+
+class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_ooxml_automation.api_client.ApiClient):
+    def __init__(self, parent: Client, **kwargs):
+        presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
+        presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
+        self.update_configuration()
+
+    def get_mimetype(self, filename):
+        self.parent().ooxml_automation.documents_documenttype_get()
+
+
+class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_story.api_client.ApiClient):
+    def __init__(self, parent: Client, **kwargs):
+        presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
+        presalytics.client.presalytics_story.api_client.ApiClient.__init__(self)
+        self.update_configuration()
+
+
+
+
+        </code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="presalytics.client.api.Client"><code class="flex name class">
+<span>class <span class="ident">Client</span></span>
+<span>(</span><span>delegate_login=False, token=None, cache_tokens=True, username=None, password=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class for interacting with Presalytics API endpoints</p>
+<p>The Client class creates a simple interface for user to interactive with the
+Presaltyics API and is the primary building block user-built tools, stories,
+dashboards and interactive presentations.</p>
+<p>A client instance wraps python functions around Presalytics API endpoints and
+manages user authentication. On initialization, he client checks the status of
+a user authentication the expiry of their refresh an access tokens.
+When needed,
+the client will prompt (or raise a )</p>
+<p>After authenication, users can the methods bound to the story, ooxml_automation,
+and doc_converter attributes to make calls in into the Presalytics API.</p>
+<p>A note for server-side development:</p>
+<p>By default, the client class automatically caches tokens in a file called
+"token.json", located in the python's current working directory.
+If building a
+client to operate in a multi-user environment, this behavior should be turned off.
+To do this, ensure the following parameters are pass to the configuration: </p>
+<pre><code>cache_tokens = False,
+delegate_login = True
+</code></pre>
+<p>When delegate login is True, the client assumes that the application creating
+instances of the client object will handle user authentication.
+The simplest way
+to do this is to pass a token to the client via the "token" keyword argument.</p>
+<h2 id="parameters">Parameters:</h2>
+<h2 id="attributes">Attributes:</h2></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L26-L270" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class Client(object):
+    &#34;&#34;&#34; Class for interacting with Presalytics API endpoints
+
+    The Client class creates a simple interface for user to interactive with the 
+    Presaltyics API and is the primary building block user-built tools, stories, 
+    dashboards and interactive presentations.
+
+    A client instance wraps python functions around Presalytics API endpoints and
+    manages user authentication. On initialization, he client checks the status of 
+    a user authentication the expiry of their refresh an access tokens.  When needed,
+    the client will prompt (or raise a )
+
+    After authenication, users can the methods bound to the story, ooxml_automation, 
+    and doc_converter attributes to make calls in into the Presalytics API.
+
+
+    A note for server-side development:
+
+    By default, the client class automatically caches tokens in a file called 
+    &#34;token.json&#34;, located in the python&#39;s current working directory.  If building a
+    client to operate in a multi-user environment, this behavior should be turned off.
+    To do this, ensure the following parameters are pass to the configuration: 
+    
+        cache_tokens = False,
+        delegate_login = True
+    
+    When delegate login is True, the client assumes that the application creating 
+    instances of the client object will handle user authentication.  The simplest way
+    to do this is to pass a token to the client via the &#34;token&#34; keyword argument.
+
+    Parameters:
+    ----------
+
+    Attributes:
+    ----------
+      
+    
+    
+    
+    
+    &#34;&#34;&#34;
+    def __init__(
+            self,
+            delegate_login=False,
+            token=None,
+            cache_tokens=True,
+            username=None,
+            password=None,
+            **kwargs):
+    
+        if username:
+            self.username = username
+        else:
+            try:
+                self.username = presalytics.CONFIG[&#39;USERNAME&#39;]
+            except KeyError:
+                if token:
+                    self.username = None
+                else:
+                    raise presalytics.lib.exceptions.MissingConfigException(&#34;Configuration variable PRESALYTICS_USERNAME is required when client is not initalized with an API token.  Please reconfigure and retry.&#34;)
+        try:
+            if password:
+                self.password = password
+            else:
+                self.password = presalytics.CONFIG[&#39;PASSWORD&#39;]
+            self.direct_grant = True
+        except KeyError:
+            self.password = None
+            self.direct_grant = False
+        try:
+            self.client_id = presalytics.CONFIG[&#39;CLIENT_ID&#39;]
+        except KeyError:
+            self.client_id = cnst.DEFAULT_CLIENT_ID
+        try:
+            self.client_secret = presalytics.CONFIG[&#39;CLIENT_SECRET&#39;]
+            self.confidential_client = True
+        except KeyError:
+            self.client_secret = None
+            self.confidential_client = False
+        self.verify_https = env.bool(&#34;VERIFY_HTTPS&#34;, True)
+        try:
+            self.site_host = presalytics.CONFIG[&#34;HOSTS&#34;][&#34;SITE&#34;]
+        except KeyError:
+            self.site_host = cnst.SITE_HOST
+        self.login_sleep_interval = 5  # seconds
+        self.login_timeout = 60  # seconds
+        try:
+            self.redirect_uri = presalytics.CONFIG[&#34;REDIRECT_URI&#34;]
+        except KeyError:
+            self.redirect_uri = cnst.REDIRECT_URI
+        if delegate_login or presalytics.CONFIG.get(&#34;DELEGATE_LOGIN&#34;, False):
+            self._delegate_login = True
+        else:
+            self._delegate_login = False
+        self.oidc = keycloak.KeycloakOpenID(
+            server_url=cnst.OIDC_AUTH_HOST,
+            realm_name=cnst.OIDC_REALM,
+            client_id=self.client_id,
+            verify=self.verify_https
+        )
+        self.token_util = presalytics.client.auth.TokenUtil(token_cache=cache_tokens)
+        if token:
+            if token.get(&#39;access_token_expire_time&#39;, None):
+                self.token_util.token = token
+            elif token.get(&#39;expires_in&#39;, None):
+                self.token_util.process_keycloak_token(token)
+            else:
+                raise presalytics.lib.exceptions.InvalidTokenException(message=&#34;Unknown token format.&#34;)
+            if self.token_util.token_cache:
+                self.token_util._put_token_file()
+        if not self._delegate_login:
+            self.token_util.token = self.refresh_token()
+
+        doc_converter_api_client = DocConverterApiClientWithAuth(self, **kwargs)
+        self.doc_converter = presalytics.client.presalytics_doc_converter.DefaultApi(api_client=doc_converter_api_client)
+        ooxml_automation_api_client = OoxmlAutomationApiClientWithAuth(self, **kwargs)
+        self.ooxml_automation = presalytics.client.presalytics_ooxml_automation.DefaultApi(api_client=ooxml_automation_api_client)
+        story_api_client = StoryApiClientWithAuth(self, **kwargs)
+        self.story = presalytics.client.presalytics_story.DefaultApi(api_client=story_api_client)
+
+    def login(self):
+        try:
+            if self.direct_grant:
+                keycloak_token = self.oidc.token(username=self.username, password=self.password)
+            else:
+                keycloak_token = self._get_new_token_browser()
+        except keycloak.exceptions.KeycloakGetError as e:
+            if e.response_code == 404:
+                logger.error(&#34;Received reponse code 404 from api authentication.  Indicates username does not exist.  Please recheck config and try again.&#34;)
+            elif e.response_code == 401:
+                logger.error(&#34;Received 401 response code from api authentication.  This user&#39;s access to this resource is unauthorized&#34;)
+            elif e.response_code &gt;= 500:
+                logger.error(&#34;Server error.  Please try again later.&#34;)
+            else:
+                logger.error(e.error_message)
+            raise presalytics.lib.exceptions.MissingConfigException(e.error_message)
+        self.token_util.process_keycloak_token(keycloak_token)
+        return self.token_util.token
+
+    def exchange_token(self, original_token, audience=None):
+        &#34;&#34;&#34; Requires developer account and authorized client credentials &#34;&#34;&#34;
+        self.oidc.decode_token(original_token, cnst.JWT_KEY)
+        kwargs = {
+            &#34;client_id&#34;: self.client_id,
+            &#34;client_secret&#34;: self.client_secret,
+            &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:token-exchange&#34;,
+            &#34;subject_token&#34;: original_token
+        }
+        if audience is not None:
+            kwargs.update(
+                {
+                    &#34;audience&#34;: audience
+                }
+            )
+        keycloak_token = self.oidc.token(**kwargs)
+        self.token_util.process_keycloak_token(keycloak_token)
+        return self.token_util.token[&#34;access_token&#34;]
+
+    def _get_new_token_browser(self):
+        &#34;&#34;&#34;
+        Opens browser in on presalytics.io and prompts for user login.
+        Retrieves authorization code from website and obtains api token
+        &#34;&#34;&#34;
+        logger.info(&#34;Opening new browser tab.  Please input login credentials...&#34;)
+        api_otp = uuid4()
+        query = {
+            &#34;api_otp&#34;: api_otp,
+            &#34;client_id&#34;: self.client_id,
+            &#34;next&#34;: urllib.parse.urlparse(self.redirect_uri).path
+        }
+        query_string = &#39;?{}&#39;.format(urllib.parse.urlencode(query))
+        url = urllib.parse.urljoin(self.site_host, urllib.parse.urljoin(cnst.LOGIN_PATH, query_string))
+        webbrowser.open_new_tab(url)
+        auth_code = None
+        payload = {
+            &#34;username&#34;: self.username,
+            &#34;api_otp&#34;: str(api_otp),
+            &#34;client_id&#34;: self.client_id
+        }
+
+        auth_code_url = urllib.parse.urljoin(self.site_host, cnst.API_CODE_URL)
+        interval = 0
+        while True:
+            response = requests.post(auth_code_url, json=payload, verify=self.verify_https)
+            if response.status_code != 200:
+                if interval &lt;= self.login_timeout:
+                    interval += self.login_sleep_interval
+                    time.sleep(self.login_sleep_interval)
+                else:
+                    raise presalytics.lib.exceptions.LoginTimeout()
+            else:
+                data = json.loads(response.content)
+                break
+        if data.get(&#34;token&#34;, None):
+            #  pick up otp token off presalytics backend
+            token = data.get(&#34;token&#34;) 
+        else:
+            # support oidc authorization code flow
+            auth_code = data[&#34;authorization_code&#34;]
+            token = self.oidc.token(username=self.username, grant_type=&#34;authorization_code&#34;, code=auth_code, redirect_uri=self.redirect_uri)
+        if token:
+            logger.info(&#34;Login Succeeded.  Proceeding.&#34;)
+        return token
+
+    def refresh_token(self):
+        if self.token_util.is_api_access_token_expired():
+            if self.token_util.is_api_refresh_token_expired():
+                if not self._delegate_login:  # do not automatically log in at init
+                    self.login()
+                else:
+                    raise presalytics.lib.exceptions.InvalidTokenException(message=&#34;This token has expired.&#34;)
+            else:
+                try:
+                    refresh_token = self.token_util.token[&#34;refresh_token&#34;]
+                    self.token_util.token = self.oidc.refresh_token(refresh_token)
+                except keycloak.exceptions.KeycloakGetError:
+                    if not self._delegate_login:
+                        self.login()
+            if self.token_util.token_cache:
+                self.token_util._put_token_file()
+        return self.token_util.token
+
+    def get_auth_header(self):
+        self.refresh_token()
+        auth_header = {
+            &#34;Authorization&#34;: &#34;Bearer &#34; + self.token_util.token[&#34;access_token&#34;]
+        }
+        return auth_header
+
+    def get_request_id_header(self):
+        return {
+            &#34;X-Request-Id&#34;: str(uuid4())
+        }
+
+    def download_file(self, story_id, ooxml_automation_id, download_folder=None, filename=None, **kwargs):
+        response, status, headers = self.story.story_id_file_ooxmlautomationid_get_with_http_info(story_id, ooxml_automation_id, _preload_content=False)
+        if download_folder is None:
+            download_folder = os.getcwd()
+        if filename is None:
+            cd_header = headers.get(&#39;Content-Disposition&#39;)
+            _, params = cgi.parse_header(cd_header)
+            filename = params[&#34;filename&#34;]
+        filepath = os.path.join(download_folder, filename)
+        with open(filepath, &#39;wb&#39;) as f:
+            f.write(response.data)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.client.api.Client.download_file"><code class="name flex">
+<span>def <span class="ident">download_file</span></span>(<span>self, story_id, ooxml_automation_id, download_folder=None, filename=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L260-L270" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def download_file(self, story_id, ooxml_automation_id, download_folder=None, filename=None, **kwargs):
+    response, status, headers = self.story.story_id_file_ooxmlautomationid_get_with_http_info(story_id, ooxml_automation_id, _preload_content=False)
+    if download_folder is None:
+        download_folder = os.getcwd()
+    if filename is None:
+        cd_header = headers.get(&#39;Content-Disposition&#39;)
+        _, params = cgi.parse_header(cd_header)
+        filename = params[&#34;filename&#34;]
+    filepath = os.path.join(download_folder, filename)
+    with open(filepath, &#39;wb&#39;) as f:
+        f.write(response.data)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.api.Client.exchange_token"><code class="name flex">
+<span>def <span class="ident">exchange_token</span></span>(<span>self, original_token, audience=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Requires developer account and authorized client credentials</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L165-L182" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def exchange_token(self, original_token, audience=None):
+    &#34;&#34;&#34; Requires developer account and authorized client credentials &#34;&#34;&#34;
+    self.oidc.decode_token(original_token, cnst.JWT_KEY)
+    kwargs = {
+        &#34;client_id&#34;: self.client_id,
+        &#34;client_secret&#34;: self.client_secret,
+        &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:token-exchange&#34;,
+        &#34;subject_token&#34;: original_token
+    }
+    if audience is not None:
+        kwargs.update(
+            {
+                &#34;audience&#34;: audience
+            }
+        )
+    keycloak_token = self.oidc.token(**kwargs)
+    self.token_util.process_keycloak_token(keycloak_token)
+    return self.token_util.token[&#34;access_token&#34;]</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.api.Client.get_auth_header"><code class="name flex">
+<span>def <span class="ident">get_auth_header</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L248-L253" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_auth_header(self):
+    self.refresh_token()
+    auth_header = {
+        &#34;Authorization&#34;: &#34;Bearer &#34; + self.token_util.token[&#34;access_token&#34;]
+    }
+    return auth_header</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.api.Client.get_request_id_header"><code class="name flex">
+<span>def <span class="ident">get_request_id_header</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L255-L258" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_request_id_header(self):
+    return {
+        &#34;X-Request-Id&#34;: str(uuid4())
+    }</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.api.Client.login"><code class="name flex">
+<span>def <span class="ident">login</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L146-L163" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def login(self):
+    try:
+        if self.direct_grant:
+            keycloak_token = self.oidc.token(username=self.username, password=self.password)
+        else:
+            keycloak_token = self._get_new_token_browser()
+    except keycloak.exceptions.KeycloakGetError as e:
+        if e.response_code == 404:
+            logger.error(&#34;Received reponse code 404 from api authentication.  Indicates username does not exist.  Please recheck config and try again.&#34;)
+        elif e.response_code == 401:
+            logger.error(&#34;Received 401 response code from api authentication.  This user&#39;s access to this resource is unauthorized&#34;)
+        elif e.response_code &gt;= 500:
+            logger.error(&#34;Server error.  Please try again later.&#34;)
+        else:
+            logger.error(e.error_message)
+        raise presalytics.lib.exceptions.MissingConfigException(e.error_message)
+    self.token_util.process_keycloak_token(keycloak_token)
+    return self.token_util.token</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.api.Client.refresh_token"><code class="name flex">
+<span>def <span class="ident">refresh_token</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L230-L246" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def refresh_token(self):
+    if self.token_util.is_api_access_token_expired():
+        if self.token_util.is_api_refresh_token_expired():
+            if not self._delegate_login:  # do not automatically log in at init
+                self.login()
+            else:
+                raise presalytics.lib.exceptions.InvalidTokenException(message=&#34;This token has expired.&#34;)
+        else:
+            try:
+                refresh_token = self.token_util.token[&#34;refresh_token&#34;]
+                self.token_util.token = self.oidc.refresh_token(refresh_token)
+            except keycloak.exceptions.KeycloakGetError:
+                if not self._delegate_login:
+                    self.login()
+        if self.token_util.token_cache:
+            self.token_util._put_token_file()
+    return self.token_util.token</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="presalytics.client.api.DocConverterApiClientWithAuth"><code class="flex name class">
+<span>class <span class="ident">DocConverterApiClientWithAuth</span></span>
+<span>(</span><span>parent, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generic API client for OpenAPI client library builds.</p>
+<p>OpenAPI generic API client. This client handles the client-
+server communication, and is invariant across implementations. Specifics of
+the methods and models for each application are generated from the OpenAPI
+templates.</p>
+<p>NOTE: This class is auto generated by OpenAPI Generator.
+Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
+Do not edit the class manually.</p>
+<p>:param configuration: .Configuration object for this client
+:param header_name: a header to pass when making calls to the API.
+:param header_value: a header value to pass when making calls to
+the API.
+:param cookie: a cookie to include in the header when making calls
+to the API
+:param pool_threads: The number of threads to use for async requests
+to the API. More threads means more concurrent API requests.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L273-L277" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_doc_converter.api_client.ApiClient):
+    def __init__(self, parent: Client, **kwargs):
+        presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
+        presalytics.client.presalytics_doc_converter.api_client.ApiClient.__init__(self)
+        self.update_configuration()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.client.auth.AuthenticationMixIn" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn">AuthenticationMixIn</a></li>
+<li><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient">ApiClient</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.client.auth.AuthenticationMixIn" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn">AuthenticationMixIn</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.client.auth.AuthenticationMixIn.call_api" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn.call_api">call_api</a></code></li>
+<li><code><a title="presalytics.client.auth.AuthenticationMixIn.update_configuration" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn.update_configuration">update_configuration</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient">ApiClient</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.NATIVE_TYPES_MAPPING" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.NATIVE_TYPES_MAPPING">NATIVE_TYPES_MAPPING</a></code></li>
+<li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.PRIMITIVE_TYPES" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.PRIMITIVE_TYPES">PRIMITIVE_TYPES</a></code></li>
+<li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.deserialize" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.files_parameters" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.files_parameters">files_parameters</a></code></li>
+<li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.parameters_to_tuples" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.parameters_to_tuples">parameters_to_tuples</a></code></li>
+<li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.pool" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.pool">pool</a></code></li>
+<li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.request" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.request">request</a></code></li>
+<li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.sanitize_for_serialization" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.sanitize_for_serialization">sanitize_for_serialization</a></code></li>
+<li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.select_header_accept" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.select_header_accept">select_header_accept</a></code></li>
+<li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.select_header_content_type" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.select_header_content_type">select_header_content_type</a></code></li>
+<li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.update_params_for_auth" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.update_params_for_auth">update_params_for_auth</a></code></li>
+<li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.user_agent" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.user_agent">user_agent</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="presalytics.client.api.OoxmlAutomationApiClientWithAuth"><code class="flex name class">
+<span>class <span class="ident">OoxmlAutomationApiClientWithAuth</span></span>
+<span>(</span><span>parent, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generic API client for OpenAPI client library builds.</p>
+<p>OpenAPI generic API client. This client handles the client-
+server communication, and is invariant across implementations. Specifics of
+the methods and models for each application are generated from the OpenAPI
+templates.</p>
+<p>NOTE: This class is auto generated by OpenAPI Generator.
+Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
+Do not edit the class manually.</p>
+<p>:param configuration: .Configuration object for this client
+:param header_name: a header to pass when making calls to the API.
+:param header_value: a header value to pass when making calls to
+the API.
+:param cookie: a cookie to include in the header when making calls
+to the API
+:param pool_threads: The number of threads to use for async requests
+to the API. More threads means more concurrent API requests.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L280-L287" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_ooxml_automation.api_client.ApiClient):
+    def __init__(self, parent: Client, **kwargs):
+        presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
+        presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
+        self.update_configuration()
+
+    def get_mimetype(self, filename):
+        self.parent().ooxml_automation.documents_documenttype_get()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.client.auth.AuthenticationMixIn" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn">AuthenticationMixIn</a></li>
+<li><a title="presalytics.client.presalytics_ooxml_automation.api_client.ApiClient" href="/python-client/presalytics/client/presalytics_ooxml_automation/api_client.html#presalytics.client.presalytics_ooxml_automation.api_client.ApiClient">ApiClient</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.client.api.OoxmlAutomationApiClientWithAuth.get_mimetype"><code class="name flex">
+<span>def <span class="ident">get_mimetype</span></span>(<span>self, filename)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L286-L287" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_mimetype(self, filename):
+    self.parent().ooxml_automation.documents_documenttype_get()</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.client.auth.AuthenticationMixIn" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn">AuthenticationMixIn</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.client.auth.AuthenticationMixIn.call_api" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn.call_api">call_api</a></code></li>
+<li><code><a title="presalytics.client.auth.AuthenticationMixIn.update_configuration" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn.update_configuration">update_configuration</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="presalytics.client.presalytics_ooxml_automation.api_client.ApiClient" href="/python-client/presalytics/client/presalytics_ooxml_automation/api_client.html#presalytics.client.presalytics_ooxml_automation.api_client.ApiClient">ApiClient</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.NATIVE_TYPES_MAPPING" href="/python-client/presalytics/client/presalytics_ooxml_automation/api_client.html#presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.NATIVE_TYPES_MAPPING">NATIVE_TYPES_MAPPING</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.PRIMITIVE_TYPES" href="/python-client/presalytics/client/presalytics_ooxml_automation/api_client.html#presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.PRIMITIVE_TYPES">PRIMITIVE_TYPES</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.deserialize" href="/python-client/presalytics/client/presalytics_ooxml_automation/api_client.html#presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.files_parameters" href="/python-client/presalytics/client/presalytics_ooxml_automation/api_client.html#presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.files_parameters">files_parameters</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.parameters_to_tuples" href="/python-client/presalytics/client/presalytics_ooxml_automation/api_client.html#presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.parameters_to_tuples">parameters_to_tuples</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.pool" href="/python-client/presalytics/client/presalytics_ooxml_automation/api_client.html#presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.pool">pool</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.request" href="/python-client/presalytics/client/presalytics_ooxml_automation/api_client.html#presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.request">request</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.sanitize_for_serialization" href="/python-client/presalytics/client/presalytics_ooxml_automation/api_client.html#presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.sanitize_for_serialization">sanitize_for_serialization</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.select_header_accept" href="/python-client/presalytics/client/presalytics_ooxml_automation/api_client.html#presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.select_header_accept">select_header_accept</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.select_header_content_type" href="/python-client/presalytics/client/presalytics_ooxml_automation/api_client.html#presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.select_header_content_type">select_header_content_type</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.update_params_for_auth" href="/python-client/presalytics/client/presalytics_ooxml_automation/api_client.html#presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.update_params_for_auth">update_params_for_auth</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.user_agent" href="/python-client/presalytics/client/presalytics_ooxml_automation/api_client.html#presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.user_agent">user_agent</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="presalytics.client.api.StoryApiClientWithAuth"><code class="flex name class">
+<span>class <span class="ident">StoryApiClientWithAuth</span></span>
+<span>(</span><span>parent, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generic API client for OpenAPI client library builds.</p>
+<p>OpenAPI generic API client. This client handles the client-
+server communication, and is invariant across implementations. Specifics of
+the methods and models for each application are generated from the OpenAPI
+templates.</p>
+<p>NOTE: This class is auto generated by OpenAPI Generator.
+Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
+Do not edit the class manually.</p>
+<p>:param configuration: .Configuration object for this client
+:param header_name: a header to pass when making calls to the API.
+:param header_value: a header value to pass when making calls to
+the API.
+:param cookie: a cookie to include in the header when making calls
+to the API
+:param pool_threads: The number of threads to use for async requests
+to the API. More threads means more concurrent API requests.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L290-L294" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_story.api_client.ApiClient):
+    def __init__(self, parent: Client, **kwargs):
+        presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
+        presalytics.client.presalytics_story.api_client.ApiClient.__init__(self)
+        self.update_configuration()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.client.auth.AuthenticationMixIn" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn">AuthenticationMixIn</a></li>
+<li><a title="presalytics.client.presalytics_story.api_client.ApiClient" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient">ApiClient</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.client.auth.AuthenticationMixIn" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn">AuthenticationMixIn</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.client.auth.AuthenticationMixIn.call_api" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn.call_api">call_api</a></code></li>
+<li><code><a title="presalytics.client.auth.AuthenticationMixIn.update_configuration" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn.update_configuration">update_configuration</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="presalytics.client.presalytics_story.api_client.ApiClient" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient">ApiClient</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.NATIVE_TYPES_MAPPING" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.NATIVE_TYPES_MAPPING">NATIVE_TYPES_MAPPING</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.PRIMITIVE_TYPES" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.PRIMITIVE_TYPES">PRIMITIVE_TYPES</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.deserialize" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.files_parameters" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.files_parameters">files_parameters</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.parameters_to_tuples" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.parameters_to_tuples">parameters_to_tuples</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.pool" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.pool">pool</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.request" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.request">request</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.sanitize_for_serialization" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.sanitize_for_serialization">sanitize_for_serialization</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.select_header_accept" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.select_header_accept">select_header_accept</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.select_header_content_type" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.select_header_content_type">select_header_content_type</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.update_params_for_auth" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.update_params_for_auth">update_params_for_auth</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.user_agent" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.user_agent">user_agent</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="presalytics.client" href="/python-client/presalytics/client/index.html">presalytics.client</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client">Client</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.client.api.Client.download_file" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.download_file">download_file</a></code></li>
+<li><code><a title="presalytics.client.api.Client.exchange_token" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.exchange_token">exchange_token</a></code></li>
+<li><code><a title="presalytics.client.api.Client.get_auth_header" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.get_auth_header">get_auth_header</a></code></li>
+<li><code><a title="presalytics.client.api.Client.get_request_id_header" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.get_request_id_header">get_request_id_header</a></code></li>
+<li><code><a title="presalytics.client.api.Client.login" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.login">login</a></code></li>
+<li><code><a title="presalytics.client.api.Client.refresh_token" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.refresh_token">refresh_token</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="presalytics.client.api.DocConverterApiClientWithAuth" href="/python-client/presalytics/client/api.html#presalytics.client.api.DocConverterApiClientWithAuth">DocConverterApiClientWithAuth</a></code></h4>
+</li>
+<li>
+<h4><code><a title="presalytics.client.api.OoxmlAutomationApiClientWithAuth" href="/python-client/presalytics/client/api.html#presalytics.client.api.OoxmlAutomationApiClientWithAuth">OoxmlAutomationApiClientWithAuth</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.client.api.OoxmlAutomationApiClientWithAuth.get_mimetype" href="/python-client/presalytics/client/api.html#presalytics.client.api.OoxmlAutomationApiClientWithAuth.get_mimetype">get_mimetype</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="presalytics.client.api.StoryApiClientWithAuth" href="/python-client/presalytics/client/api.html#presalytics.client.api.StoryApiClientWithAuth">StoryApiClientWithAuth</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

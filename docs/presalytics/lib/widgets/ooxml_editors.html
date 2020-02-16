@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>presalytics.lib.widgets.ooxml_editors API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>presalytics.lib.widgets.ooxml_editors</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L0-L135" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">import typing
+import types
+import json
+import lxml
+import lxml.etree
+import abc
+import re
+import requests
+import presalytics
+import presalytics.lib.widgets.ooxml
+
+
+class XmlTransformBase(abc.ABC):
+    def __init__(self, function_params: typing.Dict, *args, **kwargs):
+        self.function_params = function_params
+
+    @abc.abstractmethod
+    def transform_function(self, lxml_element: lxml.etree.Element, params: typing.Dict) -&gt; lxml.etree.Element:
+        pass
+
+    def execute(self, lxml_element: lxml.etree.Element):
+        return self.transform_function(lxml_element, self.function_params)
+
+
+class ChangeShapeColor(XmlTransformBase):
+    @staticmethod
+    def replace_color_on_target_shape(shape_xml: lxml.etree.Element, new_color: str) -&gt; lxml.etree.Element:
+        new_fill = lxml.etree.Element(&#34;solidFill&#34;)
+        lxml.etree.SubElement(new_fill, &#34;srbgClr&#34;, {&#34;val&#34;: new_color})
+        fill_tags = [
+            &#39;noFill&#39;,
+            &#39;blipFill&#39;,
+            &#39;gradFill&#39;,
+            &#39;pattFill&#39;,
+            &#39;solidFill&#39;
+        ]
+        props = shape_xml.find(&#39;.//{*}spPr&#39;)
+        for child in props.getchildren():
+            if any(re.search(&#39;{*}&#39; + r, child.tag) for r in fill_tags):
+                current_nsmap = child.nsmap
+                current_index = props.index(child)
+                current_prefix = child.prefix
+                current_ns = current_nsmap.get(current_prefix, None)
+                new_fill = lxml.etree.Element(lxml.etree.QName(current_ns, &#34;solidFill&#34;), nsmap=current_nsmap)
+                lxml.etree.SubElement(new_fill, lxml.etree.QName(current_ns, &#34;srgbClr&#34;), {&#34;val&#34;: new_color}, nsmap=current_nsmap)
+                child.getparent().remove(child)
+                props.insert(current_index, new_fill)
+        return shape_xml
+
+    def transform_function(self, lxml_element, params):
+        if re.match(&#39;{.*}sp&#39;, lxml_element.tag):
+            shapes = [lxml_element]
+        else:
+            shapes = lxml_element.findall(&#39;.//{*}sp&#39;)
+        object_name = params.get(&#34;object_name&#34;, None)
+        color = params.get(&#34;hex_color&#34;)
+        if object_name:
+            for shape in shapes:
+                is_target = False
+                nvprops = shape.find(&#39;.//{*}nvSpPr&#39;)
+                if len(nvprops) &gt; 0:
+                    name = nvprops.find(&#39;.//*[@name]&#39;).get(&#34;name&#34;)
+                    if name == object_name:
+                        is_target = True
+                if is_target:
+                    shape = ChangeShapeColor.replace_color_on_target_shape(shape, color)
+        else:
+            for shape in shapes:
+                shape = ChangeShapeColor.replace_color_on_target_shape(shape, color)
+        return lxml_element
+
+
+class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
+    transform: XmlTransformBase
+
+    __component_kind__ = &#39;ooxml-xml-editor&#39;
+
+    def __init__(self,
+                 name: str,
+                 story_id,
+                 object_ooxml_id,
+                 endpoint_map,
+                 transform_class=None,
+                 transform_params=None,
+                 **kwargs):
+        super(OoxmlEditorWidget, self).__init__(name, story_id=story_id, object_ooxml_id=object_ooxml_id, endpoint_map=endpoint_map, **kwargs)
+        self.name = name
+        self.transform = transform_class(transform_params)
+        self.svg_data = self.update()
+        self.svg_html = self.create_container(**self.client_info)
+        self.outline_widget = self.serialize()
+
+    def update_xml(self, xml_str) -&gt; str:
+        xml = lxml.etree.fromstring(xml_str)
+        new_xml = self.transform.execute(xml)
+        new_xml_str = lxml.etree.tostring(new_xml)
+        return new_xml_str
+
+    def update(self):
+        client = self.get_client()
+        auth_header = client.get_auth_header()
+        if self.transform:
+            xml_url = self.endpoint_map.get_xml_url(self.object_ooxml_id)
+            xml_response = requests.get(xml_url, headers=auth_header)
+            if xml_response.status_code != 200:
+                raise presalytics.lib.exceptions.ApiError(message=xml_response.text)
+            dto = xml_response.json()
+            new_xml = self.update_xml(dto[&#34;openOfficeXml&#34;])
+            dto[&#34;openOfficeXml&#34;] = new_xml.decode(&#39;utf-8&#39;)
+            xml_update_response = requests.put(xml_url, json=dto, headers=auth_header)
+            if xml_response.status_code != 200:
+                raise presalytics.lib.exceptions.ApiError(message=xml_update_response.content)
+        svg_data = self.get_svg(self.object_ooxml_id)
+        return svg_data
+
+    @classmethod
+    def deseriailize(cls, component, **kwargs):
+        endpoint_map = presalytics.lib.widgets.ooxml.OoxmlEndpointMap(component.data[&#34;endpoint_id&#34;])
+        return cls(component.name,
+                   component.data[&#34;story_id&#34;],
+                   component.data[&#34;object_ooxml_id&#34;],
+                   endpoint_map
+                   )
+
+    def serialize(self, **kwargs):
+        data = {
+            &#34;story_id&#34;: self.story_id,
+            &#34;object_ooxml_id&#34;: self.object_ooxml_id,
+            &#34;endpoint_id&#34;: self.endpoint_map.endpoint_id
+        }
+        widget = presalytics.story.outline.Widget(
+            name=self.name,
+            data=data,
+            kind=self.__component_kind__
+        )
+        return widget</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml_editors.ChangeShapeColor"><code class="flex name class">
+<span>class <span class="ident">ChangeShapeColor</span></span>
+<span>(</span><span>function_params, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Helper class that provides a standard way to create an ABC using
+inheritance.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L25-L70" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class ChangeShapeColor(XmlTransformBase):
+    @staticmethod
+    def replace_color_on_target_shape(shape_xml: lxml.etree.Element, new_color: str) -&gt; lxml.etree.Element:
+        new_fill = lxml.etree.Element(&#34;solidFill&#34;)
+        lxml.etree.SubElement(new_fill, &#34;srbgClr&#34;, {&#34;val&#34;: new_color})
+        fill_tags = [
+            &#39;noFill&#39;,
+            &#39;blipFill&#39;,
+            &#39;gradFill&#39;,
+            &#39;pattFill&#39;,
+            &#39;solidFill&#39;
+        ]
+        props = shape_xml.find(&#39;.//{*}spPr&#39;)
+        for child in props.getchildren():
+            if any(re.search(&#39;{*}&#39; + r, child.tag) for r in fill_tags):
+                current_nsmap = child.nsmap
+                current_index = props.index(child)
+                current_prefix = child.prefix
+                current_ns = current_nsmap.get(current_prefix, None)
+                new_fill = lxml.etree.Element(lxml.etree.QName(current_ns, &#34;solidFill&#34;), nsmap=current_nsmap)
+                lxml.etree.SubElement(new_fill, lxml.etree.QName(current_ns, &#34;srgbClr&#34;), {&#34;val&#34;: new_color}, nsmap=current_nsmap)
+                child.getparent().remove(child)
+                props.insert(current_index, new_fill)
+        return shape_xml
+
+    def transform_function(self, lxml_element, params):
+        if re.match(&#39;{.*}sp&#39;, lxml_element.tag):
+            shapes = [lxml_element]
+        else:
+            shapes = lxml_element.findall(&#39;.//{*}sp&#39;)
+        object_name = params.get(&#34;object_name&#34;, None)
+        color = params.get(&#34;hex_color&#34;)
+        if object_name:
+            for shape in shapes:
+                is_target = False
+                nvprops = shape.find(&#39;.//{*}nvSpPr&#39;)
+                if len(nvprops) &gt; 0:
+                    name = nvprops.find(&#39;.//*[@name]&#39;).get(&#34;name&#34;)
+                    if name == object_name:
+                        is_target = True
+                if is_target:
+                    shape = ChangeShapeColor.replace_color_on_target_shape(shape, color)
+        else:
+            for shape in shapes:
+                shape = ChangeShapeColor.replace_color_on_target_shape(shape, color)
+        return lxml_element</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase">XmlTransformBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml_editors.ChangeShapeColor.replace_color_on_target_shape"><code class="name flex">
+<span>def <span class="ident">replace_color_on_target_shape</span></span>(<span>shape_xml, new_color)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L26-L48" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@staticmethod
+def replace_color_on_target_shape(shape_xml: lxml.etree.Element, new_color: str) -&gt; lxml.etree.Element:
+    new_fill = lxml.etree.Element(&#34;solidFill&#34;)
+    lxml.etree.SubElement(new_fill, &#34;srbgClr&#34;, {&#34;val&#34;: new_color})
+    fill_tags = [
+        &#39;noFill&#39;,
+        &#39;blipFill&#39;,
+        &#39;gradFill&#39;,
+        &#39;pattFill&#39;,
+        &#39;solidFill&#39;
+    ]
+    props = shape_xml.find(&#39;.//{*}spPr&#39;)
+    for child in props.getchildren():
+        if any(re.search(&#39;{*}&#39; + r, child.tag) for r in fill_tags):
+            current_nsmap = child.nsmap
+            current_index = props.index(child)
+            current_prefix = child.prefix
+            current_ns = current_nsmap.get(current_prefix, None)
+            new_fill = lxml.etree.Element(lxml.etree.QName(current_ns, &#34;solidFill&#34;), nsmap=current_nsmap)
+            lxml.etree.SubElement(new_fill, lxml.etree.QName(current_ns, &#34;srgbClr&#34;), {&#34;val&#34;: new_color}, nsmap=current_nsmap)
+            child.getparent().remove(child)
+            props.insert(current_index, new_fill)
+    return shape_xml</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml_editors.ChangeShapeColor.transform_function"><code class="name flex">
+<span>def <span class="ident">transform_function</span></span>(<span>self, lxml_element, params)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L50-L70" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def transform_function(self, lxml_element, params):
+    if re.match(&#39;{.*}sp&#39;, lxml_element.tag):
+        shapes = [lxml_element]
+    else:
+        shapes = lxml_element.findall(&#39;.//{*}sp&#39;)
+    object_name = params.get(&#34;object_name&#34;, None)
+    color = params.get(&#34;hex_color&#34;)
+    if object_name:
+        for shape in shapes:
+            is_target = False
+            nvprops = shape.find(&#39;.//{*}nvSpPr&#39;)
+            if len(nvprops) &gt; 0:
+                name = nvprops.find(&#39;.//*[@name]&#39;).get(&#34;name&#34;)
+                if name == object_name:
+                    is_target = True
+            if is_target:
+                shape = ChangeShapeColor.replace_color_on_target_shape(shape, color)
+    else:
+        for shape in shapes:
+            shape = ChangeShapeColor.replace_color_on_target_shape(shape, color)
+    return lxml_element</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget"><code class="flex name class">
+<span>class <span class="ident">OoxmlEditorWidget</span></span>
+<span>(</span><span>name, story_id, object_ooxml_id, endpoint_map, transform_class=None, transform_params=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Inherit from this base class to create widget components that can be rendered to html via the
+presalytics.story.revealer.Revealer class.
+This component also need to build a method
+that allows the widget to be serialzed into a presalytics.story.outline.Widget object.</p>
+<h2 id="parameters">Parameters:</h2>
+<p>widget: Widget
+A presalytics.story.outline.Widget object use for initialized the component class.</p>
+<h2 id="attributes">Attributes:</h2>
+<p>outline_widget: Widget
+A presalytics.story.outline.Widget object</p>
+<p>css: List[str]
+A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
+in the presalytics.lib.templates.base module.</p>
+<p>js: List[str]
+A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
+in the presalytics.lib.templates.base module.</p>
+<p>Note: When inheriting from this base class, call "super().<strong>init</strong>(self, <em>args, </em>*kwargs)" before add your
+own custom initialization.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L73-L136" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
+    transform: XmlTransformBase
+
+    __component_kind__ = &#39;ooxml-xml-editor&#39;
+
+    def __init__(self,
+                 name: str,
+                 story_id,
+                 object_ooxml_id,
+                 endpoint_map,
+                 transform_class=None,
+                 transform_params=None,
+                 **kwargs):
+        super(OoxmlEditorWidget, self).__init__(name, story_id=story_id, object_ooxml_id=object_ooxml_id, endpoint_map=endpoint_map, **kwargs)
+        self.name = name
+        self.transform = transform_class(transform_params)
+        self.svg_data = self.update()
+        self.svg_html = self.create_container(**self.client_info)
+        self.outline_widget = self.serialize()
+
+    def update_xml(self, xml_str) -&gt; str:
+        xml = lxml.etree.fromstring(xml_str)
+        new_xml = self.transform.execute(xml)
+        new_xml_str = lxml.etree.tostring(new_xml)
+        return new_xml_str
+
+    def update(self):
+        client = self.get_client()
+        auth_header = client.get_auth_header()
+        if self.transform:
+            xml_url = self.endpoint_map.get_xml_url(self.object_ooxml_id)
+            xml_response = requests.get(xml_url, headers=auth_header)
+            if xml_response.status_code != 200:
+                raise presalytics.lib.exceptions.ApiError(message=xml_response.text)
+            dto = xml_response.json()
+            new_xml = self.update_xml(dto[&#34;openOfficeXml&#34;])
+            dto[&#34;openOfficeXml&#34;] = new_xml.decode(&#39;utf-8&#39;)
+            xml_update_response = requests.put(xml_url, json=dto, headers=auth_header)
+            if xml_response.status_code != 200:
+                raise presalytics.lib.exceptions.ApiError(message=xml_update_response.content)
+        svg_data = self.get_svg(self.object_ooxml_id)
+        return svg_data
+
+    @classmethod
+    def deseriailize(cls, component, **kwargs):
+        endpoint_map = presalytics.lib.widgets.ooxml.OoxmlEndpointMap(component.data[&#34;endpoint_id&#34;])
+        return cls(component.name,
+                   component.data[&#34;story_id&#34;],
+                   component.data[&#34;object_ooxml_id&#34;],
+                   endpoint_map
+                   )
+
+    def serialize(self, **kwargs):
+        data = {
+            &#34;story_id&#34;: self.story_id,
+            &#34;object_ooxml_id&#34;: self.object_ooxml_id,
+            &#34;endpoint_id&#34;: self.endpoint_map.endpoint_id
+        }
+        widget = presalytics.story.outline.Widget(
+            name=self.name,
+            data=data,
+            kind=self.__component_kind__
+        )
+        return widget</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></li>
+<li><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></li>
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.deseriailize"><code class="name flex">
+<span>def <span class="ident">deseriailize</span></span>(<span>component, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L116-L123" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@classmethod
+def deseriailize(cls, component, **kwargs):
+    endpoint_map = presalytics.lib.widgets.ooxml.OoxmlEndpointMap(component.data[&#34;endpoint_id&#34;])
+    return cls(component.name,
+               component.data[&#34;story_id&#34;],
+               component.data[&#34;object_ooxml_id&#34;],
+               endpoint_map
+               )</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L99-L114" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def update(self):
+    client = self.get_client()
+    auth_header = client.get_auth_header()
+    if self.transform:
+        xml_url = self.endpoint_map.get_xml_url(self.object_ooxml_id)
+        xml_response = requests.get(xml_url, headers=auth_header)
+        if xml_response.status_code != 200:
+            raise presalytics.lib.exceptions.ApiError(message=xml_response.text)
+        dto = xml_response.json()
+        new_xml = self.update_xml(dto[&#34;openOfficeXml&#34;])
+        dto[&#34;openOfficeXml&#34;] = new_xml.decode(&#39;utf-8&#39;)
+        xml_update_response = requests.put(xml_url, json=dto, headers=auth_header)
+        if xml_response.status_code != 200:
+            raise presalytics.lib.exceptions.ApiError(message=xml_update_response.content)
+    svg_data = self.get_svg(self.object_ooxml_id)
+    return svg_data</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update_xml"><code class="name flex">
+<span>def <span class="ident">update_xml</span></span>(<span>self, xml_str)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L93-L97" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def update_xml(self, xml_str) -&gt; str:
+    xml = lxml.etree.fromstring(xml_str)
+    new_xml = self.transform.execute(xml)
+    new_xml_str = lxml.etree.tostring(new_xml)
+    return new_xml_str</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml_editors.XmlTransformBase"><code class="flex name class">
+<span>class <span class="ident">XmlTransformBase</span></span>
+<span>(</span><span>function_params, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Helper class that provides a standard way to create an ABC using
+inheritance.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L13-L22" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class XmlTransformBase(abc.ABC):
+    def __init__(self, function_params: typing.Dict, *args, **kwargs):
+        self.function_params = function_params
+
+    @abc.abstractmethod
+    def transform_function(self, lxml_element: lxml.etree.Element, params: typing.Dict) -&gt; lxml.etree.Element:
+        pass
+
+    def execute(self, lxml_element: lxml.etree.Element):
+        return self.transform_function(lxml_element, self.function_params)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.widgets.ooxml_editors.ChangeShapeColor" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.ChangeShapeColor">ChangeShapeColor</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml_editors.XmlTransformBase.execute"><code class="name flex">
+<span>def <span class="ident">execute</span></span>(<span>self, lxml_element)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L21-L22" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def execute(self, lxml_element: lxml.etree.Element):
+    return self.transform_function(lxml_element, self.function_params)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml_editors.XmlTransformBase.transform_function"><code class="name flex">
+<span>def <span class="ident">transform_function</span></span>(<span>self, lxml_element, params)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L17-L19" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+def transform_function(self, lxml_element: lxml.etree.Element, params: typing.Dict) -&gt; lxml.etree.Element:
+    pass</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="presalytics.lib.widgets" href="/python-client/presalytics/lib/widgets/index.html">presalytics.lib.widgets</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="presalytics.lib.widgets.ooxml_editors.ChangeShapeColor" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.ChangeShapeColor">ChangeShapeColor</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.ChangeShapeColor.replace_color_on_target_shape" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.ChangeShapeColor.replace_color_on_target_shape">replace_color_on_target_shape</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.ChangeShapeColor.transform_function" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.ChangeShapeColor.transform_function">transform_function</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget">OoxmlEditorWidget</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.deseriailize" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.deseriailize">deseriailize</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update">update</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update_xml" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update_xml">update_xml</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase">XmlTransformBase</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase.execute" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase.execute">execute</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase.transform_function" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase.transform_function">transform_function</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

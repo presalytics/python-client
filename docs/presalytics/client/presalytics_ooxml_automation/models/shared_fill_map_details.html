@@ -1,0 +1,1935 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details API documentation</title>
+<meta name="description" content="OOXML Automation …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details</code></h1>
+</header>
+<section id="section-intro">
+<p>OOXML Automation</p>
+<p>This API helps users convert Excel and Powerpoint documents into rich, live dashboards and stories.
+# noqa: E501</p>
+<p>The version of the OpenAPI document: 0.1.0-no-tags
+Generated by: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a></p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L0-L633" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python"># coding: utf-8
+
+&#34;&#34;&#34;
+    OOXML Automation
+
+    This API helps users convert Excel and Powerpoint documents into rich, live dashboards and stories.  # noqa: E501
+
+    The version of the OpenAPI document: 0.1.0-no-tags
+    Generated by: https://openapi-generator.tech
+&#34;&#34;&#34;
+
+
+import pprint
+import re  # noqa: F401
+
+import six
+
+from presalytics.client.presalytics_ooxml_automation.configuration import Configuration
+
+
+class SharedFillMapDetails(object):
+    &#34;&#34;&#34;NOTE: This class is auto generated by OpenAPI Generator.
+    Ref: https://openapi-generator.tech
+
+    Do not edit the class manually.
+    &#34;&#34;&#34;
+
+    &#34;&#34;&#34;
+    Attributes:
+      openapi_types (dict): The key is attribute name
+                            and the value is attribute type.
+      attribute_map (dict): The key is attribute name
+                            and the value is json key in definition.
+    &#34;&#34;&#34;
+    openapi_types = {
+        &#39;fill_type_id&#39;: &#39;int&#39;,
+        &#39;solid_fill&#39;: &#39;object&#39;,
+        &#39;gradient_fill&#39;: &#39;object&#39;,
+        &#39;image_fill&#39;: &#39;object&#39;,
+        &#39;shape&#39;: &#39;object&#39;,
+        &#39;shape_id&#39;: &#39;str&#39;,
+        &#39;connector&#39;: &#39;object&#39;,
+        &#39;connector_id&#39;: &#39;str&#39;,
+        &#39;effect_attribute_id&#39;: &#39;str&#39;,
+        &#39;effect_attribute&#39;: &#39;object&#39;,
+        &#39;table_cell_id&#39;: &#39;str&#39;,
+        &#39;table_cell&#39;: &#39;object&#39;,
+        &#39;theme_background_fill_id&#39;: &#39;str&#39;,
+        &#39;theme_background_fill&#39;: &#39;object&#39;,
+        &#39;theme_fill_id&#39;: &#39;str&#39;,
+        &#39;theme_fill&#39;: &#39;object&#39;,
+        &#39;id&#39;: &#39;str&#39;,
+        &#39;date_created&#39;: &#39;datetime&#39;,
+        &#39;user_created&#39;: &#39;str&#39;,
+        &#39;date_modified&#39;: &#39;datetime&#39;,
+        &#39;user_modified&#39;: &#39;str&#39;
+    }
+
+    attribute_map = {
+        &#39;fill_type_id&#39;: &#39;fillTypeId&#39;,
+        &#39;solid_fill&#39;: &#39;solidFill&#39;,
+        &#39;gradient_fill&#39;: &#39;gradientFill&#39;,
+        &#39;image_fill&#39;: &#39;imageFill&#39;,
+        &#39;shape&#39;: &#39;shape&#39;,
+        &#39;shape_id&#39;: &#39;shapeId&#39;,
+        &#39;connector&#39;: &#39;connector&#39;,
+        &#39;connector_id&#39;: &#39;connectorId&#39;,
+        &#39;effect_attribute_id&#39;: &#39;effectAttributeId&#39;,
+        &#39;effect_attribute&#39;: &#39;effectAttribute&#39;,
+        &#39;table_cell_id&#39;: &#39;tableCellId&#39;,
+        &#39;table_cell&#39;: &#39;tableCell&#39;,
+        &#39;theme_background_fill_id&#39;: &#39;themeBackgroundFillId&#39;,
+        &#39;theme_background_fill&#39;: &#39;themeBackgroundFill&#39;,
+        &#39;theme_fill_id&#39;: &#39;themeFillId&#39;,
+        &#39;theme_fill&#39;: &#39;themeFill&#39;,
+        &#39;id&#39;: &#39;id&#39;,
+        &#39;date_created&#39;: &#39;dateCreated&#39;,
+        &#39;user_created&#39;: &#39;userCreated&#39;,
+        &#39;date_modified&#39;: &#39;dateModified&#39;,
+        &#39;user_modified&#39;: &#39;userModified&#39;
+    }
+
+    def __init__(self, fill_type_id=None, solid_fill=None, gradient_fill=None, image_fill=None, shape=None, shape_id=None, connector=None, connector_id=None, effect_attribute_id=None, effect_attribute=None, table_cell_id=None, table_cell=None, theme_background_fill_id=None, theme_background_fill=None, theme_fill_id=None, theme_fill=None, id=None, date_created=None, user_created=None, date_modified=None, user_modified=None, local_vars_configuration=None):  # noqa: E501
+        &#34;&#34;&#34;SharedFillMapDetails - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
+        if local_vars_configuration is None:
+            local_vars_configuration = Configuration()
+        self.local_vars_configuration = local_vars_configuration
+
+        self._fill_type_id = None
+        self._solid_fill = None
+        self._gradient_fill = None
+        self._image_fill = None
+        self._shape = None
+        self._shape_id = None
+        self._connector = None
+        self._connector_id = None
+        self._effect_attribute_id = None
+        self._effect_attribute = None
+        self._table_cell_id = None
+        self._table_cell = None
+        self._theme_background_fill_id = None
+        self._theme_background_fill = None
+        self._theme_fill_id = None
+        self._theme_fill = None
+        self._id = None
+        self._date_created = None
+        self._user_created = None
+        self._date_modified = None
+        self._user_modified = None
+        self.discriminator = None
+
+        if fill_type_id is not None:
+            self.fill_type_id = fill_type_id
+        if solid_fill is not None:
+            self.solid_fill = solid_fill
+        if gradient_fill is not None:
+            self.gradient_fill = gradient_fill
+        if image_fill is not None:
+            self.image_fill = image_fill
+        if shape is not None:
+            self.shape = shape
+        self.shape_id = shape_id
+        if connector is not None:
+            self.connector = connector
+        self.connector_id = connector_id
+        self.effect_attribute_id = effect_attribute_id
+        if effect_attribute is not None:
+            self.effect_attribute = effect_attribute
+        self.table_cell_id = table_cell_id
+        if table_cell is not None:
+            self.table_cell = table_cell
+        self.theme_background_fill_id = theme_background_fill_id
+        if theme_background_fill is not None:
+            self.theme_background_fill = theme_background_fill
+        self.theme_fill_id = theme_fill_id
+        if theme_fill is not None:
+            self.theme_fill = theme_fill
+        if id is not None:
+            self.id = id
+        if date_created is not None:
+            self.date_created = date_created
+        if user_created is not None:
+            self.user_created = user_created
+        if date_modified is not None:
+            self.date_modified = date_modified
+        if user_modified is not None:
+            self.user_modified = user_modified
+
+    @property
+    def fill_type_id(self):
+        &#34;&#34;&#34;Gets the fill_type_id of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The fill_type_id of this SharedFillMapDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._fill_type_id
+
+    @fill_type_id.setter
+    def fill_type_id(self, fill_type_id):
+        &#34;&#34;&#34;Sets the fill_type_id of this SharedFillMapDetails.
+
+
+        :param fill_type_id: The fill_type_id of this SharedFillMapDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._fill_type_id = fill_type_id
+
+    @property
+    def solid_fill(self):
+        &#34;&#34;&#34;Gets the solid_fill of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The solid_fill of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._solid_fill
+
+    @solid_fill.setter
+    def solid_fill(self, solid_fill):
+        &#34;&#34;&#34;Sets the solid_fill of this SharedFillMapDetails.
+
+
+        :param solid_fill: The solid_fill of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._solid_fill = solid_fill
+
+    @property
+    def gradient_fill(self):
+        &#34;&#34;&#34;Gets the gradient_fill of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The gradient_fill of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._gradient_fill
+
+    @gradient_fill.setter
+    def gradient_fill(self, gradient_fill):
+        &#34;&#34;&#34;Sets the gradient_fill of this SharedFillMapDetails.
+
+
+        :param gradient_fill: The gradient_fill of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._gradient_fill = gradient_fill
+
+    @property
+    def image_fill(self):
+        &#34;&#34;&#34;Gets the image_fill of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The image_fill of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._image_fill
+
+    @image_fill.setter
+    def image_fill(self, image_fill):
+        &#34;&#34;&#34;Sets the image_fill of this SharedFillMapDetails.
+
+
+        :param image_fill: The image_fill of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._image_fill = image_fill
+
+    @property
+    def shape(self):
+        &#34;&#34;&#34;Gets the shape of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The shape of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._shape
+
+    @shape.setter
+    def shape(self, shape):
+        &#34;&#34;&#34;Sets the shape of this SharedFillMapDetails.
+
+
+        :param shape: The shape of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._shape = shape
+
+    @property
+    def shape_id(self):
+        &#34;&#34;&#34;Gets the shape_id of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The shape_id of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._shape_id
+
+    @shape_id.setter
+    def shape_id(self, shape_id):
+        &#34;&#34;&#34;Sets the shape_id of this SharedFillMapDetails.
+
+
+        :param shape_id: The shape_id of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._shape_id = shape_id
+
+    @property
+    def connector(self):
+        &#34;&#34;&#34;Gets the connector of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The connector of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._connector
+
+    @connector.setter
+    def connector(self, connector):
+        &#34;&#34;&#34;Sets the connector of this SharedFillMapDetails.
+
+
+        :param connector: The connector of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._connector = connector
+
+    @property
+    def connector_id(self):
+        &#34;&#34;&#34;Gets the connector_id of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The connector_id of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._connector_id
+
+    @connector_id.setter
+    def connector_id(self, connector_id):
+        &#34;&#34;&#34;Sets the connector_id of this SharedFillMapDetails.
+
+
+        :param connector_id: The connector_id of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._connector_id = connector_id
+
+    @property
+    def effect_attribute_id(self):
+        &#34;&#34;&#34;Gets the effect_attribute_id of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The effect_attribute_id of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._effect_attribute_id
+
+    @effect_attribute_id.setter
+    def effect_attribute_id(self, effect_attribute_id):
+        &#34;&#34;&#34;Sets the effect_attribute_id of this SharedFillMapDetails.
+
+
+        :param effect_attribute_id: The effect_attribute_id of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._effect_attribute_id = effect_attribute_id
+
+    @property
+    def effect_attribute(self):
+        &#34;&#34;&#34;Gets the effect_attribute of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The effect_attribute of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._effect_attribute
+
+    @effect_attribute.setter
+    def effect_attribute(self, effect_attribute):
+        &#34;&#34;&#34;Sets the effect_attribute of this SharedFillMapDetails.
+
+
+        :param effect_attribute: The effect_attribute of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._effect_attribute = effect_attribute
+
+    @property
+    def table_cell_id(self):
+        &#34;&#34;&#34;Gets the table_cell_id of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The table_cell_id of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._table_cell_id
+
+    @table_cell_id.setter
+    def table_cell_id(self, table_cell_id):
+        &#34;&#34;&#34;Sets the table_cell_id of this SharedFillMapDetails.
+
+
+        :param table_cell_id: The table_cell_id of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._table_cell_id = table_cell_id
+
+    @property
+    def table_cell(self):
+        &#34;&#34;&#34;Gets the table_cell of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The table_cell of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._table_cell
+
+    @table_cell.setter
+    def table_cell(self, table_cell):
+        &#34;&#34;&#34;Sets the table_cell of this SharedFillMapDetails.
+
+
+        :param table_cell: The table_cell of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._table_cell = table_cell
+
+    @property
+    def theme_background_fill_id(self):
+        &#34;&#34;&#34;Gets the theme_background_fill_id of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The theme_background_fill_id of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._theme_background_fill_id
+
+    @theme_background_fill_id.setter
+    def theme_background_fill_id(self, theme_background_fill_id):
+        &#34;&#34;&#34;Sets the theme_background_fill_id of this SharedFillMapDetails.
+
+
+        :param theme_background_fill_id: The theme_background_fill_id of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._theme_background_fill_id = theme_background_fill_id
+
+    @property
+    def theme_background_fill(self):
+        &#34;&#34;&#34;Gets the theme_background_fill of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The theme_background_fill of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._theme_background_fill
+
+    @theme_background_fill.setter
+    def theme_background_fill(self, theme_background_fill):
+        &#34;&#34;&#34;Sets the theme_background_fill of this SharedFillMapDetails.
+
+
+        :param theme_background_fill: The theme_background_fill of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._theme_background_fill = theme_background_fill
+
+    @property
+    def theme_fill_id(self):
+        &#34;&#34;&#34;Gets the theme_fill_id of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The theme_fill_id of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._theme_fill_id
+
+    @theme_fill_id.setter
+    def theme_fill_id(self, theme_fill_id):
+        &#34;&#34;&#34;Sets the theme_fill_id of this SharedFillMapDetails.
+
+
+        :param theme_fill_id: The theme_fill_id of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._theme_fill_id = theme_fill_id
+
+    @property
+    def theme_fill(self):
+        &#34;&#34;&#34;Gets the theme_fill of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The theme_fill of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._theme_fill
+
+    @theme_fill.setter
+    def theme_fill(self, theme_fill):
+        &#34;&#34;&#34;Sets the theme_fill of this SharedFillMapDetails.
+
+
+        :param theme_fill: The theme_fill of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._theme_fill = theme_fill
+
+    @property
+    def id(self):
+        &#34;&#34;&#34;Gets the id of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The id of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        &#34;&#34;&#34;Sets the id of this SharedFillMapDetails.
+
+
+        :param id: The id of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._id = id
+
+    @property
+    def date_created(self):
+        &#34;&#34;&#34;Gets the date_created of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The date_created of this SharedFillMapDetails.  # noqa: E501
+        :rtype: datetime
+        &#34;&#34;&#34;
+        return self._date_created
+
+    @date_created.setter
+    def date_created(self, date_created):
+        &#34;&#34;&#34;Sets the date_created of this SharedFillMapDetails.
+
+
+        :param date_created: The date_created of this SharedFillMapDetails.  # noqa: E501
+        :type: datetime
+        &#34;&#34;&#34;
+
+        self._date_created = date_created
+
+    @property
+    def user_created(self):
+        &#34;&#34;&#34;Gets the user_created of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The user_created of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._user_created
+
+    @user_created.setter
+    def user_created(self, user_created):
+        &#34;&#34;&#34;Sets the user_created of this SharedFillMapDetails.
+
+
+        :param user_created: The user_created of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._user_created = user_created
+
+    @property
+    def date_modified(self):
+        &#34;&#34;&#34;Gets the date_modified of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The date_modified of this SharedFillMapDetails.  # noqa: E501
+        :rtype: datetime
+        &#34;&#34;&#34;
+        return self._date_modified
+
+    @date_modified.setter
+    def date_modified(self, date_modified):
+        &#34;&#34;&#34;Sets the date_modified of this SharedFillMapDetails.
+
+
+        :param date_modified: The date_modified of this SharedFillMapDetails.  # noqa: E501
+        :type: datetime
+        &#34;&#34;&#34;
+
+        self._date_modified = date_modified
+
+    @property
+    def user_modified(self):
+        &#34;&#34;&#34;Gets the user_modified of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The user_modified of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._user_modified
+
+    @user_modified.setter
+    def user_modified(self, user_modified):
+        &#34;&#34;&#34;Sets the user_modified of this SharedFillMapDetails.
+
+
+        :param user_modified: The user_modified of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._user_modified = user_modified
+
+    def to_dict(self):
+        &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
+        result = {}
+
+        for attr, _ in six.iteritems(self.openapi_types):
+            value = getattr(self, attr)
+            if isinstance(value, list):
+                result[attr] = list(map(
+                    lambda x: x.to_dict() if hasattr(x, &#34;to_dict&#34;) else x,
+                    value
+                ))
+            elif hasattr(value, &#34;to_dict&#34;):
+                result[attr] = value.to_dict()
+            elif isinstance(value, dict):
+                result[attr] = dict(map(
+                    lambda item: (item[0], item[1].to_dict())
+                    if hasattr(item[1], &#34;to_dict&#34;) else item,
+                    value.items()
+                ))
+            else:
+                result[attr] = value
+
+        return result
+
+    def to_str(self):
+        &#34;&#34;&#34;Returns the string representation of the model&#34;&#34;&#34;
+        return pprint.pformat(self.to_dict())
+
+    def __repr__(self):
+        &#34;&#34;&#34;For `print` and `pprint`&#34;&#34;&#34;
+        return self.to_str()
+
+    def __eq__(self, other):
+        &#34;&#34;&#34;Returns true if both objects are equal&#34;&#34;&#34;
+        if not isinstance(other, SharedFillMapDetails):
+            return False
+
+        return self.to_dict() == other.to_dict()
+
+    def __ne__(self, other):
+        &#34;&#34;&#34;Returns true if both objects are not equal&#34;&#34;&#34;
+        if not isinstance(other, SharedFillMapDetails):
+            return True
+
+        return self.to_dict() != other.to_dict()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails"><code class="flex name class">
+<span>class <span class="ident">SharedFillMapDetails</span></span>
+<span>(</span><span>fill_type_id=None, solid_fill=None, gradient_fill=None, image_fill=None, shape=None, shape_id=None, connector=None, connector_id=None, effect_attribute_id=None, effect_attribute=None, table_cell_id=None, table_cell=None, theme_background_fill_id=None, theme_background_fill=None, theme_fill_id=None, theme_fill=None, id=None, date_created=None, user_created=None, date_modified=None, user_modified=None, local_vars_configuration=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>NOTE: This class is auto generated by OpenAPI Generator.
+Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a></p>
+<p>Do not edit the class manually.</p>
+<p>SharedFillMapDetails - a model defined in OpenAPI</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L21-L634" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class SharedFillMapDetails(object):
+    &#34;&#34;&#34;NOTE: This class is auto generated by OpenAPI Generator.
+    Ref: https://openapi-generator.tech
+
+    Do not edit the class manually.
+    &#34;&#34;&#34;
+
+    &#34;&#34;&#34;
+    Attributes:
+      openapi_types (dict): The key is attribute name
+                            and the value is attribute type.
+      attribute_map (dict): The key is attribute name
+                            and the value is json key in definition.
+    &#34;&#34;&#34;
+    openapi_types = {
+        &#39;fill_type_id&#39;: &#39;int&#39;,
+        &#39;solid_fill&#39;: &#39;object&#39;,
+        &#39;gradient_fill&#39;: &#39;object&#39;,
+        &#39;image_fill&#39;: &#39;object&#39;,
+        &#39;shape&#39;: &#39;object&#39;,
+        &#39;shape_id&#39;: &#39;str&#39;,
+        &#39;connector&#39;: &#39;object&#39;,
+        &#39;connector_id&#39;: &#39;str&#39;,
+        &#39;effect_attribute_id&#39;: &#39;str&#39;,
+        &#39;effect_attribute&#39;: &#39;object&#39;,
+        &#39;table_cell_id&#39;: &#39;str&#39;,
+        &#39;table_cell&#39;: &#39;object&#39;,
+        &#39;theme_background_fill_id&#39;: &#39;str&#39;,
+        &#39;theme_background_fill&#39;: &#39;object&#39;,
+        &#39;theme_fill_id&#39;: &#39;str&#39;,
+        &#39;theme_fill&#39;: &#39;object&#39;,
+        &#39;id&#39;: &#39;str&#39;,
+        &#39;date_created&#39;: &#39;datetime&#39;,
+        &#39;user_created&#39;: &#39;str&#39;,
+        &#39;date_modified&#39;: &#39;datetime&#39;,
+        &#39;user_modified&#39;: &#39;str&#39;
+    }
+
+    attribute_map = {
+        &#39;fill_type_id&#39;: &#39;fillTypeId&#39;,
+        &#39;solid_fill&#39;: &#39;solidFill&#39;,
+        &#39;gradient_fill&#39;: &#39;gradientFill&#39;,
+        &#39;image_fill&#39;: &#39;imageFill&#39;,
+        &#39;shape&#39;: &#39;shape&#39;,
+        &#39;shape_id&#39;: &#39;shapeId&#39;,
+        &#39;connector&#39;: &#39;connector&#39;,
+        &#39;connector_id&#39;: &#39;connectorId&#39;,
+        &#39;effect_attribute_id&#39;: &#39;effectAttributeId&#39;,
+        &#39;effect_attribute&#39;: &#39;effectAttribute&#39;,
+        &#39;table_cell_id&#39;: &#39;tableCellId&#39;,
+        &#39;table_cell&#39;: &#39;tableCell&#39;,
+        &#39;theme_background_fill_id&#39;: &#39;themeBackgroundFillId&#39;,
+        &#39;theme_background_fill&#39;: &#39;themeBackgroundFill&#39;,
+        &#39;theme_fill_id&#39;: &#39;themeFillId&#39;,
+        &#39;theme_fill&#39;: &#39;themeFill&#39;,
+        &#39;id&#39;: &#39;id&#39;,
+        &#39;date_created&#39;: &#39;dateCreated&#39;,
+        &#39;user_created&#39;: &#39;userCreated&#39;,
+        &#39;date_modified&#39;: &#39;dateModified&#39;,
+        &#39;user_modified&#39;: &#39;userModified&#39;
+    }
+
+    def __init__(self, fill_type_id=None, solid_fill=None, gradient_fill=None, image_fill=None, shape=None, shape_id=None, connector=None, connector_id=None, effect_attribute_id=None, effect_attribute=None, table_cell_id=None, table_cell=None, theme_background_fill_id=None, theme_background_fill=None, theme_fill_id=None, theme_fill=None, id=None, date_created=None, user_created=None, date_modified=None, user_modified=None, local_vars_configuration=None):  # noqa: E501
+        &#34;&#34;&#34;SharedFillMapDetails - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
+        if local_vars_configuration is None:
+            local_vars_configuration = Configuration()
+        self.local_vars_configuration = local_vars_configuration
+
+        self._fill_type_id = None
+        self._solid_fill = None
+        self._gradient_fill = None
+        self._image_fill = None
+        self._shape = None
+        self._shape_id = None
+        self._connector = None
+        self._connector_id = None
+        self._effect_attribute_id = None
+        self._effect_attribute = None
+        self._table_cell_id = None
+        self._table_cell = None
+        self._theme_background_fill_id = None
+        self._theme_background_fill = None
+        self._theme_fill_id = None
+        self._theme_fill = None
+        self._id = None
+        self._date_created = None
+        self._user_created = None
+        self._date_modified = None
+        self._user_modified = None
+        self.discriminator = None
+
+        if fill_type_id is not None:
+            self.fill_type_id = fill_type_id
+        if solid_fill is not None:
+            self.solid_fill = solid_fill
+        if gradient_fill is not None:
+            self.gradient_fill = gradient_fill
+        if image_fill is not None:
+            self.image_fill = image_fill
+        if shape is not None:
+            self.shape = shape
+        self.shape_id = shape_id
+        if connector is not None:
+            self.connector = connector
+        self.connector_id = connector_id
+        self.effect_attribute_id = effect_attribute_id
+        if effect_attribute is not None:
+            self.effect_attribute = effect_attribute
+        self.table_cell_id = table_cell_id
+        if table_cell is not None:
+            self.table_cell = table_cell
+        self.theme_background_fill_id = theme_background_fill_id
+        if theme_background_fill is not None:
+            self.theme_background_fill = theme_background_fill
+        self.theme_fill_id = theme_fill_id
+        if theme_fill is not None:
+            self.theme_fill = theme_fill
+        if id is not None:
+            self.id = id
+        if date_created is not None:
+            self.date_created = date_created
+        if user_created is not None:
+            self.user_created = user_created
+        if date_modified is not None:
+            self.date_modified = date_modified
+        if user_modified is not None:
+            self.user_modified = user_modified
+
+    @property
+    def fill_type_id(self):
+        &#34;&#34;&#34;Gets the fill_type_id of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The fill_type_id of this SharedFillMapDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._fill_type_id
+
+    @fill_type_id.setter
+    def fill_type_id(self, fill_type_id):
+        &#34;&#34;&#34;Sets the fill_type_id of this SharedFillMapDetails.
+
+
+        :param fill_type_id: The fill_type_id of this SharedFillMapDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._fill_type_id = fill_type_id
+
+    @property
+    def solid_fill(self):
+        &#34;&#34;&#34;Gets the solid_fill of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The solid_fill of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._solid_fill
+
+    @solid_fill.setter
+    def solid_fill(self, solid_fill):
+        &#34;&#34;&#34;Sets the solid_fill of this SharedFillMapDetails.
+
+
+        :param solid_fill: The solid_fill of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._solid_fill = solid_fill
+
+    @property
+    def gradient_fill(self):
+        &#34;&#34;&#34;Gets the gradient_fill of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The gradient_fill of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._gradient_fill
+
+    @gradient_fill.setter
+    def gradient_fill(self, gradient_fill):
+        &#34;&#34;&#34;Sets the gradient_fill of this SharedFillMapDetails.
+
+
+        :param gradient_fill: The gradient_fill of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._gradient_fill = gradient_fill
+
+    @property
+    def image_fill(self):
+        &#34;&#34;&#34;Gets the image_fill of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The image_fill of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._image_fill
+
+    @image_fill.setter
+    def image_fill(self, image_fill):
+        &#34;&#34;&#34;Sets the image_fill of this SharedFillMapDetails.
+
+
+        :param image_fill: The image_fill of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._image_fill = image_fill
+
+    @property
+    def shape(self):
+        &#34;&#34;&#34;Gets the shape of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The shape of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._shape
+
+    @shape.setter
+    def shape(self, shape):
+        &#34;&#34;&#34;Sets the shape of this SharedFillMapDetails.
+
+
+        :param shape: The shape of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._shape = shape
+
+    @property
+    def shape_id(self):
+        &#34;&#34;&#34;Gets the shape_id of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The shape_id of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._shape_id
+
+    @shape_id.setter
+    def shape_id(self, shape_id):
+        &#34;&#34;&#34;Sets the shape_id of this SharedFillMapDetails.
+
+
+        :param shape_id: The shape_id of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._shape_id = shape_id
+
+    @property
+    def connector(self):
+        &#34;&#34;&#34;Gets the connector of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The connector of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._connector
+
+    @connector.setter
+    def connector(self, connector):
+        &#34;&#34;&#34;Sets the connector of this SharedFillMapDetails.
+
+
+        :param connector: The connector of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._connector = connector
+
+    @property
+    def connector_id(self):
+        &#34;&#34;&#34;Gets the connector_id of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The connector_id of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._connector_id
+
+    @connector_id.setter
+    def connector_id(self, connector_id):
+        &#34;&#34;&#34;Sets the connector_id of this SharedFillMapDetails.
+
+
+        :param connector_id: The connector_id of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._connector_id = connector_id
+
+    @property
+    def effect_attribute_id(self):
+        &#34;&#34;&#34;Gets the effect_attribute_id of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The effect_attribute_id of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._effect_attribute_id
+
+    @effect_attribute_id.setter
+    def effect_attribute_id(self, effect_attribute_id):
+        &#34;&#34;&#34;Sets the effect_attribute_id of this SharedFillMapDetails.
+
+
+        :param effect_attribute_id: The effect_attribute_id of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._effect_attribute_id = effect_attribute_id
+
+    @property
+    def effect_attribute(self):
+        &#34;&#34;&#34;Gets the effect_attribute of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The effect_attribute of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._effect_attribute
+
+    @effect_attribute.setter
+    def effect_attribute(self, effect_attribute):
+        &#34;&#34;&#34;Sets the effect_attribute of this SharedFillMapDetails.
+
+
+        :param effect_attribute: The effect_attribute of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._effect_attribute = effect_attribute
+
+    @property
+    def table_cell_id(self):
+        &#34;&#34;&#34;Gets the table_cell_id of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The table_cell_id of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._table_cell_id
+
+    @table_cell_id.setter
+    def table_cell_id(self, table_cell_id):
+        &#34;&#34;&#34;Sets the table_cell_id of this SharedFillMapDetails.
+
+
+        :param table_cell_id: The table_cell_id of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._table_cell_id = table_cell_id
+
+    @property
+    def table_cell(self):
+        &#34;&#34;&#34;Gets the table_cell of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The table_cell of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._table_cell
+
+    @table_cell.setter
+    def table_cell(self, table_cell):
+        &#34;&#34;&#34;Sets the table_cell of this SharedFillMapDetails.
+
+
+        :param table_cell: The table_cell of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._table_cell = table_cell
+
+    @property
+    def theme_background_fill_id(self):
+        &#34;&#34;&#34;Gets the theme_background_fill_id of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The theme_background_fill_id of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._theme_background_fill_id
+
+    @theme_background_fill_id.setter
+    def theme_background_fill_id(self, theme_background_fill_id):
+        &#34;&#34;&#34;Sets the theme_background_fill_id of this SharedFillMapDetails.
+
+
+        :param theme_background_fill_id: The theme_background_fill_id of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._theme_background_fill_id = theme_background_fill_id
+
+    @property
+    def theme_background_fill(self):
+        &#34;&#34;&#34;Gets the theme_background_fill of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The theme_background_fill of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._theme_background_fill
+
+    @theme_background_fill.setter
+    def theme_background_fill(self, theme_background_fill):
+        &#34;&#34;&#34;Sets the theme_background_fill of this SharedFillMapDetails.
+
+
+        :param theme_background_fill: The theme_background_fill of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._theme_background_fill = theme_background_fill
+
+    @property
+    def theme_fill_id(self):
+        &#34;&#34;&#34;Gets the theme_fill_id of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The theme_fill_id of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._theme_fill_id
+
+    @theme_fill_id.setter
+    def theme_fill_id(self, theme_fill_id):
+        &#34;&#34;&#34;Sets the theme_fill_id of this SharedFillMapDetails.
+
+
+        :param theme_fill_id: The theme_fill_id of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._theme_fill_id = theme_fill_id
+
+    @property
+    def theme_fill(self):
+        &#34;&#34;&#34;Gets the theme_fill of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The theme_fill of this SharedFillMapDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._theme_fill
+
+    @theme_fill.setter
+    def theme_fill(self, theme_fill):
+        &#34;&#34;&#34;Sets the theme_fill of this SharedFillMapDetails.
+
+
+        :param theme_fill: The theme_fill of this SharedFillMapDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._theme_fill = theme_fill
+
+    @property
+    def id(self):
+        &#34;&#34;&#34;Gets the id of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The id of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        &#34;&#34;&#34;Sets the id of this SharedFillMapDetails.
+
+
+        :param id: The id of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._id = id
+
+    @property
+    def date_created(self):
+        &#34;&#34;&#34;Gets the date_created of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The date_created of this SharedFillMapDetails.  # noqa: E501
+        :rtype: datetime
+        &#34;&#34;&#34;
+        return self._date_created
+
+    @date_created.setter
+    def date_created(self, date_created):
+        &#34;&#34;&#34;Sets the date_created of this SharedFillMapDetails.
+
+
+        :param date_created: The date_created of this SharedFillMapDetails.  # noqa: E501
+        :type: datetime
+        &#34;&#34;&#34;
+
+        self._date_created = date_created
+
+    @property
+    def user_created(self):
+        &#34;&#34;&#34;Gets the user_created of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The user_created of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._user_created
+
+    @user_created.setter
+    def user_created(self, user_created):
+        &#34;&#34;&#34;Sets the user_created of this SharedFillMapDetails.
+
+
+        :param user_created: The user_created of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._user_created = user_created
+
+    @property
+    def date_modified(self):
+        &#34;&#34;&#34;Gets the date_modified of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The date_modified of this SharedFillMapDetails.  # noqa: E501
+        :rtype: datetime
+        &#34;&#34;&#34;
+        return self._date_modified
+
+    @date_modified.setter
+    def date_modified(self, date_modified):
+        &#34;&#34;&#34;Sets the date_modified of this SharedFillMapDetails.
+
+
+        :param date_modified: The date_modified of this SharedFillMapDetails.  # noqa: E501
+        :type: datetime
+        &#34;&#34;&#34;
+
+        self._date_modified = date_modified
+
+    @property
+    def user_modified(self):
+        &#34;&#34;&#34;Gets the user_modified of this SharedFillMapDetails.  # noqa: E501
+
+
+        :return: The user_modified of this SharedFillMapDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._user_modified
+
+    @user_modified.setter
+    def user_modified(self, user_modified):
+        &#34;&#34;&#34;Sets the user_modified of this SharedFillMapDetails.
+
+
+        :param user_modified: The user_modified of this SharedFillMapDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._user_modified = user_modified
+
+    def to_dict(self):
+        &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
+        result = {}
+
+        for attr, _ in six.iteritems(self.openapi_types):
+            value = getattr(self, attr)
+            if isinstance(value, list):
+                result[attr] = list(map(
+                    lambda x: x.to_dict() if hasattr(x, &#34;to_dict&#34;) else x,
+                    value
+                ))
+            elif hasattr(value, &#34;to_dict&#34;):
+                result[attr] = value.to_dict()
+            elif isinstance(value, dict):
+                result[attr] = dict(map(
+                    lambda item: (item[0], item[1].to_dict())
+                    if hasattr(item[1], &#34;to_dict&#34;) else item,
+                    value.items()
+                ))
+            else:
+                result[attr] = value
+
+        return result
+
+    def to_str(self):
+        &#34;&#34;&#34;Returns the string representation of the model&#34;&#34;&#34;
+        return pprint.pformat(self.to_dict())
+
+    def __repr__(self):
+        &#34;&#34;&#34;For `print` and `pprint`&#34;&#34;&#34;
+        return self.to_str()
+
+    def __eq__(self, other):
+        &#34;&#34;&#34;Returns true if both objects are equal&#34;&#34;&#34;
+        if not isinstance(other, SharedFillMapDetails):
+            return False
+
+        return self.to_dict() == other.to_dict()
+
+    def __ne__(self, other):
+        &#34;&#34;&#34;Returns true if both objects are not equal&#34;&#34;&#34;
+        if not isinstance(other, SharedFillMapDetails):
+            return True
+
+        return self.to_dict() != other.to_dict()</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dd>
+<section class="desc"><p>dict() -&gt; new empty dictionary
+dict(mapping) -&gt; new dictionary initialized from a mapping object's
+(key, value) pairs
+dict(iterable) -&gt; new dictionary initialized as if via:
+d = {}
+for k, v in iterable:
+d[k] = v
+dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
+in the keyword argument list.
+For example:
+dict(one=1, two=2)</p></section>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dd>
+<section class="desc"><p>dict() -&gt; new empty dictionary
+dict(mapping) -&gt; new dictionary initialized from a mapping object's
+(key, value) pairs
+dict(iterable) -&gt; new dictionary initialized as if via:
+d = {}
+for k, v in iterable:
+d[k] = v
+dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
+in the keyword argument list.
+For example:
+dict(one=1, two=2)</p></section>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.connector"><code class="name">var <span class="ident">connector</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the connector of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The connector of this SharedFillMapDetails.
+# noqa: E501
+:rtype: object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L275-L283" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def connector(self):
+    &#34;&#34;&#34;Gets the connector of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The connector of this SharedFillMapDetails.  # noqa: E501
+    :rtype: object
+    &#34;&#34;&#34;
+    return self._connector</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.connector_id"><code class="name">var <span class="ident">connector_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the connector_id of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The connector_id of this SharedFillMapDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L296-L304" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def connector_id(self):
+    &#34;&#34;&#34;Gets the connector_id of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The connector_id of this SharedFillMapDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._connector_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.date_created"><code class="name">var <span class="ident">date_created</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the date_created of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The date_created of this SharedFillMapDetails.
+# noqa: E501
+:rtype: datetime</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L506-L514" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def date_created(self):
+    &#34;&#34;&#34;Gets the date_created of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The date_created of this SharedFillMapDetails.  # noqa: E501
+    :rtype: datetime
+    &#34;&#34;&#34;
+    return self._date_created</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.date_modified"><code class="name">var <span class="ident">date_modified</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the date_modified of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The date_modified of this SharedFillMapDetails.
+# noqa: E501
+:rtype: datetime</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L548-L556" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def date_modified(self):
+    &#34;&#34;&#34;Gets the date_modified of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The date_modified of this SharedFillMapDetails.  # noqa: E501
+    :rtype: datetime
+    &#34;&#34;&#34;
+    return self._date_modified</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.effect_attribute"><code class="name">var <span class="ident">effect_attribute</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the effect_attribute of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The effect_attribute of this SharedFillMapDetails.
+# noqa: E501
+:rtype: object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L338-L346" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def effect_attribute(self):
+    &#34;&#34;&#34;Gets the effect_attribute of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The effect_attribute of this SharedFillMapDetails.  # noqa: E501
+    :rtype: object
+    &#34;&#34;&#34;
+    return self._effect_attribute</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.effect_attribute_id"><code class="name">var <span class="ident">effect_attribute_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the effect_attribute_id of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The effect_attribute_id of this SharedFillMapDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L317-L325" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def effect_attribute_id(self):
+    &#34;&#34;&#34;Gets the effect_attribute_id of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The effect_attribute_id of this SharedFillMapDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._effect_attribute_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.fill_type_id"><code class="name">var <span class="ident">fill_type_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the fill_type_id of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The fill_type_id of this SharedFillMapDetails.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L149-L157" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def fill_type_id(self):
+    &#34;&#34;&#34;Gets the fill_type_id of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The fill_type_id of this SharedFillMapDetails.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._fill_type_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.gradient_fill"><code class="name">var <span class="ident">gradient_fill</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the gradient_fill of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The gradient_fill of this SharedFillMapDetails.
+# noqa: E501
+:rtype: object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L191-L199" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def gradient_fill(self):
+    &#34;&#34;&#34;Gets the gradient_fill of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The gradient_fill of this SharedFillMapDetails.  # noqa: E501
+    :rtype: object
+    &#34;&#34;&#34;
+    return self._gradient_fill</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the id of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The id of this SharedFillMapDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L485-L493" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def id(self):
+    &#34;&#34;&#34;Gets the id of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The id of this SharedFillMapDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.image_fill"><code class="name">var <span class="ident">image_fill</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the image_fill of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The image_fill of this SharedFillMapDetails.
+# noqa: E501
+:rtype: object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L212-L220" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def image_fill(self):
+    &#34;&#34;&#34;Gets the image_fill of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The image_fill of this SharedFillMapDetails.  # noqa: E501
+    :rtype: object
+    &#34;&#34;&#34;
+    return self._image_fill</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.shape"><code class="name">var <span class="ident">shape</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the shape of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The shape of this SharedFillMapDetails.
+# noqa: E501
+:rtype: object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L233-L241" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def shape(self):
+    &#34;&#34;&#34;Gets the shape of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The shape of this SharedFillMapDetails.  # noqa: E501
+    :rtype: object
+    &#34;&#34;&#34;
+    return self._shape</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.shape_id"><code class="name">var <span class="ident">shape_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the shape_id of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The shape_id of this SharedFillMapDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L254-L262" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def shape_id(self):
+    &#34;&#34;&#34;Gets the shape_id of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The shape_id of this SharedFillMapDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._shape_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.solid_fill"><code class="name">var <span class="ident">solid_fill</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the solid_fill of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The solid_fill of this SharedFillMapDetails.
+# noqa: E501
+:rtype: object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L170-L178" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def solid_fill(self):
+    &#34;&#34;&#34;Gets the solid_fill of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The solid_fill of this SharedFillMapDetails.  # noqa: E501
+    :rtype: object
+    &#34;&#34;&#34;
+    return self._solid_fill</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.table_cell"><code class="name">var <span class="ident">table_cell</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the table_cell of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The table_cell of this SharedFillMapDetails.
+# noqa: E501
+:rtype: object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L380-L388" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def table_cell(self):
+    &#34;&#34;&#34;Gets the table_cell of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The table_cell of this SharedFillMapDetails.  # noqa: E501
+    :rtype: object
+    &#34;&#34;&#34;
+    return self._table_cell</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.table_cell_id"><code class="name">var <span class="ident">table_cell_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the table_cell_id of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The table_cell_id of this SharedFillMapDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L359-L367" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def table_cell_id(self):
+    &#34;&#34;&#34;Gets the table_cell_id of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The table_cell_id of this SharedFillMapDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._table_cell_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.theme_background_fill"><code class="name">var <span class="ident">theme_background_fill</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the theme_background_fill of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The theme_background_fill of this SharedFillMapDetails.
+# noqa: E501
+:rtype: object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L422-L430" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def theme_background_fill(self):
+    &#34;&#34;&#34;Gets the theme_background_fill of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The theme_background_fill of this SharedFillMapDetails.  # noqa: E501
+    :rtype: object
+    &#34;&#34;&#34;
+    return self._theme_background_fill</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.theme_background_fill_id"><code class="name">var <span class="ident">theme_background_fill_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the theme_background_fill_id of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The theme_background_fill_id of this SharedFillMapDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L401-L409" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def theme_background_fill_id(self):
+    &#34;&#34;&#34;Gets the theme_background_fill_id of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The theme_background_fill_id of this SharedFillMapDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._theme_background_fill_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.theme_fill"><code class="name">var <span class="ident">theme_fill</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the theme_fill of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The theme_fill of this SharedFillMapDetails.
+# noqa: E501
+:rtype: object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L464-L472" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def theme_fill(self):
+    &#34;&#34;&#34;Gets the theme_fill of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The theme_fill of this SharedFillMapDetails.  # noqa: E501
+    :rtype: object
+    &#34;&#34;&#34;
+    return self._theme_fill</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.theme_fill_id"><code class="name">var <span class="ident">theme_fill_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the theme_fill_id of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The theme_fill_id of this SharedFillMapDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L443-L451" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def theme_fill_id(self):
+    &#34;&#34;&#34;Gets the theme_fill_id of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The theme_fill_id of this SharedFillMapDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._theme_fill_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.user_created"><code class="name">var <span class="ident">user_created</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the user_created of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The user_created of this SharedFillMapDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L527-L535" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def user_created(self):
+    &#34;&#34;&#34;Gets the user_created of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The user_created of this SharedFillMapDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._user_created</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.user_modified"><code class="name">var <span class="ident">user_modified</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the user_modified of this SharedFillMapDetails.
+# noqa: E501</p>
+<p>:return: The user_modified of this SharedFillMapDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L569-L577" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def user_modified(self):
+    &#34;&#34;&#34;Gets the user_modified of this SharedFillMapDetails.  # noqa: E501
+
+
+    :return: The user_modified of this SharedFillMapDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._user_modified</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the model properties as a dict</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L590-L612" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_dict(self):
+    &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
+    result = {}
+
+    for attr, _ in six.iteritems(self.openapi_types):
+        value = getattr(self, attr)
+        if isinstance(value, list):
+            result[attr] = list(map(
+                lambda x: x.to_dict() if hasattr(x, &#34;to_dict&#34;) else x,
+                value
+            ))
+        elif hasattr(value, &#34;to_dict&#34;):
+            result[attr] = value.to_dict()
+        elif isinstance(value, dict):
+            result[attr] = dict(map(
+                lambda item: (item[0], item[1].to_dict())
+                if hasattr(item[1], &#34;to_dict&#34;) else item,
+                value.items()
+            ))
+        else:
+            result[attr] = value
+
+    return result</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.to_str"><code class="name flex">
+<span>def <span class="ident">to_str</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the string representation of the model</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.py#L614-L616" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_str(self):
+    &#34;&#34;&#34;Returns the string representation of the model&#34;&#34;&#34;
+    return pprint.pformat(self.to_dict())</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/index.html">presalytics.client.presalytics_ooxml_automation.models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails">SharedFillMapDetails</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.attribute_map">attribute_map</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.connector" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.connector">connector</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.connector_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.connector_id">connector_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.date_created" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.date_created">date_created</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.date_modified" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.date_modified">date_modified</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.effect_attribute" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.effect_attribute">effect_attribute</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.effect_attribute_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.effect_attribute_id">effect_attribute_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.fill_type_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.fill_type_id">fill_type_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.gradient_fill" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.gradient_fill">gradient_fill</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.id">id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.image_fill" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.image_fill">image_fill</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.shape" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.shape">shape</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.shape_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.shape_id">shape_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.solid_fill" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.solid_fill">solid_fill</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.table_cell" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.table_cell">table_cell</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.table_cell_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.table_cell_id">table_cell_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.theme_background_fill" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.theme_background_fill">theme_background_fill</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.theme_background_fill_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.theme_background_fill_id">theme_background_fill_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.theme_fill" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.theme_fill">theme_fill</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.theme_fill_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.theme_fill_id">theme_fill_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.to_dict" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.to_dict">to_dict</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.to_str" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.to_str">to_str</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.user_created" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.user_created">user_created</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.user_modified" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_fill_map_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_fill_map_details.SharedFillMapDetails.user_modified">user_modified</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

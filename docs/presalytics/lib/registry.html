@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>presalytics.lib.registry API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>presalytics.lib.registry</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/registry.py#L0-L169" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">import pkgutil
+import importlib
+import traceback
+import sys
+import os
+import inspect
+import logging
+import typing
+import abc
+
+
+logger = logging.getLogger(&#39;presalytics.lib.registry&#39;)
+
+
+class RegistryBase(abc.ABC):
+    registry: typing.Dict[str, typing.Type]
+    show_errors = False
+
+    def __init__(self, show_errors=False, autodiscover_paths=[], reserved_names: typing.List[str] = None, **kwargs):
+        RegistryBase.show_errors = show_errors
+        self.autodiscover_paths = autodiscover_paths
+        self.registry = {}
+        self.reserved_names = [&#34;config.py&#34;, &#34;setup.py&#34;]
+        try:
+            if reserved_names:
+                self.reserved_names.extend(reserved_names)
+        except Exception:
+            pass
+        self.discover()
+
+    @abc.abstractmethod
+    def get_type(self, klass):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_name(self, klass):
+        raise NotImplementedError
+
+    @staticmethod
+    def onerror(name):
+        if RegistryBase.show_errors:
+            print(&#34;Error importing module %s&#34; % name)
+            t, value, tb = sys.exc_info()
+            traceback.print_tb(tb)
+
+    def get(self, key):
+        return self.registry.get(key, None)
+
+    def get_classes_from_module(self, module):
+        self.get_classes(module)
+        for loader, name, is_pkg in pkgutil.walk_packages(module.__path__, onerror=RegistryBase.onerror):
+            full_name = module.__name__ + &#39;.&#39; + name
+            try:
+                if not self.module_is_in_stackframe(full_name):
+                    sub_module = importlib.import_module(full_name)
+                    if sub_module.__name__.startswith(&#39;presalytics&#39;):
+                        if is_pkg:
+                            self.get_classes_from_module(sub_module)
+                        else:
+                            self.get_classes(sub_module)
+            except Exception:
+                pass
+
+    def get_registry_key(self, klass):
+        key = None
+        klass_type = self.get_type(klass)
+        if klass_type:
+            klass_name = self.get_name(klass)
+            if klass_name:
+                key = &#34;{0}.{1}&#34;.format(klass_type, klass_name)
+        return key
+
+    def load_class(self, klass):
+        if inspect.isclass(klass):
+            try:
+                key = self.get_registry_key(klass)
+                if key:
+                    if key not in self.registry.keys():
+                        self.registry[key] = klass
+            except Exception:
+                if self.show_errors:
+                    klass_type = self.get_type(klass)
+                    message = &#34;Unable to register class {0} with type {1}&#34;.format(klass.__name__, klass_type)
+                    logger.error(message)
+        else:
+            try:
+                if self.show_errors:
+                    message = &#34;{0} is not a class&#34;.format(klass.__class__.__name__)
+                    logger.error(message)
+            except Exception:
+                pass
+
+    def get_classes(self, module):
+        for key, val in module.__dict__.items():
+            if inspect.isclass(val) or isinstance(val, abc.ABC):
+                self.load_class(val)
+
+    def discover(self):
+        current_path = os.getcwd()
+        if current_path not in self.autodiscover_paths:
+            self.autodiscover_paths.append(current_path)
+        for path in self.autodiscover_paths:
+            for name in os.listdir(path):
+                if name.endswith(&#34;.py&#34;) and name not in self.reserved_names:
+                    try:
+                        mod_path = os.path.join(path, name)
+                        mod_spec = importlib.util.spec_from_file_location(name, mod_path)
+                        if not self.module_is_in_stackframe(mod_spec.name.replace(&#34;.py&#34;, &#34;&#34;)):
+                            mod = importlib.util.module_from_spec(mod_spec)
+                            mod_spec.loader.exec_module(mod)
+                            self.get_classes(mod)
+                    except Exception:
+                        if self.show_errors:
+                            message = &#34;Could not load classes from file {0}&#34;.format(name)
+                            logger.error(message)
+        for finder, name, ispkg in pkgutil.iter_modules():
+            if name.startswith(&#39;presalytics&#39;):
+                mod = importlib.import_module(name)
+                self.get_classes_from_module(mod)
+
+    def module_is_in_stackframe(self, module_name, frame=None) -&gt; bool:
+        &#34;&#34;&#34;Prevent cycles by skipping modules already loaded in the stack frame
+        &#34;&#34;&#34;
+        in_stack = False
+        try:
+            if not frame:
+                frame = inspect.currentframe()
+            frame_module = frame.f_globals[&#39;__name__&#39;]
+            if frame_module == &#39;__main__&#39;:
+                try:
+                    frame_module = inspect.getmodule(frame).__spec__.name
+                except AttributeError:
+                    # vscode and spyder&#39;s parent controllers load __main__ without a module spec
+                    if not getattr(inspect.getmodule(frame), &#34;__spec__&#34;, None):
+                        try:
+                            fname = inspect.getmodule(frame).__dict__[&#39;__file__&#39;]
+                            frame_module = os.path.basename(fname).replace(&#34;.py&#34;, &#34;&#34;)
+                            if module_name == frame_module:
+                                return True
+                            else: 
+                                return False
+                        except AttributeError:
+                            return in_stack
+                        except Exception:
+                            return True
+                    else:
+                        return True # Don&#39;t load this module for unknown errors
+                except Exception:
+                    return True
+            if module_name == frame_module:
+                in_stack = True
+            else:
+                if frame.f_back:
+                    in_stack = self.module_is_in_stackframe(module_name, frame=frame.f_back)
+        except Exception:
+            # if something wonky happens, don&#39;t load this module
+            # if loaded in IronPython or Jython, this will probably fire (untested)
+            in_stack = True
+        finally:
+            del frame
+        return in_stack
+
+
+    def register(self, klass):
+        self.load_class(klass)
+    
+    def unregister(self, klass):
+        key = self.get_registry_key(klass)
+        if key:
+            self.registry.pop(key)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="presalytics.lib.registry.RegistryBase"><code class="flex name class">
+<span>class <span class="ident">RegistryBase</span></span>
+<span>(</span><span>show_errors=False, autodiscover_paths=[], reserved_names=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Helper class that provides a standard way to create an ABC using
+inheritance.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/registry.py#L15-L170" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class RegistryBase(abc.ABC):
+    registry: typing.Dict[str, typing.Type]
+    show_errors = False
+
+    def __init__(self, show_errors=False, autodiscover_paths=[], reserved_names: typing.List[str] = None, **kwargs):
+        RegistryBase.show_errors = show_errors
+        self.autodiscover_paths = autodiscover_paths
+        self.registry = {}
+        self.reserved_names = [&#34;config.py&#34;, &#34;setup.py&#34;]
+        try:
+            if reserved_names:
+                self.reserved_names.extend(reserved_names)
+        except Exception:
+            pass
+        self.discover()
+
+    @abc.abstractmethod
+    def get_type(self, klass):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_name(self, klass):
+        raise NotImplementedError
+
+    @staticmethod
+    def onerror(name):
+        if RegistryBase.show_errors:
+            print(&#34;Error importing module %s&#34; % name)
+            t, value, tb = sys.exc_info()
+            traceback.print_tb(tb)
+
+    def get(self, key):
+        return self.registry.get(key, None)
+
+    def get_classes_from_module(self, module):
+        self.get_classes(module)
+        for loader, name, is_pkg in pkgutil.walk_packages(module.__path__, onerror=RegistryBase.onerror):
+            full_name = module.__name__ + &#39;.&#39; + name
+            try:
+                if not self.module_is_in_stackframe(full_name):
+                    sub_module = importlib.import_module(full_name)
+                    if sub_module.__name__.startswith(&#39;presalytics&#39;):
+                        if is_pkg:
+                            self.get_classes_from_module(sub_module)
+                        else:
+                            self.get_classes(sub_module)
+            except Exception:
+                pass
+
+    def get_registry_key(self, klass):
+        key = None
+        klass_type = self.get_type(klass)
+        if klass_type:
+            klass_name = self.get_name(klass)
+            if klass_name:
+                key = &#34;{0}.{1}&#34;.format(klass_type, klass_name)
+        return key
+
+    def load_class(self, klass):
+        if inspect.isclass(klass):
+            try:
+                key = self.get_registry_key(klass)
+                if key:
+                    if key not in self.registry.keys():
+                        self.registry[key] = klass
+            except Exception:
+                if self.show_errors:
+                    klass_type = self.get_type(klass)
+                    message = &#34;Unable to register class {0} with type {1}&#34;.format(klass.__name__, klass_type)
+                    logger.error(message)
+        else:
+            try:
+                if self.show_errors:
+                    message = &#34;{0} is not a class&#34;.format(klass.__class__.__name__)
+                    logger.error(message)
+            except Exception:
+                pass
+
+    def get_classes(self, module):
+        for key, val in module.__dict__.items():
+            if inspect.isclass(val) or isinstance(val, abc.ABC):
+                self.load_class(val)
+
+    def discover(self):
+        current_path = os.getcwd()
+        if current_path not in self.autodiscover_paths:
+            self.autodiscover_paths.append(current_path)
+        for path in self.autodiscover_paths:
+            for name in os.listdir(path):
+                if name.endswith(&#34;.py&#34;) and name not in self.reserved_names:
+                    try:
+                        mod_path = os.path.join(path, name)
+                        mod_spec = importlib.util.spec_from_file_location(name, mod_path)
+                        if not self.module_is_in_stackframe(mod_spec.name.replace(&#34;.py&#34;, &#34;&#34;)):
+                            mod = importlib.util.module_from_spec(mod_spec)
+                            mod_spec.loader.exec_module(mod)
+                            self.get_classes(mod)
+                    except Exception:
+                        if self.show_errors:
+                            message = &#34;Could not load classes from file {0}&#34;.format(name)
+                            logger.error(message)
+        for finder, name, ispkg in pkgutil.iter_modules():
+            if name.startswith(&#39;presalytics&#39;):
+                mod = importlib.import_module(name)
+                self.get_classes_from_module(mod)
+
+    def module_is_in_stackframe(self, module_name, frame=None) -&gt; bool:
+        &#34;&#34;&#34;Prevent cycles by skipping modules already loaded in the stack frame
+        &#34;&#34;&#34;
+        in_stack = False
+        try:
+            if not frame:
+                frame = inspect.currentframe()
+            frame_module = frame.f_globals[&#39;__name__&#39;]
+            if frame_module == &#39;__main__&#39;:
+                try:
+                    frame_module = inspect.getmodule(frame).__spec__.name
+                except AttributeError:
+                    # vscode and spyder&#39;s parent controllers load __main__ without a module spec
+                    if not getattr(inspect.getmodule(frame), &#34;__spec__&#34;, None):
+                        try:
+                            fname = inspect.getmodule(frame).__dict__[&#39;__file__&#39;]
+                            frame_module = os.path.basename(fname).replace(&#34;.py&#34;, &#34;&#34;)
+                            if module_name == frame_module:
+                                return True
+                            else: 
+                                return False
+                        except AttributeError:
+                            return in_stack
+                        except Exception:
+                            return True
+                    else:
+                        return True # Don&#39;t load this module for unknown errors
+                except Exception:
+                    return True
+            if module_name == frame_module:
+                in_stack = True
+            else:
+                if frame.f_back:
+                    in_stack = self.module_is_in_stackframe(module_name, frame=frame.f_back)
+        except Exception:
+            # if something wonky happens, don&#39;t load this module
+            # if loaded in IronPython or Jython, this will probably fire (untested)
+            in_stack = True
+        finally:
+            del frame
+        return in_stack
+
+
+    def register(self, klass):
+        self.load_class(klass)
+    
+    def unregister(self, klass):
+        key = self.get_registry_key(klass)
+        if key:
+            self.registry.pop(key)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.plugins.base.PluginRegistry" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginRegistry">PluginRegistry</a></li>
+<li><a title="presalytics.story.components.ComponentRegistry" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry">ComponentRegistry</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.lib.registry.RegistryBase.show_errors"><code class="name">var <span class="ident">show_errors</span></code></dt>
+<dd>
+<section class="desc"><p>bool(x) -&gt; bool</p>
+<p>Returns True when the argument x is true, False otherwise.
+The builtins True and False are the only two instances of the class bool.
+The class bool is a subclass of the class int, and cannot be subclassed.</p></section>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="presalytics.lib.registry.RegistryBase.onerror"><code class="name flex">
+<span>def <span class="ident">onerror</span></span>(<span>name)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/registry.py#L39-L44" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@staticmethod
+def onerror(name):
+    if RegistryBase.show_errors:
+        print(&#34;Error importing module %s&#34; % name)
+        t, value, tb = sys.exc_info()
+        traceback.print_tb(tb)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.registry.RegistryBase.discover"><code class="name flex">
+<span>def <span class="ident">discover</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/registry.py#L98-L119" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def discover(self):
+    current_path = os.getcwd()
+    if current_path not in self.autodiscover_paths:
+        self.autodiscover_paths.append(current_path)
+    for path in self.autodiscover_paths:
+        for name in os.listdir(path):
+            if name.endswith(&#34;.py&#34;) and name not in self.reserved_names:
+                try:
+                    mod_path = os.path.join(path, name)
+                    mod_spec = importlib.util.spec_from_file_location(name, mod_path)
+                    if not self.module_is_in_stackframe(mod_spec.name.replace(&#34;.py&#34;, &#34;&#34;)):
+                        mod = importlib.util.module_from_spec(mod_spec)
+                        mod_spec.loader.exec_module(mod)
+                        self.get_classes(mod)
+                except Exception:
+                    if self.show_errors:
+                        message = &#34;Could not load classes from file {0}&#34;.format(name)
+                        logger.error(message)
+    for finder, name, ispkg in pkgutil.iter_modules():
+        if name.startswith(&#39;presalytics&#39;):
+            mod = importlib.import_module(name)
+            self.get_classes_from_module(mod)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.registry.RegistryBase.get"><code class="name flex">
+<span>def <span class="ident">get</span></span>(<span>self, key)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/registry.py#L46-L47" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get(self, key):
+    return self.registry.get(key, None)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.registry.RegistryBase.get_classes"><code class="name flex">
+<span>def <span class="ident">get_classes</span></span>(<span>self, module)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/registry.py#L93-L96" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_classes(self, module):
+    for key, val in module.__dict__.items():
+        if inspect.isclass(val) or isinstance(val, abc.ABC):
+            self.load_class(val)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.registry.RegistryBase.get_classes_from_module"><code class="name flex">
+<span>def <span class="ident">get_classes_from_module</span></span>(<span>self, module)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/registry.py#L49-L62" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_classes_from_module(self, module):
+    self.get_classes(module)
+    for loader, name, is_pkg in pkgutil.walk_packages(module.__path__, onerror=RegistryBase.onerror):
+        full_name = module.__name__ + &#39;.&#39; + name
+        try:
+            if not self.module_is_in_stackframe(full_name):
+                sub_module = importlib.import_module(full_name)
+                if sub_module.__name__.startswith(&#39;presalytics&#39;):
+                    if is_pkg:
+                        self.get_classes_from_module(sub_module)
+                    else:
+                        self.get_classes(sub_module)
+        except Exception:
+            pass</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.registry.RegistryBase.get_name"><code class="name flex">
+<span>def <span class="ident">get_name</span></span>(<span>self, klass)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/registry.py#L35-L37" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+def get_name(self, klass):
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.registry.RegistryBase.get_registry_key"><code class="name flex">
+<span>def <span class="ident">get_registry_key</span></span>(<span>self, klass)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/registry.py#L64-L71" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_registry_key(self, klass):
+    key = None
+    klass_type = self.get_type(klass)
+    if klass_type:
+        klass_name = self.get_name(klass)
+        if klass_name:
+            key = &#34;{0}.{1}&#34;.format(klass_type, klass_name)
+    return key</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.registry.RegistryBase.get_type"><code class="name flex">
+<span>def <span class="ident">get_type</span></span>(<span>self, klass)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/registry.py#L31-L33" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+def get_type(self, klass):
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.registry.RegistryBase.load_class"><code class="name flex">
+<span>def <span class="ident">load_class</span></span>(<span>self, klass)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/registry.py#L73-L91" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def load_class(self, klass):
+    if inspect.isclass(klass):
+        try:
+            key = self.get_registry_key(klass)
+            if key:
+                if key not in self.registry.keys():
+                    self.registry[key] = klass
+        except Exception:
+            if self.show_errors:
+                klass_type = self.get_type(klass)
+                message = &#34;Unable to register class {0} with type {1}&#34;.format(klass.__name__, klass_type)
+                logger.error(message)
+    else:
+        try:
+            if self.show_errors:
+                message = &#34;{0} is not a class&#34;.format(klass.__class__.__name__)
+                logger.error(message)
+        except Exception:
+            pass</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.registry.RegistryBase.module_is_in_stackframe"><code class="name flex">
+<span>def <span class="ident">module_is_in_stackframe</span></span>(<span>self, module_name, frame=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Prevent cycles by skipping modules already loaded in the stack frame</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/registry.py#L121-L161" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def module_is_in_stackframe(self, module_name, frame=None) -&gt; bool:
+    &#34;&#34;&#34;Prevent cycles by skipping modules already loaded in the stack frame
+    &#34;&#34;&#34;
+    in_stack = False
+    try:
+        if not frame:
+            frame = inspect.currentframe()
+        frame_module = frame.f_globals[&#39;__name__&#39;]
+        if frame_module == &#39;__main__&#39;:
+            try:
+                frame_module = inspect.getmodule(frame).__spec__.name
+            except AttributeError:
+                # vscode and spyder&#39;s parent controllers load __main__ without a module spec
+                if not getattr(inspect.getmodule(frame), &#34;__spec__&#34;, None):
+                    try:
+                        fname = inspect.getmodule(frame).__dict__[&#39;__file__&#39;]
+                        frame_module = os.path.basename(fname).replace(&#34;.py&#34;, &#34;&#34;)
+                        if module_name == frame_module:
+                            return True
+                        else: 
+                            return False
+                    except AttributeError:
+                        return in_stack
+                    except Exception:
+                        return True
+                else:
+                    return True # Don&#39;t load this module for unknown errors
+            except Exception:
+                return True
+        if module_name == frame_module:
+            in_stack = True
+        else:
+            if frame.f_back:
+                in_stack = self.module_is_in_stackframe(module_name, frame=frame.f_back)
+    except Exception:
+        # if something wonky happens, don&#39;t load this module
+        # if loaded in IronPython or Jython, this will probably fire (untested)
+        in_stack = True
+    finally:
+        del frame
+    return in_stack</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.registry.RegistryBase.register"><code class="name flex">
+<span>def <span class="ident">register</span></span>(<span>self, klass)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Register a virtual subclass of an ABC.</p>
+<p>Returns the subclass, to allow usage as a class decorator.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/registry.py#L164-L165" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def register(self, klass):
+    self.load_class(klass)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.registry.RegistryBase.unregister"><code class="name flex">
+<span>def <span class="ident">unregister</span></span>(<span>self, klass)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/registry.py#L167-L170" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def unregister(self, klass):
+    key = self.get_registry_key(klass)
+    if key:
+        self.registry.pop(key)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="presalytics.lib" href="/python-client/presalytics/lib/index.html">presalytics.lib</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="presalytics.lib.registry.RegistryBase" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase">RegistryBase</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.lib.registry.RegistryBase.discover" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.discover">discover</a></code></li>
+<li><code><a title="presalytics.lib.registry.RegistryBase.get" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.get">get</a></code></li>
+<li><code><a title="presalytics.lib.registry.RegistryBase.get_classes" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.get_classes">get_classes</a></code></li>
+<li><code><a title="presalytics.lib.registry.RegistryBase.get_classes_from_module" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.get_classes_from_module">get_classes_from_module</a></code></li>
+<li><code><a title="presalytics.lib.registry.RegistryBase.get_name" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.get_name">get_name</a></code></li>
+<li><code><a title="presalytics.lib.registry.RegistryBase.get_registry_key" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.get_registry_key">get_registry_key</a></code></li>
+<li><code><a title="presalytics.lib.registry.RegistryBase.get_type" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.get_type">get_type</a></code></li>
+<li><code><a title="presalytics.lib.registry.RegistryBase.load_class" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.load_class">load_class</a></code></li>
+<li><code><a title="presalytics.lib.registry.RegistryBase.module_is_in_stackframe" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.module_is_in_stackframe">module_is_in_stackframe</a></code></li>
+<li><code><a title="presalytics.lib.registry.RegistryBase.onerror" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.onerror">onerror</a></code></li>
+<li><code><a title="presalytics.lib.registry.RegistryBase.register" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.register">register</a></code></li>
+<li><code><a title="presalytics.lib.registry.RegistryBase.show_errors" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.show_errors">show_errors</a></code></li>
+<li><code><a title="presalytics.lib.registry.RegistryBase.unregister" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.unregister">unregister</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

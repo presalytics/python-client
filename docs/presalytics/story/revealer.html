@@ -1,0 +1,995 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>presalytics.story.revealer API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>presalytics.story.revealer</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L0-L269" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">import os
+import shutil
+import lxml.html
+import webbrowser
+import logging
+import collections
+import typing
+import tempfile
+import lxml
+import lxml.html
+import lxml.etree
+import lxml.html.builder as E
+import datetime
+import presalytics
+import presalytics.lib
+import presalytics.lib.plugins
+import presalytics.lib.plugins.base
+import presalytics.lib.templates
+import presalytics.lib.templates.base
+import presalytics.story.util
+import presalytics.story.server
+import presalytics.story.components
+import presalytics.lib.exceptions
+if typing.TYPE_CHECKING:
+    from presalytics.story.outline import StoryOutline, Page, Plugin
+    from presalytics.story.components import PageTemplateBase, ComponentBase, WidgetBase, ThemeBase
+
+
+logger = logging.getLogger(&#39;presalytics.story.revealer&#39;)
+
+
+class Revealer(presalytics.story.components.Renderer):
+    &#34;&#34;&#34;
+    This class renders &#39;Story Outines&#39; to reveal.js presentations
+    &#34;&#34;&#34;
+    story_outline: &#39;StoryOutline&#39;
+    base: lxml.etree.Element
+    links: typing.Sequence[lxml.etree.Element]
+    plugins: typing.List[typing.Dict]
+
+    __component_kind__ = &#39;revealer&#39;
+
+    def __init__(
+            self,
+            story_outline: &#39;StoryOutline&#39;,
+            **kwargs):
+        super(Revealer, self).__init__(**kwargs)
+        self.story_outline = story_outline
+        logger.info(&#34;Initializing story render for {}&#34;.format(story_outline.title))
+        self.story_outline.validate()
+        self.base = self.make_base()
+        logger.info(&#34;Loading plugins&#34;)
+        reveal_plugin_config = {
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;name&#39;: &#39;reveal&#39;,
+            &#39;config&#39;: {}
+        }
+        self.update_outline_from_instances()
+        self.plugins = [reveal_plugin_config]
+        self.get_component_implicit_plugins()
+        outline_plugins = presalytics.lib.plugins.base.PluginManager.get_plugins_from_nested_dict(story_outline.to_dict())
+        self.plugins.extend(outline_plugins)
+        self.plugin_mgr = presalytics.lib.plugins.base.PluginManager(self.plugins)
+        logger.info(&#34;Revealer initilized.&#34;)
+
+    @classmethod
+    def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
+        return cls(component, **kwargs)
+
+    def serialize(self) -&gt; &#39;StoryOutline&#39;:
+        self.update_outline_from_instances()
+        return self.story_outline
+
+    def update_outline_from_instances(self, sub_dict: typing.Dict = None):
+        if not sub_dict:
+            sub_dict = self.story_outline.to_dict()
+        if sub_dict:
+            for key, val in sub_dict.items():
+                if key in [&#34;widgets&#34;, &#34;themes&#34;, &#34;pages&#34;]:
+                    if isinstance(val, list):
+                        for list_item in val:
+                            if isinstance(list_item, dict):
+                                if &#34;kind&#34; in list_item:
+                                    class_key = key.rstrip(&#34;s&#34;) + &#34;.&#34; + list_item[&#34;kind&#34;]
+                                    klass = presalytics.COMPONENTS.get(class_key)
+                                    if klass:
+                                        if &#34;name&#34; in list_item:
+                                            instance_key = class_key + &#34;.&#34; + list_item[&#34;name&#34;]
+                                            inst = presalytics.COMPONENTS.get_instance(instance_key)
+                                            if inst:
+                                                self.set_outline_data_from_instance(inst)
+                if isinstance(val, dict):
+                    if len(val.keys()) &gt; 0:
+                        self.update_outline_from_instances(val)
+                if isinstance(val, list):
+                    for list_item in val:
+                        if isinstance(list_item, dict):
+                            self.update_outline_from_instances(list_item)
+
+    def get_component_implicit_plugins(self, sub_dict: typing.Dict = None):
+        if not sub_dict:
+            sub_dict = self.story_outline.to_dict()
+        if sub_dict:
+            for key, val in sub_dict.items():
+                if key in [&#34;widgets&#34;, &#34;themes&#34;, &#34;pages&#34;]:
+                    if isinstance(val, list):
+                        for list_item in val:
+                            if isinstance(list_item, dict):
+                                if &#34;kind&#34; in list_item:
+                                    class_key = key.rstrip(&#34;s&#34;) + &#34;.&#34; + list_item[&#34;kind&#34;]
+                                    klass = presalytics.COMPONENTS.get(class_key)
+                                    if klass:
+                                        if len(klass.__plugins__) &gt; 0:
+                                            self.plugins.extend(klass.__plugins__)
+                                                
+                if isinstance(val, dict):
+                    if len(val.keys()) &gt; 0:
+                        self.get_component_implicit_plugins(val)
+                if isinstance(val, list):
+                    for list_item in val:
+                        if isinstance(list_item, dict):
+                            self.get_component_implicit_plugins(list_item)
+
+    def set_outline_data_from_instance(self, inst: &#39;ComponentBase&#39;):
+        if inst.__component_type__ == &#39;widget&#39;:
+            self.set_widget_outline_data(inst)
+        if inst.__component_type__ == &#39;page&#39;:
+            self.set_page_outline_data(inst)
+        if inst.__component_type__ == &#39;theme&#39;:
+            self.set_theme_outline_data(inst)
+
+    def set_theme_outline_data(self, inst: &#39;ThemeBase&#39;):
+        theme_index = None
+        for t in range(0, len(self.story_outline.themes)):
+            if inst.name == self.story_outline.themes[t].name:
+                theme_index = t
+            if theme_index:
+                break
+        theme_outline = inst.serialize()
+        if theme_index:
+            self.story_outline.themes[theme_index] = theme_outline    
+
+    def set_page_outline_data(self, inst: &#39;PageTemplateBase&#39;):
+        page_index = None
+        for p in range(0, len(self.story_outline.pages)):
+            if inst.name == self.story_outline.pages[p].name:
+                page_index = p
+            if page_index:
+                break
+        page_outline = inst.serialize()
+        if page_index:
+            self.story_outline.pages[page_index] = page_outline
+
+
+    def set_widget_outline_data(self, inst: &#39;WidgetBase&#39;):
+        widget_index = None
+        page_index = None
+        for p in range(0, len(self.story_outline.pages)):
+            for w in range(0, len(self.story_outline.pages[p].widgets)):
+                widget = self.story_outline.pages[p].widgets[w]
+                if widget.name == inst.name:
+                    page_index = p
+                    widget_index = w
+                if page_index:
+                    break
+            if page_index:
+                break
+        w_outline = inst.serialize()
+        if isinstance(page_index, int) and isinstance(widget_index, int):
+            self.story_outline.pages[page_index].widgets[widget_index] = w_outline  
+
+    def update_outline(self):
+        raise NotImplementedError
+
+    def make_base(self):
+        base = lxml.etree.Element(&#34;div&#34;, attrib={&#34;class&#34;: &#34;reveal&#34;})
+        lxml.etree.SubElement(base, &#34;div&#34;, attrib={&#34;class&#34;: &#34;slides&#34;})
+        return base
+
+    def package_as_standalone(self):
+        pres = self.render()
+        body = E.BODY()
+        body.append(pres)
+        body = self.strip_unauthorized_scripts(body)
+        for scripts in self.plugin_mgr.get_scripts():
+            lxml_scripts = lxml.html.fragments_fromstring(scripts)
+            for item in lxml_scripts:
+                body.append(item)
+        head = E.HEAD()
+        for link in self.plugin_mgr.get_styles():
+            lxml_links = lxml.html.fragments_fromstring(link)
+            for item in lxml_links:
+                head.append(item)
+        head = self.strip_unauthorized_scripts(head)
+        html = E.HTML(
+            head,
+            body
+        )
+        return lxml.html.tostring(html, pretty_print=True)
+
+    # def render_plugin(self, plugin):
+    #     plugin_type = plugin[&#39;type&#39;]
+    #     plugin_config = plugin[&#39;config&#39;]
+    #     plugin_class = self.plugin_loader.load(plugin_type)
+    #     script_string = plugin_class().to_string(plugin_config)
+    #     return lxml.html.fragment_fromstring(script_string)
+
+    def strip_unauthorized_scripts(self, body):
+        allowed_scripts = presalytics.lib.plugins.external.ALLOWED_SCRIPTS.flatten().values()
+        script_elements = body.findall(&#34;.//script&#34;)
+        for ele in script_elements:
+            try:
+                link = ele.get(&#34;src&#34;)
+            except KeyError:
+                ele.getparent().remove(ele)
+            if link not in allowed_scripts:
+                ele.getparent().remove(ele)
+        return body
+
+    def update_info(self):
+        info = self.story_outline.info
+        info.date_modified = datetime.datetime.utcnow()
+
+    def render(self):
+        &#34;&#34;&#34;
+        This method returns a t
+        &#34;&#34;&#34;
+        reveal_base = self.base
+        for page in self.story_outline.pages:
+            slides_container = reveal_base[0]
+            slide = lxml.etree.SubElement(slides_container, &#34;section&#34;)
+            page_html = self.render_page(page)
+            slide_fragment = lxml.html.fragment_fromstring(page_html)
+            slide.append(slide_fragment)
+        return reveal_base
+
+    def render_page(self, page: &#39;Page&#39;) -&gt; str:
+        class_key = &#34;page.&#34; + page.kind
+        key = class_key + &#34;.&#34; + page.name
+        if presalytics.COMPONENTS.get_instance(key):
+            page_instance = presalytics.COMPONENTS.get_instance(key)
+        else:
+            klass = presalytics.COMPONENTS.get(class_key)
+            deserialize_method = getattr(klass, &#34;deserialize&#34;, None)
+            if callable(deserialize_method):
+                page_instance = deserialize_method(page, client_info=self.client_info)
+            else:
+                message = &#39;Page component instance or class (kind) &#34;{0}&#34; unavailable in component registry&#39;.format(key)
+                raise presalytics.lib.exceptions.MissingConfigException(message)
+        return page_instance.render()
+
+    def present(self, files_path=None, debug=True, port=8082, host=&#39;127.0.0.1&#39;):
+        logger.info(&#34;Building story rendering at http://{0}:{1}&#34;.format(host, port))
+        if not files_path:
+            files_path = tempfile.gettempdir()
+        logger.info(&#34;Buidling standalone package for local rendering.&#34;)
+        html = self.package_as_standalone().decode(&#39;utf-8&#39;)
+        id = presalytics.story.util.to_title_case(self.story_outline.title)
+        if id == &#39;&#39;:
+            id = &#39;blank&#39;
+        server = presalytics.story.server.LocalServer(host=host, debug=debug, port=port, root_path=files_path)
+        pkg_templates_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), &#34;lib&#34;, &#34;templates&#34;)
+        shutil.copy(os.path.join(pkg_templates_dir, &#34;favicon.ico&#34;), os.path.join(files_path, &#34;presalytics&#34;, &#34;static&#34;))
+        html_file = os.path.join(files_path, &#34;presalytics&#34;, &#34;templates&#34;, id + &#39;.html&#39;)
+        with open(html_file, &#39;w&#39;) as file:
+            file.write(html)
+        address = &#34;http://{}:{}/story/{}&#34;.format(host, port, id)
+        logger.info(&#34;Opening browser tab...&#34;)
+        presalytics.story.server.Browser(address).start()
+        server.run()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="presalytics.story.revealer.Revealer"><code class="flex name class">
+<span>class <span class="ident">Revealer</span></span>
+<span>(</span><span>story_outline, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class renders 'Story Outines' to reveal.js presentations</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L32-L270" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class Revealer(presalytics.story.components.Renderer):
+    &#34;&#34;&#34;
+    This class renders &#39;Story Outines&#39; to reveal.js presentations
+    &#34;&#34;&#34;
+    story_outline: &#39;StoryOutline&#39;
+    base: lxml.etree.Element
+    links: typing.Sequence[lxml.etree.Element]
+    plugins: typing.List[typing.Dict]
+
+    __component_kind__ = &#39;revealer&#39;
+
+    def __init__(
+            self,
+            story_outline: &#39;StoryOutline&#39;,
+            **kwargs):
+        super(Revealer, self).__init__(**kwargs)
+        self.story_outline = story_outline
+        logger.info(&#34;Initializing story render for {}&#34;.format(story_outline.title))
+        self.story_outline.validate()
+        self.base = self.make_base()
+        logger.info(&#34;Loading plugins&#34;)
+        reveal_plugin_config = {
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;name&#39;: &#39;reveal&#39;,
+            &#39;config&#39;: {}
+        }
+        self.update_outline_from_instances()
+        self.plugins = [reveal_plugin_config]
+        self.get_component_implicit_plugins()
+        outline_plugins = presalytics.lib.plugins.base.PluginManager.get_plugins_from_nested_dict(story_outline.to_dict())
+        self.plugins.extend(outline_plugins)
+        self.plugin_mgr = presalytics.lib.plugins.base.PluginManager(self.plugins)
+        logger.info(&#34;Revealer initilized.&#34;)
+
+    @classmethod
+    def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
+        return cls(component, **kwargs)
+
+    def serialize(self) -&gt; &#39;StoryOutline&#39;:
+        self.update_outline_from_instances()
+        return self.story_outline
+
+    def update_outline_from_instances(self, sub_dict: typing.Dict = None):
+        if not sub_dict:
+            sub_dict = self.story_outline.to_dict()
+        if sub_dict:
+            for key, val in sub_dict.items():
+                if key in [&#34;widgets&#34;, &#34;themes&#34;, &#34;pages&#34;]:
+                    if isinstance(val, list):
+                        for list_item in val:
+                            if isinstance(list_item, dict):
+                                if &#34;kind&#34; in list_item:
+                                    class_key = key.rstrip(&#34;s&#34;) + &#34;.&#34; + list_item[&#34;kind&#34;]
+                                    klass = presalytics.COMPONENTS.get(class_key)
+                                    if klass:
+                                        if &#34;name&#34; in list_item:
+                                            instance_key = class_key + &#34;.&#34; + list_item[&#34;name&#34;]
+                                            inst = presalytics.COMPONENTS.get_instance(instance_key)
+                                            if inst:
+                                                self.set_outline_data_from_instance(inst)
+                if isinstance(val, dict):
+                    if len(val.keys()) &gt; 0:
+                        self.update_outline_from_instances(val)
+                if isinstance(val, list):
+                    for list_item in val:
+                        if isinstance(list_item, dict):
+                            self.update_outline_from_instances(list_item)
+
+    def get_component_implicit_plugins(self, sub_dict: typing.Dict = None):
+        if not sub_dict:
+            sub_dict = self.story_outline.to_dict()
+        if sub_dict:
+            for key, val in sub_dict.items():
+                if key in [&#34;widgets&#34;, &#34;themes&#34;, &#34;pages&#34;]:
+                    if isinstance(val, list):
+                        for list_item in val:
+                            if isinstance(list_item, dict):
+                                if &#34;kind&#34; in list_item:
+                                    class_key = key.rstrip(&#34;s&#34;) + &#34;.&#34; + list_item[&#34;kind&#34;]
+                                    klass = presalytics.COMPONENTS.get(class_key)
+                                    if klass:
+                                        if len(klass.__plugins__) &gt; 0:
+                                            self.plugins.extend(klass.__plugins__)
+                                                
+                if isinstance(val, dict):
+                    if len(val.keys()) &gt; 0:
+                        self.get_component_implicit_plugins(val)
+                if isinstance(val, list):
+                    for list_item in val:
+                        if isinstance(list_item, dict):
+                            self.get_component_implicit_plugins(list_item)
+
+    def set_outline_data_from_instance(self, inst: &#39;ComponentBase&#39;):
+        if inst.__component_type__ == &#39;widget&#39;:
+            self.set_widget_outline_data(inst)
+        if inst.__component_type__ == &#39;page&#39;:
+            self.set_page_outline_data(inst)
+        if inst.__component_type__ == &#39;theme&#39;:
+            self.set_theme_outline_data(inst)
+
+    def set_theme_outline_data(self, inst: &#39;ThemeBase&#39;):
+        theme_index = None
+        for t in range(0, len(self.story_outline.themes)):
+            if inst.name == self.story_outline.themes[t].name:
+                theme_index = t
+            if theme_index:
+                break
+        theme_outline = inst.serialize()
+        if theme_index:
+            self.story_outline.themes[theme_index] = theme_outline    
+
+    def set_page_outline_data(self, inst: &#39;PageTemplateBase&#39;):
+        page_index = None
+        for p in range(0, len(self.story_outline.pages)):
+            if inst.name == self.story_outline.pages[p].name:
+                page_index = p
+            if page_index:
+                break
+        page_outline = inst.serialize()
+        if page_index:
+            self.story_outline.pages[page_index] = page_outline
+
+
+    def set_widget_outline_data(self, inst: &#39;WidgetBase&#39;):
+        widget_index = None
+        page_index = None
+        for p in range(0, len(self.story_outline.pages)):
+            for w in range(0, len(self.story_outline.pages[p].widgets)):
+                widget = self.story_outline.pages[p].widgets[w]
+                if widget.name == inst.name:
+                    page_index = p
+                    widget_index = w
+                if page_index:
+                    break
+            if page_index:
+                break
+        w_outline = inst.serialize()
+        if isinstance(page_index, int) and isinstance(widget_index, int):
+            self.story_outline.pages[page_index].widgets[widget_index] = w_outline  
+
+    def update_outline(self):
+        raise NotImplementedError
+
+    def make_base(self):
+        base = lxml.etree.Element(&#34;div&#34;, attrib={&#34;class&#34;: &#34;reveal&#34;})
+        lxml.etree.SubElement(base, &#34;div&#34;, attrib={&#34;class&#34;: &#34;slides&#34;})
+        return base
+
+    def package_as_standalone(self):
+        pres = self.render()
+        body = E.BODY()
+        body.append(pres)
+        body = self.strip_unauthorized_scripts(body)
+        for scripts in self.plugin_mgr.get_scripts():
+            lxml_scripts = lxml.html.fragments_fromstring(scripts)
+            for item in lxml_scripts:
+                body.append(item)
+        head = E.HEAD()
+        for link in self.plugin_mgr.get_styles():
+            lxml_links = lxml.html.fragments_fromstring(link)
+            for item in lxml_links:
+                head.append(item)
+        head = self.strip_unauthorized_scripts(head)
+        html = E.HTML(
+            head,
+            body
+        )
+        return lxml.html.tostring(html, pretty_print=True)
+
+    # def render_plugin(self, plugin):
+    #     plugin_type = plugin[&#39;type&#39;]
+    #     plugin_config = plugin[&#39;config&#39;]
+    #     plugin_class = self.plugin_loader.load(plugin_type)
+    #     script_string = plugin_class().to_string(plugin_config)
+    #     return lxml.html.fragment_fromstring(script_string)
+
+    def strip_unauthorized_scripts(self, body):
+        allowed_scripts = presalytics.lib.plugins.external.ALLOWED_SCRIPTS.flatten().values()
+        script_elements = body.findall(&#34;.//script&#34;)
+        for ele in script_elements:
+            try:
+                link = ele.get(&#34;src&#34;)
+            except KeyError:
+                ele.getparent().remove(ele)
+            if link not in allowed_scripts:
+                ele.getparent().remove(ele)
+        return body
+
+    def update_info(self):
+        info = self.story_outline.info
+        info.date_modified = datetime.datetime.utcnow()
+
+    def render(self):
+        &#34;&#34;&#34;
+        This method returns a t
+        &#34;&#34;&#34;
+        reveal_base = self.base
+        for page in self.story_outline.pages:
+            slides_container = reveal_base[0]
+            slide = lxml.etree.SubElement(slides_container, &#34;section&#34;)
+            page_html = self.render_page(page)
+            slide_fragment = lxml.html.fragment_fromstring(page_html)
+            slide.append(slide_fragment)
+        return reveal_base
+
+    def render_page(self, page: &#39;Page&#39;) -&gt; str:
+        class_key = &#34;page.&#34; + page.kind
+        key = class_key + &#34;.&#34; + page.name
+        if presalytics.COMPONENTS.get_instance(key):
+            page_instance = presalytics.COMPONENTS.get_instance(key)
+        else:
+            klass = presalytics.COMPONENTS.get(class_key)
+            deserialize_method = getattr(klass, &#34;deserialize&#34;, None)
+            if callable(deserialize_method):
+                page_instance = deserialize_method(page, client_info=self.client_info)
+            else:
+                message = &#39;Page component instance or class (kind) &#34;{0}&#34; unavailable in component registry&#39;.format(key)
+                raise presalytics.lib.exceptions.MissingConfigException(message)
+        return page_instance.render()
+
+    def present(self, files_path=None, debug=True, port=8082, host=&#39;127.0.0.1&#39;):
+        logger.info(&#34;Building story rendering at http://{0}:{1}&#34;.format(host, port))
+        if not files_path:
+            files_path = tempfile.gettempdir()
+        logger.info(&#34;Buidling standalone package for local rendering.&#34;)
+        html = self.package_as_standalone().decode(&#39;utf-8&#39;)
+        id = presalytics.story.util.to_title_case(self.story_outline.title)
+        if id == &#39;&#39;:
+            id = &#39;blank&#39;
+        server = presalytics.story.server.LocalServer(host=host, debug=debug, port=port, root_path=files_path)
+        pkg_templates_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), &#34;lib&#34;, &#34;templates&#34;)
+        shutil.copy(os.path.join(pkg_templates_dir, &#34;favicon.ico&#34;), os.path.join(files_path, &#34;presalytics&#34;, &#34;static&#34;))
+        html_file = os.path.join(files_path, &#34;presalytics&#34;, &#34;templates&#34;, id + &#39;.html&#39;)
+        with open(html_file, &#39;w&#39;) as file:
+            file.write(html)
+        address = &#34;http://{}:{}/story/{}&#34;.format(host, port, id)
+        logger.info(&#34;Opening browser tab...&#34;)
+        presalytics.story.server.Browser(address).start()
+        server.run()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.story.components.Renderer" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer">Renderer</a></li>
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="presalytics.story.revealer.Revealer.deserialize"><code class="name flex">
+<span>def <span class="ident">deserialize</span></span>(<span>component, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L66-L68" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@classmethod
+def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
+    return cls(component, **kwargs)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.story.revealer.Revealer.get_component_implicit_plugins"><code class="name flex">
+<span>def <span class="ident">get_component_implicit_plugins</span></span>(<span>self, sub_dict=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L100-L122" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_component_implicit_plugins(self, sub_dict: typing.Dict = None):
+    if not sub_dict:
+        sub_dict = self.story_outline.to_dict()
+    if sub_dict:
+        for key, val in sub_dict.items():
+            if key in [&#34;widgets&#34;, &#34;themes&#34;, &#34;pages&#34;]:
+                if isinstance(val, list):
+                    for list_item in val:
+                        if isinstance(list_item, dict):
+                            if &#34;kind&#34; in list_item:
+                                class_key = key.rstrip(&#34;s&#34;) + &#34;.&#34; + list_item[&#34;kind&#34;]
+                                klass = presalytics.COMPONENTS.get(class_key)
+                                if klass:
+                                    if len(klass.__plugins__) &gt; 0:
+                                        self.plugins.extend(klass.__plugins__)
+                                            
+            if isinstance(val, dict):
+                if len(val.keys()) &gt; 0:
+                    self.get_component_implicit_plugins(val)
+            if isinstance(val, list):
+                for list_item in val:
+                    if isinstance(list_item, dict):
+                        self.get_component_implicit_plugins(list_item)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.make_base"><code class="name flex">
+<span>def <span class="ident">make_base</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L175-L178" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def make_base(self):
+    base = lxml.etree.Element(&#34;div&#34;, attrib={&#34;class&#34;: &#34;reveal&#34;})
+    lxml.etree.SubElement(base, &#34;div&#34;, attrib={&#34;class&#34;: &#34;slides&#34;})
+    return base</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.package_as_standalone"><code class="name flex">
+<span>def <span class="ident">package_as_standalone</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L180-L199" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def package_as_standalone(self):
+    pres = self.render()
+    body = E.BODY()
+    body.append(pres)
+    body = self.strip_unauthorized_scripts(body)
+    for scripts in self.plugin_mgr.get_scripts():
+        lxml_scripts = lxml.html.fragments_fromstring(scripts)
+        for item in lxml_scripts:
+            body.append(item)
+    head = E.HEAD()
+    for link in self.plugin_mgr.get_styles():
+        lxml_links = lxml.html.fragments_fromstring(link)
+        for item in lxml_links:
+            head.append(item)
+    head = self.strip_unauthorized_scripts(head)
+    html = E.HTML(
+        head,
+        body
+    )
+    return lxml.html.tostring(html, pretty_print=True)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.present"><code class="name flex">
+<span>def <span class="ident">present</span></span>(<span>self, files_path=None, debug=True, port=8082, host='127.0.0.1')</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L252-L270" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def present(self, files_path=None, debug=True, port=8082, host=&#39;127.0.0.1&#39;):
+    logger.info(&#34;Building story rendering at http://{0}:{1}&#34;.format(host, port))
+    if not files_path:
+        files_path = tempfile.gettempdir()
+    logger.info(&#34;Buidling standalone package for local rendering.&#34;)
+    html = self.package_as_standalone().decode(&#39;utf-8&#39;)
+    id = presalytics.story.util.to_title_case(self.story_outline.title)
+    if id == &#39;&#39;:
+        id = &#39;blank&#39;
+    server = presalytics.story.server.LocalServer(host=host, debug=debug, port=port, root_path=files_path)
+    pkg_templates_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), &#34;lib&#34;, &#34;templates&#34;)
+    shutil.copy(os.path.join(pkg_templates_dir, &#34;favicon.ico&#34;), os.path.join(files_path, &#34;presalytics&#34;, &#34;static&#34;))
+    html_file = os.path.join(files_path, &#34;presalytics&#34;, &#34;templates&#34;, id + &#39;.html&#39;)
+    with open(html_file, &#39;w&#39;) as file:
+        file.write(html)
+    address = &#34;http://{}:{}/story/{}&#34;.format(host, port, id)
+    logger.info(&#34;Opening browser tab...&#34;)
+    presalytics.story.server.Browser(address).start()
+    server.run()</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.render"><code class="name flex">
+<span>def <span class="ident">render</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This method returns a t</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L224-L235" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def render(self):
+    &#34;&#34;&#34;
+    This method returns a t
+    &#34;&#34;&#34;
+    reveal_base = self.base
+    for page in self.story_outline.pages:
+        slides_container = reveal_base[0]
+        slide = lxml.etree.SubElement(slides_container, &#34;section&#34;)
+        page_html = self.render_page(page)
+        slide_fragment = lxml.html.fragment_fromstring(page_html)
+        slide.append(slide_fragment)
+    return reveal_base</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.render_page"><code class="name flex">
+<span>def <span class="ident">render_page</span></span>(<span>self, page)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L237-L250" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def render_page(self, page: &#39;Page&#39;) -&gt; str:
+    class_key = &#34;page.&#34; + page.kind
+    key = class_key + &#34;.&#34; + page.name
+    if presalytics.COMPONENTS.get_instance(key):
+        page_instance = presalytics.COMPONENTS.get_instance(key)
+    else:
+        klass = presalytics.COMPONENTS.get(class_key)
+        deserialize_method = getattr(klass, &#34;deserialize&#34;, None)
+        if callable(deserialize_method):
+            page_instance = deserialize_method(page, client_info=self.client_info)
+        else:
+            message = &#39;Page component instance or class (kind) &#34;{0}&#34; unavailable in component registry&#39;.format(key)
+            raise presalytics.lib.exceptions.MissingConfigException(message)
+    return page_instance.render()</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.serialize"><code class="name flex">
+<span>def <span class="ident">serialize</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L70-L72" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def serialize(self) -&gt; &#39;StoryOutline&#39;:
+    self.update_outline_from_instances()
+    return self.story_outline</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.set_outline_data_from_instance"><code class="name flex">
+<span>def <span class="ident">set_outline_data_from_instance</span></span>(<span>self, inst)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L124-L130" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def set_outline_data_from_instance(self, inst: &#39;ComponentBase&#39;):
+    if inst.__component_type__ == &#39;widget&#39;:
+        self.set_widget_outline_data(inst)
+    if inst.__component_type__ == &#39;page&#39;:
+        self.set_page_outline_data(inst)
+    if inst.__component_type__ == &#39;theme&#39;:
+        self.set_theme_outline_data(inst)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.set_page_outline_data"><code class="name flex">
+<span>def <span class="ident">set_page_outline_data</span></span>(<span>self, inst)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L143-L152" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def set_page_outline_data(self, inst: &#39;PageTemplateBase&#39;):
+    page_index = None
+    for p in range(0, len(self.story_outline.pages)):
+        if inst.name == self.story_outline.pages[p].name:
+            page_index = p
+        if page_index:
+            break
+    page_outline = inst.serialize()
+    if page_index:
+        self.story_outline.pages[page_index] = page_outline</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.set_theme_outline_data"><code class="name flex">
+<span>def <span class="ident">set_theme_outline_data</span></span>(<span>self, inst)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L132-L141" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def set_theme_outline_data(self, inst: &#39;ThemeBase&#39;):
+    theme_index = None
+    for t in range(0, len(self.story_outline.themes)):
+        if inst.name == self.story_outline.themes[t].name:
+            theme_index = t
+        if theme_index:
+            break
+    theme_outline = inst.serialize()
+    if theme_index:
+        self.story_outline.themes[theme_index] = theme_outline    </code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.set_widget_outline_data"><code class="name flex">
+<span>def <span class="ident">set_widget_outline_data</span></span>(<span>self, inst)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L155-L170" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def set_widget_outline_data(self, inst: &#39;WidgetBase&#39;):
+    widget_index = None
+    page_index = None
+    for p in range(0, len(self.story_outline.pages)):
+        for w in range(0, len(self.story_outline.pages[p].widgets)):
+            widget = self.story_outline.pages[p].widgets[w]
+            if widget.name == inst.name:
+                page_index = p
+                widget_index = w
+            if page_index:
+                break
+        if page_index:
+            break
+    w_outline = inst.serialize()
+    if isinstance(page_index, int) and isinstance(widget_index, int):
+        self.story_outline.pages[page_index].widgets[widget_index] = w_outline  </code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.strip_unauthorized_scripts"><code class="name flex">
+<span>def <span class="ident">strip_unauthorized_scripts</span></span>(<span>self, body)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L208-L218" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def strip_unauthorized_scripts(self, body):
+    allowed_scripts = presalytics.lib.plugins.external.ALLOWED_SCRIPTS.flatten().values()
+    script_elements = body.findall(&#34;.//script&#34;)
+    for ele in script_elements:
+        try:
+            link = ele.get(&#34;src&#34;)
+        except KeyError:
+            ele.getparent().remove(ele)
+        if link not in allowed_scripts:
+            ele.getparent().remove(ele)
+    return body</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.update_info"><code class="name flex">
+<span>def <span class="ident">update_info</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L220-L222" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def update_info(self):
+    info = self.story_outline.info
+    info.date_modified = datetime.datetime.utcnow()</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.update_outline"><code class="name flex">
+<span>def <span class="ident">update_outline</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L172-L173" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def update_outline(self):
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.update_outline_from_instances"><code class="name flex">
+<span>def <span class="ident">update_outline_from_instances</span></span>(<span>self, sub_dict=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L74-L98" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def update_outline_from_instances(self, sub_dict: typing.Dict = None):
+    if not sub_dict:
+        sub_dict = self.story_outline.to_dict()
+    if sub_dict:
+        for key, val in sub_dict.items():
+            if key in [&#34;widgets&#34;, &#34;themes&#34;, &#34;pages&#34;]:
+                if isinstance(val, list):
+                    for list_item in val:
+                        if isinstance(list_item, dict):
+                            if &#34;kind&#34; in list_item:
+                                class_key = key.rstrip(&#34;s&#34;) + &#34;.&#34; + list_item[&#34;kind&#34;]
+                                klass = presalytics.COMPONENTS.get(class_key)
+                                if klass:
+                                    if &#34;name&#34; in list_item:
+                                        instance_key = class_key + &#34;.&#34; + list_item[&#34;name&#34;]
+                                        inst = presalytics.COMPONENTS.get_instance(instance_key)
+                                        if inst:
+                                            self.set_outline_data_from_instance(inst)
+            if isinstance(val, dict):
+                if len(val.keys()) &gt; 0:
+                    self.update_outline_from_instances(val)
+            if isinstance(val, list):
+                for list_item in val:
+                    if isinstance(list_item, dict):
+                        self.update_outline_from_instances(list_item)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="presalytics.story" href="/python-client/presalytics/story/index.html">presalytics.story</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer">Revealer</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.story.revealer.Revealer.deserialize" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.get_component_implicit_plugins" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.get_component_implicit_plugins">get_component_implicit_plugins</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.make_base" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.make_base">make_base</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.package_as_standalone" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.package_as_standalone">package_as_standalone</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.present" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.present">present</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.render" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.render">render</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.render_page" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.render_page">render_page</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.serialize" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.serialize">serialize</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.set_outline_data_from_instance" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.set_outline_data_from_instance">set_outline_data_from_instance</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.set_page_outline_data" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.set_page_outline_data">set_page_outline_data</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.set_theme_outline_data" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.set_theme_outline_data">set_theme_outline_data</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.set_widget_outline_data" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.set_widget_outline_data">set_widget_outline_data</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.strip_unauthorized_scripts" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.strip_unauthorized_scripts">strip_unauthorized_scripts</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.update_info" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.update_info">update_info</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.update_outline" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.update_outline">update_outline</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.update_outline_from_instances" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.update_outline_from_instances">update_outline_from_instances</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

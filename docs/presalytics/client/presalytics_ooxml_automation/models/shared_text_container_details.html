@@ -1,0 +1,1479 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details API documentation</title>
+<meta name="description" content="OOXML Automation …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details</code></h1>
+</header>
+<section id="section-intro">
+<p>OOXML Automation</p>
+<p>This API helps users convert Excel and Powerpoint documents into rich, live dashboards and stories.
+# noqa: E501</p>
+<p>The version of the OpenAPI document: 0.1.0-no-tags
+Generated by: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a></p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L0-L477" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python"># coding: utf-8
+
+&#34;&#34;&#34;
+    OOXML Automation
+
+    This API helps users convert Excel and Powerpoint documents into rich, live dashboards and stories.  # noqa: E501
+
+    The version of the OpenAPI document: 0.1.0-no-tags
+    Generated by: https://openapi-generator.tech
+&#34;&#34;&#34;
+
+
+import pprint
+import re  # noqa: F401
+
+import six
+
+from presalytics.client.presalytics_ooxml_automation.configuration import Configuration
+
+
+class SharedTextContainerDetails(object):
+    &#34;&#34;&#34;NOTE: This class is auto generated by OpenAPI Generator.
+    Ref: https://openapi-generator.tech
+
+    Do not edit the class manually.
+    &#34;&#34;&#34;
+
+    &#34;&#34;&#34;
+    Attributes:
+      openapi_types (dict): The key is attribute name
+                            and the value is attribute type.
+      attribute_map (dict): The key is attribute name
+                            and the value is json key in definition.
+    &#34;&#34;&#34;
+    openapi_types = {
+        &#39;shape_id&#39;: &#39;str&#39;,
+        &#39;parent_shape&#39;: &#39;object&#39;,
+        &#39;outer_xml&#39;: &#39;str&#39;,
+        &#39;paragraphs&#39;: &#39;object&#39;,
+        &#39;axis_id&#39;: &#39;str&#39;,
+        &#39;axis&#39;: &#39;object&#39;,
+        &#39;chart_id&#39;: &#39;str&#39;,
+        &#39;chart&#39;: &#39;object&#39;,
+        &#39;table_cell_id&#39;: &#39;str&#39;,
+        &#39;table_cell&#39;: &#39;object&#39;,
+        &#39;id&#39;: &#39;str&#39;,
+        &#39;date_created&#39;: &#39;datetime&#39;,
+        &#39;user_created&#39;: &#39;str&#39;,
+        &#39;date_modified&#39;: &#39;datetime&#39;,
+        &#39;user_modified&#39;: &#39;str&#39;
+    }
+
+    attribute_map = {
+        &#39;shape_id&#39;: &#39;shapeId&#39;,
+        &#39;parent_shape&#39;: &#39;parentShape&#39;,
+        &#39;outer_xml&#39;: &#39;outerXml&#39;,
+        &#39;paragraphs&#39;: &#39;paragraphs&#39;,
+        &#39;axis_id&#39;: &#39;axisId&#39;,
+        &#39;axis&#39;: &#39;axis&#39;,
+        &#39;chart_id&#39;: &#39;chartId&#39;,
+        &#39;chart&#39;: &#39;chart&#39;,
+        &#39;table_cell_id&#39;: &#39;tableCellId&#39;,
+        &#39;table_cell&#39;: &#39;tableCell&#39;,
+        &#39;id&#39;: &#39;id&#39;,
+        &#39;date_created&#39;: &#39;dateCreated&#39;,
+        &#39;user_created&#39;: &#39;userCreated&#39;,
+        &#39;date_modified&#39;: &#39;dateModified&#39;,
+        &#39;user_modified&#39;: &#39;userModified&#39;
+    }
+
+    def __init__(self, shape_id=None, parent_shape=None, outer_xml=None, paragraphs=None, axis_id=None, axis=None, chart_id=None, chart=None, table_cell_id=None, table_cell=None, id=None, date_created=None, user_created=None, date_modified=None, user_modified=None, local_vars_configuration=None):  # noqa: E501
+        &#34;&#34;&#34;SharedTextContainerDetails - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
+        if local_vars_configuration is None:
+            local_vars_configuration = Configuration()
+        self.local_vars_configuration = local_vars_configuration
+
+        self._shape_id = None
+        self._parent_shape = None
+        self._outer_xml = None
+        self._paragraphs = None
+        self._axis_id = None
+        self._axis = None
+        self._chart_id = None
+        self._chart = None
+        self._table_cell_id = None
+        self._table_cell = None
+        self._id = None
+        self._date_created = None
+        self._user_created = None
+        self._date_modified = None
+        self._user_modified = None
+        self.discriminator = None
+
+        self.shape_id = shape_id
+        if parent_shape is not None:
+            self.parent_shape = parent_shape
+        self.outer_xml = outer_xml
+        self.paragraphs = paragraphs
+        self.axis_id = axis_id
+        if axis is not None:
+            self.axis = axis
+        self.chart_id = chart_id
+        if chart is not None:
+            self.chart = chart
+        self.table_cell_id = table_cell_id
+        if table_cell is not None:
+            self.table_cell = table_cell
+        if id is not None:
+            self.id = id
+        if date_created is not None:
+            self.date_created = date_created
+        if user_created is not None:
+            self.user_created = user_created
+        if date_modified is not None:
+            self.date_modified = date_modified
+        if user_modified is not None:
+            self.user_modified = user_modified
+
+    @property
+    def shape_id(self):
+        &#34;&#34;&#34;Gets the shape_id of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The shape_id of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._shape_id
+
+    @shape_id.setter
+    def shape_id(self, shape_id):
+        &#34;&#34;&#34;Sets the shape_id of this SharedTextContainerDetails.
+
+
+        :param shape_id: The shape_id of this SharedTextContainerDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._shape_id = shape_id
+
+    @property
+    def parent_shape(self):
+        &#34;&#34;&#34;Gets the parent_shape of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The parent_shape of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._parent_shape
+
+    @parent_shape.setter
+    def parent_shape(self, parent_shape):
+        &#34;&#34;&#34;Sets the parent_shape of this SharedTextContainerDetails.
+
+
+        :param parent_shape: The parent_shape of this SharedTextContainerDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._parent_shape = parent_shape
+
+    @property
+    def outer_xml(self):
+        &#34;&#34;&#34;Gets the outer_xml of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The outer_xml of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._outer_xml
+
+    @outer_xml.setter
+    def outer_xml(self, outer_xml):
+        &#34;&#34;&#34;Sets the outer_xml of this SharedTextContainerDetails.
+
+
+        :param outer_xml: The outer_xml of this SharedTextContainerDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._outer_xml = outer_xml
+
+    @property
+    def paragraphs(self):
+        &#34;&#34;&#34;Gets the paragraphs of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The paragraphs of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._paragraphs
+
+    @paragraphs.setter
+    def paragraphs(self, paragraphs):
+        &#34;&#34;&#34;Sets the paragraphs of this SharedTextContainerDetails.
+
+
+        :param paragraphs: The paragraphs of this SharedTextContainerDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._paragraphs = paragraphs
+
+    @property
+    def axis_id(self):
+        &#34;&#34;&#34;Gets the axis_id of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The axis_id of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._axis_id
+
+    @axis_id.setter
+    def axis_id(self, axis_id):
+        &#34;&#34;&#34;Sets the axis_id of this SharedTextContainerDetails.
+
+
+        :param axis_id: The axis_id of this SharedTextContainerDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._axis_id = axis_id
+
+    @property
+    def axis(self):
+        &#34;&#34;&#34;Gets the axis of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The axis of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._axis
+
+    @axis.setter
+    def axis(self, axis):
+        &#34;&#34;&#34;Sets the axis of this SharedTextContainerDetails.
+
+
+        :param axis: The axis of this SharedTextContainerDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._axis = axis
+
+    @property
+    def chart_id(self):
+        &#34;&#34;&#34;Gets the chart_id of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The chart_id of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._chart_id
+
+    @chart_id.setter
+    def chart_id(self, chart_id):
+        &#34;&#34;&#34;Sets the chart_id of this SharedTextContainerDetails.
+
+
+        :param chart_id: The chart_id of this SharedTextContainerDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._chart_id = chart_id
+
+    @property
+    def chart(self):
+        &#34;&#34;&#34;Gets the chart of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The chart of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._chart
+
+    @chart.setter
+    def chart(self, chart):
+        &#34;&#34;&#34;Sets the chart of this SharedTextContainerDetails.
+
+
+        :param chart: The chart of this SharedTextContainerDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._chart = chart
+
+    @property
+    def table_cell_id(self):
+        &#34;&#34;&#34;Gets the table_cell_id of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The table_cell_id of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._table_cell_id
+
+    @table_cell_id.setter
+    def table_cell_id(self, table_cell_id):
+        &#34;&#34;&#34;Sets the table_cell_id of this SharedTextContainerDetails.
+
+
+        :param table_cell_id: The table_cell_id of this SharedTextContainerDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._table_cell_id = table_cell_id
+
+    @property
+    def table_cell(self):
+        &#34;&#34;&#34;Gets the table_cell of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The table_cell of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._table_cell
+
+    @table_cell.setter
+    def table_cell(self, table_cell):
+        &#34;&#34;&#34;Sets the table_cell of this SharedTextContainerDetails.
+
+
+        :param table_cell: The table_cell of this SharedTextContainerDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._table_cell = table_cell
+
+    @property
+    def id(self):
+        &#34;&#34;&#34;Gets the id of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The id of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        &#34;&#34;&#34;Sets the id of this SharedTextContainerDetails.
+
+
+        :param id: The id of this SharedTextContainerDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._id = id
+
+    @property
+    def date_created(self):
+        &#34;&#34;&#34;Gets the date_created of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The date_created of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: datetime
+        &#34;&#34;&#34;
+        return self._date_created
+
+    @date_created.setter
+    def date_created(self, date_created):
+        &#34;&#34;&#34;Sets the date_created of this SharedTextContainerDetails.
+
+
+        :param date_created: The date_created of this SharedTextContainerDetails.  # noqa: E501
+        :type: datetime
+        &#34;&#34;&#34;
+
+        self._date_created = date_created
+
+    @property
+    def user_created(self):
+        &#34;&#34;&#34;Gets the user_created of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The user_created of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._user_created
+
+    @user_created.setter
+    def user_created(self, user_created):
+        &#34;&#34;&#34;Sets the user_created of this SharedTextContainerDetails.
+
+
+        :param user_created: The user_created of this SharedTextContainerDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._user_created = user_created
+
+    @property
+    def date_modified(self):
+        &#34;&#34;&#34;Gets the date_modified of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The date_modified of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: datetime
+        &#34;&#34;&#34;
+        return self._date_modified
+
+    @date_modified.setter
+    def date_modified(self, date_modified):
+        &#34;&#34;&#34;Sets the date_modified of this SharedTextContainerDetails.
+
+
+        :param date_modified: The date_modified of this SharedTextContainerDetails.  # noqa: E501
+        :type: datetime
+        &#34;&#34;&#34;
+
+        self._date_modified = date_modified
+
+    @property
+    def user_modified(self):
+        &#34;&#34;&#34;Gets the user_modified of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The user_modified of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._user_modified
+
+    @user_modified.setter
+    def user_modified(self, user_modified):
+        &#34;&#34;&#34;Sets the user_modified of this SharedTextContainerDetails.
+
+
+        :param user_modified: The user_modified of this SharedTextContainerDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._user_modified = user_modified
+
+    def to_dict(self):
+        &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
+        result = {}
+
+        for attr, _ in six.iteritems(self.openapi_types):
+            value = getattr(self, attr)
+            if isinstance(value, list):
+                result[attr] = list(map(
+                    lambda x: x.to_dict() if hasattr(x, &#34;to_dict&#34;) else x,
+                    value
+                ))
+            elif hasattr(value, &#34;to_dict&#34;):
+                result[attr] = value.to_dict()
+            elif isinstance(value, dict):
+                result[attr] = dict(map(
+                    lambda item: (item[0], item[1].to_dict())
+                    if hasattr(item[1], &#34;to_dict&#34;) else item,
+                    value.items()
+                ))
+            else:
+                result[attr] = value
+
+        return result
+
+    def to_str(self):
+        &#34;&#34;&#34;Returns the string representation of the model&#34;&#34;&#34;
+        return pprint.pformat(self.to_dict())
+
+    def __repr__(self):
+        &#34;&#34;&#34;For `print` and `pprint`&#34;&#34;&#34;
+        return self.to_str()
+
+    def __eq__(self, other):
+        &#34;&#34;&#34;Returns true if both objects are equal&#34;&#34;&#34;
+        if not isinstance(other, SharedTextContainerDetails):
+            return False
+
+        return self.to_dict() == other.to_dict()
+
+    def __ne__(self, other):
+        &#34;&#34;&#34;Returns true if both objects are not equal&#34;&#34;&#34;
+        if not isinstance(other, SharedTextContainerDetails):
+            return True
+
+        return self.to_dict() != other.to_dict()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails"><code class="flex name class">
+<span>class <span class="ident">SharedTextContainerDetails</span></span>
+<span>(</span><span>shape_id=None, parent_shape=None, outer_xml=None, paragraphs=None, axis_id=None, axis=None, chart_id=None, chart=None, table_cell_id=None, table_cell=None, id=None, date_created=None, user_created=None, date_modified=None, user_modified=None, local_vars_configuration=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>NOTE: This class is auto generated by OpenAPI Generator.
+Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a></p>
+<p>Do not edit the class manually.</p>
+<p>SharedTextContainerDetails - a model defined in OpenAPI</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L21-L478" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class SharedTextContainerDetails(object):
+    &#34;&#34;&#34;NOTE: This class is auto generated by OpenAPI Generator.
+    Ref: https://openapi-generator.tech
+
+    Do not edit the class manually.
+    &#34;&#34;&#34;
+
+    &#34;&#34;&#34;
+    Attributes:
+      openapi_types (dict): The key is attribute name
+                            and the value is attribute type.
+      attribute_map (dict): The key is attribute name
+                            and the value is json key in definition.
+    &#34;&#34;&#34;
+    openapi_types = {
+        &#39;shape_id&#39;: &#39;str&#39;,
+        &#39;parent_shape&#39;: &#39;object&#39;,
+        &#39;outer_xml&#39;: &#39;str&#39;,
+        &#39;paragraphs&#39;: &#39;object&#39;,
+        &#39;axis_id&#39;: &#39;str&#39;,
+        &#39;axis&#39;: &#39;object&#39;,
+        &#39;chart_id&#39;: &#39;str&#39;,
+        &#39;chart&#39;: &#39;object&#39;,
+        &#39;table_cell_id&#39;: &#39;str&#39;,
+        &#39;table_cell&#39;: &#39;object&#39;,
+        &#39;id&#39;: &#39;str&#39;,
+        &#39;date_created&#39;: &#39;datetime&#39;,
+        &#39;user_created&#39;: &#39;str&#39;,
+        &#39;date_modified&#39;: &#39;datetime&#39;,
+        &#39;user_modified&#39;: &#39;str&#39;
+    }
+
+    attribute_map = {
+        &#39;shape_id&#39;: &#39;shapeId&#39;,
+        &#39;parent_shape&#39;: &#39;parentShape&#39;,
+        &#39;outer_xml&#39;: &#39;outerXml&#39;,
+        &#39;paragraphs&#39;: &#39;paragraphs&#39;,
+        &#39;axis_id&#39;: &#39;axisId&#39;,
+        &#39;axis&#39;: &#39;axis&#39;,
+        &#39;chart_id&#39;: &#39;chartId&#39;,
+        &#39;chart&#39;: &#39;chart&#39;,
+        &#39;table_cell_id&#39;: &#39;tableCellId&#39;,
+        &#39;table_cell&#39;: &#39;tableCell&#39;,
+        &#39;id&#39;: &#39;id&#39;,
+        &#39;date_created&#39;: &#39;dateCreated&#39;,
+        &#39;user_created&#39;: &#39;userCreated&#39;,
+        &#39;date_modified&#39;: &#39;dateModified&#39;,
+        &#39;user_modified&#39;: &#39;userModified&#39;
+    }
+
+    def __init__(self, shape_id=None, parent_shape=None, outer_xml=None, paragraphs=None, axis_id=None, axis=None, chart_id=None, chart=None, table_cell_id=None, table_cell=None, id=None, date_created=None, user_created=None, date_modified=None, user_modified=None, local_vars_configuration=None):  # noqa: E501
+        &#34;&#34;&#34;SharedTextContainerDetails - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
+        if local_vars_configuration is None:
+            local_vars_configuration = Configuration()
+        self.local_vars_configuration = local_vars_configuration
+
+        self._shape_id = None
+        self._parent_shape = None
+        self._outer_xml = None
+        self._paragraphs = None
+        self._axis_id = None
+        self._axis = None
+        self._chart_id = None
+        self._chart = None
+        self._table_cell_id = None
+        self._table_cell = None
+        self._id = None
+        self._date_created = None
+        self._user_created = None
+        self._date_modified = None
+        self._user_modified = None
+        self.discriminator = None
+
+        self.shape_id = shape_id
+        if parent_shape is not None:
+            self.parent_shape = parent_shape
+        self.outer_xml = outer_xml
+        self.paragraphs = paragraphs
+        self.axis_id = axis_id
+        if axis is not None:
+            self.axis = axis
+        self.chart_id = chart_id
+        if chart is not None:
+            self.chart = chart
+        self.table_cell_id = table_cell_id
+        if table_cell is not None:
+            self.table_cell = table_cell
+        if id is not None:
+            self.id = id
+        if date_created is not None:
+            self.date_created = date_created
+        if user_created is not None:
+            self.user_created = user_created
+        if date_modified is not None:
+            self.date_modified = date_modified
+        if user_modified is not None:
+            self.user_modified = user_modified
+
+    @property
+    def shape_id(self):
+        &#34;&#34;&#34;Gets the shape_id of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The shape_id of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._shape_id
+
+    @shape_id.setter
+    def shape_id(self, shape_id):
+        &#34;&#34;&#34;Sets the shape_id of this SharedTextContainerDetails.
+
+
+        :param shape_id: The shape_id of this SharedTextContainerDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._shape_id = shape_id
+
+    @property
+    def parent_shape(self):
+        &#34;&#34;&#34;Gets the parent_shape of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The parent_shape of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._parent_shape
+
+    @parent_shape.setter
+    def parent_shape(self, parent_shape):
+        &#34;&#34;&#34;Sets the parent_shape of this SharedTextContainerDetails.
+
+
+        :param parent_shape: The parent_shape of this SharedTextContainerDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._parent_shape = parent_shape
+
+    @property
+    def outer_xml(self):
+        &#34;&#34;&#34;Gets the outer_xml of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The outer_xml of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._outer_xml
+
+    @outer_xml.setter
+    def outer_xml(self, outer_xml):
+        &#34;&#34;&#34;Sets the outer_xml of this SharedTextContainerDetails.
+
+
+        :param outer_xml: The outer_xml of this SharedTextContainerDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._outer_xml = outer_xml
+
+    @property
+    def paragraphs(self):
+        &#34;&#34;&#34;Gets the paragraphs of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The paragraphs of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._paragraphs
+
+    @paragraphs.setter
+    def paragraphs(self, paragraphs):
+        &#34;&#34;&#34;Sets the paragraphs of this SharedTextContainerDetails.
+
+
+        :param paragraphs: The paragraphs of this SharedTextContainerDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._paragraphs = paragraphs
+
+    @property
+    def axis_id(self):
+        &#34;&#34;&#34;Gets the axis_id of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The axis_id of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._axis_id
+
+    @axis_id.setter
+    def axis_id(self, axis_id):
+        &#34;&#34;&#34;Sets the axis_id of this SharedTextContainerDetails.
+
+
+        :param axis_id: The axis_id of this SharedTextContainerDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._axis_id = axis_id
+
+    @property
+    def axis(self):
+        &#34;&#34;&#34;Gets the axis of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The axis of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._axis
+
+    @axis.setter
+    def axis(self, axis):
+        &#34;&#34;&#34;Sets the axis of this SharedTextContainerDetails.
+
+
+        :param axis: The axis of this SharedTextContainerDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._axis = axis
+
+    @property
+    def chart_id(self):
+        &#34;&#34;&#34;Gets the chart_id of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The chart_id of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._chart_id
+
+    @chart_id.setter
+    def chart_id(self, chart_id):
+        &#34;&#34;&#34;Sets the chart_id of this SharedTextContainerDetails.
+
+
+        :param chart_id: The chart_id of this SharedTextContainerDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._chart_id = chart_id
+
+    @property
+    def chart(self):
+        &#34;&#34;&#34;Gets the chart of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The chart of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._chart
+
+    @chart.setter
+    def chart(self, chart):
+        &#34;&#34;&#34;Sets the chart of this SharedTextContainerDetails.
+
+
+        :param chart: The chart of this SharedTextContainerDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._chart = chart
+
+    @property
+    def table_cell_id(self):
+        &#34;&#34;&#34;Gets the table_cell_id of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The table_cell_id of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._table_cell_id
+
+    @table_cell_id.setter
+    def table_cell_id(self, table_cell_id):
+        &#34;&#34;&#34;Sets the table_cell_id of this SharedTextContainerDetails.
+
+
+        :param table_cell_id: The table_cell_id of this SharedTextContainerDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._table_cell_id = table_cell_id
+
+    @property
+    def table_cell(self):
+        &#34;&#34;&#34;Gets the table_cell of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The table_cell of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: object
+        &#34;&#34;&#34;
+        return self._table_cell
+
+    @table_cell.setter
+    def table_cell(self, table_cell):
+        &#34;&#34;&#34;Sets the table_cell of this SharedTextContainerDetails.
+
+
+        :param table_cell: The table_cell of this SharedTextContainerDetails.  # noqa: E501
+        :type: object
+        &#34;&#34;&#34;
+
+        self._table_cell = table_cell
+
+    @property
+    def id(self):
+        &#34;&#34;&#34;Gets the id of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The id of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        &#34;&#34;&#34;Sets the id of this SharedTextContainerDetails.
+
+
+        :param id: The id of this SharedTextContainerDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._id = id
+
+    @property
+    def date_created(self):
+        &#34;&#34;&#34;Gets the date_created of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The date_created of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: datetime
+        &#34;&#34;&#34;
+        return self._date_created
+
+    @date_created.setter
+    def date_created(self, date_created):
+        &#34;&#34;&#34;Sets the date_created of this SharedTextContainerDetails.
+
+
+        :param date_created: The date_created of this SharedTextContainerDetails.  # noqa: E501
+        :type: datetime
+        &#34;&#34;&#34;
+
+        self._date_created = date_created
+
+    @property
+    def user_created(self):
+        &#34;&#34;&#34;Gets the user_created of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The user_created of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._user_created
+
+    @user_created.setter
+    def user_created(self, user_created):
+        &#34;&#34;&#34;Sets the user_created of this SharedTextContainerDetails.
+
+
+        :param user_created: The user_created of this SharedTextContainerDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._user_created = user_created
+
+    @property
+    def date_modified(self):
+        &#34;&#34;&#34;Gets the date_modified of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The date_modified of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: datetime
+        &#34;&#34;&#34;
+        return self._date_modified
+
+    @date_modified.setter
+    def date_modified(self, date_modified):
+        &#34;&#34;&#34;Sets the date_modified of this SharedTextContainerDetails.
+
+
+        :param date_modified: The date_modified of this SharedTextContainerDetails.  # noqa: E501
+        :type: datetime
+        &#34;&#34;&#34;
+
+        self._date_modified = date_modified
+
+    @property
+    def user_modified(self):
+        &#34;&#34;&#34;Gets the user_modified of this SharedTextContainerDetails.  # noqa: E501
+
+
+        :return: The user_modified of this SharedTextContainerDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._user_modified
+
+    @user_modified.setter
+    def user_modified(self, user_modified):
+        &#34;&#34;&#34;Sets the user_modified of this SharedTextContainerDetails.
+
+
+        :param user_modified: The user_modified of this SharedTextContainerDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._user_modified = user_modified
+
+    def to_dict(self):
+        &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
+        result = {}
+
+        for attr, _ in six.iteritems(self.openapi_types):
+            value = getattr(self, attr)
+            if isinstance(value, list):
+                result[attr] = list(map(
+                    lambda x: x.to_dict() if hasattr(x, &#34;to_dict&#34;) else x,
+                    value
+                ))
+            elif hasattr(value, &#34;to_dict&#34;):
+                result[attr] = value.to_dict()
+            elif isinstance(value, dict):
+                result[attr] = dict(map(
+                    lambda item: (item[0], item[1].to_dict())
+                    if hasattr(item[1], &#34;to_dict&#34;) else item,
+                    value.items()
+                ))
+            else:
+                result[attr] = value
+
+        return result
+
+    def to_str(self):
+        &#34;&#34;&#34;Returns the string representation of the model&#34;&#34;&#34;
+        return pprint.pformat(self.to_dict())
+
+    def __repr__(self):
+        &#34;&#34;&#34;For `print` and `pprint`&#34;&#34;&#34;
+        return self.to_str()
+
+    def __eq__(self, other):
+        &#34;&#34;&#34;Returns true if both objects are equal&#34;&#34;&#34;
+        if not isinstance(other, SharedTextContainerDetails):
+            return False
+
+        return self.to_dict() == other.to_dict()
+
+    def __ne__(self, other):
+        &#34;&#34;&#34;Returns true if both objects are not equal&#34;&#34;&#34;
+        if not isinstance(other, SharedTextContainerDetails):
+            return True
+
+        return self.to_dict() != other.to_dict()</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dd>
+<section class="desc"><p>dict() -&gt; new empty dictionary
+dict(mapping) -&gt; new dictionary initialized from a mapping object's
+(key, value) pairs
+dict(iterable) -&gt; new dictionary initialized as if via:
+d = {}
+for k, v in iterable:
+d[k] = v
+dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
+in the keyword argument list.
+For example:
+dict(one=1, two=2)</p></section>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dd>
+<section class="desc"><p>dict() -&gt; new empty dictionary
+dict(mapping) -&gt; new dictionary initialized from a mapping object's
+(key, value) pairs
+dict(iterable) -&gt; new dictionary initialized as if via:
+d = {}
+for k, v in iterable:
+d[k] = v
+dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
+in the keyword argument list.
+For example:
+dict(one=1, two=2)</p></section>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.axis"><code class="name">var <span class="ident">axis</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the axis of this SharedTextContainerDetails.
+# noqa: E501</p>
+<p>:return: The axis of this SharedTextContainerDetails.
+# noqa: E501
+:rtype: object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L224-L232" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def axis(self):
+    &#34;&#34;&#34;Gets the axis of this SharedTextContainerDetails.  # noqa: E501
+
+
+    :return: The axis of this SharedTextContainerDetails.  # noqa: E501
+    :rtype: object
+    &#34;&#34;&#34;
+    return self._axis</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.axis_id"><code class="name">var <span class="ident">axis_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the axis_id of this SharedTextContainerDetails.
+# noqa: E501</p>
+<p>:return: The axis_id of this SharedTextContainerDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L203-L211" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def axis_id(self):
+    &#34;&#34;&#34;Gets the axis_id of this SharedTextContainerDetails.  # noqa: E501
+
+
+    :return: The axis_id of this SharedTextContainerDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._axis_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.chart"><code class="name">var <span class="ident">chart</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the chart of this SharedTextContainerDetails.
+# noqa: E501</p>
+<p>:return: The chart of this SharedTextContainerDetails.
+# noqa: E501
+:rtype: object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L266-L274" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def chart(self):
+    &#34;&#34;&#34;Gets the chart of this SharedTextContainerDetails.  # noqa: E501
+
+
+    :return: The chart of this SharedTextContainerDetails.  # noqa: E501
+    :rtype: object
+    &#34;&#34;&#34;
+    return self._chart</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.chart_id"><code class="name">var <span class="ident">chart_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the chart_id of this SharedTextContainerDetails.
+# noqa: E501</p>
+<p>:return: The chart_id of this SharedTextContainerDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L245-L253" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def chart_id(self):
+    &#34;&#34;&#34;Gets the chart_id of this SharedTextContainerDetails.  # noqa: E501
+
+
+    :return: The chart_id of this SharedTextContainerDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._chart_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.date_created"><code class="name">var <span class="ident">date_created</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the date_created of this SharedTextContainerDetails.
+# noqa: E501</p>
+<p>:return: The date_created of this SharedTextContainerDetails.
+# noqa: E501
+:rtype: datetime</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L350-L358" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def date_created(self):
+    &#34;&#34;&#34;Gets the date_created of this SharedTextContainerDetails.  # noqa: E501
+
+
+    :return: The date_created of this SharedTextContainerDetails.  # noqa: E501
+    :rtype: datetime
+    &#34;&#34;&#34;
+    return self._date_created</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.date_modified"><code class="name">var <span class="ident">date_modified</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the date_modified of this SharedTextContainerDetails.
+# noqa: E501</p>
+<p>:return: The date_modified of this SharedTextContainerDetails.
+# noqa: E501
+:rtype: datetime</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L392-L400" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def date_modified(self):
+    &#34;&#34;&#34;Gets the date_modified of this SharedTextContainerDetails.  # noqa: E501
+
+
+    :return: The date_modified of this SharedTextContainerDetails.  # noqa: E501
+    :rtype: datetime
+    &#34;&#34;&#34;
+    return self._date_modified</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the id of this SharedTextContainerDetails.
+# noqa: E501</p>
+<p>:return: The id of this SharedTextContainerDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L329-L337" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def id(self):
+    &#34;&#34;&#34;Gets the id of this SharedTextContainerDetails.  # noqa: E501
+
+
+    :return: The id of this SharedTextContainerDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.outer_xml"><code class="name">var <span class="ident">outer_xml</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the outer_xml of this SharedTextContainerDetails.
+# noqa: E501</p>
+<p>:return: The outer_xml of this SharedTextContainerDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L161-L169" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def outer_xml(self):
+    &#34;&#34;&#34;Gets the outer_xml of this SharedTextContainerDetails.  # noqa: E501
+
+
+    :return: The outer_xml of this SharedTextContainerDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._outer_xml</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.paragraphs"><code class="name">var <span class="ident">paragraphs</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the paragraphs of this SharedTextContainerDetails.
+# noqa: E501</p>
+<p>:return: The paragraphs of this SharedTextContainerDetails.
+# noqa: E501
+:rtype: object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L182-L190" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def paragraphs(self):
+    &#34;&#34;&#34;Gets the paragraphs of this SharedTextContainerDetails.  # noqa: E501
+
+
+    :return: The paragraphs of this SharedTextContainerDetails.  # noqa: E501
+    :rtype: object
+    &#34;&#34;&#34;
+    return self._paragraphs</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.parent_shape"><code class="name">var <span class="ident">parent_shape</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the parent_shape of this SharedTextContainerDetails.
+# noqa: E501</p>
+<p>:return: The parent_shape of this SharedTextContainerDetails.
+# noqa: E501
+:rtype: object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L140-L148" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def parent_shape(self):
+    &#34;&#34;&#34;Gets the parent_shape of this SharedTextContainerDetails.  # noqa: E501
+
+
+    :return: The parent_shape of this SharedTextContainerDetails.  # noqa: E501
+    :rtype: object
+    &#34;&#34;&#34;
+    return self._parent_shape</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.shape_id"><code class="name">var <span class="ident">shape_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the shape_id of this SharedTextContainerDetails.
+# noqa: E501</p>
+<p>:return: The shape_id of this SharedTextContainerDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L119-L127" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def shape_id(self):
+    &#34;&#34;&#34;Gets the shape_id of this SharedTextContainerDetails.  # noqa: E501
+
+
+    :return: The shape_id of this SharedTextContainerDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._shape_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.table_cell"><code class="name">var <span class="ident">table_cell</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the table_cell of this SharedTextContainerDetails.
+# noqa: E501</p>
+<p>:return: The table_cell of this SharedTextContainerDetails.
+# noqa: E501
+:rtype: object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L308-L316" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def table_cell(self):
+    &#34;&#34;&#34;Gets the table_cell of this SharedTextContainerDetails.  # noqa: E501
+
+
+    :return: The table_cell of this SharedTextContainerDetails.  # noqa: E501
+    :rtype: object
+    &#34;&#34;&#34;
+    return self._table_cell</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.table_cell_id"><code class="name">var <span class="ident">table_cell_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the table_cell_id of this SharedTextContainerDetails.
+# noqa: E501</p>
+<p>:return: The table_cell_id of this SharedTextContainerDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L287-L295" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def table_cell_id(self):
+    &#34;&#34;&#34;Gets the table_cell_id of this SharedTextContainerDetails.  # noqa: E501
+
+
+    :return: The table_cell_id of this SharedTextContainerDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._table_cell_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.user_created"><code class="name">var <span class="ident">user_created</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the user_created of this SharedTextContainerDetails.
+# noqa: E501</p>
+<p>:return: The user_created of this SharedTextContainerDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L371-L379" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def user_created(self):
+    &#34;&#34;&#34;Gets the user_created of this SharedTextContainerDetails.  # noqa: E501
+
+
+    :return: The user_created of this SharedTextContainerDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._user_created</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.user_modified"><code class="name">var <span class="ident">user_modified</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the user_modified of this SharedTextContainerDetails.
+# noqa: E501</p>
+<p>:return: The user_modified of this SharedTextContainerDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L413-L421" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def user_modified(self):
+    &#34;&#34;&#34;Gets the user_modified of this SharedTextContainerDetails.  # noqa: E501
+
+
+    :return: The user_modified of this SharedTextContainerDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._user_modified</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the model properties as a dict</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L434-L456" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_dict(self):
+    &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
+    result = {}
+
+    for attr, _ in six.iteritems(self.openapi_types):
+        value = getattr(self, attr)
+        if isinstance(value, list):
+            result[attr] = list(map(
+                lambda x: x.to_dict() if hasattr(x, &#34;to_dict&#34;) else x,
+                value
+            ))
+        elif hasattr(value, &#34;to_dict&#34;):
+            result[attr] = value.to_dict()
+        elif isinstance(value, dict):
+            result[attr] = dict(map(
+                lambda item: (item[0], item[1].to_dict())
+                if hasattr(item[1], &#34;to_dict&#34;) else item,
+                value.items()
+            ))
+        else:
+            result[attr] = value
+
+    return result</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.to_str"><code class="name flex">
+<span>def <span class="ident">to_str</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the string representation of the model</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.py#L458-L460" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_str(self):
+    &#34;&#34;&#34;Returns the string representation of the model&#34;&#34;&#34;
+    return pprint.pformat(self.to_dict())</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/index.html">presalytics.client.presalytics_ooxml_automation.models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails">SharedTextContainerDetails</a></code></h4>
+<ul class="two-column">
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.attribute_map">attribute_map</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.axis" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.axis">axis</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.axis_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.axis_id">axis_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.chart" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.chart">chart</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.chart_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.chart_id">chart_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.date_created" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.date_created">date_created</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.date_modified" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.date_modified">date_modified</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.id">id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.outer_xml" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.outer_xml">outer_xml</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.paragraphs" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.paragraphs">paragraphs</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.parent_shape" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.parent_shape">parent_shape</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.shape_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.shape_id">shape_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.table_cell" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.table_cell">table_cell</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.table_cell_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.table_cell_id">table_cell_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.to_dict" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.to_dict">to_dict</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.to_str" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.to_str">to_str</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.user_created" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.user_created">user_created</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.user_modified" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container_details.SharedTextContainerDetails.user_modified">user_modified</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

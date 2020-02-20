@@ -12,7 +12,34 @@ if typing.TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def story_post_file_bytes(client: 'Client', binary_obj: 'BytesIO', filename: str, mime_type: str = None):
+def story_post_file_bytes(client: 'Client', 
+                          binary_obj: 'BytesIO', 
+                          filename: str,
+                          mime_type: str = None):
+    """
+    Create a Presalytics API Story object from a file-like `io.BytesIO` object.  Helpful for server-side 
+    interaction with the Presaltyics Story API
+
+    Parameters
+    ----------
+    client : presalytics.client.api.Client
+        A client object for making api calls
+    
+    binary_obj : io.BytesIO
+        A file-like object for storing file-data in memory.  Often found in multipart messages
+        uploaded from browsers.
+    
+    filename : str
+        The filename of the object to be uploaded
+
+    mimetype : str, optional
+        If known, please add the mimetype of the file.  Otherwise, this method will execute an 
+        additional API call ascertain the file's mimetype
+
+    Returns
+    ----------
+    A `presalytics.client.presalytics_story.models.story.Story` containing information about the Story object in the Presalytics API
+    """
     if not mime_type:
         mime_type = presalytics.lib.tools.ooxml_tools.get_mime_type_from_filename(client, filename)
     _file = {'file': (filename, binary_obj, mime_type,)}

@@ -2,12 +2,15 @@ import abc
 import typing
 import os
 import logging
+import webbrowser
+import posixpath
 import presalytics.lib
 import presalytics.lib.registry
 import presalytics.lib.exceptions
+import presalytics.lib.constants
 import presalytics.client.api
 if typing.TYPE_CHECKING:
-    from presalytics.story.outline import Widget, Page, Plugin, OutlineBase
+    from presalytics.story.outline import Widget, Page, Plugin, OutlineBase, StoryOutline
 
 
 logger = logging.getLogger("presalytics.story.components")
@@ -79,7 +82,7 @@ class ComponentBase(abc.ABC):
         raise NotImplementedError
 
     @classmethod
-    def deserialize(cls, component: typing.Type['OutlineBase'], **kwargs):
+    def deserialize(cls, component, **kwargs):
         raise NotImplementedError
 
     def get_client(self):
@@ -172,7 +175,7 @@ class WidgetBase(ComponentBase):
         raise NotImplementedError
 
     @classmethod
-    def deserialize(cls, widget: 'Widget', **kwargs) -> 'WidgetBase':
+    def deserialize(cls, component: 'Widget', **kwargs) -> 'WidgetBase':
         """
         Creates an instance of the widget from the data object in the presalytics.story.outline.Widget
         object. This method exists to ensure widgets can be portable across environments.  To clarify,
@@ -317,10 +320,210 @@ class ThemeBase(ComponentBase):
 
 
 class Renderer(ComponentBase):
-    __component_type__ = 'renderer'
+    story_outline: 'StoryOutline'
+    plugins: typing.List[typing.Dict]
 
-    def __init__(self, **kwargs):
+    __component_type__ = 'renderer'
+    
+    def __init__(self, story_outline : 'StoryOutline', **kwargs):
         super(Renderer, self).__init__(**kwargs)
+        self.story_outline = story_outline
+        try:
+            self.site_host = presalytics.CONFIG["HOSTS"]["SITE"]
+        except (KeyError, AttributeError):
+            self.site_host = presalytics.lib.constants.SITE_HOST
+        
+            
+    
+    def strip_unauthorized_scripts(self, body):
+        """
+        Finds and remove unauthorized scripts from that the html document.  For security reasons,
+        content in `<script>` tags that has not been vetted by presalytics.io devops 
+
+        If you would like to get a tag included int eh base library, raise an issue on 
+        [Github](https://github.com/presalytics/python-client/issues/new).  We'd love to hear from you and learn 
+        about your use case, and will respond promptly to help.
+        """
+        allowed_scripts = presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().values()
+        script_elements = body.findall(".//script")
+        for ele in script_elements:
+            try:
+                link = ele.get("src")
+            except KeyError:
+                ele.getparent().remove(ele)
+            if link not in allowed_scripts:
+                ele.getparent().remove(ele)
+        return body
+        
+    @classmethod
+    def deserialize(cls, component: 'StoryOutline', **kwargs):
+        """
+        Initializes the class from a `presalytics.story.outline.StoryOutline`.  See __init___.
+        """
+        return cls(component, **kwargs)
+
+    def serialize(self) -> 'StoryOutline':
+        """
+        Updates the story_outline
+
+        Returns
+        -----------
+        A refreshed `presalytics.story.outline.StoryOutline`
+        """
+        self.update_outline_from_instances()
+        return self.story_outline
+
+    def update_outline_from_instances(self, sub_dict: typing.Dict = None):
+        """
+        If a component instance for the widget is available in `presalytics.COMPONENTS`, 
+        this method find the instance and regenerates the component data 
+        so the latest data is avialable during the renering process.
+        """
+        if not sub_dict:
+            sub_dict = self.story_outline.to_dict()
+        if sub_dict:
+            for key, val in sub_dict.items():
+                if key in ["widgets", "themes", "pages"]:
+                    if isinstance(val, list):
+                        for list_item in val:
+                            if isinstance(list_item, dict):
+                                if "kind" in list_item:
+                                    class_key = key.rstrip("s") + "." + list_item["kind"]
+                                    klass = presalytics.COMPONENTS.get(class_key)
+                                    if klass:
+                                        if "name" in list_item:
+                                            instance_key = class_key + "." + list_item["name"]
+                                            inst = presalytics.COMPONENTS.get_instance(instance_key)
+                                            if inst:
+                                                self._set_outline_data_from_instance(inst)
+                if isinstance(val, dict):
+                    if len(val.keys()) > 0:
+                        self.update_outline_from_instances(val)
+                if isinstance(val, list):
+                    for list_item in val:
+                        if isinstance(list_item, dict):
+                            self.update_outline_from_instances(list_item)
+
+    def get_component_implicit_plugins(self, sub_dict: typing.Dict = None):
+        """
+        Retrieves plugin data from plugins attached to `presalytics.story.components`
+        objects reference in the `presaltyics.story.outline.StoryOutline`
+        """
+        if not sub_dict:
+            sub_dict = self.story_outline.to_dict()
+        if sub_dict:
+            for key, val in sub_dict.items():
+                if key in ["widgets", "themes", "pages"]:
+                    if isinstance(val, list):
+                        for list_item in val:
+                            if isinstance(list_item, dict):
+                                if "kind" in list_item:
+                                    class_key = key.rstrip("s") + "." + list_item["kind"]
+                                    klass = presalytics.COMPONENTS.get(class_key)
+                                    if klass:
+                                        if len(klass.__plugins__) > 0:
+                                            self.plugins.extend(klass.__plugins__)                           
+                if isinstance(val, dict):
+                    if len(val.keys()) > 0:
+                        self.get_component_implicit_plugins(val)
+                if isinstance(val, list):
+                    for list_item in val:
+                        if isinstance(list_item, dict):
+                            self.get_component_implicit_plugins(list_item)
+
+    def _set_outline_data_from_instance(self, inst):
+        
+        if inst.__component_type__ == 'widget':
+            self._set_widget_outline_data(inst)
+        if inst.__component_type__ == 'page':
+            self._set_page_outline_data(inst)
+        if inst.__component_type__ == 'theme':
+            self._set_theme_outline_data(inst)
+
+    def _set_theme_outline_data(self, inst: 'ThemeBase'):
+        theme_index = None
+        for t in range(0, len(self.story_outline.themes)):
+            if inst.name == self.story_outline.themes[t].name:
+                theme_index = t
+            if theme_index:
+                break
+        theme_outline = inst.serialize()
+        if theme_index:
+            self.story_outline.themes[theme_index] = theme_outline    
+
+    def _set_page_outline_data(self, inst: 'PageTemplateBase'):
+        page_index = None
+        for p in range(0, len(self.story_outline.pages)):
+            if inst.name == self.story_outline.pages[p].name:
+                page_index = p
+            if page_index:
+                break
+        page_outline = inst.serialize()
+        if page_index:
+            self.story_outline.pages[page_index] = page_outline
+
+    def _set_widget_outline_data(self, inst: 'WidgetBase'):
+        widget_index: typing.Optional[int]
+        page_index: typing.Optional[int]
+        widget_index = None
+        page_index = None
+        for p in range(0, len(self.story_outline.pages)):
+            for w in range(0, len(self.story_outline.pages[p].widgets)):
+                widget = self.story_outline.pages[p].widgets[w]
+                if widget.name == inst.name:
+                    page_index = p
+                    widget_index = w
+                if page_index:
+                    break
+            if page_index:
+                break
+        w_outline = inst.serialize()
+        if isinstance(page_index, int) and isinstance(widget_index, int): #  Causes 'unsupported target for assingment error`
+            self.story_outline.pages[page_index].widgets[widget_index] = w_outline #type: ignore
+
+    def update_story(self):
+        """
+        Updates the StoryOutline and pushes those updates to the Presalytics API Story service
+        """
+        self.update_outline_from_instances()
+        client = presalytics.client.api.Client(**self.client_info)
+        story = client.story.story_id_get(self.story_outline.info.story_id)
+        story.outline = self.story_outline.dump()
+        client.story.story_id_put(story.id, story)
+    
+    def view(self, update=True):
+        """
+        Updates a story and opens it on the presalytics.io website
+
+        Parameters
+        ----------
+        update : bool
+            Defaults to True.  Indicates whether the StoryOutline should be updated
+            prior to opening in the web browser
+        """
+        if update:
+            self.update_story()
+        endpoint = presalytics.lib.constants.STORY_VIEW_URL.format(self.story_outline.info.story_id)
+        url = posixpath.join(self.site_host, endpoint)
+        webbrowser.open_new_tab(url)
+
+
+    def manage(self, update=True):
+        """
+        Updates a story and opens the management page on the presalytics.io website
+
+        Parameters
+        ----------
+        update : bool
+            Defaults to True.  Indicates whether the StoryOutline should be updated
+            prior to opening in the web browser
+        """
+        if update:
+            self.update_story()
+        endpoint = presalytics.lib.constants.STORY_MANAGE_URL.format(self.story_outline.info.story_id)
+        url = posixpath.join(self.site_host, endpoint)
+        webbrowser.open_new_tab(url)
+
 
 
 class ComponentRegistry(presalytics.lib.registry.RegistryBase):

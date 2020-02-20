@@ -18,6 +18,24 @@ logger = logging.getLogger(__name__)
 
 
 def create_story_from_ooxml_file(filename: str, client_info={}) -> 'Story':
+    """
+    Utility Method for building stories into the Presalytics API directly from a Presentation or Spreadsheet file. 
+
+    Parameters
+    ----------
+    filename : str
+        A string contain the local path to a presenation or spreadsheet object.
+
+    client_info : dict, optional
+        A dictionary containing arguments that will be unpacked and passed to a `presalytics.client.api.Client` object on intialization. 
+        This dictionary can include the `token`, `cache_tokens`, `delegate_login` values.  See `presalytics.client.api.Client` for more information.
+
+    Returns:
+    ----------
+    A `presalytics.client.presalytics_story.models.story.Story` containing information about the Story object in the Presalytics API
+
+    """
+
     story: 'Story'
     logger.info("Starting presalytics tool: create_story_from_ooxml_file")
     logger.info("Intializing presalytics client.")
@@ -39,13 +57,47 @@ def create_story_from_ooxml_file(filename: str, client_info={}) -> 'Story':
     return story
 
 
-def create_outline_from_ooxml_document(story: 'Story',
+def create_outline_from_ooxml_document(story_api: 'Story',
                                        ooxml_document: 'Document',
                                        title: str = None,
                                        description: str = None,
                                        themes: typing.Sequence['ThemeBase'] = None,
                                        client_info={}):
+    """
+    Utility Method for generating a story from a presenation or spreadsheet file
 
+    This method encapsulates a standard workflow for interating the the Presalytics
+    API into a single function.  This method takes known `presalytics.client.presalytics_ooxml_automation.models.document.Document`
+    with a known `presalytics.client.presalytics_story.models.story.Story`.  This method returns a `presalytics.story.outline.StoryOutline`
+    that can be used to replace with existing `presalytics.story.outline.StoryOutline` on the story if the user warrants it.
+    
+
+    Parameters
+    ----------
+    story_api : presalytics.client.presalytics_story.models.story.Story
+        The represenation for the Presalytics API instance that will recieve a new associate with the  **ooxml_document**
+
+    ooxml_document : presalytics.client.presalytics_ooxml_automation.models.document.Document 
+        the new ooxml_document will be associated with the story.  The outline will be generated from this object
+
+    title : str, optional
+        If not provided, the story will take on the title of the `presalytics.client.presalytics_ooxml_automation.models.document.Document` object
+
+    description : str, optional
+        If not provided, the story description will initialize as the empty string
+    
+    themes : list of presalytics.story.components.ThemeBase, optional
+        A list of the themes to added to the returned `presalytics.story.outline.StoryOutline`
+    
+    client_info : dict, optional
+        A dictionary containing arguments that will be unpacked and passed to a `presalytics.client.api.Client` object on intialization. 
+        This dictionary can include the `token`, `cache_tokens`, `delegate_login` values.  See `presalytics.client.api.Client` for more information.
+
+    Returns
+    ----------
+    A `presalytics.story.outline.StoryOutline` for the user to optionally serialize and append to the story in downstream operations
+
+    """
     info = presalytics.story.outline.Info(
         revision=0,
         date_created=datetime.datetime.utcnow().isoformat(),
@@ -60,7 +112,7 @@ def create_outline_from_ooxml_document(story: 'Story',
     else:
         _description = ""
 
-    pages = create_pages_from_ooxml_document(story, ooxml_document, client_info=client_info)
+    pages = create_pages_from_ooxml_document(story_api, ooxml_document, client_info=client_info)
 
     if themes:
         _themes = themes
@@ -88,6 +140,26 @@ def create_outline_from_ooxml_document(story: 'Story',
 def create_pages_from_ooxml_document(story: 'Story', 
                                      ooxml_document: 'Document',
                                      client_info={}):
+    """
+    Utility Method for building stories into the Presalytics API directly from a Presenation or Spreadsheet file. 
+
+    Parameters
+    ----------
+    story : presalytics.client.presalytics_story.models.story.Story
+        Representation for Presaltyics API Story object
+
+    ooxml_document: presalytics.client.presalytics_ooxml_automation.models.document.Document
+        The ooxml_document on the story that you want to create pages from
+
+    client_info : dict, optional
+        A dictionary containing arguments that will be unpacked and passed to a `presalytics.client.api.Client` object on intialization. 
+        This dictionary can include the `token`, `cache_tokens`, `delegate_login` values.  See `presalytics.client.api.Client` for more information.
+
+    Returns:
+    ----------
+    A list of `presalytics.story.outline.Page` objects representing the slides, pages and charts in the source document
+
+    """
     pages = []
     client = presalytics.Client(**client_info)
     child_objects = client.ooxml_automation.documents_childobjects_get_id(ooxml_document.id)
@@ -120,6 +192,23 @@ def create_pages_from_ooxml_document(story: 'Story',
 
 
 def create_theme_from_ooxml_document(document_id: str, client_info={}):
+    """
+    Creates a `presalytics.story.outline.Theme` object from an Presalytics API ooxml_document object
+
+    Parameters:
+    ----------
+    document_id: str
+        A string containing a uuid that corresponds to a document in the Ooxml Automation service of the Presalytics API
+
+    client_info : dict, optional
+        A dictionary containing arguments that will be unpacked and passed to a `presalytics.client.api.Client` object on intialization. 
+        This dictionary can include the `token`, `cache_tokens`, `delegate_login` values.  See `presalytics.client.api.Client` for more information.
+
+    Returns:
+    ----------
+    A `presalytics.story.outline.Theme` object with formats extracted from the ooxml_document
+
+    """
     client = presalytics.Client(**client_info)
     child_objects = client.ooxml_automation.documents_childobjects_get_id(document_id)
     themes = [x for x in child_objects if x.object_type == "Theme.Themes"]
@@ -146,6 +235,22 @@ def create_theme_from_ooxml_document(document_id: str, client_info={}):
     return theme.serialize().to_dict()
 
 def get_mime_type_from_filename(client: presalytics.Client, filename) -> typing.Optional[str]:
+    """
+    Determines the mimetype from a file's type extension
+
+    Parameters:
+    ----------
+    client : presalytics.client.api.Client
+        A client object for making api calls
+    
+    filename : str
+        A filename against which the method can lookup mimetypes
+
+    Returns:
+    ----------
+    A string containing a mimetype to attach to file uploads
+
+    """
     doc_types = client.ooxml_automation.documents_documenttype_get()
     file_extension = filename.split(".")[-1]
     try:

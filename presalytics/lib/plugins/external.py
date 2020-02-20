@@ -9,47 +9,6 @@ try:
 except (KeyError, AttributeError, ImportError, ModuleNotFoundError):
     pass
 
-script_map = {
-    'd3': 'https://cdnjs.cloudflare.com/ajax/libs/d3/5.12.0/d3.min.js',
-    'd3v3': 'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js',
-    'reveal': {
-        'base': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js',
-        'marked': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/marked.js',
-        'markdown': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js',
-        'highlight': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/highlight/highlight.min.js',
-        'math': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js',
-        'zoom': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js',
-        'notes': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js',
-        'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js'
-
-    },
-    'mpld3': '{0}/static/mpld3/mpld3.min.js'.format(site_host),
-    'ooxml': '{0}/static/ooxml/ooxml.js'.format(site_host),
-    'jquery': 'https://code.jquery.com/jquery-3.4.1.min.js'
-}
-
-
-styles_map = {
-    'reveal': {
-        'base': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css',
-        'themes': {
-            'beige': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/beige.min.css',
-            'black': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/black.min.css',
-            'blood': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/blood.min.css',
-            'league': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/league.min.css',
-            'moon': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/moon.min.css',
-            'night': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/night.min.css',
-            'serif': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/serif.min.css',
-            'simple': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/simple.min.css',
-            'sky': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/sky.min.css',
-            'solarized': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/solarized.min.css',
-            'white': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css'
-        },
-        'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css'
-    },
-    'preloaders' : '{0}/static/css/preloaders.css'.format(site_host)
-}
-
 
 class AttrDict(dict):
     """ Dictionary subclass whose entries can be accessed by attributes
@@ -82,30 +41,113 @@ class AttrDict(dict):
         return result
 
 
-ALLOWED_SCRIPTS = AttrDict(script_map)
-
-
-ALLOWED_STYLES = AttrDict(styles_map)
-
-
 class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
+    """
+    `presalytics.lib.plugins.base.StylePlugin` subclass for converting a `presalytics.story.outline.Plugin` 
+    config into an html `<link>` fragment.
+
+    Attributes:
+    ----------
+
+    attr_dict: An `presalytics.lib.plugins.external.AttrDict` that performs nested lookups on the
+    `presalytics.lib.plugins.external.ApprovedExternalLinks.STYLES_MAP`
+    """
     __plugin_name__ = 'external_links'
 
+    STYLES_MAP = {
+        'reveal': {
+            'base': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css',
+            'themes': {
+                'beige': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/beige.min.css',
+                'black': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/black.min.css',
+                'blood': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/blood.min.css',
+                'league': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/league.min.css',
+                'moon': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/moon.min.css',
+                'night': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/night.min.css',
+                'serif': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/serif.min.css',
+                'simple': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/simple.min.css',
+                'sky': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/sky.min.css',
+                'solarized': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/solarized.min.css',
+                'white': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css'
+            },
+            'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css'
+        },
+        'preloaders' : '{0}/static/css/preloaders.css'.format(site_host)
+    }
+    
+    """
+    Static nested dictionary containing links to external stylesheets that will be rendered alongside this plugin
+    """
+
+    def __init__(self, **kwargs):
+        super(ApprovedExternalLinks, self).__init__(**kwargs)
+        self.attr_dict = AttrDict(self.STYLES_MAP)
+
+
     def to_style(self, config, **kwargs):
+        """
+        Converts a dot-notation key for nested dictionaries (e.g., 'reveal.base') into a
+        string contain an html fragement with `<link>` tag.  The dot-notation key 
+        is pulled from the 'approved_styles_key' of the 'config' attrubte of subclass 
+        of a `presalytics.story.outline.Plugin` object.
+        """
         key = config['approved_styles_key']
-        link = ALLOWED_STYLES.flatten()[key]
+        link = self.attr_dict.flatten()[key]
         if link is None:
-            message = "Key {0} does not reference a link in the APPROVED_LINKS dictionary".format(key)
+            message = "Key {0} does not reference a link in the APPROVED_STYLES dictionary".format(key)
             raise presalytics.lib.exceptions.MissingConfigException(message)
         return '<link rel="stylesheet" href="{0}"/>'.format(link)
 
 
 class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
+    """
+    `presalytics.lib.plugins.base.ScriptPlugin` subclass for converting a `presalytics.story.outline.Plugin` 
+    config into an html `<script>` fragment.
+
+    Attributes:
+    ----------
+
+    attr_dict: An `presalytics.lib.plugins.external.AttrDict` that performs nested lookups on the
+    `presalytics.lib.plugins.external.ApprovedExternalScripts.SCRIPT_MAP`
+    """
     __plugin_name__ = 'external_scripts'
 
+    SCRIPT_MAP = {
+        'd3': 'https://cdnjs.cloudflare.com/ajax/libs/d3/5.12.0/d3.min.js',
+        'd3v3': 'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js',
+        'reveal': {
+            'base': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js',
+            'marked': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/marked.js',
+            'markdown': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js',
+            'highlight': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/highlight/highlight.min.js',
+            'math': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js',
+            'zoom': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js',
+            'notes': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js',
+            'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js'
+
+        },
+        'mpld3': '{0}/static/mpld3/mpld3.min.js'.format(site_host),
+        'ooxml': '{0}/static/ooxml/ooxml.js'.format(site_host),
+        'jquery': 'https://code.jquery.com/jquery-3.4.1.min.js'
+    }
+    """
+    Static nested dictionary containing links to external scripts that will be rendered alongside this plugin
+    """
+
+    def __init__(self, **kwargs):
+        super(ApprovedExternalScripts, self).__init__(**kwargs)
+        self.attr_dict = AttrDict(self.SCRIPT_MAP)
+
+
     def to_script(self, config, **kwargs):
+        """
+        Converts a dot-notation key for nested dictionaries (e.g., 'reveal.base') into a
+        string containing an html fragement with `<script>` tags.  The dot-notation key 
+        is pulled from the 'approved_styles_key' of the 'config' attrubte of subclass 
+        of a `presalytics.story.outline.Plugin` object.
+        """
         key = config['approved_scripts_key']
-        link = ALLOWED_SCRIPTS.flatten()[key]
+        link = self.attr_dict.flatten()[key]
         if link is None:
             message = "Key {0} does not reference a link in the APPROVED_SCRIPTS dictionary".format(key)
             raise presalytics.lib.exceptions.MissingConfigException(message)

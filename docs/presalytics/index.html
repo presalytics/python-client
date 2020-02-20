@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.4" />
 <title>presalytics API documentation</title>
-<meta name="description" content="Presalytics python client
-https://presalytics.io" />
+<meta name="description" content="Presalytics Python Library
+For more information, visit https://presalytics.io …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -21,16 +21,88 @@ https://presalytics.io" />
 <h1 class="title">Module <code>presalytics</code></h1>
 </header>
 <section id="section-intro">
-<p>Presalytics python client
-<a href="https://presalytics.io">https://presalytics.io</a></p>
+<h1 id="presalytics-python-library">Presalytics Python Library</h1>
+<p>For more information, visit <a href="https://presalytics.io.">https://presalytics.io.</a></p>
+<h1 id="overview">Overview</h1>
+<p>The Presalytics Python Library streamlines analytic operations across analysts, executives, consultants,
+and developers.
+These tools enable for a simplified workflow for analysts to rapidly generate
+client-ready presentation materials and web content that update in real-time and easily scale across your user-base.
+</p>
+<p>Our objective when building this platform is make the analyst experience as simple as possible.<br>
+Set up time for new user should take less than half an hour, and all features are self-service and self-explanatory.<br>
+Of course, if you have any questions or need help to get going, you can <a href="/contact-us">contact us</a> or
+quickly get the help you need on our <a href="https://presalytics.slack.com">slack channel</a>
+(<a href="https://join.slack.com/t/presalytics/shared_invite/enQtODExMjc3MDE1Nzc5LWU0ZDlhZTgwZTM3MzQ4Yzc4Nzk4Zjc0NmQ3YjgzNTEwODdlYjM0ZjFkZWI4Y2ZhNzBmOTZhMzA2MzE3YjFiZTg">Join Here!</a>).</p>
+<p>To get going quickly, you can browse our <a href="https://presalytics.io/docs/getting-started/">Getting Started</a> page and review
+some <a href="https://presalytics.io/docs/examples">examples</a>.</p>
+<p>For more advanced users developers, you can learn more about the API by reviewing
+the <a href="https://presalytics.io/docs/how-it-works">service structure</a> and building a better understanding
+of the API <a href="https://presaltyics.io/docs/develpers/security">security</a> features.</p>
+<h1 id="installation">Installation</h1>
+<p>The Presalytics Python Library is avialabe in python package index, and can be installed via pip:</p>
+<pre><code class="python">pip install presalytics
+</code></pre>
+<h1 id="contributing">Contributing</h1>
+<p>Presaltyics.io is on <a href="https://github.com/presalytics">Github</a>.
+Bug reports and pull requests are strongly encouraged at
+the package <a href="https://github.com/presalytics/python-client">repository</a>. If you encounter any problems or have any suggestions for
+the API endpoints that this libary interacts with at <a href="https://api.presaltyics.io,">https://api.presaltyics.io,</a> please open an issue in the
+<a href="https://github.com/presalytics/Presalytics-API">API repository</a>.</p>
+<h1 id="license">License</h1>
+<p>The Presaltyics Python Library can be used in any of your applications and is covered by the MIT License.
+This library
+exchanges infromation with other web APIs that may be proprietary and carry their own licensing restriction.
+More more
+information on licensing, please contact <a href="mailto:inquires@presaltyics.io">inquires@presaltyics.io</a>.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/__init__.py#L0-L100" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/__init__.py#L0-L140" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-Presalytics python client
-https://presalytics.io
+# Presalytics Python Library
+For more information, visit https://presalytics.io.
+
+# Overview
+
+The Presalytics Python Library streamlines analytic operations across analysts, executives, consultants, 
+and developers.  These tools enable for a simplified workflow for analysts to rapidly generate 
+client-ready presentation materials and web content that update in real-time and easily scale across your user-base.  
+
+Our objective when building this platform is make the analyst experience as simple as possible.  
+Set up time for new user should take less than half an hour, and all features are self-service and self-explanatory.  
+Of course, if you have any questions or need help to get going, you can [contact us](/contact-us) or 
+quickly get the help you need on our [slack channel](https://presalytics.slack.com) 
+([Join Here!](https://join.slack.com/t/presalytics/shared_invite/enQtODExMjc3MDE1Nzc5LWU0ZDlhZTgwZTM3MzQ4Yzc4Nzk4Zjc0NmQ3YjgzNTEwODdlYjM0ZjFkZWI4Y2ZhNzBmOTZhMzA2MzE3YjFiZTg)).
+
+To get going quickly, you can browse our [Getting Started](https://presalytics.io/docs/getting-started/) page and review 
+some [examples](https://presalytics.io/docs/examples).
+
+For more advanced users developers, you can learn more about the API by reviewing 
+the [service structure](https://presalytics.io/docs/how-it-works) and building a better understanding 
+of the API [security](https://presaltyics.io/docs/develpers/security) features.
+
+# Installation
+
+The Presalytics Python Library is avialabe in python package index, and can be installed via pip:
+
+~~~~python
+pip install presalytics
+~~~~
+
+# Contributing
+
+Presaltyics.io is on [Github](https://github.com/presalytics).  Bug reports and pull requests are strongly encouraged at
+the package [repository](https://github.com/presalytics/python-client). If you encounter any problems or have any suggestions for 
+the API endpoints that this libary interacts with at https://api.presaltyics.io, please open an issue in the 
+[API repository](https://github.com/presalytics/Presalytics-API).
+
+# License
+
+The Presaltyics Python Library can be used in any of your applications and is covered by the MIT License.  This library
+exchanges infromation with other web APIs that may be proprietary and carry their own licensing restriction.  More more
+information on licensing, please contact [inquires@presaltyics.io](mailto:inquires@presaltyics.io).
 
 &#34;&#34;&#34;
 import os
@@ -390,21 +462,31 @@ __all__ = [
 <span>(</span><span>**kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>A script plugin render configures templated scripts to append to the body
-tag of an html document</p></section>
+<section class="desc"><p>Plugin for converting the <code>presaltyics.lib.plugins.external.ALLOWED_STYLES</code> dictionary
+into an html <link> fragment.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L91-L100" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L91-L110" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
+    &#34;&#34;&#34;
+    Plugin for converting the `presaltyics.lib.plugins.external.ALLOWED_STYLES` dictionary
+    into an html &lt;link&gt; fragment.    
+    &#34;&#34;&#34;
     __plugin_name__ = &#39;external_links&#39;
 
     def to_style(self, config, **kwargs):
+        &#34;&#34;&#34;
+        Converts a dot-notation key for nested dictionaries (e.g., &#39;reveal.base&#39;) into an 
+        string contain an html fragement with &lt;link&gt; tag.  The dot-notation key is will 
+        is pulled from the &#39;approved_styles_key&#39; of the &#39;config&#39; attrubte of subclass 
+        of a `presaltyics.story.outline.Plugin&#39; object.
+        &#34;&#34;&#34;
         key = config[&#39;approved_styles_key&#39;]
         link = ALLOWED_STYLES.flatten()[key]
         if link is None:
-            message = &#34;Key {0} does not reference a link in the APPROVED_LINKS dictionary&#34;.format(key)
+            message = &#34;Key {0} does not reference a link in the APPROVED_STYLES dictionary&#34;.format(key)
             raise presalytics.lib.exceptions.MissingConfigException(message)
         return &#39;&lt;link rel=&#34;stylesheet&#34; href=&#34;{0}&#34;/&gt;&#39;.format(link)</code></pre>
 </details>
@@ -414,12 +496,43 @@ tag of an html document</p></section>
 <li><a title="presalytics.lib.plugins.base.PluginBase" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase">PluginBase</a></li>
 <li>abc.ABC</li>
 </ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.ApprovedExternalLinks.to_style"><code class="name flex">
+<span>def <span class="ident">to_style</span></span>(<span>self, config, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Converts a dot-notation key for nested dictionaries (e.g., 'reveal.base') into an
+string contain an html fragement with <link> tag.
+The dot-notation key is will
+is pulled from the 'approved_styles_key' of the 'config' attrubte of subclass
+of a `presaltyics.story.outline.Plugin' object.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L98-L110" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_style(self, config, **kwargs):
+    &#34;&#34;&#34;
+    Converts a dot-notation key for nested dictionaries (e.g., &#39;reveal.base&#39;) into an 
+    string contain an html fragement with &lt;link&gt; tag.  The dot-notation key is will 
+    is pulled from the &#39;approved_styles_key&#39; of the &#39;config&#39; attrubte of subclass 
+    of a `presaltyics.story.outline.Plugin&#39; object.
+    &#34;&#34;&#34;
+    key = config[&#39;approved_styles_key&#39;]
+    link = ALLOWED_STYLES.flatten()[key]
+    if link is None:
+        message = &#34;Key {0} does not reference a link in the APPROVED_STYLES dictionary&#34;.format(key)
+        raise presalytics.lib.exceptions.MissingConfigException(message)
+    return &#39;&lt;link rel=&#34;stylesheet&#34; href=&#34;{0}&#34;/&gt;&#39;.format(link)</code></pre>
+</details>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="presalytics.lib.plugins.base.StylePlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin">StylePlugin</a></b></code>:
 <ul class="hlist">
 <li><code><a title="presalytics.lib.plugins.base.StylePlugin.get_tag" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase.get_tag">get_tag</a></code></li>
-<li><code><a title="presalytics.lib.plugins.base.StylePlugin.to_style" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin.to_style">to_style</a></code></li>
 </ul>
 </li>
 </ul>
@@ -434,7 +547,7 @@ tag of an html document</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L103-L112" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L113-L122" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
     __plugin_name__ = &#39;external_scripts&#39;
@@ -530,7 +643,7 @@ inheritance.</p></section>
 <h3>Static methods</h3>
 <dl>
 <dt id="presalytics.ChangeShapeColor.replace_color_on_target_shape"><code class="name flex">
-<span>def <span class="ident">replace_color_on_target_shape</span></span>(<span>shape_xml: <cyfunction Element at 0x7f6a06864df0>, new_color: str) -> <cyfunction Element at 0x7f6a06864df0></span>
+<span>def <span class="ident">replace_color_on_target_shape</span></span>(<span>shape_xml: <cyfunction Element at 0x7fdddf308df0>, new_color: str) -> <cyfunction Element at 0x7fdddf308df0></span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -4601,7 +4714,7 @@ inheritance.</p></section>
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.XmlTransformBase.execute"><code class="name flex">
-<span>def <span class="ident">execute</span></span>(<span>self, lxml_element: <cyfunction Element at 0x7f6a06864df0>)</span>
+<span>def <span class="ident">execute</span></span>(<span>self, lxml_element: <cyfunction Element at 0x7fdddf308df0>)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -4615,7 +4728,7 @@ inheritance.</p></section>
 </details>
 </dd>
 <dt id="presalytics.XmlTransformBase.transform_function"><code class="name flex">
-<span>def <span class="ident">transform_function</span></span>(<span>self, lxml_element: <cyfunction Element at 0x7f6a06864df0>, params: Dict) -> <cyfunction Element at 0x7f6a06864df0></span>
+<span>def <span class="ident">transform_function</span></span>(<span>self, lxml_element: <cyfunction Element at 0x7fdddf308df0>, params: Dict) -> <cyfunction Element at 0x7fdddf308df0></span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -4637,7 +4750,13 @@ def transform_function(self, lxml_element: lxml.etree.Element, params: typing.Di
 <nav id="sidebar">
 <h1>Index</h1>
 <div class="toc">
-<ul></ul>
+<ul>
+<li><a href="#presalytics-python-library">Presalytics Python Library</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#contributing">Contributing</a></li>
+<li><a href="#license">License</a></li>
+</ul>
 </div>
 <ul id="index">
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
@@ -4661,6 +4780,9 @@ def transform_function(self, lxml_element: lxml.etree.Element, params: typing.Di
 <ul>
 <li>
 <h4><code><a title="presalytics.ApprovedExternalLinks" href="/python-client/presalytics/index.html#presalytics.ApprovedExternalLinks">ApprovedExternalLinks</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.ApprovedExternalLinks.to_style" href="/python-client/presalytics/index.html#presalytics.ApprovedExternalLinks.to_style">to_style</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="presalytics.ApprovedExternalScripts" href="/python-client/presalytics/index.html#presalytics.ApprovedExternalScripts">ApprovedExternalScripts</a></code></h4>

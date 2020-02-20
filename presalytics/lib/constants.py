@@ -17,3 +17,5 @@ LOCALHOST_PORT = 8052
 LOGIN_PATH = "/accounts/login/"
 API_CODE_URL = "/user/client-get-auth-code/"
 API_LOGGEDIN_NEXT_URL = "/user/api-logged-in/"
+STORY_VIEW_URL = "/story/view/{0}/"
+STORY_MANAGE_URL = "/story/manage/{0}/"

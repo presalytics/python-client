@@ -31,12 +31,31 @@ logger = logging.getLogger('presalytics.story.revealer')
 
 class Revealer(presalytics.story.components.Renderer):
     """
-    This class renders 'Story Outines' to reveal.js presentations
+    Renders `presaltyics.story.outline.StoryOutline` objects to reveal.js presentations
+
+    Parameters:
+    ----------
+    story_outline : `presalytics.story.outline.StoryOutline`
+        The presaltyics StoryOutline to be rendered and presented
+    
+    Attributes:
+    -----------
+    base : lxml.etree.Element
+        An etree element containing the base html for each slide
+
+    links : list of lxml.etree.Element
+        list of etree elements containing html link that will be rendered at
+        the top of the presenation
+    
+    plugins : list of `dict`
+        Plugin data that transform to html `<script>` and `<link>` tags through
+        the rendering process
+
+    plugin_mgr : `presalytics.lib.plugins.base.PluginManager`
+        Sorts, validates, and renders plugins
+
     """
-    story_outline: 'StoryOutline'
     base: lxml.etree.Element
-    links: typing.Sequence[lxml.etree.Element]
-    plugins: typing.List[typing.Dict]
 
     __component_kind__ = 'revealer'
 
@@ -44,11 +63,10 @@ class Revealer(presalytics.story.components.Renderer):
             self,
             story_outline: 'StoryOutline',
             **kwargs):
-        super(Revealer, self).__init__(**kwargs)
-        self.story_outline = story_outline
+        super(Revealer, self).__init__(story_outline, **kwargs)
         logger.info("Initializing story render for {}".format(story_outline.title))
         self.story_outline.validate()
-        self.base = self.make_base()
+        self.base = self._make_base()
         logger.info("Loading plugins")
         reveal_plugin_config = {
             'kind': 'script',
@@ -63,121 +81,20 @@ class Revealer(presalytics.story.components.Renderer):
         self.plugin_mgr = presalytics.lib.plugins.base.PluginManager(self.plugins)
         logger.info("Revealer initilized.")
 
-    @classmethod
-    def deserialize(cls, component: 'StoryOutline', **kwargs):
-        return cls(component, **kwargs)
-
-    def serialize(self) -> 'StoryOutline':
-        self.update_outline_from_instances()
-        return self.story_outline
-
-    def update_outline_from_instances(self, sub_dict: typing.Dict = None):
-        if not sub_dict:
-            sub_dict = self.story_outline.to_dict()
-        if sub_dict:
-            for key, val in sub_dict.items():
-                if key in ["widgets", "themes", "pages"]:
-                    if isinstance(val, list):
-                        for list_item in val:
-                            if isinstance(list_item, dict):
-                                if "kind" in list_item:
-                                    class_key = key.rstrip("s") + "." + list_item["kind"]
-                                    klass = presalytics.COMPONENTS.get(class_key)
-                                    if klass:
-                                        if "name" in list_item:
-                                            instance_key = class_key + "." + list_item["name"]
-                                            inst = presalytics.COMPONENTS.get_instance(instance_key)
-                                            if inst:
-                                                self.set_outline_data_from_instance(inst)
-                if isinstance(val, dict):
-                    if len(val.keys()) > 0:
-                        self.update_outline_from_instances(val)
-                if isinstance(val, list):
-                    for list_item in val:
-                        if isinstance(list_item, dict):
-                            self.update_outline_from_instances(list_item)
-
-    def get_component_implicit_plugins(self, sub_dict: typing.Dict = None):
-        if not sub_dict:
-            sub_dict = self.story_outline.to_dict()
-        if sub_dict:
-            for key, val in sub_dict.items():
-                if key in ["widgets", "themes", "pages"]:
-                    if isinstance(val, list):
-                        for list_item in val:
-                            if isinstance(list_item, dict):
-                                if "kind" in list_item:
-                                    class_key = key.rstrip("s") + "." + list_item["kind"]
-                                    klass = presalytics.COMPONENTS.get(class_key)
-                                    if klass:
-                                        if len(klass.__plugins__) > 0:
-                                            self.plugins.extend(klass.__plugins__)
-                                                
-                if isinstance(val, dict):
-                    if len(val.keys()) > 0:
-                        self.get_component_implicit_plugins(val)
-                if isinstance(val, list):
-                    for list_item in val:
-                        if isinstance(list_item, dict):
-                            self.get_component_implicit_plugins(list_item)
-
-    def set_outline_data_from_instance(self, inst: 'ComponentBase'):
-        if inst.__component_type__ == 'widget':
-            self.set_widget_outline_data(inst)
-        if inst.__component_type__ == 'page':
-            self.set_page_outline_data(inst)
-        if inst.__component_type__ == 'theme':
-            self.set_theme_outline_data(inst)
-
-    def set_theme_outline_data(self, inst: 'ThemeBase'):
-        theme_index = None
-        for t in range(0, len(self.story_outline.themes)):
-            if inst.name == self.story_outline.themes[t].name:
-                theme_index = t
-            if theme_index:
-                break
-        theme_outline = inst.serialize()
-        if theme_index:
-            self.story_outline.themes[theme_index] = theme_outline    
-
-    def set_page_outline_data(self, inst: 'PageTemplateBase'):
-        page_index = None
-        for p in range(0, len(self.story_outline.pages)):
-            if inst.name == self.story_outline.pages[p].name:
-                page_index = p
-            if page_index:
-                break
-        page_outline = inst.serialize()
-        if page_index:
-            self.story_outline.pages[page_index] = page_outline
-
-
-    def set_widget_outline_data(self, inst: 'WidgetBase'):
-        widget_index = None
-        page_index = None
-        for p in range(0, len(self.story_outline.pages)):
-            for w in range(0, len(self.story_outline.pages[p].widgets)):
-                widget = self.story_outline.pages[p].widgets[w]
-                if widget.name == inst.name:
-                    page_index = p
-                    widget_index = w
-                if page_index:
-                    break
-            if page_index:
-                break
-        w_outline = inst.serialize()
-        if isinstance(page_index, int) and isinstance(widget_index, int):
-            self.story_outline.pages[page_index].widgets[widget_index] = w_outline  
-
-    def update_outline(self):
-        raise NotImplementedError
-
-    def make_base(self):
+    def _make_base(self):
         base = lxml.etree.Element("div", attrib={"class": "reveal"})
         lxml.etree.SubElement(base, "div", attrib={"class": "slides"})
         return base
 
     def package_as_standalone(self):
+        """
+        Render the story outline as a html document with only the 
+        reveal.js presentation as conent
+
+        Returns
+        ----------
+        A `str` containing a complete html document with the presentation
+        """
         pres = self.render()
         body = E.BODY()
         body.append(pres)
@@ -205,25 +122,20 @@ class Revealer(presalytics.story.components.Renderer):
     #     script_string = plugin_class().to_string(plugin_config)
     #     return lxml.html.fragment_fromstring(script_string)
 
-    def strip_unauthorized_scripts(self, body):
-        allowed_scripts = presalytics.lib.plugins.external.ALLOWED_SCRIPTS.flatten().values()
-        script_elements = body.findall(".//script")
-        for ele in script_elements:
-            try:
-                link = ele.get("src")
-            except KeyError:
-                ele.getparent().remove(ele)
-            if link not in allowed_scripts:
-                ele.getparent().remove(ele)
-        return body
-
     def update_info(self):
+        """
+        Updates story metadata
+        """
         info = self.story_outline.info
         info.date_modified = datetime.datetime.utcnow()
 
     def render(self):
         """
-        This method returns a t
+        Creates a reveal.js presenation html fragement
+
+        Returns:
+        ---------
+        A `str` html fragment containing a reveal.js presentation
         """
         reveal_base = self.base
         for page in self.story_outline.pages:
@@ -235,6 +147,14 @@ class Revealer(presalytics.story.components.Renderer):
         return reveal_base
 
     def render_page(self, page: 'Page') -> str:
+        """
+        Creates a reveal.js slide
+
+        Returns
+        ----------
+        A `str` html framgment of the page
+
+        """
         class_key = "page." + page.kind
         key = class_key + "." + page.name
         if presalytics.COMPONENTS.get_instance(key):
@@ -250,6 +170,28 @@ class Revealer(presalytics.story.components.Renderer):
         return page_instance.render()
 
     def present(self, files_path=None, debug=True, port=8082, host='127.0.0.1'):
+        """
+        Creates and opens the rendered story in the browser.  Story files are served by 
+        a local flask server.  Not for production use.  Press Ctrl + C to close the server.
+
+        Parameters
+        ----------
+        files_path : str
+            filepath to a local folder that will work as root folder for a local flask
+            server.  Defaults to the user's temporary files directory
+
+        debug : str
+            Defaults to True.  Indicates whether the flask server should be started
+            in debug mode.
+        
+        port : str
+            The network port to serve the story onto.  Defautls to 8082.
+        
+        host : str
+            The host to for the local server.  Typically either localhost or the default gateway.
+            Defaults to 127.0.0.1 (localhost).
+        
+        """
         logger.info("Building story rendering at http://{0}:{1}".format(host, port))
         if not files_path:
             files_path = tempfile.gettempdir()

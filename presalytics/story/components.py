@@ -368,7 +368,14 @@ class Renderer(ComponentBase):
             self.manage_url = posixpath.join(self.site_host, manage_endpoint)
         except (KeyError, AttributeError):
             self.view_url = None
-            self.manage_url = None      
+            self.manage_url = None
+
+    def render(self, **kwargs):
+        """
+        Renders server-side (i.e., opens the story on https://presaltyics.io)
+        """
+        return self.view()
+
             
     
     def strip_unauthorized_scripts(self, body):

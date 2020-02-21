@@ -27,7 +27,7 @@ class TestClient(unittest.TestCase):
     def test_module_config(self):
         from test.files.config import PRESALYTICS
         client = presalytics.client.api.Client(config=PRESALYTICS)
-        self.assertIsNotNone(client.ooxml_automation.api_client.client_id)
+        self.assertIsNotNone(client.client_id)
 
     def test_api_exception(self):
         exception_client = presalytics.client.api.Client(config_file=self.config_file)
@@ -56,9 +56,3 @@ class TestClient(unittest.TestCase):
                 os.remove(target_path)
             except Exception:
                 pass
-
-    def test_client_browser_login(self):
-        from test.files.config import PRESALYTICS
-        PRESALYTICS.pop('PASSWORD', None)
-        client = presalytics.client.api.Client(config=PRESALYTICS)
-        self.assertIsNotNone(client.token_util.token["access_token"])

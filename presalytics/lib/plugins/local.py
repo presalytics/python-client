@@ -40,7 +40,7 @@ class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
                 message = 'Path {0} in plugin configuration does not exist'.format(file_path)
                 raise presalytics.lib.exceptions.MissingConfigException(message)
         else:
-            file_path = LOCAL_STYLES_MAP[id]
+            file_path = LocalStylesPlugin.LOCAL_STYLES_MAP[id]
         with open(file_path, 'r') as f:
             style_data = f.read()
         tag = "<style>{0}</style>".format(style_data)

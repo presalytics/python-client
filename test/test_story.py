@@ -7,7 +7,11 @@ import presalytics.story.outline
 
 class TestStory(unittest.TestCase):
     """
-    Test module features thatr render stories to dashboards or other formats
+    Test module features thatr render stories to dashboards or other formats.
+
+    Please note that these are integration tests, the development environment and
+    `presaltytics.CONFIG` must be set up appropriately for these test execute 
+    sucessfully.
     """
     def setUp(self):
         pass

@@ -209,7 +209,7 @@ class Info(OutlineBase):
         The Presalytics API user id of the user that last modified the story
     
     revision_notes : str, optional
-        Text explaining the changes made during that latest revision to the story   
+        Text explaining the changes made during that latest revision to the story
     
     """
     revision: str
@@ -226,6 +226,7 @@ class Info(OutlineBase):
                  created_by,
                  modified_by,
                  revision_notes,
+                 story_id=None,
                  **kwargs):
         super(Info, self).__init__(**kwargs)
         self.revision = revision
@@ -234,7 +235,6 @@ class Info(OutlineBase):
         self.created_by = created_by
         self.modified_by = modified_by
         self.revision_notes = revision_notes
-
 
 class Plugin(OutlineBase):
     """
@@ -452,7 +452,11 @@ class StoryOutline(OutlineBase):
 
     description: str, optional
         A description of the story
-        
+    
+    story_id : str, optional
+        The Presaltyics API Story Id.  Automatically added once the story outline has been pushed to
+        the server.
+
     TODO
     ----------
     Build a [Json-Schema](https://json-schema.org/) for the StoryOutline to help with validation

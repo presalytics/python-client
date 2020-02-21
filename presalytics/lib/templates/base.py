@@ -151,7 +151,7 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
         }
         if self.outline_page.additional_properties:
             context.update(self.outline_page.additional_properties)
-            context.pop("template_string", default=None)
+            context.pop("template_string", None)
         return context
 
     

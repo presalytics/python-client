@@ -338,9 +338,18 @@ class Renderer(ComponentBase):
     site_host : str
         The host of the website.  Defaults to https://presalytics.io.
 
+    view_url : str, optional
+         The url to view the story.  Unavailable if story outline has not been pushed to
+         the Presalytics API story service
+
+    manage_url : str, optional
+         The url to view the story.  Unavailable if story outline has not been pushed to
+         the Presalytics API story service
     """
     story_outline: 'StoryOutline'
     plugins: typing.List[typing.Dict]
+    view_url: typing.Optional[str]
+    manage_url: typing.Optional[str]
 
     __component_type__ = 'renderer'
     
@@ -351,11 +360,15 @@ class Renderer(ComponentBase):
             self.site_host = presalytics.CONFIG["HOSTS"]["SITE"]
         except (KeyError, AttributeError):
             self.site_host = presalytics.lib.constants.SITE_HOST
-        view_endpoint = presalytics.lib.constants.STORY_VIEW_URL.format(self.story_outline.info.story_id)
-        self.view_url = posixpath.join(self.site_host, view_endpoint)
-        manage_endpoint = presalytics.lib.constants.STORY_MANAGE_URL.format(self.story_outline.info.story_id)
-        self.manage_url = posixpath.join(self.site_host, manage_endpoint)
-        
+        try:
+            story_id = self.story_outline.story_id
+            view_endpoint = presalytics.lib.constants.STORY_VIEW_URL.format(story_id)
+            self.view_url = posixpath.join(self.site_host, view_endpoint)
+            manage_endpoint = presalytics.lib.constants.STORY_MANAGE_URL.format(story_id)
+            self.manage_url = posixpath.join(self.site_host, manage_endpoint)
+        except (KeyError, AttributeError):
+            self.view_url = None
+            self.manage_url = None      
             
     
     def strip_unauthorized_scripts(self, body):
@@ -524,6 +537,9 @@ class Renderer(ComponentBase):
             Defaults to True.  Indicates whether the StoryOutline should be updated
             prior to opening in the web browser
         """
+        if not self.view_url:
+            message = "The outline has not been push to the Presaltyics API yet, and therefore cannot be view via preslaytics.io"
+            raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
         if update:
             self.update_story()
         webbrowser.open_new_tab(self.view_url)
@@ -539,6 +555,10 @@ class Renderer(ComponentBase):
             Defaults to True.  Indicates whether the StoryOutline should be updated
             prior to opening in the web browser
         """
+        if not self.manage_url:
+            message = "The outline has not been push to the Presaltyics API yet, and therefore cannot be view via preslaytics.io"
+            raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
+            
         if update:
             self.update_story()
         webbrowser.open_new_tab(self.manage_url)

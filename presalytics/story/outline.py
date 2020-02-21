@@ -7,6 +7,8 @@ if you are incorporating type hints on presalytics objects in modules that impor
 The problem is solved using the TYPE_CHECKING boolean in the python's typing package.
 """
 import json
+import numpy as np
+import base64
 import yaml
 import inspect
 import datetime
@@ -17,7 +19,6 @@ import typing
 import sys
 from presalytics.story.util import to_camel_case, to_snake_case
 from presalytics.lib.exceptions import ValidationError
-
 
 class OutlineEncoder(json.JSONEncoder):
     """
@@ -34,11 +35,33 @@ class OutlineEncoder(json.JSONEncoder):
             return obj.replace(tzinfo=datetime.timezone.utc).isoformat()
         if isinstance(obj, uuid.UUID):
             return str(obj)
+        # If input object is an ndarray it will be converted into a dict 
+        # holding dtype, shape and the data, base64 encoded.
+        if isinstance(obj, np.ndarray):
+            if obj.flags['C_CONTIGUOUS']:
+                obj_data = obj.data
+            else:
+                cont_obj = np.ascontiguousarray(obj)
+                assert(cont_obj.flags['C_CONTIGUOUS'])
+                obj_data = cont_obj.data
+            data_b64 = base64.b64encode(obj_data).decode('utf-8')
+            return dict(__ndarray__=data_b64,
+                        dtype=str(obj.dtype),
+                        shape=obj.shape)
         return json.JSONEncoder.default(self, obj)
+
+def json_numpy_obj_hook(dct):
+    """
+    Decodes a previously encoded numpy ndarray with proper shape and dtype.
+    """
+    if isinstance(dct, dict) and '__ndarray__' in dct:
+        data = base64.b64decode(dct['__ndarray__'].encode('utf-8'))
+        return np.frombuffer(data, dct['dtype']).reshape(dct['shape'])
+    return dct
 
 
 def get_current_spec_version():
-    return '0.3'
+    return 'beta'
 
 class OutlineBase(abc.ABC):
     """
@@ -182,7 +205,7 @@ class OutlineBase(abc.ABC):
                     if len(val.items()) == 0:
                         continue
             ret_key = "{}".format(to_camel_case(key))
-            ret_val = json.loads(json.dumps(val, cls=OutlineEncoder), encoding='utf-8')
+            ret_val = json.loads(json.dumps(val, cls=OutlineEncoder), encoding='utf-8', object_hook=json_numpy_obj_hook)
             ret[ret_key] = ret_val
         return ret
 

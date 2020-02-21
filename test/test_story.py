@@ -3,7 +3,7 @@ import os
 import json
 import presalytics.story.revealer
 import presalytics.story.outline
-
+import presalytics.lib.tools.component_tools
 
 class TestStory(unittest.TestCase):
     """
@@ -36,6 +36,27 @@ class TestStory(unittest.TestCase):
 
     def test_plugins(self):
         from presalytics import PLUGINS
+
+    def test_create_outline_from_widget(self):
+        import matplotlib.pyplot as plt
+        import numpy as np
+        
+        x = np.random.rand(30)
+        y = np.random.rand(30)
+        z = np.random.rand(30)
+        
+        fig, ax = plt.subplots()
+
+        ax.scatter(x, y, s=z*1000, alpha=0.5)
+
+        wrapper = presalytics.lib.widgets.matplotlib.MatplotlibFigure(fig, "BubbleChart")
+
+        outline = presalytics.lib.tools.component_tools.create_outline_from_widget(wrapper)
+
+        re_wrapper = presalytics.lib.widgets.matplotlib.MatplotlibFigure.deserialize(outline.pages[0].widgets[0])
+
+        self.assertIsInstance(outline, presalytics.story.outline.StoryOutline)
+        self.assertIsInstance(re_wrapper, presalytics.lib.widgets.matplotlib.MatplotlibFigure)
 
     def tearDown(self):
         pass

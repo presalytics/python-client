@@ -176,6 +176,10 @@ from presalytics.lib.tools.ooxml_tools import (
     create_story_from_ooxml_file
 )
 from presalytics.lib.tools.story_tools import story_post_file_bytes
+from presalytics.lib.tools.component_tools import (
+    create_outline_from_page,
+    create_outline_from_widget
+)
 from presalytics.lib.widgets.ooxml_editors import (
     OoxmlEditorWidget,
     XmlTransformBase,
@@ -207,5 +211,7 @@ __all__ = [
     'PageTemplateBase',
     'ScssPlugin',
     'create_story_from_ooxml_file',
-    'story_post_file_bytes'
+    'story_post_file_bytes',
+    'create_outline_from_page',
+    'create_outline_from_widget'
 ]

@@ -73,7 +73,7 @@ class Revealer(presalytics.story.components.Renderer):
         self.update_outline_from_instances()
         self.plugins = [reveal_plugin_config]
         self.get_component_implicit_plugins()
-        outline_plugins = presalytics.lib.plugins.base.PluginManager.get_plugins_from_nested_dict(story_outline.to_dict())
+        outline_plugins = presalytics.lib.plugins.base.PluginManager.get_plugins_from_nested_dict(source_dict=self.story_outline.to_dict())
         self.plugins.extend(outline_plugins)
         self.plugin_mgr = presalytics.lib.plugins.base.PluginManager(self.plugins)
         logger.info("Revealer initilized.")

@@ -21,7 +21,8 @@ class TestComponents(unittest.TestCase):
         presalytics.COMPONENTS = presalytics.story.components.ComponentRegistry(autodiscover_paths=presalytics.autodiscover_paths)
         test_file = os.path.join(os.path.dirname(__file__), 'files', 'matplotlib-outline.yaml')
         outline = presalytics.StoryOutline.import_yaml(test_file)
-        presalytics.Revealer(outline).present()
+        html = presalytics.Revealer(outline).package_as_standalone().decode('utf-8')
+        self.assertIsInstance(html, str)
 
     def test_xml_widget(self):
         test_file = os.path.join(os.path.dirname(__file__), "files", "star.pptx")
@@ -49,7 +50,8 @@ class TestComponents(unittest.TestCase):
         )
         outline.pages[0].widgets[0] = widget.outline_widget
         presalytics.COMPONENTS.register(widget)
-        presalytics.Revealer(outline).present()
+        html = presalytics.Revealer(outline).package_as_standalone().decode('utf-8')
+        self.assertIsInstance(html, str)
         os.remove(tmp_filename)
 
     def test_file_widget(self):
@@ -61,7 +63,8 @@ class TestComponents(unittest.TestCase):
         story_outline = presalytics.StoryOutline.load(story.outline)
         widget_data = story_outline.pages[0].widgets[0]
         presalytics.OoxmlFileWidget.deserialize(widget_data)
-        presalytics.Revealer(story_outline).present()
+        html = presalytics.Revealer(story_outline).package_as_standalone().decode('utf-8')
+        self.assertIsInstance(html, str)
 
     def test_bytesio_upload(self):
         test_file = os.path.join(os.path.dirname(__file__), "files", "star.pptx")

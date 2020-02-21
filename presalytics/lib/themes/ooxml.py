@@ -7,7 +7,7 @@ import presalytics.story.util
 import presalytics.client.presalytics_ooxml_automation.models
 
 
-class UntestedOoxmlTheme(presalytics.story.components.ThemeBase):
+class OoxmlTheme(presalytics.story.components.ThemeBase):
     """
     TODO: Review whether this class is obsolete
     """

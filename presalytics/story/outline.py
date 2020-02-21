@@ -383,7 +383,7 @@ class Theme(OutlineBase):
         `presalytics.story.components.ThemeBase`
 
     name : str
-        The name of the Theme.  Correpsonds to a local instance of 
+        The name of the Theme.  Corresponds to a local instance of 
         `presalytics.story.components.ThemeBase` loaded into `presalytics.COMPONENTS`
 
     data : dict
@@ -419,12 +419,12 @@ class Theme(OutlineBase):
 class StoryOutline(OutlineBase):
     """
     A StoryOutline contains instructions for a `presalytics.story.components.Renderer` 
-    (e.g., `presalytics.story.revealer.Revealer`) can render an story into html.
+    (e.g., `presalytics.story.revealer.Revealer`) to render an story into html.
 
-    A story outlines info, pages, widgets, and themes are intended to be easily editable
+    A story outline's `info`, `pages`, `widgets`, and `themes` are intended to be easily editable
     by both human users and machines via json serialization and deserialization, and the ecosystem
-    of tools that can be used to edit json objects. Once a valid StoryOuline is
-    built, it contains sufficient instructions for this libary find the required components in the user's
+    of tools that can be used to edit json objects. Once a valid `StoryOutline` is
+    built, it contains sufficient instructions for this library find the required components in the user's
     workspace and render theme.
 
     StoryOutlines are stored in the [Presalytics API Story Service](https://presalytics.io/docs/api-specifications/story/).
@@ -435,7 +435,7 @@ class StoryOutline(OutlineBase):
     Attributes
     ----------
 
-    presaltyics_story : str
+    presalytics_story : str
         the version of that StoryOuline schema.  Static at 0.3 for now.  Reserved for future use.
     
     info : presalytics.story.outline.Info

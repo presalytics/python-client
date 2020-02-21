@@ -7,12 +7,28 @@ import presalytics.lib.plugins.base
 
 
 class RevealCustomTheme(presalytics.lib.plugins.base.StylePlugin):
+    """
+    Plugin to for customizing reveal.js settings for a given story
+
+    This plugin's configuration dictionary keys and that load them in
+    as variable to a _variables.scss file and compiles the scss using the
+    sass python package. 
+
+    See reveal.js' [Creating a Theme](https://github.com/hakimel/reveal.js/blob/8a54118f43b91030f3965088d5e1c1c7598a5cd3/css/theme/README.md)
+    page for more information regarding configuration values.
+    """
     __plugin_name__ = 'reveal_custom_theme'
     defaults: typing.Dict[str, str]
 
     fonts_base_url = 'https://fonts.googleapis.com/css?family={0}'
+    """
+    Google fonts base url for loading fonts via a `<link>` tag 
+    """
 
     def to_style(self, config, **kwargs):
+        """
+        Returns compiled scss and links to download fonts
+        """
         scss_variables = self.defaults
         scss_variables.update(config)
         scss_string = self.get_base_scss(scss_variables)
@@ -22,6 +38,9 @@ class RevealCustomTheme(presalytics.lib.plugins.base.StylePlugin):
         return links + style_string
 
     def get_fonts(self, fonts: typing.List[str]):
+        """
+        Creates `<link>` tags from font names
+        """
         links = ""
         for font in fonts:
             link = self.get_font_link(font)
@@ -30,6 +49,10 @@ class RevealCustomTheme(presalytics.lib.plugins.base.StylePlugin):
         return links
 
     def get_font_link(self, font_name) -> typing.Optional[str]:
+        """
+        Tests whether a given font is available for download form google fonts.  Returns
+        the link tag if available
+        """
         test_url = self.fonts_base_url.format(font_name)
         r = requests.get(test_url)
         if r.status_code == 200:
@@ -38,6 +61,9 @@ class RevealCustomTheme(presalytics.lib.plugins.base.StylePlugin):
             return None
 
     def get_base_scss(self, scss_variables):
+        """
+        loads the reveal.js scss files into string to be compiled by the sass module
+        """
         scss_folder = os.path.join(os.path.dirname(__file__), "scss")
         mixins_file = os.path.join(scss_folder, "reveal-mixins.scss")
         settings_file = os.path.join(scss_folder, "reveal-settings.scss")
@@ -100,3 +126,6 @@ class RevealCustomTheme(presalytics.lib.plugins.base.StylePlugin):
         "selection_background_color": "#FF5E99",
         "selection_color": "#fff"
     }
+    """
+    Default reveal.js theme configuration for presalytics stories
+    """

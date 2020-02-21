@@ -46,11 +46,10 @@ class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
     `presalytics.lib.plugins.base.StylePlugin` subclass for converting a `presalytics.story.outline.Plugin` 
     config into an html `<link>` fragment.
 
-    Attributes:
+    Attributes
     ----------
-
-    attr_dict: An `presalytics.lib.plugins.external.AttrDict` that performs nested lookups on the
-    `presalytics.lib.plugins.external.ApprovedExternalLinks.STYLES_MAP`
+    attr_dict: presalytics.lib.plugins.external.AttrDict
+        Performs nested lookups on the `STYLES_MAP`
     """
     __plugin_name__ = 'external_links'
 
@@ -104,11 +103,10 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
     `presalytics.lib.plugins.base.ScriptPlugin` subclass for converting a `presalytics.story.outline.Plugin` 
     config into an html `<script>` fragment.
 
-    Attributes:
+    Attributes
     ----------
-
-    attr_dict: An `presalytics.lib.plugins.external.AttrDict` that performs nested lookups on the
-    `presalytics.lib.plugins.external.ApprovedExternalScripts.SCRIPT_MAP`
+    attr_dict: presalytics.lib.plugins.external.AttrDict
+        Performs nested lookups on the `SCRIPT_MAP`
     """
     __plugin_name__ = 'external_scripts'
 

@@ -7,7 +7,10 @@ import presalytics.story.util
 import presalytics.client.presalytics_ooxml_automation.models
 
 
-class OoxmlTheme(presalytics.story.components.ThemeBase):
+class UntestedOoxmlTheme(presalytics.story.components.ThemeBase):
+    """
+    TODO: Review whether this class is obsolete
+    """
     name: str
     ooxml_id: str
     plugin_config: typing.Dict

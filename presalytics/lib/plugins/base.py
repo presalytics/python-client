@@ -15,15 +15,41 @@ logger = logging.getLogger('presalytics.lib.plugins.base')
 class PluginBase(abc.ABC):
     """
     A plugin converts a dictionary of configuration values into an html script.
-    Typically plugins are are used as reable mapping classes to add script tags to
+    Typically plugins are are used as reusable mapping classes to add script or link tags to
     to a rendered html body.
 
-    Attributes:
+    Attributes
     ----------
 
-    __plugin_kind__: str
-        The __plugin_kind__ is a static string that uniquely identifies this plugin to classes
-        the render story outlines (e.g., presalytics.story.revealer.Revealer).
+    __plugin_kind__ : str
+        The __plugin_kind__ is a static string that instructs classes 
+        the render story outlines (e.g., presalytics.story.revealer.Revealer) where
+        to where render the plugin (i.e., at the bottom of the html body for scripts).
+
+    __plugin_name__ : str
+        The __plugin_name__ is a static string that uniquely identifies this plugin to classes
+        the render story outlines (e.g., `presalytics.story.revealer.Revealer`).
+
+    __dependencies__ : list of dict
+        A list of plugs that should be rendered above this plugin in an html document.  This ensures
+        the needed javascript or css is loaded prior user's plugin runs.
+        
+        For example, if a user creates plugin requires d3.js to function, dependencies should include
+        the following configuration:
+
+            __dependencies__ = [
+                {
+                    'kind': 'script',
+                    'name': 'external_scripts',
+                    'config': {
+                        'approved_scripts_key': 'd3'
+                    }
+                }
+            ]
+
+        This ensures that the `presalytics.lib.plugins.external.ApprovedExternalScripts` loads during the
+        rendering pushes a `<script>` tag into the render html that tells the browser to download d3.js from
+        a CDN.
 
     """
     __plugin_kind__: str
@@ -69,8 +95,8 @@ class PluginBase(abc.ABC):
 
 class ScriptPlugin(PluginBase):
     """
-    A script plugin render configures templated scripts to append to the body
-    tag of an html document
+    A script plugin incorporates whitelisted or local `<script>` tags into a 
+    rendered story
     """
     __plugin_kind__ = 'script'
 
@@ -88,14 +114,14 @@ class ScriptPlugin(PluginBase):
         config: Dict
             A set configuration values for the plugin.  Required keys should be
             specified by the docstring of the inheriting classes.
-            Can be implemented via a mypy_extensions.TypedDict object if warranted.
-            The presalytics.story.outline.Plugin's config element should be passed
+            Can be implemented via a `mypy_extensions.TypedDict` object if warranted.
+            The `presalytics.story.outline.Plugin`'s config element should be passed
             as this value to render the script.
 
         Returns:
         ----------
 
-        A string carrying a html script that can be embedded in a html document
+        A string carrying a html `<script>` fragments that can be embedded in a html document
 
         """
         raise NotImplementedError
@@ -103,8 +129,7 @@ class ScriptPlugin(PluginBase):
 
 class StylePlugin(PluginBase):
     """
-    A script plugin render configures templated scripts to append to the body
-    tag of an html document
+    A style plugin to incorporates `<link>` and `<style>` tags into a rendered story
     """
     __plugin_kind__ = 'style'
 
@@ -122,14 +147,14 @@ class StylePlugin(PluginBase):
         config: Dict
             A set configuration values for the plugin.  Required keys should be
             specified by the docstring of the inheriting classes.
-            Can be implemented via a mypy_extensions.TypedDict object if warranted.
-            The presalytics.story.outline.Plugin's config element should be passed
+            Can be implemented via a `mypy_extensions.TypedDict` object if warranted.
+            The `presalytics.story.outline.Plugin`'s config element should be passed
             as this value to render the script.
 
         Returns:
         ----------
 
-        A string carrying a html script that can be embedded in a html document
+        A string carrying a `<link>` or `<style>` tags that can be embedded in a html document
 
         """
         raise NotImplementedError
@@ -150,6 +175,11 @@ class PluginRegistry(presalytics.lib.registry.RegistryBase):
 
 
 class Graph():
+    """
+    Utility for identifying circular dependencies in plugins
+
+    Adapted from https://www.geeksforgeeks.org/detect-cycle-in-a-graph/
+    """
     def __init__(self, vertices):
         self.graph = collections.defaultdict(list)
         self.V = vertices
@@ -191,7 +221,9 @@ class Graph():
 
 
 class PluginManager(object):
-
+    """
+    Manager class for sorting, validating and rendering plugins
+    """
     dependency_map: typing.Dict[str, typing.Dict[str, typing.Any]]
     dependency_order: typing.List[str]
 

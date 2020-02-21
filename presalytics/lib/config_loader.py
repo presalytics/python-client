@@ -10,6 +10,25 @@ logger = logging.getLogger(__name__)
 
 
 def load_config(additional_paths: typing.List[str] = []) -> typing.Dict:
+    """
+    Searches the current working directory and `additional_paths` for a loadable
+    module named `config.py`.  If a file is found and has a global variable named
+    'PRESALYTICS', the dictionary contained in the 'PRESALYTICS' is returned.
+
+    *Note*: A environment variable called `autodiscover_paths` is automatically
+    loaded into the `additional_paths` keyword argument the the `presalytics` module
+    is imported.
+
+    Parameters
+    ----------
+    additional_paths : list of str, optional
+        Additional filepaths to search for files named `config.py`
+
+    Returns
+    ----------
+    a `dict` containing the PRESALYTICS module environment configuration
+
+    """
     current_path = os.getcwd()
     additional_paths.append(current_path)
     config_dict = None

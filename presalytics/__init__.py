@@ -165,6 +165,7 @@ from presalytics.lib.plugins.matplotlib import Mpld3Plugin
 from presalytics.lib.plugins.ooxml import OoxmlTheme
 from presalytics.lib.plugins.reveal import RevealConfigPlugin
 from presalytics.lib.plugins.reveal_theme import RevealCustomTheme
+from presalytics.lib.plugins.scss import ScssPlugin
 from presalytics.lib.templates.base import JinjaTemplateBuilder
 from presalytics.lib.widgets.matplotlib import MatplotlibFigure
 from presalytics.lib.widgets.ooxml import OoxmlFileWidget, OoxmlEndpointMap
@@ -187,6 +188,7 @@ __all__ = [
     'PLUGINS',
     'Client',
     'StoryOutline',
+    'Renderer',
     'Revealer',
     'MatplotlibFigure',
     'OoxmlFileWidget',
@@ -194,8 +196,6 @@ __all__ = [
     'OoxmlEditorWidget',
     'XmlTransformBase',
     'ChangeShapeColor',
-    'PluginBase',
-    'Mpld3Plugin',
     'ApprovedExternalLinks',
     'ApprovedExternalScripts',
     'LocalStylesPlugin',
@@ -205,7 +205,7 @@ __all__ = [
     'JinjaTemplateBuilder',
     'WidgetBase',
     'PageTemplateBase',
-    'ThemeBase',
+    'ScssPlugin',
     'create_story_from_ooxml_file',
     'story_post_file_bytes'
 ]

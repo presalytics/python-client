@@ -11,20 +11,62 @@ import presalytics.lib.widgets.ooxml
 
 
 class XmlTransformBase(abc.ABC):
+    """
+    Base class for writing Open Office Xml tranform functions to be implemented
+    by `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget`
+    
+    *For more information about Open Office Xml Schema that underlies 
+    .pptx and .xlsx files, see http://officeopenxml.com/
+
+    *For more information on how to lxml to write transforms, consult https://lxml.de/
+
+    Parameters
+    ----------
+    function_params : dict
+        A dictionary containing variables that will be used when the `transform_function`
+        is executed
+    """
     def __init__(self, function_params: typing.Dict, *args, **kwargs):
         self.function_params = function_params
 
     @abc.abstractmethod
     def transform_function(self, lxml_element: lxml.etree.Element, params: typing.Dict) -> lxml.etree.Element:
+        """
+        Modifies Open Office Xml via transforming `lxml.etree.Element` using a params `dict` containing
+        variables. Must be overridden in subclasses.
+        """
         pass
+    
 
     def execute(self, lxml_element: lxml.etree.Element):
+        """
+        Called by widget classes (e.g., `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget`) to 
+        perform the updates prescribed in the `transform_function`
+        """
         return self.transform_function(lxml_element, self.function_params)
 
 
 class ChangeShapeColor(XmlTransformBase):
+    """
+    Changes the color of a set of [Open Office Xml Shapes](http://officeopenxml.com/drwShape.php)
+    
+    Function Parameters Dictionary
+    ----------
+    hex_color : str
+        The six-digit hexadecimal-format color string (e.g., ffa500 for orange).  See
+        https://www.color-hex.com/ for an example color calculator
+
+    object_name : str, optional
+        The object tree name of the target shape.  If not supplied, all descendent shapes will
+        have their color changed.      
+
+    
+    """
     @staticmethod
     def replace_color_on_target_shape(shape_xml: lxml.etree.Element, new_color: str) -> lxml.etree.Element:
+        """
+        Changes the color of an [Open Office Xml Shape](http://officeopenxml.com/drwShape.php)
+        """
         new_fill = lxml.etree.Element("solidFill")
         lxml.etree.SubElement(new_fill, "srbgClr", {"val": new_color})
         fill_tags = [
@@ -48,6 +90,17 @@ class ChangeShapeColor(XmlTransformBase):
         return shape_xml
 
     def transform_function(self, lxml_element, params):
+        """
+        Changes the color of an [Open Office Xml Shape](http://officeopenxml.com/drwShape.php)
+
+        Parameters
+        -----------
+        lxml_element : lxml.etree.Element
+            An element containing as least one an `<sp>` element
+
+        params : dict
+            See the `Function Parameters Dictionary` for required entries
+        """
         if re.match('{.*}sp', lxml_element.tag):
             shapes = [lxml_element]
         else:
@@ -71,6 +124,48 @@ class ChangeShapeColor(XmlTransformBase):
 
 
 class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
+    """
+    Edits a `widget` from a Presentation or Spreadsheet document and renders 
+    the edited widget.
+
+    This class interacts with the Presalytics API to extract SVG objects from
+    Presentation and spreadsheet documents, from Presaltytics Ooxml Automation
+    service objects that have already been loaded into the API.  This class requires
+    that users supply `transform_function` by subclassing 
+    `presalytics.lib.widgets.ooxml_editors.XmlTransformBase`, and an optional set of 
+    parameters to act as variables in the transform function.
+
+    Parameters
+    ----------
+    filename : str
+        The local filepath a presentation or spreadsheet file containing
+        the object to be rendered
+
+    name : str
+        The widget name.  If not provided, attribute will be set as the `object_name` 
+        or `filename`
+
+    story_id : str
+        The the id of the story in the Presalytics API Story service.  If not provided, 
+        a new story will be created.  Do not supply if this object has not yet been created. 
+    
+    object_ooxml_id : str
+        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this 
+        object has not yet been created.
+
+    endpoint_map : presalytics.lib.widgets.ooxml.OoxmlEndpointMap
+        Reference to the Presalytics API Ooxml Automation service endpoint and object type
+        that for the object of interest
+
+    tranform_class : subclass of presalytics.lib.widgets.ooxml_editors.XmlTransformBase
+        A class containing a `transform_function` method that transforms Open Office Xml via
+        an `lxml.etree.Element` instance
+
+    transform_params : dict, optional
+        A dictionary of parameters that will be passed to the `transform_class`'s `transform_function`
+        as variables to modify the underlying OpenOfficeXml 
+    
+    """
     transform: XmlTransformBase
 
     __component_kind__ = 'ooxml-xml-editor'
@@ -80,8 +175,8 @@ class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
                  story_id,
                  object_ooxml_id,
                  endpoint_map,
-                 transform_class=None,
-                 transform_params=None,
+                 transform_class,
+                 transform_params={},
                  **kwargs):
         super(OoxmlEditorWidget, self).__init__(name, story_id=story_id, object_ooxml_id=object_ooxml_id, endpoint_map=endpoint_map, **kwargs)
         self.name = name
@@ -91,12 +186,18 @@ class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
         self.outline_widget = self.serialize()
 
     def update_xml(self, xml_str) -> str:
+        """
+        Runs the `transform_function` Open Office Xml data downloaded via the Presalytics API
+        """
         xml = lxml.etree.fromstring(xml_str)
         new_xml = self.transform.execute(xml)
         new_xml_str = lxml.etree.tostring(new_xml)
         return new_xml_str
 
     def update(self):
+        """
+        Update the widget, include changes to the Xml
+        """
         client = self.get_client()
         auth_header = client.get_auth_header()
         if self.transform:

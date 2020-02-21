@@ -8,6 +8,32 @@ if typing.TYPE_CHECKING:
 
 
 class MatplotlibFigure(presalytics.story.components.WidgetBase):
+    """
+    A `Widget` for rendering `matplotlib.pyplot.Figure` instances in stories
+
+    This class acts as wrapper class for matplotlib figures, allowing their packaging into
+    `presalytics.story.outline.Widget` objects and serialization to json.  At render-time, 
+    the figure is converted to a d3.js object via the [mpld3](https://mpld3.github.io/)
+    package.
+
+    Parameters
+    ----------
+
+    figure : `matplotlib.pyplot.Figure`
+        the figure to create the widget from
+
+    name : str
+        the name of widget.  Must be unique within `presalytics.COMPONENTS`
+
+    Attributes
+    ----------
+    figure_dict : dict
+        A `dict` containing json-serializable data for reconstituting the
+        `matplotlib.pyplot.Figure` object.
+
+    figure_id : str
+        A unique identifier used to render the that figure into a d3.js object
+    """
     __component_kind__ = 'matplotlib_figure'
     additional_properties: typing.Dict
 

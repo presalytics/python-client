@@ -5,6 +5,10 @@ import presalytics.lib.plugins.reveal_theme
 
 
 class OoxmlTheme(presalytics.lib.plugins.reveal_theme.RevealCustomTheme):
+    """
+    This class takes theme data from an Presalytics API Ooxml Automation service Theme object
+    and feeds those values into the `presalytics.lib.plugins.reveal_theme.RevealCustomTheme`
+    """
     __plugin_name__ = 'ooxml-theme'
 
     def to_style(self, config, **kwargs):

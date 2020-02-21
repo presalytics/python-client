@@ -31,27 +31,24 @@ logger = logging.getLogger('presalytics.story.revealer')
 
 class Revealer(presalytics.story.components.Renderer):
     """
-    Renders `presaltyics.story.outline.StoryOutline` objects to reveal.js presentations
+    Renders `presalytics.story.outline.StoryOutline` objects to 
+    [reveal.js](https://github.com/hakimel/reveal.js/) presentations
 
-    Parameters:
+    Parameters
     ----------
-    story_outline : `presalytics.story.outline.StoryOutline`
+    story_outline : presalytics.story.outline.StoryOutline
         The presaltyics StoryOutline to be rendered and presented
     
-    Attributes:
+    Attributes
     -----------
     base : lxml.etree.Element
         An etree element containing the base html for each slide
 
-    links : list of lxml.etree.Element
-        list of etree elements containing html link that will be rendered at
-        the top of the presenation
-    
-    plugins : list of `dict`
+    plugins : list of dict
         Plugin data that transform to html `<script>` and `<link>` tags through
         the rendering process
 
-    plugin_mgr : `presalytics.lib.plugins.base.PluginManager`
+    plugin_mgr : presalytics.lib.plugins.base.PluginManager
         Sorts, validates, and renders plugins
 
     """
@@ -153,7 +150,6 @@ class Revealer(presalytics.story.components.Renderer):
         Returns
         ----------
         A `str` html framgment of the page
-
         """
         class_key = "page." + page.kind
         key = class_key + "." + page.name

@@ -32,27 +32,40 @@ class ComponentBase(abc.ABC):
     The __component_type__ and __component_name__ metadata on subclasses is required in
     order for instances to be registered in rendering pipeline for automatic updates
 
-    Attributes:
+    Note: When inheriting from this base class, call "super().__init__(self, *args, **kwargs)" before add your
+    own custom initialization.
+
+    Attributes
     ----------
 
-    name: str
+    name : str
         The name of the instance of the component.  Used in component as a key to lookup
         instances to re-calcute during rendering
 
-    css: List[str]
+    css : list of str
         A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
         in the presalytics.lib.templates.base module.
 
-    js: List[str]
+    js: list of str
         A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
         in the presalytics.lib.templates.base module.
 
-    __component_type__: str
-        The idenifier for the component superclass (e.g. widget, page_template, renderer, theme).
+    __component_type__ : str
+        The identifier for the component superclass (e.g. widget, page_template, renderer, theme).
         Used for component registration.
 
-    __component_kind__:
+    __component_kind__ : str
         An identifier for this component class.  Used for component registration.
+
+    __plugins__ : list of dict
+        A list of dictionaries that reference `presalytics.story.outline.Plugin` configurations.  When a 
+        `presaltytics.story.components.Renderer` is initialized, it will load these plugins into the
+        rendered.  This allows plugins to be statically configured on `presalytics.story.component` classes,
+        in lieu dynamic configurations on `presalytics.story.outline.StoryOutline` instances.
+
+    client_info : str
+        A `dict` to be unpacked and passed to `presalytics.client.api.Client` object when subclasses of
+        `ComponentBase` require interaction with the Presalytics API.
     """
     __component_type__: str
     __component_kind__: str
@@ -75,54 +88,53 @@ class ComponentBase(abc.ABC):
 
     @abc.abstractmethod
     def render(self, **kwargs):
+        """
+        Renders `component` to html.  Must be overridden in subclass.
+        """
         raise NotImplementedError
 
     @abc.abstractmethod
     def serialize(self):
+        """
+        Initializes `component` object from `presalytics.story.outline` attributes. Must be overridden in subclass.
+        """
         raise NotImplementedError
 
     @classmethod
     def deserialize(cls, component, **kwargs):
+        """
+        Converts `component` instance to a `presalytics.story.outline` object. Must be overridden in subclass.
+        """
         raise NotImplementedError
 
     def get_client(self):
+        """
+        Initializes `presalytics.client.api.Client` using `client_info`
+        """
         return presalytics.client.api.Client(**self.client_info)
 
 
 class WidgetBase(ComponentBase):
     """
     Inherit from this base class to create widget components that can be rendered to html via the
-    presalytics.story.revealer.Revealer class.  This component also need to build a method
-    that allows the widget to be serialzed into a presalytics.story.outline.Widget object.
+    `presalytics.story.components.Renderer` class.  This component also needs to build a method
+    that allows the widget to be serialzed into a `presalytics.story.outline.Widget` object.
 
-    Parameters:
+    Parameters
     ----------
     widget: Widget
-        A presalytics.story.outline.Widget object use for initialized the component class.
+        A `presalytics.story.outline.Widget` object use for initialized the component class.
 
-    Attributes:
+    Attributes
     ----------
     outline_widget: Widget
-        A presalytics.story.outline.Widget object
-
-    css: List[str]
-        A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
-        in the presalytics.lib.templates.base module.
-
-    js: List[str]
-        A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
-        in the presalytics.lib.templates.base module.
+        A `presalytics.story.outline.Widget` object
     """
     outline_widget: typing.Optional['Widget']
 
     __component_type__ = 'widget'
 
     def __init__(self, name, *args, **kwargs) -> None:
-        """
-        Note: When inheriting from this base class, call "super().__init__(self, *args, **kwargs)" before add your
-        own custom initialization.
-
-        """
         super(WidgetBase, self).__init__(*args, **kwargs)
         self.name = name
         self.outline_widget = None
@@ -133,43 +145,44 @@ class WidgetBase(ComponentBase):
     @abc.abstractmethod
     def to_html(self, data: typing.Dict = None, **kwargs) -> str:
         """
-        Returns valid html that renders the widget in a broswer.
+        Returns valid html that renders the widget in a browser.
 
-        Parameters:
+        Parameters
         ----------
-        data: Dict
+        data: dict
             The data parameter is a dictionary should contain the minimum amount of that is required to
-            successfully render the object.  As the widget is update, data control how the disply of
+            successfully render the object.  As the widget is update, data control how the display of
             information changes.
+
         **kwargs:
-            Optional keyword arguments can be used in subclass to modify the behavior of the to_html function.
-            these keyword arguments should be geinvariant through successive updates to the chart.  For example,
+            Optional keyword arguments can be used in subclass to modify the behavior of the `to_html` function.
+            these keyword arguments should be invariant through successive updates to the chart.  For example,
             keycloak argument should control the styling of the widget, which should not change as the data in
-            the object (e.g., a chart) is updated.  Keyword arguments are loaded via additional_properties
-            parameter in in the presalytics.story.outline.Widget object.
+            the object (e.g., a chart) is updated.  Keyword arguments are loaded via `additional_properties`
+            parameter in in the `presalytics.story.outline.Widget` object.
 
         Returns
         ----------
-        A string of containing an html fragment that will be loaded into a template in successive operations
+        A str of containing an html fragment that will be loaded into a template in successive operations
         """
         raise NotImplementedError
 
     @abc.abstractmethod
     def serialize(self, **kwargs) -> 'Widget':
         """
-        Creates presalytics.story.outline.Widget object from instance data. This widget should
-        have the correct name, data and additional_properties so the same widget can be reconstituted
+        Creates `presalytics.story.outline.Widget` object from instance data. This widget should
+        have the correct `name`, `data` and `additional_properties` so the same widget can be reconstituted
         via the to_html method, given the same set of data.
 
         Typically, this method will call an update method that run a local script with updates this
         Widget's data Dictionary prior being loading into the Widget outline object for serialization.
 
-        Parameters:
+        Parameters
         ----------
         **kwargs:
             Optional keyword arguments can be used in subclass to modify the behavior of the to_html function.
             these keyword arguments should be be invariant through successive updates to the chart. Overrides
-            for this widgets default additional_properties shoudl be loaded via these keyword argments.
+            for this widgets default additional_properties should be loaded via these keyword arguments.
 
         """
         raise NotImplementedError
@@ -177,24 +190,23 @@ class WidgetBase(ComponentBase):
     @classmethod
     def deserialize(cls, component: 'Widget', **kwargs) -> 'WidgetBase':
         """
-        Creates an instance of the widget from the data object in the presalytics.story.outline.Widget
+        Creates an instance of the widget from the data object in the `presalytics.story.outline.Widget`
         object. This method exists to ensure widgets can be portable across environments.  To clarify,
-        widgets built on the client-side via the __init__ method can be reconstructed server-side via
+        widgets built on the client-side via the `__init__` method can be reconstructed server-side via
         the deserialize method.  This allows decoupling of the widget generation/updating of data and
-        the rendering of the widget in a UI.  Renderers (e.g., presalytics.story.revealer.Revealer object)
+        the rendering of the widget in a UI.  Renderers (e.g., `presalytics.story.revealer.Revealer` object)
         need not know about how the data get updated, but can update the graphic with data generated by
         the widget when the serialize method is called.
 
-        Parameters:
+        Parameters
         ----------
 
         widget: Widget
-            A prealytics.story.outline.Widget object
+            A `presalytics.story.outline.Widget` object
 
-        Returns:
+        Returns
         ----------
-
-        An instance the widget class
+        `presalytics.story.components.WidgetBase` subclass instance
         """
         raise NotImplementedError
 
@@ -202,29 +214,22 @@ class WidgetBase(ComponentBase):
 class PageTemplateBase(ComponentBase):
     """
     Inherit from this base class to render templates to html via the
-    presalytics.story.revealer.Revealer class.
+    `presalytics.story.revealer.Revealer` class.
 
-    Parameters:
+    Parameters
     ----------
     page: Page
         A presalytics.story.outline.Page object for instalizing the class
 
-    Attributes:
+    Attributes
     ----------
-    outline_page: Page
-        A presalytics.story.outline.Page object
+    outline_page: presalytics.story.outline.Page
+        The page data
 
-    widgets: List[WidgetComponentBase]
+    widgets: list of subclasses of presalytics.story.components.WidgetBase
         A list widget that will be loaded into templates and rendered via placeholders.
         These widgets must have a "to_html(self, data, **kwargs)" method.
 
-    css: List[str]
-        A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
-        in the presalytics.lib.templates.base module.
-
-    js: List[str]
-        A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
-        in the presalytics.lib.templates.base module.
     """
 
     outline_page: 'Page'
@@ -243,30 +248,13 @@ class PageTemplateBase(ComponentBase):
     def render(self, **kwargs) -> str:
         """
         Returns valid html that renders the template in a broswer with data loaded from widgets.
-
-        Parameters:
-        ----------
-        widgets: Sequence[WidgetComponentBase]
-            List of widget instances a one to many different class that inhereit from the WidgetComponentBase
-            abstract class. Defaults tot he widget list that the class as initilazed with.
-
-        **kwargs:
-            Optional keyword arguments can be used in subclass to modify the behavior of the to_html function.
-            these keyword arguments should be geinvariant through successive updates to the chart.  For example,
-            keycloak argument should control the styling of the widget, which should not change as the data in
-            the object (e.g., a chart) is updated.  Keyword arguments are loaded via additional_properties
-            parameter in in the presalytics.story.outline.Widget object.
-
-        Returns
-        ----------
-        A string of containing an html fragment that will be loaded into a template in successive operations
         """
         raise NotImplementedError
 
     def load_widget(self, widget: 'Widget'):
         """
         Converts a presalytics.story.outline.Widget object to a subclass of WidgetComponentBase
-        via a presalytics.story.loaders.WidgetLoaderBase object.
+        via the `presalytics.COMPONENTS` registry.
         """
         class_key = "widget." + widget.kind
         key = class_key + "." + widget.name
@@ -284,8 +272,8 @@ class PageTemplateBase(ComponentBase):
 
     def get_page_widgets(self, page: 'Page'):
         """
-        Converts the widgets within a presaltytics.story.outline.Page object to a list
-        of widgets subclassed from WidgetComponentBase
+        Converts the widgets within a `presalytics.story.outline.Page` object to a list
+        of widgets subclassed from `presalytics.story.components.WidgetBase`
         """
         widget_instances = []
         for widget_outline in page.widgets:
@@ -320,6 +308,37 @@ class ThemeBase(ComponentBase):
 
 
 class Renderer(ComponentBase):
+    """
+    Base class for objects that convert `presalytics.story.outline.StoryOutline` 
+    objects into html and rendering them over the web
+
+    With this class, users can push changes to their `presalytics.story.outline.StoryOutline`
+    to the Presalytics API and web clients.  Renderer class contains a couplemethods for 
+    syncing changes from component instances in the `presalytics.CONFIG` to the Presalytics API 
+    Story service.
+
+    * The `view` method allows users programattically view their stories at https://presaltyics.io 
+    after changes are made
+
+    * The `manage` method takes users to to the story management interface, where users can share their 
+    work with other users, continue making edits or change story properties.
+
+
+    Parameters
+    ----------
+    story_outline : presalytics.story.outline.StoryOutline
+        The presalytics StoryOutline to be rendered and presented
+    
+    Attributes
+    -----------
+    plugins : list of dict
+        Plugin data that transform to html `<script>` and `<link>` tags through
+        the rendering process
+    
+    site_host : str
+        The host of the website.  Defaults to https://presalytics.io.
+
+    """
     story_outline: 'StoryOutline'
     plugins: typing.List[typing.Dict]
 
@@ -332,15 +351,19 @@ class Renderer(ComponentBase):
             self.site_host = presalytics.CONFIG["HOSTS"]["SITE"]
         except (KeyError, AttributeError):
             self.site_host = presalytics.lib.constants.SITE_HOST
+        view_endpoint = presalytics.lib.constants.STORY_VIEW_URL.format(self.story_outline.info.story_id)
+        self.view_url = posixpath.join(self.site_host, view_endpoint)
+        manage_endpoint = presalytics.lib.constants.STORY_MANAGE_URL.format(self.story_outline.info.story_id)
+        self.manage_url = posixpath.join(self.site_host, manage_endpoint)
         
             
     
     def strip_unauthorized_scripts(self, body):
         """
-        Finds and remove unauthorized scripts from that the html document.  For security reasons,
+        Finds and removes unauthorized scripts from that the html document.  For security reasons,
         content in `<script>` tags that has not been vetted by presalytics.io devops 
 
-        If you would like to get a tag included int eh base library, raise an issue on 
+        If you would like to get a tag included in the base library, raise an issue on 
         [Github](https://github.com/presalytics/python-client/issues/new).  We'd love to hear from you and learn 
         about your use case, and will respond promptly to help.
         """
@@ -377,7 +400,7 @@ class Renderer(ComponentBase):
         """
         If a component instance for the widget is available in `presalytics.COMPONENTS`, 
         this method find the instance and regenerates the component data 
-        so the latest data is avialable during the renering process.
+        so the latest data is available during the renering process.
         """
         if not sub_dict:
             sub_dict = self.story_outline.to_dict()
@@ -407,7 +430,7 @@ class Renderer(ComponentBase):
     def get_component_implicit_plugins(self, sub_dict: typing.Dict = None):
         """
         Retrieves plugin data from plugins attached to `presalytics.story.components`
-        objects reference in the `presaltyics.story.outline.StoryOutline`
+        classes referenced in the `presalytics.story.outline.StoryOutline`
         """
         if not sub_dict:
             sub_dict = self.story_outline.to_dict()
@@ -503,9 +526,7 @@ class Renderer(ComponentBase):
         """
         if update:
             self.update_story()
-        endpoint = presalytics.lib.constants.STORY_VIEW_URL.format(self.story_outline.info.story_id)
-        url = posixpath.join(self.site_host, endpoint)
-        webbrowser.open_new_tab(url)
+        webbrowser.open_new_tab(self.view_url)
 
 
     def manage(self, update=True):
@@ -520,27 +541,42 @@ class Renderer(ComponentBase):
         """
         if update:
             self.update_story()
-        endpoint = presalytics.lib.constants.STORY_MANAGE_URL.format(self.story_outline.info.story_id)
-        url = posixpath.join(self.site_host, endpoint)
-        webbrowser.open_new_tab(url)
-
+        webbrowser.open_new_tab(self.manage_url)
 
 
 class ComponentRegistry(presalytics.lib.registry.RegistryBase):
+    """
+    A registry of classes and class instances of objects that inherit from
+    `presalytics.story.components.ComponentBase`.
+
+    """
     def __init__(self, **kwargs):
         self.instances = {}
         super(ComponentRegistry, self).__init__(**kwargs)
 
     def get_type(self, klass):
+        """
+        Returns the `__component_type__` attribute on a class
+        """
         return getattr(klass, "__component_type__", None)
 
     def get_name(self, klass):
+        """
+        Returns the `__component_kind__` attribute on a class
+        """
         return getattr(klass, "__component_kind__", None)
 
     def get_instance_name(self, klass):
+        """
+        Returns the `name` attribute on an instance
+        """
         return getattr(klass, "name", None)
 
     def get_instance_registry_key(self, klass):
+        """
+        Creates a registry key from a class instance by concatenating the 
+        `__component_type__`, `__component_kind__`, and `name` attributes of an instance
+        """
         key = None
         klass_type = self.get_type(klass)
         if klass_type:
@@ -556,6 +592,9 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
 
 
     def load_class(self, klass):
+        """
+        Loads a class or instance into the registry
+        """
         super().load_class(klass)
         if isinstance(klass, ComponentBase):
             try:
@@ -574,6 +613,9 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
         return self.instances.get(key, None)
 
     def unregister(self, klass):
+        """
+        Removes a class or instance from the registry
+        """
         super().unregister(klass)
         key = self.get_instance_registry_key(klass)
         if key:

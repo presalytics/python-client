@@ -13,6 +13,14 @@ logger = logging.getLogger('presalytics.lib.registry')
 
 
 class RegistryBase(abc.ABC):
+    """
+    In-memory container for python objects that return attributes from both the
+    `get_type` and `get_name` abstract functions. 
+
+    The `discover` method searches the current working directory, directories at
+    in the `autodiscover_paths` attribute, and packages in the current python environment
+    prefixed with "presalytics" (i.e., extensions).
+    """
     registry: typing.Dict[str, typing.Type]
     show_errors = False
 

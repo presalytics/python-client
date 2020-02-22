@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser(
 add = parser.add_argument
 group_add = parser.add_mutually_exclusive_group().add_argument
 
-add('--version', action='version', version='%(prog)s ' + presalytics.__version__)
+add('--version', action='version', version=presalytics.__version__)
 
 
 def main(_args=None):

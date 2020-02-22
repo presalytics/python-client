@@ -35,6 +35,7 @@ class OutlineEncoder(json.JSONEncoder):
             return obj.replace(tzinfo=datetime.timezone.utc).isoformat()
         if isinstance(obj, uuid.UUID):
             return str(obj)
+        # Generalized numpy encoder/decoder -- for http transport
         # If input object is an ndarray it will be converted into a dict 
         # holding dtype, shape and the data, base64 encoded.
         if isinstance(obj, np.ndarray):

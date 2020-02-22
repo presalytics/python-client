@@ -58,5 +58,9 @@ class TestStory(unittest.TestCase):
         self.assertIsInstance(outline, presalytics.story.outline.StoryOutline)
         self.assertIsInstance(re_wrapper, presalytics.lib.widgets.matplotlib.MatplotlibFigure)
 
+        revealer = presalytics.story.revealer.Revealer(outline)
+
+        self.assertEqual(len(revealer.plugin_mgr.dependency_map), 5)
+
     def tearDown(self):
         pass

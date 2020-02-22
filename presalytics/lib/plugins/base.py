@@ -329,18 +329,19 @@ class PluginManager(object):
     def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.List[typing.Dict] = None) -> typing.List[typing.Dict]:
         if not plugin_list:
             plugin_list = []
-        if plugin_list:
-            for key, val in source_dict.items():
-                if key == "plugins":
-                    if isinstance(val, list):
-                        for list_item in val:
-                            if isinstance(list_item, dict):
-                                if "config" in list_item and "name" in list_item and "kind" in list_item:
-                                    plugin_list.append(list_item)
-                if isinstance(val, dict):
-                    PluginManager.get_plugins_from_nested_dict(val, plugin_list)
+    
+        for key, val in source_dict.items():
+            if key == "plugins":
                 if isinstance(val, list):
                     for list_item in val:
                         if isinstance(list_item, dict):
-                            PluginManager.get_plugins_from_nested_dict(list_item, plugin_list)
+                            if "config" in list_item and "name" in list_item and "kind" in list_item:
+                                plugin_list.append(list_item)
+                continue
+            if isinstance(val, dict):
+                plugin_list.extend(PluginManager.get_plugins_from_nested_dict(val, plugin_list))
+            if isinstance(val, list):
+                for list_item in val:
+                    if isinstance(list_item, dict):
+                        plugin_list.extend(PluginManager.get_plugins_from_nested_dict(list_item, plugin_list))
         return plugin_list

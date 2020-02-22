@@ -3,7 +3,7 @@ import typing
 import os
 import logging
 import webbrowser
-import posixpath
+import urllib.parse
 import presalytics.lib
 import presalytics.lib.registry
 import presalytics.lib.exceptions
@@ -363,9 +363,9 @@ class Renderer(ComponentBase):
         try:
             story_id = self.story_outline.story_id
             view_endpoint = presalytics.lib.constants.STORY_VIEW_URL.format(story_id)
-            self.view_url = posixpath.join(self.site_host, view_endpoint)
+            self.view_url = urllib.parse.urljoin(self.site_host, view_endpoint)
             manage_endpoint = presalytics.lib.constants.STORY_MANAGE_URL.format(story_id)
-            self.manage_url = posixpath.join(self.site_host, manage_endpoint)
+            self.manage_url = urllib.parse.urljoin(self.site_host, manage_endpoint)
         except (KeyError, AttributeError):
             self.view_url = None
             self.manage_url = None
@@ -545,7 +545,7 @@ class Renderer(ComponentBase):
             prior to opening in the web browser
         """
         if not self.view_url:
-            message = "The outline has not been push to the Presaltyics API yet, and therefore cannot be view via preslaytics.io"
+            message = "The outline has not been pushed to the Presaltyics API yet, and therefore cannot be viewed via preslaytics.io"
             raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
         if update:
             self.update_story()
@@ -563,7 +563,7 @@ class Renderer(ComponentBase):
             prior to opening in the web browser
         """
         if not self.manage_url:
-            message = "The outline has not been push to the Presaltyics API yet, and therefore cannot be view via preslaytics.io"
+            message = "The outline has not been pushed to the Presaltyics API yet, and therefore cannot be viewed via preslaytics.io"
             raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
             
         if update:

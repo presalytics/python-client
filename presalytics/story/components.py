@@ -530,7 +530,7 @@ class Renderer(ComponentBase):
         """
         self.update_outline_from_instances()
         client = presalytics.client.api.Client(**self.client_info)
-        story = client.story.story_id_get(self.story_outline.info.story_id)
+        story = client.story.story_id_get(self.story_outline.story_id)
         story.outline = self.story_outline.dump()
         client.story.story_id_put(story.id, story)
     

@@ -46,6 +46,7 @@ information on licensing, please contact [inquires@presaltyics.io](mailto:inquir
 import os
 import environs
 import logging
+import pkg_resources
 import presalytics.lib
 import presalytics.lib.logger
 import presalytics.lib.plugins
@@ -129,6 +130,7 @@ the documentation for those package for those vairables definition.
 """
 
 
+
 file_logger = CONFIG.get("USE_LOGGER", True)
 log_level = CONFIG.get("LOG_LEVEL", logging.DEBUG)
 
@@ -155,6 +157,10 @@ and loaded in this environment. This instance is used by `presalytics.story.comp
 (e.g., `presalytics.story.revealer.Revealer`) to convert widgets, pages, and themes into stories.
 """
 
+try:
+    __version__ = pkg_resources.require(presalytics.__name__)[0].version
+except Exception:
+    __version__ = "build"
 
 from presalytics.client.api import Client
 from presalytics.lib.plugins.base import PluginBase

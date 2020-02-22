@@ -534,7 +534,7 @@ class Renderer(ComponentBase):
         story.outline = self.story_outline.dump()
         client.story.story_id_put(story.id, story)
     
-    def view(self, update=True):
+    def view(self, update=False):
         """
         Updates a story and opens it on the presalytics.io website
 
@@ -552,7 +552,7 @@ class Renderer(ComponentBase):
         webbrowser.open_new_tab(self.view_url)
 
 
-    def manage(self, update=True):
+    def manage(self, update=False):
         """
         Updates a story and opens the management page on the presalytics.io website
 

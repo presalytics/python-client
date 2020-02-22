@@ -21,13 +21,6 @@ class Mpld3Plugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
             'kind': 'script',
             'name': 'external_scripts',
             'config': {
-                'approved_scripts_key': 'reveal.base'
-            }
-        },
-        {
-            'kind': 'script',
-            'name': 'external_scripts',
-            'config': {
                 'approved_scripts_key': 'd3v3'
             }
         },

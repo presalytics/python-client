@@ -49,11 +49,20 @@ class TestStory(unittest.TestCase):
 
         ax.scatter(x, y, s=z*1000, alpha=0.5)
 
-        wrapper = presalytics.lib.widgets.matplotlib.MatplotlibFigure(fig, "BubbleChart")
+        wrapper = presalytics.lib.widgets.matplotlib.MatplotlibResponsiveFigure(fig, "BubbleChart")
+
 
         outline = presalytics.lib.tools.component_tools.create_outline_from_widget(wrapper)
 
-        re_wrapper = presalytics.lib.widgets.matplotlib.MatplotlibFigure.deserialize(outline.pages[0].widgets[0])
+        client = presalytics.Client()
+
+        story = client.story.story_post(outline.dump())
+        
+        outline = presalytics.story.outline.StoryOutline.load(story.outline)
+
+        re_wrapper = presalytics.lib.widgets.matplotlib.MatplotlibResponsiveFigure.deserialize(outline.pages[0].widgets[0])
+
+    
 
         self.assertIsInstance(outline, presalytics.story.outline.StoryOutline)
         self.assertIsInstance(re_wrapper, presalytics.lib.widgets.matplotlib.MatplotlibFigure)

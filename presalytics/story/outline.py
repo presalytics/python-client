@@ -500,7 +500,7 @@ class StoryOutline(OutlineBase):
         'title',
     ]
 
-    def __init__(self, presalytics_story, info, pages, description, title, themes, plugins=None, story_id=None, **kwargs):
+    def __init__(self, presalytics_story, info, pages, description, title, themes, plugins=None, story_id="empty", **kwargs):
         super(StoryOutline, self).__init__(**kwargs)
         self.presalytics_story = presalytics_story
         self.info = Info.deserialize(info)
@@ -521,7 +521,5 @@ class StoryOutline(OutlineBase):
             self.plugins = [Plugin.deserialize(x) for x in plugins]
         else:
             self.plugins = []
-        if story_id:
-            self.story_id = story_id
-        else:
-            self.story_id = ""
+        self.story_id = story_id
+        

@@ -2,6 +2,8 @@ import mpld3
 import jinja2
 import typing
 import json
+import lxml
+import os
 import presalytics.story.components
 import presalytics.story.outline
 import presalytics.lib.exceptions

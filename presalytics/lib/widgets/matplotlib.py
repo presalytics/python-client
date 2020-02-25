@@ -178,7 +178,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
             "figure_id": self.figure_id,
             "story_id": self.story_id
         }
-        source_url = "{story_host}/{story_id}/matplotlib-responsive/{figure_id}/".format(**params)
+        source_url = "{story_host}/{story_id}/matplotlib-responsive/{figure_id}".format(**params)
         svg_container_div = lxml.html.Element("div", {
             'class': 'matplotlib-responsive-container',
             'data-jwt': self.token,

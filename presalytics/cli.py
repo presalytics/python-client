@@ -141,7 +141,7 @@ account_action_group = account.add_mutually_exclusive_group(required=True)
 account_action_group.add_argument('--delete', default=False, action='store_true', help='Delete Stories')
 delete_group = account.add_mutually_exclusive_group(required=True)
 delete_group.add_argument('--all', default=False, action='store_true', help='WARNING!!! Delete all stories on account.')
-delete_group.add_argument('--id', help='The Presaltyics API Story service Id of the story you want to delete.')
+delete_group.add_argument('--id', default=None, help='The Presaltyics API Story service Id of the story you want to delete.')
 account.add_argument('-u', '--username', default=None, action='store', help=username_help)
 account.add_argument('-p', '--password', default=None, action='store', help=password_help)
 

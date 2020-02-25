@@ -157,10 +157,10 @@ class RegistryBase(abc.ABC):
                             self.get_classes(mod)
                     except AttributeError as circ:
                         # Checks for targets of circular imports, and defer those imports to runtime
-                        message = "Likely ciruclar import in module {}. Deferring import to run-time.".format(mod.__name__)
+                        message = "Likely ciruclar import in module '{}'. Deferring import to run-time.".format(mod.__name__)
                         logger.info(message)
                         self.deferred_modules.append({
-                            "name": module.__name__,
+                            "name": mod.__name__,
                             "module": mod,
                             "spec": mod_spec
                         })

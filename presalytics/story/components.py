@@ -639,6 +639,7 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
                     logger.error(message)
 
     def get_instance(self, key):
+        self.load_deferred_modules()
         return self.instances.get(key, None)
 
     def unregister(self, klass):
@@ -655,4 +656,5 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
         if is_key:
             return [self.get_instance(string_with_key_or_name)]
         else:
+            self.load_deferred_modules()
             return [x for x in self.instances.keys() if string_with_key_or_name in x]

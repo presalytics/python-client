@@ -8,6 +8,8 @@ import logging
 import typing
 import abc
 import re
+import types
+import ast
 import presalytics.lib.exceptions
 
 
@@ -24,6 +26,7 @@ class RegistryBase(abc.ABC):
     prefixed with "presalytics" (i.e., extensions).
     """
     registry: typing.Dict[str, typing.Type]
+    deferred_modules: typing.List[typing.Dict[str, typing.Any]]
     show_errors = False
 
     def __init__(self, show_errors=False, autodiscover_paths=[], reserved_names: typing.List[str] = None, **kwargs):
@@ -32,6 +35,7 @@ class RegistryBase(abc.ABC):
         self.autodiscover_paths = autodiscover_paths
         self.registry = {}
         self.reserved_names = ["config.py", "setup.py"]
+        self.deferred_modules = []  # modules to load at at runtime, if theres a ciruclat dependency at import-time
         try:
             if reserved_names:
                 self.reserved_names.extend(reserved_names)
@@ -59,6 +63,7 @@ class RegistryBase(abc.ABC):
             traceback.print_tb(tb)
 
     def get(self, key):
+        self.load_deferred_modules()
         return self.registry.get(key, None)
 
     def get_classes_from_module(self, module):
@@ -92,8 +97,9 @@ class RegistryBase(abc.ABC):
                 if key:
                     if key not in self.registry.keys():
                         self.registry[key] = klass
-            except Exception:
+            except Exception as ex:
                 if self.show_errors:
+                    logger.exception(ex)
                     klass_type = self.get_type(klass)
                     message = "Unable to register class {0} with type {1}".format(klass.__name__, klass_type)
                     logger.error(message)
@@ -110,6 +116,31 @@ class RegistryBase(abc.ABC):
             if inspect.isclass(val) or isinstance(val, abc.ABC):
                 self.load_class(val)
 
+    # def get_exception_line_number(tb: types.TracebackType, mod__file__)
+    #     if tb.tb_frame.f_globals.get('__file__') == mod__file__:
+    #         return tb.tb_lineno
+    #     else:
+    #         return self.get_exception_line_number(tb.tb_next, mod__file__)
+    
+    # def get_target_from_ast(atree: ast.Module, lineno: int):
+    #     for nodes in atree.body:
+    def load_deferred_modules(self):
+        if len(self.deferred_modules) > 0:
+            new_deferred = []
+            for mod in self.deferred_modules:
+                try:
+                    spec = mod.get("spec")
+                    module = mod.get("module")
+                    spec.loader.exec_module(module)
+                    self.get_classes(module)
+                except Exception as ex:
+                    logger.exception(ex)
+                    message = "Failuire to execute deferred load on module {}.  Please check exception message and review for errors.".format(mod.__name__)
+                    logger.error(message)
+                    new_deferred.append(mod)
+            self.deferred_modules = new_deferred # removes modules successfully loaded from the list
+                 
+                
     def discover(self):
         current_path = os.getcwd()
         if current_path not in self.autodiscover_paths:
@@ -124,8 +155,18 @@ class RegistryBase(abc.ABC):
                             mod = importlib.util.module_from_spec(mod_spec)
                             mod_spec.loader.exec_module(mod)
                             self.get_classes(mod)
-                    except Exception:
+                    except AttributeError as circ:
+                        # Checks for targets of circular imports, and defer those imports to runtime
+                        message = "Likely ciruclar import in module {}. Deferring import to run-time.".format(mod.__name__)
+                        logger.info(message)
+                        self.deferred_modules.append({
+                            "name": module.__name__,
+                            "module": mod,
+                            "spec": mod_spec
+                        })
+                    except Exception as ex:
                         if self.show_errors:
+                            logger.exception(ex)
                             message = "Could not load classes from file {0}".format(name)
                             logger.error(message)
         for finder, name, ispkg in pkgutil.iter_modules():
@@ -189,6 +230,7 @@ class RegistryBase(abc.ABC):
         if is_key:
             return [self.get(string_with_key_or_name)]
         else:
+            self.load_deferred_modules()
             return [x for x in self.registry.keys() if string_with_key_or_name in x]
             
             

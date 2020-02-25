@@ -68,6 +68,7 @@ class MatplotlibFigure(presalytics.story.components.WidgetBase):
     @classmethod
     def deserialize(cls, outline, **kwargs):
         figure_dict = outline.data.get("figure_dict")
+        kwargs.update(**outline.additional_properties)
         return cls(None, outline.name, figure_dict=figure_dict, **outline.additional_properties)
 
     def serialize(self, **kwargs):
@@ -193,11 +194,12 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
     def deserialize(cls, outline, **kwargs):
         figure_dict = outline.data.get("figure_dict")
         story_id = outline.data.get("story_id", None)
+        kwargs.update(**outline.additional_properties)
         return cls(None, 
                    outline.name,
                    story_id,
                    figure_dict=figure_dict,
-                   **outline.additional_properties)
+                   **kwargs)
 
     def serialize(self, **kwargs):
         data = {

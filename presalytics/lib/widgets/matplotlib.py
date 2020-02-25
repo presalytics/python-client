@@ -155,16 +155,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
         if not self.story_id:
             message = "This object requires a valid story_id to render."
             raise presalytics.lib.exceptions.MissingConfigException(message=message)
-        params = {
-            "story_host": self.story_host,
-            "figure_id": self.figure_id,
-            "story_id": self.story_id
-        }
-        html = """
-        <div class="matplotlib-responsive-wrapper">
-            <iframe src="{story_host}/story/{story_id}/matplotlib-responsive/{figure_id}/" frameborder="0"></iframe>
-        </div>
-        """.format(**params)
+        html = self.create_container()
         return html
 
 

@@ -133,6 +133,13 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
             'name': 'external_scripts',
             'kind': 'script',
             'config': {
+                'approved_scripts_key': 'jquery'
+            }
+        },
+        {
+            'name': 'external_scripts',
+            'kind': 'script',
+            'config': {
                 'approved_scripts_key': 'mpl-responsive'
             }
         },

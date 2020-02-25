@@ -277,7 +277,7 @@ def main():
                 logger.error("A story outline needs a Story Id to be pulled from the Presaltyics API. Please run 'presalytics push'")
                 return
             else:
-                if args.id:
+                if getattr(args, "id", None):
                     _id = args.id
                 else:
                     _id = outline.story_id

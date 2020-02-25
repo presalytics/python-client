@@ -153,12 +153,9 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
     ] #type: ignore
 
     def __init__(self, figure: 'Figure', name: str, story_id: str = "empty", *args, **kwargs):
-        try:
-            self.story_host = presalytics.CONFIG["HOSTS"]["STORY"]
-        except (KeyError, AttributeError):
-            self.story_host = presalytics.lib.constants.HOST
         self.story_id = story_id
         super(MatplotlibResponsiveFigure, self).__init__(figure, name, *args, **kwargs)
+        self.story_host = self.get_client().story.api_client.configuration.host
 
         
     def to_html(self):
@@ -181,7 +178,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
             "figure_id": self.figure_id,
             "story_id": self.story_id
         }
-        source_url = "{story_host}/story/{story_id}/matplotlib-responsive/{figure_id}/".format(**params)
+        source_url = "{story_host}/{story_id}/matplotlib-responsive/{figure_id}/".format(**params)
         svg_container_div = lxml.html.Element("div", {
             'class': 'matplotlib-responsive-container',
             'data-jwt': self.token,

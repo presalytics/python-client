@@ -174,7 +174,7 @@ from presalytics.lib.plugins.reveal import RevealConfigPlugin
 from presalytics.lib.plugins.reveal_theme import RevealCustomTheme
 from presalytics.lib.plugins.scss import ScssPlugin
 from presalytics.lib.templates.base import JinjaTemplateBuilder
-from presalytics.lib.widgets.matplotlib import MatplotlibFigure
+from presalytics.lib.widgets.matplotlib import MatplotlibFigure, MatplotlibResponsiveFigure
 from presalytics.lib.widgets.ooxml import OoxmlFileWidget, OoxmlEndpointMap
 from presalytics.story.outline import StoryOutline
 from presalytics.story.revealer import Revealer
@@ -202,6 +202,7 @@ __all__ = [
     'Renderer',
     'Revealer',
     'MatplotlibFigure',
+    'MatplotlibResponsiveFigure',
     'OoxmlFileWidget',
     'OoxmlEndpointMap',
     'OoxmlEditorWidget',

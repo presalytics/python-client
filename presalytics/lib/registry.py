@@ -7,6 +7,8 @@ import inspect
 import logging
 import typing
 import abc
+import re
+import presalytics.lib.exceptions
 
 
 logger = logging.getLogger('presalytics.lib.registry')
@@ -26,6 +28,7 @@ class RegistryBase(abc.ABC):
 
     def __init__(self, show_errors=False, autodiscover_paths=[], reserved_names: typing.List[str] = None, **kwargs):
         RegistryBase.show_errors = show_errors
+        self.error_class = presalytics.lib.exceptions.RegistryError
         self.autodiscover_paths = autodiscover_paths
         self.registry = {}
         self.reserved_names = ["config.py", "setup.py"]
@@ -35,6 +38,10 @@ class RegistryBase(abc.ABC):
         except Exception:
             pass
         self.discover()
+        self.key_regex = re.compile(r'(.*)\.(.*)')
+
+    def raise_error(self, message):
+        raise self.error_class(self, message)
 
     @abc.abstractmethod
     def get_type(self, klass):
@@ -136,7 +143,7 @@ class RegistryBase(abc.ABC):
             frame_module = frame.f_globals['__name__']
             if frame_module == '__main__':
                 try:
-                    frame_module = inspect.getmodule(frame).__spec__.name
+                    frame_module = inspect.getmodule(frame).__spec__.name #type: ignore
                 except AttributeError:
                     # vscode and spyder's parent controllers load __main__ without a module spec
                     if not getattr(inspect.getmodule(frame), "__spec__", None):
@@ -176,3 +183,14 @@ class RegistryBase(abc.ABC):
         key = self.get_registry_key(klass)
         if key:
             self.registry.pop(key)
+
+    def find_class(self, string_with_key_or_name) -> typing.List[str]:
+        is_key = self.key_regex.match(string_with_key_or_name)
+        if is_key:
+            return [self.get(string_with_key_or_name)]
+        else:
+            return [x for x in self.registry.keys() if string_with_key_or_name in x]
+            
+            
+            
+

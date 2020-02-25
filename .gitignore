@@ -432,3 +432,5 @@ dist/
 token.json
 presalytics.log
 tmp.*
+story.yaml
+story.json

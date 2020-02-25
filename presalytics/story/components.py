@@ -3,6 +3,7 @@ import typing
 import os
 import logging
 import webbrowser
+import re
 import urllib.parse
 import presalytics.lib
 import presalytics.lib.registry
@@ -69,7 +70,7 @@ class ComponentBase(abc.ABC):
     """
     __component_type__: str
     __component_kind__: str
-    __plugins__: typing.List[str]
+    __plugins__: typing.List[typing.Optional[typing.Dict[str, typing.Any]]]
     name: str
 
     __plugins__ = []
@@ -579,6 +580,7 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
     """
     def __init__(self, **kwargs):
         self.instances = {}
+        self.instance_regex = re.compile(r'(.*)\.(.*)\.(.*)')
         super(ComponentRegistry, self).__init__(**kwargs)
 
     def get_type(self, klass):
@@ -647,3 +649,10 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
         key = self.get_instance_registry_key(klass)
         if key:
             self.instances.pop(key)
+
+    def find_instance(self, string_with_key_or_name) -> typing.List[str]:
+        is_key = self.instance_regex.match(string_with_key_or_name)
+        if is_key:
+            return [self.get_instance(string_with_key_or_name)]
+        else:
+            return [x for x in self.instances.keys() if string_with_key_or_name in x]

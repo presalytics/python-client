@@ -69,7 +69,7 @@ class TestStory(unittest.TestCase):
 
         revealer = presalytics.story.revealer.Revealer(outline)
 
-        self.assertEqual(len(revealer.plugin_mgr.dependency_map), 6)
+        self.assertEqual(len(revealer.plugin_mgr.dependency_map), 5)
 
         html_str = revealer.package_as_standalone().decode('utf-8')
 

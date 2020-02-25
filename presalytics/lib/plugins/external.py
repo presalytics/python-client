@@ -5,7 +5,7 @@ import presalytics.lib.exceptions
 
 site_host = "https://presalytics.io"
 try:
-    site_host = presalytics.CONFIG["HOSTS"]["SITE"]
+    site_host = presalytics.CONFIG["HOSTS"]["SITE"] #type: ignore
 except (KeyError, AttributeError, ImportError, ModuleNotFoundError):
     pass
 
@@ -126,6 +126,7 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
         },
         'mpld3': '{0}/static/mpld3/mpld3.min.js'.format(site_host),
         'ooxml': '{0}/static/ooxml/ooxml.js'.format(site_host),
+        'mpl-responsive': '{0}/static/ooxml/mpl-responsive.js'.format(site_host),
         'jquery': 'https://code.jquery.com/jquery-3.4.1.min.js'
     }
     """

@@ -144,6 +144,7 @@ class AuthenticationMixIn(object):
                     except TypeError:
                         d = e.body + addendum
                     e.body = json.dumps(d)
+                    logging.error(d)
                 except Exception:
                     pass
                 if self._ignore_api_exceptions:

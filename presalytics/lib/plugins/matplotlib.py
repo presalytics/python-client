@@ -42,3 +42,4 @@ class Mpld3Plugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
             'fig_json': fig_json
         }
         return self.render(render_config)
+

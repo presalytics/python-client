@@ -1,3 +1,4 @@
+import typing
 import logging
 
 
@@ -5,6 +6,10 @@ class PresalyticsBaseException(Exception):
     def __init__(self, *args, **kwargs):
         default_message = "An Error occur in the presalytics module.  Consult log for stacktrace."
         message = args[0]
+        if message:
+            self.message = message
+        else:
+            self.message = default_message
         if len(message) > 0:
             logger = logging.getLogger('presalytics.lib.exceptions')
             logger.error(message)
@@ -65,6 +70,20 @@ class InvalidConfigurationError(PresalyticsBaseException):
             message = "One of the input parameters to your component is incorrectly defined (e.g., a typo).  Please re-check and try again."
         super().__init__(message)
 
+
+class RegistryError(PresalyticsBaseException):
+     def __init__(self, registry, message=None):
+        if not message:
+            message = "The was an unknown error in inside the registry"
+        message = "{0} Error: ".format(registry.__class__.__name__) + message
+        super().__init__(message)
+
+
+class InvalidArgumentException(PresalyticsBaseException):
+    def __init__(self, message=None):
+        if not message:
+            message = "One of the arguments supplied to this method is invalid."
+        super().__init__(message)
 
 class ApiException(PresalyticsBaseException):
     def __init__(self, default_exception=None):

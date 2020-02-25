@@ -10,6 +10,7 @@ client-ready presentation materials and web content that update in real-time and
 
 Our objective when building this platform is make the analyst experience as simple as possible.  
 Set up time for new user should take less than half an hour, and all features are self-service and self-explanatory.  
+
 Of course, if you have any questions or need help to get going, you can [contact us](/contact-us) or 
 quickly get the help you need on our [slack channel](https://presalytics.slack.com) 
 ([Join Here!](https://join.slack.com/t/presalytics/shared_invite/enQtODExMjc3MDE1Nzc5LWU0ZDlhZTgwZTM3MzQ4Yzc4Nzk4Zjc0NmQ3YjgzNTEwODdlYjM0ZjFkZWI4Y2ZhNzBmOTZhMzA2MzE3YjFiZTg)).
@@ -17,9 +18,9 @@ quickly get the help you need on our [slack channel](https://presalytics.slack.c
 To get going quickly, you can browse our [Getting Started](https://presalytics.io/docs/getting-started/) page and review 
 some [examples](https://presalytics.io/docs/examples).
 
-For more advanced users developers, you can learn more about the API by reviewing 
-the [service structure](https://presalytics.io/docs/how-it-works) and building a better understanding 
-of the API [security](https://presaltyics.io/docs/develpers/security) features.
+For more advanced users and developers, you can learn more about the API by reviewing 
+the [service structure](https://presalytics.io/docs/how-it-works) to build a better understanding 
+of the API and its [security](https://presaltyics.io/docs/develpers/security) features.
 
 # Installation
 

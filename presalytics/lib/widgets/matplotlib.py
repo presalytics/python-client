@@ -98,6 +98,8 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
     the figure is converted to a d3.js object via the [mpld3](https://mpld3.github.io/)
     package.
 
+    This class also depends on the static plugin
+
     Parameters
     ----------
 
@@ -119,8 +121,26 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
     figure_id : str
         A unique identifier used to render the that figure into a d3.js object
     """
-    __component_kind__ = 'matplotlib-responsive'
+
     additional_properties: typing.Dict
+    __component_kind__ = 'matplotlib-responsive'
+
+    __plugins__ = [
+        {
+            'name': 'external_scripts',
+            'kind': 'script',
+            'config': {
+                'approved_scripts_key': 'mpl-responsive'
+            }
+        },
+        {
+            'name': 'external_links',
+            'kind': 'style',
+            'config': {
+                'approved_styles_key': 'preloaders'
+            }
+        }
+    ] #type: ignore
 
     def __init__(self, figure: 'Figure', name: str, story_id: str = "empty", *args, **kwargs):
         try:
@@ -146,6 +166,37 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
         </div>
         """.format(**params)
         return html
+
+
+    def create_container(self, **kwargs):
+        """
+        Wraps the Matplotlib Figure in a SVG endpoint load via `<iframe>` that
+        will be rendered inside of a story and rescaled to give repsonsive effect
+        """
+        client = self.get_client()
+        self.token = client.token_util.token["access_token"]
+        params = {
+            "story_host": self.story_host,
+            "figure_id": self.figure_id,
+            "story_id": self.story_id
+        }
+        source_url = "{story_host}/story/{story_id}/matplotlib-responsive/{figure_id}/".format(**params)
+        svg_container_div = lxml.html.Element("div", {
+            'class': 'matplotlib-responsive-container',
+            'data-jwt': self.token,
+            'data-source-url': source_url
+        })
+        preloader_container_div = lxml.etree.SubElement(svg_container_div, "div", attrib={"class":"preloader-container"})
+        preloader_row_div = lxml.etree.SubElement(preloader_container_div, "div", attrib={"class":"preloader-row"})
+        preloader_file = os.path.join(os.path.dirname(__file__), "img", "preloader.svg")
+        svg = lxml.html.parse(preloader_file)
+        preloader_row_div.append(svg.getroot())
+        empty_parent_div = lxml.html.Element("div", {
+            'class': 'empty-parent bg-light'
+        })
+        empty_parent_div.append(svg_container_div)
+        return lxml.html.tostring(empty_parent_div)
+
 
     @classmethod
     def deserialize(cls, outline, **kwargs):

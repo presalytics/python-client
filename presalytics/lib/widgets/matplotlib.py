@@ -235,7 +235,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
                 <div id="{{ figid }}"></div>
                 <script type="text/javascript">
 
-                    window.onload = mpld3.draw_figure({{ figid }}, {{ figure_json }});
+                    window.onload = mpld3.draw_figure("{{ figid }}", {{ figure_json }});
             
                 </script>
             </body>

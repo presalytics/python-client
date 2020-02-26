@@ -224,6 +224,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
         SIMPLE_HTML = jinja2.Template("""<!DOCTYPE html>
         <html>
             <head>
+                <meta charset="UTF-8">
                 <style>
                 {{ extra_css }}
                 </style>
@@ -231,7 +232,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
             <body>
                 <script type="text/javascript" src="{{ d3_url }}"></script>
                 <script type="text/javascript" src="{{ mpld3_url }}"></script>
-                <div id={{ figid }}></div>
+                <div id="{{ figid }}"></div>
                 <script type="text/javascript">
 
                     window.onload = mpld3.draw_figure({{ figid }}, {{ figure_json }});

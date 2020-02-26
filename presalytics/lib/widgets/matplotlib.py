@@ -182,7 +182,8 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
         svg_container_div = lxml.html.Element("div", {
             'class': 'matplotlib-responsive-container',
             'data-jwt': self.token,
-            'data-source-url': source_url
+            'data-source-url': source_url,
+            'style': "height: 100%; width: 100%; display: block;"
         })
         preloader_container_div = lxml.etree.SubElement(svg_container_div, "div", attrib={"class":"preloader-container"})
         preloader_row_div = lxml.etree.SubElement(preloader_container_div, "div", attrib={"class":"preloader-row"})

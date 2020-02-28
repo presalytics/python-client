@@ -56,8 +56,7 @@ json_help = "Writes file updates to JSON format"
 overwrite_help = "Forces (o)verwrite of file with returned Story Outline (if exists)"
 username_help = "Overrides the username in presalytics.CONFIG (if present)"
 password_help = "The user's Presalytics API password"
-metavar = "These commands come after the above optional arguments (when present)"
-subparsers = parser.add_subparsers(title='Story API Commands', prog='presalytics', metavar=metavar, dest='story_api')
+subparsers = parser.add_subparsers(title='Story API Commands', prog='presalytics', dest='story_api')
 
 push_description = """
 Pushes a Story Outline revision to the Presalytics API

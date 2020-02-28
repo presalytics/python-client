@@ -327,8 +327,8 @@ class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
                    component.data["object_ooxml_id"],
                    endpoint_map,
                    transform_class=transform_class,
-                   transform_params=transform_params
-                   )
+                   transform_params=transform_params,
+                   **kwargs)
 
     def serialize(self, **kwargs):
         data = {

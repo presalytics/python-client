@@ -185,7 +185,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
             'src': source_url,
             'frameborder': "0",
             'scrolling': "no",
-            'class': 'matplotlib-responsive-frame'
+            'class': 'matplotlib-responsive-frame',
             'style': 'max-height: none; max-width: none;'
         })
         empty_parent_div.append(frame)

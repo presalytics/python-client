@@ -155,7 +155,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
     def __init__(self, figure: 'Figure', name: str, story_id: str = "empty", *args, **kwargs):
         self.story_id = story_id
         super(MatplotlibResponsiveFigure, self).__init__(figure, name, *args, **kwargs)
-        self.story_host = self.get_client().story.api_client.configuration.host
+        self.story_host = self.get_client(delegate_login=True).story.api_client.configuration.host
 
         
     def to_html(self):
@@ -171,7 +171,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
         Wraps the Matplotlib Figure in a SVG endpoint load via `<iframe>` that
         will be rendered inside of a story and rescaled to give repsonsive effect
         """
-        client = self.get_client()
+        client = self.get_client(delegate_login=True)
         self.token = client.token_util.token["access_token"]
         params = {
             "story_host": self.story_host,

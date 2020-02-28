@@ -108,11 +108,13 @@ class ComponentBase(abc.ABC):
         """
         raise NotImplementedError
 
-    def get_client(self):
+    def get_client(self, **kwargs):
         """
         Initializes `presalytics.client.api.Client` using `client_info`
         """
-        return presalytics.client.api.Client(**self.client_info)
+        params = self.client_info
+        params.update(kwargs)
+        return presalytics.client.api.Client(**params)
 
 
 class WidgetBase(ComponentBase):

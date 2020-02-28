@@ -8,6 +8,7 @@ import abc
 import re
 import requests
 import pystache
+import collections
 import presalytics
 import presalytics.lib.registry
 import presalytics.lib.exceptions
@@ -137,6 +138,87 @@ class TextReplace(XmlTransformBase):
     Replaces text in an ooxml Element
     """
     __xml_transform_name__ = "ReplaceText"
+
+    class TextElementInfo(object):
+        def __init__(self, element: lxml.etree.Element, start_position: int):
+            self.element = element
+            self.text = element.text
+            self.length = len(self.text)
+            self.start_position = start_position
+            self.end_position = self.start_position + self.length
+
+    class TextList(object):
+        _list: typing.List['TextReplace.TextElementInfo']
+
+        def __init__(self):
+            self._list = []
+
+        def append(self, text_element_info):
+            if isinstance(text_element_info, globals()['TextReplace'].TextElementInfo):
+                self._list.append(text_element_info)
+            else:
+                raise presalytics.lib.exceptions.InvalidArgumentException(message="Argument must be an instance of class 'TextElementInfo'")
+        
+        def set_text(self, index, new_string):
+            self._list[index].text = new_string
+            self._list[index].element.text = new_string
+
+        def get_text(self, index):
+            return self._list[index].text
+
+        def get_plaintext_string(self):
+            ret = ""
+            for item in self._list:
+                ret += item.text
+            return ret
+
+        def get_position(self, match_string):
+            return self.get_plaintext_string().find(match_string)
+
+        def get_list_index_of_position(self, position: int):
+            for item in self._list:
+                if item.start_position <= position and item.end_position >= position:
+                    return self.get_index(item)
+            raise presalytics.lib.exceptions.InvalidArgumentException(message="Position {} out of range".format(position))
+        
+        def get_index(self, text_element_info: 'TextReplace.TextElementInfo'):
+            for i in range(len(self._list)):
+                if self._list[i] == text_element_info:
+                    return i
+            raise presalytics.lib.exceptions.InvalidArgumentException(message="Supplied argument on in self._list")
+        
+        def set_text_to_empty_string(self, index):
+            self._list[index].text = ""
+            self._list[index].element.text = ""
+
+        def set_start_to_new_value(self, index, new_value):
+            start_text = self._list[index].text.split("{{", 1)[0]
+            new_text = start_text + new_value
+            self._list[index].text = new_text
+            self._list[index].element.text = new_text
+
+        def truncate_end(self, index):
+            end_text = self._list[index].text.split("}}", 1)[-1]
+            self._list[index].text = end_text
+            self._list[index].element.text = end_text
+
+            
+    def replace_handlebars(self, info_list, params):
+        for key, val in params.items():
+            match_key = "{{" + key + "}}"
+            match_start_position =  info_list.get_position(match_key)
+            if match_start_position > -1:
+                match_end_position = match_start_position + len(match_key)
+                match_start_index = info_list.get_list_index_of_position(match_start_position)
+                match_end_index = info_list.get_list_index_of_position(match_end_position)
+                info_list.set_start_to_new_value(match_start_index, val)
+                if match_start_index < match_end_index:
+                    info_list.truncate_end(match_end_index)
+                for i in range(match_start_index + 1, match_end_index):
+                    info_list.set_text_to_empty_string(i)
+                self.replace_handlebars(info_list, params)
+
+
     def transform_function(self, lxml_element, params):
         """
         Replaces the text inside 
@@ -150,8 +232,13 @@ class TextReplace(XmlTransformBase):
             See the `Function Parameters Dictionary` for required entries
         """
         text_list = lxml_element.findall('.//{*}t')
-        for t in text_list:
-            t.text = pystache.render(t.text, params)
+        info_list = TextReplace.TextList()
+        position = 0
+        for tag in text_list:
+            info = self.TextElementInfo(tag, position)
+            position = info.end_position + 1
+            info_list.append(info)
+        self.replace_handlebars(info_list, params)
         return lxml_element
 
 

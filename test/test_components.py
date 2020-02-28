@@ -5,6 +5,7 @@ import unittest
 import typing
 import presalytics
 import io
+import lxml
 if typing.TYPE_CHECKING:
     from presalytics.client.presalytics_story import Story
 
@@ -61,6 +62,8 @@ class TestComponents(unittest.TestCase):
             transform_params=multiparams
         )
         outline.pages[0].widgets[0] = widget.outline_widget
+
+        
         presalytics.COMPONENTS.register(widget)
         story.outline = outline.dump()
         client.story.story_id_put(story.id, story)
@@ -91,8 +94,27 @@ class TestComponents(unittest.TestCase):
         self.assertIsInstance(story, Story)
 
     def test_multixml(self):
-                test_file = os.path.join(os.path.dirname(__file__), "files", "star.pptx")
-
+        test_file = os.path.join(os.path.dirname(__file__), "files", "ooxml_test.xml")
+        etree = lxml.etree.parse(test_file)
+        multiparams = {"transforms_list" : [
+            {
+                'name': 'ChangeShapeColor',
+                'function_params': {
+                    "hex_color": "FF0000"
+                }
+            },
+            {
+                'name': 'ReplaceText',
+                'function_params': {
+                    'test_text': "Test Passed!"
+                }
+            }
+        ]}
+        inst  = presalytics.MultiXmlTransform(multiparams)
+        new_lxml = inst.execute(etree.getroot())
+        xml_string = lxml.etree.tostring(new_lxml).decode('utf-8')
+        self.assertTrue("Test Passed!" in xml_string)
+        self.assertTrue("FF0000" in xml_string)
 
 
     def tearDown(self):

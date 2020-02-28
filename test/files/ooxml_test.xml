@@ -1,0 +1,71 @@
+<p:sp xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main"> <p:nvSpPr>
+    <p:cNvPr id="4" name="Star: 5 Points 3">
+        <a:extLst xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:ext
+            uri="{FF2B5EF4-FFF2-40B4-BE49-F238E27FC236}">
+            <a16:creationId xmlns:a16="http://schemas.microsoft.com/office/drawing/2014/main"
+                id="{3815FFFA-EE02-492A-AB64-FD7DCB80923F}" />
+            </a:ext>
+        </a:extLst>
+    </p:cNvPr>
+    <p:cNvSpPr />
+    <p:nvPr />
+    </p:nvSpPr>
+    <p:spPr>
+        <a:xfrm rot="3026875" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:off x="4044462"
+            y="1385668" />
+        <a:ext cx="5057335" cy="4339883" />
+        </a:xfrm>
+        <a:prstGeom prst="star5" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:avLst />
+        </a:prstGeom>
+        <a:solidFill xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:srgbClr val="FFFF00" />
+        </a:solidFill>
+        <a:ln xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:solidFill>
+            <a:srgbClr val="002060" />
+            </a:solidFill>
+        </a:ln>
+        <a:effectLst xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:outerShdw blurRad="50800"
+            dist="685800" dir="2700000" algn="tl" rotWithShape="0">
+            <a:prstClr val="black">
+                <a:alpha val="40000" />
+            </a:prstClr>
+            </a:outerShdw>
+        </a:effectLst>
+    </p:spPr>
+    <p:style>
+        <a:lnRef idx="2" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:schemeClr
+            val="accent1">
+            <a:shade val="50000" />
+            </a:schemeClr>
+        </a:lnRef>
+        <a:fillRef idx="1" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:schemeClr
+            val="accent1" />
+        </a:fillRef>
+        <a:effectRef idx="0" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:schemeClr
+            val="accent1" />
+        </a:effectRef>
+        <a:fontRef idx="minor" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:schemeClr
+            val="lt1" />
+        </a:fontRef>
+    </p:style>
+    <p:txBody>
+        <a:bodyPr rtlCol="0" anchor="ctr" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" />
+        <a:lstStyle xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" />
+        <a:p xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:pPr algn="ctr" />
+        <a:r>
+            <a:rPr lang="en-US" dirty="0">
+                <a:solidFill>
+                    <a:sysClr val="windowText" lastClr="000000" />
+                </a:solidFill>
+            </a:rPr>
+            <a:t>
+                {{</a:t></a:r><a:r><a:rPr lang="en-US" dirty="0" err="1"><a:solidFill><a:sysClr val="windowText" lastClr="000000" /></a:solidFill></a:rPr><a:t>test_text</a:t></a:r><a:r><a:rPr lang="en-US"><a:solidFill><a:sysClr val="windowText" lastClr="000000" /></a:solidFill></a:rPr><a:t>}}
+            </a:t>
+        </a:r>
+        <a:endParaRPr lang="en-US" dirty="0">
+            <a:solidFill>
+                <a:sysClr val="windowText" lastClr="000000" />
+            </a:solidFill>
+        </a:endParaRPr>
+        </a:p>
+    </p:txBody>
+</p:sp>

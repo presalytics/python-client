@@ -125,6 +125,12 @@ def share_story(story_id,
             }
             client.story.story_id_collaborators_post(story_id, body)
 
+def get_story(story_id):
+    """
+    returns Story metadata from the story API
+    """
+    client = presalytics.client.api.Client()
+    return client.story.story_id_get(story_id)
 
 
     

@@ -116,14 +116,7 @@ class RegistryBase(abc.ABC):
             if inspect.isclass(val) or isinstance(val, abc.ABC):
                 self.load_class(val)
 
-    # def get_exception_line_number(tb: types.TracebackType, mod__file__)
-    #     if tb.tb_frame.f_globals.get('__file__') == mod__file__:
-    #         return tb.tb_lineno
-    #     else:
-    #         return self.get_exception_line_number(tb.tb_next, mod__file__)
-    
-    # def get_target_from_ast(atree: ast.Module, lineno: int):
-    #     for nodes in atree.body:
+
     def load_deferred_modules(self):
         if len(self.deferred_modules) > 0:
             new_deferred = []

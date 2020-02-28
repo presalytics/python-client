@@ -1,13 +1,20 @@
 import typing
 import types
+import logging
 import json
 import lxml
 import lxml.etree
 import abc
 import re
 import requests
+import pystache
 import presalytics
+import presalytics.lib.registry
+import presalytics.lib.exceptions
 import presalytics.lib.widgets.ooxml
+
+
+logger = logging.getLogger(__name__)
 
 
 class XmlTransformBase(abc.ABC):
@@ -26,6 +33,8 @@ class XmlTransformBase(abc.ABC):
         A dictionary containing variables that will be used when the `transform_function`
         is executed
     """
+    __xml_transform_kind__ = 'XmlTransform'
+
     def __init__(self, function_params: typing.Dict, *args, **kwargs):
         self.function_params = function_params
 
@@ -59,9 +68,9 @@ class ChangeShapeColor(XmlTransformBase):
     object_name : str, optional
         The object tree name of the target shape.  If not supplied, all descendent shapes will
         have their color changed.      
-
-    
     """
+    __xml_transform_name__ = "ChangeShapeColor"
+
     @staticmethod
     def replace_color_on_target_shape(shape_xml: lxml.etree.Element, new_color: str) -> lxml.etree.Element:
         """
@@ -101,6 +110,7 @@ class ChangeShapeColor(XmlTransformBase):
         params : dict
             See the `Function Parameters Dictionary` for required entries
         """
+        
         if re.match('{.*}sp', lxml_element.tag):
             shapes = [lxml_element]
         else:
@@ -121,6 +131,65 @@ class ChangeShapeColor(XmlTransformBase):
             for shape in shapes:
                 shape = ChangeShapeColor.replace_color_on_target_shape(shape, color)
         return lxml_element
+
+class TextReplace(XmlTransformBase):
+    """
+    Replaces text in an ooxml Element
+    """
+    __xml_transform_name__ = "ReplaceText"
+    def transform_function(self, lxml_element, params):
+        """
+        Replaces the text inside 
+
+        Parameters
+        -----------
+        lxml_element : lxml.etree.Element
+            An element containing as least one an `<sp>` element
+
+        params : dict
+            See the `Function Parameters Dictionary` for required entries
+        """
+        text_list = lxml_element.findall('.//{*}t')
+        for t in text_list:
+            t.text = pystache.render(t.text, params)
+        return lxml_element
+
+class MultiXmlTransform(XmlTransformBase):
+    """
+    This class allow users to run mutiple transforms on multiple targets in a single widget
+    """
+    transform_instances: typing.List[XmlTransformBase]
+
+    class Registry(presalytics.lib.registry.RegistryBase):
+        def get_name(self, klass):
+            return getattr(klass, "__xml_transform_name__", None)
+
+        def get_type(self, klass):
+            return getattr(klass, "__xml_transform_kind__", None)
+
+    def __init__(self, transforms: typing.List[typing.Dict[str, typing.Any]], fail_quietly=True, **kwargs):
+        super(MultiXmlTransform, self).__init__({}, **kwargs)
+        self.fail_quietly = fail_quietly
+        self.transform_instances = []
+        include_paths = presalytics.COMPONENTS.autodiscover_paths
+        self.transform_registry = self.Registry(autodiscover_paths=include_paths)
+        for _transform in transforms:
+            key = "XmlTransform." + _transform["name"]
+            transform_class = self.transform_registry.get(key)
+            if not transform_class:
+                message = "Could not find XmlTransform with name '{}'".format(_transform["name"])
+                if self.fail_quietly:
+                    logging.info(message)
+                else:
+                    raise self.transform_registry.raise_error(message) #noqa
+            else:
+                inst = transform_class(_transform["function_params"])
+                self.transform_instances.append(inst)
+
+    def transform_function(self, lxml_element, params):
+        for inst in self.transform_instances:
+            lxml_element = inst.execute(lxml_element)
+        return lxml_element    
 
 
 class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):

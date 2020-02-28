@@ -17,6 +17,41 @@ if typing.TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+def add_ooxml_document_to_story(story_id, new_document_filepath, replace_id=None, username=None, password=None):
+    """
+    Utility method for asscoiating a new Document in the Presaltyics API Ooxml Automation service
+    with a Story.  
+
+    Parameters
+    ----------
+    story_id: str
+        The Presaltyics API Story service Id for for the story
+
+    new_document_filepath str
+        The local filepath to the document tha you want to associate with the story
+
+    replace_id: str, option
+        If you want to replace a document, this the documents Ooxml Automation service Id  
+        
+        Passing this value will also update the references to Ooxml Automation
+        service Document object in the Story Outline.  This is a good option if you have
+        not made significant changes to the new version of the document.  Widgets may 
+        fail to render if more than minor changes are made to the object tree.
+
+    username: str, option
+        Presaltyics API username.  Defaults to workspace username.
+
+    password: str, option
+        Presaltyics API password. 
+    """
+
+    client = presalytics.client.api.Client(username=username, password=password)
+    if story_id == "empty" or not story_id:
+        message = "The story_id must not be empty"
+        raise presalytics.lib.exceptions.InvalidArgumentException(message)
+    replace = True if replace_id else False
+    story = client.story.story_id_file_post(story_id, file=new_document_filepath, replace_exiting=replace, obsolete_id=replace_id)
+
 def create_story_from_ooxml_file(filename: str, client_info={}) -> 'Story':
     """
     Utility Method for building stories into the Presalytics API directly from a Presentation or Spreadsheet file. 

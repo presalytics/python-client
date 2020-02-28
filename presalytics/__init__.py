@@ -190,7 +190,9 @@ from presalytics.lib.tools.component_tools import (
 from presalytics.lib.widgets.ooxml_editors import (
     OoxmlEditorWidget,
     XmlTransformBase,
-    ChangeShapeColor
+    ChangeShapeColor,
+    TextReplace,
+    MultiXmlTransform
 )
 
 __all__ = [
@@ -208,6 +210,8 @@ __all__ = [
     'OoxmlEditorWidget',
     'XmlTransformBase',
     'ChangeShapeColor',
+    'TextReplace',
+    'MultiXmlTransform',
     'ApprovedExternalLinks',
     'ApprovedExternalScripts',
     'LocalStylesPlugin',

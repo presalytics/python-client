@@ -13,6 +13,7 @@ import yaml
 import datetime
 import presalytics.lib.constants
 import presalytics.lib.tools.story_tools
+import presalytics.lib.tools.ooxml_tools
 import presalytics.lib.tools.workflows
 
 
@@ -46,6 +47,7 @@ parser.add_argument('-f', '--file', default='story.yaml', action='store', help=f
 parser.add_argument('--version', action='version', version=presalytics.__version__)
 parser.add_argument('--view', default=False, action='store_true', help='View a Story in the browser')
 parser.add_argument('--manage', default=False, action='store_true', help="""Go to the Story's management page""")
+parser.add_argument('--show-story', default=False, action='store_true', help="Print Story metadata to the console")
 parser.add_argument('-v', '--verbose', default=False, action='store_true', help="Increases the detail in log output")
 
 
@@ -146,6 +148,16 @@ account.add_argument('-u', '--username', default=None, action='store', help=user
 account.add_argument('-p', '--password', default=None, action='store', help=password_help)
 
 
+ooxml = subparsers.add_parser('ooxml', description=account_description, help='Create and Modify Stories using Ooxml Documents')
+ooxml.add_argument('ooxml-filepath', action='store', default=None, help="The relative or absolute file path to the ooxml-file")
+ooxml.add_argument('action', choices=['add', 'replace'], default=None, action='store', help="Whether to add the ooxml to a story or replace an existing one.")
+ooxml.add_argument('--story-id', action='store', default=None, help="The Presaltyics API Story service Id of the story you want associate this file with.  Defaults to the story at the [--file] option.")
+ooxml.add_argument('--replace-id', action='store', default=None, help="The Ooxml Automation service if id for the associated document that you want to replace")
+
+ooxml.add_argument('-u', '--username', default=None, action='store', help=username_help)
+ooxml.add_argument('-p', '--password', default=None, action='store', help=password_help)
+
+
 
 
 def _load_file(filename):
@@ -221,6 +233,7 @@ def main():
         account = False
         share = False
         outline = None
+        ooxml = False
         message = getattr(args, "message", None)
         if args.story_api == "create":
             # create outline from page/widget
@@ -242,6 +255,9 @@ def main():
             account = True
         elif args.story_api == "share":
             share = True
+        elif args.story_api == "ooxml":
+            ooxml = True
+            pull = True
         else:
             push = False
             pull = False
@@ -272,6 +288,23 @@ def main():
         except:
             logger.error("A story outline could not be found or created.  Please use the [--file] option to designate a target outline.")
             return
+        if ooxml:
+            if args.story_id:
+                story_id = args.story_id
+            if not args.replace_id and args.action == "replace":
+                logger.error("the [--replace-id] option is required when the 'action' argument is [replace]")
+                return
+            ooxml_file = args.ooxml-filepath
+            if not os.path.exists(ooxml_file):
+                cwd = os.getcwd()
+                test_path = os.path.join(cwd, ooxml_file)
+                if os.path.exists(test_path):
+                    ooxml_file = test_path
+                else:
+                    logger.error("Could not find a path to file: {0}".format(ooxml_file))
+                    return 
+            presalytics.lib.tools.ooxml_tools.add_ooxml_document_to_story(story_id, ooxml_file, replace_id=args.replace_id, username=args.username, password=args.password)
+            
         if pull:
             if story_id == "empty":
                 logger.error("A story outline needs a Story Id to be pulled from the Presaltyics API. Please run 'presalytics push'")
@@ -282,6 +315,7 @@ def main():
                 else:
                     _id = outline.story_id
                 outline = presalytics.lib.tools.workflows.pull_outline(_id, username=args.username, password=args.password)
+       
         if write:
             _dump(outline, filename, args.overwrite, args.json)
         if account:
@@ -303,6 +337,9 @@ def main():
                     _open_page(story_id, "view")
                 if args.manage:
                     _open_page(story_id, "manage")
+                if args.show_story:
+                    story = presaltyics.lib.tools.workflows.get_story(story_id)
+        
             except webbrowser.Error:
                 logger.error("This environment does not have a webrowser loaded for use with python.")
                 return

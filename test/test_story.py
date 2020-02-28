@@ -54,12 +54,6 @@ class TestStory(unittest.TestCase):
 
         outline = presalytics.lib.tools.component_tools.create_outline_from_widget(wrapper)
 
-        client = presalytics.Client()
-
-        story = client.story.story_post(outline.dump())
-        
-        outline = presalytics.story.outline.StoryOutline.load(story.outline)
-
         re_wrapper = presalytics.lib.widgets.matplotlib.MatplotlibResponsiveFigure.deserialize(outline.pages[0].widgets[0])
 
     

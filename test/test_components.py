@@ -40,16 +40,30 @@ class TestComponents(unittest.TestCase):
             "object_name": info.entity_name,
             "hex_color": "FFFFFF"
         }
+        multiparams = [
+            {
+                'name': 'ChangeShapeColor',
+                'function_params': new_color
+            },
+            {
+                'name': 'ReplaceText',
+                'function_params': {
+                    'test_text': "Test Passed!"
+                }
+            }
+        ]
         widget = presalytics.OoxmlEditorWidget(
             name="test-editor",
             story_id=story.id,
             object_ooxml_id=info.entity_id,
             endpoint_map=endpoint_map,
-            transform_class=presalytics.ChangeShapeColor,
-            transform_params=new_color
+            transform_class=presalytics.MultiXmlTransform,
+            transform_params=multiparams
         )
         outline.pages[0].widgets[0] = widget.outline_widget
         presalytics.COMPONENTS.register(widget)
+        story.outline = outline.dump()
+        client.story.story_id_put(story.id, story)
         html = presalytics.Revealer(outline).package_as_standalone().decode('utf-8')
         self.assertIsInstance(html, str)
         os.remove(tmp_filename)
@@ -75,6 +89,10 @@ class TestComponents(unittest.TestCase):
         story = presalytics.story_post_file_bytes(client, _bytes, "testfile.pptx")
         from presalytics.client.presalytics_story.models.story import Story
         self.assertIsInstance(story, Story)
+
+    def test_multixml(self):
+                test_file = os.path.join(os.path.dirname(__file__), "files", "star.pptx")
+
 
 
     def tearDown(self):

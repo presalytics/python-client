@@ -7,7 +7,6 @@ import lxml.etree
 import abc
 import re
 import requests
-import pystache
 import collections
 import presalytics
 import presalytics.lib.registry

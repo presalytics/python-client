@@ -32,8 +32,7 @@ REQUIRES = [
     "lxml",
     "pyyaml",
     "mpld3",
-    "libsass",
-    "pystache"
+    "libsass"
 ]
 
 with open("README.md", "r") as fh:

@@ -171,29 +171,23 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
         Wraps the Matplotlib Figure in a SVG endpoint load via `<iframe>` that
         will be rendered inside of a story and rescaled to give repsonsive effect
         """
-        client = self.get_client(delegate_login=True)
-        self.token = client.token_util.token["access_token"]
         params = {
-            "story_host": self.story_host,
+            "site_host": self.get_client(delegate_login=True).site_host,
             "figure_id": self.figure_id,
             "story_id": self.story_id
         }
-        source_url = "{story_host}/{story_id}/matplotlib-responsive/{figure_id}".format(**params)
-        svg_container_div = lxml.html.Element("div", {
-            'class': 'matplotlib-responsive-container',
-            'data-jwt': self.token,
-            'data-source-url': source_url,
-            'style': "height: 100%; width: 100%; display: block;"
-        })
-        preloader_container_div = lxml.etree.SubElement(svg_container_div, "div", attrib={"class":"preloader-container"})
-        preloader_row_div = lxml.etree.SubElement(preloader_container_div, "div", attrib={"class":"preloader-row"})
-        preloader_file = os.path.join(os.path.dirname(__file__), "img", "preloader.svg")
-        svg = lxml.html.parse(preloader_file)
-        preloader_row_div.append(svg.getroot())
+        source_url = "{site_host}/story/matplotlib-figure/{story_id}/{figure_id}".format(**params)
         empty_parent_div = lxml.html.Element("div", {
-            'class': 'empty-parent bg-light'
+            'class': 'empty-parent bg-light matplotlib-responsive-container',
+            'style': 'height: 100%; width: 100%, display: block'
         })
-        empty_parent_div.append(svg_container_div)
+        frame = lxml.html.Element("iframe", {
+            'src': source_url,
+            'frameborder': "0",
+            'scrolling': "no",
+            'class': 'matplotlib-responsive-frame'
+        })
+        empty_parent_div.append(frame)
         return lxml.html.tostring(empty_parent_div)
 
 

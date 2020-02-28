@@ -141,7 +141,7 @@ class TextReplace(XmlTransformBase):
     class TextElementInfo(object):
         def __init__(self, element: lxml.etree.Element, start_position: int):
             self.element = element
-            self.text = element.text
+            self.text = "" if not element.text else element.text
             self.length = len(self.text)
             self.start_position = start_position
             self.end_position = self.start_position + self.length

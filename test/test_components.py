@@ -39,7 +39,7 @@ class TestComponents(unittest.TestCase):
         info = next(x for x in childs if x.object_type == object_type)
         new_color = {
             "object_name": info.entity_name,
-            "hex_color": "FFFFFF"
+            "hex_color": "FF0000"
         }
         multiparams = {"transforms_list" : [
             {

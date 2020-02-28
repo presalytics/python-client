@@ -68,16 +68,17 @@ class RegistryBase(abc.ABC):
 
     def get_classes_from_module(self, module):
         self.get_classes(module)
-        for loader, name, is_pkg in pkgutil.walk_packages(module.__path__, onerror=RegistryBase.onerror):
-            full_name = module.__name__ + '.' + name
-            try:
-                if not self.module_is_in_stackframe(full_name):
-                    sub_module = importlib.import_module(full_name)
-                    if sub_module.__name__.startswith('presalytics'):
-                        if is_pkg:
-                            self.get_classes_from_module(sub_module)
-                        else:
-                            self.get_classes(sub_module)
+        if getattr(module, "__path__", None):
+            for loader, name, is_pkg in pkgutil.walk_packages(module.__path__, onerror=RegistryBase.onerror):
+                full_name = module.__name__ + '.' + name
+                try:
+                    if not self.module_is_in_stackframe(full_name):
+                        sub_module = importlib.import_module(full_name)
+                        if sub_module.__name__.startswith('presalytics'):
+                            if is_pkg:
+                                self.get_classes_from_module(sub_module)
+                            else:
+                                self.get_classes(sub_module)
             except Exception:
                 pass
 

@@ -79,8 +79,8 @@ class RegistryBase(abc.ABC):
                                 self.get_classes_from_module(sub_module)
                             else:
                                 self.get_classes(sub_module)
-            except Exception:
-                pass
+                except Exception:
+                    pass
 
     def get_registry_key(self, klass):
         key = None

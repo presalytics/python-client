@@ -157,10 +157,12 @@ class TextReplace(XmlTransformBase):
 
 class XmlTransformRegistry(presalytics.lib.registry.RegistryBase):
     """
-    Registry for XmlTransform Classes
+    Registry for XmlTransform Classes.  Read by `presalytics.lib.widgets.ooxml_editors.MultiXmlTransform`
+    and `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget` so XmlTransformBase subclasses
+    can be deserialized at run-time.
     """
     def __init__(self):
-        include_paths = presalytics.COMPONENTS.autodiscover_paths
+        include_paths = presalytics.COMPONENTS.autodiscover_paths # todo: Change this line -does not exist at timport time.
         super(XmlTransformRegistry, self).__init__(autodiscover_paths=include_paths)
 
     def get_name(self, klass):
@@ -170,7 +172,24 @@ class XmlTransformRegistry(presalytics.lib.registry.RegistryBase):
         return getattr(klass, "__xml_transform_kind__", None)
 
 
-XML_TRANSFORM_REGISTRY = XmlTransformRegistry()
+XML_TRANSFORM_REGISTRY = None
+"""
+Static instance of `presalytics.lib.widgets.ooxml_editors.XmlTransformRegistry`
+
+Should not be used directly by consuming classes. Only initialized if a consuming 
+class or method calls the `presalytics.lib.widgets.ooxml_editors.get_transform_registry`.  No need
+to build the registry at import-time if its never used in a workspace.
+"""
+
+def get_transform_registry():
+    """
+    Initalizes and retreives `presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY`
+    """
+    global XML_TRANSFORM_REGISTRY
+    if not XML_TRANSFORM_REGISTRY:
+        XML_TRANSFORM_REGISTRY = XmlTransformRegistry()
+    return XML_TRANSFORM_REGISTRY
+
 
 
 class MultiXmlTransform(XmlTransformBase):
@@ -186,8 +205,7 @@ class MultiXmlTransform(XmlTransformBase):
         transforms_list = transforms.get("transforms_list", None)
         self.fail_quietly = fail_quietly
         self.transform_instances = []
-        
-        self.transform_registry = XML_TRANSFORM_REGISTRY
+        self.transform_registry = get_transform_registry()
         for _transform in transforms_list: #type: ignore
             key = "XmlTransform." + _transform["name"]
             transform_class = self.transform_registry.get(key)
@@ -302,7 +320,7 @@ class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
     def deserialize(cls, component, **kwargs):
         endpoint_map = presalytics.lib.widgets.ooxml.OoxmlEndpointMap(component.data["endpoint_id"])
         class_key = "XmlTransform." + component.data.get("transform_class", "")
-        transform_class = XML_TRANSFORM_REGISTRY.get(class_key)
+        transform_class = get_transform_registry().get(class_key)
         transform_params = component.data.get("transform_params", {})
         return cls(component.name,
                    component.data["story_id"],

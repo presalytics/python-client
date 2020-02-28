@@ -40,7 +40,7 @@ class TestComponents(unittest.TestCase):
             "object_name": info.entity_name,
             "hex_color": "FFFFFF"
         }
-        multiparams = [
+        multiparams = {"transforms_list" : [
             {
                 'name': 'ChangeShapeColor',
                 'function_params': new_color
@@ -51,7 +51,7 @@ class TestComponents(unittest.TestCase):
                     'test_text': "Test Passed!"
                 }
             }
-        ]
+        ]}
         widget = presalytics.OoxmlEditorWidget(
             name="test-editor",
             story_id=story.id,

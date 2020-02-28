@@ -154,26 +154,41 @@ class TextReplace(XmlTransformBase):
             t.text = pystache.render(t.text, params)
         return lxml_element
 
+
+class XmlTransformRegistry(presalytics.lib.registry.RegistryBase):
+    """
+    Registry for XmlTransform Classes
+    """
+    def __init__(self):
+        include_paths = presalytics.COMPONENTS.autodiscover_paths
+        super(XmlTransformRegistry, self).__init__(autodiscover_paths=include_paths)
+
+    def get_name(self, klass):
+        return getattr(klass, "__xml_transform_name__", None)
+
+    def get_type(self, klass):
+        return getattr(klass, "__xml_transform_kind__", None)
+
+
+XML_TRANSFORM_REGISTRY = XmlTransformRegistry()
+
+
 class MultiXmlTransform(XmlTransformBase):
     """
     This class allow users to run mutiple transforms on multiple targets in a single widget
     """
     transform_instances: typing.List[XmlTransformBase]
 
-    class Registry(presalytics.lib.registry.RegistryBase):
-        def get_name(self, klass):
-            return getattr(klass, "__xml_transform_name__", None)
+    __xml_transform_name__ = "MultiXmlTransform"
 
-        def get_type(self, klass):
-            return getattr(klass, "__xml_transform_kind__", None)
-
-    def __init__(self, transforms: typing.List[typing.Dict[str, typing.Any]], fail_quietly=True, **kwargs):
-        super(MultiXmlTransform, self).__init__({}, **kwargs)
+    def __init__(self, transforms: typing.Dict[str, typing.List[typing.Dict[str, typing.Any]]], fail_quietly=True, **kwargs):
+        super(MultiXmlTransform, self).__init__(transforms, **kwargs)
+        transforms_list = transforms.get("transforms_list", None)
         self.fail_quietly = fail_quietly
         self.transform_instances = []
-        include_paths = presalytics.COMPONENTS.autodiscover_paths
-        self.transform_registry = self.Registry(autodiscover_paths=include_paths)
-        for _transform in transforms:
+        
+        self.transform_registry = XML_TRANSFORM_REGISTRY
+        for _transform in transforms_list: #type: ignore
             key = "XmlTransform." + _transform["name"]
             transform_class = self.transform_registry.get(key)
             if not transform_class:
@@ -284,19 +299,26 @@ class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
         return svg_data
 
     @classmethod
-    def deseriailize(cls, component, **kwargs):
+    def deserialize(cls, component, **kwargs):
         endpoint_map = presalytics.lib.widgets.ooxml.OoxmlEndpointMap(component.data["endpoint_id"])
+        class_key = "XmlTransform." + component.data.get("transform_class", "")
+        transform_class = XML_TRANSFORM_REGISTRY.get(class_key)
+        transform_params = component.data.get("transform_params", {})
         return cls(component.name,
                    component.data["story_id"],
                    component.data["object_ooxml_id"],
-                   endpoint_map
+                   endpoint_map,
+                   transform_class=transform_class,
+                   transform_params=transform_params
                    )
 
     def serialize(self, **kwargs):
         data = {
             "story_id": self.story_id,
             "object_ooxml_id": self.object_ooxml_id,
-            "endpoint_id": self.endpoint_map.endpoint_id
+            "endpoint_id": self.endpoint_map.endpoint_id,
+            "transform_class": self.transform.__xml_transform_name__,
+            "transform_params": self.transform.function_params
         }
         widget = presalytics.story.outline.Widget(
             name=self.name,

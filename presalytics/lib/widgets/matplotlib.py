@@ -179,13 +179,14 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
         source_url = "{site_host}/story/matplotlib-figure/{story_id}/{figure_id}".format(**params)
         empty_parent_div = lxml.html.Element("div", {
             'class': 'empty-parent bg-light matplotlib-responsive-container',
-            'style': 'height: 100%; width: 100%, display: block'
+            'style': 'height: 100%; width: 100%, display: block; text-align: left;'
         })
         frame = lxml.html.Element("iframe", {
             'src': source_url,
             'frameborder': "0",
             'scrolling': "no",
             'class': 'matplotlib-responsive-frame'
+            'style': 'max-height: none; max-width: none;'
         })
         empty_parent_div.append(frame)
         return lxml.html.tostring(empty_parent_div)

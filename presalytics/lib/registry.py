@@ -146,9 +146,19 @@ class RegistryBase(abc.ABC):
                         mod_path = os.path.join(path, name)
                         mod_spec = importlib.util.spec_from_file_location(name, mod_path)
                         if not self.module_is_in_stackframe(mod_spec.name.replace(".py", "")):
+                            """
+                            Defer workspace-level imports so these modules only load once
+                            Avoids memory errors in computationally-intensive packages
+                            and packages built Intel's MKL (e.g., scipy, numpy, scipy), which
+                            raise errors when re-executed under the same interpreter w/o a ipython kernel.
+                            TODO: Add note to docs saying not to put components and plugins in the same file
+                            """
                             mod = importlib.util.module_from_spec(mod_spec)
-                            mod_spec.loader.exec_module(mod)
-                            self.get_classes(mod)
+                            self.deferred_modules.append({
+                                "name": name,
+                                "module": mod,
+                                "spec": mod_spec
+                            })
                     except AttributeError as circ:
                         # Checks for targets of circular imports, and defer those imports to runtime
                         message = "Likely circular import in module '{}'. Deferring import to run-time.".format(mod.__name__)

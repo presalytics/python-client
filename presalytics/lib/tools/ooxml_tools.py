@@ -50,7 +50,7 @@ def add_ooxml_document_to_story(story_id, new_document_filepath, replace_id=None
         message = "The story_id must not be empty"
         raise presalytics.lib.exceptions.InvalidArgumentException(message)
     replace = True if replace_id else False
-    story = client.story.story_id_file_post(story_id, file=new_document_filepath, replace_exiting=replace, obsolete_id=replace_id)
+    story = client.story.story_id_file_post(story_id, file=new_document_filepath, replace_existing=replace, obsolete_id=replace_id)
 
 def create_story_from_ooxml_file(filename: str, client_info={}) -> 'Story':
     """

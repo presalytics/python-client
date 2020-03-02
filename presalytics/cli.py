@@ -308,7 +308,7 @@ def main():
             #load story outline from file
         try:
             if not outline:
-                if not os.path.exists(filename):
+                if not os.path.exists(filename) and not config:
                     current_dir = os.getcwd()
                     abs_filename = os.path.join(current_dir, filename)
                     if os.path.exists(abs_filename):

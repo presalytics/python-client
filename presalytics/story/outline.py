@@ -85,18 +85,6 @@ def load_latest_schema():
     version_number = get_current_spec_version()
     return load_schema(version_number)
 
-def get_spec_json(version_number):
-    """
-    Returns a string containing for the outline schema base on the version number.
-
-    Raises a ValueError in no schema is found
-    """
-    try:
-        schema = load_schema(version_number)
-        return json.dumps(schema)
-    except Exception as ex:
-        raise ValueError("Story outline schema version '{}' could not be found.".fomrat(version_number))
-
 
 
 class OutlineBase(abc.ABC):

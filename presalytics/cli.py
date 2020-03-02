@@ -48,6 +48,7 @@ parser.add_argument('--version', action='version', version=presalytics.__version
 parser.add_argument('--view', default=False, action='store_true', help='View a Story in the browser')
 parser.add_argument('--manage', default=False, action='store_true', help="""Go to the Story's management page""")
 parser.add_argument('--show-story', default=False, action='store_true', help="Print Story metadata to the console")
+parser.add_argument('--cron', default=False, action='store_true', help="Print information on how automate updates to your story to the console.")
 parser.add_argument('-v', '--verbose', default=False, action='store_true', help="Increases the detail in log output")
 
 
@@ -152,12 +153,52 @@ ooxml.add_argument('ooxml-filepath', action='store', default=None, help="The rel
 ooxml.add_argument('action', choices=['add', 'replace'], default=None, action='store', help="Whether to add the ooxml to a story or replace an existing one.")
 ooxml.add_argument('--story-id', action='store', default=None, help="The Presaltyics API Story service Id of the story you want associate this file with.  Defaults to the story at the [--file] option.")
 ooxml.add_argument('--replace-id', action='store', default=None, help="The Ooxml Automation service if id for the associated document that you want to replace")
-
 ooxml.add_argument('-u', '--username', default=None, action='store', help=username_help)
 ooxml.add_argument('-p', '--password', default=None, action='store', help=password_help)
 
+config_description = """
+Create and manage presaltyics `config.py` files
+"""
+
+config = subparsers.add_parser('config', description=config_description, help='Create and manage presaltyics `config.py` files')
+config.add_argument('username', action='store', help=username_help)
+config.add_argument('-p', '--password', default=None, action='store', help=password_help)
+config.add_argument('-s', "--set", metavar="KEY=VALUE", default=None, nargs='+', help="Pass config values to to `config.py` with KEY=VALUE stucture (e.g., '-s USE_LOGGER=False'")
+config.add_argument('-o', '--overwrite', default=False, action='store_true', help=overwrite_help)
+
+def parse_var(s):
+    """
+    Parse a key, value pair, separated by '='
+    That's the reverse of ShellArgs.
+
+    On the command line (argparse) a declaration will typically look like:
+        foo=hello
+    or
+        foo="hello world"
+    """
+    items = s.split('=')
+    key = items[0].strip() # we remove blanks around keys, as is logical
+    if len(items) > 1:
+        # rejoin the rest:
+        value = '='.join(items[1:])
+        if value == 'True' or value == 'true':
+            value = True
+        if value == 'False'or value == 'false':
+            value = False
+    return (key, value)
 
 
+def parse_vars(items):
+    """
+    Parse a series of key-value pairs and return a dictionary
+    """
+    d = {}
+
+    if items:
+        for item in items:
+            key, value = parse_var(item)
+            d[key] = value
+    return d
 
 def _load_file(filename):
     if filename.endswith('yaml') or filename.endswith('yml'):
@@ -233,6 +274,7 @@ def main():
         share = False
         outline = None
         ooxml = False
+        config = False
         message = getattr(args, "message", None)
         if args.story_api == "create":
             # create outline from page/widget
@@ -257,6 +299,8 @@ def main():
         elif args.story_api == "ooxml":
             ooxml = True
             pull = True
+        elif args.story_api == "config":
+            config = True
         else:
             push = False
             pull = False
@@ -330,6 +374,12 @@ def main():
                                                            username=args.username,
                                                            password=args.password,
                                                            collaborator_type=args.collaborator_type)
+        if config:
+            set_dict = {} if not args.set else parse_vars(args.set)
+            presalytics.lib.tools.workflows.create_config_file(args.username, 
+                                                               password=args.password, 
+                                                               set_dict=set_dict, 
+                                                               overwrite=args.overwrite)
         if story_id != 'empty':
             try:
                 if args.view:
@@ -342,6 +392,8 @@ def main():
             except webbrowser.Error:
                 logger.error("This environment does not have a webrowser loaded for use with python.")
                 return
+        if args.cron:
+            presalytics.lib.tools.workflows.create_cron_target()
         else:
             logger.error("This outline does not yet have a story_id.  Please run 'presalytics push'.")
             return

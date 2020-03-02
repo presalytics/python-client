@@ -1,5 +1,7 @@
 import typing
 import os
+import sys
+import json
 import presalytics.client.api
 import presalytics.lib.tools.story_tools
 import presalytics.story.outline
@@ -131,6 +133,42 @@ def get_story(story_id):
     """
     client = presalytics.client.api.Client()
     return client.story.story_id_get(story_id)
+
+def create_config_file(username, password=None, set_dict={}, overwrite=False):
+    config_file = os.path.join(os.getcwd(), "config.py")
+    if os.path.exists(config_file):
+        if overwrite:
+            os.remove(config_file)
+        else:
+            logger.error("Configuration file exists.  Use option [--overwrite] to overwrite.")
+            raise ValueError
+    dump = {"USERNAME": username}
+    if password:
+        dump.update({"PASSWORD": password})
+    if len(set_dict.keys()) > 0:
+        dump.update(set_dict)
+    content = "PRESALYTICS = " + repr(dump)
+    with open(config_file, 'w') as f:
+        f.write(content)
+
+def create_cron_target():
+    if sys.platform.startswith("linux"):
+        cron_command = "* * * * * cd {0} && {1} -m presaltyics push".format(os.getcwd(), sys.executable)
+        print("Place the following line in your cron file:")
+        print(cron_command)
+    elif sys.platform.startswith("win"):
+        command = os.environ["VIRTUAL_ENV"] + "/Scripts/activate.bat && python -m presaltyics push"
+        filename = os.path.join(os.getcwd(), "story-push.bat")
+        with open(filename, 'w') as f:
+            f.write(command)
+        print("A file named 'story-push.bat was just placed in the current working directory.  Add this file in the 'Windows Task Scheduler'.")
+    else:
+        logger.error("Unknown operating system.")
+        raise ValueError
+
+
+    
+    
 
 
     

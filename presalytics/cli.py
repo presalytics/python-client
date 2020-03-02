@@ -394,12 +394,12 @@ def main():
             except webbrowser.Error:
                 logger.error("This environment does not have a webrowser loaded for use with python.")
                 return
-        if args.cron:
-            presalytics.lib.tools.workflows.create_cron_target()
         else:
             logger.error("This outline does not yet have a story_id.  Please run 'presalytics push'.")
             return
         logger.info("\n\nStory Outline\n-------------\n\n{0}".format(yaml.dump(outline.to_dict())))
+        if args.cron:
+            presalytics.lib.tools.workflows.create_cron_target()
     except Exception as ex:
         if isinstance(ex, presalytics.lib.exceptions.PresalyticsBaseException):
             logger.error(ex.message) # noqa

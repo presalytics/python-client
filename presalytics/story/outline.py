@@ -181,7 +181,7 @@ class OutlineBase(abc.ABC):
         A `class` instance
         """
         with open(yaml_file, 'r') as file:
-            obj = yaml.safe_load(file)
+            obj = yaml.unsafe_load(file) # use unsafe loader per: https://github.com/yaml/pyyaml/issues/286, Monitor for fix.
         return cls.deserialize(obj)
 
     def export_yaml(self, filename):

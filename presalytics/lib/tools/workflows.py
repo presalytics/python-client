@@ -2,6 +2,7 @@ import typing
 import os
 import sys
 import json
+import logging
 import presalytics.client.api
 import presalytics.lib.tools.story_tools
 import presalytics.story.outline
@@ -10,6 +11,7 @@ if typing.TYPE_CHECKING:
     from presalytics.story.components import ComponentBase
     from presalytics.story.outline import StoryOutline
 
+logger = logging.getLogger(__name__)
 
 def create_from_instance(name, widget=False, page=False, filename=None) -> 'StoryOutline': #type: ignore
     """

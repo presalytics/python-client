@@ -129,7 +129,7 @@ class RegistryBase(abc.ABC):
                     self.get_classes(module)
                 except Exception as ex:
                     logger.exception(ex)
-                    message = "Failuire to execute deferred load on module {}.  Please check exception message and review for errors.".format(mod.__name__)
+                    message = "Failuire to execute deferred load on module {}.  Please check exception message and review for errors.".format(mod.get(name, None))
                     logger.error(message)
                     new_deferred.append(mod)
             self.deferred_modules = new_deferred # removes modules successfully loaded from the list

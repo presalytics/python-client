@@ -306,8 +306,16 @@ def main():
             pull = False
             write = False
             #load story outline from file
+        if config:
+            set_dict = {} if not args.set else parse_vars(args.set)
+            presalytics.lib.tools.workflows.create_config_file(args.username, 
+                                                               password=args.password, 
+                                                               set_dict=set_dict, 
+                                                               overwrite=args.overwrite)
+            logger.info("File 'config.py creating in folder " + os.getcwd())
+            return
         try:
-            if not outline and not config:
+            if not outline:
                 if not os.path.exists(filename):
                     current_dir = os.getcwd()
                     abs_filename = os.path.join(current_dir, filename)
@@ -374,12 +382,6 @@ def main():
                                                            username=args.username,
                                                            password=args.password,
                                                            collaborator_type=args.collaborator_type)
-        if config:
-            set_dict = {} if not args.set else parse_vars(args.set)
-            presalytics.lib.tools.workflows.create_config_file(args.username, 
-                                                               password=args.password, 
-                                                               set_dict=set_dict, 
-                                                               overwrite=args.overwrite)
         if story_id != 'empty':
             try:
                 if args.view:

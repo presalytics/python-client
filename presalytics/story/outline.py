@@ -1,10 +1,6 @@
 """
-Module helps serialize and deserialize presalytics story outlines to/from json yaml.
-Allow downstream modules work seemlessly with json data
-
-Note: this module leverage type-checking at runtime, and may cause ciruclar references
-if you are incorporating type hints on presalytics objects in modules that import this file.
-The problem is solved using the TYPE_CHECKING boolean in the python's typing package.
+Module helps serialize and deserialize presalytics story outlines to/from json and yaml source data.
+Classes in this module acts are interfaces between story outlines and `component` objects
 """
 import json
 import numpy as np
@@ -97,7 +93,7 @@ def get_spec_json(version_number):
     """
     try:
         schema = load_schema(version_number)
-        return json.dump(schema)
+        return json.dumps(schema)
     except Exception as ex:
         raise ValueError("Story outline schema version '{}' could not be found.".fomrat(version_number))
 

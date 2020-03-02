@@ -1,0 +1,11 @@
+.flex-row {
+    display: flex;
+    justify-content: space-around;
+    flex-direction:row;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+}

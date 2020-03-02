@@ -1,0 +1,12 @@
+{% extends 'title.html' %}
+
+{% block page_content %}
+    <div class="flex-row">
+        <div class="flex-column">
+            {{ widgets[widget_index.next()].to_html() }}
+        </div>
+        <div style="display:flex; flex-direction: column;">
+            {{ widgets[widget_index.next()].to_html() }}
+        </div>
+    </div>
+{% endblock %}

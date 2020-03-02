@@ -84,6 +84,23 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
     __template_paths__ = []
     __css__ = []
 
+    class WidgetIndexer(object):
+        """
+        A counter class for 
+
+        call `widgetindex.next()` in html templates to move this the widget list
+        """
+        def __init__(self):
+            self._val = 0
+        
+        def next(self):
+            """
+            Returns the current widget index and increments the value for the next call 
+            """
+            cur = self._val
+            self._val += 1
+            return cur
+
     def __init__(self, page: 'Page', **kwargs) -> None:
         super().__init__(page, **kwargs)
         pkg_templates = os.path.join(os.path.dirname(__file__), "html")
@@ -147,7 +164,7 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
     def _make_context(self):
         context = {
             "widgets": self.widgets,
-            "widget_index": 0
+            "widget_index": self.WidgetIndexer()
         }
         if self.outline_page.additional_properties:
             context.update(self.outline_page.additional_properties)
@@ -216,3 +233,11 @@ class TitleWithSingleItem(JinjaTemplateBuilder):
     __component_kind__ = 'TitleWithSingleItem'
     __css__ = ['single_item_grid']
     __template_file__ = 'title_with_single_widget.html'
+
+class TwoUpWithTitle(JinjaTemplateBuilder):
+    """
+    View two widgets side-by-side on one page
+    """
+    __component_kind__ = "TwoUpWithTitle"
+    __css__ = ['single_item_grid', 'flex_row']
+    __template_file = 'two_up_with_title.html'

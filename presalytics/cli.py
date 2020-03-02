@@ -149,7 +149,7 @@ account.add_argument('-p', '--password', default=None, action='store', help=pass
 
 
 ooxml = subparsers.add_parser('ooxml', description=account_description, help='Create and Modify Stories using Ooxml Documents')
-ooxml.add_argument('ooxml-filepath', action='store', default=None, help="The relative or absolute file path to the ooxml-file")
+ooxml.add_argument('ooxml_filepath', action='store', default=None, help="The relative or absolute file path to the ooxml-file")
 ooxml.add_argument('action', choices=['add', 'replace'], default=None, action='store', help="Whether to add the ooxml to a story or replace an existing one.")
 ooxml.add_argument('--story-id', action='store', default=None, help="The Presaltyics API Story service Id of the story you want associate this file with.  Defaults to the story at the [--file] option.")
 ooxml.add_argument('--replace-id', action='store', default=None, help="The Ooxml Automation service if id for the associated document that you want to replace")
@@ -345,7 +345,7 @@ def main():
             if not args.replace_id and args.action == "replace":
                 logger.error("the [--replace-id] option is required when the 'action' argument is [replace]")
                 return
-            ooxml_file = args.ooxml-filepath
+            ooxml_file = args.ooxml_filepath
             if not os.path.exists(ooxml_file):
                 cwd = os.getcwd()
                 test_path = os.path.join(cwd, ooxml_file)

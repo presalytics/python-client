@@ -59,7 +59,6 @@ def create_outline_from_widget(widget: 'WidgetBase',
         title = page_name
 
     outline = presalytics.story.outline.StoryOutline(
-        presalytics_story=presalytics.story.outline.get_current_spec_version(),
         info=info,
         pages=[page],
         description=description,
@@ -109,7 +108,6 @@ def create_outline_from_page(page: 'PageTemplateBase',
         title = page_outline.name
 
     outline = presalytics.story.outline.StoryOutline(
-        presalytics_story=presalytics.story.outline.get_current_spec_version(),
         info=info,
         pages=[page],
         description=description,

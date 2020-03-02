@@ -4,7 +4,7 @@
   "type": "object",
   "title": "Story Outline Schema",
   "required": [
-    "presalyticsStory",
+    "outlineVersion",
     "info",
     "title",
     "description",
@@ -12,12 +12,12 @@
   ],
   "properties": {
     "outlineVersion": {
-      "$id": "#/properties/presalyticsStory",
+      "$id": "#/properties/outlineVersion",
       "type": "string",
       "title": "Schema Version Number",
       "default": "",
       "examples": [
-        "vbeta1"
+        "0.3.1"
       ],
       "pattern": "^(.*)$"
     },

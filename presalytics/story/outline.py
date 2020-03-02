@@ -516,9 +516,9 @@ class StoryOutline(OutlineBase):
         'title',
     ]
 
-    def __init__(self, outline_version, info, pages, description, title, themes, plugins=None, story_id="empty", **kwargs):
+    def __init__(self, info, pages, description, title, themes, plugins=None, story_id="empty", **kwargs):
         super(StoryOutline, self).__init__(**kwargs)
-        self.outline_version = outline_version
+        self.outline_version = get_current_spec_version()
         self.info = Info.deserialize(info)
         self.pages = [Page.deserialize(x) for x in pages]
         if description:

@@ -161,7 +161,6 @@ def create_outline_from_ooxml_document(story_api: 'Story',
         _title = pages[0].widgets[0].name
 
     outline = presalytics.story.outline.StoryOutline(
-        presalytics_story=presalytics.story.outline.get_current_spec_version(),
         info=info,
         pages=pages,
         description=_description,

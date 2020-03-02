@@ -20,7 +20,7 @@ some [examples](https://presalytics.io/docs/examples).
 
 For more advanced users and developers, you can learn more about the API by reviewing 
 the [service structure](https://presalytics.io/docs/how-it-works) to build a better understanding 
-of the API and its [security](https://presaltyics.io/docs/develpers/security) features.
+of the API and its [security](https://presalytics.io/docs/develpers/security) features.
 
 # Installation
 
@@ -32,16 +32,16 @@ pip install presalytics
 
 # Contributing
 
-Presaltyics.io is on [Github](https://github.com/presalytics).  Bug reports and pull requests are strongly encouraged at
+Presalytics.io is on [Github](https://github.com/presalytics).  Bug reports and pull requests are strongly encouraged at
 the package [repository](https://github.com/presalytics/python-client). If you encounter any problems or have any suggestions for 
-the API endpoints that this libary interacts with at https://api.presaltyics.io, please open an issue in the 
+the API endpoints that this libary interacts with at https://api.presalytics.io, please open an issue in the 
 [API repository](https://github.com/presalytics/Presalytics-API).
 
 # License
 
-The Presaltyics Python Library can be used in any of your applications and is covered by the MIT License.  This library
+The Presalytics Python Library can be used in any of your applications and is covered by the MIT License.  This library
 exchanges infromation with other web APIs that may be proprietary and carry their own licensing restriction.  More more
-information on licensing, please contact [inquires@presaltyics.io](mailto:inquires@presaltyics.io).
+information on licensing, please contact [inquires@presalytics.io](mailto:inquires@presalytics.io).
 
 """
 import os
@@ -124,7 +124,7 @@ HOSTS : dict, optional
 
 REDIRECT_URI : string, optional
     For developer use.  Useful if implementing authorization code flow for and OpenID Connect client.
-    Redirect URIs must be approved by Presaltyics API devops for use in client applications.
+    Redirect URIs must be approved by Presalytics API devops for use in client applications.
 
 The object can also take on values for user-defined extensions, and please consult
 the documentation for those package for those vairables definition.

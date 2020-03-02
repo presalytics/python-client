@@ -320,7 +320,7 @@ class Renderer(ComponentBase):
     syncing changes from component instances in the `presalytics.CONFIG` to the Presalytics API 
     Story service.
 
-    * The `view` method allows users programattically view their stories at https://presaltyics.io 
+    * The `view` method allows users programattically view their stories at https://presalytics.io 
     after changes are made
 
     * The `manage` method takes users to to the story management interface, where users can share their 
@@ -375,7 +375,7 @@ class Renderer(ComponentBase):
 
     def render(self, **kwargs):
         """
-        Renders server-side (i.e., opens the story on https://presaltyics.io)
+        Renders server-side (i.e., opens the story on https://presalytics.io)
         """
         return self.view()
 
@@ -548,7 +548,7 @@ class Renderer(ComponentBase):
             prior to opening in the web browser
         """
         if not self.view_url:
-            message = "The outline has not been pushed to the Presaltyics API yet, and therefore cannot be viewed via preslaytics.io"
+            message = "The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via preslaytics.io"
             raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
         if update:
             self.update_story()
@@ -566,7 +566,7 @@ class Renderer(ComponentBase):
             prior to opening in the web browser
         """
         if not self.manage_url:
-            message = "The outline has not been pushed to the Presaltyics API yet, and therefore cannot be viewed via preslaytics.io"
+            message = "The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via preslaytics.io"
             raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
             
         if update:

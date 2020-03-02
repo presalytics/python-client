@@ -46,7 +46,7 @@ class OoxmlEndpointMap(object):
     Attributes
     ----------
     root_url : str
-        the home url for the class instance.  Typically `http://api.presaltyics.io/ooxml-automation/{object_type}`
+        the home url for the class instance.  Typically `http://api.presalytics.io/ooxml-automation/{object_type}`
     
     OBJECT_TYPE_MAP : str
         A mapping table for object_types and object tree lookup keys

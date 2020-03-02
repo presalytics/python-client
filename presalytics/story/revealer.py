@@ -37,7 +37,7 @@ class Revealer(presalytics.story.components.Renderer):
     Parameters
     ----------
     story_outline : presalytics.story.outline.StoryOutline
-        The presaltyics StoryOutline to be rendered and presented
+        The presalytics StoryOutline to be rendered and presented
     
     Attributes
     -----------

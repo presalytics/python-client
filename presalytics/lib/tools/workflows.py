@@ -68,7 +68,7 @@ def push_outline(outline, username=None, password=None) -> 'StoryOutline':
 
 def pull_outline(story_id, username=None, password=None) -> 'StoryOutline':
     """
-    Retrives an outline from the Presaltyics API Story service
+    Retrives an outline from the Presalytics API Story service
     """
     client = presalytics.client.api.Client(username=username, password=password)
     if story_id == "empty" or not story_id:
@@ -107,7 +107,7 @@ def share_story(story_id,
                 password=None,
                 collaborator_type="viewer"):
     """
-    Share stories with other users. Either by email or Presaltyics API user Id.
+    Share stories with other users. Either by email or Presalytics API user Id.
     """
     client = presalytics.client.api.Client(username=username, password=password)
     if emails:
@@ -155,11 +155,11 @@ def create_config_file(username, password=None, set_dict={}, overwrite=False):
 
 def create_cron_target():
     if sys.platform.startswith("linux"):
-        cron_command = "* * * * * cd {0} && {1} -m presaltyics push".format(os.getcwd(), sys.executable)
+        cron_command = "* * * * * cd {0} && {1} -m presalytics push".format(os.getcwd(), sys.executable)
         print("Place the following line in your cron file:")
         print(cron_command)
     elif sys.platform.startswith("win"):
-        command = os.environ["VIRTUAL_ENV"] + "/Scripts/activate.bat && python -m presaltyics push"
+        command = os.environ["VIRTUAL_ENV"] + "/Scripts/activate.bat && python -m presalytics push"
         filename = os.path.join(os.getcwd(), "story-push.bat")
         with open(filename, 'w') as f:
             f.write(command)

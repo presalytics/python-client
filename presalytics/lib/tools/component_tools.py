@@ -12,14 +12,14 @@ def create_outline_from_widget(widget: 'WidgetBase',
                                title: str = None,
                                description: str = None) -> 'StoryOutline':
     """
-    Creates a `presaltyics.story.outline.StoryOutline` from a subclass of 
-    `presaltyics.story.components.WidgetBase`.  Useful for quickstarts, demos, and 
+    Creates a `presalytics.story.outline.StoryOutline` from a subclass of 
+    `presalytics.story.components.WidgetBase`.  Useful for quickstarts, demos, and 
     rapidly sharing content without having to manaully build a `StoryOutline`.
 
     Parameters
     ----------
 
-    widget : subclass of presaltyics.story.components.WidgetBase
+    widget : subclass of presalytics.story.components.WidgetBase
         The widget component that you want to build the story from
 
     page_name : str, optional
@@ -72,14 +72,14 @@ def create_outline_from_page(page: 'PageTemplateBase',
                              title: str = None,
                              description: str = None) -> 'StoryOutline':
     """
-    Creates a `presaltyics.story.outline.StoryOutline` from a subclass of 
-    `presaltyics.story.components.PageTemplateBase`.  Useful for quick starts, demos, and 
+    Creates a `presalytics.story.outline.StoryOutline` from a subclass of 
+    `presalytics.story.components.PageTemplateBase`.  Useful for quick starts, demos, and 
     rapidly sharing content without having to manaully build a `StoryOutline`.
 
     Parameters
     ----------
 
-    page : subclass of presaltyics.story.components.PageTemplateBase
+    page : subclass of presalytics.story.components.PageTemplateBase
         The Page component that you want to build the story from
 
     title : str, optional

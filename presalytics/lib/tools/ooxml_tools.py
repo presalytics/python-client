@@ -19,13 +19,13 @@ logger = logging.getLogger(__name__)
 
 def add_ooxml_document_to_story(story_id, new_document_filepath, replace_id=None, username=None, password=None):
     """
-    Utility method for asscoiating a new Document in the Presaltyics API Ooxml Automation service
+    Utility method for asscoiating a new Document in the Presalytics API Ooxml Automation service
     with a Story.  
 
     Parameters
     ----------
     story_id: str
-        The Presaltyics API Story service Id for for the story
+        The Presalytics API Story service Id for for the story
 
     new_document_filepath str
         The local filepath to the document tha you want to associate with the story
@@ -39,10 +39,10 @@ def add_ooxml_document_to_story(story_id, new_document_filepath, replace_id=None
         fail to render if more than minor changes are made to the object tree.
 
     username: str, option
-        Presaltyics API username.  Defaults to workspace username.
+        Presalytics API username.  Defaults to workspace username.
 
     password: str, option
-        Presaltyics API password. 
+        Presalytics API password. 
     """
 
     client = presalytics.client.api.Client(username=username, password=password)
@@ -75,7 +75,7 @@ def create_story_from_ooxml_file(filename: str, client_info={}) -> 'Story':
     logger.info("Starting presalytics tool: create_story_from_ooxml_file")
     logger.info("Intializing presalytics client.")
     client = presalytics.Client(**client_info)
-    logger.info("Sending file to presaltyics server for document processing and base story creation")
+    logger.info("Sending file to presalytics server for document processing and base story creation")
     story = client.story.story_post_file(file=filename)
     logger.info("Creating local instances of file widgets")
     outline = presalytics.StoryOutline.load(story.outline)
@@ -180,7 +180,7 @@ def create_pages_from_ooxml_document(story: 'Story',
     Parameters
     ----------
     story : presalytics.client.presalytics_story.models.story.Story
-        Representation for Presaltyics API Story object
+        Representation for Presalytics API Story object
 
     ooxml_document: presalytics.client.presalytics_ooxml_automation.models.document.Document
         The ooxml_document on the story that you want to create pages from

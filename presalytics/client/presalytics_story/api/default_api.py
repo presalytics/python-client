@@ -1656,7 +1656,7 @@ class DefaultApi(object):
 
         :param async_req bool: execute request asynchronously
         :param str id: the id from the story object (required)
-        :param str figure_id: A matplotlib figure id from a MatplotlibResponsiveFigure instance in the Presaltyics Python Library (required)
+        :param str figure_id: A matplotlib figure id from a MatplotlibResponsiveFigure instance in the Presalytics Python Library (required)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -1682,7 +1682,7 @@ class DefaultApi(object):
 
         :param async_req bool: execute request asynchronously
         :param str id: the id from the story object (required)
-        :param str figure_id: A matplotlib figure id from a MatplotlibResponsiveFigure instance in the Presaltyics Python Library (required)
+        :param str figure_id: A matplotlib figure id from a MatplotlibResponsiveFigure instance in the Presalytics Python Library (required)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will

@@ -20,17 +20,17 @@ import presalytics.lib.tools.workflows
 logger = logging.getLogger(__name__)
 
 description = """
-Presaltyics Python Library
+Presalytics Python Library
 --------------------------
 Version: {version}
 
 Create live presentations, dashboards, and persistent analytics,
-and interact with the Presaltyics API.
+and interact with the Presalytics API.
 
 Please review the push, pull, and create subcommands for more options.
 
-For more information about the Presaltyics API, please visit 
-<https://presaltyics.io> or send your questions to inquires@presaltyics.io.
+For more information about the Presalytics API, please visit 
+<https://presalytics.io> or send your questions to inquires@presalytics.io.
 
 Command Line Instructions
 -------------------------
@@ -38,7 +38,7 @@ Command Line Instructions
 
 parser = argparse.ArgumentParser(
     description=description,
-    epilog="Further documentation is available at <https://presaltyics.io/docs/>.",
+    epilog="Further documentation is available at <https://presalytics.io/docs/>.",
     formatter_class=argparse.RawTextHelpFormatter,
     prog='presalytics'
 )
@@ -96,9 +96,9 @@ pull_options.add_argument('-j', '--json', default=False, action='store_true', he
 create_description = """
 
 The widget or page instance in the [name] arguemnt must be avialable in 
-`presaltyics.COMPONENTS` at run-time.  Widget and page instances are loaded 
+`presalytics.COMPONENTS` at run-time.  Widget and page instances are loaded 
 into `presalytics.COMPONENTS` from the current working directory and other 
-configured folders at import of the presaltyics module.
+configured folders at import of the presalytics module.
 """
 
 create_epilog = """
@@ -126,7 +126,7 @@ Control permissions for owners, editors, promoters, and viewer or your stories
 """
 
 share = subparsers.add_parser('share', description=share_description, help='Share Stories')
-share.add_argument('--user-ids', action='store', help='A comma-separated list of the Presaltyics API user IDs of users you what to share this story with.')
+share.add_argument('--user-ids', action='store', help='A comma-separated list of the Presalytics API user IDs of users you what to share this story with.')
 share.add_argument('--emails', action='store', help='A comma-separated list of the email addresses of users you what to share this story with.')
 share.add_argument('--collaborator-type', choices=['owner', 'viewer', 'promoter', 'editor'], action='store', help='The permission type to grant to the new user. Defaults to viewer.')
 share.add_argument('-u', '--username', default=None, action='store', help=username_help)
@@ -143,7 +143,7 @@ account_action_group = account.add_mutually_exclusive_group(required=True)
 account_action_group.add_argument('--delete', default=False, action='store_true', help='Delete Stories')
 delete_group = account.add_mutually_exclusive_group(required=True)
 delete_group.add_argument('--all', default=False, action='store_true', help='WARNING!!! Delete all stories on account.')
-delete_group.add_argument('--id', default=None, help='The Presaltyics API Story service Id of the story you want to delete.')
+delete_group.add_argument('--id', default=None, help='The Presalytics API Story service Id of the story you want to delete.')
 account.add_argument('-u', '--username', default=None, action='store', help=username_help)
 account.add_argument('-p', '--password', default=None, action='store', help=password_help)
 
@@ -151,16 +151,16 @@ account.add_argument('-p', '--password', default=None, action='store', help=pass
 ooxml = subparsers.add_parser('ooxml', description=account_description, help='Create and Modify Stories using Ooxml Documents')
 ooxml.add_argument('ooxml_filepath', action='store', default=None, help="The relative or absolute file path to the ooxml-file")
 ooxml.add_argument('action', choices=['add', 'replace'], default=None, action='store', help="Whether to add the ooxml to a story or replace an existing one.")
-ooxml.add_argument('--story-id', action='store', default=None, help="The Presaltyics API Story service Id of the story you want associate this file with.  Defaults to the story at the [--file] option.")
+ooxml.add_argument('--story-id', action='store', default=None, help="The Presalytics API Story service Id of the story you want associate this file with.  Defaults to the story at the [--file] option.")
 ooxml.add_argument('--replace-id', action='store', default=None, help="The Ooxml Automation service if id for the associated document that you want to replace")
 ooxml.add_argument('-u', '--username', default=None, action='store', help=username_help)
 ooxml.add_argument('-p', '--password', default=None, action='store', help=password_help)
 
 config_description = """
-Create and manage presaltyics `config.py` files
+Create and manage presalytics `config.py` files
 """
 
-config = subparsers.add_parser('config', description=config_description, help='Create and manage presaltyics `config.py` files')
+config = subparsers.add_parser('config', description=config_description, help='Create and manage presalytics `config.py` files')
 config.add_argument('username', action='store', help=username_help)
 config.add_argument('-p', '--password', default=None, action='store', help=password_help)
 config.add_argument('-s', "--set", metavar="KEY=VALUE", default=None, nargs='+', help="Pass config values to to `config.py` with KEY=VALUE stucture (e.g., '-s USE_LOGGER=False'")
@@ -358,7 +358,7 @@ def main():
             
         if pull:
             if story_id == "empty":
-                logger.error("A story outline needs a Story Id to be pulled from the Presaltyics API. Please run 'presalytics push'")
+                logger.error("A story outline needs a Story Id to be pulled from the Presalytics API. Please run 'presalytics push'")
                 return
             else:
                 if getattr(args, "id", None):
@@ -389,7 +389,7 @@ def main():
                 if args.manage:
                     _open_page(story_id, "manage")
                 if args.show_story:
-                    story = presaltyics.lib.tools.workflows.get_story(story_id)
+                    story = presalytics.lib.tools.workflows.get_story(story_id)
         
             except webbrowser.Error:
                 logger.error("This environment does not have a webrowser loaded for use with python.")

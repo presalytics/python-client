@@ -472,7 +472,7 @@ class StoryOutline(OutlineBase):
 
     StoryOutlines are stored in the [Presalytics API Story Service](https://presalytics.io/docs/api-specifications/story/).
     The story service manages version history and user permissions for StoryOutlines.  For more information
-    about how outlines are used, please see the [How It Works](https://presaltyics.io/docs/how-it-works/)
+    about how outlines are used, please see the [How It Works](https://presalytics.io/docs/how-it-works/)
     section of the website.
 
     Attributes
@@ -497,7 +497,7 @@ class StoryOutline(OutlineBase):
         A description of the story
     
     story_id : str, optional
-        The Presaltyics API Story Id.  Automatically added once the story outline has been pushed to
+        The Presalytics API Story Id.  Automatically added once the story outline has been pushed to
         the server.
 
     """

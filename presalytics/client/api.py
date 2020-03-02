@@ -27,7 +27,7 @@ class Client(object):
     """ Class for interacting with Presalytics API endpoints
 
     The Client class creates a simple interface for user to interactive with the 
-    Presaltyics API and is the primary building block for user-built automation of stories, 
+    Presalytics API and is the primary building block for user-built automation of stories, 
     dashboards, and interactive presentations.
 
     A client instance wraps python functions around Presalytics API endpoints and
@@ -80,7 +80,7 @@ class Client(object):
         useful for server-side development.
 
     token : dict, optional
-        Defaults to None.  A dictionary contain information about tokens acquire from auth.presaltyics.io.  The 
+        Defaults to None.  A dictionary contain information about tokens acquire from auth.presalytics.io.  The 
         dictionary must contain an `access_token`, a `refresh_token`, and entries contiaing information about token expiry.  
 
         Token expiry information can either passed in ISO 8601 formatted string with a UTC offset as dictionary keys
@@ -104,7 +104,7 @@ class Client(object):
         during object initialization.
 
     doc_converter : presalytics.client.presalytics_doc_converter.api.default_api.DefaultApi
-        Interface to the Presaltyics API Doc Converter service.  The object contains methods that enable
+        Interface to the Presalytics API Doc Converter service.  The object contains methods that enable
         the client to make api calls that return deserialized objects from the Presalytics API,
         simplying user and developer interaction with the Presaltytics API.  API calls can be generated
         as follows:
@@ -126,7 +126,7 @@ class Client(object):
         built via code generatation.
 
     ooxml_automation : presalytics.client.presalytics_ooxml_automation.api.default_api.DefaultApi
-        Interface to the Presaltyics API Ooxml Automation service.  The object contains methods that enable
+        Interface to the Presalytics API Ooxml Automation service.  The object contains methods that enable
         the client to make api calls that return deserialized objects from the Presalytics API,
         simplying user and developer interaction with the Presaltytics API.  API calls can be generated
         as follows:
@@ -148,7 +148,7 @@ class Client(object):
         built via code generatation.
 
     story : presalytics.client.presalytics_story.api.default_api.DefaultApi
-        Interface to the Presaltyics API Ooxml Automation service.  The object contains methods that enable
+        Interface to the Presalytics API Ooxml Automation service.  The object contains methods that enable
         the client to make api calls that return deserialized objects from the Presalytics API,
         simplying user and developer interaction with the Presaltytics API.  API calls can be generated
         as follows:
@@ -192,7 +192,7 @@ class Client(object):
 
     redirect_uri : str
         Useful if implementing authorization code flow for and OpenID Connect client.  Redirect URIs must 
-        be approved by Presaltyics API devops for use in client applications. Set from Set from 
+        be approved by Presalytics API devops for use in client applications. Set from Set from 
         `presalytics.CONFIG` with keyword `["REDIRECT_URI"]`.  Defaults to https://presalytics.io/user/login-success. 
 
     login_sleep_interval : int
@@ -201,7 +201,7 @@ class Client(object):
 
     login_timeout : int
         Defaults to 60 seconds.  The amount of time the client will attempt to acquire a token after the 
-        https://presaltyics.io authenicates a user. Raises a `presalytics.lib.exceptions.LoginTimeout`
+        https://presalytics.io authenicates a user. Raises a `presalytics.lib.exceptions.LoginTimeout`
         if the user has not authenticated by the time the interval has expired.
 
     """
@@ -318,7 +318,7 @@ class Client(object):
         ----------
 
         original_token : str
-            A str with JWT Bearer access token obtained from auth.presaltyics.io
+            A str with JWT Bearer access token obtained from auth.presalytics.io
 
         audience : str
             A str naming the referrring to audience of the server that will consume the new token
@@ -449,7 +449,7 @@ class Client(object):
         Parameters
         ---------
         story : str
-            The id of the Presaltyics Story API object that manages access to document
+            The id of the Presalytics Story API object that manages access to document
         
         ooxml_automation_id : str
             The id of the Presalytics API Ooxml Automation service object that you want to download

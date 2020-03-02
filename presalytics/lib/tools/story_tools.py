@@ -18,7 +18,7 @@ def story_post_file_bytes(client: 'Client',
                           mime_type: str = None):
     """
     Create a Presalytics API Story object from a file-like `io.BytesIO` object.  Helpful for server-side 
-    interaction with the Presaltyics Story API
+    interaction with the Presalytics Story API
 
     Parameters
     ----------

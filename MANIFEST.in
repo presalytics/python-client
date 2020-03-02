@@ -3,4 +3,5 @@ include presalytics/lib/templates/html/*
 include presalytics/lib/templates/favicon.ico
 include presalytics/lib/plugins/scss/*
 include presalytics/lib/widgets/img/*
+include presalytics/story/schemas/**/*
 

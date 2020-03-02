@@ -32,7 +32,9 @@ REQUIRES = [
     "lxml",
     "pyyaml",
     "mpld3",
-    "libsass"
+    "libsass",
+    "jsonschema",
+    "semantic_version"
 ]
 
 with open("README.md", "r") as fh:

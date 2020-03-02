@@ -17,6 +17,9 @@ import uuid
 import abc
 import typing
 import sys
+import os
+import semantic_version
+import jsonschema
 from presalytics.story.util import to_camel_case, to_snake_case
 from presalytics.lib.exceptions import ValidationError
 
@@ -62,7 +65,43 @@ def json_numpy_obj_hook(dct):
 
 
 def get_current_spec_version():
-    return 'beta'
+    """
+    Get the latest version of the story outline schema via reading foldernames in 
+    the schemas subfolder of this file's directory
+    """
+    schema_dir = os.path.join(os.path.dirname(__file__), "schemas")
+    major, minor, patch = None, None, None
+    latest = None
+    for _dir in os.listdir(schema_dir):
+        if not latest: 
+            latest = semantic_version.Version(_dir)
+        elif latest < semantic_version.Version(_dir):
+            latest = semantic_version.Version(_dir)
+    return str(latest)
+
+def load_schema(version_number):
+    path = os.path.join(os.path.dirname(__file__), "schemas", version_number, "story-outline.schema.json")
+    with open(path, 'r') as f:
+        data = json.load(f)
+    return data
+
+def load_latest_schema():
+    version_number = get_current_spec_version()
+    return load_schema(version_number)
+
+def get_spec_json(version_number):
+    """
+    Returns a string containing for the outline schema base on the version number.
+
+    Raises a ValueError in no schema is found
+    """
+    try:
+        schema = load_schema(version_number)
+        return json.dump(schema)
+    except Exception as ex:
+        raise ValueError("Story outline schema version '{}' could not be found.".fomrat(version_number))
+
+
 
 class OutlineBase(abc.ABC):
     """
@@ -71,11 +110,6 @@ class OutlineBase(abc.ABC):
     Includes methods for validiating, serializing, and deserializing outline classes
     """
     
-    __client_ver__: str
-    """
-    CAn I annotate an annoation?
-    """
-
     __annotations__: typing.Dict
     __required__: typing.Sequence[str]
     additional_properties: typing.Dict
@@ -104,6 +138,7 @@ class OutlineBase(abc.ABC):
             if not hasattr(self, key):
                 err_message = 'Could not load {0} object, source data missing "{1}" key'.format(self.__class__.__name__, key)
                 raise ValidationError(err_message)
+
 
     @classmethod
     def deserialize(cls, json_obj: dict):
@@ -459,8 +494,8 @@ class StoryOutline(OutlineBase):
     Attributes
     ----------
 
-    presalytics_story : str
-        the version of that StoryOuline schema.  Static at 0.3 for now.  Reserved for future use.
+    outline_version : str
+        the version of that StoryOuline schema.
     
     info : presalytics.story.outline.Info
         Metadata about this StoryOutline
@@ -481,11 +516,8 @@ class StoryOutline(OutlineBase):
         The Presaltyics API Story Id.  Automatically added once the story outline has been pushed to
         the server.
 
-    TODO
-    ----------
-    Build a [Json-Schema](https://json-schema.org/) for the StoryOutline to help with validation
     """
-    presalytics_story: str
+    outline_version: str
     info: Info
     pages: typing.List[Page]
     description: str
@@ -494,15 +526,15 @@ class StoryOutline(OutlineBase):
     story_id: str
 
     __required__ = [
-        'presalytics_story',
+        'outline_version',
         'info',
         'pages',
         'title',
     ]
 
-    def __init__(self, presalytics_story, info, pages, description, title, themes, plugins=None, story_id="empty", **kwargs):
+    def __init__(self, outline_version, info, pages, description, title, themes, plugins=None, story_id="empty", **kwargs):
         super(StoryOutline, self).__init__(**kwargs)
-        self.presalytics_story = presalytics_story
+        self.outline_version = outline_version
         self.info = Info.deserialize(info)
         self.pages = [Page.deserialize(x) for x in pages]
         if description:
@@ -522,4 +554,10 @@ class StoryOutline(OutlineBase):
         else:
             self.plugins = []
         self.story_id = story_id
+        if not kwargs.get("validate", True):
+            self.validate()
+
+        def validate(self):
+            super(StoryOutline, self).validate()
+            jsonschema.validate(instance=self.to_dict(), schema=load_latest_schema())
         

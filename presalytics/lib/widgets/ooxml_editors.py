@@ -134,11 +134,23 @@ class ChangeShapeColor(XmlTransformBase):
 
 class TextReplace(XmlTransformBase):
     """
-    Replaces text in an ooxml Element
+    Replaces text in a template built into an Office Office Xml object that has 
+    been uploaded to the Presalytics Ooxml Automation service.  Text to be should
+    be in the format of a "template tag", which is a string enclosed in handlebars
+    as such: '{{template_tag}}'
+
+    Function Parameters Dictionary
+    ----------
+
+    A dictionary that maps template tags to the new strings that will replace the
+    tags in the rendered widget.  The the dictionary keys should not be enclosed in handlebars.
     """
     __xml_transform_name__ = "ReplaceText"
 
     class TextElementInfo(object):
+        """
+        Holds metadata for a list of `<t>` tags from an Office Open Xml document. 
+        """
         def __init__(self, element: lxml.etree.Element, start_position: int):
             self.element = element
             self.text = "" if not element.text else element.text
@@ -147,6 +159,9 @@ class TextReplace(XmlTransformBase):
             self.end_position = self.start_position + self.length
 
     class TextList(object):
+        """
+        Class for managing a list of `TextElementInfo` objects
+        """
         _list: typing.List['TextReplace.TextElementInfo']
 
         def __init__(self):
@@ -203,6 +218,9 @@ class TextReplace(XmlTransformBase):
 
             
     def replace_handlebars(self, info_list, params):
+        """
+        Method that finds template tags and replaces them 
+        """
         for key, val in params.items():
             match_key = "{{" + key + "}}"
             match_start_position =  info_list.get_position(match_key)
@@ -220,15 +238,20 @@ class TextReplace(XmlTransformBase):
 
     def transform_function(self, lxml_element, params):
         """
-        Replaces the text inside 
+        Replaces template tags located {{inside_handlebars}} that match keys in the
+        `params` dict with values from the `params` dict. 
+
+        This method searches for match for plain text strings, so that if template
+        tags are split across xml `<t>` elements, they are still identified and replaced. 
 
         Parameters
         -----------
         lxml_element : lxml.etree.Element
-            An element containing as least one an `<sp>` element
+            An element containing as least one an `<t>` element
 
         params : dict
-            See the `Function Parameters Dictionary` for required entries
+            A dictionary that maps template tags (no handlebars) to their respective
+            replacement values.
         """
         text_list = lxml_element.findall('.//{*}t')
         info_list = TextReplace.TextList()
@@ -245,7 +268,7 @@ class XmlTransformRegistry(presalytics.lib.registry.RegistryBase):
     """
     Registry for XmlTransform Classes.  Read by `presalytics.lib.widgets.ooxml_editors.MultiXmlTransform`
     and `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget` so XmlTransformBase subclasses
-    can be deserialized at run-time.
+    can be deserialized at run-time without a loaded instance in `locals()`.
     """
     def __init__(self):
         include_paths = presalytics.COMPONENTS.autodiscover_paths # todo: Change this line -does not exist at timport time.
@@ -260,11 +283,12 @@ class XmlTransformRegistry(presalytics.lib.registry.RegistryBase):
 
 XML_TRANSFORM_REGISTRY = None
 """
-Static instance of `presalytics.lib.widgets.ooxml_editors.XmlTransformRegistry`
+Static instance of `presalytics.lib.widgets.ooxml_editors.XmlTransformRegistry`. 
 
 Should not be used directly by consuming classes. Only initialized if a consuming 
-class or method calls the `presalytics.lib.widgets.ooxml_editors.get_transform_registry`.  No need
-to build the registry at import-time if its never used in a workspace.
+class or method calls the `presalytics.lib.widgets.ooxml_editors.get_transform_registry`.  This is done
+for performance reasons since there's no need to build this registry at import-time if its never 
+used in a workspace.
 """
 
 def get_transform_registry():
@@ -280,7 +304,34 @@ def get_transform_registry():
 
 class MultiXmlTransform(XmlTransformBase):
     """
-    This class allow users to run mutiple transforms on multiple targets in a single widget
+    This class allow users to run mutiple transforms on multiple targets in a single widget.  `MultiXmlTransform`
+    wraps multiple subclasses of `presalytics.lib.widgets.ooxml_editors.XmlTransformBase`, creates instances of
+    them, and feeds them into an `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget` instance.  To do this,
+    the `presalytics.lib.widgets.ooxml_editors.XmlTransformBase` subclasses must be loaded into the 
+    `presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY` when called.
+
+    The function parameters for the 
+
+    Parameters
+    ----------
+    fail_quietly: bool, optional
+        Defaults to false.  Indicates whether an exception should be raised when a subclass specified
+        in the function parameters cannot not be found in the `presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY`
+        instance. 
+        
+
+    Function Parameters Dictionary
+    ----------
+    transforms_list: list of dict
+        A list of dictionaries, with each item in the list consiting of a dictionary of two entries.  
+        The entries are as follows:
+         
+         * name: [str]
+            The name of the the subclass of `presalytics.lib.widgets.ooxml_editors.XmlTransformBase` that
+            will be that will be initialized
+         
+         * function_params: [dict]
+            The `params` that will be the loaded into the instance's `transform_function` 
     """
     transform_instances: typing.List[XmlTransformBase]
 

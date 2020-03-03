@@ -272,7 +272,8 @@ class XmlTransformRegistry(presalytics.lib.registry.RegistryBase):
     """
     def __init__(self):
         include_paths = presalytics.COMPONENTS.autodiscover_paths # todo: Change this line -does not exist at timport time.
-        super(XmlTransformRegistry, self).__init__(autodiscover_paths=include_paths)
+        reserved_names = presalytics.COMPONENTS.reserved_names
+        super(XmlTransformRegistry, self).__init__(autodiscover_paths=include_paths, reserved_names=reserved_names)
 
     def get_name(self, klass):
         return getattr(klass, "__xml_transform_name__", None)

@@ -24,7 +24,8 @@ def update_components(filename=None):
     if os.path.exists(abs_filedir) and abs_filedir not in autodiscover_paths:
         autodiscover_paths.append(abs_filedir)
     if len(autodiscover_paths) > len(presalytics.COMPONENTS.autodiscover_paths):
-        presalytics.COMPONENTS = presalytics.story.components.ComponentRegistry(autodiscover_paths=autodiscover_paths)
+        presalytics.COMPONENTS = presalytics.story.components.ComponentRegistry(autodiscover_paths=autodiscover_paths, 
+                                                                                reserved_names=presalytics.CONFIG.get("RESERVED_NAMES", []))
 
 def get_component(name, filename=None):
     inst: 'ComponentBase'

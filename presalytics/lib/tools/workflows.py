@@ -227,7 +227,8 @@ def apply_json_patch(outline, patch):
     outline: 'StoryOutline'
 
     if isinstance(patch, dict):
-        patch = json.dumps(patch)
+        _json = json.dumps(patch)
+        patch = '[{}]'.format(_json)
     outline_dict = outline.to_dict()
     try:
         new_dict = jsonpatch.apply_patch(outline_dict, patch_string)

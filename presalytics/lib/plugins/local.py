@@ -14,8 +14,8 @@ class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
     LOCAL_STYLES_MAP = {
         "single_item_grid": os.path.join(css_path, "single-item-grid.css"),
         "flex_row": os.path.join(css_path, "flex-row.css"),
-        "light_grey": os.path.join(css_path, "ligh-grey.css"),
-        "responsive_title": os.path.join(css_path, "responsive-tile.css")
+        "light_grey": os.path.join(css_path, "light-grey.css"),
+        "responsive_title": os.path.join(css_path, "responsive-title.css")
     }
     """
     Dictionary containing a map configuration keys to css files that are 

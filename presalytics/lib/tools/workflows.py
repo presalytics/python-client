@@ -226,7 +226,11 @@ def apply_json_patch(outline, patch_string):
     outline: 'StoryOutline'
 
     outline_dict = outline.to_dict()
-    new_dict = jsonpatch.apply_patch(outline_dict, patch_string)
+    try:
+        new_dict = jsonpatch.apply_patch(outline_dict, patch_string)
+    except jsonpatch.JsonPatchException as ex:
+        message = "Unable to apply Json patch: {}".format(ex.args[0])
+        raise presalytics.lib.exceptions.InvalidArgumentException(message=message)
     new_outline = presalytics.story.outline.StoryOutline.deserialize(new_dict)
     return new_outline
     

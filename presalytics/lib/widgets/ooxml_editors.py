@@ -145,7 +145,7 @@ class TextReplace(XmlTransformBase):
     A dictionary that maps template tags to the new strings that will replace the
     tags in the rendered widget.  The the dictionary keys should not be enclosed in handlebars.
     """
-    __xml_transform_name__ = "ReplaceText"
+    __xml_transform_name__ = "TextReplace"
 
     class TextElementInfo(object):
         """

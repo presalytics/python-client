@@ -266,12 +266,12 @@ def update_outline(outline, filename=None, message=None):
             outline.pages[p] = page_inst.serialize()
         
         for w in range(0, len(page.widgets)):
-            widget = outline.pages[p]
+            widget = outline.pages[p].widgets[w]
 
             widget_key = "widget.{}.{}".format(widget.kind, widget.name)
             widget_inst = presalytics.COMPONENTS.get_instance(widget_key)
             if widget_inst:
-                outline.pages[p].widget[w] = widget_inst.serialize() 
+                outline.pages[p].widgets[w] = widget_inst.serialize() 
 
     
     for t in range(0, len(outline.themes)):

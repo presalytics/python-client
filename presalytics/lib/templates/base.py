@@ -241,4 +241,4 @@ class TwoUpWithTitle(JinjaTemplateBuilder):
     """
     __component_kind__ = "TwoUpWithTitle"
     __css__ = ['single_item_grid', 'flex_row']
-    __template_file = 'two_up_with_title.html'
+    __template_file__ = 'two_up_with_title.html'

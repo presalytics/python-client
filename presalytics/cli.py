@@ -398,7 +398,7 @@ def main():
                 outline = presalytics.lib.tools.workflows.apply_json_patch(outline, patch)
             _dump(outline, filename, True, args.json)
         if update:
-            presalytics.lib.tools.workflows.update_outline(outline, filename=filename, message=args.message)      
+            outline = presalytics.lib.tools.workflows.update_outline(outline, filename=filename, message=args.message)      
             _dump(outline, filename, True, args.json)  
         if push:
             if not message:

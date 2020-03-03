@@ -126,7 +126,11 @@ create_output_options = create.add_mutually_exclusive_group(required=False)
 create_output_options.add_argument('-y', '--yaml', default=False, action='store_true', help=yaml_help)
 create_output_options.add_argument('-j', '--json', default=False, action='store_true', help=json_help)
 
-update = subparsers.add_parser('update', description=modify_description, help='Update a Story Outline From Local Scripts')
+update_description = """
+Update the Story outline from instances contained in scripts in the active workspace 
+"""
+
+update = subparsers.add_parser('update', description=update_description, help='Update a Story Outline From Local Scripts')
 update.add_argument('-m', '--message', default=None, action='store', help="Revision message (added to outline).  Automatically populates by default.")
 update_options = update.add_mutually_exclusive_group(required=False)
 update_options.add_argument('-y', '--yaml', default=False, action='store_true', help=yaml_help)

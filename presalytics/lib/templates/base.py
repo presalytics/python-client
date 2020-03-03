@@ -231,7 +231,7 @@ class TitleWithSingleItem(JinjaTemplateBuilder):
     Simple single-widget page with a title
     """
     __component_kind__ = 'TitleWithSingleItem'
-    __css__ = ['single_item_grid']
+    __css__ = ['single_item_grid', 'light_grey', 'responsive_title']
     __template_file__ = 'title_with_single_widget.html'
 
 
@@ -240,5 +240,5 @@ class TwoUpWithTitle(JinjaTemplateBuilder):
     View two widgets side-by-side on one page
     """
     __component_kind__ = "TwoUpWithTitle"
-    __css__ = ['single_item_grid', 'flex_row']
+    __css__ = ['single_item_grid', 'flex_row', 'light_grey', 'responsive_title']
     __template_file__ = 'two_up_with_title.html'

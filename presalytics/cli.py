@@ -10,6 +10,8 @@ import presalytics
 import urllib.parse
 import webbrowser
 import yaml
+import json
+import ast
 import datetime
 import presalytics.lib.constants
 import presalytics.lib.tools.story_tools
@@ -369,7 +371,10 @@ def main():
                     logger.error("Modifying an outline using the 'patch' action requires a [--patch] argument")
                     return
                 try:
-                    patch = json.loads(args.patch)
+                    try:
+                        patch = json.loads(args.patch)
+                    except json.JSONDecodeError:
+                        patch = ast.literal_eval(args.patch)
                 except Exception as ex:
                     logger.error("A patch could not be created from [--patch]: {}".format(args.patch))
                     return

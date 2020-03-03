@@ -223,6 +223,16 @@ def apply_json_patch(outline, patch):
     Allows users to apply json patches to thier Story Outlines.
 
     See https://python-json-patch.readthedocs.io/en/latest/index.html for more info.
+
+    Parameters:
+    ----------
+
+    outline: presaltyics.story.outline.StoryOutline
+        A Story Outline object
+
+    patch: str or dict
+        Either an RFC 6901 compliant string or a dictionary with op, path, and value keys.  The
+        dictionary is for ease of use and will get parsed into a compliant string.
     """
     outline: 'StoryOutline'
 
@@ -231,7 +241,7 @@ def apply_json_patch(outline, patch):
         patch = '[{}]'.format(_json)
     outline_dict = outline.to_dict()
     try:
-        new_dict = jsonpatch.apply_patch(outline_dict, patch_string)
+        new_dict = jsonpatch.apply_patch(outline_dict, patch)
     except (jsonpatch.JsonPatchException, jsonpointer.JsonPointerException) as ex:
         message = "Unable to apply Json patch: {}".format(ex.args[0])
         raise presalytics.lib.exceptions.InvalidArgumentException(message=message)

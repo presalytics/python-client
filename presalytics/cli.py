@@ -68,6 +68,7 @@ Pushes a Story Outline revision to the Presalytics API
 Story service, and writes the updated story outline to a local file (--file)
 """
 push = subparsers.add_parser('push', description=push_description, help='Push a Story Outline revision')
+push.add_argument('--update', default=False, action='store_true', help="Update the Story Outline from Local Scripts before pushing")
 push.add_argument('-o', '--overwrite', default=False, action='store_true', help=overwrite_help)
 push.add_argument('-u', '--username', default=None, action='store', help=username_help)
 push.add_argument('-p', '--password', default=None, action='store', help=password_help)
@@ -124,6 +125,13 @@ create.add_argument('-s', '--source', default=None, action='store', help="The mo
 create_output_options = create.add_mutually_exclusive_group(required=False)
 create_output_options.add_argument('-y', '--yaml', default=False, action='store_true', help=yaml_help)
 create_output_options.add_argument('-j', '--json', default=False, action='store_true', help=json_help)
+
+update = subparsers.add_parser('update', description=modify_description, help='Update a Story Outline From Local Scripts')
+update.add_argument('-m', '--message', default=None, action='store', help="Revision message (added to outline).  Automatically populates by default.")
+update_options = update.add_mutually_exclusive_group(required=False)
+update_options.add_argument('-y', '--yaml', default=False, action='store_true', help=yaml_help)
+update_options.add_argument('-j', '--json', default=False, action='store_true', help=json_help)
+
 
 modify_description = """
 Modify a Story's outline
@@ -302,6 +310,7 @@ def main():
         ooxml = False
         config = False
         modify = False
+        update = False
         message = getattr(args, "message", None)
         if args.story_api == "create":
             # create outline from page/widget
@@ -315,6 +324,8 @@ def main():
             push = True
             pull = False
             write = False
+            if args.update:
+                update = True
         elif args.story_api == "pull":
             push = False
             pull = True
@@ -330,6 +341,8 @@ def main():
             config = True
         elif args.story_api == "modify":
             modify = True
+        elif args.story_api == "update":
+            update = True
         else:
             push = False
             pull = False
@@ -379,7 +392,10 @@ def main():
                     logger.error("A patch could not be created from [--patch]: {}".format(args.patch))
                     return
                 outline = presalytics.lib.tools.workflows.apply_json_patch(outline, patch)
-            _dump(outline, filename, True, args.json)            
+            _dump(outline, filename, True, args.json)
+        if update:
+            presalytics.lib.tools.workflows.update_outline(outline, filename=filename, message=args.message)      
+            _dump(outline, filename, True, args.json)  
         if push:
             if not message:
                 pretty_time = datetime.datetime.now().strftime("%d-%m-%Y at %H:%M")

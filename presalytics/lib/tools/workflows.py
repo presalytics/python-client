@@ -247,6 +247,45 @@ def apply_json_patch(outline, patch):
         raise presalytics.lib.exceptions.InvalidArgumentException(message=message)
     new_outline = presalytics.story.outline.StoryOutline.deserialize(new_dict)
     return new_outline
+
+def update_outline(outline, filename=None, message=None):
+    """
+    Updates the the outline from active instances in the workspace
+    """
+    if not message:
+        message = "Automated update via presalytics.lib.tools.workflows.update_outline()"
+    
+    update_components(filename=filename)
+
+    for p in range(0, len(outline.pages)):
+        page = outline.pages[p]
+
+        page_key = "page.{}.{}".format(page.kind, page.name)
+        page_inst = presalytics.COMPONENTS.get_instance(page_key)
+        if page_inst:
+            outline.pages[p] = page_inst.serialize()
+        
+        for w in range(0, len(page.widgets)):
+            widget = outline.pages[p]
+
+            widget_key = "widget.{}.{}".format(widget.kind, widget.name)
+            widget_inst = presalytics.COMPONENTS.get_instance(widget_key)
+            if widget_inst:
+                outline.pages[p].widget[w] = widget_inst.serialize() 
+
+    
+    for t in range(0, len(outline.themes)):
+        theme = outline.themes[t]
+
+        theme_key = "theme.{}.{}".format(theme.kind, theme.name)
+        theme_inst = presalytics.COMPONENTS.get_instance(theme_key)
+        if theme_inst:
+            outline.themes[t] = theme_inst.serialize()
+    
+    outline.info.revision_notes = message
+    return outline
+
+
     
     
 

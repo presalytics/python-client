@@ -207,7 +207,7 @@ class TextReplace(XmlTransformBase):
 
         def set_start_to_new_value(self, index, new_value):
             start_text = self._list[index].text.split("{{", 1)[0]
-            new_text = start_text + new_value
+            new_text = "{0}{1}".format(start_text, new_value)
             self._list[index].text = new_text
             self._list[index].element.text = new_text
 

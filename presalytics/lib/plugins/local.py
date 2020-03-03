@@ -12,7 +12,8 @@ class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
     __plugin_name__ = 'local'
 
     LOCAL_STYLES_MAP = {
-        "single_item_grid": os.path.join(css_path, "single-item-grid.css")
+        "single_item_grid": os.path.join(css_path, "single-item-grid.css"),
+        "flex_row": os.path.join(css_path, "flex-row.css")
     }
     """
     Dictionary containing a map configuration keys to css files that are 

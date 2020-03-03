@@ -53,7 +53,7 @@ def add_widget_instance(widget_name, outline, position=None, page_number=0, file
     inst = get_component(widget_name, filename=filename)
     widget = inst.serialize()
 
-    if not postion:
+    if not position:
         position = len(outline.pages[page_number].widgets)
     outline.pages[page_number].widgets.insert(position, widget)
 

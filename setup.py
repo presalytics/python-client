@@ -34,7 +34,8 @@ REQUIRES = [
     "mpld3",
     "libsass",
     "jsonschema",
-    "semantic_version"
+    "semantic_version",
+    "jsonpatch"
 ]
 
 with open("README.md", "r") as fh:

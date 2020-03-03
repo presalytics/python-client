@@ -121,6 +121,25 @@ create_output_options = create.add_mutually_exclusive_group(required=False)
 create_output_options.add_argument('-y', '--yaml', default=False, action='store_true', help=yaml_help)
 create_output_options.add_argument('-j', '--json', default=False, action='store_true', help=json_help)
 
+modify_description = """
+Modify a Story's outline
+
+You can either 'add' or 'remove' a widget to or from a page in story outline.
+
+For more complex operations, you can apply a JSON 'patch' to to the story outline per 
+[RFC 6902](https://tools.ietf.org/html/rfc6902).  You can find good exmaples at 
+www.jsonpatch.com
+""" 
+modify = subparsers.add_parser('modify', description=modify_description, help='Modify a Story Outline')
+modify.add_argument('action', choices=['add', 'remove', 'patch'], action='store', help="You can either add or remove a widget (quick & easy), or apply a json patch (more complex)")
+modify.add_argument('-n', '--name', default=None, action='store', help="The name of the widget you would like to add or remove")
+modify.add_argument('--position', default=None, action='store', type=int, help="The position in the widget list to place the widget")
+modify.add_argument('--page_number', default=None, action='store', type=int, help="The page number to add or remove the widget to/from" )
+modify.add_argument('-s', '--patch_string', default=None, action='store', help="The json patch string (per RFC 6902) you want to apply to the Story Outline")
+modify_output_options = modify.add_mutually_exclusive_group(required=False)
+modify_output_options.add_argument('-y', '--yaml', default=False, action='store_true', help=yaml_help)
+modify_output_options.add_argument('-j', '--json', default=False, action='store_true', help=json_help)
+
 share_description = """
 Control permissions for owners, editors, promoters, and viewer or your stories
 """
@@ -275,6 +294,7 @@ def main():
         outline = None
         ooxml = False
         config = False
+        modify = False
         message = getattr(args, "message", None)
         if args.story_api == "create":
             # create outline from page/widget
@@ -301,6 +321,8 @@ def main():
             pull = True
         elif args.story_api == "config":
             config = True
+        elif args.story_api == "modify":
+            modify = True
         else:
             push = False
             pull = False
@@ -328,6 +350,21 @@ def main():
         except Exception:
             logger.error("Error handling file: {}".format(filename))
             return
+        if modify:
+            if args.action == "add" or args.action == "remove":
+                if not args.name:
+                    logger.error("Modifying an outline using the 'add' or 'remove' actions requires a [--name] argument")
+                    return
+                if args.action == "add":
+                    outline = presalytics.lib.tools.workflows.add_widget_instance(args.name, outline, position=args.position, page_number=args.page_number, filename=filename)
+                elif args.action == "remove":
+                    outline = presalytics.lib.tools.workflows.remove_widget_by_name(args.name, outline, page_number=args.page_number, filename=filename)
+            elif args.action == "patch":
+                if not args.patch_string:
+                    logger.error("Modifying an outline using the 'patch' action requires a [--patch_string] argument")
+                    return
+                outline = presalytics.lib.tools.workflows.apply_json_patch(outline, args.patch_string)
+            _dump(outline, filename, True, args.json)            
         if push:
             if not message:
                 pretty_time = datetime.datetime.now().strftime("%d-%m-%Y at %H:%M")

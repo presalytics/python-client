@@ -2,34 +2,35 @@ import typing
 import os
 import sys
 import json
+import jsonpatch
 import logging
 import presalytics.client.api
 import presalytics.lib.tools.story_tools
 import presalytics.story.outline
 import presalytics.story.components
 if typing.TYPE_CHECKING:
-    from presalytics.story.components import ComponentBase
+    from presalytics.story.components import ComponentBase, WidgetBase
     from presalytics.story.outline import StoryOutline
 
 logger = logging.getLogger(__name__)
 
-def create_from_instance(name, widget=False, page=False, filename=None) -> 'StoryOutline': #type: ignore
-    """
-    Creates a Story Outline from an instance name in `presalytics.COMPONENTS`
-    """
+def update_components(filename=None):
+    autodiscover_paths = presalytics.COMPONENTS.autodiscover_paths
+    dirname = os.path.dirname(filename)
+    if os.path.exists(dirname) and dirname not in autodiscover_paths:
+        autodiscover_paths.append(dirname)
+    cwd = os.getcwd()
+    abs_filedir = os.path.join(cwd, dirname)
+    if os.path.exists(abs_filedir) and abs_filedir not in autodiscover_paths:
+        autodiscover_paths.append(abs_filedir)
+    if len(autodiscover_paths) > len(presalytics.COMPONENTS.autodiscover_paths):
+        presalytics.COMPONENTS = presalytics.story.components.ComponentRegistry(autodiscover_paths=autodiscover_paths)
+
+def get_component(name, filename=None):
     inst: 'ComponentBase'
+
     if filename:
-        autodiscover_paths = presalytics.COMPONENTS.autodiscover_paths
-        dirname = os.path.dirname(filename)
-        if os.path.exists(dirname) and dirname not in autodiscover_paths:
-            autodiscover_paths.append(dirname)
-        cwd = os.getcwd()
-        abs_filedir = os.path.join(cwd, dirname)
-        if os.path.exists(abs_filedir) and abs_filedir not in autodiscover_paths:
-            autodiscover_paths.append(abs_filedir)
-        if len(autodiscover_paths) > len(presalytics.COMPONENTS.autodiscover_paths):
-            presalytics.COMPONENTS = presalytics.story.components.ComponentRegistry(autodiscover_paths=autodiscover_paths)
-            
+        update_components(filename=filename)            
     component_list = presalytics.COMPONENTS.find_instance(name)
     if len(component_list) == 0:
         message = "Could not find an instance with name '{0}' in the COMPONENTS registry".format(name)
@@ -39,17 +40,60 @@ def create_from_instance(name, widget=False, page=False, filename=None) -> 'Stor
         message = "Multiple matches for name in COMPONENTS registry.  Choose from: " + components_str
         presalytics.COMPONENTS.raise_error(message)
     elif len(component_list) == 1:
-        inst = presalytics.COMPONENTS.get_instance(component_list[0])
-        if page:
-            outline = presalytics.lib.tools.component_tools.create_outline_from_page(inst) #type: ignore
-        elif widget:
-            outline = presalytics.lib.tools.component_tools.create_outline_from_widget(inst) #type: ignore
-        else:
-            raise presalytics.lib.exceptions.InvalidArgumentException("Either the 'widget' or 'page' paramters must be true.")
-        return outline
+        return presalytics.COMPONENTS.get_instance(component_list[0])
     else:
         message = "Error searching the COMPONENTS registry"
         presalytics.COMPONENTS.raise_error(message)
+
+def add_widget_instance(widget_name, outline, position=None, page_number=0, filename=None):
+    inst: 'WidgetBase'
+    outline: 'StoryOutline'
+
+    inst = get_component(widget_name, filename=filename)
+    widget = inst.serialize()
+
+    if not postion:
+        position = len(outline.pages[page_number].widgets)
+    outline.pages[page_number].widgets.insert(position, widget)
+
+    return outline
+
+def remove_widget_by_name(widget_name, outline, page_number=None, filename=None):
+    inst: 'WidgetBase'
+    outline: 'StoryOutline'
+
+    if page_number:
+        start = page_number
+        stop = page_number
+    else:
+        start = 0
+        stop = len(outline.pages)
+    
+    for p in range(start, stop):
+        page = outline.pages[p]
+        for w in range(0, len(page.widgets)):
+            if page.widgets[w].name == widget_name:
+                page.widgets.pop(w)
+    
+    return outline
+
+
+
+def create_from_instance(name, widget=False, page=False, filename=None) -> 'StoryOutline': #type: ignore
+    """
+    Creates a Story Outline from an instance name in `presalytics.COMPONENTS`
+    """
+    inst: 'ComponentBase'
+
+    inst = get_component(name)
+    if page:
+        outline = presalytics.lib.tools.component_tools.create_outline_from_page(inst) #type: ignore
+    elif widget:
+        outline = presalytics.lib.tools.component_tools.create_outline_from_widget(inst) #type: ignore
+    else:
+        raise presalytics.lib.exceptions.InvalidArgumentException("Either the 'widget' or 'page' paramters must be true.")
+    return outline
+
 
 
 def push_outline(outline, username=None, password=None) -> 'StoryOutline':
@@ -168,7 +212,18 @@ def create_cron_target():
         logger.error("Unknown operating system.")
         raise ValueError
 
+def apply_json_patch(outline, patch_string):
+    """
+    Allows users to apply json patches to thier Story Outlines.
 
+    See https://python-json-patch.readthedocs.io/en/latest/index.html for more info.
+    """
+    outline: 'StoryOutline'
+
+    outline_dict = outline.to_dict()
+    new_dict = jsonpatch.apply_patch(outline_dict, patch_string)
+    new_outline = presalytics.story.outline.StoryOutline.deserialize(new_dict)
+    return new_outline
     
     
 

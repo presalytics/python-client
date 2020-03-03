@@ -234,7 +234,7 @@ class TitleWithSingleItem(JinjaTemplateBuilder):
     __css__ = ['single_item_grid']
     __template_file__ = 'title_with_single_widget.html'
 
-class TwoUpWithTitle(JinjaTemplateBuilder):
+class TwoUpWithTitle(JinjaTemplateBuilder): 
     """
     View two widgets side-by-side on one page
     """

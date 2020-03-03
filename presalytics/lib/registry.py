@@ -123,14 +123,14 @@ class RegistryBase(abc.ABC):
             new_deferred = []
             for mod in self.deferred_modules:
                 try:
-                    name = mod.get("name")
-                    if name in sys.modules:
-                        module = sys.modules[name]
-                    else:
+                    name = mod.get("name") 
+                    if name in sys.modules: 
+                        module = sys.modules[name] 
+                    else: 
                         spec = mod.get("spec")
                         module = mod.get("module")
                         sys.modules[name] = module
-                        spec.loader.exec_module(module)
+                        spec.loader.exec_module(module) 
                     self.get_classes(module)
                 except Exception as ex:
                     logger.exception(ex)

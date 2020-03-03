@@ -434,3 +434,4 @@ presalytics.log
 tmp.*
 story.yaml
 story.json
+config.py

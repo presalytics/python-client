@@ -365,11 +365,14 @@ def main():
                 elif args.action == "remove":
                     outline = presalytics.lib.tools.workflows.remove_widget_by_name(args.name, outline, page_number=args.page_number, filename=filename)
             elif args.action == "patch":
-                if not args.patch_string:
-                    logger.error("Modifying an outline using the 'patch' action requires a [--patch_string] argument")
+                if not args.patch:
+                    logger.error("Modifying an outline using the 'patch' action requires a [--patch] argument")
                     return
                 try:
                     patch = json.loads(args.patch)
+                except Exception as ex:
+                    logger.error("A patch could not be created from [--patch]: {}".format(args.patch))
+                    return
                 outline = presalytics.lib.tools.workflows.apply_json_patch(outline, patch)
             _dump(outline, filename, True, args.json)            
         if push:

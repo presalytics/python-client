@@ -49,7 +49,9 @@ parser.add_argument('--view', default=False, action='store_true', help='View a S
 parser.add_argument('--manage', default=False, action='store_true', help="""Go to the Story's management page""")
 parser.add_argument('--show-story', default=False, action='store_true', help="Print Story metadata to the console")
 parser.add_argument('--cron', default=False, action='store_true', help="Print information on how automate updates to your story to the console.")
-parser.add_argument('-v', '--verbose', default=False, action='store_true', help="Increases the detail in log output")
+verbosity = parser.add_mutually_exclusive_group(required=False)
+verbosity.add_argument('-v', '--verbose', default=False, action='store_true', help="Increases the detail in log output")
+verbosity.add_argument('-q', '--quiet', default=False, action='store_true', help="Decrease the detail in log output. Supresseses non-critical errors.")
 
 
 yaml_help = "Writes file updates to YAML format.  Yaml is the default."
@@ -280,9 +282,12 @@ def main():
         else:
             original_file_is_yaml - False
         lgs = [logging.getLogger(n) for n in logging.root.manager.loggerDict]
-        if args.verbose:
+        if args.verbose or args.quiet:
             for lg in lgs:
                 lg.setLevel(logging.DEBUG)
+        elif args.quiet:
+            for lg in lgs:
+                lg.setLevel(logging.CRITICAL)
         else:
             for lg in lgs:
                 lg.setLevel(logging.ERROR)

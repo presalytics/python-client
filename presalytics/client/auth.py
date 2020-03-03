@@ -45,8 +45,8 @@ class TokenUtil(object):
 
     def is_api_access_token_expired(self):
         try:
-            expire_datetime = dateutil.parser.parse(self.token['access_token_expire_time']).replace(tzinfo=datetime.timezone.utc)
-            if expire_datetime < datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc):
+            expire_datetime = dateutil.parser.parse(self.token['access_token_expire_time'])
+            if expire_datetime < datetime.datetime.utcnow().astimezone(datetime.timezone.utc):
                 return True
             return False
         except Exception:
@@ -54,8 +54,8 @@ class TokenUtil(object):
 
     def is_api_refresh_token_expired(self):
         try:
-            expire_datetime = dateutil.parser.parse(self.token['refresh_token_expire_time']).replace(tzinfo=datetime.timezone.utc)
-            if expire_datetime < datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc):
+            expire_datetime = dateutil.parser.parse(self.token['refresh_token_expire_time'])
+            if expire_datetime < datetime.datetime.utcnow().astimezone(datetime.timezone.utc):
                 return True
             return False
         except Exception:
@@ -70,8 +70,8 @@ class TokenUtil(object):
             self.put_token_file(self.token, self.token_file)
 
     def process_keycloak_token(self, keycloak_token):
-        access_token_expire_time = datetime.datetime.utcnow() + datetime.timedelta(seconds=keycloak_token['expires_in'])
-        refresh_token_expire_time = datetime.datetime.utcnow() + datetime.timedelta(seconds=keycloak_token['refresh_expires_in'])
+        access_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=keycloak_token['expires_in'])
+        refresh_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=keycloak_token['refresh_expires_in'])
 
         self.token = {
             'access_token': keycloak_token['access_token'],
@@ -112,7 +112,14 @@ class AuthenticationMixIn(object):
         Overriding call_api to force token check, refresh on each api call,
         rather than at class initialized (good for ipython notebooks)
         """
-
+        if self.parent() is None:
+            message = """
+            Missing reference to Client class.  Client was like garbage collected by the intepreter.\n  
+            Please initialize the Client class on its own line to avoid this error.  For example:\n\n
+            client = presalytics.Client()\n
+            story = client.story.story_id_get(story_id)\n\n
+            """
+            raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
         auth_header = self.parent().get_auth_header()
         if header_params is not None:
             header_params.update(auth_header)

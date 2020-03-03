@@ -218,7 +218,7 @@ def create_cron_target():
         logger.error("Unknown operating system.")
         raise ValueError
 
-def apply_json_patch(outline, patch_string):
+def apply_json_patch(outline, patch):
     """
     Allows users to apply json patches to thier Story Outlines.
 
@@ -226,6 +226,8 @@ def apply_json_patch(outline, patch_string):
     """
     outline: 'StoryOutline'
 
+    if isinstance(patch, dict):
+        patch = json.dumps(patch)
     outline_dict = outline.to_dict()
     try:
         new_dict = jsonpatch.apply_patch(outline_dict, patch_string)

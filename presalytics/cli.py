@@ -137,7 +137,7 @@ modify.add_argument('action', choices=['add', 'remove', 'patch'], action='store'
 modify.add_argument('-n', '--name', default=None, action='store', help="The name of the widget you would like to add or remove")
 modify.add_argument('--position', default=None, action='store', type=int, help="The position in the widget list to place the widget")
 modify.add_argument('--page_number', default=None, action='store', type=int, help="The page number to add or remove the widget to/from" )
-modify.add_argument('-s', '--patch_string', default=None, action='store', help="The json patch string (per RFC 6902) you want to apply to the Story Outline")
+modify.add_argument('--patch', default=None, action='store', help="The json patch (per RFC 6902) you want to apply to the Story Outline.")
 modify_output_options = modify.add_mutually_exclusive_group(required=False)
 modify_output_options.add_argument('-y', '--yaml', default=False, action='store_true', help=yaml_help)
 modify_output_options.add_argument('-j', '--json', default=False, action='store_true', help=json_help)
@@ -368,7 +368,9 @@ def main():
                 if not args.patch_string:
                     logger.error("Modifying an outline using the 'patch' action requires a [--patch_string] argument")
                     return
-                outline = presalytics.lib.tools.workflows.apply_json_patch(outline, args.patch_string)
+                try:
+                    patch = json.loads(args.patch)
+                outline = presalytics.lib.tools.workflows.apply_json_patch(outline, patch)
             _dump(outline, filename, True, args.json)            
         if push:
             if not message:

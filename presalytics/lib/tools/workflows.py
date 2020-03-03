@@ -3,6 +3,7 @@ import os
 import sys
 import json
 import jsonpatch
+import jsonpointer
 import logging
 import presalytics.client.api
 import presalytics.lib.tools.story_tools
@@ -228,7 +229,7 @@ def apply_json_patch(outline, patch_string):
     outline_dict = outline.to_dict()
     try:
         new_dict = jsonpatch.apply_patch(outline_dict, patch_string)
-    except jsonpatch.JsonPatchException as ex:
+    except (jsonpatch.JsonPatchException, jsonpointer.JsonPointerException) as ex:
         message = "Unable to apply Json patch: {}".format(ex.args[0])
         raise presalytics.lib.exceptions.InvalidArgumentException(message=message)
     new_outline = presalytics.story.outline.StoryOutline.deserialize(new_dict)

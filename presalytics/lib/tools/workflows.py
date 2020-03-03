@@ -52,7 +52,11 @@ def add_widget_instance(widget_name, outline, position=None, page_number=0, file
 
     inst = get_component(widget_name, filename=filename)
     widget = inst.serialize()
-
+    if not page_number:
+        page_number = 0
+    if page_number > len(outline.pages):
+        message = "The story has fewer than {} pages".format(page_number)
+        raise presalytics.lib.exceptions.InvalidArgumentException(message=message)
     if not position:
         position = len(outline.pages[page_number].widgets)
     outline.pages[page_number].widgets.insert(position, widget)

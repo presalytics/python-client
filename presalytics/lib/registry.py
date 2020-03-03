@@ -125,6 +125,7 @@ class RegistryBase(abc.ABC):
                 try:
                     spec = mod.get("spec")
                     module = mod.get("module")
+                    sys.modules[name] = module
                     spec.loader.exec_module(module)
                     self.get_classes(module)
                 except Exception as ex:
@@ -142,10 +143,11 @@ class RegistryBase(abc.ABC):
         for path in self.autodiscover_paths:
             for name in os.listdir(path):
                 if name.endswith(".py") and name not in self.reserved_names:
+                    module_name = name.replace(".py", "")
                     try:
                         mod_path = os.path.join(path, name)
-                        mod_spec = importlib.util.spec_from_file_location(name, mod_path)
-                        if not self.module_is_in_stackframe(mod_spec.name.replace(".py", "")):
+                        mod_spec = importlib.util.spec_from_file_location(module_name, mod_path)
+                        if not self.module_is_in_stackframe(module_name):
                             """
                             Defer workspace-level imports so these modules only load once
                             This avoids memory errors in computationally-intensive packages (in some environments)
@@ -155,7 +157,7 @@ class RegistryBase(abc.ABC):
                             """
                             mod = importlib.util.module_from_spec(mod_spec)
                             self.deferred_modules.append({
-                                "name": name,
+                                "name": module_name,
                                 "module": mod,
                                 "spec": mod_spec
                             })

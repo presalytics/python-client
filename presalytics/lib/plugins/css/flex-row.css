@@ -9,3 +9,8 @@
     flex-direction: column;
     padding: 2rem;
 }
+
+.two-col {
+    flex: 50%;
+    width: 50%;
+}

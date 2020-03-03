@@ -125,6 +125,7 @@ class RegistryBase(abc.ABC):
                 try:
                     spec = mod.get("spec")
                     module = mod.get("module")
+                    name = mod.get("name")
                     sys.modules[name] = module
                     spec.loader.exec_module(module)
                     self.get_classes(module)

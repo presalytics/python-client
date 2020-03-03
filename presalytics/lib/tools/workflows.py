@@ -179,7 +179,7 @@ def get_story(story_id):
     returns Story metadata from the story API
     """
     client = presalytics.client.api.Client()
-    return client.story.story_id_get(story_id)
+    return client.story.story_id_get(story_id, include_relationships=True)
 
 def create_config_file(username, password=None, set_dict={}, overwrite=False):
     config_file = os.path.join(os.getcwd(), "config.py")

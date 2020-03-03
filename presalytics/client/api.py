@@ -407,7 +407,8 @@ class Client(object):
             else:
                 try:
                     refresh_token = self.token_util.token["refresh_token"]
-                    self.token_util.token = self.oidc.refresh_token(refresh_token)
+                    keycloak_token = self.oidc.refresh_token(refresh_token)
+                    self.token_util.process_keycloak_token(keycloak_token)
                     logger.debug("Refresh token granted successfully.")
                 except keycloak.exceptions.KeycloakGetError:
                     if not self._delegate_login:

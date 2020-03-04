@@ -29,10 +29,16 @@ class RegistryBase(abc.ABC):
     deferred_modules: typing.List[typing.Dict[str, typing.Any]]
     show_errors = False
 
-    def __init__(self, show_errors=False, autodiscover_paths=[], reserved_names: typing.List[str] = None, **kwargs):
+    def __init__(self, 
+                 show_errors=False, 
+                 autodiscover_paths=[], 
+                 reserved_names: typing.List[str] = None, 
+                 ignore_paths: typing.List[str] = None,
+                 **kwargs):
         RegistryBase.show_errors = show_errors
         self.error_class = presalytics.lib.exceptions.RegistryError
         self.autodiscover_paths = autodiscover_paths
+        self.ignore_paths = ignore_paths if ignore_paths else []
         self.registry = {}
         self.reserved_names = ["config.py", "setup.py"]
         self.deferred_modules = []  # modules to load at at runtime, if theres a ciruclat dependency at import-time
@@ -41,6 +47,9 @@ class RegistryBase(abc.ABC):
                 self.reserved_names.extend(reserved_names)
         except Exception:
             pass
+        for path in ignore_paths:
+            if path in self.autodiscover_paths:
+                self.autodiscover_paths.remove(path)
         self.discover()
         self.key_regex = re.compile(r'(.*)\.(.*)')
 

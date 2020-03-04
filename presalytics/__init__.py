@@ -130,6 +130,9 @@ RESERVED_NAMEs: list of str, optional
     A list of filenames for *.py files in the current workspace that should be ignored by the 
     registries. 
 
+IGNORE_PATHS: list of str, optional
+    A list of paths to not to include in registry autosdiscover
+
 The object can also take on values for user-defined extensions, and please consult
 the documentation for those package for those vairables definition.
 """
@@ -144,7 +147,8 @@ presalytics.lib.logger.configure_logger(log_level=log_level, file_logger=file_lo
 registry_kwargs = {
     'show_errors': False,
     'autodiscover_paths': autodiscover_paths,
-    'reserved_names': CONFIG.get("RESERVED_NAMES", [])
+    'reserved_names': CONFIG.get("RESERVED_NAMES", []),
+    'ignore_paths': CONFIG.get("IGNORE_PATHS", [])
 }
 
 PLUGINS = presalytics.lib.plugins.base.PluginRegistry(**registry_kwargs)

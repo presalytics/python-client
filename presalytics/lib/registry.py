@@ -47,9 +47,13 @@ class RegistryBase(abc.ABC):
                 self.reserved_names.extend(reserved_names)
         except Exception:
             pass
-        for path in ignore_paths:
-            if path in self.autodiscover_paths:
-                self.autodiscover_paths.remove(path)
+        remove_paths = []
+        for path in self.ignore_paths:
+            for search_path in self.autodiscover_paths:
+                if path in search_path:
+                    remove_paths.append(search_path)
+        for remove_path in remove_paths:
+            self.autodiscover_paths.remove(remove_path)
         self.discover()
         self.key_regex = re.compile(r'(.*)\.(.*)')
 

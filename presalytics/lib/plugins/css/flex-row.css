@@ -7,14 +7,10 @@ div.flex-row {
 div.flex-column {
     display: flex;
     flex-direction: column;
-    padding: 2rem;
-}
-
-div.two-col {
-    flex: 50%;
-    width: 50%;
+    margin: 2rem;
+    flex: 1 1 0;
 }
 
 div.item-container {
-    margin: 20px;
+    margin: 2rem;
 }

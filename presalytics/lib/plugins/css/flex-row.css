@@ -1,20 +1,20 @@
-.flex-row {
+div.flex-row {
     display: flex;
     justify-content: space-around;
     flex-direction: row;
 }
 
-.flex-column {
+div.flex-column {
     display: flex;
     flex-direction: column;
     padding: 2rem;
 }
 
-.two-col {
+div.two-col {
     flex: 50%;
     width: 50%;
 }
 
-.item-container {
+div.item-container {
     margin: 20px;
 }

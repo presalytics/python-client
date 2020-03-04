@@ -70,6 +70,13 @@ class Revealer(presalytics.story.components.Renderer):
             'name': 'reveal',
             'config': {}
         }
+        overrides_config = {
+            'kind': 'style',
+            'name': 'local',
+            'config': {
+                "css_file_id": "reveal_overrides"
+            }
+        }
         self.update_outline_from_instances()
         self.plugins = [reveal_plugin_config]
         self.get_component_implicit_plugins()

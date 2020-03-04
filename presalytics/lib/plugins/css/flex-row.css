@@ -4,11 +4,6 @@
     width: 100%;
 }
 
-.reveal .slides section.present {
-    padding: 0;
-}
-
-
 div.flex-row {
     display: flex;
     justify-content: space-around;

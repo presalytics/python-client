@@ -421,7 +421,7 @@ class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
         super(OoxmlEditorWidget, self).__init__(name, story_id=story_id, object_ooxml_id=object_ooxml_id, endpoint_map=endpoint_map, **kwargs)
         self.name = name
         self.transform = transform_class(transform_params)
-        self.svg_data = self.update()
+        self.update()
         self.svg_html = self.create_container(**self.client_info)
         self.outline_widget = self.serialize()
 
@@ -451,8 +451,6 @@ class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
             xml_update_response = requests.put(xml_url, json=dto, headers=auth_header)
             if xml_response.status_code != 200:
                 raise presalytics.lib.exceptions.ApiError(message=xml_update_response.content)
-        svg_data = self.get_svg(self.object_ooxml_id)
-        return svg_data
 
     @classmethod
     def deserialize(cls, component, **kwargs):

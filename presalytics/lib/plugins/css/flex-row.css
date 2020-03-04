@@ -1,7 +1,7 @@
 .flex-row {
     display: flex;
     justify-content: space-around;
-    flex-direction:row;
+    flex-direction: row;
 }
 
 .flex-column {
@@ -13,4 +13,8 @@
 .two-col {
     flex: 50%;
     width: 50%;
+}
+
+.item-container {
+    margin: 20px;
 }

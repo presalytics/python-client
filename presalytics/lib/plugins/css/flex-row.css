@@ -13,11 +13,7 @@ div.flex-row {
 div.flex-column {
     display: flex;
     flex-direction: column;
-    margin: 2rem;
+    margin: 2.5vw;
     flex: 1 1 0;
     min-width: 0;
-}
-
-div.item-container {
-    margin: 2rem;
 }

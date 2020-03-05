@@ -6,6 +6,7 @@ import lxml
 import lxml.etree
 import sys
 import six
+import lxml
 import presalytics
 import presalytics.lib.exceptions
 import presalytics.lib.registry
@@ -330,10 +331,13 @@ class PluginManager(object):
                 except Exception as ex:
                     t, v, tb = sys.exc_info()
                     if not presalytics.CONFIG.get("DEBUG", False):
-                        page_html = presalytics.lib.exceptions.RenderExceptionHandler(ex, "plugin", traceback=tb).render_exception()
+                        div = presalytics.lib.exceptions.RenderExceptionHandler(ex, "plugin", traceback=tb).render_exception()
+                        template = lxml.html.Element('template')
+                        template.extend(list(lxml.html.fragment_fromstring(div)))
+                        tag = lxml.html.tostring(template).decode('utf-8')
                     else:
                         six.reraise(t, v, tb)
-                        rendered_list.append(tag)
+                rendered_list.append(tag)
         return rendered_list
 
     @staticmethod

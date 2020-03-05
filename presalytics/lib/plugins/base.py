@@ -4,6 +4,8 @@ import logging
 import collections
 import lxml
 import lxml.etree
+import sys
+import six
 import presalytics
 import presalytics.lib.exceptions
 import presalytics.lib.registry
@@ -314,15 +316,24 @@ class PluginManager(object):
         return self.render_plugins('script')
 
     def render_plugins(self, plugin_kind: str) -> typing.List[str]:
+        rendered_list: typing.List[str]
+
         rendered_list = []
         for key in self.dependency_order:
             dep_map = self.dependency_map[key]
             if dep_map["plugin"]["kind"] == plugin_kind:
                 plugin_config = dep_map["plugin"]
                 plugin_class = dep_map["class"]
-                plugin_instance = plugin_class()
-                tag = plugin_instance.get_tag(config=plugin_config["config"])
-                rendered_list.append(tag)
+                try:
+                    plugin_instance = plugin_class()
+                    tag = plugin_instance.get_tag(config=plugin_config["config"])
+                except Exception as ex:
+                    t, v, tb = sys.exc_info()
+                    if not presalytics.CONFIG.get("DEBUG", False):
+                        page_html = presalytics.lib.exceptions.RenderExceptionHandler(ex, "plugin", traceback=tb).render_exception()
+                    else:
+                        six.reraise(t, v, tb)
+                        rendered_list.append(tag)
         return rendered_list
 
     @staticmethod

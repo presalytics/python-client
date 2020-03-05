@@ -69,5 +69,16 @@ class TestStory(unittest.TestCase):
 
         self.assertIsInstance(html_str, str)
 
+    def test_render_page_exception(self):
+        test_file = os.path.join(os.path.dirname(__file__), 'files', 'bad-outline.yaml')
+        _debug = presalytics.CONFIG.pop("DEBUG", None)
+        outline = presalytics.story.outline.StoryOutline.import_yaml(test_file)
+        revealer = presalytics.story.revealer.Revealer(outline)
+        html = revealer.package_as_standalone().decode('utf-8')
+        self.assertTrue("Oops!" in html)
+        if _debug:
+            presalytics.CONFIG.update({"DEBUG": _debug})
+        
+
     def tearDown(self):
         pass

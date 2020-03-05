@@ -4,6 +4,8 @@ import os
 import logging
 import webbrowser
 import re
+import six
+import sys
 import urllib.parse
 import presalytics.lib
 import presalytics.lib.registry
@@ -261,16 +263,23 @@ class PageTemplateBase(ComponentBase):
         """
         class_key = "widget." + widget.kind
         key = class_key + "." + widget.name
-        if presalytics.COMPONENTS.get_instance(key):
-            widget_instance = presalytics.COMPONENTS.get_instance(key)
-        else:
-            klass = presalytics.COMPONENTS.get(class_key)
-            deserialize_method = getattr(klass, "deserialize", None)
-            if callable(deserialize_method):
-                widget_instance = deserialize_method(widget, client_info=self.client_info)
+        try:
+            if presalytics.COMPONENTS.get_instance(key):
+                widget_instance = presalytics.COMPONENTS.get_instance(key)
             else:
-                message = "Widget component instance or class (kind) {0} unavailable in component registry".format(key)
-                raise presalytics.lib.exceptions.MissingConfigException(message)
+                klass = presalytics.COMPONENTS.get(class_key)
+                deserialize_method = getattr(klass, "deserialize", None)
+                if callable(deserialize_method):
+                    widget_instance = deserialize_method(widget, client_info=self.client_info)
+                else:
+                    message = "Widget component instance or class (kind) {0} unavailable in component registry".format(key)
+                    raise presalytics.lib.exceptions.MissingConfigException(message)
+        except Exception as ex:
+            if not presalytics.CONFIG.get("DEBUG", False):
+                widget_instance = presalytics.lib.exceptions.RenderExceptionHandler(ex)
+            else:
+                t, v, tb = sys.exc_info()
+                six.reraise(t, v, tb)
         return widget_instance
 
     def get_page_widgets(self, page: 'Page'):

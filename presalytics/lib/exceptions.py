@@ -1,5 +1,8 @@
 import typing
 import logging
+import lxml
+import sys
+import traceback
 
 
 class PresalyticsBaseException(Exception):
@@ -103,3 +106,59 @@ class ApiException(PresalyticsBaseException):
             return error_message
         except Exception:
             return "An unknown error occured.  Please set default_exception to learn more."
+
+
+class RenderExceptionHandler(object):
+    def __init__(self, exception: Exception, target_type="widget", traceback=None):
+        self.exception = exception
+        self.target_type = target_type
+        self.exception_type = self.exception.__class__.__name__
+        first_frame = self.get_source_frame(traceback)
+        try: 
+            self.source_module = first_frame.tb_frame.f_globals['__name__']
+        except Exception:
+            self.source_module = "unidentitied"
+        
+        self.line_no = first_frame.tb_lineno
+        if isinstance(self.exception, PresalyticsBaseException):
+            self.message = self.exception.message
+        else:
+            try:
+                self.message = self.exception.args[0]
+            except (AttributeError, KeyError):
+                self.message = "No message was included with this exception."
+
+    def get_source_frame(self, tb):
+        next = tb.tb_next
+        if next:
+            return self.get_source_frame(next)
+        else:
+            return tb
+        
+
+    def render_exception(self):
+        container = lxml.html.Element("div", {
+            'class': "exception-container"
+        })
+        header = lxml.html.Element("h3")
+        message = lxml.html.Element("p")
+        header.text = "Oops! A rendering error occured."
+        message.text = "This {} could not be rendered.  Please seed the information below to help you diagnose the problem".format(self.target_type)
+
+        _type = lxml.html.Element("p")
+        _type.text = "Exception Type: {}".format(self.exception_type)
+
+        exception_message = lxml.html.Element("p")
+        exception_message.text = "Exception message: {}".format(self.message)
+        source = lxml.html.Element("p")
+        source.text = "Error at line number: {0} in module {1}".format(self.line_no, self.source_module)
+        note = lxml.html.Element("p")
+        note.text = "If you have trouble understainding this error message, try building your story using " \
+            "with the presalytics.Revealer's `present()` method.  If should give you more thorough error logging."
+        
+        container.extend([header, message, _type, exception_message, source, note])
+        return lxml.html.tostring(container).decode('utf-8')
+    
+    def to_html(self):
+        return self.render_exception()
+         

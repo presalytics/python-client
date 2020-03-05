@@ -11,6 +11,8 @@ import lxml.html
 import lxml.etree
 import lxml.html.builder as E
 import datetime
+import six
+import sys
 import presalytics
 import presalytics.lib
 import presalytics.lib.plugins
@@ -160,17 +162,25 @@ class Revealer(presalytics.story.components.Renderer):
         """
         class_key = "page." + page.kind
         key = class_key + "." + page.name
-        if presalytics.COMPONENTS.get_instance(key):
-            page_instance = presalytics.COMPONENTS.get_instance(key)
-        else:
-            klass = presalytics.COMPONENTS.get(class_key)
-            deserialize_method = getattr(klass, "deserialize", None)
-            if callable(deserialize_method):
-                page_instance = deserialize_method(page, client_info=self.client_info)
+        try:
+            if presalytics.COMPONENTS.get_instance(key):
+                page_instance = presalytics.COMPONENTS.get_instance(key)
             else:
-                message = 'Page component instance or class (kind) "{0}" unavailable in component registry'.format(key)
-                raise presalytics.lib.exceptions.MissingConfigException(message)
-        return page_instance.render()
+                klass = presalytics.COMPONENTS.get(class_key)
+                deserialize_method = getattr(klass, "deserialize", None)
+                if callable(deserialize_method):
+                    page_instance = deserialize_method(page, client_info=self.client_info)
+                else:
+                    message = 'Page component instance or class (kind) "{0}" unavailable in component registry'.format(key)
+                    raise presalytics.lib.exceptions.MissingConfigException(message)
+            page_html = page_instance.render()
+        except Exception as ex:
+            t, v, tb = sys.exc_info()
+            if not presalytics.CONFIG.get("DEBUG", False):
+                page_html = presalytics.lib.exceptions.RenderExceptionHandler(ex, "page", traceback=tb).render_exception()
+            else:
+                six.reraise(t, v, tb)
+        return page_html
 
     def present(self, files_path=None, debug=True, port=8082, host='127.0.0.1'):
         """

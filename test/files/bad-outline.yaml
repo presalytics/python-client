@@ -1,0 +1,30 @@
+outlineVersion: 0.1.1
+info:
+  revision: 0.1.1
+  dateCreated: '2019-11-7'
+  dateModified: '2019-11-7'
+  createdBy: Kevin
+  modifiedBy: Kevin
+  revisionNotes: IntialCreate 
+title: Test-story
+description: tests whether the story revealer can render a matplotlib plot
+pages:
+  - name: BadTestPage
+    kind: TitleWithSingleItem
+    additionalProperties:
+      title: Example plot 
+    widgets:
+      - name: test_plot_1
+        kind: NonExistentWidget
+        data:
+          temp: data
+        additionalProperties:
+          module: test.files.test_plots
+themes:
+- name: white
+  kind: PluginOnly
+  plugins:
+  - name: external_links
+    kind: style
+    config:
+      approved_styles_key: reveal.themes.white

@@ -216,6 +216,9 @@ class TextReplace(XmlTransformBase):
             self._list[index].text = end_text
             self._list[index].element.text = end_text
 
+        def plaintext_string_list(self):
+            return [x.text for x in self._list]
+
             
     def replace_handlebars(self, info_list, params):
         """

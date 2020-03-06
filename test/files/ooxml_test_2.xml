@@ -1,0 +1,226 @@
+<p:grpSp xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main"> <p:nvGrpSpPr>
+    <p:cNvPr id="2" name="TakeawayBox">
+        <a:extLst xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:ext
+            uri="{FF2B5EF4-FFF2-40B4-BE49-F238E27FC236}">
+            <a16:creationId xmlns:a16="http://schemas.microsoft.com/office/drawing/2014/main"
+                id="{2213CBF3-3B8F-45E6-AE42-2CF66B3C264D}" />
+            </a:ext>
+        </a:extLst>
+    </p:cNvPr>
+    <p:cNvGrpSpPr />
+    <p:nvPr />
+    </p:nvGrpSpPr>
+    <p:grpSpPr>
+        <a:xfrm xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:off x="4217324" y="1518459" />
+        <a:ext cx="3746269" cy="4051068" />
+        <a:chOff x="4217324" y="1518459" />
+        <a:chExt cx="3746269" cy="4051068" />
+        </a:xfrm>
+    </p:grpSpPr>
+    <p:sp>
+        <p:nvSpPr>
+            <p:cNvPr id="4" name="Header">
+                <a:extLst xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:ext
+                    uri="{FF2B5EF4-FFF2-40B4-BE49-F238E27FC236}">
+                    <a16:creationId xmlns:a16="http://schemas.microsoft.com/office/drawing/2014/main"
+                        id="{DB535222-9BF3-4BFE-92BB-907BA72801DD}" />
+                    </a:ext>
+                </a:extLst>
+            </p:cNvPr>
+            <p:cNvSpPr />
+            <p:nvPr />
+        </p:nvSpPr>
+        <p:spPr>
+            <a:xfrm xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:off x="4222865"
+                y="1518459" />
+            <a:ext cx="3735186" cy="587432" />
+            </a:xfrm>
+            <a:prstGeom prst="rect" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:avLst />
+            </a:prstGeom>
+        </p:spPr>
+        <p:style>
+            <a:lnRef idx="2" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:schemeClr
+                val="accent1">
+                <a:shade val="50000" />
+                </a:schemeClr>
+            </a:lnRef>
+            <a:fillRef idx="1" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:schemeClr
+                val="accent1" />
+            </a:fillRef>
+            <a:effectRef idx="0" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:schemeClr
+                val="accent1" />
+            </a:effectRef>
+            <a:fontRef idx="minor" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:schemeClr
+                val="lt1" />
+            </a:fontRef>
+        </p:style>
+        <p:txBody>
+            <a:bodyPr rtlCol="0" anchor="ctr" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" />
+            <a:lstStyle xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" />
+            <a:p xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:pPr algn="ctr" />
+            <a:r>
+                <a:rPr lang="en-US" dirty="0">
+                    <a:latin typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                    <a:cs typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                </a:rPr>
+                <a:t>Takeaways</a:t>
+            </a:r>
+            </a:p>
+        </p:txBody>
+    </p:sp>
+    <p:sp>
+        <p:nvSpPr>
+            <p:cNvPr id="5" name="Body">
+                <a:extLst xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:ext
+                    uri="{FF2B5EF4-FFF2-40B4-BE49-F238E27FC236}">
+                    <a16:creationId xmlns:a16="http://schemas.microsoft.com/office/drawing/2014/main"
+                        id="{8CADB895-63B4-43D4-A4E1-BBA28E7DA3CA}" />
+                    </a:ext>
+                </a:extLst>
+            </p:cNvPr>
+            <p:cNvSpPr />
+            <p:nvPr />
+        </p:nvSpPr>
+        <p:spPr>
+            <a:xfrm xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:off x="4217324"
+                y="2111432" />
+            <a:ext cx="3746269" cy="3458095" />
+            </a:xfrm>
+            <a:prstGeom prst="rect" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:avLst />
+            </a:prstGeom>
+            <a:solidFill xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:schemeClr val="bg1" />
+            </a:solidFill>
+        </p:spPr>
+        <p:style>
+            <a:lnRef idx="2" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:schemeClr
+                val="accent1">
+                <a:shade val="50000" />
+                </a:schemeClr>
+            </a:lnRef>
+            <a:fillRef idx="1" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:schemeClr
+                val="accent1" />
+            </a:fillRef>
+            <a:effectRef idx="0" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:schemeClr
+                val="accent1" />
+            </a:effectRef>
+            <a:fontRef idx="minor" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:schemeClr
+                val="lt1" />
+            </a:fontRef>
+        </p:style>
+        <p:txBody>
+            <a:bodyPr rtlCol="0" anchor="t" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" />
+            <a:lstStyle xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" />
+            <a:p xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:pPr marL="285750"
+                indent="-285750">
+                <a:buFont typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                <a:buChar char="•" />
+                </a:pPr>
+                <a:endParaRPr lang="en-US" dirty="0">
+                    <a:solidFill>
+                        <a:schemeClr val="tx1" />
+                    </a:solidFill>
+                    <a:latin typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                    <a:cs typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                </a:endParaRPr>
+            </a:p>
+            <a:p xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:pPr marL="285750"
+                indent="-285750">
+                <a:buFont typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                <a:buChar char="•" />
+                </a:pPr>
+                <a:r>
+                    <a:rPr lang="en-US" dirty="0">
+                        <a:solidFill>
+                            <a:schemeClr val="tx1" />
+                        </a:solidFill>
+                        <a:latin typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                        <a:cs typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                    </a:rPr>
+                    <a:t>The data in the chart exhibit a {{trend}} trend</a:t>
+                </a:r>
+            </a:p>
+            <a:p xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:pPr marL="285750"
+                indent="-285750">
+                <a:buFont typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                <a:buChar char="•" />
+                </a:pPr>
+                <a:endParaRPr lang="en-US" dirty="0">
+                    <a:solidFill>
+                        <a:schemeClr val="tx1" />
+                    </a:solidFill>
+                    <a:latin typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                    <a:cs typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                </a:endParaRPr>
+            </a:p>
+            <a:p xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:pPr marL="285750"
+                indent="-285750">
+                <a:buFont typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                <a:buChar char="•" />
+                </a:pPr>
+                <a:r>
+                    <a:rPr lang="en-US" dirty="0">
+                        <a:solidFill>
+                            <a:schemeClr val="tx1" />
+                        </a:solidFill>
+                        <a:latin typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                        <a:cs typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                    </a:rPr>
+                    <a:t>The slope of data is {{beta}} per x-axis unit</a:t>
+                </a:r>
+            </a:p>
+            <a:p xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:pPr marL="285750"
+                indent="-285750">
+                <a:buFont typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                <a:buChar char="•" />
+                </a:pPr>
+                <a:endParaRPr lang="en-US" dirty="0">
+                    <a:solidFill>
+                        <a:schemeClr val="tx1" />
+                    </a:solidFill>
+                    <a:latin typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                    <a:cs typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                </a:endParaRPr>
+            </a:p>
+            <a:p xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"> <a:pPr marL="285750"
+                indent="-285750">
+                <a:buFont typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                <a:buChar char="•" />
+                </a:pPr>
+                <a:r>
+                    <a:rPr lang="en-US" dirty="0">
+                        <a:solidFill>
+                            <a:schemeClr val="tx1" />
+                        </a:solidFill>
+                        <a:latin typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                        <a:cs typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                    </a:rPr>
+                    <a:t>The R</a:t>
+                </a:r>
+                <a:r>
+                    <a:rPr lang="en-US" baseline="30000" dirty="0">
+                        <a:solidFill>
+                            <a:schemeClr val="tx1" />
+                        </a:solidFill>
+                        <a:latin typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                        <a:cs typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                    </a:rPr>
+                    <a:t>2</a:t>
+                </a:r>
+                <a:r>
+                    <a:rPr lang="en-US" dirty="0">
+                        <a:solidFill>
+                            <a:schemeClr val="tx1" />
+                        </a:solidFill>
+                        <a:latin typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                        <a:cs typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" />
+                    </a:rPr>
+                    <a:t> of this linear regression is
+                        {{</a:t></a:r><a:r><a:rPr lang="en-US" dirty="0" err="1"><a:solidFill><a:schemeClr val="tx1" /></a:solidFill><a:latin typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" /><a:cs typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" /></a:rPr><a:t>r_squared</a:t></a:r><a:r><a:rPr lang="en-US" dirty="0"><a:solidFill><a:schemeClr val="tx1" /></a:solidFill><a:latin typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" /><a:cs typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" /></a:rPr><a:t>}},
+                        indicating a
+                        {{</a:t></a:r><a:r><a:rPr lang="en-US" dirty="0" err="1"><a:solidFill><a:schemeClr val="tx1" /></a:solidFill><a:latin typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" /><a:cs typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" /></a:rPr><a:t>fit_quality</a:t></a:r><a:r><a:rPr lang="en-US" dirty="0"><a:solidFill><a:schemeClr val="tx1" /></a:solidFill><a:latin typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" /><a:cs typeface="Arial" panose="020B0604020202020204" pitchFamily="34" charset="0" /></a:rPr><a:t>}}
+                        fit to the trend in the data</a:t>
+                </a:r>
+            </a:p>
+        </p:txBody>
+    </p:sp>
+</p:grpSp>

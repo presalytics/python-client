@@ -156,7 +156,7 @@ class TextReplace(XmlTransformBase):
             self.text = "" if not element.text else element.text
             self.length = len(self.text)
             self.start_position = start_position
-            self.end_position = self.start_position + self.length
+            self.end_position = self.start_position + self.length - 1
 
     class TextList(object):
         """
@@ -206,8 +206,11 @@ class TextReplace(XmlTransformBase):
             self._list[index].element.text = ""
 
         def set_start_to_new_value(self, index, new_value):
-            start_text = self._list[index].text.split("{{", 1)[0]
-            new_text = "{0}{1}".format(start_text, new_value)
+            start_text, remainder = self._list[index].text.split("{{", 1)
+            end = ""
+            if "}}" in remainder:
+                end = remainder.split("}}", 1)[1]
+            new_text = "{0}{1}{2}".format(start_text, new_value, end)
             self._list[index].text = new_text
             self._list[index].element.text = new_text
 
@@ -218,6 +221,12 @@ class TextReplace(XmlTransformBase):
 
         def plaintext_string_list(self):
             return [x.text for x in self._list]
+
+        def reset(self):
+            for i in range(0, len(self._list)):
+                start_position = 0 if i == 0 else self._list[i-1].end_position + 1
+                self._list[i] = TextReplace.TextElementInfo(self._list[i].element, start_position)
+
 
             
     def replace_handlebars(self, info_list, params):
@@ -231,11 +240,12 @@ class TextReplace(XmlTransformBase):
                 match_end_position = match_start_position + len(match_key)
                 match_start_index = info_list.get_list_index_of_position(match_start_position)
                 match_end_index = info_list.get_list_index_of_position(match_end_position)
-                info_list.set_start_to_new_value(match_start_index, val)
                 if match_start_index < match_end_index:
                     info_list.truncate_end(match_end_index)
                 for i in range(match_start_index + 1, match_end_index):
                     info_list.set_text_to_empty_string(i)
+                info_list.set_start_to_new_value(match_start_index, val)
+                info_list.reset()
                 self.replace_handlebars(info_list, params)
 
 

@@ -1,9 +1,11 @@
 import unittest
 import os
 import json
+import lxml
 import presalytics.story.revealer
 import presalytics.story.outline
 import presalytics.lib.tools.component_tools
+import presalytics.lib.widgets.ooxml_editors
 
 class TestStory(unittest.TestCase):
     """
@@ -78,7 +80,25 @@ class TestStory(unittest.TestCase):
         self.assertTrue("Oops!" in html)
         if _debug:
             presalytics.CONFIG.update({"DEBUG": _debug})
-        
+    
+    def text_replace_transform_test(self):
+        test_file = os.path.join(os.path.dirname(__file__), 'files', 'ooxml_test_2.xml')
+        test_element = lxml.etree.parse(test_file)
+        params = {
+            'beta': '66.02',
+            'fit_quality': 'pretty good',
+            'r_squared': '91.33%',
+            'trend': 'positive'
+        }
+
+        replacer = presalytics.lib.widgets.ooxml_editors.TextReplace(params)
+
+        updates = lxml.etree.tostring(replacer.execute(test_element)).decode('utf-8')
+
+        for _, val in params.items():
+            self.assertTrue(val in updates)
+
+
 
     def tearDown(self):
         pass

@@ -442,7 +442,7 @@ class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
         auth_header = client.get_auth_header()
         if self.transform:
             xml_url = self.endpoint_map.get_xml_url(self.object_ooxml_id)
-            xml_response = requests.get(xml_url, headers=auth_header)
+            xml_response = requests.get(xml_url + "?updated=false", headers=auth_header)
             if xml_response.status_code != 200:
                 raise presalytics.lib.exceptions.ApiError(message=xml_response.text)
             dto = xml_response.json()

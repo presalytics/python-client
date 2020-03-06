@@ -2380,17 +2380,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def charts_charts_openofficexml_get_id(self, id, **kwargs):  # noqa: E501
+    def charts_charts_openofficexml_get_id_updated(self, id, **kwargs):  # noqa: E501
         """Charts: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Chart object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Chart objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.charts_charts_openofficexml_get_id(id, async_req=True)
+        >>> thread = api.charts_charts_openofficexml_get_id_updated(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -2403,19 +2404,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.charts_charts_openofficexml_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.charts_charts_openofficexml_get_id_updated_with_http_info(id, **kwargs)  # noqa: E501
 
-    def charts_charts_openofficexml_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def charts_charts_openofficexml_get_id_updated_with_http_info(self, id, **kwargs):  # noqa: E501
         """Charts: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Chart object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Chart objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.charts_charts_openofficexml_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.charts_charts_openofficexml_get_id_updated_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -2432,7 +2434,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['id']  # noqa: E501
+        all_params = ['id', 'updated']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -2442,14 +2444,14 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method charts_charts_openofficexml_get_id" % key
+                    " to method charts_charts_openofficexml_get_id_updated" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
         if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
                                                         local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `charts_charts_openofficexml_get_id`")  # noqa: E501
+            raise ApiValueError("Missing the required parameter `id` when calling `charts_charts_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
@@ -2458,6 +2460,8 @@ class DefaultApi(object):
             path_params['Id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+            query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
 
@@ -6028,17 +6032,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def shared_images_openofficexml_get_id(self, id, **kwargs):  # noqa: E501
+    def shared_images_openofficexml_get_id_updated(self, id, **kwargs):  # noqa: E501
         """Shared: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Shared object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Shared objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.shared_images_openofficexml_get_id(id, async_req=True)
+        >>> thread = api.shared_images_openofficexml_get_id_updated(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -6051,19 +6056,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.shared_images_openofficexml_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.shared_images_openofficexml_get_id_updated_with_http_info(id, **kwargs)  # noqa: E501
 
-    def shared_images_openofficexml_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def shared_images_openofficexml_get_id_updated_with_http_info(self, id, **kwargs):  # noqa: E501
         """Shared: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Shared object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Shared objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.shared_images_openofficexml_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.shared_images_openofficexml_get_id_updated_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -6080,7 +6086,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['id']  # noqa: E501
+        all_params = ['id', 'updated']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -6090,14 +6096,14 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method shared_images_openofficexml_get_id" % key
+                    " to method shared_images_openofficexml_get_id_updated" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
         if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
                                                         local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `shared_images_openofficexml_get_id`")  # noqa: E501
+            raise ApiValueError("Missing the required parameter `id` when calling `shared_images_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
@@ -6106,6 +6112,8 @@ class DefaultApi(object):
             path_params['Id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+            query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
 
@@ -7964,17 +7972,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def slides_connectionshapes_openofficexml_get_id(self, id, **kwargs):  # noqa: E501
+    def slides_connectionshapes_openofficexml_get_id_updated(self, id, **kwargs):  # noqa: E501
         """Slides: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Slide object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Slide objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_connectionshapes_openofficexml_get_id(id, async_req=True)
+        >>> thread = api.slides_connectionshapes_openofficexml_get_id_updated(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -7987,19 +7996,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.slides_connectionshapes_openofficexml_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.slides_connectionshapes_openofficexml_get_id_updated_with_http_info(id, **kwargs)  # noqa: E501
 
-    def slides_connectionshapes_openofficexml_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def slides_connectionshapes_openofficexml_get_id_updated_with_http_info(self, id, **kwargs):  # noqa: E501
         """Slides: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Slide object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Slide objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_connectionshapes_openofficexml_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.slides_connectionshapes_openofficexml_get_id_updated_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -8016,7 +8026,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['id']  # noqa: E501
+        all_params = ['id', 'updated']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -8026,14 +8036,14 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method slides_connectionshapes_openofficexml_get_id" % key
+                    " to method slides_connectionshapes_openofficexml_get_id_updated" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
         if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
                                                         local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `slides_connectionshapes_openofficexml_get_id`")  # noqa: E501
+            raise ApiValueError("Missing the required parameter `id` when calling `slides_connectionshapes_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
@@ -8042,6 +8052,8 @@ class DefaultApi(object):
             path_params['Id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+            query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
 
@@ -9468,17 +9480,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def slides_groups_openofficexml_get_id(self, id, **kwargs):  # noqa: E501
+    def slides_groups_openofficexml_get_id_updated(self, id, **kwargs):  # noqa: E501
         """Slides: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Slide object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Slide objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_groups_openofficexml_get_id(id, async_req=True)
+        >>> thread = api.slides_groups_openofficexml_get_id_updated(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -9491,19 +9504,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.slides_groups_openofficexml_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.slides_groups_openofficexml_get_id_updated_with_http_info(id, **kwargs)  # noqa: E501
 
-    def slides_groups_openofficexml_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def slides_groups_openofficexml_get_id_updated_with_http_info(self, id, **kwargs):  # noqa: E501
         """Slides: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Slide object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Slide objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_groups_openofficexml_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.slides_groups_openofficexml_get_id_updated_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -9520,7 +9534,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['id']  # noqa: E501
+        all_params = ['id', 'updated']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -9530,14 +9544,14 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method slides_groups_openofficexml_get_id" % key
+                    " to method slides_groups_openofficexml_get_id_updated" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
         if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
                                                         local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `slides_groups_openofficexml_get_id`")  # noqa: E501
+            raise ApiValueError("Missing the required parameter `id` when calling `slides_groups_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
@@ -9546,6 +9560,8 @@ class DefaultApi(object):
             path_params['Id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+            query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
 
@@ -10124,17 +10140,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def slides_shapes_openofficexml_get_id(self, id, **kwargs):  # noqa: E501
+    def slides_shapes_openofficexml_get_id_updated(self, id, **kwargs):  # noqa: E501
         """Slides: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Slide object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Slide objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_shapes_openofficexml_get_id(id, async_req=True)
+        >>> thread = api.slides_shapes_openofficexml_get_id_updated(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -10147,19 +10164,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.slides_shapes_openofficexml_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.slides_shapes_openofficexml_get_id_updated_with_http_info(id, **kwargs)  # noqa: E501
 
-    def slides_shapes_openofficexml_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def slides_shapes_openofficexml_get_id_updated_with_http_info(self, id, **kwargs):  # noqa: E501
         """Slides: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Slide object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Slide objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_shapes_openofficexml_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.slides_shapes_openofficexml_get_id_updated_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -10176,7 +10194,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['id']  # noqa: E501
+        all_params = ['id', 'updated']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -10186,14 +10204,14 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method slides_shapes_openofficexml_get_id" % key
+                    " to method slides_shapes_openofficexml_get_id_updated" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
         if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
                                                         local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `slides_shapes_openofficexml_get_id`")  # noqa: E501
+            raise ApiValueError("Missing the required parameter `id` when calling `slides_shapes_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
@@ -10202,6 +10220,8 @@ class DefaultApi(object):
             path_params['Id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+            query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
 
@@ -10780,17 +10800,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def slides_shapetrees_openofficexml_get_id(self, id, **kwargs):  # noqa: E501
+    def slides_shapetrees_openofficexml_get_id_updated(self, id, **kwargs):  # noqa: E501
         """Slides: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Slide object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Slide objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_shapetrees_openofficexml_get_id(id, async_req=True)
+        >>> thread = api.slides_shapetrees_openofficexml_get_id_updated(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -10803,19 +10824,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.slides_shapetrees_openofficexml_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.slides_shapetrees_openofficexml_get_id_updated_with_http_info(id, **kwargs)  # noqa: E501
 
-    def slides_shapetrees_openofficexml_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def slides_shapetrees_openofficexml_get_id_updated_with_http_info(self, id, **kwargs):  # noqa: E501
         """Slides: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Slide object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Slide objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_shapetrees_openofficexml_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.slides_shapetrees_openofficexml_get_id_updated_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -10832,7 +10854,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['id']  # noqa: E501
+        all_params = ['id', 'updated']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -10842,14 +10864,14 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method slides_shapetrees_openofficexml_get_id" % key
+                    " to method slides_shapetrees_openofficexml_get_id_updated" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
         if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
                                                         local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `slides_shapetrees_openofficexml_get_id`")  # noqa: E501
+            raise ApiValueError("Missing the required parameter `id` when calling `slides_shapetrees_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
@@ -10858,6 +10880,8 @@ class DefaultApi(object):
             path_params['Id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+            query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
 
@@ -11544,17 +11568,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def slides_slides_openofficexml_get_id(self, id, **kwargs):  # noqa: E501
+    def slides_slides_openofficexml_get_id_updated(self, id, **kwargs):  # noqa: E501
         """Slides: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Slide object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Slide objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_slides_openofficexml_get_id(id, async_req=True)
+        >>> thread = api.slides_slides_openofficexml_get_id_updated(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -11567,19 +11592,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.slides_slides_openofficexml_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.slides_slides_openofficexml_get_id_updated_with_http_info(id, **kwargs)  # noqa: E501
 
-    def slides_slides_openofficexml_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def slides_slides_openofficexml_get_id_updated_with_http_info(self, id, **kwargs):  # noqa: E501
         """Slides: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Slide object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Slide objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_slides_openofficexml_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.slides_slides_openofficexml_get_id_updated_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -11596,7 +11622,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['id']  # noqa: E501
+        all_params = ['id', 'updated']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -11606,14 +11632,14 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method slides_slides_openofficexml_get_id" % key
+                    " to method slides_slides_openofficexml_get_id_updated" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
         if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
                                                         local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `slides_slides_openofficexml_get_id`")  # noqa: E501
+            raise ApiValueError("Missing the required parameter `id` when calling `slides_slides_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
@@ -11622,6 +11648,8 @@ class DefaultApi(object):
             path_params['Id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+            query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
 
@@ -12200,17 +12228,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def slides_smartarts_openofficexml_get_id(self, id, **kwargs):  # noqa: E501
+    def slides_smartarts_openofficexml_get_id_updated(self, id, **kwargs):  # noqa: E501
         """Slides: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Slide object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Slide objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_smartarts_openofficexml_get_id(id, async_req=True)
+        >>> thread = api.slides_smartarts_openofficexml_get_id_updated(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -12223,19 +12252,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.slides_smartarts_openofficexml_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.slides_smartarts_openofficexml_get_id_updated_with_http_info(id, **kwargs)  # noqa: E501
 
-    def slides_smartarts_openofficexml_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def slides_smartarts_openofficexml_get_id_updated_with_http_info(self, id, **kwargs):  # noqa: E501
         """Slides: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Slide object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Slide objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_smartarts_openofficexml_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.slides_smartarts_openofficexml_get_id_updated_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -12252,7 +12282,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['id']  # noqa: E501
+        all_params = ['id', 'updated']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -12262,14 +12292,14 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method slides_smartarts_openofficexml_get_id" % key
+                    " to method slides_smartarts_openofficexml_get_id_updated" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
         if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
                                                         local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `slides_smartarts_openofficexml_get_id`")  # noqa: E501
+            raise ApiValueError("Missing the required parameter `id` when calling `slides_smartarts_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
@@ -12278,6 +12308,8 @@ class DefaultApi(object):
             path_params['Id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+            query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
 
@@ -13288,17 +13320,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def tables_tables_openofficexml_get_id(self, id, **kwargs):  # noqa: E501
+    def tables_tables_openofficexml_get_id_updated(self, id, **kwargs):  # noqa: E501
         """Tables: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Table object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Table objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.tables_tables_openofficexml_get_id(id, async_req=True)
+        >>> thread = api.tables_tables_openofficexml_get_id_updated(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -13311,19 +13344,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.tables_tables_openofficexml_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.tables_tables_openofficexml_get_id_updated_with_http_info(id, **kwargs)  # noqa: E501
 
-    def tables_tables_openofficexml_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def tables_tables_openofficexml_get_id_updated_with_http_info(self, id, **kwargs):  # noqa: E501
         """Tables: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Table object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Table objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.tables_tables_openofficexml_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.tables_tables_openofficexml_get_id_updated_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -13340,7 +13374,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['id']  # noqa: E501
+        all_params = ['id', 'updated']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -13350,14 +13384,14 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method tables_tables_openofficexml_get_id" % key
+                    " to method tables_tables_openofficexml_get_id_updated" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
         if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
                                                         local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `tables_tables_openofficexml_get_id`")  # noqa: E501
+            raise ApiValueError("Missing the required parameter `id` when calling `tables_tables_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
@@ -13366,6 +13400,8 @@ class DefaultApi(object):
             path_params['Id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+            query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
 
@@ -13944,17 +13980,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def theme_themes_openofficexml_get_id(self, id, **kwargs):  # noqa: E501
+    def theme_themes_openofficexml_get_id_updated(self, id, **kwargs):  # noqa: E501
         """Theme: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Theme object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Theme objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.theme_themes_openofficexml_get_id(id, async_req=True)
+        >>> thread = api.theme_themes_openofficexml_get_id_updated(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -13967,19 +14004,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.theme_themes_openofficexml_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.theme_themes_openofficexml_get_id_updated_with_http_info(id, **kwargs)  # noqa: E501
 
-    def theme_themes_openofficexml_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def theme_themes_openofficexml_get_id_updated_with_http_info(self, id, **kwargs):  # noqa: E501
         """Theme: Get Underlying Xml  # noqa: E501
 
         Return the subset of the xml content from within the latest edited version of the OpenXmlDocument from this Theme object.  The returned xml data conforms to the [Ecma-376 standard](http://www.ecma-international.org/publications/standards/Ecma-376.htm).  Use this endpoint a starting point for building client-side extensions that modify Presalytics widgets containing Theme objects.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.theme_themes_openofficexml_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.theme_themes_openofficexml_get_id_updated_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool updated: Indicates whether API should return the orginal uploaded xml (false) or the actively updated version (true, default)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -13996,7 +14034,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['id']  # noqa: E501
+        all_params = ['id', 'updated']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -14006,14 +14044,14 @@ class DefaultApi(object):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method theme_themes_openofficexml_get_id" % key
+                    " to method theme_themes_openofficexml_get_id_updated" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
         if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
                                                         local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `theme_themes_openofficexml_get_id`")  # noqa: E501
+            raise ApiValueError("Missing the required parameter `id` when calling `theme_themes_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
@@ -14022,6 +14060,8 @@ class DefaultApi(object):
             path_params['Id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+            query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
 

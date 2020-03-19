@@ -452,16 +452,17 @@ class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
         Update the widget, include changes to the Xml
         """
         client = self.get_client()
-        auth_header = client.get_auth_header()
+        headers = client.get_auth_header()
+        headers.update(client.get_request_id_header())
         if self.transform:
             xml_url = self.endpoint_map.get_xml_url(self.object_ooxml_id)
-            xml_response = requests.get(xml_url + "?updated=false", headers=auth_header)
+            xml_response = requests.get(xml_url + "?updated=false", headers=headers)
             if xml_response.status_code != 200:
                 raise presalytics.lib.exceptions.ApiError(message=xml_response.text)
             dto = xml_response.json()
             new_xml = self.update_xml(dto["openOfficeXml"])
             dto["openOfficeXml"] = new_xml.decode('utf-8')
-            xml_update_response = requests.put(xml_url, json=dto, headers=auth_header)
+            xml_update_response = requests.put(xml_url, json=dto, headers=headers)
             if xml_response.status_code != 200:
                 raise presalytics.lib.exceptions.ApiError(message=xml_update_response.content)
 

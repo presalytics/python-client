@@ -7,7 +7,7 @@ import presalytics
 import io
 import lxml
 if typing.TYPE_CHECKING:
-    from presalytics.client.presalytics_story import Story
+    from presalytics.client.presalytics_story import Story, OoxmlDocument
 
 
 class TestComponents(unittest.TestCase):
@@ -116,6 +116,24 @@ class TestComponents(unittest.TestCase):
         self.assertTrue("Test Passed!" in xml_string)
         self.assertTrue("FF0000" in xml_string)
 
+    def test_chart_update(self):
+        story: Story
+        story_detailed: Story
+        document: OoxmlDocument
+
+        test_file = os.path.join(os.path.dirname(__file__), "files", "ooxml_test.xml")
+        client = presalytics.Client()
+        story = client.story.story_post_file(file=[test_file])
+        story_detailed = client.story.story_id_get(story.id, include_relationships=True)
+        document = story_detailed.ooxml_documents[0]
+        object_tree = client.ooxml_automation.documents_childobjects_get_id(document.ooxml_automation_id)
+        endpoint_map = presalytics.OoxmlEndpointMap.chart() 
+        object_type = endpoint_map.get_object_type()
+        chart_id = next(entity.id for entity in object_tree if entity.object_type == object_type)
+        
+
+        
+        
 
     def tearDown(self):
         pass

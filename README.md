@@ -12,12 +12,12 @@ Python 3.5+.  This client uses packages that are not yet compatible with python2
 
 Install using the pip package tool 
 
-''''bash
+~~~~bash
 pip install presalytics
-'''
+~~~~
 
-You can also the latest develoment (potentially unstable) withe the command:
+You can also keep up with the latest feature updates by install presalytics with the commandwith the command(potentially unstable):
 
-''''bash
-pip install git+https://github.com/presalytics/python-client
-''''
+~~~~bash
+pip install git+https://github.com/presalytics/python-client@next
+~~~~

@@ -9,6 +9,7 @@ import logging
 import json
 import keycloak
 import environs
+import wsgi_microservice_middleware
 import presalytics
 import presalytics.lib.exceptions
 import presalytics.lib.constants as cnst
@@ -434,15 +435,21 @@ class Client(object):
     def get_request_id_header(self):
         """
         Creates an 'X-Request-Id' token header for tracing requests through Presalytics API
-        services
+        services.  If deployed alongside the [WSGI Microservice Middleware](https://github.com/presalytics/WSGI-Microservice-Middleware) 
+        package, this method will pull the request id from the call stack.
         
         Returns
         ----------
         A `dict` header representation with an 'X-Request-Id' key to be attached to an API request
         """
-        return {
-            "X-Request-Id": str(uuid4())
+        
+        current_request_id = wsgi_microservice_middleware.current_request_id()
+        if not current_request_id:
+            current_request_id = str(uuid4())
+        header = {
+            "X-Request-Id": current_request_id
         }
+        return header
 
     def download_file(self, story_id, ooxml_automation_id, download_folder=None, filename=None, **kwargs):
         """

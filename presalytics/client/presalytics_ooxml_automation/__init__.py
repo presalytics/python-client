@@ -14,7 +14,7 @@
 
 from __future__ import absolute_import
 
-__version__ = "0.2.88"
+__version__ = "1.0.0"
 
 # import apis into sdk package
 from presalytics.client.presalytics_ooxml_automation.api.default_api import DefaultApi
@@ -32,6 +32,7 @@ from presalytics.client.presalytics_ooxml_automation.models.chart_axes import Ch
 from presalytics.client.presalytics_ooxml_automation.models.chart_axes_details import ChartAxesDetails
 from presalytics.client.presalytics_ooxml_automation.models.chart_axis_data_types import ChartAxisDataTypes
 from presalytics.client.presalytics_ooxml_automation.models.chart_chart_data import ChartChartData
+from presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto import ChartChartDataDTO
 from presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_details import ChartChartDataDetails
 from presalytics.client.presalytics_ooxml_automation.models.chart_charts import ChartCharts
 from presalytics.client.presalytics_ooxml_automation.models.chart_charts_details import ChartChartsDetails
@@ -120,6 +121,7 @@ from presalytics.client.presalytics_ooxml_automation.models.table_columns import
 from presalytics.client.presalytics_ooxml_automation.models.table_columns_details import TableColumnsDetails
 from presalytics.client.presalytics_ooxml_automation.models.table_rows import TableRows
 from presalytics.client.presalytics_ooxml_automation.models.table_rows_details import TableRowsDetails
+from presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto import TableTableDataDTO
 from presalytics.client.presalytics_ooxml_automation.models.table_tables import TableTables
 from presalytics.client.presalytics_ooxml_automation.models.table_tables_details import TableTablesDetails
 from presalytics.client.presalytics_ooxml_automation.models.theme_background_fills import ThemeBackgroundFills

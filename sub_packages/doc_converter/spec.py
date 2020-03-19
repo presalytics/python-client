@@ -7,9 +7,9 @@ env.read_env()
 doc_converter_host = env("DOC_CONVERTER_HOST", "https://api.presalytics.io")
 
 SPEC = {
-        "update": False,
+        "update": True,
         "update_type": "patch",
-        "endpoint": "{}/doc-converter/openapi.json.".format(doc_converter_host),
+        "endpoint": "{}/doc-converter/openapi.json".format(doc_converter_host),
         "package_name": "presalytics_doc_converter",
         "package_url": "https://github.com/presalytics/doc-converter-python-client.git",
         "readme_path": os.path.join(os.path.dirname(os.path.realpath(__file__)), "README.md"),

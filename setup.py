@@ -35,7 +35,8 @@ REQUIRES = [
     "libsass",
     "jsonschema",
     "semantic_version",
-    "jsonpatch"
+    "jsonpatch",
+    "wsgi_microservice_middleware>=0.1.3"
 ]
 
 with open("README.md", "r") as fh:

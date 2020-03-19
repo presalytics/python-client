@@ -44,6 +44,7 @@ def story_post_file_bytes(client: 'Client',
         mime_type = presalytics.lib.tools.ooxml_tools.get_mime_type_from_filename(client, filename)
     _file = {'file': (filename, binary_obj, mime_type,)}
     headers = client.get_auth_header()
+    headers.update(client.get_request_id_header())
     headers.update({
         'User-Agent': client.story.api_client.user_agent,
         'Accept': 'application/json'

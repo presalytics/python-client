@@ -106,13 +106,13 @@ def update_imports(tmp_dir_path, package_name):
 for spec in CLIENT_SPECS:
     try:
         if spec["update"] is True:
-            new_ver = replace_ver(spec["setuppy_path"], spec["update_type"])
+            #new_ver = replace_ver(spec["setuppy_path"], spec["update_type"])
             payload = {
                 'openAPIUrl': spec['endpoint'],
                 'options' : {
                     'packageName': spec['package_name'],
-                    'projectName': 'Presalytics API',
-                    'packageVersion': new_ver
+                    'projectName': 'Presalytics API'
+                    # 'packageVersion': new_ver
                 }
             }
 

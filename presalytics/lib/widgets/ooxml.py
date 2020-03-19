@@ -324,8 +324,9 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         """
         svg_url = self.endpoint_map.get_svg_url(id)
         client = self.get_client()
-        auth_header = client.get_auth_header()
-        response = requests.get(svg_url, headers=auth_header)
+        headers = client.get_auth_header()
+        headers.update(client.get_request_id_header())
+        response = requests.get(svg_url, headers=headers)
         svg_data = response.text
         if response.status_code != 200:
             raise presalytics.lib.exceptions.ApiError(message=response.text, status_code=response.status_code)

@@ -181,8 +181,8 @@ class TestComponents(unittest.TestCase):
 
 
         updater.put_dto(dto)
-        updater.get_svg_file()
-        client.download_file(story.id, document.ooxml_automation_id)
+        # updater.get_svg_file()
+        # client.download_file(story.id, document.ooxml_automation_id)
         self.assertTrue(dummyEntryName in updater.get_svg(updater.table_id))
 
     def tearDown(self):

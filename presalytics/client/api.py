@@ -482,7 +482,6 @@ class Client(object):
         with open(filepath, 'wb') as f:
             f.write(response.data)
 
-
 class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_doc_converter.api_client.ApiClient):
     """
     Wraps `presalytics.client.presalytics_doc_converter.api_client.ApiClient` with 
@@ -503,7 +502,6 @@ class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMix
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
         self.update_configuration()
-
 
 class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_story.api_client.ApiClient):
     """

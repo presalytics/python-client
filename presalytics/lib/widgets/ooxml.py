@@ -1,5 +1,6 @@
 import typing
 import time
+import abc
 import urllib.parse
 import requests
 import os
@@ -16,9 +17,13 @@ import presalytics.lib.exceptions
 import presalytics.story.outline
 import presalytics.lib.util
 import presalytics.lib.plugins.ooxml
+import presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto
+import presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto
 if typing.TYPE_CHECKING:
     from presalytics.story.outline import StoryOutline, Page, Widget
     from presalytics.client.presalytics_story import Story as ApiStory
+    from presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto import ChartChartDataDTO
+    from presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto import TableTableDataDTO
 
 
 class OoxmlEndpointMap(object):
@@ -338,6 +343,12 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
                 svg_data = self.get_svg(id, timeout_iterator)
         return svg_data
 
+    def get_svg_file(self, filename=None):
+        if not filename:
+            filename = self.endpoint_map.get_object_type() + "-" + self.object_ooxml_id + ".pptx"
+        with open(filename, 'w') as f:
+            f.write(self.get_svg(self.object_ooxml_id))
+
 
 class OoxmlFileWidget(OoxmlWidgetBase):
     """
@@ -567,3 +578,143 @@ class OoxmlFileWidget(OoxmlWidgetBase):
             plugins=None
         )
         return widget
+
+
+class UpdaterWidgetBase(OoxmlWidgetBase):
+    def __init__(self, 
+                name,
+                story_id: str,
+                object_id: str,
+                endpoint_map: OoxmlEndpointMap,
+                dto=None, 
+                data_table=None,
+                **kwargs):
+        super(UpdaterWidgetBase, self).__init__(name, story_id, object_id, endpoint_map, **kwargs)
+        self.dto = dto
+        self.data_table = data_table
+    
+    
+    @abc.abstractmethod
+    def get_dto_class(self):
+        return NotImplemented
+
+    @abc.abstractmethod
+    def get_endpoint_path(self):
+        return NotImplemented
+
+    @abc.abstractmethod
+    def get_dto_table_name(self):
+        return NotImplemented
+
+    def build_endpoint(self):
+        return posixpath.join(self.endpoint_map.root_url, self.get_endpoint_path(), self.object_ooxml_id)
+    
+    def get_dto(self):
+        client = self.get_client()
+        headers = client.get_auth_header()
+        headers.update(client.get_request_id_header())
+        resp = requests.get(self.build_endpoint(), headers=headers)
+        if resp.status_code > 299:
+            raise presalytics.lib.exceptions.ApiError(message=resp.text)
+        dto = client.ooxml_automation.api_client._ApiClient__deserialize(resp.json(), self.get_dto_class())
+        self.dto = dto
+        return dto
+
+    def put_dto(self, dto):
+        client = self.get_client()
+        headers = client.get_auth_header()
+        headers.update(client.get_request_id_header())
+        data = client.ooxml_automation.api_client.sanitize_for_serialization(dto)
+        resp = requests.put(self.build_endpoint(), json=data, headers=headers)
+        if resp.status_code > 299:
+            raise presalytics.lib.exceptions.ApiError(message=resp.text)
+        else:
+            self.dto = dto
+
+    def update_from_dto(self, dto):
+        self.put_dto(dto)
+        self.svg_html = self.create_container()
+
+    def update_from_data_table(self, data_table):
+        dto = self.get_dto()
+        setattr(dto, self.get_dto_table_name(), data_table)
+        self.put_dto(dto)
+
+    def serialize(self):
+        data = {
+            "story_id": self.story_id,
+            "object_id": self.object_ooxml_id,
+            "dto": self.dto.to_dict(),
+            "data_table": self.data_table
+        }
+        widget = presalytics.story.outline.Widget(
+            name=self.name,
+            kind=self.__component_kind__,
+            data=data,
+            plugins=None
+        )
+        return widget
+
+    @classmethod
+    def deserialize(cls, component, **kwargs):
+        return cls(
+            component.name, 
+            component.data["story_id"], 
+            component.data["object_id"],
+            component.data.get("dto", None),
+            component.data.get("data_table", None),
+            **kwargs
+        )
+
+        
+
+
+class ChartUpdaterWidget(UpdaterWidgetBase):
+    
+    __component_kind__ = "chart-updater"
+    
+    def __init__(self, 
+                name,
+                story_id: str,
+                chart_id: str,
+                dto: 'ChartChartDataDTO' = None, 
+                data_table: typing.Sequence[typing.Sequence] = None,
+                **kwargs):
+        super().__init__(name, story_id, chart_id, OoxmlEndpointMap.chart(), dto=dto, data_table=data_table)
+        self.chart_id = chart_id
+
+
+    def get_dto_class(self):
+        return presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO
+
+    def get_endpoint_path(self):
+        return "ChartUpdate"
+
+    def get_dto_table_name(self):
+        return "data_points"
+        
+
+class TableUpdaterWidget(UpdaterWidgetBase):
+    
+    __component_kind__ = "chart-updater"
+    
+    def __init__(self, 
+                name,
+                story_id: str,
+                table_id: str,
+                dto: 'TableTableDataDTO' = None, 
+                data_table: typing.Sequence[typing.Sequence] = None,
+                **kwargs):
+        super().__init__(name, story_id, table_id, OoxmlEndpointMap.table(), dto=dto, data_table=data_table)
+        self.table_id = table_id
+
+
+    def get_dto_class(self):
+        return presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO
+
+    def get_endpoint_path(self):
+        return "TableUpdate"
+
+    def get_dto_table_name(self):
+        return "table_data"
+    

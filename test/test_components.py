@@ -8,6 +8,7 @@ import io
 import lxml
 if typing.TYPE_CHECKING:
     from presalytics.client.presalytics_story import Story, OoxmlDocument
+    from presalytics.client.presalytics_ooxml_automation.models import ChartChartDataDTO, TableTableDataDTO
 
 
 class TestComponents(unittest.TestCase):
@@ -117,11 +118,11 @@ class TestComponents(unittest.TestCase):
         self.assertTrue("FF0000" in xml_string)
 
     def test_chart_update(self):
-        story: Story
-        story_detailed: Story
-        document: OoxmlDocument
+        story: "Story"
+        story_detailed: "Story"
+        document: "OoxmlDocument"
 
-        test_file = os.path.join(os.path.dirname(__file__), "files", "ooxml_test.xml")
+        test_file = os.path.join(os.path.dirname(__file__), "files", "bubblechart.pptx")
         client = presalytics.Client()
         story = client.story.story_post_file(file=[test_file])
         story_detailed = client.story.story_id_get(story.id, include_relationships=True)
@@ -129,11 +130,60 @@ class TestComponents(unittest.TestCase):
         object_tree = client.ooxml_automation.documents_childobjects_get_id(document.ooxml_automation_id)
         endpoint_map = presalytics.OoxmlEndpointMap.chart() 
         object_type = endpoint_map.get_object_type()
-        chart_id = next(entity.id for entity in object_tree if entity.object_type == object_type)
-        
+        chart_id = next(entity.entity_id for entity in object_tree if entity.object_type == object_type)
+        updater = presalytics.lib.widgets.ooxml.ChartUpdaterWidget('updater', story.id, chart_id)
 
+        dto = updater.get_dto()
+        dummySeriesName = "TestSeries1"
+        data = [
+            [1,2,5,None],
+            [None,None,4,5],
+            [9,3,8,None],
+            [None,None,3,6]
+        ]
         
-        
+        dto.data_points = data
+        series = dto.series_names
+        series[0] = dummySeriesName
+        dto.series_names = series
+
+        updater.put_dto(dto)
+
+        widget = updater.serialize()
+
+        self.assertTrue(isinstance(widget, presalytics.story.outline.Widget))
+
+        inst = presalytics.lib.widgets.ooxml.ChartUpdaterWidget.deserialize(widget)
+
+        self.assertTrue(isinstance(inst, presalytics.lib.widgets.ooxml.ChartUpdaterWidget))
+
+    def test_table_update(self):
+        story: "Story"
+        story_detailed: "Story"
+        document: "OoxmlDocument"
+        dto: "TableTableDataDTO"
+
+        test_file = os.path.join(os.path.dirname(__file__), "files", "table.pptx")
+        client = presalytics.Client()
+        story = client.story.story_post_file(file=[test_file])
+        story_detailed = client.story.story_id_get(story.id, include_relationships=True)
+        document = story_detailed.ooxml_documents[0]
+        object_tree = client.ooxml_automation.documents_childobjects_get_id(document.ooxml_automation_id)
+        endpoint_map = presalytics.OoxmlEndpointMap.table() 
+        object_type = endpoint_map.get_object_type()
+        table_id = next(entity.entity_id for entity in object_tree if entity.object_type == object_type)
+        updater = presalytics.lib.widgets.ooxml.TableUpdaterWidget('updater', story.id, table_id)
+
+        dto = updater.get_dto()
+        dummyEntryName = "CR6!XD?"
+
+        dto.table_data[2][2] = dummyEntryName
+
+
+        updater.put_dto(dto)
+        updater.get_svg_file()
+        client.download_file(story.id, document.ooxml_automation_id)
+        self.assertTrue(dummyEntryName in updater.get_svg(updater.table_id))
 
     def tearDown(self):
         pass

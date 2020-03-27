@@ -26,6 +26,19 @@ class WidgetPage(presalytics.story.components.PageTemplateBase):
         return self.widgets[0].to_html()
 
 
+def htmlize(widget):
+    """
+    Jinja filter to render a widget to a html string
+    """
+    html = widget.to_html()
+    try:
+        html = html.decode('utf-8')
+    except Exception:
+        pass
+    return html
+    
+
+
 class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
     """
     Base class for building objects that render html from `presalytics.story.outline.Page` 
@@ -189,7 +202,9 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
         }
         if context.get("jinja_options", None):
             options.update(context.pop("jinja_options"))
-        template = jinja2.Environment(**options).from_string(self.template_string)
+        env = jinja2.Environment(**options)
+        env.filters['htmlize'] = htmlize
+        template = env.from_string(self.template_string)
         return template.render(**context)
 
     def read_template_string(self) -> typing.Optional[str]:
@@ -212,6 +227,7 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
         """
         loader = jinja2.FileSystemLoader(self.template_paths)
         env = jinja2.Environment(loader=loader)
+        env.filters['htmlize'] = htmlize
         return env.get_template(self.get_template_name())
 
     def check_for_file(self):
@@ -241,3 +257,5 @@ class TwoUpWithTitle(JinjaTemplateBuilder):
     __component_kind__ = "TwoUpWithTitle"
     __css__ = ['flex_row', 'light_grey', 'responsive_title']
     __template_file__ = 'two_up_with_title.html'
+
+

@@ -111,13 +111,15 @@ See https://presalytics.io/docs/configuration/ for more information.
 """
 
 name_help = """
-The name of the widget or page instance to create a Story Outline from.
+The name of the widget or page instance to create a Story Outline from.  If using options
+`ooxml_file`, the name is the path the file that you would like to create from.
 """
 create = subparsers.add_parser('create', description=create_description, help='Create a Story Outline', epilog=create_epilog)
 create.add_argument('name', action='store', help=name_help)
 create_options = create.add_mutually_exclusive_group(required=True)
 create_options.add_argument('--widget', default=False, action='store_true', help="Create a Story Outline from a widget instance")
 create_options.add_argument('--page', default=False, action='store_true', help="Create a Story Outline from a page instance")
+create_options.add_argument('--ooxml_file', default=False, action='store_true', help="Create a Story Outline from an Ooxml Document")
 create.add_argument('-o', '--overwrite', default=False, action='store_true', help=overwrite_help)
 create.add_argument('-u', '--username', default=None, action='store', help=username_help)
 create.add_argument('-p', '--password', default=None, action='store', help=password_help)
@@ -185,9 +187,9 @@ account.add_argument('-p', '--password', default=None, action='store', help=pass
 ooxml_description = """
 Utilities for managing references to the Presaltyics API Ooxml Automation Service in your stracts
 """
-ooxml = subparsers.add_parser('ooxml', description=account_description, help='Create and Modify Stories using Ooxml Documents')
+ooxml = subparsers.add_parser('ooxml', description=account_description, help='Modify Stories using Ooxml Documents')
 ooxml.add_argument('ooxml_filepath', action='store', default=None, help="The relative or absolute file path to the ooxml-file")
-ooxml.add_argument('action', choices=['add', 'replace', 'create'], default=None, action='store', help="Whether to add the ooxml to a story or replace an existing one.")
+ooxml.add_argument('action', choices=['add', 'replace'], default=None, action='store', help="Whether to add the ooxml to a story or replace an existing one.")
 ooxml.add_argument('--story-id', action='store', default=None, help="The Presalytics API Story service Id of the story you want associate this file with.  Defaults to the story at the [--file] option.")
 ooxml.add_argument('--replace-id', action='store', default=None, help="The Ooxml Automation service if id for the associated document that you want to replace")
 ooxml.add_argument('-u', '--username', default=None, action='store', help=username_help)
@@ -320,7 +322,20 @@ def main():
         message = getattr(args, "message", None)
         if args.story_api == "create":
             # create outline from page/widget
-            outline = presalytics.lib.tools.workflows.create_from_instance(args.name, page=args.page, widget=args.widget, filename=args.source)
+            if args.ooxml_file:
+                ooxml_file = args.name
+                if not os.path.exists(ooxml_file):
+                    cwd = os.getcwd()
+                    test_path = os.path.join(cwd, ooxml_file)
+                    if os.path.exists(test_path):
+                        ooxml_file = test_path
+                    else:
+                        logger.error("Could not find a path to file: {0}".format(ooxml_file))
+                        return
+                story = presalytics.lib.tools.ooxml_tools.create_story_from_ooxml_file(ooxml_file)
+                outline = presalytics.story.outline.StoryOutline.load(story.outline)
+            else:
+                outline = presalytics.lib.tools.workflows.create_from_instance(args.name, page=args.page, widget=args.widget, filename=args.source)
             # dump to file
             push = True
             pull = True
@@ -370,7 +385,7 @@ def main():
                     if os.path.exists(abs_filename):
                         filename = abs_filename
                     else:
-                        logger.error("Could not file file: {}".format(filename))
+                        logger.error("Could not find file: {}".format(filename))
                         return
                 outline = _load_file(filename)
         except Exception:
@@ -430,9 +445,6 @@ def main():
                     return
             if args.action == "add" or args.action == "replace": 
                 presalytics.lib.tools.ooxml_tools.add_ooxml_document_to_story(story_id, ooxml_file, replace_id=args.replace_id, username=args.username, password=args.password)
-            elif args.action == "create":
-                 story = presalytics.lib.tools.ooxml_tools.create_story_from_ooxml_file(ooxml_file)
-                 story_id = str(story.id)
         if pull:
             if story_id == "empty":
                 logger.error("A story outline needs a Story Id to be pulled from the Presalytics API. Please run 'presalytics push'")

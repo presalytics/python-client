@@ -116,7 +116,7 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
     def __init__(self, page: 'Page', **kwargs) -> None:
         super().__init__(page, **kwargs)
         pkg_templates = os.path.join(os.path.dirname(__file__), "html")
-        self.template_paths = [pkg_templates]
+        self.template_paths = [pkg_templates, os.getcwd()]
         if len(self.__template_paths__) > 0:
             self.template_paths[0:0] = self.__template_paths__
         self.is_template_local = self.check_for_file()
@@ -155,7 +155,7 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
 
     def get_template_name(self):
         """
-        Requires subclasses have either a `__template_file__` property or override this method
+        Requires subclasses have either a `__template_file__` class property, a or override this method
         """
         if self.__template_file__:
             return self.__template_file__
@@ -235,7 +235,7 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
         Checks whether `__template_file__` exists locally
         """
         for _dir in self.template_paths:
-            fpath = os.path.join(_dir, self.__template_file__)
+            fpath = os.path.join(_dir, self.get_template_name())
             if os.path.exists(fpath):
                 return True
         return False
@@ -257,5 +257,62 @@ class TwoUpWithTitle(JinjaTemplateBuilder):
     __component_kind__ = "TwoUpWithTitle"
     __css__ = ['flex_row', 'light_grey', 'responsive_title']
     __template_file__ = 'two_up_with_title.html'
+
+
+class BootstrapCustomTemplate(JinjaTemplateBuilder):
+    """
+    Build customer repsonsive tempaltes using bootstrap to layout widgets
+    
+    The `presalytics.story.outline.Page` must contain an entry named "template_file" in the its data dictionary.
+    The values of the "template_file" varialble must a file path to an html file in the
+    current working directory
+    """
+    template_file: str
+
+    __component_kind__ = "bootstrap-custom"
+
+    __plugins__ = [
+        {
+            'name': 'external_scripts',
+            'kind': 'script',
+            'config': {
+                'approved_scripts_key': 'jquery'
+            }
+        },
+        {
+            'name': 'external_scripts',
+            'kind': 'script',
+            'config': {
+                'approved_scripts_key': 'popper'
+            }
+        },
+        {
+            'name': 'external_scripts',
+            'kind': 'script',
+            'config': {
+                'approved_scripts_key': 'bootstrap4'
+            }
+        },
+        {
+            'name': 'external_links',
+            'kind': 'style',
+            'config': {
+                'approved_styles_key': 'bootstrap4'
+            }
+        },
+    ]
+
+
+    def __init__(self, page: 'Page', **kwargs) -> None:
+        super(BootstrapCustomTemplate, self).__init__(page, **kwargs)
+        try:
+            self.template_file = page.additional_properties["template_file"]
+        except (KeyError, AttributeError):
+            raise presalytics.lib.exceptions.InvalidConfigurationError(message="BootstrapCustomTemplate requires a 'template_file' in additional properites")
+         
+    def get_template_name(self):
+        return self.template_file
+
+
 
 

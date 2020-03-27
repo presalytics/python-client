@@ -126,7 +126,7 @@ REDIRECT_URI : string, optional
     For developer use.  Useful if implementing authorization code flow for and OpenID Connect client.
     Redirect URIs must be approved by Presalytics API devops for use in client applications.
 
-RESERVED_NAMEs: list of str, optional
+RESERVED_NAMES: list of str, optional
     A list of filenames for *.py files in the current workspace that should be ignored by the 
     registries. 
 
@@ -184,7 +184,12 @@ from presalytics.lib.plugins.reveal_theme import RevealCustomTheme
 from presalytics.lib.plugins.scss import ScssPlugin
 from presalytics.lib.templates.base import JinjaTemplateBuilder
 from presalytics.lib.widgets.matplotlib import MatplotlibFigure, MatplotlibResponsiveFigure
-from presalytics.lib.widgets.ooxml import OoxmlFileWidget, OoxmlEndpointMap
+from presalytics.lib.widgets.ooxml import (
+    OoxmlFileWidget, 
+    OoxmlEndpointMap,
+    ChartUpdaterWidget,
+    TableUpdaterWidget,
+)
 from presalytics.story.outline import StoryOutline
 from presalytics.story.revealer import Revealer
 from presalytics.story.components import WidgetBase, PageTemplateBase, Renderer, ThemeBase
@@ -217,6 +222,8 @@ __all__ = [
     'OoxmlFileWidget',
     'OoxmlEndpointMap',
     'OoxmlEditorWidget',
+    'ChartUpdaterWidget',
+    'TableUpdaterWidget',
     'XmlTransformBase',
     'ChangeShapeColor',
     'TextReplace',

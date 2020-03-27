@@ -581,6 +581,42 @@ class OoxmlFileWidget(OoxmlWidgetBase):
 
 
 class UpdaterWidgetBase(OoxmlWidgetBase):
+    """
+    Abstract class for create simple interfaces to update widgets from a simple data table. 
+
+    This class simplifies updates to Ooxml Automation service endpoints, allowing updates to 
+    ooxml object data and its underlying xml via simple data transfer objects definted in the 
+    Presalytics Ooxml Automation server.  
+
+    Inheriting classes must override the `_get_dto_class`, `_get_endpoint_path`, and `_get_dto_table_name`
+    methods
+
+    Parameters
+    ----------
+    name : str
+        The widget name.  If not provided, will be the `object_name` or `filename`
+
+    story_id : str
+        The the id of the story in the Presalytics API Story service.  If not provided, 
+        a new story will be created.  Do not supply if this object has not yet been created. 
+    
+    object_id : str
+        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this 
+        object has not yet been created.
+
+    endpoint_map : presalytics.lib.widgets.ooxml.OoxmlEndpointMap
+        Reference to the Presalytics API Ooxml Automation service endpoint and object type
+        that for the object of interest
+
+    dto: object, optional
+        A an instance of the data transfer object model. The class of this object is defined by the
+        `_get_dto_class()` method.  Represents the current state of the data of the data in the service.
+
+    data_table: list of lists, optional
+        A representation of a data table that will be incorporates into a dto object's property defined by
+        the subclass' `_get_dto_table_name` method.
+
+    """
     def __init__(self, 
                 name,
                 story_id: str,
@@ -592,35 +628,56 @@ class UpdaterWidgetBase(OoxmlWidgetBase):
         super(UpdaterWidgetBase, self).__init__(name, story_id, object_id, endpoint_map, **kwargs)
         self.dto = dto
         self.data_table = data_table
+        self.object_id = object_id
     
     
     @abc.abstractmethod
-    def get_dto_class(self):
+    def _get_dto_class(self) -> typing.Type:
+        """
+        Returns the Class of instances that will used for dtos
+        """
         return NotImplemented
 
     @abc.abstractmethod
-    def get_endpoint_path(self):
+    def _get_endpoint_path(self) -> str:
+        """
+        Returns the relative path to the the endpoint used , starting from the `root_url` of the 
+        `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` object. 
+        """
         return NotImplemented
 
     @abc.abstractmethod
-    def get_dto_table_name(self):
+    def _get_dto_table_name(self) -> str:
+        """
+        Returns the attribute name in the object returned by `_get_dto_class()` that the `data_table` parameter
+        should be mapped to.
+        """
         return NotImplemented
 
-    def build_endpoint(self):
-        return posixpath.join(self.endpoint_map.root_url, self.get_endpoint_path(), self.object_ooxml_id)
+    def build_endpoint(self) -> str:
+        """
+        Returns the endpoints used for Api calls
+        """
+        return posixpath.join(self.endpoint_map.root_url, self._get_endpoint_path(), self.object_ooxml_id)
     
     def get_dto(self):
+        """
+        Returns an instance of the dto object from the OoxmlAutomation Service API
+        """
         client = self.get_client()
         headers = client.get_auth_header()
         headers.update(client.get_request_id_header())
         resp = requests.get(self.build_endpoint(), headers=headers)
         if resp.status_code > 299:
             raise presalytics.lib.exceptions.ApiError(message=resp.text)
-        dto = client.ooxml_automation.api_client._ApiClient__deserialize(resp.json(), self.get_dto_class())
+        dto = client.ooxml_automation.api_client._ApiClient__deserialize(resp.json(), self._get_dto_class())
         self.dto = dto
         return dto
 
-    def put_dto(self, dto):
+    def _put_dto(self, dto):
+        """
+        Updates the Endpoint in the Ooxml Automation Service from a dto object
+        """
         client = self.get_client()
         headers = client.get_auth_header()
         headers.update(client.get_request_id_header())
@@ -632,12 +689,20 @@ class UpdaterWidgetBase(OoxmlWidgetBase):
             self.dto = dto
 
     def update_from_dto(self, dto):
-        self.put_dto(dto)
+        """
+        Updates the Endpoint in the Ooxml Automation Service from a dto object, and updates
+        the `svg_html` attribute
+        """
+        self._put_dto(dto)
         self.svg_html = self.create_container()
 
     def update_from_data_table(self, data_table):
+        """
+        Updates the Endpoint in the Ooxml Automation Service from a the `data_table`, and updates
+        the `svg_html` attribute
+        """
         dto = self.get_dto()
-        setattr(dto, self.get_dto_table_name(), data_table)
+        setattr(dto, self._get_dto_table_name(), data_table)
         self.put_dto(dto)
 
     def serialize(self):
@@ -670,7 +735,34 @@ class UpdaterWidgetBase(OoxmlWidgetBase):
 
 
 class ChartUpdaterWidget(UpdaterWidgetBase):
+    """
+    Updates a Chart in the Ooxml Automation service API at the the endpoint '/Chart/ChartUpdate/'
+
+    This class simplifies chart updates, for charts residing in the Ooxml Automation Service, 
+    allowing updates to ooxml object data and its underlying xml either via a list of lists or
+    the `presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO`
+    object.  
+
+    Parameters
+    ----------
+    name : str
+        A name for the widget.
+
+    story_id : str
+        The the id of the story in the Presalytics API Story service. 
     
+    chart_id : str
+        The identifier of the Ooxml Automation Chart service object. 
+
+    dto: presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO, optional
+        A an instance of the data transfer object model. The class of this object is defined by the
+        `_get_dto_class()` method.  Represents the current state of the data of the data in the service.
+
+    data_table: list of lists, optional
+        A representation of a data table that will be incorporates into a dto object's property defined by
+        the subclass' `_get_dto_table_name` method.
+
+    """
     __component_kind__ = "chart-updater"
     
     def __init__(self, 
@@ -684,19 +776,46 @@ class ChartUpdaterWidget(UpdaterWidgetBase):
         self.chart_id = chart_id
 
 
-    def get_dto_class(self):
+    def _get_dto_class(self):
         return presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO
 
-    def get_endpoint_path(self):
+    def _get_endpoint_path(self):
         return "ChartUpdate"
 
-    def get_dto_table_name(self):
+    def _get_dto_table_name(self):
         return "data_points"
         
 
 class TableUpdaterWidget(UpdaterWidgetBase):
+    """
+    Updates a Table in the Ooxml Automation service API at the the endpoint '/Table/TableUpdate/'
+
+    This class simplifies table updates, for tables residing in the Ooxml Automation Service, 
+    allowing updates to ooxml object data and its underlying xml either via a list of lists or
+    the `presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO`
+    object.  
+
+    Parameters
+    ----------
+    name : str
+        A name for the widget.
+
+    story_id : str
+        The the id of the story in the Presalytics API Story service. 
     
-    __component_kind__ = "chart-updater"
+    table_id : str
+        The identifier of the Ooxml Automation Table service object. 
+
+    dto: presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO, optional
+        A an instance of the data transfer object model. The class of this object is defined by the
+        `_get_dto_class()` method.  Represents the current state of the data of the data in the service.
+
+    data_table: list of lists, optional
+        A representation of a data table that will be incorporates into a dto object's property defined by
+        the subclass' `_get_dto_table_name` method.
+
+    """
+    __component_kind__ = "table-updater"
     
     def __init__(self, 
                 name,
@@ -709,12 +828,12 @@ class TableUpdaterWidget(UpdaterWidgetBase):
         self.table_id = table_id
 
 
-    def get_dto_class(self):
+    def _get_dto_class(self):
         return presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO
 
-    def get_endpoint_path(self):
+    def _get_endpoint_path(self):
         return "TableUpdate"
 
-    def get_dto_table_name(self):
+    def _get_dto_table_name(self):
         return "table_data"
     

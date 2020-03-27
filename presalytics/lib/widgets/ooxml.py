@@ -9,6 +9,7 @@ import dateutil.parser
 import lxml
 import lxml.etree
 import posixpath
+import pandas
 import presalytics
 import presalytics.client.api
 import presalytics.story.components
@@ -784,6 +785,28 @@ class ChartUpdaterWidget(UpdaterWidgetBase):
 
     def _get_dto_table_name(self):
         return "data_points"
+
+    def get_dataframe(self) -> pandas.DataFrame:
+        """
+        Returns a panda datagrame of the 
+        """
+        if not self.dto:
+            self.dto = self.get_dto()
+        data = {}
+        for i in range(0, len(self.dto.series_names)):
+            data.update({
+                self.dto.series_names[i]: pandas.Series(self.dto.data_points[i], self.dto.category_name)
+            })
+        return pandas.DataFrame(data)
+    
+    def put_dataframe(self, df: pandas.DataFrame):
+        data_dict = df.to_dict('split')
+        dto = self._get_dto_class()(chart_id=self.chart_id, 
+                                 series_names=data_dict["columns"], 
+                                 category_names=data_dict["index"],
+                                 data_points=data_dict["data"])
+        self._put_dto(dto)
+
         
 
 class TableUpdaterWidget(UpdaterWidgetBase):

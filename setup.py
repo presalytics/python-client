@@ -36,7 +36,8 @@ REQUIRES = [
     "jsonschema",
     "semantic_version",
     "jsonpatch",
-    "wsgi_microservice_middleware>=0.1.3"
+    "pandas"
+    "wsgi_microservice_middleware>=0.1.5"
 ]
 
 with open("README.md", "r") as fh:

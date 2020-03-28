@@ -36,7 +36,7 @@ REQUIRES = [
     "jsonschema",
     "semantic_version",
     "jsonpatch",
-    "pandas"
+    "pandas",
     "wsgi_microservice_middleware>=0.1.5"
 ]
 

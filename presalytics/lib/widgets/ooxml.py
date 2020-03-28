@@ -795,7 +795,7 @@ class ChartUpdaterWidget(UpdaterWidgetBase):
         data = {}
         for i in range(0, len(self.dto.series_names)):
             data.update({
-                self.dto.series_names[i]: pandas.Series(self.dto.data_points[i], self.dto.category_name)
+                self.dto.series_names[i]: pandas.Series(self.dto.data_points[i], self.dto.category_names)
             })
         return pandas.DataFrame(data)
     

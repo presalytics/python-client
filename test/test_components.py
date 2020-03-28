@@ -142,10 +142,14 @@ class TestComponents(unittest.TestCase):
             [None,None,3,6]
         ]
         
+        
         dto.data_points = data
         series = dto.series_names
         series[0] = dummySeriesName
         dto.series_names = series
+
+        df = updater.get_dataframe()
+        updater.put_dataframe(df)
 
         updater.put_dto(dto)
 

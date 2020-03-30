@@ -321,8 +321,8 @@ class BootstrapCustomTemplate(JinjaTemplateBuilder):
 
 
     def __init__(self, page: 'Page', template_file=None, **kwargs) -> None:
-        super(BootstrapCustomTemplate, self).__init__(page, **kwargs)
         self.template_file = template_file
+        super(BootstrapCustomTemplate, self).__init__(page, **kwargs)
         try:
             if not self.template_file:
                 self.template_file = page.additional_properties["template_file"]

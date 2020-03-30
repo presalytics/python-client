@@ -274,7 +274,7 @@ class BootstrapCustomTemplate(JinjaTemplateBuilder):
     ----------
     name: str
         the page instance name
-        
+
     page: presalytics.story.outline.Page
         A story outline page object to create the widget from
     
@@ -326,6 +326,8 @@ class BootstrapCustomTemplate(JinjaTemplateBuilder):
 
     def __init__(self, page: 'Page', name=None, template_file=None, **kwargs) -> None:
         self.template_file = template_file
+        if self.template_file:
+            self.outline_page.additional_properties["template_file"] = self.template_file
         super(BootstrapCustomTemplate, self).__init__(page, **kwargs)
         try:
             if not self.template_file:
@@ -335,8 +337,6 @@ class BootstrapCustomTemplate(JinjaTemplateBuilder):
         self.name = name
         if not self.name:
             self.name = page.name
-        if self.template_file:
-            self.outline_page.additional_properties["template_file"] = self.template_file
         self.outline_page.name = self.name
         self.outline_page.kind = self.__component_kind__
 

@@ -183,7 +183,6 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
             context.pop("template_string", None)
         return context
 
-    
     def render_from_file(self, **kwargs) -> str:
         """
         Returns rendered html with widgets rendered into template placeholders

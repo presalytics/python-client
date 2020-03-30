@@ -360,7 +360,7 @@ class Client(object):
         query_string = '?{}'.format(urllib.parse.urlencode(query))
         url = urllib.parse.urljoin(self.site_host, urllib.parse.urljoin(cnst.LOGIN_PATH, query_string))
         logger.info("Opening new browser tab.  Please input login credentials...")
-        logger.info("Requesting loging at location: <{0}>".format(url))
+        logger.info("Requesting login at location: <{0}>".format(url))
         webbrowser.open_new_tab(url)
         auth_code = None
         payload = {

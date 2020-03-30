@@ -182,7 +182,10 @@ from presalytics.lib.plugins.ooxml import OoxmlTheme
 from presalytics.lib.plugins.reveal import RevealConfigPlugin
 from presalytics.lib.plugins.reveal_theme import RevealCustomTheme
 from presalytics.lib.plugins.scss import ScssPlugin
-from presalytics.lib.templates.base import JinjaTemplateBuilder
+from presalytics.lib.templates.base import (
+    JinjaTemplateBuilder,
+    BootstrapCustomTemplate
+)
 from presalytics.lib.widgets.matplotlib import MatplotlibFigure, MatplotlibResponsiveFigure
 from presalytics.lib.widgets.ooxml import (
     OoxmlFileWidget, 

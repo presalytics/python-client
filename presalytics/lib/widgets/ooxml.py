@@ -10,6 +10,7 @@ import lxml
 import lxml.etree
 import posixpath
 import pandas
+import collections
 import presalytics
 import presalytics.client.api
 import presalytics.story.components
@@ -792,7 +793,7 @@ class ChartUpdaterWidget(UpdaterWidgetBase):
         """
         if not self.dto:
             self.dto = self.get_dto()
-        data = {}
+        data = collections.OrderedDict()
         for i in range(0, len(self.dto.series_names)):
             data.update({
                 self.dto.series_names[i]: pandas.Series(self.dto.data_points[i], self.dto.category_names)
@@ -801,10 +802,11 @@ class ChartUpdaterWidget(UpdaterWidgetBase):
     
     def put_dataframe(self, df: pandas.DataFrame):
         data_dict = df.to_dict('split')
+        data_points = list(map(list, zip(*data_dict['data'])))
         dto = self._get_dto_class()(chart_id=self.chart_id, 
                                  series_names=data_dict["columns"], 
                                  category_names=data_dict["index"],
-                                 data_points=data_dict["data"])
+                                 data_points=data_points)
         self._put_dto(dto)
 
         

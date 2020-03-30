@@ -128,6 +128,9 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
             self.template_string = None
         if len(kwargs.keys()) > 0:
             self.outline_page.additional_properties.update(kwargs)
+        self.outline_page.name = self.name
+        self.outline_page.kind = self.__component_kind__
+
         
 
     @classmethod
@@ -330,6 +333,7 @@ class BootstrapCustomTemplate(JinjaTemplateBuilder):
             raise presalytics.lib.exceptions.InvalidConfigurationError(message="BootstrapCustomTemplate requires a 'template_file' in additional properites")
         if self.template_file:
             self.outline_page.additional_properties["template_file"] = self.template_file
+
 
 
     def get_template_name(self):

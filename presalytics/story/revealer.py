@@ -175,6 +175,7 @@ class Revealer(presalytics.story.components.Renderer):
                     raise presalytics.lib.exceptions.MissingConfigException(message)
             page_html = page_instance.render()
         except Exception as ex:
+            logger.exception(ex)
             t, v, tb = sys.exc_info()
             if not presalytics.CONFIG.get("DEBUG", False):
                 page_html = presalytics.lib.exceptions.RenderExceptionHandler(ex, "page", traceback=tb).render_exception()

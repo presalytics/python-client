@@ -143,7 +143,7 @@ class RenderExceptionHandler(object):
         header = lxml.html.Element("h3")
         message = lxml.html.Element("p")
         header.text = "Oops! A rendering error occured."
-        message.text = "This {} could not be rendered.  Please seed the information below to help you diagnose the problem".format(self.target_type)
+        message.text = "This {} could not be rendered.  Please see the information below to help you diagnose the problem".format(self.target_type)
 
         _type = lxml.html.Element("p")
         _type.text = "Exception Type: {}".format(self.exception_type)

@@ -329,6 +329,7 @@ class PluginManager(object):
                     plugin_instance = plugin_class()
                     tag = plugin_instance.get_tag(config=plugin_config["config"])
                 except Exception as ex:
+                    logger.exception(ex)
                     t, v, tb = sys.exc_info()
                     if not presalytics.CONFIG.get("DEBUG", False):
                         div = presalytics.lib.exceptions.RenderExceptionHandler(ex, "plugin", traceback=tb).render_exception()

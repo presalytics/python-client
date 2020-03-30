@@ -275,6 +275,7 @@ class PageTemplateBase(ComponentBase):
                     message = "Widget component instance or class (kind) {0} unavailable in component registry".format(key)
                     raise presalytics.lib.exceptions.MissingConfigException(message)
         except Exception as ex:
+            logger.exception(ex)
             if not presalytics.CONFIG.get("DEBUG", False):
                 widget_instance = presalytics.lib.exceptions.RenderExceptionHandler(ex)
             else:

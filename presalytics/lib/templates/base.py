@@ -128,8 +128,7 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
             self.template_string = None
         if len(kwargs.keys()) > 0:
             self.outline_page.additional_properties.update(kwargs)
-        self.outline_page.name = self.name
-        self.outline_page.kind = self.__component_kind__
+
 
         
 
@@ -273,7 +272,9 @@ class BootstrapCustomTemplate(JinjaTemplateBuilder):
 
     Parameters:
     ----------
-
+    name: str
+        the page instance name
+        
     page: presalytics.story.outline.Page
         A story outline page object to create the widget from
     
@@ -323,7 +324,7 @@ class BootstrapCustomTemplate(JinjaTemplateBuilder):
     ]
 
 
-    def __init__(self, page: 'Page', template_file=None, **kwargs) -> None:
+    def __init__(self, page: 'Page', name=None, template_file=None, **kwargs) -> None:
         self.template_file = template_file
         super(BootstrapCustomTemplate, self).__init__(page, **kwargs)
         try:
@@ -331,8 +332,13 @@ class BootstrapCustomTemplate(JinjaTemplateBuilder):
                 self.template_file = page.additional_properties["template_file"]
         except (KeyError, AttributeError):
             raise presalytics.lib.exceptions.InvalidConfigurationError(message="BootstrapCustomTemplate requires a 'template_file' in additional properites")
+        self.name = name
+        if not self.name:
+            self.name = page.name
         if self.template_file:
             self.outline_page.additional_properties["template_file"] = self.template_file
+        self.outline_page.name = self.name
+        self.outline_page.kind = self.__component_kind__
 
 
 

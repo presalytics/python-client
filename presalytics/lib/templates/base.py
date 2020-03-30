@@ -126,6 +126,8 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
             self.template_string = self.outline_page.additional_properties.get("template_string")
         else:
             self.template_string = None
+        if len(kwargs.keys()) > 0:
+            self.outline_page.additional_properties.update(kwargs)
         
 
     @classmethod
@@ -265,6 +267,22 @@ class BootstrapCustomTemplate(JinjaTemplateBuilder):
     The `presalytics.story.outline.Page` must contain an entry named "template_file" in the its data dictionary.
     The values of the "template_file" varialble must a file path to an html file in the
     current working directory
+
+    Parameters:
+    ----------
+
+    page: presalytics.story.outline.Page
+        A story outline page object to create the widget from
+    
+    template_file: str
+        A local file path to an html file that wil be used as a template for rendering the page.
+        The file path is relative to the current working directory.
+
+    kwargs: dict, optional
+        **kwargs can include parameters to pass to the template rendering context. For example, 
+        when kwargs is passed `title="An Example Title"`, during rendering, the template's
+         `{{title}}` place holder will be replaced with with `An Example Title` 
+        
     """
     template_file: str
 
@@ -312,8 +330,6 @@ class BootstrapCustomTemplate(JinjaTemplateBuilder):
             raise presalytics.lib.exceptions.InvalidConfigurationError(message="BootstrapCustomTemplate requires a 'template_file' in additional properites")
         if self.template_file:
             self.outline_page.additional_properties["template_file"] = self.template_file
-        if len(kwargs.keys()) > 0:
-            self.outline_page.additional_properties.update(kwargs)
 
 
     def get_template_name(self):

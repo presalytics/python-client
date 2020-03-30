@@ -211,7 +211,7 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
         Finds the template file and reads it into a string
         """
         for _dir in self.template_paths:
-            fpath = os.path.join(_dir, self.__template_file__)
+            fpath = os.path.join(_dir, self.get_template_name())
             if os.path.exists(fpath):
                 with open(fpath, 'r') as f:
                     template_string = f.read()

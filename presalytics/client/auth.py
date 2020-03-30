@@ -45,7 +45,7 @@ class TokenUtil(object):
 
     def is_api_access_token_expired(self):
         try:
-            expire_datetime = dateutil.parser.parse(self.token['access_token_expire_time'])
+            expire_datetime = dateutil.parser.parse(self.token['access_token_expire_time']).astimezone(datetime.timezone.utc)
             if expire_datetime < datetime.datetime.utcnow().astimezone(datetime.timezone.utc):
                 return True
             return False
@@ -54,7 +54,7 @@ class TokenUtil(object):
 
     def is_api_refresh_token_expired(self):
         try:
-            expire_datetime = dateutil.parser.parse(self.token['refresh_token_expire_time'])
+            expire_datetime = dateutil.parser.parse(self.token['refresh_token_expire_time']).astimezone(datetime.timezone.utc)
             if expire_datetime < datetime.datetime.utcnow().astimezone(datetime.timezone.utc):
                 return True
             return False
@@ -209,4 +209,4 @@ class AuthenticationMixIn(object):
         :param string: str.
         :return: datetime.
         """
-        return super()._ApiClient__deserialize_datetime(string).replace(tzinfo=datetime.timezone.utc)
+        return super()._ApiClient__deserialize_datetime(string).astimezone(datetime.timezone.utc)

@@ -335,6 +335,9 @@ class BootstrapCustomTemplate(JinjaTemplateBuilder):
     def get_template_name(self):
         return self.template_file
 
+    def serialize(self):
+        return self.outline_page
+
 
 
 

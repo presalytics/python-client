@@ -791,6 +791,8 @@ class ChartUpdaterWidget(UpdaterWidgetBase):
         """
         Returns a panda datagrame of the 
         """
+        data: collections.OrderedDict
+        
         if not self.dto:
             self.dto = self.get_dto()
         data = collections.OrderedDict()

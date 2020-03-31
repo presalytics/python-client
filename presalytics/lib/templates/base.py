@@ -328,7 +328,7 @@ class BootstrapCustomTemplate(JinjaTemplateBuilder):
         try:        
             self.template_file = template_file
             if not self.template_file:
-                self.template_file = self.outline_page.additional_properties["template_file"]
+                self.template_file = page.additional_properties["template_file"]
         except (KeyError, AttributeError):
             raise presalytics.lib.exceptions.InvalidConfigurationError(message="BootstrapCustomTemplate requires a 'template_file' passed either via 'additional_properties` or a keyword argument")
         super(BootstrapCustomTemplate, self).__init__(page, **kwargs)

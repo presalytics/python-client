@@ -48,7 +48,7 @@ class TestComponents(unittest.TestCase):
                 'function_params': new_color
             },
             {
-                'name': 'ReplaceText',
+                'name': 'TextReplace',
                 'function_params': {
                     'test_text': "Test Passed!"
                 }
@@ -105,7 +105,7 @@ class TestComponents(unittest.TestCase):
                 }
             },
             {
-                'name': 'ReplaceText',
+                'name': 'TextReplace',
                 'function_params': {
                     'test_text': "Test Passed!"
                 }
@@ -151,7 +151,6 @@ class TestComponents(unittest.TestCase):
         df = updater.get_dataframe()
         updater.put_dataframe(df)
 
-        updater.put_dto(dto)
 
         widget = updater.serialize()
 
@@ -184,7 +183,7 @@ class TestComponents(unittest.TestCase):
         dto.table_data[2][2] = dummyEntryName
 
 
-        updater.put_dto(dto)
+        updater.update_from_dto(dto)
         # updater.get_svg_file()
         # client.download_file(story.id, document.ooxml_automation_id)
         self.assertTrue(dummyEntryName in updater.get_svg(updater.table_id))

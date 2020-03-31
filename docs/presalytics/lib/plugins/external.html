@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L0-L121" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L0-L155" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import typing
 import presalytics
@@ -32,50 +32,9 @@ import presalytics.lib.exceptions
 
 site_host = &#34;https://presalytics.io&#34;
 try:
-    site_host = presalytics.CONFIG[&#34;HOSTS&#34;][&#34;SITE&#34;]
+    site_host = presalytics.CONFIG[&#34;HOSTS&#34;][&#34;SITE&#34;] #type: ignore
 except (KeyError, AttributeError, ImportError, ModuleNotFoundError):
     pass
-
-script_map = {
-    &#39;d3&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/d3/5.12.0/d3.min.js&#39;,
-    &#39;d3v3&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js&#39;,
-    &#39;reveal&#39;: {
-        &#39;base&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js&#39;,
-        &#39;marked&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/marked.js&#39;,
-        &#39;markdown&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js&#39;,
-        &#39;highlight&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/highlight/highlight.min.js&#39;,
-        &#39;math&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js&#39;,
-        &#39;zoom&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js&#39;,
-        &#39;notes&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js&#39;,
-        &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js&#39;
-
-    },
-    &#39;mpld3&#39;: &#39;{0}/static/mpld3/mpld3.min.js&#39;.format(site_host),
-    &#39;ooxml&#39;: &#39;{0}/static/ooxml/ooxml.js&#39;.format(site_host),
-    &#39;jquery&#39;: &#39;https://code.jquery.com/jquery-3.4.1.min.js&#39;
-}
-
-
-styles_map = {
-    &#39;reveal&#39;: {
-        &#39;base&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css&#39;,
-        &#39;themes&#39;: {
-            &#39;beige&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/beige.min.css&#39;,
-            &#39;black&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/black.min.css&#39;,
-            &#39;blood&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/blood.min.css&#39;,
-            &#39;league&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/league.min.css&#39;,
-            &#39;moon&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/moon.min.css&#39;,
-            &#39;night&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/night.min.css&#39;,
-            &#39;serif&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/serif.min.css&#39;,
-            &#39;simple&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/simple.min.css&#39;,
-            &#39;sky&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/sky.min.css&#39;,
-            &#39;solarized&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/solarized.min.css&#39;,
-            &#39;white&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css&#39;
-        },
-        &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css&#39;
-    },
-    &#39;preloaders&#39; : &#39;{0}/static/css/preloaders.css&#39;.format(site_host)
-}
 
 
 class AttrDict(dict):
@@ -109,28 +68,58 @@ class AttrDict(dict):
         return result
 
 
-ALLOWED_SCRIPTS = AttrDict(script_map)
-
-
-ALLOWED_STYLES = AttrDict(styles_map)
-
-
 class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
     &#34;&#34;&#34;
-    Plugin for converting the `presaltyics.lib.plugins.external.ALLOWED_STYLES` dictionary
-    into an html &lt;link&gt; fragment.    
+    `presalytics.lib.plugins.base.StylePlugin` subclass for converting a `presalytics.story.outline.Plugin` 
+    config into an html `&lt;link&gt;` fragment.
+
+    Attributes
+    ----------
+    attr_dict: presalytics.lib.plugins.external.AttrDict
+        Performs nested lookups on the `STYLES_MAP`
     &#34;&#34;&#34;
     __plugin_name__ = &#39;external_links&#39;
 
+    STYLES_MAP = {
+        &#39;reveal&#39;: {
+            &#39;base&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css&#39;,
+            &#39;themes&#39;: {
+                &#39;beige&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/beige.min.css&#39;,
+                &#39;black&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/black.min.css&#39;,
+                &#39;blood&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/blood.min.css&#39;,
+                &#39;league&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/league.min.css&#39;,
+                &#39;moon&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/moon.min.css&#39;,
+                &#39;night&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/night.min.css&#39;,
+                &#39;serif&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/serif.min.css&#39;,
+                &#39;simple&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/simple.min.css&#39;,
+                &#39;sky&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/sky.min.css&#39;,
+                &#39;solarized&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/solarized.min.css&#39;,
+                &#39;white&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css&#39;
+            },
+            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css&#39;
+        },
+        &#39;preloaders&#39; : &#39;{0}/static/css/preloaders.css&#39;.format(site_host),
+        &#39;bootstrap4&#39;: &#34;https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css&#34;
+    }
+    
+    &#34;&#34;&#34;
+    Static nested dictionary containing links to external stylesheets that will be rendered alongside this plugin
+    &#34;&#34;&#34;
+
+    def __init__(self, **kwargs):
+        super(ApprovedExternalLinks, self).__init__(**kwargs)
+        self.attr_dict = AttrDict(self.STYLES_MAP)
+
+
     def to_style(self, config, **kwargs):
         &#34;&#34;&#34;
-        Converts a dot-notation key for nested dictionaries (e.g., &#39;reveal.base&#39;) into an 
-        string contain an html fragement with &lt;link&gt; tag.  The dot-notation key is will 
+        Converts a dot-notation key for nested dictionaries (e.g., &#39;reveal.base&#39;) into a
+        string contain an html fragement with `&lt;link&gt;` tag.  The dot-notation key 
         is pulled from the &#39;approved_styles_key&#39; of the &#39;config&#39; attrubte of subclass 
-        of a `presaltyics.story.outline.Plugin&#39; object.
+        of a `presalytics.story.outline.Plugin` object.
         &#34;&#34;&#34;
         key = config[&#39;approved_styles_key&#39;]
-        link = ALLOWED_STYLES.flatten()[key]
+        link = self.attr_dict.flatten()[key]
         if link is None:
             message = &#34;Key {0} does not reference a link in the APPROVED_STYLES dictionary&#34;.format(key)
             raise presalytics.lib.exceptions.MissingConfigException(message)
@@ -138,11 +127,56 @@ class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
 
 
 class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
+    &#34;&#34;&#34;
+    `presalytics.lib.plugins.base.ScriptPlugin` subclass for converting a `presalytics.story.outline.Plugin` 
+    config into an html `&lt;script&gt;` fragment.
+
+    Attributes
+    ----------
+    attr_dict: presalytics.lib.plugins.external.AttrDict
+        Performs nested lookups on the `SCRIPT_MAP`
+    &#34;&#34;&#34;
     __plugin_name__ = &#39;external_scripts&#39;
 
+    SCRIPT_MAP = {
+        &#39;d3&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/d3/5.12.0/d3.min.js&#39;,
+        &#39;d3v3&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js&#39;,
+        &#39;reveal&#39;: {
+            &#39;base&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js&#39;,
+            &#39;marked&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/marked.js&#39;,
+            &#39;markdown&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js&#39;,
+            &#39;highlight&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/highlight/highlight.min.js&#39;,
+            &#39;math&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js&#39;,
+            &#39;zoom&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js&#39;,
+            &#39;notes&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js&#39;,
+            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js&#39;
+
+        },
+        &#39;mpld3&#39;: &#39;{0}/static/mpld3/mpld3.min.js&#39;.format(site_host),
+        &#39;ooxml&#39;: &#39;{0}/static/ooxml/ooxml.js&#39;.format(site_host),
+        &#39;mpl-responsive&#39;: &#39;{0}/static/js/mpl-responsive.js&#39;.format(site_host),
+        &#39;jquery&#39;: &#39;https://code.jquery.com/jquery-3.4.1.min.js&#39;,
+        &#39;popper&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js&#39;,
+        &#39;bootstrap4&#39;: &#39;https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js&#39;
+    }
+    &#34;&#34;&#34;
+    Static nested dictionary containing links to external scripts that will be rendered alongside this plugin
+    &#34;&#34;&#34;
+
+    def __init__(self, **kwargs):
+        super(ApprovedExternalScripts, self).__init__(**kwargs)
+        self.attr_dict = AttrDict(self.SCRIPT_MAP)
+
+
     def to_script(self, config, **kwargs):
+        &#34;&#34;&#34;
+        Converts a dot-notation key for nested dictionaries (e.g., &#39;reveal.base&#39;) into a
+        string containing an html fragement with `&lt;script&gt;` tags.  The dot-notation key 
+        is pulled from the &#39;approved_styles_key&#39; of the &#39;config&#39; attrubte of subclass 
+        of a `presalytics.story.outline.Plugin` object.
+        &#34;&#34;&#34;
         key = config[&#39;approved_scripts_key&#39;]
-        link = ALLOWED_SCRIPTS.flatten()[key]
+        link = self.attr_dict.flatten()[key]
         if link is None:
             message = &#34;Key {0} does not reference a link in the APPROVED_SCRIPTS dictionary&#34;.format(key)
             raise presalytics.lib.exceptions.MissingConfigException(message)
@@ -158,125 +192,6 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="presalytics.lib.plugins.external.ApprovedExternalLinks"><code class="flex name class">
-<span>class <span class="ident">ApprovedExternalLinks</span></span>
-<span>(</span><span>**kwargs)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Plugin for converting the <code>presaltyics.lib.plugins.external.ALLOWED_STYLES</code> dictionary
-into an html <link> fragment.</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L91-L110" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
-    &#34;&#34;&#34;
-    Plugin for converting the `presaltyics.lib.plugins.external.ALLOWED_STYLES` dictionary
-    into an html &lt;link&gt; fragment.    
-    &#34;&#34;&#34;
-    __plugin_name__ = &#39;external_links&#39;
-
-    def to_style(self, config, **kwargs):
-        &#34;&#34;&#34;
-        Converts a dot-notation key for nested dictionaries (e.g., &#39;reveal.base&#39;) into an 
-        string contain an html fragement with &lt;link&gt; tag.  The dot-notation key is will 
-        is pulled from the &#39;approved_styles_key&#39; of the &#39;config&#39; attrubte of subclass 
-        of a `presaltyics.story.outline.Plugin&#39; object.
-        &#34;&#34;&#34;
-        key = config[&#39;approved_styles_key&#39;]
-        link = ALLOWED_STYLES.flatten()[key]
-        if link is None:
-            message = &#34;Key {0} does not reference a link in the APPROVED_STYLES dictionary&#34;.format(key)
-            raise presalytics.lib.exceptions.MissingConfigException(message)
-        return &#39;&lt;link rel=&#34;stylesheet&#34; href=&#34;{0}&#34;/&gt;&#39;.format(link)</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="presalytics.lib.plugins.base.StylePlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin">StylePlugin</a></li>
-<li><a title="presalytics.lib.plugins.base.PluginBase" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase">PluginBase</a></li>
-<li>abc.ABC</li>
-</ul>
-<h3>Methods</h3>
-<dl>
-<dt id="presalytics.lib.plugins.external.ApprovedExternalLinks.to_style"><code class="name flex">
-<span>def <span class="ident">to_style</span></span>(<span>self, config, **kwargs)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Converts a dot-notation key for nested dictionaries (e.g., 'reveal.base') into an
-string contain an html fragement with <link> tag.
-The dot-notation key is will
-is pulled from the 'approved_styles_key' of the 'config' attrubte of subclass
-of a `presaltyics.story.outline.Plugin' object.</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L98-L110" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def to_style(self, config, **kwargs):
-    &#34;&#34;&#34;
-    Converts a dot-notation key for nested dictionaries (e.g., &#39;reveal.base&#39;) into an 
-    string contain an html fragement with &lt;link&gt; tag.  The dot-notation key is will 
-    is pulled from the &#39;approved_styles_key&#39; of the &#39;config&#39; attrubte of subclass 
-    of a `presaltyics.story.outline.Plugin&#39; object.
-    &#34;&#34;&#34;
-    key = config[&#39;approved_styles_key&#39;]
-    link = ALLOWED_STYLES.flatten()[key]
-    if link is None:
-        message = &#34;Key {0} does not reference a link in the APPROVED_STYLES dictionary&#34;.format(key)
-        raise presalytics.lib.exceptions.MissingConfigException(message)
-    return &#39;&lt;link rel=&#34;stylesheet&#34; href=&#34;{0}&#34;/&gt;&#39;.format(link)</code></pre>
-</details>
-</dd>
-</dl>
-<h3>Inherited members</h3>
-<ul class="hlist">
-<li><code><b><a title="presalytics.lib.plugins.base.StylePlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin">StylePlugin</a></b></code>:
-<ul class="hlist">
-<li><code><a title="presalytics.lib.plugins.base.StylePlugin.get_tag" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase.get_tag">get_tag</a></code></li>
-</ul>
-</li>
-</ul>
-</dd>
-<dt id="presalytics.lib.plugins.external.ApprovedExternalScripts"><code class="flex name class">
-<span>class <span class="ident">ApprovedExternalScripts</span></span>
-<span>(</span><span>**kwargs)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>A script plugin render configures templated scripts to append to the body
-tag of an html document</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L113-L122" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
-    __plugin_name__ = &#39;external_scripts&#39;
-
-    def to_script(self, config, **kwargs):
-        key = config[&#39;approved_scripts_key&#39;]
-        link = ALLOWED_SCRIPTS.flatten()[key]
-        if link is None:
-            message = &#34;Key {0} does not reference a link in the APPROVED_SCRIPTS dictionary&#34;.format(key)
-            raise presalytics.lib.exceptions.MissingConfigException(message)
-        return &#39;&lt;script type=&#34;text/javascript&#34; src=&#34;{0}&#34;&gt;&lt;/script&gt;&#39;.format(link)</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="presalytics.lib.plugins.base.ScriptPlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.ScriptPlugin">ScriptPlugin</a></li>
-<li><a title="presalytics.lib.plugins.base.PluginBase" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase">PluginBase</a></li>
-<li>abc.ABC</li>
-</ul>
-<h3>Inherited members</h3>
-<ul class="hlist">
-<li><code><b><a title="presalytics.lib.plugins.base.ScriptPlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.ScriptPlugin">ScriptPlugin</a></b></code>:
-<ul class="hlist">
-<li><code><a title="presalytics.lib.plugins.base.ScriptPlugin.get_tag" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase.get_tag">get_tag</a></code></li>
-<li><code><a title="presalytics.lib.plugins.base.ScriptPlugin.to_script" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.ScriptPlugin.to_script">to_script</a></code></li>
-</ul>
-</li>
-</ul>
-</dd>
 <dt id="presalytics.lib.plugins.external.AttrDict"><code class="flex name class">
 <span>class <span class="ident">AttrDict</span></span>
 <span>(</span><span>*args, **kwargs)</span>
@@ -287,7 +202,7 @@ tag of an html document</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L54-L82" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L13-L41" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class AttrDict(dict):
     &#34;&#34;&#34; Dictionary subclass whose entries can be accessed by attributes
@@ -333,7 +248,7 @@ tag of an html document</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L62-L69" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L21-L28" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@staticmethod
 def from_nested_dict(data):
@@ -349,20 +264,275 @@ def from_nested_dict(data):
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.lib.plugins.external.AttrDict.flatten"><code class="name flex">
-<span>def <span class="ident">flatten</span></span>(<span>self) -> Dict</span>
+<span>def <span class="ident">flatten</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L71-L72" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L30-L31" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def flatten(self) -&gt; typing.Dict:
     return AttrDict._flatten(self, &#39;&#39;, {})</code></pre>
 </details>
 </dd>
 </dl>
+</dd>
+<dt id="presalytics.lib.plugins.external.ApprovedExternalLinks"><code class="flex name class">
+<span>class <span class="ident">ApprovedExternalLinks</span></span>
+<span>(</span><span>**kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p><a title="presalytics.lib.plugins.base.StylePlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin"><code>StylePlugin</code></a> subclass for converting a <a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin"><code>Plugin</code></a>
+config into an html <code>&lt;link&gt;</code> fragment.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>attr_dict</code></strong> :&ensp;<a title="presalytics.lib.plugins.external.AttrDict" href="/python-client/presalytics/lib/plugins/external.html#presalytics.lib.plugins.external.AttrDict"><code>AttrDict</code></a></dt>
+<dd>Performs nested lookups on the <code>STYLES_MAP</code></dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L44-L99" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
+    &#34;&#34;&#34;
+    `presalytics.lib.plugins.base.StylePlugin` subclass for converting a `presalytics.story.outline.Plugin` 
+    config into an html `&lt;link&gt;` fragment.
+
+    Attributes
+    ----------
+    attr_dict: presalytics.lib.plugins.external.AttrDict
+        Performs nested lookups on the `STYLES_MAP`
+    &#34;&#34;&#34;
+    __plugin_name__ = &#39;external_links&#39;
+
+    STYLES_MAP = {
+        &#39;reveal&#39;: {
+            &#39;base&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css&#39;,
+            &#39;themes&#39;: {
+                &#39;beige&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/beige.min.css&#39;,
+                &#39;black&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/black.min.css&#39;,
+                &#39;blood&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/blood.min.css&#39;,
+                &#39;league&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/league.min.css&#39;,
+                &#39;moon&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/moon.min.css&#39;,
+                &#39;night&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/night.min.css&#39;,
+                &#39;serif&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/serif.min.css&#39;,
+                &#39;simple&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/simple.min.css&#39;,
+                &#39;sky&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/sky.min.css&#39;,
+                &#39;solarized&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/solarized.min.css&#39;,
+                &#39;white&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css&#39;
+            },
+            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css&#39;
+        },
+        &#39;preloaders&#39; : &#39;{0}/static/css/preloaders.css&#39;.format(site_host),
+        &#39;bootstrap4&#39;: &#34;https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css&#34;
+    }
+    
+    &#34;&#34;&#34;
+    Static nested dictionary containing links to external stylesheets that will be rendered alongside this plugin
+    &#34;&#34;&#34;
+
+    def __init__(self, **kwargs):
+        super(ApprovedExternalLinks, self).__init__(**kwargs)
+        self.attr_dict = AttrDict(self.STYLES_MAP)
+
+
+    def to_style(self, config, **kwargs):
+        &#34;&#34;&#34;
+        Converts a dot-notation key for nested dictionaries (e.g., &#39;reveal.base&#39;) into a
+        string contain an html fragement with `&lt;link&gt;` tag.  The dot-notation key 
+        is pulled from the &#39;approved_styles_key&#39; of the &#39;config&#39; attrubte of subclass 
+        of a `presalytics.story.outline.Plugin` object.
+        &#34;&#34;&#34;
+        key = config[&#39;approved_styles_key&#39;]
+        link = self.attr_dict.flatten()[key]
+        if link is None:
+            message = &#34;Key {0} does not reference a link in the APPROVED_STYLES dictionary&#34;.format(key)
+            raise presalytics.lib.exceptions.MissingConfigException(message)
+        return &#39;&lt;link rel=&#34;stylesheet&#34; href=&#34;{0}&#34;/&gt;&#39;.format(link)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.plugins.base.StylePlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin">StylePlugin</a></li>
+<li><a title="presalytics.lib.plugins.base.PluginBase" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase">PluginBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.lib.plugins.external.ApprovedExternalLinks.STYLES_MAP"><code class="name">var <span class="ident">STYLES_MAP</span></code></dt>
+<dd>
+<section class="desc"><p>Static nested dictionary containing links to external stylesheets that will be rendered alongside this plugin</p></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.plugins.external.ApprovedExternalLinks.to_style"><code class="name flex">
+<span>def <span class="ident">to_style</span></span>(<span>self, config, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Converts a dot-notation key for nested dictionaries (e.g., 'reveal.base') into a
+string contain an html fragement with <code>&lt;link&gt;</code> tag.
+The dot-notation key
+is pulled from the 'approved_styles_key' of the 'config' attrubte of subclass
+of a <a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin"><code>Plugin</code></a> object.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L87-L99" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_style(self, config, **kwargs):
+    &#34;&#34;&#34;
+    Converts a dot-notation key for nested dictionaries (e.g., &#39;reveal.base&#39;) into a
+    string contain an html fragement with `&lt;link&gt;` tag.  The dot-notation key 
+    is pulled from the &#39;approved_styles_key&#39; of the &#39;config&#39; attrubte of subclass 
+    of a `presalytics.story.outline.Plugin` object.
+    &#34;&#34;&#34;
+    key = config[&#39;approved_styles_key&#39;]
+    link = self.attr_dict.flatten()[key]
+    if link is None:
+        message = &#34;Key {0} does not reference a link in the APPROVED_STYLES dictionary&#34;.format(key)
+        raise presalytics.lib.exceptions.MissingConfigException(message)
+    return &#39;&lt;link rel=&#34;stylesheet&#34; href=&#34;{0}&#34;/&gt;&#39;.format(link)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.lib.plugins.base.StylePlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin">StylePlugin</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.lib.plugins.base.StylePlugin.get_tag" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase.get_tag">get_tag</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="presalytics.lib.plugins.external.ApprovedExternalScripts"><code class="flex name class">
+<span>class <span class="ident">ApprovedExternalScripts</span></span>
+<span>(</span><span>**kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p><a title="presalytics.lib.plugins.base.ScriptPlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.ScriptPlugin"><code>ScriptPlugin</code></a> subclass for converting a <a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin"><code>Plugin</code></a>
+config into an html <code>&lt;script&gt;</code> fragment.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>attr_dict</code></strong> :&ensp;<a title="presalytics.lib.plugins.external.AttrDict" href="/python-client/presalytics/lib/plugins/external.html#presalytics.lib.plugins.external.AttrDict"><code>AttrDict</code></a></dt>
+<dd>Performs nested lookups on the <code>SCRIPT_MAP</code></dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L102-L156" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
+    &#34;&#34;&#34;
+    `presalytics.lib.plugins.base.ScriptPlugin` subclass for converting a `presalytics.story.outline.Plugin` 
+    config into an html `&lt;script&gt;` fragment.
+
+    Attributes
+    ----------
+    attr_dict: presalytics.lib.plugins.external.AttrDict
+        Performs nested lookups on the `SCRIPT_MAP`
+    &#34;&#34;&#34;
+    __plugin_name__ = &#39;external_scripts&#39;
+
+    SCRIPT_MAP = {
+        &#39;d3&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/d3/5.12.0/d3.min.js&#39;,
+        &#39;d3v3&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js&#39;,
+        &#39;reveal&#39;: {
+            &#39;base&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js&#39;,
+            &#39;marked&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/marked.js&#39;,
+            &#39;markdown&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js&#39;,
+            &#39;highlight&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/highlight/highlight.min.js&#39;,
+            &#39;math&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js&#39;,
+            &#39;zoom&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js&#39;,
+            &#39;notes&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js&#39;,
+            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js&#39;
+
+        },
+        &#39;mpld3&#39;: &#39;{0}/static/mpld3/mpld3.min.js&#39;.format(site_host),
+        &#39;ooxml&#39;: &#39;{0}/static/ooxml/ooxml.js&#39;.format(site_host),
+        &#39;mpl-responsive&#39;: &#39;{0}/static/js/mpl-responsive.js&#39;.format(site_host),
+        &#39;jquery&#39;: &#39;https://code.jquery.com/jquery-3.4.1.min.js&#39;,
+        &#39;popper&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js&#39;,
+        &#39;bootstrap4&#39;: &#39;https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js&#39;
+    }
+    &#34;&#34;&#34;
+    Static nested dictionary containing links to external scripts that will be rendered alongside this plugin
+    &#34;&#34;&#34;
+
+    def __init__(self, **kwargs):
+        super(ApprovedExternalScripts, self).__init__(**kwargs)
+        self.attr_dict = AttrDict(self.SCRIPT_MAP)
+
+
+    def to_script(self, config, **kwargs):
+        &#34;&#34;&#34;
+        Converts a dot-notation key for nested dictionaries (e.g., &#39;reveal.base&#39;) into a
+        string containing an html fragement with `&lt;script&gt;` tags.  The dot-notation key 
+        is pulled from the &#39;approved_styles_key&#39; of the &#39;config&#39; attrubte of subclass 
+        of a `presalytics.story.outline.Plugin` object.
+        &#34;&#34;&#34;
+        key = config[&#39;approved_scripts_key&#39;]
+        link = self.attr_dict.flatten()[key]
+        if link is None:
+            message = &#34;Key {0} does not reference a link in the APPROVED_SCRIPTS dictionary&#34;.format(key)
+            raise presalytics.lib.exceptions.MissingConfigException(message)
+        return &#39;&lt;script type=&#34;text/javascript&#34; src=&#34;{0}&#34;&gt;&lt;/script&gt;&#39;.format(link)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.plugins.base.ScriptPlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.ScriptPlugin">ScriptPlugin</a></li>
+<li><a title="presalytics.lib.plugins.base.PluginBase" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase">PluginBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.lib.plugins.external.ApprovedExternalScripts.SCRIPT_MAP"><code class="name">var <span class="ident">SCRIPT_MAP</span></code></dt>
+<dd>
+<section class="desc"><p>Static nested dictionary containing links to external scripts that will be rendered alongside this plugin</p></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.plugins.external.ApprovedExternalScripts.to_script"><code class="name flex">
+<span>def <span class="ident">to_script</span></span>(<span>self, config, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Converts a dot-notation key for nested dictionaries (e.g., 'reveal.base') into a
+string containing an html fragement with <code>&lt;script&gt;</code> tags.
+The dot-notation key
+is pulled from the 'approved_styles_key' of the 'config' attrubte of subclass
+of a <a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin"><code>Plugin</code></a> object.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L144-L156" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_script(self, config, **kwargs):
+    &#34;&#34;&#34;
+    Converts a dot-notation key for nested dictionaries (e.g., &#39;reveal.base&#39;) into a
+    string containing an html fragement with `&lt;script&gt;` tags.  The dot-notation key 
+    is pulled from the &#39;approved_styles_key&#39; of the &#39;config&#39; attrubte of subclass 
+    of a `presalytics.story.outline.Plugin` object.
+    &#34;&#34;&#34;
+    key = config[&#39;approved_scripts_key&#39;]
+    link = self.attr_dict.flatten()[key]
+    if link is None:
+        message = &#34;Key {0} does not reference a link in the APPROVED_SCRIPTS dictionary&#34;.format(key)
+        raise presalytics.lib.exceptions.MissingConfigException(message)
+    return &#39;&lt;script type=&#34;text/javascript&#34; src=&#34;{0}&#34;&gt;&lt;/script&gt;&#39;.format(link)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.lib.plugins.base.ScriptPlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.ScriptPlugin">ScriptPlugin</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.lib.plugins.base.ScriptPlugin.get_tag" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase.get_tag">get_tag</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -381,19 +551,24 @@ def from_nested_dict(data):
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="presalytics.lib.plugins.external.AttrDict" href="/python-client/presalytics/lib/plugins/external.html#presalytics.lib.plugins.external.AttrDict">AttrDict</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.lib.plugins.external.AttrDict.from_nested_dict" href="/python-client/presalytics/lib/plugins/external.html#presalytics.lib.plugins.external.AttrDict.from_nested_dict">from_nested_dict</a></code></li>
+<li><code><a title="presalytics.lib.plugins.external.AttrDict.flatten" href="/python-client/presalytics/lib/plugins/external.html#presalytics.lib.plugins.external.AttrDict.flatten">flatten</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="presalytics.lib.plugins.external.ApprovedExternalLinks" href="/python-client/presalytics/lib/plugins/external.html#presalytics.lib.plugins.external.ApprovedExternalLinks">ApprovedExternalLinks</a></code></h4>
 <ul class="">
 <li><code><a title="presalytics.lib.plugins.external.ApprovedExternalLinks.to_style" href="/python-client/presalytics/lib/plugins/external.html#presalytics.lib.plugins.external.ApprovedExternalLinks.to_style">to_style</a></code></li>
+<li><code><a title="presalytics.lib.plugins.external.ApprovedExternalLinks.STYLES_MAP" href="/python-client/presalytics/lib/plugins/external.html#presalytics.lib.plugins.external.ApprovedExternalLinks.STYLES_MAP">STYLES_MAP</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="presalytics.lib.plugins.external.ApprovedExternalScripts" href="/python-client/presalytics/lib/plugins/external.html#presalytics.lib.plugins.external.ApprovedExternalScripts">ApprovedExternalScripts</a></code></h4>
-</li>
-<li>
-<h4><code><a title="presalytics.lib.plugins.external.AttrDict" href="/python-client/presalytics/lib/plugins/external.html#presalytics.lib.plugins.external.AttrDict">AttrDict</a></code></h4>
 <ul class="">
-<li><code><a title="presalytics.lib.plugins.external.AttrDict.flatten" href="/python-client/presalytics/lib/plugins/external.html#presalytics.lib.plugins.external.AttrDict.flatten">flatten</a></code></li>
-<li><code><a title="presalytics.lib.plugins.external.AttrDict.from_nested_dict" href="/python-client/presalytics/lib/plugins/external.html#presalytics.lib.plugins.external.AttrDict.from_nested_dict">from_nested_dict</a></code></li>
+<li><code><a title="presalytics.lib.plugins.external.ApprovedExternalScripts.to_script" href="/python-client/presalytics/lib/plugins/external.html#presalytics.lib.plugins.external.ApprovedExternalScripts.to_script">to_script</a></code></li>
+<li><code><a title="presalytics.lib.plugins.external.ApprovedExternalScripts.SCRIPT_MAP" href="/python-client/presalytics/lib/plugins/external.html#presalytics.lib.plugins.external.ApprovedExternalScripts.SCRIPT_MAP">SCRIPT_MAP</a></code></li>
 </ul>
 </li>
 </ul>

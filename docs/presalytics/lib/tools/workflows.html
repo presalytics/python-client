@@ -1,0 +1,812 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>presalytics.lib.tools.workflows API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>presalytics.lib.tools.workflows</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L0-L292" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">import typing
+import os
+import sys
+import json
+import jsonpatch
+import jsonpointer
+import logging
+import presalytics.client.api
+import presalytics.lib.tools.story_tools
+import presalytics.story.outline
+import presalytics.story.components
+if typing.TYPE_CHECKING:
+    from presalytics.story.components import ComponentBase, WidgetBase
+    from presalytics.story.outline import StoryOutline
+
+logger = logging.getLogger(__name__)
+
+def update_components(filename=None):
+    autodiscover_paths = presalytics.COMPONENTS.autodiscover_paths
+    dirname = os.path.dirname(filename)
+    if os.path.exists(dirname) and dirname not in autodiscover_paths:
+        autodiscover_paths.append(dirname)
+    cwd = os.getcwd()
+    abs_filedir = os.path.join(cwd, dirname)
+    if os.path.exists(abs_filedir) and abs_filedir not in autodiscover_paths:
+        autodiscover_paths.append(abs_filedir)
+    if len(autodiscover_paths) &gt; len(presalytics.COMPONENTS.autodiscover_paths):
+        presalytics.COMPONENTS = presalytics.story.components.ComponentRegistry(autodiscover_paths=autodiscover_paths, 
+                                                                                reserved_names=presalytics.CONFIG.get(&#34;RESERVED_NAMES&#34;, []))
+
+def get_component(name, filename=None):
+    inst: &#39;ComponentBase&#39;
+
+    if filename:
+        update_components(filename=filename)            
+    component_list = presalytics.COMPONENTS.find_instance(name)
+    if len(component_list) == 0:
+        message = &#34;Could not find an instance with name &#39;{0}&#39; in the COMPONENTS registry&#34;.format(name)
+        presalytics.COMPONENTS.raise_error(message)
+    elif len(component_list) &gt; 1:
+        components_str = &#34;, &#34;.join(component_list)
+        message = &#34;Multiple matches for name in COMPONENTS registry.  Choose from: &#34; + components_str
+        presalytics.COMPONENTS.raise_error(message)
+    elif len(component_list) == 1:
+        return presalytics.COMPONENTS.get_instance(component_list[0])
+    else:
+        message = &#34;Error searching the COMPONENTS registry&#34;
+        presalytics.COMPONENTS.raise_error(message)
+
+def add_widget_instance(widget_name, outline, position=None, page_number=0, filename=None):
+    inst: &#39;WidgetBase&#39;
+    outline: &#39;StoryOutline&#39;
+
+    inst = get_component(widget_name, filename=filename)
+    widget = inst.serialize()
+    if not page_number:
+        page_number = 0
+    if page_number &gt; len(outline.pages):
+        message = &#34;The story has fewer than {} pages&#34;.format(page_number)
+        raise presalytics.lib.exceptions.InvalidArgumentException(message=message)
+    if not position:
+        position = len(outline.pages[page_number].widgets)
+    outline.pages[page_number].widgets.insert(position, widget)
+
+    return outline
+
+def remove_widget_by_name(widget_name, outline, page_number=None, filename=None):
+    inst: &#39;WidgetBase&#39;
+    outline: &#39;StoryOutline&#39;
+
+    if page_number:
+        start = page_number
+        stop = page_number
+    else:
+        start = 0
+        stop = len(outline.pages)
+    
+    for p in range(start, stop):
+        page = outline.pages[p]
+        for w in range(0, len(page.widgets)):
+            if page.widgets[w].name == widget_name:
+                page.widgets.pop(w)
+    
+    return outline
+
+
+
+def create_from_instance(name, widget=False, page=False, filename=None) -&gt; &#39;StoryOutline&#39;: #type: ignore
+    &#34;&#34;&#34;
+    Creates a Story Outline from an instance name in `presalytics.COMPONENTS`
+    &#34;&#34;&#34;
+    inst: &#39;ComponentBase&#39;
+
+    inst = get_component(name)
+    if page:
+        outline = presalytics.lib.tools.component_tools.create_outline_from_page(inst) #type: ignore
+    elif widget:
+        outline = presalytics.lib.tools.component_tools.create_outline_from_widget(inst) #type: ignore
+    else:
+        raise presalytics.lib.exceptions.InvalidArgumentException(&#34;Either the &#39;widget&#39; or &#39;page&#39; paramters must be true.&#34;)
+    return outline
+
+
+
+def push_outline(outline, username=None, password=None) -&gt; &#39;StoryOutline&#39;:
+    &#34;&#34;&#34;
+    Updates an outline in the Presalytics API Story service
+    &#34;&#34;&#34;
+    client = presalytics.client.api.Client(username=username, password=password)
+    if outline.story_id == &#34;empty&#34; or not outline.story_id:
+        story = client.story.story_post(outline.dump())
+    else:
+        old_story = client.story.story_id_get(outline.story_id)
+        old_story.outline = outline.dump()
+        story = client.story.story_id_put(outline.story_id, old_story)
+    return presalytics.story.outline.StoryOutline.load(story.outline)
+
+
+def pull_outline(story_id, username=None, password=None) -&gt; &#39;StoryOutline&#39;:
+    &#34;&#34;&#34;
+    Retrives an outline from the Presalytics API Story service
+    &#34;&#34;&#34;
+    client = presalytics.client.api.Client(username=username, password=password)
+    if story_id == &#34;empty&#34; or not story_id:
+        message = &#34;The story_id must not be empty&#34;
+        raise presalytics.lib.exceptions.InvalidArgumentException(message)
+    story = client.story.story_id_get(story_id)
+    return presalytics.story.outline.StoryOutline.load(story.outline)
+
+
+def delete_all_stories(username=None, password=None):
+    &#34;&#34;&#34;
+    WARNING!!! 
+    
+    Delete all stories owned by this user
+
+    BE CAREFUL!!!    
+    &#34;&#34;&#34;
+    client = presalytics.client.api.Client(username=username, password=password)
+    stories = client.story.story_get()
+    ids = [s.id for s in stories]
+    for id in ids:
+        client.story.story_id_delete(id)
+
+
+def delete_by_id(story_id, username=None, password=None):
+    &#34;&#34;&#34;
+    Delete stories by Story Id
+    &#34;&#34;&#34;
+    client = presalytics.client.api.Client(username=username, password=password)
+    client.story.story_id_delete(story_id)
+
+def share_story(story_id,
+                emails=None, 
+                user_ids=None, 
+                username=None, 
+                password=None,
+                collaborator_type=&#34;viewer&#34;):
+    &#34;&#34;&#34;
+    Share stories with other users. Either by email or Presalytics API user Id.
+    &#34;&#34;&#34;
+    client = presalytics.client.api.Client(username=username, password=password)
+    if emails:
+        email_list = emails.split(&#34;,&#34;)
+        for e in email_list:
+            body = {
+                &#34;user_email&#34;: e,
+                &#34;collaborator_type&#34;: collaborator_type,
+                &#34;user_id&#34;: &#34;&#34;
+            }
+            client.story.story_id_collaborators_post(story_id, body)
+    if user_ids:
+        user_id_list = user_ids.split(&#34;,&#34;)
+        for _id in user_id_list:
+            body = {
+                &#34;user_email&#34;: &#34;&#34;,
+                &#34;collaborator_type&#34;: collaborator_type,
+                &#34;user_id&#34;: _id
+            }
+            client.story.story_id_collaborators_post(story_id, body)
+
+def get_story(story_id):
+    &#34;&#34;&#34;
+    returns Story metadata from the story API
+    &#34;&#34;&#34;
+    client = presalytics.client.api.Client()
+    return client.story.story_id_get(story_id, include_relationships=True)
+
+def create_config_file(username, password=None, set_dict={}, overwrite=False):
+    config_file = os.path.join(os.getcwd(), &#34;config.py&#34;)
+    if os.path.exists(config_file):
+        if overwrite:
+            os.remove(config_file)
+        else:
+            logger.error(&#34;Configuration file exists.  Use option [--overwrite] to overwrite.&#34;)
+            raise ValueError
+    dump = {&#34;USERNAME&#34;: username}
+    if password:
+        dump.update({&#34;PASSWORD&#34;: password})
+    if len(set_dict.keys()) &gt; 0:
+        dump.update(set_dict)
+    content = &#34;PRESALYTICS = &#34; + repr(dump)
+    with open(config_file, &#39;w&#39;) as f:
+        f.write(content)
+
+def create_cron_target():
+    if sys.platform.startswith(&#34;linux&#34;):
+        cron_command = &#34;* * * * * cd {0} &amp;&amp; {1} -m presalytics push&#34;.format(os.getcwd(), sys.executable)
+        print(&#34;Place the following line in your cron file:&#34;)
+        print(cron_command)
+    elif sys.platform.startswith(&#34;win&#34;):
+        command = os.environ[&#34;VIRTUAL_ENV&#34;] + &#34;/Scripts/activate.bat &amp;&amp; python -m presalytics push&#34;
+        filename = os.path.join(os.getcwd(), &#34;story-push.bat&#34;)
+        with open(filename, &#39;w&#39;) as f:
+            f.write(command)
+        print(&#34;A file named &#39;story-push.bat was just placed in the current working directory.  Add this file in the &#39;Windows Task Scheduler&#39;.&#34;)
+    else:
+        logger.error(&#34;Unknown operating system.&#34;)
+        raise ValueError
+
+def apply_json_patch(outline, patch):
+    &#34;&#34;&#34;
+    Allows users to apply json patches to thier Story Outlines.
+
+    See https://python-json-patch.readthedocs.io/en/latest/index.html for more info.
+
+    Parameters:
+    ----------
+
+    outline: presaltyics.story.outline.StoryOutline
+        A Story Outline object
+
+    patch: str or dict
+        Either an RFC 6901 compliant string or a dictionary with op, path, and value keys.  The
+        dictionary is for ease of use and will get parsed into a compliant string.
+    &#34;&#34;&#34;
+    outline: &#39;StoryOutline&#39;
+
+    if isinstance(patch, dict):
+        _json = json.dumps(patch)
+        patch = &#39;[{}]&#39;.format(_json)
+    outline_dict = outline.to_dict()
+    try:
+        new_dict = jsonpatch.apply_patch(outline_dict, patch)
+    except (jsonpatch.JsonPatchException, jsonpointer.JsonPointerException) as ex:
+        message = &#34;Unable to apply Json patch: {}&#34;.format(ex.args[0])
+        raise presalytics.lib.exceptions.InvalidArgumentException(message=message)
+    new_outline = presalytics.story.outline.StoryOutline.deserialize(new_dict)
+    return new_outline
+
+def update_outline(outline, filename=None, message=None):
+    &#34;&#34;&#34;
+    Updates the the outline from active instances in the workspace
+    &#34;&#34;&#34;
+    if not message:
+        message = &#34;Automated update via presalytics.lib.tools.workflows.update_outline()&#34;
+    
+    update_components(filename=filename)
+
+    for p in range(0, len(outline.pages)):
+        page = outline.pages[p]
+
+        page_key = &#34;page.{}.{}&#34;.format(page.kind, page.name)
+        page_inst = presalytics.COMPONENTS.get_instance(page_key)
+        if page_inst:
+            outline.pages[p] = page_inst.serialize()
+        
+        for w in range(0, len(page.widgets)):
+            widget = outline.pages[p].widgets[w]
+
+            widget_key = &#34;widget.{}.{}&#34;.format(widget.kind, widget.name)
+            widget_inst = presalytics.COMPONENTS.get_instance(widget_key)
+            if widget_inst:
+                outline.pages[p].widgets[w] = widget_inst.serialize() 
+
+    
+    for t in range(0, len(outline.themes)):
+        theme = outline.themes[t]
+
+        theme_key = &#34;theme.{}.{}&#34;.format(theme.kind, theme.name)
+        theme_inst = presalytics.COMPONENTS.get_instance(theme_key)
+        if theme_inst:
+            outline.themes[t] = theme_inst.serialize()
+    
+    outline.info.revision_notes = message
+    return outline
+
+
+    
+    
+
+
+    </code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="presalytics.lib.tools.workflows.update_components"><code class="name flex">
+<span>def <span class="ident">update_components</span></span>(<span>filename=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L18-L29" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def update_components(filename=None):
+    autodiscover_paths = presalytics.COMPONENTS.autodiscover_paths
+    dirname = os.path.dirname(filename)
+    if os.path.exists(dirname) and dirname not in autodiscover_paths:
+        autodiscover_paths.append(dirname)
+    cwd = os.getcwd()
+    abs_filedir = os.path.join(cwd, dirname)
+    if os.path.exists(abs_filedir) and abs_filedir not in autodiscover_paths:
+        autodiscover_paths.append(abs_filedir)
+    if len(autodiscover_paths) &gt; len(presalytics.COMPONENTS.autodiscover_paths):
+        presalytics.COMPONENTS = presalytics.story.components.ComponentRegistry(autodiscover_paths=autodiscover_paths, 
+                                                                                reserved_names=presalytics.CONFIG.get(&#34;RESERVED_NAMES&#34;, []))</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.tools.workflows.get_component"><code class="name flex">
+<span>def <span class="ident">get_component</span></span>(<span>name, filename=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L31-L48" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_component(name, filename=None):
+    inst: &#39;ComponentBase&#39;
+
+    if filename:
+        update_components(filename=filename)            
+    component_list = presalytics.COMPONENTS.find_instance(name)
+    if len(component_list) == 0:
+        message = &#34;Could not find an instance with name &#39;{0}&#39; in the COMPONENTS registry&#34;.format(name)
+        presalytics.COMPONENTS.raise_error(message)
+    elif len(component_list) &gt; 1:
+        components_str = &#34;, &#34;.join(component_list)
+        message = &#34;Multiple matches for name in COMPONENTS registry.  Choose from: &#34; + components_str
+        presalytics.COMPONENTS.raise_error(message)
+    elif len(component_list) == 1:
+        return presalytics.COMPONENTS.get_instance(component_list[0])
+    else:
+        message = &#34;Error searching the COMPONENTS registry&#34;
+        presalytics.COMPONENTS.raise_error(message)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.tools.workflows.add_widget_instance"><code class="name flex">
+<span>def <span class="ident">add_widget_instance</span></span>(<span>widget_name, outline, position=None, page_number=0, filename=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L50-L65" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def add_widget_instance(widget_name, outline, position=None, page_number=0, filename=None):
+    inst: &#39;WidgetBase&#39;
+    outline: &#39;StoryOutline&#39;
+
+    inst = get_component(widget_name, filename=filename)
+    widget = inst.serialize()
+    if not page_number:
+        page_number = 0
+    if page_number &gt; len(outline.pages):
+        message = &#34;The story has fewer than {} pages&#34;.format(page_number)
+        raise presalytics.lib.exceptions.InvalidArgumentException(message=message)
+    if not position:
+        position = len(outline.pages[page_number].widgets)
+    outline.pages[page_number].widgets.insert(position, widget)
+
+    return outline</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.tools.workflows.remove_widget_by_name"><code class="name flex">
+<span>def <span class="ident">remove_widget_by_name</span></span>(<span>widget_name, outline, page_number=None, filename=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L67-L84" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def remove_widget_by_name(widget_name, outline, page_number=None, filename=None):
+    inst: &#39;WidgetBase&#39;
+    outline: &#39;StoryOutline&#39;
+
+    if page_number:
+        start = page_number
+        stop = page_number
+    else:
+        start = 0
+        stop = len(outline.pages)
+    
+    for p in range(start, stop):
+        page = outline.pages[p]
+        for w in range(0, len(page.widgets)):
+            if page.widgets[w].name == widget_name:
+                page.widgets.pop(w)
+    
+    return outline</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.tools.workflows.create_from_instance"><code class="name flex">
+<span>def <span class="ident">create_from_instance</span></span>(<span>name, widget=False, page=False, filename=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Creates a Story Outline from an instance name in <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS"><code>COMPONENTS</code></a></p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L88-L101" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def create_from_instance(name, widget=False, page=False, filename=None) -&gt; &#39;StoryOutline&#39;: #type: ignore
+    &#34;&#34;&#34;
+    Creates a Story Outline from an instance name in `presalytics.COMPONENTS`
+    &#34;&#34;&#34;
+    inst: &#39;ComponentBase&#39;
+
+    inst = get_component(name)
+    if page:
+        outline = presalytics.lib.tools.component_tools.create_outline_from_page(inst) #type: ignore
+    elif widget:
+        outline = presalytics.lib.tools.component_tools.create_outline_from_widget(inst) #type: ignore
+    else:
+        raise presalytics.lib.exceptions.InvalidArgumentException(&#34;Either the &#39;widget&#39; or &#39;page&#39; paramters must be true.&#34;)
+    return outline</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.tools.workflows.push_outline"><code class="name flex">
+<span>def <span class="ident">push_outline</span></span>(<span>outline, username=None, password=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Updates an outline in the Presalytics API Story service</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L105-L116" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def push_outline(outline, username=None, password=None) -&gt; &#39;StoryOutline&#39;:
+    &#34;&#34;&#34;
+    Updates an outline in the Presalytics API Story service
+    &#34;&#34;&#34;
+    client = presalytics.client.api.Client(username=username, password=password)
+    if outline.story_id == &#34;empty&#34; or not outline.story_id:
+        story = client.story.story_post(outline.dump())
+    else:
+        old_story = client.story.story_id_get(outline.story_id)
+        old_story.outline = outline.dump()
+        story = client.story.story_id_put(outline.story_id, old_story)
+    return presalytics.story.outline.StoryOutline.load(story.outline)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.tools.workflows.pull_outline"><code class="name flex">
+<span>def <span class="ident">pull_outline</span></span>(<span>story_id, username=None, password=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Retrives an outline from the Presalytics API Story service</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L119-L128" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def pull_outline(story_id, username=None, password=None) -&gt; &#39;StoryOutline&#39;:
+    &#34;&#34;&#34;
+    Retrives an outline from the Presalytics API Story service
+    &#34;&#34;&#34;
+    client = presalytics.client.api.Client(username=username, password=password)
+    if story_id == &#34;empty&#34; or not story_id:
+        message = &#34;The story_id must not be empty&#34;
+        raise presalytics.lib.exceptions.InvalidArgumentException(message)
+    story = client.story.story_id_get(story_id)
+    return presalytics.story.outline.StoryOutline.load(story.outline)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.tools.workflows.delete_all_stories"><code class="name flex">
+<span>def <span class="ident">delete_all_stories</span></span>(<span>username=None, password=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>WARNING!!! </p>
+<p>Delete all stories owned by this user</p>
+<p>BE CAREFUL!!!</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L131-L143" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def delete_all_stories(username=None, password=None):
+    &#34;&#34;&#34;
+    WARNING!!! 
+    
+    Delete all stories owned by this user
+
+    BE CAREFUL!!!    
+    &#34;&#34;&#34;
+    client = presalytics.client.api.Client(username=username, password=password)
+    stories = client.story.story_get()
+    ids = [s.id for s in stories]
+    for id in ids:
+        client.story.story_id_delete(id)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.tools.workflows.delete_by_id"><code class="name flex">
+<span>def <span class="ident">delete_by_id</span></span>(<span>story_id, username=None, password=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Delete stories by Story Id</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L146-L151" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def delete_by_id(story_id, username=None, password=None):
+    &#34;&#34;&#34;
+    Delete stories by Story Id
+    &#34;&#34;&#34;
+    client = presalytics.client.api.Client(username=username, password=password)
+    client.story.story_id_delete(story_id)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.tools.workflows.share_story"><code class="name flex">
+<span>def <span class="ident">share_story</span></span>(<span>story_id, emails=None, user_ids=None, username=None, password=None, collaborator_type='viewer')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Share stories with other users. Either by email or Presalytics API user Id.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L153-L180" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def share_story(story_id,
+                emails=None, 
+                user_ids=None, 
+                username=None, 
+                password=None,
+                collaborator_type=&#34;viewer&#34;):
+    &#34;&#34;&#34;
+    Share stories with other users. Either by email or Presalytics API user Id.
+    &#34;&#34;&#34;
+    client = presalytics.client.api.Client(username=username, password=password)
+    if emails:
+        email_list = emails.split(&#34;,&#34;)
+        for e in email_list:
+            body = {
+                &#34;user_email&#34;: e,
+                &#34;collaborator_type&#34;: collaborator_type,
+                &#34;user_id&#34;: &#34;&#34;
+            }
+            client.story.story_id_collaborators_post(story_id, body)
+    if user_ids:
+        user_id_list = user_ids.split(&#34;,&#34;)
+        for _id in user_id_list:
+            body = {
+                &#34;user_email&#34;: &#34;&#34;,
+                &#34;collaborator_type&#34;: collaborator_type,
+                &#34;user_id&#34;: _id
+            }
+            client.story.story_id_collaborators_post(story_id, body)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.tools.workflows.get_story"><code class="name flex">
+<span>def <span class="ident">get_story</span></span>(<span>story_id)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>returns Story metadata from the story API</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L182-L187" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_story(story_id):
+    &#34;&#34;&#34;
+    returns Story metadata from the story API
+    &#34;&#34;&#34;
+    client = presalytics.client.api.Client()
+    return client.story.story_id_get(story_id, include_relationships=True)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.tools.workflows.create_config_file"><code class="name flex">
+<span>def <span class="ident">create_config_file</span></span>(<span>username, password=None, set_dict={}, overwrite=False)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L189-L204" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def create_config_file(username, password=None, set_dict={}, overwrite=False):
+    config_file = os.path.join(os.getcwd(), &#34;config.py&#34;)
+    if os.path.exists(config_file):
+        if overwrite:
+            os.remove(config_file)
+        else:
+            logger.error(&#34;Configuration file exists.  Use option [--overwrite] to overwrite.&#34;)
+            raise ValueError
+    dump = {&#34;USERNAME&#34;: username}
+    if password:
+        dump.update({&#34;PASSWORD&#34;: password})
+    if len(set_dict.keys()) &gt; 0:
+        dump.update(set_dict)
+    content = &#34;PRESALYTICS = &#34; + repr(dump)
+    with open(config_file, &#39;w&#39;) as f:
+        f.write(content)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.tools.workflows.create_cron_target"><code class="name flex">
+<span>def <span class="ident">create_cron_target</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L206-L219" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def create_cron_target():
+    if sys.platform.startswith(&#34;linux&#34;):
+        cron_command = &#34;* * * * * cd {0} &amp;&amp; {1} -m presalytics push&#34;.format(os.getcwd(), sys.executable)
+        print(&#34;Place the following line in your cron file:&#34;)
+        print(cron_command)
+    elif sys.platform.startswith(&#34;win&#34;):
+        command = os.environ[&#34;VIRTUAL_ENV&#34;] + &#34;/Scripts/activate.bat &amp;&amp; python -m presalytics push&#34;
+        filename = os.path.join(os.getcwd(), &#34;story-push.bat&#34;)
+        with open(filename, &#39;w&#39;) as f:
+            f.write(command)
+        print(&#34;A file named &#39;story-push.bat was just placed in the current working directory.  Add this file in the &#39;Windows Task Scheduler&#39;.&#34;)
+    else:
+        logger.error(&#34;Unknown operating system.&#34;)
+        raise ValueError</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.tools.workflows.apply_json_patch"><code class="name flex">
+<span>def <span class="ident">apply_json_patch</span></span>(<span>outline, patch)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Allows users to apply json patches to thier Story Outlines.</p>
+<p>See <a href="https://python-json-patch.readthedocs.io/en/latest/index.html">https://python-json-patch.readthedocs.io/en/latest/index.html</a> for more info.</p>
+<h2 id="parameters">Parameters:</h2>
+<p>outline: presaltyics.story.outline.StoryOutline
+A Story Outline object</p>
+<p>patch: str or dict
+Either an RFC 6901 compliant string or a dictionary with op, path, and value keys.
+The
+dictionary is for ease of use and will get parsed into a compliant string.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L221-L249" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def apply_json_patch(outline, patch):
+    &#34;&#34;&#34;
+    Allows users to apply json patches to thier Story Outlines.
+
+    See https://python-json-patch.readthedocs.io/en/latest/index.html for more info.
+
+    Parameters:
+    ----------
+
+    outline: presaltyics.story.outline.StoryOutline
+        A Story Outline object
+
+    patch: str or dict
+        Either an RFC 6901 compliant string or a dictionary with op, path, and value keys.  The
+        dictionary is for ease of use and will get parsed into a compliant string.
+    &#34;&#34;&#34;
+    outline: &#39;StoryOutline&#39;
+
+    if isinstance(patch, dict):
+        _json = json.dumps(patch)
+        patch = &#39;[{}]&#39;.format(_json)
+    outline_dict = outline.to_dict()
+    try:
+        new_dict = jsonpatch.apply_patch(outline_dict, patch)
+    except (jsonpatch.JsonPatchException, jsonpointer.JsonPointerException) as ex:
+        message = &#34;Unable to apply Json patch: {}&#34;.format(ex.args[0])
+        raise presalytics.lib.exceptions.InvalidArgumentException(message=message)
+    new_outline = presalytics.story.outline.StoryOutline.deserialize(new_dict)
+    return new_outline</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.tools.workflows.update_outline"><code class="name flex">
+<span>def <span class="ident">update_outline</span></span>(<span>outline, filename=None, message=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Updates the the outline from active instances in the workspace</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L251-L286" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def update_outline(outline, filename=None, message=None):
+    &#34;&#34;&#34;
+    Updates the the outline from active instances in the workspace
+    &#34;&#34;&#34;
+    if not message:
+        message = &#34;Automated update via presalytics.lib.tools.workflows.update_outline()&#34;
+    
+    update_components(filename=filename)
+
+    for p in range(0, len(outline.pages)):
+        page = outline.pages[p]
+
+        page_key = &#34;page.{}.{}&#34;.format(page.kind, page.name)
+        page_inst = presalytics.COMPONENTS.get_instance(page_key)
+        if page_inst:
+            outline.pages[p] = page_inst.serialize()
+        
+        for w in range(0, len(page.widgets)):
+            widget = outline.pages[p].widgets[w]
+
+            widget_key = &#34;widget.{}.{}&#34;.format(widget.kind, widget.name)
+            widget_inst = presalytics.COMPONENTS.get_instance(widget_key)
+            if widget_inst:
+                outline.pages[p].widgets[w] = widget_inst.serialize() 
+
+    
+    for t in range(0, len(outline.themes)):
+        theme = outline.themes[t]
+
+        theme_key = &#34;theme.{}.{}&#34;.format(theme.kind, theme.name)
+        theme_inst = presalytics.COMPONENTS.get_instance(theme_key)
+        if theme_inst:
+            outline.themes[t] = theme_inst.serialize()
+    
+    outline.info.revision_notes = message
+    return outline</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="presalytics.lib.tools" href="/python-client/presalytics/lib/tools/index.html">presalytics.lib.tools</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="presalytics.lib.tools.workflows.update_components" href="/python-client/presalytics/lib/tools/workflows.html#presalytics.lib.tools.workflows.update_components">update_components</a></code></li>
+<li><code><a title="presalytics.lib.tools.workflows.get_component" href="/python-client/presalytics/lib/tools/workflows.html#presalytics.lib.tools.workflows.get_component">get_component</a></code></li>
+<li><code><a title="presalytics.lib.tools.workflows.add_widget_instance" href="/python-client/presalytics/lib/tools/workflows.html#presalytics.lib.tools.workflows.add_widget_instance">add_widget_instance</a></code></li>
+<li><code><a title="presalytics.lib.tools.workflows.remove_widget_by_name" href="/python-client/presalytics/lib/tools/workflows.html#presalytics.lib.tools.workflows.remove_widget_by_name">remove_widget_by_name</a></code></li>
+<li><code><a title="presalytics.lib.tools.workflows.create_from_instance" href="/python-client/presalytics/lib/tools/workflows.html#presalytics.lib.tools.workflows.create_from_instance">create_from_instance</a></code></li>
+<li><code><a title="presalytics.lib.tools.workflows.push_outline" href="/python-client/presalytics/lib/tools/workflows.html#presalytics.lib.tools.workflows.push_outline">push_outline</a></code></li>
+<li><code><a title="presalytics.lib.tools.workflows.pull_outline" href="/python-client/presalytics/lib/tools/workflows.html#presalytics.lib.tools.workflows.pull_outline">pull_outline</a></code></li>
+<li><code><a title="presalytics.lib.tools.workflows.delete_all_stories" href="/python-client/presalytics/lib/tools/workflows.html#presalytics.lib.tools.workflows.delete_all_stories">delete_all_stories</a></code></li>
+<li><code><a title="presalytics.lib.tools.workflows.delete_by_id" href="/python-client/presalytics/lib/tools/workflows.html#presalytics.lib.tools.workflows.delete_by_id">delete_by_id</a></code></li>
+<li><code><a title="presalytics.lib.tools.workflows.share_story" href="/python-client/presalytics/lib/tools/workflows.html#presalytics.lib.tools.workflows.share_story">share_story</a></code></li>
+<li><code><a title="presalytics.lib.tools.workflows.get_story" href="/python-client/presalytics/lib/tools/workflows.html#presalytics.lib.tools.workflows.get_story">get_story</a></code></li>
+<li><code><a title="presalytics.lib.tools.workflows.create_config_file" href="/python-client/presalytics/lib/tools/workflows.html#presalytics.lib.tools.workflows.create_config_file">create_config_file</a></code></li>
+<li><code><a title="presalytics.lib.tools.workflows.create_cron_target" href="/python-client/presalytics/lib/tools/workflows.html#presalytics.lib.tools.workflows.create_cron_target">create_cron_target</a></code></li>
+<li><code><a title="presalytics.lib.tools.workflows.apply_json_patch" href="/python-client/presalytics/lib/tools/workflows.html#presalytics.lib.tools.workflows.apply_json_patch">apply_json_patch</a></code></li>
+<li><code><a title="presalytics.lib.tools.workflows.update_outline" href="/python-client/presalytics/lib/tools/workflows.html#presalytics.lib.tools.workflows.update_outline">update_outline</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

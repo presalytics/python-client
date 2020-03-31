@@ -63,7 +63,7 @@ class ComponentBase(abc.ABC):
     __plugins__ : list of dict
         A list of dictionaries that reference `presalytics.story.outline.Plugin` configurations.  When a 
         `presaltytics.story.components.Renderer` is initialized, it will load these plugins into the
-        rendered.  This allows plugins to be statically configured on `presalytics.story.component` classes,
+        rendered.  This allows plugins to be statically configured on `presalytics.story.components` classes,
         in lieu dynamic configurations on `presalytics.story.outline.StoryOutline` instances.
 
     client_info : str

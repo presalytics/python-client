@@ -193,52 +193,20 @@ if __name__ == &#39;__main__&#39;:
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="presalytics.story.server.favicon"><code class="name flex">
-<span>def <span class="ident">favicon</span></span>(<span>)</span>
+<dt id="presalytics.story.server.story"><code class="name flex">
+<span>def <span class="ident">story</span></span>(<span>id)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L43-L45" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L20-L23" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">@app.route(&#39;/favicon.ico&#39;)
-def favicon():
-    return flask.send_from_directory(app.static_folder, &#39;favicon.ico&#39;)</code></pre>
-</details>
-</dd>
-<dt id="presalytics.story.server.shutdown"><code class="name flex">
-<span>def <span class="ident">shutdown</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L48-L52" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@app.route(&#39;/shutdown&#39;, methods=[&#39;POST&#39;])
-def shutdown():
-    shutdown_func = flask.request.environ.get(&#39;werkzeug.server.shutdown&#39;)
-    shutdown_func()
-    return &#39;Server shutting down...&#39;</code></pre>
-</details>
-</dd>
-<dt id="presalytics.story.server.static_css"><code class="name flex">
-<span>def <span class="ident">static_css</span></span>(<span>filename=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L37-L40" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@app.route(&#39;/css/&lt;path:filename&gt;/&#39;)
-def static_css(filename=None):
-    directory = os.path.join(app.static_folder, &#34;css&#34;)
-    return flask.send_from_directory(directory, filename)</code></pre>
+<pre><code class="python">@app.route(&#39;/story/&lt;id&gt;&#39;)
+def story(id):
+    template_name = str(id) + &#39;.html&#39;
+    return flask.render_template(template_name)</code></pre>
 </details>
 </dd>
 <dt id="presalytics.story.server.static_img"><code class="name flex">
@@ -273,20 +241,52 @@ def static_js(filename=None):
     return flask.send_from_directory(directory, filename)</code></pre>
 </details>
 </dd>
-<dt id="presalytics.story.server.story"><code class="name flex">
-<span>def <span class="ident">story</span></span>(<span>id)</span>
+<dt id="presalytics.story.server.static_css"><code class="name flex">
+<span>def <span class="ident">static_css</span></span>(<span>filename=None)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L20-L23" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L37-L40" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">@app.route(&#39;/story/&lt;id&gt;&#39;)
-def story(id):
-    template_name = str(id) + &#39;.html&#39;
-    return flask.render_template(template_name)</code></pre>
+<pre><code class="python">@app.route(&#39;/css/&lt;path:filename&gt;/&#39;)
+def static_css(filename=None):
+    directory = os.path.join(app.static_folder, &#34;css&#34;)
+    return flask.send_from_directory(directory, filename)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.server.favicon"><code class="name flex">
+<span>def <span class="ident">favicon</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L43-L45" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@app.route(&#39;/favicon.ico&#39;)
+def favicon():
+    return flask.send_from_directory(app.static_folder, &#39;favicon.ico&#39;)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.server.shutdown"><code class="name flex">
+<span>def <span class="ident">shutdown</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L48-L52" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@app.route(&#39;/shutdown&#39;, methods=[&#39;POST&#39;])
+def shutdown():
+    shutdown_func = flask.request.environ.get(&#39;werkzeug.server.shutdown&#39;)
+    shutdown_func()
+    return &#39;Server shutting down...&#39;</code></pre>
 </details>
 </dd>
 </dl>
@@ -294,70 +294,6 @@ def story(id):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="presalytics.story.server.Browser"><code class="flex name class">
-<span>class <span class="ident">Browser</span></span>
-<span>(</span><span>address, delay_time=2, *args, **kwargs)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>A class that represents a thread of control.</p>
-<p>This class can be safely subclassed in a limited fashion. There are two ways
-to specify the activity: by passing a callable object to the constructor, or
-by overriding the run() method in a subclass.</p>
-<p>This constructor should always be called with keyword arguments. Arguments are:</p>
-<p><em>group</em> should be None; reserved for future extension when a ThreadGroup
-class is implemented.</p>
-<p><em>target</em> is the callable object to be invoked by the run()
-method. Defaults to None, meaning nothing is called.</p>
-<p><em>name</em> is the thread name. By default, a unique name is constructed of
-the form "Thread-N" where N is a small decimal number.</p>
-<p><em>args</em> is the argument tuple for the target invocation. Defaults to ().</p>
-<p><em>kwargs</em> is a dictionary of keyword arguments for the target
-invocation. Defaults to {}.</p>
-<p>If a subclass overrides the constructor, it must make sure to invoke
-the base class constructor (Thread.<strong>init</strong>()) before doing anything
-else to the thread.</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L147-L155" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">class Browser(threading.Thread):
-    def __init__(self, address, delay_time=2, *args, **kwargs):
-        super(Browser, self).__init__(*args, **kwargs)
-        self.address = address
-        self.delay_time = delay_time
-
-    def run(self):
-        time.sleep(self.delay_time)
-        webbrowser.open_new_tab(self.address)</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>threading.Thread</li>
-</ul>
-<h3>Methods</h3>
-<dl>
-<dt id="presalytics.story.server.Browser.run"><code class="name flex">
-<span>def <span class="ident">run</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Method representing the thread's activity.</p>
-<p>You may override this method in a subclass. The standard run() method
-invokes the callable object passed to the object's constructor as the
-target argument, if any, with sequential and keyword arguments taken
-from the args and kwargs arguments, respectively.</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L153-L155" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def run(self):
-    time.sleep(self.delay_time)
-    webbrowser.open_new_tab(self.address)</code></pre>
-</details>
-</dd>
-</dl>
-</dd>
 <dt id="presalytics.story.server.LocalServer"><code class="flex name class">
 <span>class <span class="ident">LocalServer</span></span>
 <span>(</span><span>host='127.0.0.1', debug=True, port=8082, root_path=None, use_reloader=False, **kwargs)</span>
@@ -461,6 +397,67 @@ from the args and kwargs arguments, respectively.</p></section>
 </details>
 <h3>Methods</h3>
 <dl>
+<dt id="presalytics.story.server.LocalServer.run"><code class="name flex">
+<span>def <span class="ident">run</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L71-L77" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def run(self):
+    app.root_path = self.root_path
+    app.static_folder = self.static_dir
+    app.run(host=self.host, 
+            debug=self.debug, 
+            port=self.port, 
+            use_reloader=self.use_reloader)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.server.LocalServer.make_local_folders"><code class="name flex">
+<span>def <span class="ident">make_local_folders</span></span>(<span>self, files_path=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L79-L108" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def make_local_folders(self, files_path=None):
+    if files_path is None:
+        files_path = os.getcwd()
+    if not os.path.exists(files_path):
+        os.mkdir(files_path)
+    root = os.path.join(files_path, &#34;presalytics&#34;)
+    if not os.path.exists(root):
+        os.mkdir(root)
+    templates_path = os.path.join(root, &#34;templates&#34;)
+    if not os.path.exists(templates_path):
+        os.mkdir(templates_path)
+    static_files_path = os.path.join(root, &#34;static&#34;)
+    if not os.path.exists(static_files_path):
+        os.mkdir(static_files_path)
+    css_path = os.path.join(static_files_path, &#34;css&#34;)
+    if not os.path.exists(css_path):
+        os.mkdir(css_path)
+    js_path = os.path.join(static_files_path, &#34;js&#34;)
+    if not os.path.exists(js_path):
+        os.mkdir(js_path)
+    theme_path = os.path.join(css_path, &#34;theme&#34;)
+    if not os.path.exists(theme_path):
+        os.mkdir(theme_path)
+    img_path = os.path.join(static_files_path, &#34;img&#34;)
+    if not os.path.exists(img_path):
+        os.mkdir(img_path)
+    local_preloader_path = os.path.join(static_files_path, &#34;preloaders&#34;)
+    if not os.path.exists(local_preloader_path):
+        os.mkdir(local_preloader_path)
+    return root</code></pre>
+</details>
+</dd>
 <dt id="presalytics.story.server.LocalServer.get_preloaders"><code class="name flex">
 <span>def <span class="ident">get_preloaders</span></span>(<span>self)</span>
 </code></dt>
@@ -515,65 +512,68 @@ from the args and kwargs arguments, respectively.</p></section>
     return static_files_dict</code></pre>
 </details>
 </dd>
-<dt id="presalytics.story.server.LocalServer.make_local_folders"><code class="name flex">
-<span>def <span class="ident">make_local_folders</span></span>(<span>self, files_path=None)</span>
+</dl>
+</dd>
+<dt id="presalytics.story.server.Browser"><code class="flex name class">
+<span>class <span class="ident">Browser</span></span>
+<span>(</span><span>address, delay_time=2, *args, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>A class that represents a thread of control.</p>
+<p>This class can be safely subclassed in a limited fashion. There are two ways
+to specify the activity: by passing a callable object to the constructor, or
+by overriding the run() method in a subclass.</p>
+<p>This constructor should always be called with keyword arguments. Arguments are:</p>
+<p><em>group</em> should be None; reserved for future extension when a ThreadGroup
+class is implemented.</p>
+<p><em>target</em> is the callable object to be invoked by the run()
+method. Defaults to None, meaning nothing is called.</p>
+<p><em>name</em> is the thread name. By default, a unique name is constructed of
+the form "Thread-N" where N is a small decimal number.</p>
+<p><em>args</em> is the argument tuple for the target invocation. Defaults to ().</p>
+<p><em>kwargs</em> is a dictionary of keyword arguments for the target
+invocation. Defaults to {}.</p>
+<p>If a subclass overrides the constructor, it must make sure to invoke
+the base class constructor (Thread.<strong>init</strong>()) before doing anything
+else to the thread.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L79-L108" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L147-L155" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">def make_local_folders(self, files_path=None):
-    if files_path is None:
-        files_path = os.getcwd()
-    if not os.path.exists(files_path):
-        os.mkdir(files_path)
-    root = os.path.join(files_path, &#34;presalytics&#34;)
-    if not os.path.exists(root):
-        os.mkdir(root)
-    templates_path = os.path.join(root, &#34;templates&#34;)
-    if not os.path.exists(templates_path):
-        os.mkdir(templates_path)
-    static_files_path = os.path.join(root, &#34;static&#34;)
-    if not os.path.exists(static_files_path):
-        os.mkdir(static_files_path)
-    css_path = os.path.join(static_files_path, &#34;css&#34;)
-    if not os.path.exists(css_path):
-        os.mkdir(css_path)
-    js_path = os.path.join(static_files_path, &#34;js&#34;)
-    if not os.path.exists(js_path):
-        os.mkdir(js_path)
-    theme_path = os.path.join(css_path, &#34;theme&#34;)
-    if not os.path.exists(theme_path):
-        os.mkdir(theme_path)
-    img_path = os.path.join(static_files_path, &#34;img&#34;)
-    if not os.path.exists(img_path):
-        os.mkdir(img_path)
-    local_preloader_path = os.path.join(static_files_path, &#34;preloaders&#34;)
-    if not os.path.exists(local_preloader_path):
-        os.mkdir(local_preloader_path)
-    return root</code></pre>
+<pre><code class="python">class Browser(threading.Thread):
+    def __init__(self, address, delay_time=2, *args, **kwargs):
+        super(Browser, self).__init__(*args, **kwargs)
+        self.address = address
+        self.delay_time = delay_time
+
+    def run(self):
+        time.sleep(self.delay_time)
+        webbrowser.open_new_tab(self.address)</code></pre>
 </details>
-</dd>
-<dt id="presalytics.story.server.LocalServer.run"><code class="name flex">
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>threading.Thread</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.story.server.Browser.run"><code class="name flex">
 <span>def <span class="ident">run</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Method representing the thread's activity.</p>
+<p>You may override this method in a subclass. The standard run() method
+invokes the callable object passed to the object's constructor as the
+target argument, if any, with sequential and keyword arguments taken
+from the args and kwargs arguments, respectively.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L71-L77" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L153-L155" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def run(self):
-    app.root_path = self.root_path
-    app.static_folder = self.static_dir
-    app.run(host=self.host, 
-            debug=self.debug, 
-            port=self.port, 
-            use_reloader=self.use_reloader)</code></pre>
+    time.sleep(self.delay_time)
+    webbrowser.open_new_tab(self.address)</code></pre>
 </details>
 </dd>
 </dl>
@@ -594,29 +594,29 @@ from the args and kwargs arguments, respectively.</p></section>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="two-column">
-<li><code><a title="presalytics.story.server.favicon" href="/python-client/presalytics/story/server.html#presalytics.story.server.favicon">favicon</a></code></li>
-<li><code><a title="presalytics.story.server.shutdown" href="/python-client/presalytics/story/server.html#presalytics.story.server.shutdown">shutdown</a></code></li>
-<li><code><a title="presalytics.story.server.static_css" href="/python-client/presalytics/story/server.html#presalytics.story.server.static_css">static_css</a></code></li>
+<li><code><a title="presalytics.story.server.story" href="/python-client/presalytics/story/server.html#presalytics.story.server.story">story</a></code></li>
 <li><code><a title="presalytics.story.server.static_img" href="/python-client/presalytics/story/server.html#presalytics.story.server.static_img">static_img</a></code></li>
 <li><code><a title="presalytics.story.server.static_js" href="/python-client/presalytics/story/server.html#presalytics.story.server.static_js">static_js</a></code></li>
-<li><code><a title="presalytics.story.server.story" href="/python-client/presalytics/story/server.html#presalytics.story.server.story">story</a></code></li>
+<li><code><a title="presalytics.story.server.static_css" href="/python-client/presalytics/story/server.html#presalytics.story.server.static_css">static_css</a></code></li>
+<li><code><a title="presalytics.story.server.favicon" href="/python-client/presalytics/story/server.html#presalytics.story.server.favicon">favicon</a></code></li>
+<li><code><a title="presalytics.story.server.shutdown" href="/python-client/presalytics/story/server.html#presalytics.story.server.shutdown">shutdown</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="presalytics.story.server.Browser" href="/python-client/presalytics/story/server.html#presalytics.story.server.Browser">Browser</a></code></h4>
+<h4><code><a title="presalytics.story.server.LocalServer" href="/python-client/presalytics/story/server.html#presalytics.story.server.LocalServer">LocalServer</a></code></h4>
 <ul class="">
-<li><code><a title="presalytics.story.server.Browser.run" href="/python-client/presalytics/story/server.html#presalytics.story.server.Browser.run">run</a></code></li>
+<li><code><a title="presalytics.story.server.LocalServer.run" href="/python-client/presalytics/story/server.html#presalytics.story.server.LocalServer.run">run</a></code></li>
+<li><code><a title="presalytics.story.server.LocalServer.make_local_folders" href="/python-client/presalytics/story/server.html#presalytics.story.server.LocalServer.make_local_folders">make_local_folders</a></code></li>
+<li><code><a title="presalytics.story.server.LocalServer.get_preloaders" href="/python-client/presalytics/story/server.html#presalytics.story.server.LocalServer.get_preloaders">get_preloaders</a></code></li>
+<li><code><a title="presalytics.story.server.LocalServer.get_static_files_dict" href="/python-client/presalytics/story/server.html#presalytics.story.server.LocalServer.get_static_files_dict">get_static_files_dict</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="presalytics.story.server.LocalServer" href="/python-client/presalytics/story/server.html#presalytics.story.server.LocalServer">LocalServer</a></code></h4>
+<h4><code><a title="presalytics.story.server.Browser" href="/python-client/presalytics/story/server.html#presalytics.story.server.Browser">Browser</a></code></h4>
 <ul class="">
-<li><code><a title="presalytics.story.server.LocalServer.get_preloaders" href="/python-client/presalytics/story/server.html#presalytics.story.server.LocalServer.get_preloaders">get_preloaders</a></code></li>
-<li><code><a title="presalytics.story.server.LocalServer.get_static_files_dict" href="/python-client/presalytics/story/server.html#presalytics.story.server.LocalServer.get_static_files_dict">get_static_files_dict</a></code></li>
-<li><code><a title="presalytics.story.server.LocalServer.make_local_folders" href="/python-client/presalytics/story/server.html#presalytics.story.server.LocalServer.make_local_folders">make_local_folders</a></code></li>
-<li><code><a title="presalytics.story.server.LocalServer.run" href="/python-client/presalytics/story/server.html#presalytics.story.server.LocalServer.run">run</a></code></li>
+<li><code><a title="presalytics.story.server.Browser.run" href="/python-client/presalytics/story/server.html#presalytics.story.server.Browser.run">run</a></code></li>
 </ul>
 </li>
 </ul>

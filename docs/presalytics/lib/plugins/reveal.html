@@ -23,13 +23,20 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal.py#L0-L347" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal.py#L0-L209" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import presalytics.lib.plugins.base as ext
 import presalytics.lib.plugins.jinja as jinja
 
 
 class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
+    &#34;&#34;&#34;
+    Allows users configure reveal.js initialization settings for when their 
+    story is rendered via `presalytics.story.revealer.Revealer`
+
+    For more information regarding reveal.js&#39; initialization settings, please
+    refer to https://github.com/hakimel/reveal.js/#configuration        
+    &#34;&#34;&#34;
     __plugin_name__ = &#39;reveal&#39;
 
     __dependencies__ = [
@@ -46,8 +53,14 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
             &#39;config&#39;: {
                 &#39;approved_styles_key&#39;: &#39;reveal.base&#39;
             }
-
-        }
+        },
+        {
+            &#39;kind&#39;: &#39;style&#39;,
+            &#39;name&#39;: &#39;external_links&#39;,
+            &#39;config&#39;: {
+                &#39;approved_styles_key&#39;: &#39;reveal.themes.white&#39;
+            }
+        },
     ]
 
     def to_script(self, config, **kwargs):
@@ -66,6 +79,11 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
         };
     &lt;/script&gt;
     &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    The `&lt;script&gt;` fragment that get populated with a initialization data 
+    via the `presalytics.lib.plugins.jinja.JinjaPluginMakerMixin`
+    &#34;&#34;&#34;
+    
     default_config = {
         &#39;controls&#39;: True,  # Display presentation control arrows
         # Help the user learn the controls by providing hints, for example by
@@ -214,164 +232,9 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
         &#39;minScale&#39;: 1,
         &#39;maxScale&#39;: 1
     }
-
-    #  template = &#34;&#34;&#34;&lt;script type=&#34;text/javascript&#34;
-    # Reveal.initialize({
-
-    #     {# Display presentation control arrows #}
-    #     controls: true,
-
-    #     {# Help the user learn the controls by providing hints, for example by
-    #      bouncing the down arrow when they first encounter a vertical slide #}
-    #     controlsTutorial: true,
-
-    #     {# Determines where controls appear, &#34;edges&#34; or &#34;bottom-right&#34; #}
-    #     controlsLayout: &#39;bottom-right&#39;,
-
-    #     {# Visibility rule for backwards navigation arrows; &#34;faded&#34;, &#34;hidden&#34;
-    #      or &#34;visible&#34; #}
-    #     controlsBackArrows: &#39;faded&#39;,
-
-    #     {# Display a presentation progress bar #}
-    #     progress: true,
-
-    #     {# Display the page number of the current slide #}
-    #     slideNumber: false,
-
-    #     {# Add the current slide number to the URL hash so that reloading the
-    #      page/copying the URL will return you to the same slide #}
-    #     hash: false,
-
-    #     {# Push each slide change to the browser history. Implies `hash: true` #}
-    #     history: false,
-
-    #     {# Enable keyboard shortcuts for navigation #}
-    #     keyboard: true,
-
-    #     {# Enable the slide overview mode #}
-    #     overview: true,
-
-    #     {# Vertical centering of slides #}
-    #     center: true,
-
-    #     {# Enables touch navigation on devices with touch input #}
-    #     touch: true,
-
-    #     {# Loop the presentation #}
-    #     loop: false,
-
-    #     {# Change the presentation direction to be RTL #}
-    #     rtl: false,
-
-    #     {# See https://
-    #     github.com/hakimel/reveal.js/#navigation-mode #}
-    #     navigationMode: &#39;default&#39;,
-
-    #     {# Randomizes the order of slides each time the presentation loads #}
-    #     shuffle: false,
-
-    #     {# Turns fragments on and off globally #}
-    #     fragments: true,
-
-    #     {# Flags whether to include the current fragment in the URL,
-    #      so that reloading brings you to the same fragment position #}
-    #     fragmentInURL: false,
-
-    #     {# Flags if the presentation is running in an embedded mode,
-    #      i.e. contained within a limited portion of the screen #}
-    #     embedded: false,
-
-    #     {# Flags if we should show a help overlay when the questionmark
-    #      key is pressed #}
-    #     help: true,
-
-    #     {# Flags if speaker notes should be visible to all viewers #}
-    #     showNotes: false,
-
-    #     {# Global override for autoplaying embedded media (video/audio/iframe)
-    #      - null: Media will only autoplay if data-autoplay is present
-    #      - true: All media will autoplay, regardless of individual setting
-    #      - false: No media will autoplay, regardless of individual setting
-    #     autoPlayMedia: null,
-
-    #     {# Global override for preloading lazy-loaded iframes
-    #      - null: Iframes with data-src AND data-preload will be loaded when within
-    #        the viewDistance, iframes with only data-src will be loaded when visible
-    #      - true: All iframes with data-src will be loaded when within the viewDistance
-    #      - false: All iframes with data-src will be loaded only when visible #}
-    #     preloadIframes: null,
-
-    #     {# Number of milliseconds between automatically proceeding to the
-    #     next slide, disabled when set to 0, this value can be overwritten
-    #     by using a data-autoslide attribute on your slides #}
-    #     autoSlide: 0,
-
-    #     {# Stop auto-sliding after user input #}
-    #     autoSlideStoppable: true,
-
-    #     {# Use this method for navigation when auto-sliding #}
-    #     autoSlideMethod: Reveal.navigateNext,
-
-    #     {# Specify the average time in seconds that you think you will spend
-    #      presenting each slide. This is used to show a pacing timer in the
-    #      speaker view #}
-    #     defaultTiming: 120,
-
-    #     {# Enable slide navigation via mouse wheel #}
-    #     mouseWheel: false,
-
-    #     {# Hide cursor if inactive #}
-    #     hideInactiveCursor: true,
-
-    #     {# Time before the cursor is hidden (in ms) #}
-    #     hideCursorTime: 5000,
-
-    #     {# Hides the address bar on mobile devices #}
-    #     hideAddressBar: true,
-
-    #     {# Opens links in an iframe preview overlay
-    #      Add `data-preview-link` and `data-preview-link=&#34;false&#34;` to customise each link
-    #      individually #}
-    #     previewLinks: false,
-
-    #     {# Transition style #}
-    #     transition: &#39;slide&#39;, {# none/fade/slide/convex/concave/zoom #}
-
-    #     {# Transition speed #}
-    #     transitionSpeed: &#39;default&#39;, {# default/fast/slow #}
-
-    #     {# Transition style for full page slide backgrounds #}
-    #     backgroundTransition: &#39;fade&#39;, {# none/fade/slide/convex/concave/zoom #}
-
-    #     {# Number of slides away from the current that are visible #}
-    #     viewDistance: 3,
-
-    #     {# Parallax background image
-    #     parallaxBackgroundImage: &#39;&#39;, {# e.g. &#34;&#39;https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg&#39;&#34; #}
-
-    #     {# Parallax background size
-    #     parallaxBackgroundSize: &#39;&#39;, {# CSS syntax, e.g. &#34;2100px 900px&#34; #}
-
-    #     {# Number of pixels to move the parallax background per slide
-    #      - Calculated automatically unless specified
-    #      - Set to 0 to disable movement along an axis #}
-    #     parallaxBackgroundHorizontal: null,
-    #     parallaxBackgroundVertical: null,
-
-    #     {# The display mode that will be used to show slides #}
-    #     display: &#39;block&#39;,
-
-    #     {# Allow for responsive presenation formats #}
-    #     width: &#34;100%&#34;,
-    #     height: &#34;100%&#34;,
-    #     margin: 0,
-    #     minScale: 1,
-    #     maxScale: 1
-
-    #     });
-    #     &lt;/script&gt;
-
-    # &#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;
+    A dictionary containing default values for rendering presalytics stories
+    &#34;&#34;&#34;</code></pre>
 </details>
 </section>
 <section>
@@ -388,14 +251,23 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
 <span>(</span><span>**kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>A script plugin render configures templated scripts to append to the body
-tag of an html document</p></section>
+<section class="desc"><p>Allows users configure reveal.js initialization settings for when their
+story is rendered via <a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer"><code>Revealer</code></a></p>
+<p>For more information regarding reveal.js' initialization settings, please
+refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://github.com/hakimel/reveal.js/#configuration</a></p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal.py#L5-L189" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal.py#L5-L210" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
+    &#34;&#34;&#34;
+    Allows users configure reveal.js initialization settings for when their 
+    story is rendered via `presalytics.story.revealer.Revealer`
+
+    For more information regarding reveal.js&#39; initialization settings, please
+    refer to https://github.com/hakimel/reveal.js/#configuration        
+    &#34;&#34;&#34;
     __plugin_name__ = &#39;reveal&#39;
 
     __dependencies__ = [
@@ -412,8 +284,14 @@ tag of an html document</p></section>
             &#39;config&#39;: {
                 &#39;approved_styles_key&#39;: &#39;reveal.base&#39;
             }
-
-        }
+        },
+        {
+            &#39;kind&#39;: &#39;style&#39;,
+            &#39;name&#39;: &#39;external_links&#39;,
+            &#39;config&#39;: {
+                &#39;approved_styles_key&#39;: &#39;reveal.themes.white&#39;
+            }
+        },
     ]
 
     def to_script(self, config, **kwargs):
@@ -432,6 +310,11 @@ tag of an html document</p></section>
         };
     &lt;/script&gt;
     &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    The `&lt;script&gt;` fragment that get populated with a initialization data 
+    via the `presalytics.lib.plugins.jinja.JinjaPluginMakerMixin`
+    &#34;&#34;&#34;
+    
     default_config = {
         &#39;controls&#39;: True,  # Display presentation control arrows
         # Help the user learn the controls by providing hints, for example by
@@ -579,7 +462,10 @@ tag of an html document</p></section>
         &#39;margin&#39;: 0,
         &#39;minScale&#39;: 1,
         &#39;maxScale&#39;: 1
-    }</code></pre>
+    }
+    &#34;&#34;&#34;
+    A dictionary containing default values for rendering presalytics stories
+    &#34;&#34;&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -590,31 +476,14 @@ tag of an html document</p></section>
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config"><code class="name">var <span class="ident">default_config</span></code></dt>
-<dd>
-<section class="desc"><p>dict() -&gt; new empty dictionary
-dict(mapping) -&gt; new dictionary initialized from a mapping object's
-(key, value) pairs
-dict(iterable) -&gt; new dictionary initialized as if via:
-d = {}
-for k, v in iterable:
-d[k] = v
-dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
-in the keyword argument list.
-For example:
-dict(one=1, two=2)</p></section>
-</dd>
 <dt id="presalytics.lib.plugins.reveal.RevealConfigPlugin.template"><code class="name">var <span class="ident">template</span></code></dt>
 <dd>
-<section class="desc"><p>str(object='') -&gt; str
-str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
-<p>Create a new string object from the given object. If encoding or
-errors is specified, then the object must expose a data buffer
-that will be decoded using the given encoding and error handler.
-Otherwise, returns the result of object.<strong>str</strong>() (if defined)
-or repr(object).
-encoding defaults to sys.getdefaultencoding().
-errors defaults to 'strict'.</p></section>
+<section class="desc"><p>The <code>&lt;script&gt;</code> fragment that get populated with a initialization data
+via the <a title="presalytics.lib.plugins.jinja.JinjaPluginMakerMixin" href="/python-client/presalytics/lib/plugins/jinja.html#presalytics.lib.plugins.jinja.JinjaPluginMakerMixin"><code>JinjaPluginMakerMixin</code></a></p></section>
+</dd>
+<dt id="presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config"><code class="name">var <span class="ident">default_config</span></code></dt>
+<dd>
+<section class="desc"><p>A dictionary containing default values for rendering presalytics stories</p></section>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -623,6 +492,11 @@ errors defaults to 'strict'.</p></section>
 <ul class="hlist">
 <li><code><a title="presalytics.lib.plugins.base.ScriptPlugin.get_tag" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase.get_tag">get_tag</a></code></li>
 <li><code><a title="presalytics.lib.plugins.base.ScriptPlugin.to_script" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.ScriptPlugin.to_script">to_script</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="presalytics.lib.plugins.jinja.JinjaPluginMakerMixin" href="/python-client/presalytics/lib/plugins/jinja.html#presalytics.lib.plugins.jinja.JinjaPluginMakerMixin">JinjaPluginMakerMixin</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.lib.plugins.jinja.JinjaPluginMakerMixin.render" href="/python-client/presalytics/lib/plugins/jinja.html#presalytics.lib.plugins.jinja.JinjaPluginMakerMixin.render">render</a></code></li>
 </ul>
 </li>
 </ul>
@@ -646,8 +520,8 @@ errors defaults to 'strict'.</p></section>
 <li>
 <h4><code><a title="presalytics.lib.plugins.reveal.RevealConfigPlugin" href="/python-client/presalytics/lib/plugins/reveal.html#presalytics.lib.plugins.reveal.RevealConfigPlugin">RevealConfigPlugin</a></code></h4>
 <ul class="">
-<li><code><a title="presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config" href="/python-client/presalytics/lib/plugins/reveal.html#presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config">default_config</a></code></li>
 <li><code><a title="presalytics.lib.plugins.reveal.RevealConfigPlugin.template" href="/python-client/presalytics/lib/plugins/reveal.html#presalytics.lib.plugins.reveal.RevealConfigPlugin.template">template</a></code></li>
+<li><code><a title="presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config" href="/python-client/presalytics/lib/plugins/reveal.html#presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config">default_config</a></code></li>
 </ul>
 </li>
 </ul>

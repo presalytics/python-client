@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L0-L100" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L0-L103" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import typing
 import presalytics
@@ -35,6 +35,9 @@ import presalytics.client.presalytics_ooxml_automation.models
 
 
 class OoxmlTheme(presalytics.story.components.ThemeBase):
+    &#34;&#34;&#34;
+    TODO: Review whether this class is obsolete
+    &#34;&#34;&#34;
     name: str
     ooxml_id: str
     plugin_config: typing.Dict
@@ -142,17 +145,16 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
 <span>(</span><span>name, ooxml_theme_id, plugin_config=None, always_refresh=False, client_info={}, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Themes are containers for plugins should be rendered once
-across the entire document.
-The init method should configure
-parameters with get passed to plugins via serialization and
-deserialization.</p></section>
+<section class="desc"><p>TODO: Review whether this class is obsolete</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L10-L101" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L10-L104" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlTheme(presalytics.story.components.ThemeBase):
+    &#34;&#34;&#34;
+    TODO: Review whether this class is obsolete
+    &#34;&#34;&#34;
     name: str
     ooxml_id: str
     plugin_config: typing.Dict
@@ -261,7 +263,7 @@ deserialization.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L92-L101" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L95-L104" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def deseriailize(cls, component, **kwargs):
@@ -286,7 +288,7 @@ def deseriailize(cls, component, **kwargs):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L35-L56" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L38-L59" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_configuration(self):
     client = presalytics.Client(**self.client_kwargs)
@@ -313,14 +315,14 @@ def deseriailize(cls, component, **kwargs):
 </details>
 </dd>
 <dt id="presalytics.lib.themes.ooxml.OoxmlTheme.map_color_type"><code class="name flex">
-<span>def <span class="ident">map_color_type</span></span>(<span>self, color_map_name: str, color_map: Dict, theme_colors: Dict, color_types_list=None) -> str</span>
+<span>def <span class="ident">map_color_type</span></span>(<span>self, color_map_name, color_map, theme_colors, color_types_list=None)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L59-L72" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L62-L75" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def map_color_type(
         self,
@@ -338,36 +340,18 @@ def deseriailize(cls, component, **kwargs):
     return color</code></pre>
 </details>
 </dd>
-<dt id="presalytics.lib.themes.ooxml.OoxmlTheme.serialize"><code class="name flex">
-<span>def <span class="ident">serialize</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L74-L90" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def serialize(self):
-    plugin = presalytics.story.outline.Plugin(
-        kind=&#39;style&#39;,
-        name=&#39;ooxml-theme&#39;,
-        config=self.plugin_config
-    )
-    data = {
-        &#34;ooxml_theme_id&#34;: self.ooxml_id,
-        &#34;always_refresh&#34;: self.always_refresh,
-    }
-    theme = presalytics.story.outline.Theme(
-        kind=self.__component_kind__,
-        name=self.name,
-        data=data,
-        plugins=[plugin]
-    )
-    return theme</code></pre>
-</details>
-</dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.story.components.ThemeBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ThemeBase">ThemeBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.story.components.ThemeBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.story.components.ThemeBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.story.components.ThemeBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
+<li><code><a title="presalytics.story.components.ThemeBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.serialize">serialize</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -391,7 +375,6 @@ def deseriailize(cls, component, **kwargs):
 <li><code><a title="presalytics.lib.themes.ooxml.OoxmlTheme.deseriailize" href="/python-client/presalytics/lib/themes/ooxml.html#presalytics.lib.themes.ooxml.OoxmlTheme.deseriailize">deseriailize</a></code></li>
 <li><code><a title="presalytics.lib.themes.ooxml.OoxmlTheme.get_configuration" href="/python-client/presalytics/lib/themes/ooxml.html#presalytics.lib.themes.ooxml.OoxmlTheme.get_configuration">get_configuration</a></code></li>
 <li><code><a title="presalytics.lib.themes.ooxml.OoxmlTheme.map_color_type" href="/python-client/presalytics/lib/themes/ooxml.html#presalytics.lib.themes.ooxml.OoxmlTheme.map_color_type">map_color_type</a></code></li>
-<li><code><a title="presalytics.lib.themes.ooxml.OoxmlTheme.serialize" href="/python-client/presalytics/lib/themes/ooxml.html#presalytics.lib.themes.ooxml.OoxmlTheme.serialize">serialize</a></code></li>
 </ul>
 </li>
 </ul>

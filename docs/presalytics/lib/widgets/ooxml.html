@@ -23,10 +23,11 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L0-L401" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L0-L865" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import typing
 import time
+import abc
 import urllib.parse
 import requests
 import os
@@ -35,6 +36,8 @@ import dateutil.parser
 import lxml
 import lxml.etree
 import posixpath
+import pandas
+import collections
 import presalytics
 import presalytics.client.api
 import presalytics.story.components
@@ -43,60 +46,63 @@ import presalytics.lib.exceptions
 import presalytics.story.outline
 import presalytics.lib.util
 import presalytics.lib.plugins.ooxml
+import presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto
+import presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto
 if typing.TYPE_CHECKING:
     from presalytics.story.outline import StoryOutline, Page, Widget
     from presalytics.client.presalytics_story import Story as ApiStory
+    from presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto import ChartChartDataDTO
+    from presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto import TableTableDataDTO
 
 
 class OoxmlEndpointMap(object):
-    BASE_URL = &#34;https://api.presalytics.io/ooxml-automation&#34;
+    &#34;&#34;&#34;
+    Mapping class that bridges Presalytics API Ooxml Automation service endpoints
+    and component class that consume those endpoints (typically subclasses of 
+    `presalytics.lib.widgets.ooxml.OoxmlWidgetBase`)
 
-    CHART = &#34;Charts&#34;
-    CONNECTION_SHAPE = &#34;ConnectionShapes&#34;
-    DOCUMENT = &#34;Documents&#34;
-    GROUP = &#34;Groups&#34;
-    IMAGE = &#34;Images&#34;
-    SHAPE = &#34;Shapes&#34;
-    SHAPETREE = &#34;ShapeTrees&#34;
-    SLIDE = &#34;Slides&#34;
-    TABLE = &#34;Tables&#34;
-    THEME = &#34;Themes&#34;
+    The classmethods on this class are conveninece methods to help users 
+    quickly inform their widget which endpoint their of a Ooxml Document their
+    targets.
 
+    Instance methods on this class are used by widget to generate urls and 
+    lookup against object tree for target objects.
 
-    def _build_object_type_map(self):
-        return {
-            &#34;Chart&#34;: [
-                OoxmlEndpointMap.CHART,
-            ],
-            &#34;Slide&#34;: [
-                OoxmlEndpointMap.GROUP,
-                OoxmlEndpointMap.SHAPE,
-                OoxmlEndpointMap.SHAPETREE, 
-                OoxmlEndpointMap.CONNECTION_SHAPE,
-                OoxmlEndpointMap.SLIDE
-            ],
-            &#34;Table&#34;: [
-                OoxmlEndpointMap.TABLE
-            ],
-            &#34;Theme&#34;: [
-                OoxmlEndpointMap.THEME
-            ],
-            &#34;Shared&#34;: [
-                OoxmlEndpointMap.IMAGE
-            ],
-            &#34;EMPTY&#34;: [
-                OoxmlEndpointMap.DOCUMENT
-            ]
-        }
+    Parameters
+    ----------
+    endpoint_id : str
+        A unique string for identifying the object_type related to the enpoint
     
+    baseurl : str
+        For developer use. Allows this to generate urls for non-standard instances
+        of the Ooxml Automation service.  Defaults to https://api.presalytics.io/ooxml-automation/
+
+    Attributes
+    ----------
+    root_url : str
+        the home url for the class instance.  Typically `http://api.presalytics.io/ooxml-automation/{object_type}`
     
+    OBJECT_TYPE_MAP : str
+        A mapping table for object_types and object tree lookup keys
+    &#34;&#34;&#34;
+    _BASE_URL = &#34;https://api.presalytics.io/ooxml-automation&#34;
+    _CHART = &#34;Charts&#34;
+    _CONNECTION_SHAPE = &#34;ConnectionShapes&#34;
+    _DOCUMENT = &#34;Documents&#34;
+    _GROUP = &#34;Groups&#34;
+    _IMAGE = &#34;Images&#34;
+    _SHAPE = &#34;Shapes&#34;
+    _SHAPETREE = &#34;ShapeTrees&#34;
+    _SLIDE = &#34;Slides&#34;
+    _TABLE = &#34;Tables&#34;
+    _THEME = &#34;Themes&#34;
 
     def __init__(self, endpoint_id, baseurl: str = None):
         if endpoint_id not in OoxmlEndpointMap.__dict__.values():
-            raise presalytics.lib.exceptions.ValidationError(&#34;{0} is not a valid endpoint ID&#34;.format(endpoint))
+            raise presalytics.lib.exceptions.ValidationError(&#34;{0} is not a valid endpoint ID&#34;.format(endpoint_id))
         self.endpoint_id = endpoint_id
         if not baseurl:
-            self.baseurl = OoxmlEndpointMap.BASE_URL
+            self.baseurl = OoxmlEndpointMap._BASE_URL
             custom_hosts = presalytics.CONFIG.get(&#34;HOSTS&#34;, None)
             if custom_hosts:
                 ooxml_host = custom_hosts.get(&#34;OOXML_AUTOMATION&#34;, None)
@@ -108,7 +114,38 @@ class OoxmlEndpointMap(object):
         self.root_url = posixpath.join(self.baseurl, self.endpoint_id)
         self.OBJECT_TYPE_MAP = self._build_object_type_map()
     
+
+
+    def _build_object_type_map(self):
+        return {
+            &#34;Chart&#34;: [
+                OoxmlEndpointMap._CHART,
+            ],
+            &#34;Slide&#34;: [
+                OoxmlEndpointMap._GROUP,
+                OoxmlEndpointMap._SHAPE,
+                OoxmlEndpointMap._SHAPETREE, 
+                OoxmlEndpointMap._CONNECTION_SHAPE,
+                OoxmlEndpointMap._SLIDE
+            ],
+            &#34;Table&#34;: [
+                OoxmlEndpointMap._TABLE
+            ],
+            &#34;Theme&#34;: [
+                OoxmlEndpointMap._THEME
+            ],
+            &#34;Shared&#34;: [
+                OoxmlEndpointMap._IMAGE
+            ],
+            &#34;EMPTY&#34;: [
+                OoxmlEndpointMap._DOCUMENT
+            ]
+        }
+    
     def get_object_type(self):
+        &#34;&#34;&#34;
+        Returns the Ooxml Automation service object type for this endpoint
+        &#34;&#34;&#34;
         for key, val in self.OBJECT_TYPE_MAP.items():
             for test_ep in val:
                 if test_ep == self.endpoint_id:
@@ -120,56 +157,131 @@ class OoxmlEndpointMap(object):
         raise presalytics.lib.exceptions.ValidationError(message)
 
     def get_id_url(self, id):
+        &#34;&#34;&#34;
+        Returns a url to pull metadata from this Ooxml Automation service endpoint
+        &#34;&#34;&#34;
         return posixpath.join(self.root_url, id)
 
     def get_svg_url(self, id):
+        &#34;&#34;&#34;
+        Returns a url to download an svg from this Ooxml Automation service endpoint
+        &#34;&#34;&#34;
         return posixpath.join(self.root_url, &#34;Svg&#34;, id)
 
     def get_xml_url(self, id):
+        &#34;&#34;&#34;
+        Returns a url to pull the Open Office Xml from this Ooxml Automation service endpoint
+        &#34;&#34;&#34;
         return posixpath.join(self.root_url, &#34;OpenOfficeXml&#34;, id)
 
     @classmethod
     def connection_shape(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.CONNECTION_SHAPE, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting ConnectionShape objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._CONNECTION_SHAPE, baseurl)
 
     @classmethod
     def chart(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.CHART, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting Chart objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._CHART, baseurl)
 
     @classmethod
     def document(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.DOCUMENT, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting Document objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._DOCUMENT, baseurl)
     
     @classmethod
     def group(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.GROUP, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting Group objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._GROUP, baseurl)
 
     @classmethod
     def image(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.IMAGE, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting Image objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._IMAGE, baseurl)
 
     @classmethod
     def shape(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.SHAPE, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting Shape objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._SHAPE, baseurl)
 
     @classmethod
     def shapetree(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.SHAPETREE, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting ShapeTree objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._SHAPETREE, baseurl)
 
     @classmethod
     def slide(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.SLIDE, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting Slide objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._SLIDE, baseurl)
 
     @classmethod
     def table(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.table, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting Table objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._TABLE, baseurl)
 
     @classmethod
     def theme(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.THEME, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting Theme objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._THEME, baseurl)
 
 
 class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
+    &#34;&#34;&#34;
+    Base class for creating widgets from objects at endpoints in the 
+    Presalytics API Ooxml Automation service.
+
+    Parameters
+    ----------
+    name : str, optional
+        The widget name.  If not provided, will be the `object_name` or `filename`
+
+    story_id : str, optional
+        The the id of the story in the Presalytics API Story service.  If not provided, 
+        a new story will be created.  Do not supply if this object has not yet been created. 
+    
+    object_ooxml_id : str, optional
+        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this 
+        object has not yet been created.
+
+    endpoint_map : presalytics.lib.widgets.ooxml.OoxmlEndpointMap, optional
+        Reference to the Presalytics API Ooxml Automation service endpoint and object type
+        that for the object of interest
+
+    Attributes
+    ----------
+    svg_html : str
+        An html fragment containing the svg data
+    &#34;&#34;&#34;
     endpoint_map: OoxmlEndpointMap
     data: typing.Dict
 
@@ -213,7 +325,10 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         self.svg_html = None
 
     def create_container(self, **kwargs):
-        
+        &#34;&#34;&#34;
+        Wraps the Presalytics API Ooxml Automation service SVG endpoint in an `&lt;iframe&gt;` that
+        will be rendered inside of a story
+        &#34;&#34;&#34;
         client = self.get_client()
         self.token = client.token_util.token[&#34;access_token&#34;]
         svg_container_div = lxml.html.Element(&#34;div&#34;, {
@@ -238,10 +353,14 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         return self.svg_html
 
     def get_svg(self, id, timeout_iterator=0) -&gt; str:
+        &#34;&#34;&#34;
+        Get an svg-formatted version of the object from the Ooxml Automation service
+        &#34;&#34;&#34;
         svg_url = self.endpoint_map.get_svg_url(id)
         client = self.get_client()
-        auth_header = client.get_auth_header()
-        response = requests.get(svg_url, headers=auth_header)
+        headers = client.get_auth_header()
+        headers.update(client.get_request_id_header())
+        response = requests.get(svg_url, headers=headers)
         svg_data = response.text
         if response.status_code != 200:
             raise presalytics.lib.exceptions.ApiError(message=response.text, status_code=response.status_code)
@@ -253,8 +372,69 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
                 svg_data = self.get_svg(id, timeout_iterator)
         return svg_data
 
+    def get_svg_file(self, filename=None):
+        if not filename:
+            filename = self.endpoint_map.get_object_type() + &#34;-&#34; + self.object_ooxml_id + &#34;.pptx&#34;
+        with open(filename, &#39;w&#39;) as f:
+            f.write(self.get_svg(self.object_ooxml_id))
+
 
 class OoxmlFileWidget(OoxmlWidgetBase):
+    &#34;&#34;&#34;
+    Builds a `widget` from a Presentation or Spreadsheet document
+
+    This class interacts with the Presalytics API to extract SVG objects from
+    Presentation and spreadsheet documents, identify them, and render them 
+    into a story. The file is uploaded to Presalytics API Ooxml Automation service,
+    which then processes the file and scans for objects in the file&#39;s object tree 
+    (As seen in the &#39;Selection Pane&#39; in PowerPoint) for objects matching the &#39;object_name&#39;.
+    When rendered, this widget retrieves an SVG of the identified object for rendering within 
+    the story. 
+
+    Please note that the Presalytics API Ooxml Automation object will be created overwritten 
+    each time this widget is initialized, and replaced within the corresponding 
+    `presalytics.story.outline.StoryOutline`.  For in-place editing of widgets Ooxml Automation objects 
+    that are already bound to the `Story`, please see `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget`
+
+    Parameters
+    ----------
+    filename : str
+        The local filepath a presentation or spreadsheet file containing
+        the object to be rendered
+
+    name : str, optional
+        The widget name.  If not provided, attribute will be set as the `object_name` 
+        or `filename`
+
+    story_id : str, optional
+        The the id of the story in the Presalytics API Story service.  If not provided, 
+        a new story will be created.  Do not supply if this object has not yet been created. 
+    
+    object_ooxml_id : str, optional
+        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this 
+        object has not yet been created.
+
+    endpoint_map : presalytics.lib.widgets.ooxml.OoxmlEndpointMap, optional
+        Reference to the Presalytics API Ooxml Automation service endpoint and object type
+        that for the object of interest
+
+    object_name : str, optional
+        The name of the object in the file&#39;s object tree the will be rendered
+
+    previous_ooxml_version : str, optional
+        The id Ooxml Automation service document object that was previously used to 
+        occupy this widget in the `presalytics.story.outline.StoryOutline`
+
+    file_last_modified : str, optional
+        The &#34;last modified&#34; date for the file at the `filename` path.  Used to ascertain
+        whether file has been updated since the last time the widget was initialized, and
+        correspondingly, whether the widget should be updated in the `presalytics.story.outline.StoryOutline`
+
+    document_ooxml_id : str, optional
+        The identifier for the parent &#34;Document&#34; object in the Ooxml Automation service for the object
+        idenitifiable by a combinatation of `object_ooxml_id` and `endpoint_map`.
+    
+    &#34;&#34;&#34;
     object_name: typing.Optional[str]
     ooxml_id: str
     file_last_modified: datetime.datetime
@@ -426,7 +606,291 @@ class OoxmlFileWidget(OoxmlWidgetBase):
             data=data,
             plugins=None
         )
-        return widget</code></pre>
+        return widget
+
+
+class UpdaterWidgetBase(OoxmlWidgetBase):
+    &#34;&#34;&#34;
+    Abstract class for create simple interfaces to update widgets from a simple data table. 
+
+    This class simplifies updates to Ooxml Automation service endpoints, allowing updates to 
+    ooxml object data and its underlying xml via simple data transfer objects definted in the 
+    Presalytics Ooxml Automation server.  
+
+    Inheriting classes must override the `_get_dto_class`, `_get_endpoint_path`, and `_get_dto_table_name`
+    methods
+
+    Parameters
+    ----------
+    name : str
+        The widget name.  If not provided, will be the `object_name` or `filename`
+
+    story_id : str
+        The the id of the story in the Presalytics API Story service.  If not provided, 
+        a new story will be created.  Do not supply if this object has not yet been created. 
+    
+    object_id : str
+        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this 
+        object has not yet been created.
+
+    endpoint_map : presalytics.lib.widgets.ooxml.OoxmlEndpointMap
+        Reference to the Presalytics API Ooxml Automation service endpoint and object type
+        that for the object of interest
+
+    dto: object, optional
+        A an instance of the data transfer object model. The class of this object is defined by the
+        `_get_dto_class()` method.  Represents the current state of the data of the data in the service.
+
+    data_table: list of lists, optional
+        A representation of a data table that will be incorporates into a dto object&#39;s property defined by
+        the subclass&#39; `_get_dto_table_name` method.
+
+    &#34;&#34;&#34;
+    def __init__(self, 
+                name,
+                story_id: str,
+                object_id: str,
+                endpoint_map: OoxmlEndpointMap,
+                dto=None, 
+                data_table=None,
+                **kwargs):
+        super(UpdaterWidgetBase, self).__init__(name, story_id, object_id, endpoint_map, **kwargs)
+        self.dto = dto
+        self.data_table = data_table
+        self.object_id = object_id
+    
+    
+    @abc.abstractmethod
+    def _get_dto_class(self) -&gt; typing.Type:
+        &#34;&#34;&#34;
+        Returns the Class of instances that will used for dtos
+        &#34;&#34;&#34;
+        return NotImplemented
+
+    @abc.abstractmethod
+    def _get_endpoint_path(self) -&gt; str:
+        &#34;&#34;&#34;
+        Returns the relative path to the the endpoint used , starting from the `root_url` of the 
+        `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` object. 
+        &#34;&#34;&#34;
+        return NotImplemented
+
+    @abc.abstractmethod
+    def _get_dto_table_name(self) -&gt; str:
+        &#34;&#34;&#34;
+        Returns the attribute name in the object returned by `_get_dto_class()` that the `data_table` parameter
+        should be mapped to.
+        &#34;&#34;&#34;
+        return NotImplemented
+
+    def build_endpoint(self) -&gt; str:
+        &#34;&#34;&#34;
+        Returns the endpoints used for Api calls
+        &#34;&#34;&#34;
+        return posixpath.join(self.endpoint_map.root_url, self._get_endpoint_path(), self.object_ooxml_id)
+    
+    def get_dto(self):
+        &#34;&#34;&#34;
+        Returns an instance of the dto object from the OoxmlAutomation Service API
+        &#34;&#34;&#34;
+        client = self.get_client()
+        headers = client.get_auth_header()
+        headers.update(client.get_request_id_header())
+        resp = requests.get(self.build_endpoint(), headers=headers)
+        if resp.status_code &gt; 299:
+            raise presalytics.lib.exceptions.ApiError(message=resp.text)
+        dto = client.ooxml_automation.api_client._ApiClient__deserialize(resp.json(), self._get_dto_class())
+        self.dto = dto
+        return dto
+
+    def _put_dto(self, dto):
+        &#34;&#34;&#34;
+        Updates the Endpoint in the Ooxml Automation Service from a dto object
+        &#34;&#34;&#34;
+        client = self.get_client()
+        headers = client.get_auth_header()
+        headers.update(client.get_request_id_header())
+        data = client.ooxml_automation.api_client.sanitize_for_serialization(dto)
+        resp = requests.put(self.build_endpoint(), json=data, headers=headers)
+        if resp.status_code &gt; 299:
+            raise presalytics.lib.exceptions.ApiError(message=resp.text)
+        else:
+            self.dto = dto
+
+    def update_from_dto(self, dto):
+        &#34;&#34;&#34;
+        Updates the Endpoint in the Ooxml Automation Service from a dto object, and updates
+        the `svg_html` attribute
+        &#34;&#34;&#34;
+        self._put_dto(dto)
+        self.svg_html = self.create_container()
+
+    def update_from_data_table(self, data_table):
+        &#34;&#34;&#34;
+        Updates the Endpoint in the Ooxml Automation Service from a the `data_table`, and updates
+        the `svg_html` attribute
+        &#34;&#34;&#34;
+        dto = self.get_dto()
+        setattr(dto, self._get_dto_table_name(), data_table)
+        self.put_dto(dto)
+
+    def serialize(self):
+        data = {
+            &#34;story_id&#34;: self.story_id,
+            &#34;object_id&#34;: self.object_ooxml_id,
+            &#34;dto&#34;: self.dto.to_dict(),
+            &#34;data_table&#34;: self.data_table
+        }
+        widget = presalytics.story.outline.Widget(
+            name=self.name,
+            kind=self.__component_kind__,
+            data=data,
+            plugins=None
+        )
+        return widget
+
+    @classmethod
+    def deserialize(cls, component, **kwargs):
+        return cls(
+            component.name, 
+            component.data[&#34;story_id&#34;], 
+            component.data[&#34;object_id&#34;],
+            component.data.get(&#34;dto&#34;, None),
+            component.data.get(&#34;data_table&#34;, None),
+            **kwargs
+        )
+
+        
+
+
+class ChartUpdaterWidget(UpdaterWidgetBase):
+    &#34;&#34;&#34;
+    Updates a Chart in the Ooxml Automation service API at the the endpoint &#39;/Chart/ChartUpdate/&#39;
+
+    This class simplifies chart updates, for charts residing in the Ooxml Automation Service, 
+    allowing updates to ooxml object data and its underlying xml either via a list of lists or
+    the `presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO`
+    object.  
+
+    Parameters
+    ----------
+    name : str
+        A name for the widget.
+
+    story_id : str
+        The the id of the story in the Presalytics API Story service. 
+    
+    chart_id : str
+        The identifier of the Ooxml Automation Chart service object. 
+
+    dto: presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO, optional
+        A an instance of the data transfer object model. The class of this object is defined by the
+        `_get_dto_class()` method.  Represents the current state of the data of the data in the service.
+
+    data_table: list of lists, optional
+        A representation of a data table that will be incorporates into a dto object&#39;s property defined by
+        the subclass&#39; `_get_dto_table_name` method.
+
+    &#34;&#34;&#34;
+    __component_kind__ = &#34;chart-updater&#34;
+    
+    def __init__(self, 
+                name,
+                story_id: str,
+                chart_id: str,
+                dto: &#39;ChartChartDataDTO&#39; = None, 
+                data_table: typing.Sequence[typing.Sequence] = None,
+                **kwargs):
+        super().__init__(name, story_id, chart_id, OoxmlEndpointMap.chart(), dto=dto, data_table=data_table)
+        self.chart_id = chart_id
+
+
+    def _get_dto_class(self):
+        return presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO
+
+    def _get_endpoint_path(self):
+        return &#34;ChartUpdate&#34;
+
+    def _get_dto_table_name(self):
+        return &#34;data_points&#34;
+
+    def get_dataframe(self) -&gt; pandas.DataFrame:
+        &#34;&#34;&#34;
+        Returns a panda datagrame of the 
+        &#34;&#34;&#34;
+        data: collections.OrderedDict
+        
+        if not self.dto:
+            self.dto = self.get_dto()
+        data = collections.OrderedDict()
+        for i in range(0, len(self.dto.series_names)):
+            data.update({
+                self.dto.series_names[i]: pandas.Series(self.dto.data_points[i], self.dto.category_names)
+            })
+        return pandas.DataFrame(data)
+    
+    def put_dataframe(self, df: pandas.DataFrame):
+        data_dict = df.to_dict(&#39;split&#39;)
+        data_points = list(map(list, zip(*data_dict[&#39;data&#39;])))
+        dto = self._get_dto_class()(chart_id=self.chart_id, 
+                                 series_names=data_dict[&#34;columns&#34;], 
+                                 category_names=data_dict[&#34;index&#34;],
+                                 data_points=data_points)
+        self._put_dto(dto)
+
+        
+
+class TableUpdaterWidget(UpdaterWidgetBase):
+    &#34;&#34;&#34;
+    Updates a Table in the Ooxml Automation service API at the the endpoint &#39;/Table/TableUpdate/&#39;
+
+    This class simplifies table updates, for tables residing in the Ooxml Automation Service, 
+    allowing updates to ooxml object data and its underlying xml either via a list of lists or
+    the `presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO`
+    object.  
+
+    Parameters
+    ----------
+    name : str
+        A name for the widget.
+
+    story_id : str
+        The the id of the story in the Presalytics API Story service. 
+    
+    table_id : str
+        The identifier of the Ooxml Automation Table service object. 
+
+    dto: presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO, optional
+        A an instance of the data transfer object model. The class of this object is defined by the
+        `_get_dto_class()` method.  Represents the current state of the data of the data in the service.
+
+    data_table: list of lists, optional
+        A representation of a data table that will be incorporates into a dto object&#39;s property defined by
+        the subclass&#39; `_get_dto_table_name` method.
+
+    &#34;&#34;&#34;
+    __component_kind__ = &#34;table-updater&#34;
+    
+    def __init__(self, 
+                name,
+                story_id: str,
+                table_id: str,
+                dto: &#39;TableTableDataDTO&#39; = None, 
+                data_table: typing.Sequence[typing.Sequence] = None,
+                **kwargs):
+        super().__init__(name, story_id, table_id, OoxmlEndpointMap.table(), dto=dto, data_table=data_table)
+        self.table_id = table_id
+
+
+    def _get_dto_class(self):
+        return presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO
+
+    def _get_endpoint_path(self):
+        return &#34;TableUpdate&#34;
+
+    def _get_dto_table_name(self):
+        return &#34;table_data&#34;
+    </code></pre>
 </details>
 </section>
 <section>
@@ -440,64 +904,87 @@ class OoxmlFileWidget(OoxmlWidgetBase):
 <dl>
 <dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code class="flex name class">
 <span>class <span class="ident">OoxmlEndpointMap</span></span>
-<span>(</span><span>endpoint_id, baseurl: str = None)</span>
+<span>(</span><span>endpoint_id, baseurl=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Mapping class that bridges Presalytics API Ooxml Automation service endpoints
+and component class that consume those endpoints (typically subclasses of
+<a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase"><code>OoxmlWidgetBase</code></a>)</p>
+<p>The classmethods on this class are conveninece methods to help users
+quickly inform their widget which endpoint their of a Ooxml Document their
+targets.</p>
+<p>Instance methods on this class are used by widget to generate urls and
+lookup against object tree for target objects.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>endpoint_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>A unique string for identifying the object_type related to the enpoint</dd>
+<dt><strong><code>baseurl</code></strong> :&ensp;<code>str</code></dt>
+<dd>For developer use. Allows this to generate urls for non-standard instances
+of the Ooxml Automation service.
+Defaults to <a href="https://api.presalytics.io/ooxml-automation/">https://api.presalytics.io/ooxml-automation/</a></dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>root_url</code></strong> :&ensp;<code>str</code></dt>
+<dd>the home url for the class instance.
+Typically <code>&lt;http://api.presalytics.io/ooxml-automation/{object_type}</code>&gt;</dd>
+<dt><strong><code>OBJECT_TYPE_MAP</code></strong> :&ensp;<code>str</code></dt>
+<dd>A mapping table for object_types and object tree lookup keys</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L24-L142" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L31-L228" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlEndpointMap(object):
-    BASE_URL = &#34;https://api.presalytics.io/ooxml-automation&#34;
+    &#34;&#34;&#34;
+    Mapping class that bridges Presalytics API Ooxml Automation service endpoints
+    and component class that consume those endpoints (typically subclasses of 
+    `presalytics.lib.widgets.ooxml.OoxmlWidgetBase`)
 
-    CHART = &#34;Charts&#34;
-    CONNECTION_SHAPE = &#34;ConnectionShapes&#34;
-    DOCUMENT = &#34;Documents&#34;
-    GROUP = &#34;Groups&#34;
-    IMAGE = &#34;Images&#34;
-    SHAPE = &#34;Shapes&#34;
-    SHAPETREE = &#34;ShapeTrees&#34;
-    SLIDE = &#34;Slides&#34;
-    TABLE = &#34;Tables&#34;
-    THEME = &#34;Themes&#34;
+    The classmethods on this class are conveninece methods to help users 
+    quickly inform their widget which endpoint their of a Ooxml Document their
+    targets.
 
+    Instance methods on this class are used by widget to generate urls and 
+    lookup against object tree for target objects.
 
-    def _build_object_type_map(self):
-        return {
-            &#34;Chart&#34;: [
-                OoxmlEndpointMap.CHART,
-            ],
-            &#34;Slide&#34;: [
-                OoxmlEndpointMap.GROUP,
-                OoxmlEndpointMap.SHAPE,
-                OoxmlEndpointMap.SHAPETREE, 
-                OoxmlEndpointMap.CONNECTION_SHAPE,
-                OoxmlEndpointMap.SLIDE
-            ],
-            &#34;Table&#34;: [
-                OoxmlEndpointMap.TABLE
-            ],
-            &#34;Theme&#34;: [
-                OoxmlEndpointMap.THEME
-            ],
-            &#34;Shared&#34;: [
-                OoxmlEndpointMap.IMAGE
-            ],
-            &#34;EMPTY&#34;: [
-                OoxmlEndpointMap.DOCUMENT
-            ]
-        }
+    Parameters
+    ----------
+    endpoint_id : str
+        A unique string for identifying the object_type related to the enpoint
     
+    baseurl : str
+        For developer use. Allows this to generate urls for non-standard instances
+        of the Ooxml Automation service.  Defaults to https://api.presalytics.io/ooxml-automation/
+
+    Attributes
+    ----------
+    root_url : str
+        the home url for the class instance.  Typically `http://api.presalytics.io/ooxml-automation/{object_type}`
     
+    OBJECT_TYPE_MAP : str
+        A mapping table for object_types and object tree lookup keys
+    &#34;&#34;&#34;
+    _BASE_URL = &#34;https://api.presalytics.io/ooxml-automation&#34;
+    _CHART = &#34;Charts&#34;
+    _CONNECTION_SHAPE = &#34;ConnectionShapes&#34;
+    _DOCUMENT = &#34;Documents&#34;
+    _GROUP = &#34;Groups&#34;
+    _IMAGE = &#34;Images&#34;
+    _SHAPE = &#34;Shapes&#34;
+    _SHAPETREE = &#34;ShapeTrees&#34;
+    _SLIDE = &#34;Slides&#34;
+    _TABLE = &#34;Tables&#34;
+    _THEME = &#34;Themes&#34;
 
     def __init__(self, endpoint_id, baseurl: str = None):
         if endpoint_id not in OoxmlEndpointMap.__dict__.values():
-            raise presalytics.lib.exceptions.ValidationError(&#34;{0} is not a valid endpoint ID&#34;.format(endpoint))
+            raise presalytics.lib.exceptions.ValidationError(&#34;{0} is not a valid endpoint ID&#34;.format(endpoint_id))
         self.endpoint_id = endpoint_id
         if not baseurl:
-            self.baseurl = OoxmlEndpointMap.BASE_URL
+            self.baseurl = OoxmlEndpointMap._BASE_URL
             custom_hosts = presalytics.CONFIG.get(&#34;HOSTS&#34;, None)
             if custom_hosts:
                 ooxml_host = custom_hosts.get(&#34;OOXML_AUTOMATION&#34;, None)
@@ -509,7 +996,38 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         self.root_url = posixpath.join(self.baseurl, self.endpoint_id)
         self.OBJECT_TYPE_MAP = self._build_object_type_map()
     
+
+
+    def _build_object_type_map(self):
+        return {
+            &#34;Chart&#34;: [
+                OoxmlEndpointMap._CHART,
+            ],
+            &#34;Slide&#34;: [
+                OoxmlEndpointMap._GROUP,
+                OoxmlEndpointMap._SHAPE,
+                OoxmlEndpointMap._SHAPETREE, 
+                OoxmlEndpointMap._CONNECTION_SHAPE,
+                OoxmlEndpointMap._SLIDE
+            ],
+            &#34;Table&#34;: [
+                OoxmlEndpointMap._TABLE
+            ],
+            &#34;Theme&#34;: [
+                OoxmlEndpointMap._THEME
+            ],
+            &#34;Shared&#34;: [
+                OoxmlEndpointMap._IMAGE
+            ],
+            &#34;EMPTY&#34;: [
+                OoxmlEndpointMap._DOCUMENT
+            ]
+        }
+    
     def get_object_type(self):
+        &#34;&#34;&#34;
+        Returns the Ooxml Automation service object type for this endpoint
+        &#34;&#34;&#34;
         for key, val in self.OBJECT_TYPE_MAP.items():
             for test_ep in val:
                 if test_ep == self.endpoint_id:
@@ -521,369 +1039,322 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         raise presalytics.lib.exceptions.ValidationError(message)
 
     def get_id_url(self, id):
+        &#34;&#34;&#34;
+        Returns a url to pull metadata from this Ooxml Automation service endpoint
+        &#34;&#34;&#34;
         return posixpath.join(self.root_url, id)
 
     def get_svg_url(self, id):
+        &#34;&#34;&#34;
+        Returns a url to download an svg from this Ooxml Automation service endpoint
+        &#34;&#34;&#34;
         return posixpath.join(self.root_url, &#34;Svg&#34;, id)
 
     def get_xml_url(self, id):
+        &#34;&#34;&#34;
+        Returns a url to pull the Open Office Xml from this Ooxml Automation service endpoint
+        &#34;&#34;&#34;
         return posixpath.join(self.root_url, &#34;OpenOfficeXml&#34;, id)
 
     @classmethod
     def connection_shape(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.CONNECTION_SHAPE, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting ConnectionShape objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._CONNECTION_SHAPE, baseurl)
 
     @classmethod
     def chart(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.CHART, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting Chart objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._CHART, baseurl)
 
     @classmethod
     def document(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.DOCUMENT, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting Document objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._DOCUMENT, baseurl)
     
     @classmethod
     def group(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.GROUP, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting Group objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._GROUP, baseurl)
 
     @classmethod
     def image(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.IMAGE, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting Image objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._IMAGE, baseurl)
 
     @classmethod
     def shape(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.SHAPE, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting Shape objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._SHAPE, baseurl)
 
     @classmethod
     def shapetree(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.SHAPETREE, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting ShapeTree objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._SHAPETREE, baseurl)
 
     @classmethod
     def slide(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.SLIDE, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting Slide objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._SLIDE, baseurl)
 
     @classmethod
     def table(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.table, baseurl)
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting Table objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._TABLE, baseurl)
 
     @classmethod
     def theme(cls, baseurl=None):
-        return cls(OoxmlEndpointMap.THEME, baseurl)</code></pre>
+        &#34;&#34;&#34;
+        Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+        targeting Theme objects
+        &#34;&#34;&#34;
+        return cls(OoxmlEndpointMap._THEME, baseurl)</code></pre>
 </details>
-<h3>Class variables</h3>
-<dl>
-<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.BASE_URL"><code class="name">var <span class="ident">BASE_URL</span></code></dt>
-<dd>
-<section class="desc"><p>str(object='') -&gt; str
-str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
-<p>Create a new string object from the given object. If encoding or
-errors is specified, then the object must expose a data buffer
-that will be decoded using the given encoding and error handler.
-Otherwise, returns the result of object.<strong>str</strong>() (if defined)
-or repr(object).
-encoding defaults to sys.getdefaultencoding().
-errors defaults to 'strict'.</p></section>
-</dd>
-<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.CHART"><code class="name">var <span class="ident">CHART</span></code></dt>
-<dd>
-<section class="desc"><p>str(object='') -&gt; str
-str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
-<p>Create a new string object from the given object. If encoding or
-errors is specified, then the object must expose a data buffer
-that will be decoded using the given encoding and error handler.
-Otherwise, returns the result of object.<strong>str</strong>() (if defined)
-or repr(object).
-encoding defaults to sys.getdefaultencoding().
-errors defaults to 'strict'.</p></section>
-</dd>
-<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.CONNECTION_SHAPE"><code class="name">var <span class="ident">CONNECTION_SHAPE</span></code></dt>
-<dd>
-<section class="desc"><p>str(object='') -&gt; str
-str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
-<p>Create a new string object from the given object. If encoding or
-errors is specified, then the object must expose a data buffer
-that will be decoded using the given encoding and error handler.
-Otherwise, returns the result of object.<strong>str</strong>() (if defined)
-or repr(object).
-encoding defaults to sys.getdefaultencoding().
-errors defaults to 'strict'.</p></section>
-</dd>
-<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.DOCUMENT"><code class="name">var <span class="ident">DOCUMENT</span></code></dt>
-<dd>
-<section class="desc"><p>str(object='') -&gt; str
-str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
-<p>Create a new string object from the given object. If encoding or
-errors is specified, then the object must expose a data buffer
-that will be decoded using the given encoding and error handler.
-Otherwise, returns the result of object.<strong>str</strong>() (if defined)
-or repr(object).
-encoding defaults to sys.getdefaultencoding().
-errors defaults to 'strict'.</p></section>
-</dd>
-<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.GROUP"><code class="name">var <span class="ident">GROUP</span></code></dt>
-<dd>
-<section class="desc"><p>str(object='') -&gt; str
-str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
-<p>Create a new string object from the given object. If encoding or
-errors is specified, then the object must expose a data buffer
-that will be decoded using the given encoding and error handler.
-Otherwise, returns the result of object.<strong>str</strong>() (if defined)
-or repr(object).
-encoding defaults to sys.getdefaultencoding().
-errors defaults to 'strict'.</p></section>
-</dd>
-<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.IMAGE"><code class="name">var <span class="ident">IMAGE</span></code></dt>
-<dd>
-<section class="desc"><p>str(object='') -&gt; str
-str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
-<p>Create a new string object from the given object. If encoding or
-errors is specified, then the object must expose a data buffer
-that will be decoded using the given encoding and error handler.
-Otherwise, returns the result of object.<strong>str</strong>() (if defined)
-or repr(object).
-encoding defaults to sys.getdefaultencoding().
-errors defaults to 'strict'.</p></section>
-</dd>
-<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SHAPE"><code class="name">var <span class="ident">SHAPE</span></code></dt>
-<dd>
-<section class="desc"><p>str(object='') -&gt; str
-str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
-<p>Create a new string object from the given object. If encoding or
-errors is specified, then the object must expose a data buffer
-that will be decoded using the given encoding and error handler.
-Otherwise, returns the result of object.<strong>str</strong>() (if defined)
-or repr(object).
-encoding defaults to sys.getdefaultencoding().
-errors defaults to 'strict'.</p></section>
-</dd>
-<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SHAPETREE"><code class="name">var <span class="ident">SHAPETREE</span></code></dt>
-<dd>
-<section class="desc"><p>str(object='') -&gt; str
-str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
-<p>Create a new string object from the given object. If encoding or
-errors is specified, then the object must expose a data buffer
-that will be decoded using the given encoding and error handler.
-Otherwise, returns the result of object.<strong>str</strong>() (if defined)
-or repr(object).
-encoding defaults to sys.getdefaultencoding().
-errors defaults to 'strict'.</p></section>
-</dd>
-<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SLIDE"><code class="name">var <span class="ident">SLIDE</span></code></dt>
-<dd>
-<section class="desc"><p>str(object='') -&gt; str
-str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
-<p>Create a new string object from the given object. If encoding or
-errors is specified, then the object must expose a data buffer
-that will be decoded using the given encoding and error handler.
-Otherwise, returns the result of object.<strong>str</strong>() (if defined)
-or repr(object).
-encoding defaults to sys.getdefaultencoding().
-errors defaults to 'strict'.</p></section>
-</dd>
-<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.TABLE"><code class="name">var <span class="ident">TABLE</span></code></dt>
-<dd>
-<section class="desc"><p>str(object='') -&gt; str
-str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
-<p>Create a new string object from the given object. If encoding or
-errors is specified, then the object must expose a data buffer
-that will be decoded using the given encoding and error handler.
-Otherwise, returns the result of object.<strong>str</strong>() (if defined)
-or repr(object).
-encoding defaults to sys.getdefaultencoding().
-errors defaults to 'strict'.</p></section>
-</dd>
-<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.THEME"><code class="name">var <span class="ident">THEME</span></code></dt>
-<dd>
-<section class="desc"><p>str(object='') -&gt; str
-str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
-<p>Create a new string object from the given object. If encoding or
-errors is specified, then the object must expose a data buffer
-that will be decoded using the given encoding and error handler.
-Otherwise, returns the result of object.<strong>str</strong>() (if defined)
-or repr(object).
-encoding defaults to sys.getdefaultencoding().
-errors defaults to 'strict'.</p></section>
-</dd>
-</dl>
 <h3>Static methods</h3>
 <dl>
-<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.chart"><code class="name flex">
-<span>def <span class="ident">chart</span></span>(<span>baseurl=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L108-L110" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@classmethod
-def chart(cls, baseurl=None):
-    return cls(OoxmlEndpointMap.CHART, baseurl)</code></pre>
-</details>
-</dd>
 <dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.connection_shape"><code class="name flex">
 <span>def <span class="ident">connection_shape</span></span>(<span>baseurl=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Factory method to create an <a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code>OoxmlEndpointMap</code></a> instance
+targeting ConnectionShape objects</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L104-L106" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L150-L156" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def connection_shape(cls, baseurl=None):
-    return cls(OoxmlEndpointMap.CONNECTION_SHAPE, baseurl)</code></pre>
+    &#34;&#34;&#34;
+    Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+    targeting ConnectionShape objects
+    &#34;&#34;&#34;
+    return cls(OoxmlEndpointMap._CONNECTION_SHAPE, baseurl)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.chart"><code class="name flex">
+<span>def <span class="ident">chart</span></span>(<span>baseurl=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Factory method to create an <a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code>OoxmlEndpointMap</code></a> instance
+targeting Chart objects</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L158-L164" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@classmethod
+def chart(cls, baseurl=None):
+    &#34;&#34;&#34;
+    Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+    targeting Chart objects
+    &#34;&#34;&#34;
+    return cls(OoxmlEndpointMap._CHART, baseurl)</code></pre>
 </details>
 </dd>
 <dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.document"><code class="name flex">
 <span>def <span class="ident">document</span></span>(<span>baseurl=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Factory method to create an <a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code>OoxmlEndpointMap</code></a> instance
+targeting Document objects</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L112-L114" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L166-L172" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def document(cls, baseurl=None):
-    return cls(OoxmlEndpointMap.DOCUMENT, baseurl)</code></pre>
+    &#34;&#34;&#34;
+    Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+    targeting Document objects
+    &#34;&#34;&#34;
+    return cls(OoxmlEndpointMap._DOCUMENT, baseurl)</code></pre>
 </details>
 </dd>
 <dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.group"><code class="name flex">
 <span>def <span class="ident">group</span></span>(<span>baseurl=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Factory method to create an <a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code>OoxmlEndpointMap</code></a> instance
+targeting Group objects</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L116-L118" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L174-L180" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def group(cls, baseurl=None):
-    return cls(OoxmlEndpointMap.GROUP, baseurl)</code></pre>
+    &#34;&#34;&#34;
+    Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+    targeting Group objects
+    &#34;&#34;&#34;
+    return cls(OoxmlEndpointMap._GROUP, baseurl)</code></pre>
 </details>
 </dd>
 <dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.image"><code class="name flex">
 <span>def <span class="ident">image</span></span>(<span>baseurl=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Factory method to create an <a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code>OoxmlEndpointMap</code></a> instance
+targeting Image objects</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L120-L122" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L182-L188" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def image(cls, baseurl=None):
-    return cls(OoxmlEndpointMap.IMAGE, baseurl)</code></pre>
+    &#34;&#34;&#34;
+    Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+    targeting Image objects
+    &#34;&#34;&#34;
+    return cls(OoxmlEndpointMap._IMAGE, baseurl)</code></pre>
 </details>
 </dd>
 <dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.shape"><code class="name flex">
 <span>def <span class="ident">shape</span></span>(<span>baseurl=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Factory method to create an <a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code>OoxmlEndpointMap</code></a> instance
+targeting Shape objects</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L124-L126" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L190-L196" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def shape(cls, baseurl=None):
-    return cls(OoxmlEndpointMap.SHAPE, baseurl)</code></pre>
+    &#34;&#34;&#34;
+    Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+    targeting Shape objects
+    &#34;&#34;&#34;
+    return cls(OoxmlEndpointMap._SHAPE, baseurl)</code></pre>
 </details>
 </dd>
 <dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.shapetree"><code class="name flex">
 <span>def <span class="ident">shapetree</span></span>(<span>baseurl=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Factory method to create an <a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code>OoxmlEndpointMap</code></a> instance
+targeting ShapeTree objects</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L128-L130" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L198-L204" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def shapetree(cls, baseurl=None):
-    return cls(OoxmlEndpointMap.SHAPETREE, baseurl)</code></pre>
+    &#34;&#34;&#34;
+    Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+    targeting ShapeTree objects
+    &#34;&#34;&#34;
+    return cls(OoxmlEndpointMap._SHAPETREE, baseurl)</code></pre>
 </details>
 </dd>
 <dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.slide"><code class="name flex">
 <span>def <span class="ident">slide</span></span>(<span>baseurl=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Factory method to create an <a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code>OoxmlEndpointMap</code></a> instance
+targeting Slide objects</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L132-L134" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L206-L212" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def slide(cls, baseurl=None):
-    return cls(OoxmlEndpointMap.SLIDE, baseurl)</code></pre>
+    &#34;&#34;&#34;
+    Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+    targeting Slide objects
+    &#34;&#34;&#34;
+    return cls(OoxmlEndpointMap._SLIDE, baseurl)</code></pre>
 </details>
 </dd>
 <dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.table"><code class="name flex">
 <span>def <span class="ident">table</span></span>(<span>baseurl=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Factory method to create an <a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code>OoxmlEndpointMap</code></a> instance
+targeting Table objects</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L136-L138" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L214-L220" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def table(cls, baseurl=None):
-    return cls(OoxmlEndpointMap.table, baseurl)</code></pre>
+    &#34;&#34;&#34;
+    Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+    targeting Table objects
+    &#34;&#34;&#34;
+    return cls(OoxmlEndpointMap._TABLE, baseurl)</code></pre>
 </details>
 </dd>
 <dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.theme"><code class="name flex">
 <span>def <span class="ident">theme</span></span>(<span>baseurl=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Factory method to create an <a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code>OoxmlEndpointMap</code></a> instance
+targeting Theme objects</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L140-L142" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L222-L228" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def theme(cls, baseurl=None):
-    return cls(OoxmlEndpointMap.THEME, baseurl)</code></pre>
+    &#34;&#34;&#34;
+    Factory method to create an `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` instance
+    targeting Theme objects
+    &#34;&#34;&#34;
+    return cls(OoxmlEndpointMap._THEME, baseurl)</code></pre>
 </details>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_id_url"><code class="name flex">
-<span>def <span class="ident">get_id_url</span></span>(<span>self, id)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L95-L96" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def get_id_url(self, id):
-    return posixpath.join(self.root_url, id)</code></pre>
-</details>
-</dd>
 <dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_object_type"><code class="name flex">
 <span>def <span class="ident">get_object_type</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Returns the Ooxml Automation service object type for this endpoint</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L84-L93" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L118-L130" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_object_type(self):
+    &#34;&#34;&#34;
+    Returns the Ooxml Automation service object type for this endpoint
+    &#34;&#34;&#34;
     for key, val in self.OBJECT_TYPE_MAP.items():
         for test_ep in val:
             if test_ep == self.endpoint_id:
@@ -895,17 +1366,37 @@ def theme(cls, baseurl=None):
     raise presalytics.lib.exceptions.ValidationError(message)</code></pre>
 </details>
 </dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_id_url"><code class="name flex">
+<span>def <span class="ident">get_id_url</span></span>(<span>self, id)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns a url to pull metadata from this Ooxml Automation service endpoint</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L132-L136" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_id_url(self, id):
+    &#34;&#34;&#34;
+    Returns a url to pull metadata from this Ooxml Automation service endpoint
+    &#34;&#34;&#34;
+    return posixpath.join(self.root_url, id)</code></pre>
+</details>
+</dd>
 <dt id="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_svg_url"><code class="name flex">
 <span>def <span class="ident">get_svg_url</span></span>(<span>self, id)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Returns a url to download an svg from this Ooxml Automation service endpoint</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L98-L99" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L138-L142" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_svg_url(self, id):
+    &#34;&#34;&#34;
+    Returns a url to download an svg from this Ooxml Automation service endpoint
+    &#34;&#34;&#34;
     return posixpath.join(self.root_url, &#34;Svg&#34;, id)</code></pre>
 </details>
 </dd>
@@ -913,47 +1404,403 @@ def theme(cls, baseurl=None):
 <span>def <span class="ident">get_xml_url</span></span>(<span>self, id)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Returns a url to pull the Open Office Xml from this Ooxml Automation service endpoint</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L101-L102" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L144-L148" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_xml_url(self, id):
+    &#34;&#34;&#34;
+    Returns a url to pull the Open Office Xml from this Ooxml Automation service endpoint
+    &#34;&#34;&#34;
     return posixpath.join(self.root_url, &#34;OpenOfficeXml&#34;, id)</code></pre>
 </details>
 </dd>
 </dl>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlWidgetBase"><code class="flex name class">
+<span>class <span class="ident">OoxmlWidgetBase</span></span>
+<span>(</span><span>name, story_id=None, object_ooxml_id=None, endpoint_map=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base class for creating widgets from objects at endpoints in the
+Presalytics API Ooxml Automation service.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The widget name.
+If not provided, will be the <code>object_name</code> or <code>filename</code></dd>
+<dt><strong><code>story_id</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The the id of the story in the Presalytics API Story service.
+If not provided,
+a new story will be created.
+Do not supply if this object has not yet been created.</dd>
+<dt><strong><code>object_ooxml_id</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The identifier of the Ooxml Automation service object bound the Story. Do not supply if this
+object has not yet been created.</dd>
+<dt><strong><code>endpoint_map</code></strong> :&ensp;<a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code>OoxmlEndpointMap</code></a>, optional</dt>
+<dd>Reference to the Presalytics API Ooxml Automation service endpoint and object type
+that for the object of interest</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>svg_html</code></strong> :&ensp;<code>str</code></dt>
+<dd>An html fragment containing the svg data</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L231-L352" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
+    &#34;&#34;&#34;
+    Base class for creating widgets from objects at endpoints in the 
+    Presalytics API Ooxml Automation service.
+
+    Parameters
+    ----------
+    name : str, optional
+        The widget name.  If not provided, will be the `object_name` or `filename`
+
+    story_id : str, optional
+        The the id of the story in the Presalytics API Story service.  If not provided, 
+        a new story will be created.  Do not supply if this object has not yet been created. 
+    
+    object_ooxml_id : str, optional
+        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this 
+        object has not yet been created.
+
+    endpoint_map : presalytics.lib.widgets.ooxml.OoxmlEndpointMap, optional
+        Reference to the Presalytics API Ooxml Automation service endpoint and object type
+        that for the object of interest
+
+    Attributes
+    ----------
+    svg_html : str
+        An html fragment containing the svg data
+    &#34;&#34;&#34;
+    endpoint_map: OoxmlEndpointMap
+    data: typing.Dict
+
+    __plugins__ = [
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;jquery&#39;
+            }
+        },
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;ooxml&#39;
+            }
+        },
+        {
+            &#39;name&#39;: &#39;external_links&#39;,
+            &#39;kind&#39;: &#39;style&#39;,
+            &#39;config&#39;: {
+                &#39;approved_styles_key&#39;: &#39;preloaders&#39;
+            }
+        }
+    ]
+
+    def __init__(self, 
+                 name,
+                 story_id=None,
+                 object_ooxml_id=None,
+                 endpoint_map=None,
+                 **kwargs):
+        super(OoxmlWidgetBase, self).__init__(name, **kwargs)
+        if object_ooxml_id:
+            self.object_ooxml_id = object_ooxml_id
+        if story_id:
+            self.story_id = story_id
+        if endpoint_map:
+            self.endpoint_map = endpoint_map
+        self.svg_html = None
+
+    def create_container(self, **kwargs):
+        &#34;&#34;&#34;
+        Wraps the Presalytics API Ooxml Automation service SVG endpoint in an `&lt;iframe&gt;` that
+        will be rendered inside of a story
+        &#34;&#34;&#34;
+        client = self.get_client()
+        self.token = client.token_util.token[&#34;access_token&#34;]
+        svg_container_div = lxml.html.Element(&#34;div&#34;, {
+            &#39;class&#39;: &#39;svg-container&#39;,
+            &#39;data-jwt&#39;: self.token,
+            &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
+            &#39;data-object-id&#39;: self.object_ooxml_id
+        })
+        preloader_container_div = lxml.etree.SubElement(svg_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-container&#34;})
+        preloader_row_div = lxml.etree.SubElement(preloader_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-row&#34;})
+        preloader_file = os.path.join(os.path.dirname(__file__), &#34;img&#34;, &#34;preloader.svg&#34;)
+        svg = lxml.html.parse(preloader_file)
+        preloader_row_div.append(svg.getroot())
+        empty_parent_div = lxml.html.Element(&#34;div&#34;, {
+            &#39;class&#39;: &#39;empty-parent bg-light&#39;
+        })
+        empty_parent_div.append(svg_container_div)
+        return lxml.html.tostring(empty_parent_div)
+
+
+    def to_html(self, **kwargs):
+        return self.svg_html
+
+    def get_svg(self, id, timeout_iterator=0) -&gt; str:
+        &#34;&#34;&#34;
+        Get an svg-formatted version of the object from the Ooxml Automation service
+        &#34;&#34;&#34;
+        svg_url = self.endpoint_map.get_svg_url(id)
+        client = self.get_client()
+        headers = client.get_auth_header()
+        headers.update(client.get_request_id_header())
+        response = requests.get(svg_url, headers=headers)
+        svg_data = response.text
+        if response.status_code != 200:
+            raise presalytics.lib.exceptions.ApiError(message=response.text, status_code=response.status_code)
+        if response.text.startswith(&#34;Temp data&#34;):
+            if timeout_iterator &gt; 5:
+                raise presalytics.lib.exceptions.ApiError(message=&#34;Unable to download svg.  Please check for upstream processing errors.&#34;)
+            else:
+                time.sleep(2)
+                svg_data = self.get_svg(id, timeout_iterator)
+        return svg_data
+
+    def get_svg_file(self, filename=None):
+        if not filename:
+            filename = self.endpoint_map.get_object_type() + &#34;-&#34; + self.object_ooxml_id + &#34;.pptx&#34;
+        with open(filename, &#39;w&#39;) as f:
+            f.write(self.get_svg(self.object_ooxml_id))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></li>
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.widgets.ooxml.OoxmlFileWidget" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlFileWidget">OoxmlFileWidget</a></li>
+<li><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase">UpdaterWidgetBase</a></li>
+<li><a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget">OoxmlEditorWidget</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container"><code class="name flex">
+<span>def <span class="ident">create_container</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Wraps the Presalytics API Ooxml Automation service SVG endpoint in an <code>&lt;iframe&gt;</code> that
+will be rendered inside of a story</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L300-L322" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def create_container(self, **kwargs):
+    &#34;&#34;&#34;
+    Wraps the Presalytics API Ooxml Automation service SVG endpoint in an `&lt;iframe&gt;` that
+    will be rendered inside of a story
+    &#34;&#34;&#34;
+    client = self.get_client()
+    self.token = client.token_util.token[&#34;access_token&#34;]
+    svg_container_div = lxml.html.Element(&#34;div&#34;, {
+        &#39;class&#39;: &#39;svg-container&#39;,
+        &#39;data-jwt&#39;: self.token,
+        &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
+        &#39;data-object-id&#39;: self.object_ooxml_id
+    })
+    preloader_container_div = lxml.etree.SubElement(svg_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-container&#34;})
+    preloader_row_div = lxml.etree.SubElement(preloader_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-row&#34;})
+    preloader_file = os.path.join(os.path.dirname(__file__), &#34;img&#34;, &#34;preloader.svg&#34;)
+    svg = lxml.html.parse(preloader_file)
+    preloader_row_div.append(svg.getroot())
+    empty_parent_div = lxml.html.Element(&#34;div&#34;, {
+        &#39;class&#39;: &#39;empty-parent bg-light&#39;
+    })
+    empty_parent_div.append(svg_container_div)
+    return lxml.html.tostring(empty_parent_div)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg"><code class="name flex">
+<span>def <span class="ident">get_svg</span></span>(<span>self, id, timeout_iterator=0)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get an svg-formatted version of the object from the Ooxml Automation service</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L328-L346" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_svg(self, id, timeout_iterator=0) -&gt; str:
+    &#34;&#34;&#34;
+    Get an svg-formatted version of the object from the Ooxml Automation service
+    &#34;&#34;&#34;
+    svg_url = self.endpoint_map.get_svg_url(id)
+    client = self.get_client()
+    headers = client.get_auth_header()
+    headers.update(client.get_request_id_header())
+    response = requests.get(svg_url, headers=headers)
+    svg_data = response.text
+    if response.status_code != 200:
+        raise presalytics.lib.exceptions.ApiError(message=response.text, status_code=response.status_code)
+    if response.text.startswith(&#34;Temp data&#34;):
+        if timeout_iterator &gt; 5:
+            raise presalytics.lib.exceptions.ApiError(message=&#34;Unable to download svg.  Please check for upstream processing errors.&#34;)
+        else:
+            time.sleep(2)
+            svg_data = self.get_svg(id, timeout_iterator)
+    return svg_data</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file"><code class="name flex">
+<span>def <span class="ident">get_svg_file</span></span>(<span>self, filename=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L348-L352" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_svg_file(self, filename=None):
+    if not filename:
+        filename = self.endpoint_map.get_object_type() + &#34;-&#34; + self.object_ooxml_id + &#34;.pptx&#34;
+    with open(filename, &#39;w&#39;) as f:
+        f.write(self.get_svg(self.object_ooxml_id))</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.story.components.WidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 <dt id="presalytics.lib.widgets.ooxml.OoxmlFileWidget"><code class="flex name class">
 <span>class <span class="ident">OoxmlFileWidget</span></span>
 <span>(</span><span>filename, name=None, story_id=None, object_ooxml_id=None, endpoint_map=None, object_name=None, previous_ooxml_version={}, file_last_modified=None, document_ooxml_id=None, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Inherit from this base class to create widget components that can be rendered to html via the
-presalytics.story.revealer.Revealer class.
-This component also need to build a method
-that allows the widget to be serialzed into a presalytics.story.outline.Widget object.</p>
-<h2 id="parameters">Parameters:</h2>
-<p>widget: Widget
-A presalytics.story.outline.Widget object use for initialized the component class.</p>
-<h2 id="attributes">Attributes:</h2>
-<p>outline_widget: Widget
-A presalytics.story.outline.Widget object</p>
-<p>css: List[str]
-A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
-in the presalytics.lib.templates.base module.</p>
-<p>js: List[str]
-A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
-in the presalytics.lib.templates.base module.</p>
-<p>Note: When inheriting from this base class, call "super().<strong>init</strong>(self, <em>args, </em>*kwargs)" before add your
-own custom initialization.</p></section>
+<section class="desc"><p>Builds a <code>widget</code> from a Presentation or Spreadsheet document</p>
+<p>This class interacts with the Presalytics API to extract SVG objects from
+Presentation and spreadsheet documents, identify them, and render them
+into a story. The file is uploaded to Presalytics API Ooxml Automation service,
+which then processes the file and scans for objects in the file's object tree
+(As seen in the 'Selection Pane' in PowerPoint) for objects matching the 'object_name'.
+When rendered, this widget retrieves an SVG of the identified object for rendering within
+the story. </p>
+<p>Please note that the Presalytics API Ooxml Automation object will be created overwritten
+each time this widget is initialized, and replaced within the corresponding
+<a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a>.
+For in-place editing of widgets Ooxml Automation objects
+that are already bound to the <code>Story</code>, please see <a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget"><code>OoxmlEditorWidget</code></a></p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>filename</code></strong> :&ensp;<code>str</code></dt>
+<dd>The local filepath a presentation or spreadsheet file containing
+the object to be rendered</dd>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The widget name.
+If not provided, attribute will be set as the <code>object_name</code>
+or <code>filename</code></dd>
+<dt><strong><code>story_id</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The the id of the story in the Presalytics API Story service.
+If not provided,
+a new story will be created.
+Do not supply if this object has not yet been created.</dd>
+<dt><strong><code>object_ooxml_id</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The identifier of the Ooxml Automation service object bound the Story. Do not supply if this
+object has not yet been created.</dd>
+<dt><strong><code>endpoint_map</code></strong> :&ensp;<a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code>OoxmlEndpointMap</code></a>, optional</dt>
+<dd>Reference to the Presalytics API Ooxml Automation service endpoint and object type
+that for the object of interest</dd>
+<dt><strong><code>object_name</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The name of the object in the file's object tree the will be rendered</dd>
+<dt><strong><code>previous_ooxml_version</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The id Ooxml Automation service document object that was previously used to
+occupy this widget in the <a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a></dd>
+<dt><strong><code>file_last_modified</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The "last modified" date for the file at the <code>filename</code> path.
+Used to ascertain
+whether file has been updated since the last time the widget was initialized, and
+correspondingly, whether the widget should be updated in the <a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a></dd>
+<dt><strong><code>document_ooxml_id</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The identifier for the parent "Document" object in the Ooxml Automation service for the object
+idenitifiable by a combinatation of <code>object_ooxml_id</code> and <code>endpoint_map</code>.</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L230-L402" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L355-L582" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlFileWidget(OoxmlWidgetBase):
+    &#34;&#34;&#34;
+    Builds a `widget` from a Presentation or Spreadsheet document
+
+    This class interacts with the Presalytics API to extract SVG objects from
+    Presentation and spreadsheet documents, identify them, and render them 
+    into a story. The file is uploaded to Presalytics API Ooxml Automation service,
+    which then processes the file and scans for objects in the file&#39;s object tree 
+    (As seen in the &#39;Selection Pane&#39; in PowerPoint) for objects matching the &#39;object_name&#39;.
+    When rendered, this widget retrieves an SVG of the identified object for rendering within 
+    the story. 
+
+    Please note that the Presalytics API Ooxml Automation object will be created overwritten 
+    each time this widget is initialized, and replaced within the corresponding 
+    `presalytics.story.outline.StoryOutline`.  For in-place editing of widgets Ooxml Automation objects 
+    that are already bound to the `Story`, please see `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget`
+
+    Parameters
+    ----------
+    filename : str
+        The local filepath a presentation or spreadsheet file containing
+        the object to be rendered
+
+    name : str, optional
+        The widget name.  If not provided, attribute will be set as the `object_name` 
+        or `filename`
+
+    story_id : str, optional
+        The the id of the story in the Presalytics API Story service.  If not provided, 
+        a new story will be created.  Do not supply if this object has not yet been created. 
+    
+    object_ooxml_id : str, optional
+        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this 
+        object has not yet been created.
+
+    endpoint_map : presalytics.lib.widgets.ooxml.OoxmlEndpointMap, optional
+        Reference to the Presalytics API Ooxml Automation service endpoint and object type
+        that for the object of interest
+
+    object_name : str, optional
+        The name of the object in the file&#39;s object tree the will be rendered
+
+    previous_ooxml_version : str, optional
+        The id Ooxml Automation service document object that was previously used to 
+        occupy this widget in the `presalytics.story.outline.StoryOutline`
+
+    file_last_modified : str, optional
+        The &#34;last modified&#34; date for the file at the `filename` path.  Used to ascertain
+        whether file has been updated since the last time the widget was initialized, and
+        correspondingly, whether the widget should be updated in the `presalytics.story.outline.StoryOutline`
+
+    document_ooxml_id : str, optional
+        The identifier for the parent &#34;Document&#34; object in the Ooxml Automation service for the object
+        idenitifiable by a combinatation of `object_ooxml_id` and `endpoint_map`.
+    
+    &#34;&#34;&#34;
     object_name: typing.Optional[str]
     ooxml_id: str
     file_last_modified: datetime.datetime
@@ -1145,7 +1992,7 @@ the updated rendering data to the server</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L272-L329" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L452-L509" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update(self):
     &#34;&#34;&#34;
@@ -1212,205 +2059,611 @@ the updated rendering data to the server</p></section>
 <ul class="hlist">
 <li><code><b><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></b></code>:
 <ul class="hlist">
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container">create_container</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
 </ul>
 </li>
 </ul>
 </dd>
-<dt id="presalytics.lib.widgets.ooxml.OoxmlWidgetBase"><code class="flex name class">
-<span>class <span class="ident">OoxmlWidgetBase</span></span>
-<span>(</span><span>name, story_id=None, object_ooxml_id=None, endpoint_map=None, **kwargs)</span>
+<dt id="presalytics.lib.widgets.ooxml.UpdaterWidgetBase"><code class="flex name class">
+<span>class <span class="ident">UpdaterWidgetBase</span></span>
+<span>(</span><span>name, story_id, object_id, endpoint_map, dto=None, data_table=None, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Inherit from this base class to create widget components that can be rendered to html via the
-presalytics.story.revealer.Revealer class.
-This component also need to build a method
-that allows the widget to be serialzed into a presalytics.story.outline.Widget object.</p>
-<h2 id="parameters">Parameters:</h2>
-<p>widget: Widget
-A presalytics.story.outline.Widget object use for initialized the component class.</p>
-<h2 id="attributes">Attributes:</h2>
-<p>outline_widget: Widget
-A presalytics.story.outline.Widget object</p>
-<p>css: List[str]
-A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
-in the presalytics.lib.templates.base module.</p>
-<p>js: List[str]
-A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
-in the presalytics.lib.templates.base module.</p>
-<p>Note: When inheriting from this base class, call "super().<strong>init</strong>(self, <em>args, </em>*kwargs)" before add your
-own custom initialization.</p></section>
+<section class="desc"><p>Abstract class for create simple interfaces to update widgets from a simple data table. </p>
+<p>This class simplifies updates to Ooxml Automation service endpoints, allowing updates to
+ooxml object data and its underlying xml via simple data transfer objects definted in the
+Presalytics Ooxml Automation server.
+</p>
+<p>Inheriting classes must override the <code>_get_dto_class</code>, <code>_get_endpoint_path</code>, and <code>_get_dto_table_name</code>
+methods</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The widget name.
+If not provided, will be the <code>object_name</code> or <code>filename</code></dd>
+<dt><strong><code>story_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>The the id of the story in the Presalytics API Story service.
+If not provided,
+a new story will be created.
+Do not supply if this object has not yet been created.</dd>
+<dt><strong><code>object_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>The identifier of the Ooxml Automation service object bound the Story. Do not supply if this
+object has not yet been created.</dd>
+<dt><strong><code>endpoint_map</code></strong> :&ensp;<a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code>OoxmlEndpointMap</code></a></dt>
+<dd>Reference to the Presalytics API Ooxml Automation service endpoint and object type
+that for the object of interest</dd>
+<dt><strong><code>dto</code></strong> :&ensp;<code>object</code>, optional</dt>
+<dd>A an instance of the data transfer object model. The class of this object is defined by the
+<code>_get_dto_class()</code> method.
+Represents the current state of the data of the data in the service.</dd>
+<dt><strong><code>data_table</code></strong> :&ensp;<code>list</code> of <code>lists</code>, optional</dt>
+<dd>A representation of a data table that will be incorporates into a dto object's property defined by
+the subclass' <code>_get_dto_table_name</code> method.</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L145-L227" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L585-L734" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
-    endpoint_map: OoxmlEndpointMap
-    data: typing.Dict
+<pre><code class="python">class UpdaterWidgetBase(OoxmlWidgetBase):
+    &#34;&#34;&#34;
+    Abstract class for create simple interfaces to update widgets from a simple data table. 
 
-    __plugins__ = [
-        {
-            &#39;name&#39;: &#39;external_scripts&#39;,
-            &#39;kind&#39;: &#39;script&#39;,
-            &#39;config&#39;: {
-                &#39;approved_scripts_key&#39;: &#39;jquery&#39;
-            }
-        },
-        {
-            &#39;name&#39;: &#39;external_scripts&#39;,
-            &#39;kind&#39;: &#39;script&#39;,
-            &#39;config&#39;: {
-                &#39;approved_scripts_key&#39;: &#39;ooxml&#39;
-            }
-        },
-        {
-            &#39;name&#39;: &#39;external_links&#39;,
-            &#39;kind&#39;: &#39;style&#39;,
-            &#39;config&#39;: {
-                &#39;approved_styles_key&#39;: &#39;preloaders&#39;
-            }
-        }
-    ]
+    This class simplifies updates to Ooxml Automation service endpoints, allowing updates to 
+    ooxml object data and its underlying xml via simple data transfer objects definted in the 
+    Presalytics Ooxml Automation server.  
 
+    Inheriting classes must override the `_get_dto_class`, `_get_endpoint_path`, and `_get_dto_table_name`
+    methods
+
+    Parameters
+    ----------
+    name : str
+        The widget name.  If not provided, will be the `object_name` or `filename`
+
+    story_id : str
+        The the id of the story in the Presalytics API Story service.  If not provided, 
+        a new story will be created.  Do not supply if this object has not yet been created. 
+    
+    object_id : str
+        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this 
+        object has not yet been created.
+
+    endpoint_map : presalytics.lib.widgets.ooxml.OoxmlEndpointMap
+        Reference to the Presalytics API Ooxml Automation service endpoint and object type
+        that for the object of interest
+
+    dto: object, optional
+        A an instance of the data transfer object model. The class of this object is defined by the
+        `_get_dto_class()` method.  Represents the current state of the data of the data in the service.
+
+    data_table: list of lists, optional
+        A representation of a data table that will be incorporates into a dto object&#39;s property defined by
+        the subclass&#39; `_get_dto_table_name` method.
+
+    &#34;&#34;&#34;
     def __init__(self, 
-                 name,
-                 story_id=None,
-                 object_ooxml_id=None,
-                 endpoint_map=None,
-                 **kwargs):
-        super(OoxmlWidgetBase, self).__init__(name, **kwargs)
-        if object_ooxml_id:
-            self.object_ooxml_id = object_ooxml_id
-        if story_id:
-            self.story_id = story_id
-        if endpoint_map:
-            self.endpoint_map = endpoint_map
-        self.svg_html = None
+                name,
+                story_id: str,
+                object_id: str,
+                endpoint_map: OoxmlEndpointMap,
+                dto=None, 
+                data_table=None,
+                **kwargs):
+        super(UpdaterWidgetBase, self).__init__(name, story_id, object_id, endpoint_map, **kwargs)
+        self.dto = dto
+        self.data_table = data_table
+        self.object_id = object_id
+    
+    
+    @abc.abstractmethod
+    def _get_dto_class(self) -&gt; typing.Type:
+        &#34;&#34;&#34;
+        Returns the Class of instances that will used for dtos
+        &#34;&#34;&#34;
+        return NotImplemented
 
-    def create_container(self, **kwargs):
-        
+    @abc.abstractmethod
+    def _get_endpoint_path(self) -&gt; str:
+        &#34;&#34;&#34;
+        Returns the relative path to the the endpoint used , starting from the `root_url` of the 
+        `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` object. 
+        &#34;&#34;&#34;
+        return NotImplemented
+
+    @abc.abstractmethod
+    def _get_dto_table_name(self) -&gt; str:
+        &#34;&#34;&#34;
+        Returns the attribute name in the object returned by `_get_dto_class()` that the `data_table` parameter
+        should be mapped to.
+        &#34;&#34;&#34;
+        return NotImplemented
+
+    def build_endpoint(self) -&gt; str:
+        &#34;&#34;&#34;
+        Returns the endpoints used for Api calls
+        &#34;&#34;&#34;
+        return posixpath.join(self.endpoint_map.root_url, self._get_endpoint_path(), self.object_ooxml_id)
+    
+    def get_dto(self):
+        &#34;&#34;&#34;
+        Returns an instance of the dto object from the OoxmlAutomation Service API
+        &#34;&#34;&#34;
         client = self.get_client()
-        self.token = client.token_util.token[&#34;access_token&#34;]
-        svg_container_div = lxml.html.Element(&#34;div&#34;, {
-            &#39;class&#39;: &#39;svg-container&#39;,
-            &#39;data-jwt&#39;: self.token,
-            &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
-            &#39;data-object-id&#39;: self.object_ooxml_id
-        })
-        preloader_container_div = lxml.etree.SubElement(svg_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-container&#34;})
-        preloader_row_div = lxml.etree.SubElement(preloader_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-row&#34;})
-        preloader_file = os.path.join(os.path.dirname(__file__), &#34;img&#34;, &#34;preloader.svg&#34;)
-        svg = lxml.html.parse(preloader_file)
-        preloader_row_div.append(svg.getroot())
-        empty_parent_div = lxml.html.Element(&#34;div&#34;, {
-            &#39;class&#39;: &#39;empty-parent bg-light&#39;
-        })
-        empty_parent_div.append(svg_container_div)
-        return lxml.html.tostring(empty_parent_div)
+        headers = client.get_auth_header()
+        headers.update(client.get_request_id_header())
+        resp = requests.get(self.build_endpoint(), headers=headers)
+        if resp.status_code &gt; 299:
+            raise presalytics.lib.exceptions.ApiError(message=resp.text)
+        dto = client.ooxml_automation.api_client._ApiClient__deserialize(resp.json(), self._get_dto_class())
+        self.dto = dto
+        return dto
 
-
-    def to_html(self, **kwargs):
-        return self.svg_html
-
-    def get_svg(self, id, timeout_iterator=0) -&gt; str:
-        svg_url = self.endpoint_map.get_svg_url(id)
+    def _put_dto(self, dto):
+        &#34;&#34;&#34;
+        Updates the Endpoint in the Ooxml Automation Service from a dto object
+        &#34;&#34;&#34;
         client = self.get_client()
-        auth_header = client.get_auth_header()
-        response = requests.get(svg_url, headers=auth_header)
-        svg_data = response.text
-        if response.status_code != 200:
-            raise presalytics.lib.exceptions.ApiError(message=response.text, status_code=response.status_code)
-        if response.text.startswith(&#34;Temp data&#34;):
-            if timeout_iterator &gt; 5:
-                raise presalytics.lib.exceptions.ApiError(message=&#34;Unable to download svg.  Please check for upstream processing errors.&#34;)
-            else:
-                time.sleep(2)
-                svg_data = self.get_svg(id, timeout_iterator)
-        return svg_data</code></pre>
+        headers = client.get_auth_header()
+        headers.update(client.get_request_id_header())
+        data = client.ooxml_automation.api_client.sanitize_for_serialization(dto)
+        resp = requests.put(self.build_endpoint(), json=data, headers=headers)
+        if resp.status_code &gt; 299:
+            raise presalytics.lib.exceptions.ApiError(message=resp.text)
+        else:
+            self.dto = dto
+
+    def update_from_dto(self, dto):
+        &#34;&#34;&#34;
+        Updates the Endpoint in the Ooxml Automation Service from a dto object, and updates
+        the `svg_html` attribute
+        &#34;&#34;&#34;
+        self._put_dto(dto)
+        self.svg_html = self.create_container()
+
+    def update_from_data_table(self, data_table):
+        &#34;&#34;&#34;
+        Updates the Endpoint in the Ooxml Automation Service from a the `data_table`, and updates
+        the `svg_html` attribute
+        &#34;&#34;&#34;
+        dto = self.get_dto()
+        setattr(dto, self._get_dto_table_name(), data_table)
+        self.put_dto(dto)
+
+    def serialize(self):
+        data = {
+            &#34;story_id&#34;: self.story_id,
+            &#34;object_id&#34;: self.object_ooxml_id,
+            &#34;dto&#34;: self.dto.to_dict(),
+            &#34;data_table&#34;: self.data_table
+        }
+        widget = presalytics.story.outline.Widget(
+            name=self.name,
+            kind=self.__component_kind__,
+            data=data,
+            plugins=None
+        )
+        return widget
+
+    @classmethod
+    def deserialize(cls, component, **kwargs):
+        return cls(
+            component.name, 
+            component.data[&#34;story_id&#34;], 
+            component.data[&#34;object_id&#34;],
+            component.data.get(&#34;dto&#34;, None),
+            component.data.get(&#34;data_table&#34;, None),
+            **kwargs
+        )</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
+<li><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></li>
 <li><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></li>
 <li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
 <li>abc.ABC</li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
-<li><a title="presalytics.lib.widgets.ooxml.OoxmlFileWidget" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlFileWidget">OoxmlFileWidget</a></li>
-<li><a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget">OoxmlEditorWidget</a></li>
+<li><a title="presalytics.lib.widgets.ooxml.ChartUpdaterWidget" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.ChartUpdaterWidget">ChartUpdaterWidget</a></li>
+<li><a title="presalytics.lib.widgets.ooxml.TableUpdaterWidget" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.TableUpdaterWidget">TableUpdaterWidget</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container"><code class="name flex">
-<span>def <span class="ident">create_container</span></span>(<span>self, **kwargs)</span>
+<dt id="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.build_endpoint"><code class="name flex">
+<span>def <span class="ident">build_endpoint</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Returns the endpoints used for Api calls</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L188-L207" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L659-L663" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">def create_container(self, **kwargs):
-    
-    client = self.get_client()
-    self.token = client.token_util.token[&#34;access_token&#34;]
-    svg_container_div = lxml.html.Element(&#34;div&#34;, {
-        &#39;class&#39;: &#39;svg-container&#39;,
-        &#39;data-jwt&#39;: self.token,
-        &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
-        &#39;data-object-id&#39;: self.object_ooxml_id
-    })
-    preloader_container_div = lxml.etree.SubElement(svg_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-container&#34;})
-    preloader_row_div = lxml.etree.SubElement(preloader_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-row&#34;})
-    preloader_file = os.path.join(os.path.dirname(__file__), &#34;img&#34;, &#34;preloader.svg&#34;)
-    svg = lxml.html.parse(preloader_file)
-    preloader_row_div.append(svg.getroot())
-    empty_parent_div = lxml.html.Element(&#34;div&#34;, {
-        &#39;class&#39;: &#39;empty-parent bg-light&#39;
-    })
-    empty_parent_div.append(svg_container_div)
-    return lxml.html.tostring(empty_parent_div)</code></pre>
+<pre><code class="python">def build_endpoint(self) -&gt; str:
+    &#34;&#34;&#34;
+    Returns the endpoints used for Api calls
+    &#34;&#34;&#34;
+    return posixpath.join(self.endpoint_map.root_url, self._get_endpoint_path(), self.object_ooxml_id)</code></pre>
 </details>
 </dd>
-<dt id="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg"><code class="name flex">
-<span>def <span class="ident">get_svg</span></span>(<span>self, id, timeout_iterator=0) -> str</span>
+<dt id="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_dto"><code class="name flex">
+<span>def <span class="ident">get_dto</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Returns an instance of the dto object from the OoxmlAutomation Service API</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L213-L227" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L665-L677" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">def get_svg(self, id, timeout_iterator=0) -&gt; str:
-    svg_url = self.endpoint_map.get_svg_url(id)
+<pre><code class="python">def get_dto(self):
+    &#34;&#34;&#34;
+    Returns an instance of the dto object from the OoxmlAutomation Service API
+    &#34;&#34;&#34;
     client = self.get_client()
-    auth_header = client.get_auth_header()
-    response = requests.get(svg_url, headers=auth_header)
-    svg_data = response.text
-    if response.status_code != 200:
-        raise presalytics.lib.exceptions.ApiError(message=response.text, status_code=response.status_code)
-    if response.text.startswith(&#34;Temp data&#34;):
-        if timeout_iterator &gt; 5:
-            raise presalytics.lib.exceptions.ApiError(message=&#34;Unable to download svg.  Please check for upstream processing errors.&#34;)
-        else:
-            time.sleep(2)
-            svg_data = self.get_svg(id, timeout_iterator)
-    return svg_data</code></pre>
+    headers = client.get_auth_header()
+    headers.update(client.get_request_id_header())
+    resp = requests.get(self.build_endpoint(), headers=headers)
+    if resp.status_code &gt; 299:
+        raise presalytics.lib.exceptions.ApiError(message=resp.text)
+    dto = client.ooxml_automation.api_client._ApiClient__deserialize(resp.json(), self._get_dto_class())
+    self.dto = dto
+    return dto</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_dto"><code class="name flex">
+<span>def <span class="ident">update_from_dto</span></span>(<span>self, dto)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Updates the Endpoint in the Ooxml Automation Service from a dto object, and updates
+the <code>svg_html</code> attribute</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L693-L699" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def update_from_dto(self, dto):
+    &#34;&#34;&#34;
+    Updates the Endpoint in the Ooxml Automation Service from a dto object, and updates
+    the `svg_html` attribute
+    &#34;&#34;&#34;
+    self._put_dto(dto)
+    self.svg_html = self.create_container()</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_data_table"><code class="name flex">
+<span>def <span class="ident">update_from_data_table</span></span>(<span>self, data_table)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Updates the Endpoint in the Ooxml Automation Service from a the <code>data_table</code>, and updates
+the <code>svg_html</code> attribute</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L701-L708" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def update_from_data_table(self, data_table):
+    &#34;&#34;&#34;
+    Updates the Endpoint in the Ooxml Automation Service from a the `data_table`, and updates
+    the `svg_html` attribute
+    &#34;&#34;&#34;
+    dto = self.get_dto()
+    setattr(dto, self._get_dto_table_name(), data_table)
+    self.put_dto(dto)</code></pre>
 </details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></b></code>:
+<li><code><b><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></b></code>:
 <ul class="hlist">
-<li><code><a title="presalytics.story.components.WidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
-<li><code><a title="presalytics.story.components.WidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
-<li><code><a title="presalytics.story.components.WidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container">create_container</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.ChartUpdaterWidget"><code class="flex name class">
+<span>class <span class="ident">ChartUpdaterWidget</span></span>
+<span>(</span><span>name, story_id, chart_id, dto=None, data_table=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Updates a Chart in the Ooxml Automation service API at the the endpoint '/Chart/ChartUpdate/'</p>
+<p>This class simplifies chart updates, for charts residing in the Ooxml Automation Service,
+allowing updates to ooxml object data and its underlying xml either via a list of lists or
+the <a title="presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_chart_data_dto.html#presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO"><code>ChartChartDataDTO</code></a>
+object.
+</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>A name for the widget.</dd>
+<dt><strong><code>story_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>The the id of the story in the Presalytics API Story service.</dd>
+<dt><strong><code>chart_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>The identifier of the Ooxml Automation Chart service object.</dd>
+<dt><strong><code>dto</code></strong> :&ensp;<a title="presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_chart_data_dto.html#presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO"><code>ChartChartDataDTO</code></a>, optional</dt>
+<dd>A an instance of the data transfer object model. The class of this object is defined by the
+<code>_get_dto_class()</code> method.
+Represents the current state of the data of the data in the service.</dd>
+<dt><strong><code>data_table</code></strong> :&ensp;<code>list</code> of <code>lists</code>, optional</dt>
+<dd>A representation of a data table that will be incorporates into a dto object's property defined by
+the subclass' <code>_get_dto_table_name</code> method.</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L739-L812" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class ChartUpdaterWidget(UpdaterWidgetBase):
+    &#34;&#34;&#34;
+    Updates a Chart in the Ooxml Automation service API at the the endpoint &#39;/Chart/ChartUpdate/&#39;
+
+    This class simplifies chart updates, for charts residing in the Ooxml Automation Service, 
+    allowing updates to ooxml object data and its underlying xml either via a list of lists or
+    the `presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO`
+    object.  
+
+    Parameters
+    ----------
+    name : str
+        A name for the widget.
+
+    story_id : str
+        The the id of the story in the Presalytics API Story service. 
+    
+    chart_id : str
+        The identifier of the Ooxml Automation Chart service object. 
+
+    dto: presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO, optional
+        A an instance of the data transfer object model. The class of this object is defined by the
+        `_get_dto_class()` method.  Represents the current state of the data of the data in the service.
+
+    data_table: list of lists, optional
+        A representation of a data table that will be incorporates into a dto object&#39;s property defined by
+        the subclass&#39; `_get_dto_table_name` method.
+
+    &#34;&#34;&#34;
+    __component_kind__ = &#34;chart-updater&#34;
+    
+    def __init__(self, 
+                name,
+                story_id: str,
+                chart_id: str,
+                dto: &#39;ChartChartDataDTO&#39; = None, 
+                data_table: typing.Sequence[typing.Sequence] = None,
+                **kwargs):
+        super().__init__(name, story_id, chart_id, OoxmlEndpointMap.chart(), dto=dto, data_table=data_table)
+        self.chart_id = chart_id
+
+
+    def _get_dto_class(self):
+        return presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO
+
+    def _get_endpoint_path(self):
+        return &#34;ChartUpdate&#34;
+
+    def _get_dto_table_name(self):
+        return &#34;data_points&#34;
+
+    def get_dataframe(self) -&gt; pandas.DataFrame:
+        &#34;&#34;&#34;
+        Returns a panda datagrame of the 
+        &#34;&#34;&#34;
+        data: collections.OrderedDict
+        
+        if not self.dto:
+            self.dto = self.get_dto()
+        data = collections.OrderedDict()
+        for i in range(0, len(self.dto.series_names)):
+            data.update({
+                self.dto.series_names[i]: pandas.Series(self.dto.data_points[i], self.dto.category_names)
+            })
+        return pandas.DataFrame(data)
+    
+    def put_dataframe(self, df: pandas.DataFrame):
+        data_dict = df.to_dict(&#39;split&#39;)
+        data_points = list(map(list, zip(*data_dict[&#39;data&#39;])))
+        dto = self._get_dto_class()(chart_id=self.chart_id, 
+                                 series_names=data_dict[&#34;columns&#34;], 
+                                 category_names=data_dict[&#34;index&#34;],
+                                 data_points=data_points)
+        self._put_dto(dto)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase">UpdaterWidgetBase</a></li>
+<li><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></li>
+<li><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></li>
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml.ChartUpdaterWidget.get_dataframe"><code class="name flex">
+<span>def <span class="ident">get_dataframe</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns a panda datagrame of the</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L790-L803" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_dataframe(self) -&gt; pandas.DataFrame:
+    &#34;&#34;&#34;
+    Returns a panda datagrame of the 
+    &#34;&#34;&#34;
+    data: collections.OrderedDict
+    
+    if not self.dto:
+        self.dto = self.get_dto()
+    data = collections.OrderedDict()
+    for i in range(0, len(self.dto.series_names)):
+        data.update({
+            self.dto.series_names[i]: pandas.Series(self.dto.data_points[i], self.dto.category_names)
+        })
+    return pandas.DataFrame(data)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.ChartUpdaterWidget.put_dataframe"><code class="name flex">
+<span>def <span class="ident">put_dataframe</span></span>(<span>self, df)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L805-L812" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def put_dataframe(self, df: pandas.DataFrame):
+    data_dict = df.to_dict(&#39;split&#39;)
+    data_points = list(map(list, zip(*data_dict[&#39;data&#39;])))
+    dto = self._get_dto_class()(chart_id=self.chart_id, 
+                             series_names=data_dict[&#34;columns&#34;], 
+                             category_names=data_dict[&#34;index&#34;],
+                             data_points=data_points)
+    self._put_dto(dto)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase">UpdaterWidgetBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.build_endpoint" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.build_endpoint">build_endpoint</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.create_container" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container">create_container</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_dto" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_dto">get_dto</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_data_table" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_data_table">update_from_data_table</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_dto" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_dto">update_from_dto</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.TableUpdaterWidget"><code class="flex name class">
+<span>class <span class="ident">TableUpdaterWidget</span></span>
+<span>(</span><span>name, story_id, table_id, dto=None, data_table=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Updates a Table in the Ooxml Automation service API at the the endpoint '/Table/TableUpdate/'</p>
+<p>This class simplifies table updates, for tables residing in the Ooxml Automation Service,
+allowing updates to ooxml object data and its underlying xml either via a list of lists or
+the <a title="presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/table_table_data_dto.html#presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO"><code>TableTableDataDTO</code></a>
+object.
+</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>A name for the widget.</dd>
+<dt><strong><code>story_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>The the id of the story in the Presalytics API Story service.</dd>
+<dt><strong><code>table_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>The identifier of the Ooxml Automation Table service object.</dd>
+<dt><strong><code>dto</code></strong> :&ensp;<a title="presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/table_table_data_dto.html#presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO"><code>TableTableDataDTO</code></a>, optional</dt>
+<dd>A an instance of the data transfer object model. The class of this object is defined by the
+<code>_get_dto_class()</code> method.
+Represents the current state of the data of the data in the service.</dd>
+<dt><strong><code>data_table</code></strong> :&ensp;<code>list</code> of <code>lists</code>, optional</dt>
+<dd>A representation of a data table that will be incorporates into a dto object's property defined by
+the subclass' <code>_get_dto_table_name</code> method.</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L816-L865" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class TableUpdaterWidget(UpdaterWidgetBase):
+    &#34;&#34;&#34;
+    Updates a Table in the Ooxml Automation service API at the the endpoint &#39;/Table/TableUpdate/&#39;
+
+    This class simplifies table updates, for tables residing in the Ooxml Automation Service, 
+    allowing updates to ooxml object data and its underlying xml either via a list of lists or
+    the `presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO`
+    object.  
+
+    Parameters
+    ----------
+    name : str
+        A name for the widget.
+
+    story_id : str
+        The the id of the story in the Presalytics API Story service. 
+    
+    table_id : str
+        The identifier of the Ooxml Automation Table service object. 
+
+    dto: presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO, optional
+        A an instance of the data transfer object model. The class of this object is defined by the
+        `_get_dto_class()` method.  Represents the current state of the data of the data in the service.
+
+    data_table: list of lists, optional
+        A representation of a data table that will be incorporates into a dto object&#39;s property defined by
+        the subclass&#39; `_get_dto_table_name` method.
+
+    &#34;&#34;&#34;
+    __component_kind__ = &#34;table-updater&#34;
+    
+    def __init__(self, 
+                name,
+                story_id: str,
+                table_id: str,
+                dto: &#39;TableTableDataDTO&#39; = None, 
+                data_table: typing.Sequence[typing.Sequence] = None,
+                **kwargs):
+        super().__init__(name, story_id, table_id, OoxmlEndpointMap.table(), dto=dto, data_table=data_table)
+        self.table_id = table_id
+
+
+    def _get_dto_class(self):
+        return presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO
+
+    def _get_endpoint_path(self):
+        return &#34;TableUpdate&#34;
+
+    def _get_dto_table_name(self):
+        return &#34;table_data&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase">UpdaterWidgetBase</a></li>
+<li><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></li>
+<li><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></li>
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase">UpdaterWidgetBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.build_endpoint" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.build_endpoint">build_endpoint</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.create_container" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container">create_container</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_dto" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_dto">get_dto</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_data_table" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_data_table">update_from_data_table</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_dto" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_dto">update_from_dto</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1434,24 +2687,9 @@ own custom initialization.</p></section>
 <li>
 <h4><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap">OoxmlEndpointMap</a></code></h4>
 <ul class="two-column">
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.BASE_URL" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.BASE_URL">BASE_URL</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.CHART" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.CHART">CHART</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.CONNECTION_SHAPE" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.CONNECTION_SHAPE">CONNECTION_SHAPE</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.DOCUMENT" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.DOCUMENT">DOCUMENT</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.GROUP" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.GROUP">GROUP</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.IMAGE" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.IMAGE">IMAGE</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SHAPE" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SHAPE">SHAPE</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SHAPETREE" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SHAPETREE">SHAPETREE</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SLIDE" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.SLIDE">SLIDE</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.TABLE" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.TABLE">TABLE</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.THEME" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.THEME">THEME</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.chart" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.chart">chart</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.connection_shape" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.connection_shape">connection_shape</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.chart" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.chart">chart</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.document" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.document">document</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_id_url" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_id_url">get_id_url</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_object_type" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_object_type">get_object_type</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_svg_url" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_svg_url">get_svg_url</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_xml_url" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_xml_url">get_xml_url</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.group" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.group">group</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.image" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.image">image</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.shape" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.shape">shape</a></code></li>
@@ -1459,6 +2697,18 @@ own custom initialization.</p></section>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.slide" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.slide">slide</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.table" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.table">table</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.theme" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.theme">theme</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_object_type" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_object_type">get_object_type</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_id_url" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_id_url">get_id_url</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_svg_url" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_svg_url">get_svg_url</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_xml_url" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap.get_xml_url">get_xml_url</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container">create_container</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file">get_svg_file</a></code></li>
 </ul>
 </li>
 <li>
@@ -1468,11 +2718,23 @@ own custom initialization.</p></section>
 </ul>
 </li>
 <li>
-<h4><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></code></h4>
+<h4><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase">UpdaterWidgetBase</a></code></h4>
 <ul class="">
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container">create_container</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.build_endpoint" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.build_endpoint">build_endpoint</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_dto" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_dto">get_dto</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_dto" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_dto">update_from_dto</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_data_table" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_data_table">update_from_data_table</a></code></li>
 </ul>
+</li>
+<li>
+<h4><code><a title="presalytics.lib.widgets.ooxml.ChartUpdaterWidget" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.ChartUpdaterWidget">ChartUpdaterWidget</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.lib.widgets.ooxml.ChartUpdaterWidget.get_dataframe" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.ChartUpdaterWidget.get_dataframe">get_dataframe</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.ChartUpdaterWidget.put_dataframe" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.ChartUpdaterWidget.put_dataframe">put_dataframe</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="presalytics.lib.widgets.ooxml.TableUpdaterWidget" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.TableUpdaterWidget">TableUpdaterWidget</a></code></h4>
 </li>
 </ul>
 </li>

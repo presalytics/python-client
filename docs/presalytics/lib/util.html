@@ -62,6 +62,22 @@ def get_site_host():
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="presalytics.lib.util.roundup_date_modified"><code class="name flex">
+<span>def <span class="ident">roundup_date_modified</span></span>(<span>current_datetime)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L15-L18" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def roundup_date_modified(current_datetime: datetime.datetime):
+    one_second = datetime.timedelta(seconds=1)
+    rounddown = current_datetime.replace(microsecond=0)
+    return rounddown + one_second</code></pre>
+</details>
+</dd>
 <dt id="presalytics.lib.util.get_site_host"><code class="name flex">
 <span>def <span class="ident">get_site_host</span></span>(<span>)</span>
 </code></dt>
@@ -79,22 +95,6 @@ def get_site_host():
     except (KeyError, AttributeError):
         pass
     return site_host</code></pre>
-</details>
-</dd>
-<dt id="presalytics.lib.util.roundup_date_modified"><code class="name flex">
-<span>def <span class="ident">roundup_date_modified</span></span>(<span>current_datetime: datetime.datetime)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L15-L18" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def roundup_date_modified(current_datetime: datetime.datetime):
-    one_second = datetime.timedelta(seconds=1)
-    rounddown = current_datetime.replace(microsecond=0)
-    return rounddown + one_second</code></pre>
 </details>
 </dd>
 </dl>
@@ -165,8 +165,8 @@ del self._x</p></section>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="presalytics.lib.util.get_site_host" href="/python-client/presalytics/lib/util.html#presalytics.lib.util.get_site_host">get_site_host</a></code></li>
 <li><code><a title="presalytics.lib.util.roundup_date_modified" href="/python-client/presalytics/lib/util.html#presalytics.lib.util.roundup_date_modified">roundup_date_modified</a></code></li>
+<li><code><a title="presalytics.lib.util.get_site_host" href="/python-client/presalytics/lib/util.html#presalytics.lib.util.get_site_host">get_site_host</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>

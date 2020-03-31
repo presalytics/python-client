@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/local.py#L0-L30" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/local.py#L0-L50" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import os
 import typing
@@ -32,15 +32,35 @@ import presalytics.lib.exceptions
 
 css_path = os.path.join(os.path.dirname(__file__), &#34;css&#34;)
 
-local_styles_map = {
-    &#34;single_item_grid&#34;: os.path.join(css_path, &#34;single-item-grid.css&#34;)
-}
-
-
 class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
+    &#34;&#34;&#34;
+    Plugin incorporate styles from a css stylesheet in a local filepath
+    &#34;&#34;&#34;
     __plugin_name__ = &#39;local&#39;
 
+    LOCAL_STYLES_MAP = {
+        &#34;single_item_grid&#34;: os.path.join(css_path, &#34;single-item-grid.css&#34;),
+        &#34;flex_row&#34;: os.path.join(css_path, &#34;flex-row.css&#34;),
+        &#34;light_grey&#34;: os.path.join(css_path, &#34;light-grey.css&#34;),
+        &#34;responsive_title&#34;: os.path.join(css_path, &#34;responsive-title.css&#34;),
+        &#34;reveal_overrides&#34;: os.path.join(css_path, &#34;reveal-overrides-base.css&#34;)
+    }
+    &#34;&#34;&#34;
+    Dictionary containing a map configuration keys to css files that are 
+    member of the Presalytics Python Library manifest
+    &#34;&#34;&#34;
+
     def to_style(self, config, **kwargs):
+        &#34;&#34;&#34;
+        Renders a css stylesheet as an inline style tag in a story
+
+        Parameters
+        ----------
+        config : dict
+            A dictionary containing either a &#34;css_file_path&#34; key, which points
+            to a local file path, or a &#34;css_file_id&#34; refers to a css file included
+            in the Presalytics Python Library&#39;s manifest 
+        &#34;&#34;&#34;
         id = config.get(&#34;css_file_id&#34;, None)
         if not id:
             file_path = config.get(&#34;css_file_path&#34;, None)
@@ -51,7 +71,7 @@ class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
                 message = &#39;Path {0} in plugin configuration does not exist&#39;.format(file_path)
                 raise presalytics.lib.exceptions.MissingConfigException(message)
         else:
-            file_path = local_styles_map[id]
+            file_path = LocalStylesPlugin.LOCAL_STYLES_MAP[id]
         with open(file_path, &#39;r&#39;) as f:
             style_data = f.read()
         tag = &#34;&lt;style&gt;{0}&lt;/style&gt;&#34;.format(style_data)
@@ -72,17 +92,41 @@ class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
 <span>(</span><span>**kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>A script plugin render configures templated scripts to append to the body
-tag of an html document</p></section>
+<section class="desc"><p>Plugin incorporate styles from a css stylesheet in a local filepath</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/local.py#L13-L31" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/local.py#L8-L51" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
+    &#34;&#34;&#34;
+    Plugin incorporate styles from a css stylesheet in a local filepath
+    &#34;&#34;&#34;
     __plugin_name__ = &#39;local&#39;
 
+    LOCAL_STYLES_MAP = {
+        &#34;single_item_grid&#34;: os.path.join(css_path, &#34;single-item-grid.css&#34;),
+        &#34;flex_row&#34;: os.path.join(css_path, &#34;flex-row.css&#34;),
+        &#34;light_grey&#34;: os.path.join(css_path, &#34;light-grey.css&#34;),
+        &#34;responsive_title&#34;: os.path.join(css_path, &#34;responsive-title.css&#34;),
+        &#34;reveal_overrides&#34;: os.path.join(css_path, &#34;reveal-overrides-base.css&#34;)
+    }
+    &#34;&#34;&#34;
+    Dictionary containing a map configuration keys to css files that are 
+    member of the Presalytics Python Library manifest
+    &#34;&#34;&#34;
+
     def to_style(self, config, **kwargs):
+        &#34;&#34;&#34;
+        Renders a css stylesheet as an inline style tag in a story
+
+        Parameters
+        ----------
+        config : dict
+            A dictionary containing either a &#34;css_file_path&#34; key, which points
+            to a local file path, or a &#34;css_file_id&#34; refers to a css file included
+            in the Presalytics Python Library&#39;s manifest 
+        &#34;&#34;&#34;
         id = config.get(&#34;css_file_id&#34;, None)
         if not id:
             file_path = config.get(&#34;css_file_path&#34;, None)
@@ -93,7 +137,7 @@ tag of an html document</p></section>
                 message = &#39;Path {0} in plugin configuration does not exist&#39;.format(file_path)
                 raise presalytics.lib.exceptions.MissingConfigException(message)
         else:
-            file_path = local_styles_map[id]
+            file_path = LocalStylesPlugin.LOCAL_STYLES_MAP[id]
         with open(file_path, &#39;r&#39;) as f:
             style_data = f.read()
         tag = &#34;&lt;style&gt;{0}&lt;/style&gt;&#34;.format(style_data)
@@ -105,12 +149,67 @@ tag of an html document</p></section>
 <li><a title="presalytics.lib.plugins.base.PluginBase" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase">PluginBase</a></li>
 <li>abc.ABC</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.lib.plugins.local.LocalStylesPlugin.LOCAL_STYLES_MAP"><code class="name">var <span class="ident">LOCAL_STYLES_MAP</span></code></dt>
+<dd>
+<section class="desc"><p>Dictionary containing a map configuration keys to css files that are
+member of the Presalytics Python Library manifest</p></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.plugins.local.LocalStylesPlugin.to_style"><code class="name flex">
+<span>def <span class="ident">to_style</span></span>(<span>self, config, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Renders a css stylesheet as an inline style tag in a story</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>config</code></strong> :&ensp;<code>dict</code></dt>
+<dd>A dictionary containing either a "css_file_path" key, which points
+to a local file path, or a "css_file_id" refers to a css file included
+in the Presalytics Python Library's manifest</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/local.py#L26-L51" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_style(self, config, **kwargs):
+    &#34;&#34;&#34;
+    Renders a css stylesheet as an inline style tag in a story
+
+    Parameters
+    ----------
+    config : dict
+        A dictionary containing either a &#34;css_file_path&#34; key, which points
+        to a local file path, or a &#34;css_file_id&#34; refers to a css file included
+        in the Presalytics Python Library&#39;s manifest 
+    &#34;&#34;&#34;
+    id = config.get(&#34;css_file_id&#34;, None)
+    if not id:
+        file_path = config.get(&#34;css_file_path&#34;, None)
+        if not file_path:
+            message = &#39;Plugin requires &#34;css_file_id&#34; or &#34;css_file_path&#34; in its configuration dictionary&#39;
+            raise presalytics.lib.exceptions.MissingConfigException(message)
+        if not os.path.exists(file_path):
+            message = &#39;Path {0} in plugin configuration does not exist&#39;.format(file_path)
+            raise presalytics.lib.exceptions.MissingConfigException(message)
+    else:
+        file_path = LocalStylesPlugin.LOCAL_STYLES_MAP[id]
+    with open(file_path, &#39;r&#39;) as f:
+        style_data = f.read()
+    tag = &#34;&lt;style&gt;{0}&lt;/style&gt;&#34;.format(style_data)
+    return tag</code></pre>
+</details>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="presalytics.lib.plugins.base.StylePlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin">StylePlugin</a></b></code>:
 <ul class="hlist">
 <li><code><a title="presalytics.lib.plugins.base.StylePlugin.get_tag" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase.get_tag">get_tag</a></code></li>
-<li><code><a title="presalytics.lib.plugins.base.StylePlugin.to_style" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin.to_style">to_style</a></code></li>
 </ul>
 </li>
 </ul>
@@ -133,6 +232,10 @@ tag of an html document</p></section>
 <ul>
 <li>
 <h4><code><a title="presalytics.lib.plugins.local.LocalStylesPlugin" href="/python-client/presalytics/lib/plugins/local.html#presalytics.lib.plugins.local.LocalStylesPlugin">LocalStylesPlugin</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.lib.plugins.local.LocalStylesPlugin.to_style" href="/python-client/presalytics/lib/plugins/local.html#presalytics.lib.plugins.local.LocalStylesPlugin.to_style">to_style</a></code></li>
+<li><code><a title="presalytics.lib.plugins.local.LocalStylesPlugin.LOCAL_STYLES_MAP" href="/python-client/presalytics/lib/plugins/local.html#presalytics.lib.plugins.local.LocalStylesPlugin.LOCAL_STYLES_MAP">LOCAL_STYLES_MAP</a></code></li>
+</ul>
 </li>
 </ul>
 </li>

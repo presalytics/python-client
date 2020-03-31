@@ -187,93 +187,31 @@ def render_path(path_to_item):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="presalytics.client.presalytics_doc_converter.exceptions.ApiException"><code class="flex name class">
-<span>class <span class="ident">ApiException</span></span>
-<span>(</span><span>status=None, reason=None, http_resp=None)</span>
+<dt id="presalytics.client.presalytics_doc_converter.exceptions.OpenApiException"><code class="flex name class">
+<span>class <span class="ident">OpenApiException</span></span>
+<span>(</span><span>...)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>The base exception class for all OpenAPIExceptions</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_doc_converter/exceptions.py#L85-L110" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_doc_converter/exceptions.py#L17-L18" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">class ApiException(OpenApiException):
-
-    def __init__(self, status=None, reason=None, http_resp=None):
-        if http_resp:
-            self.status = http_resp.status
-            self.reason = http_resp.reason
-            self.body = http_resp.data
-            self.headers = http_resp.getheaders()
-        else:
-            self.status = status
-            self.reason = reason
-            self.body = None
-            self.headers = None
-
-    def __str__(self):
-        &#34;&#34;&#34;Custom error messages for exception&#34;&#34;&#34;
-        error_message = &#34;({0})\n&#34;\
-                        &#34;Reason: {1}\n&#34;.format(self.status, self.reason)
-        if self.headers:
-            error_message += &#34;HTTP response headers: {0}\n&#34;.format(
-                self.headers)
-
-        if self.body:
-            error_message += &#34;HTTP response body: {0}\n&#34;.format(self.body)
-
-        return error_message</code></pre>
+<pre><code class="python">class OpenApiException(Exception):
+    &#34;&#34;&#34;The base exception class for all OpenAPIExceptions&#34;&#34;&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="presalytics.client.presalytics_doc_converter.exceptions.OpenApiException" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.OpenApiException">OpenApiException</a></li>
 <li>builtins.Exception</li>
 <li>builtins.BaseException</li>
 </ul>
-</dd>
-<dt id="presalytics.client.presalytics_doc_converter.exceptions.ApiKeyError"><code class="flex name class">
-<span>class <span class="ident">ApiKeyError</span></span>
-<span>(</span><span>msg, path_to_item=None)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>The base exception class for all OpenAPIExceptions</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>msg</code></strong> :&ensp;<code>str</code></dt>
-<dd>the exception message</dd>
-</dl>
-<p>Keyword Args:
-path_to_item (None/list) the path to the exception in the
-received_data dict</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_doc_converter/exceptions.py#L68-L82" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">class ApiKeyError(OpenApiException, KeyError):
-    def __init__(self, msg, path_to_item=None):
-        &#34;&#34;&#34;
-        Args:
-            msg (str): the exception message
-
-        Keyword Args:
-            path_to_item (None/list) the path to the exception in the
-                received_data dict
-        &#34;&#34;&#34;
-        self.path_to_item = path_to_item
-        full_msg = msg
-        if path_to_item:
-            full_msg = &#34;{0} at {1}&#34;.format(msg, render_path(path_to_item))
-        super(ApiKeyError, self).__init__(full_msg)</code></pre>
-</details>
-<h3>Ancestors</h3>
+<h3>Subclasses</h3>
 <ul class="hlist">
-<li><a title="presalytics.client.presalytics_doc_converter.exceptions.OpenApiException" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.OpenApiException">OpenApiException</a></li>
-<li>builtins.KeyError</li>
-<li>builtins.LookupError</li>
-<li>builtins.Exception</li>
-<li>builtins.BaseException</li>
+<li><a title="presalytics.client.presalytics_doc_converter.exceptions.ApiException" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.ApiException">ApiException</a></li>
+<li><a title="presalytics.client.presalytics_doc_converter.exceptions.ApiKeyError" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.ApiKeyError">ApiKeyError</a></li>
+<li><a title="presalytics.client.presalytics_doc_converter.exceptions.ApiTypeError" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.ApiTypeError">ApiTypeError</a></li>
+<li><a title="presalytics.client.presalytics_doc_converter.exceptions.ApiValueError" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.ApiValueError">ApiValueError</a></li>
 </ul>
 </dd>
 <dt id="presalytics.client.presalytics_doc_converter.exceptions.ApiTypeError"><code class="flex name class">
@@ -384,31 +322,93 @@ received_data dict. None if unset</p></section>
 <li>builtins.BaseException</li>
 </ul>
 </dd>
-<dt id="presalytics.client.presalytics_doc_converter.exceptions.OpenApiException"><code class="flex name class">
-<span>class <span class="ident">OpenApiException</span></span>
-<span>(</span><span>...)</span>
+<dt id="presalytics.client.presalytics_doc_converter.exceptions.ApiKeyError"><code class="flex name class">
+<span>class <span class="ident">ApiKeyError</span></span>
+<span>(</span><span>msg, path_to_item=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The base exception class for all OpenAPIExceptions</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>msg</code></strong> :&ensp;<code>str</code></dt>
+<dd>the exception message</dd>
+</dl>
+<p>Keyword Args:
+path_to_item (None/list) the path to the exception in the
+received_data dict</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_doc_converter/exceptions.py#L68-L82" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class ApiKeyError(OpenApiException, KeyError):
+    def __init__(self, msg, path_to_item=None):
+        &#34;&#34;&#34;
+        Args:
+            msg (str): the exception message
+
+        Keyword Args:
+            path_to_item (None/list) the path to the exception in the
+                received_data dict
+        &#34;&#34;&#34;
+        self.path_to_item = path_to_item
+        full_msg = msg
+        if path_to_item:
+            full_msg = &#34;{0} at {1}&#34;.format(msg, render_path(path_to_item))
+        super(ApiKeyError, self).__init__(full_msg)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.client.presalytics_doc_converter.exceptions.OpenApiException" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.OpenApiException">OpenApiException</a></li>
+<li>builtins.KeyError</li>
+<li>builtins.LookupError</li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="presalytics.client.presalytics_doc_converter.exceptions.ApiException"><code class="flex name class">
+<span>class <span class="ident">ApiException</span></span>
+<span>(</span><span>status=None, reason=None, http_resp=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>The base exception class for all OpenAPIExceptions</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_doc_converter/exceptions.py#L17-L18" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_doc_converter/exceptions.py#L85-L110" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">class OpenApiException(Exception):
-    &#34;&#34;&#34;The base exception class for all OpenAPIExceptions&#34;&#34;&#34;</code></pre>
+<pre><code class="python">class ApiException(OpenApiException):
+
+    def __init__(self, status=None, reason=None, http_resp=None):
+        if http_resp:
+            self.status = http_resp.status
+            self.reason = http_resp.reason
+            self.body = http_resp.data
+            self.headers = http_resp.getheaders()
+        else:
+            self.status = status
+            self.reason = reason
+            self.body = None
+            self.headers = None
+
+    def __str__(self):
+        &#34;&#34;&#34;Custom error messages for exception&#34;&#34;&#34;
+        error_message = &#34;({0})\n&#34;\
+                        &#34;Reason: {1}\n&#34;.format(self.status, self.reason)
+        if self.headers:
+            error_message += &#34;HTTP response headers: {0}\n&#34;.format(
+                self.headers)
+
+        if self.body:
+            error_message += &#34;HTTP response body: {0}\n&#34;.format(self.body)
+
+        return error_message</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
+<li><a title="presalytics.client.presalytics_doc_converter.exceptions.OpenApiException" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.OpenApiException">OpenApiException</a></li>
 <li>builtins.Exception</li>
 <li>builtins.BaseException</li>
-</ul>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="presalytics.client.presalytics_doc_converter.exceptions.ApiException" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.ApiException">ApiException</a></li>
-<li><a title="presalytics.client.presalytics_doc_converter.exceptions.ApiKeyError" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.ApiKeyError">ApiKeyError</a></li>
-<li><a title="presalytics.client.presalytics_doc_converter.exceptions.ApiTypeError" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.ApiTypeError">ApiTypeError</a></li>
-<li><a title="presalytics.client.presalytics_doc_converter.exceptions.ApiValueError" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.ApiValueError">ApiValueError</a></li>
 </ul>
 </dd>
 </dl>
@@ -433,10 +433,7 @@ received_data dict. None if unset</p></section>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="presalytics.client.presalytics_doc_converter.exceptions.ApiException" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.ApiException">ApiException</a></code></h4>
-</li>
-<li>
-<h4><code><a title="presalytics.client.presalytics_doc_converter.exceptions.ApiKeyError" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.ApiKeyError">ApiKeyError</a></code></h4>
+<h4><code><a title="presalytics.client.presalytics_doc_converter.exceptions.OpenApiException" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.OpenApiException">OpenApiException</a></code></h4>
 </li>
 <li>
 <h4><code><a title="presalytics.client.presalytics_doc_converter.exceptions.ApiTypeError" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.ApiTypeError">ApiTypeError</a></code></h4>
@@ -445,7 +442,10 @@ received_data dict. None if unset</p></section>
 <h4><code><a title="presalytics.client.presalytics_doc_converter.exceptions.ApiValueError" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.ApiValueError">ApiValueError</a></code></h4>
 </li>
 <li>
-<h4><code><a title="presalytics.client.presalytics_doc_converter.exceptions.OpenApiException" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.OpenApiException">OpenApiException</a></code></h4>
+<h4><code><a title="presalytics.client.presalytics_doc_converter.exceptions.ApiKeyError" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.ApiKeyError">ApiKeyError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="presalytics.client.presalytics_doc_converter.exceptions.ApiException" href="/python-client/presalytics/client/presalytics_doc_converter/exceptions.html#presalytics.client.presalytics_doc_converter.exceptions.ApiException">ApiException</a></code></h4>
 </li>
 </ul>
 </li>

@@ -23,35 +23,86 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L0-L135" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L0-L495" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import typing
 import types
+import logging
 import json
 import lxml
 import lxml.etree
 import abc
 import re
 import requests
+import collections
 import presalytics
+import presalytics.lib.registry
+import presalytics.lib.exceptions
 import presalytics.lib.widgets.ooxml
 
 
+logger = logging.getLogger(__name__)
+
+
 class XmlTransformBase(abc.ABC):
+    &#34;&#34;&#34;
+    Base class for writing Open Office Xml tranform functions to be implemented
+    by `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget`
+    
+    *For more information about Open Office Xml Schema that underlies 
+    .pptx and .xlsx files, see http://officeopenxml.com/
+
+    *For more information on how to lxml to write transforms, consult https://lxml.de/
+
+    Parameters
+    ----------
+    function_params : dict
+        A dictionary containing variables that will be used when the `transform_function`
+        is executed
+    &#34;&#34;&#34;
+    __xml_transform_kind__ = &#39;XmlTransform&#39;
+
     def __init__(self, function_params: typing.Dict, *args, **kwargs):
         self.function_params = function_params
 
     @abc.abstractmethod
     def transform_function(self, lxml_element: lxml.etree.Element, params: typing.Dict) -&gt; lxml.etree.Element:
+        &#34;&#34;&#34;
+        Modifies Open Office Xml via transforming `lxml.etree.Element` using a params `dict` containing
+        variables. Must be overridden in subclasses.
+        &#34;&#34;&#34;
         pass
+    
 
     def execute(self, lxml_element: lxml.etree.Element):
+        &#34;&#34;&#34;
+        Called by widget classes (e.g., `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget`) to 
+        perform the updates prescribed in the `transform_function`
+        &#34;&#34;&#34;
         return self.transform_function(lxml_element, self.function_params)
 
 
 class ChangeShapeColor(XmlTransformBase):
+    &#34;&#34;&#34;
+    Changes the color of a set of [Open Office Xml Shapes](http://officeopenxml.com/drwShape.php)
+    
+    Function Parameters Dictionary
+    ----------
+    hex_color : str
+        The six-digit hexadecimal-format color string (e.g., ffa500 for orange).  See
+        https://www.color-hex.com/ for an example color calculator
+
+    object_name : str, optional
+        The object tree name of the target shape.  If not supplied, all descendent shapes will
+        have their color changed.      
+    &#34;&#34;&#34;
+    __xml_transform_name__ = &#34;ChangeShapeColor&#34;
+
     @staticmethod
     def replace_color_on_target_shape(shape_xml: lxml.etree.Element, new_color: str) -&gt; lxml.etree.Element:
+        &#34;&#34;&#34;
+        Changes the color of an [Open Office Xml Shape](http://officeopenxml.com/drwShape.php)
+        &#34;&#34;&#34;
         new_fill = lxml.etree.Element(&#34;solidFill&#34;)
         lxml.etree.SubElement(new_fill, &#34;srbgClr&#34;, {&#34;val&#34;: new_color})
         fill_tags = [
@@ -75,6 +126,18 @@ class ChangeShapeColor(XmlTransformBase):
         return shape_xml
 
     def transform_function(self, lxml_element, params):
+        &#34;&#34;&#34;
+        Changes the color of an [Open Office Xml Shape](http://officeopenxml.com/drwShape.php)
+
+        Parameters
+        -----------
+        lxml_element : lxml.etree.Element
+            An element containing as least one an `&lt;sp&gt;` element
+
+        params : dict
+            See the `Function Parameters Dictionary` for required entries
+        &#34;&#34;&#34;
+        
         if re.match(&#39;{.*}sp&#39;, lxml_element.tag):
             shapes = [lxml_element]
         else:
@@ -96,8 +159,293 @@ class ChangeShapeColor(XmlTransformBase):
                 shape = ChangeShapeColor.replace_color_on_target_shape(shape, color)
         return lxml_element
 
+class TextReplace(XmlTransformBase):
+    &#34;&#34;&#34;
+    Replaces text in a template built into an Office Office Xml object that has 
+    been uploaded to the Presalytics Ooxml Automation service.  Text to be should
+    be in the format of a &#34;template tag&#34;, which is a string enclosed in handlebars
+    as such: &#39;{{template_tag}}&#39;
+
+    Function Parameters Dictionary
+    ----------
+
+    A dictionary that maps template tags to the new strings that will replace the
+    tags in the rendered widget.  The the dictionary keys should not be enclosed in handlebars.
+    &#34;&#34;&#34;
+    __xml_transform_name__ = &#34;TextReplace&#34;
+
+    class TextElementInfo(object):
+        &#34;&#34;&#34;
+        Holds metadata for a list of `&lt;t&gt;` tags from an Office Open Xml document. 
+        &#34;&#34;&#34;
+        def __init__(self, element: lxml.etree.Element, start_position: int):
+            self.element = element
+            self.text = &#34;&#34; if not element.text else element.text
+            self.length = len(self.text)
+            self.start_position = start_position
+            self.end_position = self.start_position + self.length - 1
+
+    class TextList(object):
+        &#34;&#34;&#34;
+        Class for managing a list of `TextElementInfo` objects
+        &#34;&#34;&#34;
+        _list: typing.List[&#39;TextReplace.TextElementInfo&#39;]
+
+        def __init__(self):
+            self._list = []
+
+        def append(self, text_element_info):
+            if isinstance(text_element_info, globals()[&#39;TextReplace&#39;].TextElementInfo):
+                self._list.append(text_element_info)
+            else:
+                raise presalytics.lib.exceptions.InvalidArgumentException(message=&#34;Argument must be an instance of class &#39;TextElementInfo&#39;&#34;)
+        
+        def set_text(self, index, new_string):
+            self._list[index].text = new_string
+            self._list[index].element.text = new_string
+
+        def get_text(self, index):
+            return self._list[index].text
+
+        def get_plaintext_string(self):
+            ret = &#34;&#34;
+            for item in self._list:
+                ret += item.text
+            return ret
+
+        def get_position(self, match_string):
+            return self.get_plaintext_string().find(match_string)
+
+        def get_list_index_of_position(self, position: int):
+            for item in self._list:
+                if item.start_position &lt;= position and item.end_position &gt;= position:
+                    return self.get_index(item)
+            raise presalytics.lib.exceptions.InvalidArgumentException(message=&#34;Position {} out of range&#34;.format(position))
+        
+        def get_index(self, text_element_info: &#39;TextReplace.TextElementInfo&#39;):
+            for i in range(len(self._list)):
+                if self._list[i] == text_element_info:
+                    return i
+            raise presalytics.lib.exceptions.InvalidArgumentException(message=&#34;Supplied argument on in self._list&#34;)
+        
+        def set_text_to_empty_string(self, index):
+            self._list[index].text = &#34;&#34;
+            self._list[index].element.text = &#34;&#34;
+
+        def set_start_to_new_value(self, index, new_value):
+            start_text, remainder = self._list[index].text.split(&#34;{{&#34;, 1)
+            end = &#34;&#34;
+            if &#34;}}&#34; in remainder:
+                end = remainder.split(&#34;}}&#34;, 1)[1]
+            new_text = &#34;{0}{1}{2}&#34;.format(start_text, new_value, end)
+            self._list[index].text = new_text
+            self._list[index].element.text = new_text
+
+        def truncate_end(self, index):
+            end_text = self._list[index].text.split(&#34;}}&#34;, 1)[-1]
+            self._list[index].text = end_text
+            self._list[index].element.text = end_text
+
+        def plaintext_string_list(self):
+            return [x.text for x in self._list]
+
+        def reset(self):
+            for i in range(0, len(self._list)):
+                start_position = 0 if i == 0 else self._list[i-1].end_position + 1
+                self._list[i] = TextReplace.TextElementInfo(self._list[i].element, start_position)
+
+
+            
+    def replace_handlebars(self, info_list, params):
+        &#34;&#34;&#34;
+        Method that finds template tags and replaces them 
+        &#34;&#34;&#34;
+        for key, val in params.items():
+            match_key = &#34;{{&#34; + key + &#34;}}&#34;
+            match_start_position =  info_list.get_position(match_key)
+            if match_start_position &gt; -1:
+                match_end_position = match_start_position + len(match_key)
+                match_start_index = info_list.get_list_index_of_position(match_start_position)
+                match_end_index = info_list.get_list_index_of_position(match_end_position)
+                if match_start_index &lt; match_end_index:
+                    info_list.truncate_end(match_end_index)
+                for i in range(match_start_index + 1, match_end_index):
+                    info_list.set_text_to_empty_string(i)
+                info_list.set_start_to_new_value(match_start_index, val)
+                info_list.reset()
+                self.replace_handlebars(info_list, params)
+
+
+    def transform_function(self, lxml_element, params):
+        &#34;&#34;&#34;
+        Replaces template tags located {{inside_handlebars}} that match keys in the
+        `params` dict with values from the `params` dict. 
+
+        This method searches for match for plain text strings, so that if template
+        tags are split across xml `&lt;t&gt;` elements, they are still identified and replaced. 
+
+        Parameters
+        -----------
+        lxml_element : lxml.etree.Element
+            An element containing as least one an `&lt;t&gt;` element
+
+        params : dict
+            A dictionary that maps template tags (no handlebars) to their respective
+            replacement values.
+        &#34;&#34;&#34;
+        text_list = lxml_element.findall(&#39;.//{*}t&#39;)
+        info_list = TextReplace.TextList()
+        position = 0
+        for tag in text_list:
+            info = self.TextElementInfo(tag, position)
+            position = info.end_position + 1
+            info_list.append(info)
+        self.replace_handlebars(info_list, params)
+        return lxml_element
+
+
+class XmlTransformRegistry(presalytics.lib.registry.RegistryBase):
+    &#34;&#34;&#34;
+    Registry for XmlTransform Classes.  Read by `presalytics.lib.widgets.ooxml_editors.MultiXmlTransform`
+    and `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget` so XmlTransformBase subclasses
+    can be deserialized at run-time without a loaded instance in `locals()`.
+    &#34;&#34;&#34;
+    def __init__(self):
+        include_paths = presalytics.COMPONENTS.autodiscover_paths # todo: Change this line -does not exist at timport time.
+        reserved_names = presalytics.COMPONENTS.reserved_names
+        super(XmlTransformRegistry, self).__init__(autodiscover_paths=include_paths, reserved_names=reserved_names)
+
+    def get_name(self, klass):
+        return getattr(klass, &#34;__xml_transform_name__&#34;, None)
+
+    def get_type(self, klass):
+        return getattr(klass, &#34;__xml_transform_kind__&#34;, None)
+
+
+XML_TRANSFORM_REGISTRY = None
+&#34;&#34;&#34;
+Static instance of `presalytics.lib.widgets.ooxml_editors.XmlTransformRegistry`. 
+
+Should not be used directly by consuming classes. Only initialized if a consuming 
+class or method calls the `presalytics.lib.widgets.ooxml_editors.get_transform_registry`.  This is done
+for performance reasons since there&#39;s no need to build this registry at import-time if its never 
+used in a workspace.
+&#34;&#34;&#34;
+
+def get_transform_registry():
+    &#34;&#34;&#34;
+    Initalizes and retreives `presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY`
+    &#34;&#34;&#34;
+    global XML_TRANSFORM_REGISTRY
+    if not XML_TRANSFORM_REGISTRY:
+        XML_TRANSFORM_REGISTRY = XmlTransformRegistry()
+    return XML_TRANSFORM_REGISTRY
+
+
+
+class MultiXmlTransform(XmlTransformBase):
+    &#34;&#34;&#34;
+    This class allow users to run mutiple transforms on multiple targets in a single widget.  `MultiXmlTransform`
+    wraps multiple subclasses of `presalytics.lib.widgets.ooxml_editors.XmlTransformBase`, creates instances of
+    them, and feeds them into an `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget` instance.  To do this,
+    the `presalytics.lib.widgets.ooxml_editors.XmlTransformBase` subclasses must be loaded into the 
+    `presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY` when called.
+
+    The function parameters for the 
+
+    Parameters
+    ----------
+    fail_quietly: bool, optional
+        Defaults to false.  Indicates whether an exception should be raised when a subclass specified
+        in the function parameters cannot not be found in the `presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY`
+        instance. 
+        
+
+    Function Parameters Dictionary
+    ----------
+    transforms_list: list of dict
+        A list of dictionaries, with each item in the list consiting of a dictionary of two entries.  
+        The entries are as follows:
+         
+         * name: [str]
+            The name of the the subclass of `presalytics.lib.widgets.ooxml_editors.XmlTransformBase` that
+            will be that will be initialized
+         
+         * function_params: [dict]
+            The `params` that will be the loaded into the instance&#39;s `transform_function` 
+    &#34;&#34;&#34;
+    transform_instances: typing.List[XmlTransformBase]
+
+    __xml_transform_name__ = &#34;MultiXmlTransform&#34;
+
+    def __init__(self, transforms: typing.Dict[str, typing.List[typing.Dict[str, typing.Any]]], fail_quietly=True, **kwargs):
+        super(MultiXmlTransform, self).__init__(transforms, **kwargs)
+        transforms_list = transforms.get(&#34;transforms_list&#34;, None)
+        self.fail_quietly = fail_quietly
+        self.transform_instances = []
+        self.transform_registry = get_transform_registry()
+        for _transform in transforms_list: #type: ignore
+            key = &#34;XmlTransform.&#34; + _transform[&#34;name&#34;]
+            transform_class = self.transform_registry.get(key)
+            if not transform_class:
+                message = &#34;Could not find XmlTransform with name &#39;{}&#39;&#34;.format(_transform[&#34;name&#34;])
+                if self.fail_quietly:
+                    logging.info(message)
+                else:
+                    raise self.transform_registry.raise_error(message) #noqa
+            else:
+                inst = transform_class(_transform[&#34;function_params&#34;])
+                self.transform_instances.append(inst)
+
+    def transform_function(self, lxml_element, params):
+        for inst in self.transform_instances:
+            lxml_element = inst.execute(lxml_element)
+        return lxml_element    
+
 
 class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
+    &#34;&#34;&#34;
+    Edits a `widget` from a Presentation or Spreadsheet document and renders 
+    the edited widget.
+
+    This class interacts with the Presalytics API to extract SVG objects from
+    Presentation and spreadsheet documents, from Presaltytics Ooxml Automation
+    service objects that have already been loaded into the API.  This class requires
+    that users supply `transform_function` by subclassing 
+    `presalytics.lib.widgets.ooxml_editors.XmlTransformBase`, and an optional set of 
+    parameters to act as variables in the transform function.
+
+    Parameters
+    ----------
+    filename : str
+        The local filepath a presentation or spreadsheet file containing
+        the object to be rendered
+
+    name : str
+        The widget name.  If not provided, attribute will be set as the `object_name` 
+        or `filename`
+
+    story_id : str
+        The the id of the story in the Presalytics API Story service.  If not provided, 
+        a new story will be created.  Do not supply if this object has not yet been created. 
+    
+    object_ooxml_id : str
+        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this 
+        object has not yet been created.
+
+    endpoint_map : presalytics.lib.widgets.ooxml.OoxmlEndpointMap
+        Reference to the Presalytics API Ooxml Automation service endpoint and object type
+        that for the object of interest
+
+    tranform_class : subclass of presalytics.lib.widgets.ooxml_editors.XmlTransformBase
+        A class containing a `transform_function` method that transforms Open Office Xml via
+        an `lxml.etree.Element` instance
+
+    transform_params : dict, optional
+        A dictionary of parameters that will be passed to the `transform_class`&#39;s `transform_function`
+        as variables to modify the underlying OpenOfficeXml 
+    
+    &#34;&#34;&#34;
     transform: XmlTransformBase
 
     __component_kind__ = &#39;ooxml-xml-editor&#39;
@@ -107,53 +455,65 @@ class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
                  story_id,
                  object_ooxml_id,
                  endpoint_map,
-                 transform_class=None,
-                 transform_params=None,
+                 transform_class,
+                 transform_params={},
                  **kwargs):
         super(OoxmlEditorWidget, self).__init__(name, story_id=story_id, object_ooxml_id=object_ooxml_id, endpoint_map=endpoint_map, **kwargs)
         self.name = name
         self.transform = transform_class(transform_params)
-        self.svg_data = self.update()
+        self.update()
         self.svg_html = self.create_container(**self.client_info)
         self.outline_widget = self.serialize()
 
     def update_xml(self, xml_str) -&gt; str:
+        &#34;&#34;&#34;
+        Runs the `transform_function` Open Office Xml data downloaded via the Presalytics API
+        &#34;&#34;&#34;
         xml = lxml.etree.fromstring(xml_str)
         new_xml = self.transform.execute(xml)
         new_xml_str = lxml.etree.tostring(new_xml)
         return new_xml_str
 
     def update(self):
+        &#34;&#34;&#34;
+        Update the widget, include changes to the Xml
+        &#34;&#34;&#34;
         client = self.get_client()
-        auth_header = client.get_auth_header()
+        headers = client.get_auth_header()
+        headers.update(client.get_request_id_header())
         if self.transform:
             xml_url = self.endpoint_map.get_xml_url(self.object_ooxml_id)
-            xml_response = requests.get(xml_url, headers=auth_header)
+            xml_response = requests.get(xml_url + &#34;?updated=false&#34;, headers=headers)
             if xml_response.status_code != 200:
                 raise presalytics.lib.exceptions.ApiError(message=xml_response.text)
             dto = xml_response.json()
             new_xml = self.update_xml(dto[&#34;openOfficeXml&#34;])
             dto[&#34;openOfficeXml&#34;] = new_xml.decode(&#39;utf-8&#39;)
-            xml_update_response = requests.put(xml_url, json=dto, headers=auth_header)
+            xml_update_response = requests.put(xml_url, json=dto, headers=headers)
             if xml_response.status_code != 200:
                 raise presalytics.lib.exceptions.ApiError(message=xml_update_response.content)
-        svg_data = self.get_svg(self.object_ooxml_id)
-        return svg_data
 
     @classmethod
-    def deseriailize(cls, component, **kwargs):
+    def deserialize(cls, component, **kwargs):
         endpoint_map = presalytics.lib.widgets.ooxml.OoxmlEndpointMap(component.data[&#34;endpoint_id&#34;])
+        class_key = &#34;XmlTransform.&#34; + component.data.get(&#34;transform_class&#34;, &#34;&#34;)
+        transform_class = get_transform_registry().get(class_key)
+        transform_params = component.data.get(&#34;transform_params&#34;, {})
         return cls(component.name,
                    component.data[&#34;story_id&#34;],
                    component.data[&#34;object_ooxml_id&#34;],
-                   endpoint_map
-                   )
+                   endpoint_map,
+                   transform_class=transform_class,
+                   transform_params=transform_params,
+                   **kwargs)
 
     def serialize(self, **kwargs):
         data = {
             &#34;story_id&#34;: self.story_id,
             &#34;object_ooxml_id&#34;: self.object_ooxml_id,
-            &#34;endpoint_id&#34;: self.endpoint_map.endpoint_id
+            &#34;endpoint_id&#34;: self.endpoint_map.endpoint_id,
+            &#34;transform_class&#34;: self.transform.__xml_transform_name__,
+            &#34;transform_params&#34;: self.transform.function_params
         }
         widget = presalytics.story.outline.Widget(
             name=self.name,
@@ -166,27 +526,201 @@ class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-variables">Global variables</h2>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY"><code class="name">var <span class="ident">XML_TRANSFORM_REGISTRY</span></code></dt>
+<dd>
+<section class="desc"><p>Static instance of <a title="presalytics.lib.widgets.ooxml_editors.XmlTransformRegistry" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformRegistry"><code>XmlTransformRegistry</code></a>. </p>
+<p>Should not be used directly by consuming classes. Only initialized if a consuming
+class or method calls the <a title="presalytics.lib.widgets.ooxml_editors.get_transform_registry" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.get_transform_registry"><code>get_transform_registry()</code></a>.
+This is done
+for performance reasons since there's no need to build this registry at import-time if its never
+used in a workspace.</p></section>
+</dd>
+</dl>
 </section>
 <section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml_editors.get_transform_registry"><code class="name flex">
+<span>def <span class="ident">get_transform_registry</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Initalizes and retreives <a title="presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY"><code>XML_TRANSFORM_REGISTRY</code></a></p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L308-L315" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_transform_registry():
+    &#34;&#34;&#34;
+    Initalizes and retreives `presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY`
+    &#34;&#34;&#34;
+    global XML_TRANSFORM_REGISTRY
+    if not XML_TRANSFORM_REGISTRY:
+        XML_TRANSFORM_REGISTRY = XmlTransformRegistry()
+    return XML_TRANSFORM_REGISTRY</code></pre>
+</details>
+</dd>
+</dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="presalytics.lib.widgets.ooxml_editors.ChangeShapeColor"><code class="flex name class">
-<span>class <span class="ident">ChangeShapeColor</span></span>
-<span>(</span><span>function_params: Dict, *args, **kwargs)</span>
+<dt id="presalytics.lib.widgets.ooxml_editors.XmlTransformBase"><code class="flex name class">
+<span>class <span class="ident">XmlTransformBase</span></span>
+<span>(</span><span>function_params, *args, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Helper class that provides a standard way to create an ABC using
-inheritance.</p></section>
+<section class="desc"><p>Base class for writing Open Office Xml tranform functions to be implemented
+by <a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget"><code>OoxmlEditorWidget</code></a></p>
+<p>*For more information about Open Office Xml Schema that underlies
+.pptx and .xlsx files, see <a href="http://officeopenxml.com/">http://officeopenxml.com/</a></p>
+<p>*For more information on how to lxml to write transforms, consult <a href="https://lxml.de/">https://lxml.de/</a></p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>function_params</code></strong> :&ensp;<code>dict</code></dt>
+<dd>A dictionary containing variables that will be used when the <code>transform_function</code>
+is executed</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L25-L70" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L20-L55" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class XmlTransformBase(abc.ABC):
+    &#34;&#34;&#34;
+    Base class for writing Open Office Xml tranform functions to be implemented
+    by `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget`
+    
+    *For more information about Open Office Xml Schema that underlies 
+    .pptx and .xlsx files, see http://officeopenxml.com/
+
+    *For more information on how to lxml to write transforms, consult https://lxml.de/
+
+    Parameters
+    ----------
+    function_params : dict
+        A dictionary containing variables that will be used when the `transform_function`
+        is executed
+    &#34;&#34;&#34;
+    __xml_transform_kind__ = &#39;XmlTransform&#39;
+
+    def __init__(self, function_params: typing.Dict, *args, **kwargs):
+        self.function_params = function_params
+
+    @abc.abstractmethod
+    def transform_function(self, lxml_element: lxml.etree.Element, params: typing.Dict) -&gt; lxml.etree.Element:
+        &#34;&#34;&#34;
+        Modifies Open Office Xml via transforming `lxml.etree.Element` using a params `dict` containing
+        variables. Must be overridden in subclasses.
+        &#34;&#34;&#34;
+        pass
+    
+
+    def execute(self, lxml_element: lxml.etree.Element):
+        &#34;&#34;&#34;
+        Called by widget classes (e.g., `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget`) to 
+        perform the updates prescribed in the `transform_function`
+        &#34;&#34;&#34;
+        return self.transform_function(lxml_element, self.function_params)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.widgets.ooxml_editors.ChangeShapeColor" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.ChangeShapeColor">ChangeShapeColor</a></li>
+<li><a title="presalytics.lib.widgets.ooxml_editors.MultiXmlTransform" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.MultiXmlTransform">MultiXmlTransform</a></li>
+<li><a title="presalytics.lib.widgets.ooxml_editors.TextReplace" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.TextReplace">TextReplace</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml_editors.XmlTransformBase.transform_function"><code class="name flex">
+<span>def <span class="ident">transform_function</span></span>(<span>self, lxml_element, params)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Modifies Open Office Xml via transforming <code>lxml.etree.Element</code> using a params <code>dict</code> containing
+variables. Must be overridden in subclasses.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L41-L47" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+def transform_function(self, lxml_element: lxml.etree.Element, params: typing.Dict) -&gt; lxml.etree.Element:
+    &#34;&#34;&#34;
+    Modifies Open Office Xml via transforming `lxml.etree.Element` using a params `dict` containing
+    variables. Must be overridden in subclasses.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml_editors.XmlTransformBase.execute"><code class="name flex">
+<span>def <span class="ident">execute</span></span>(<span>self, lxml_element)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Called by widget classes (e.g., <a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget"><code>OoxmlEditorWidget</code></a>) to
+perform the updates prescribed in the <code>transform_function</code></p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L50-L55" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def execute(self, lxml_element: lxml.etree.Element):
+    &#34;&#34;&#34;
+    Called by widget classes (e.g., `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget`) to 
+    perform the updates prescribed in the `transform_function`
+    &#34;&#34;&#34;
+    return self.transform_function(lxml_element, self.function_params)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml_editors.ChangeShapeColor"><code class="flex name class">
+<span>class <span class="ident">ChangeShapeColor</span></span>
+<span>(</span><span>function_params, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Changes the color of a set of <a href="http://officeopenxml.com/drwShape.php">Open Office Xml Shapes</a></p>
+<h2 id="function-parameters-dictionary">Function Parameters Dictionary</h2>
+<dl>
+<dt><strong><code>hex_color</code></strong> :&ensp;<code>str</code></dt>
+<dd>The six-digit hexadecimal-format color string (e.g., ffa500 for orange).
+See
+<a href="https://www.color-hex.com/">https://www.color-hex.com/</a> for an example color calculator</dd>
+<dt><strong><code>object_name</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The object tree name of the target shape.
+If not supplied, all descendent shapes will
+have their color changed.</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L58-L133" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ChangeShapeColor(XmlTransformBase):
+    &#34;&#34;&#34;
+    Changes the color of a set of [Open Office Xml Shapes](http://officeopenxml.com/drwShape.php)
+    
+    Function Parameters Dictionary
+    ----------
+    hex_color : str
+        The six-digit hexadecimal-format color string (e.g., ffa500 for orange).  See
+        https://www.color-hex.com/ for an example color calculator
+
+    object_name : str, optional
+        The object tree name of the target shape.  If not supplied, all descendent shapes will
+        have their color changed.      
+    &#34;&#34;&#34;
+    __xml_transform_name__ = &#34;ChangeShapeColor&#34;
+
     @staticmethod
     def replace_color_on_target_shape(shape_xml: lxml.etree.Element, new_color: str) -&gt; lxml.etree.Element:
+        &#34;&#34;&#34;
+        Changes the color of an [Open Office Xml Shape](http://officeopenxml.com/drwShape.php)
+        &#34;&#34;&#34;
         new_fill = lxml.etree.Element(&#34;solidFill&#34;)
         lxml.etree.SubElement(new_fill, &#34;srbgClr&#34;, {&#34;val&#34;: new_color})
         fill_tags = [
@@ -210,6 +744,18 @@ inheritance.</p></section>
         return shape_xml
 
     def transform_function(self, lxml_element, params):
+        &#34;&#34;&#34;
+        Changes the color of an [Open Office Xml Shape](http://officeopenxml.com/drwShape.php)
+
+        Parameters
+        -----------
+        lxml_element : lxml.etree.Element
+            An element containing as least one an `&lt;sp&gt;` element
+
+        params : dict
+            See the `Function Parameters Dictionary` for required entries
+        &#34;&#34;&#34;
+        
         if re.match(&#39;{.*}sp&#39;, lxml_element.tag):
             shapes = [lxml_element]
         else:
@@ -239,17 +785,20 @@ inheritance.</p></section>
 <h3>Static methods</h3>
 <dl>
 <dt id="presalytics.lib.widgets.ooxml_editors.ChangeShapeColor.replace_color_on_target_shape"><code class="name flex">
-<span>def <span class="ident">replace_color_on_target_shape</span></span>(<span>shape_xml: <cyfunction Element at 0x7fdddf308df0>, new_color: str) -> <cyfunction Element at 0x7fdddf308df0></span>
+<span>def <span class="ident">replace_color_on_target_shape</span></span>(<span>shape_xml, new_color)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Changes the color of an <a href="http://officeopenxml.com/drwShape.php">Open Office Xml Shape</a></p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L26-L48" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L74-L99" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@staticmethod
 def replace_color_on_target_shape(shape_xml: lxml.etree.Element, new_color: str) -&gt; lxml.etree.Element:
+    &#34;&#34;&#34;
+    Changes the color of an [Open Office Xml Shape](http://officeopenxml.com/drwShape.php)
+    &#34;&#34;&#34;
     new_fill = lxml.etree.Element(&#34;solidFill&#34;)
     lxml.etree.SubElement(new_fill, &#34;srbgClr&#34;, {&#34;val&#34;: new_color})
     fill_tags = [
@@ -280,13 +829,32 @@ def replace_color_on_target_shape(shape_xml: lxml.etree.Element, new_color: str)
 <span>def <span class="ident">transform_function</span></span>(<span>self, lxml_element, params)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Changes the color of an <a href="http://officeopenxml.com/drwShape.php">Open Office Xml Shape</a></p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>lxml_element</code></strong> :&ensp;<code>lxml.etree.Element</code></dt>
+<dd>An element containing as least one an <code>&lt;sp&gt;</code> element</dd>
+<dt><strong><code>params</code></strong> :&ensp;<code>dict</code></dt>
+<dd>See the <code>Function Parameters Dictionary</code> for required entries</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L50-L70" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L101-L133" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def transform_function(self, lxml_element, params):
+    &#34;&#34;&#34;
+    Changes the color of an [Open Office Xml Shape](http://officeopenxml.com/drwShape.php)
+
+    Parameters
+    -----------
+    lxml_element : lxml.etree.Element
+        An element containing as least one an `&lt;sp&gt;` element
+
+    params : dict
+        See the `Function Parameters Dictionary` for required entries
+    &#34;&#34;&#34;
+    
     if re.match(&#39;{.*}sp&#39;, lxml_element.tag):
         shapes = [lxml_element]
     else:
@@ -310,36 +878,660 @@ def replace_color_on_target_shape(shape_xml: lxml.etree.Element, new_color: str)
 </details>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase">XmlTransformBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase.execute" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase.execute">execute</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
-<dt id="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget"><code class="flex name class">
-<span>class <span class="ident">OoxmlEditorWidget</span></span>
-<span>(</span><span>name: str, story_id, object_ooxml_id, endpoint_map, transform_class=None, transform_params=None, **kwargs)</span>
+<dt id="presalytics.lib.widgets.ooxml_editors.TextReplace"><code class="flex name class">
+<span>class <span class="ident">TextReplace</span></span>
+<span>(</span><span>function_params, *args, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Inherit from this base class to create widget components that can be rendered to html via the
-presalytics.story.revealer.Revealer class.
-This component also need to build a method
-that allows the widget to be serialzed into a presalytics.story.outline.Widget object.</p>
-<h2 id="parameters">Parameters:</h2>
-<p>widget: Widget
-A presalytics.story.outline.Widget object use for initialized the component class.</p>
-<h2 id="attributes">Attributes:</h2>
-<p>outline_widget: Widget
-A presalytics.story.outline.Widget object</p>
-<p>css: List[str]
-A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
-in the presalytics.lib.templates.base module.</p>
-<p>js: List[str]
-A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
-in the presalytics.lib.templates.base module.</p>
-<p>Note: When inheriting from this base class, call "super().<strong>init</strong>(self, <em>args, </em>*kwargs)" before add your
-own custom initialization.</p></section>
+<section class="desc"><p>Replaces text in a template built into an Office Office Xml object that has
+been uploaded to the Presalytics Ooxml Automation service.
+Text to be should
+be in the format of a "template tag", which is a string enclosed in handlebars
+as such: '{{template_tag}}'</p>
+<h2 id="function-parameters-dictionary">Function Parameters Dictionary</h2>
+<p>A dictionary that maps template tags to the new strings that will replace the
+tags in the rendered widget.
+The the dictionary keys should not be enclosed in handlebars.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L73-L136" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L135-L277" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class TextReplace(XmlTransformBase):
+    &#34;&#34;&#34;
+    Replaces text in a template built into an Office Office Xml object that has 
+    been uploaded to the Presalytics Ooxml Automation service.  Text to be should
+    be in the format of a &#34;template tag&#34;, which is a string enclosed in handlebars
+    as such: &#39;{{template_tag}}&#39;
+
+    Function Parameters Dictionary
+    ----------
+
+    A dictionary that maps template tags to the new strings that will replace the
+    tags in the rendered widget.  The the dictionary keys should not be enclosed in handlebars.
+    &#34;&#34;&#34;
+    __xml_transform_name__ = &#34;TextReplace&#34;
+
+    class TextElementInfo(object):
+        &#34;&#34;&#34;
+        Holds metadata for a list of `&lt;t&gt;` tags from an Office Open Xml document. 
+        &#34;&#34;&#34;
+        def __init__(self, element: lxml.etree.Element, start_position: int):
+            self.element = element
+            self.text = &#34;&#34; if not element.text else element.text
+            self.length = len(self.text)
+            self.start_position = start_position
+            self.end_position = self.start_position + self.length - 1
+
+    class TextList(object):
+        &#34;&#34;&#34;
+        Class for managing a list of `TextElementInfo` objects
+        &#34;&#34;&#34;
+        _list: typing.List[&#39;TextReplace.TextElementInfo&#39;]
+
+        def __init__(self):
+            self._list = []
+
+        def append(self, text_element_info):
+            if isinstance(text_element_info, globals()[&#39;TextReplace&#39;].TextElementInfo):
+                self._list.append(text_element_info)
+            else:
+                raise presalytics.lib.exceptions.InvalidArgumentException(message=&#34;Argument must be an instance of class &#39;TextElementInfo&#39;&#34;)
+        
+        def set_text(self, index, new_string):
+            self._list[index].text = new_string
+            self._list[index].element.text = new_string
+
+        def get_text(self, index):
+            return self._list[index].text
+
+        def get_plaintext_string(self):
+            ret = &#34;&#34;
+            for item in self._list:
+                ret += item.text
+            return ret
+
+        def get_position(self, match_string):
+            return self.get_plaintext_string().find(match_string)
+
+        def get_list_index_of_position(self, position: int):
+            for item in self._list:
+                if item.start_position &lt;= position and item.end_position &gt;= position:
+                    return self.get_index(item)
+            raise presalytics.lib.exceptions.InvalidArgumentException(message=&#34;Position {} out of range&#34;.format(position))
+        
+        def get_index(self, text_element_info: &#39;TextReplace.TextElementInfo&#39;):
+            for i in range(len(self._list)):
+                if self._list[i] == text_element_info:
+                    return i
+            raise presalytics.lib.exceptions.InvalidArgumentException(message=&#34;Supplied argument on in self._list&#34;)
+        
+        def set_text_to_empty_string(self, index):
+            self._list[index].text = &#34;&#34;
+            self._list[index].element.text = &#34;&#34;
+
+        def set_start_to_new_value(self, index, new_value):
+            start_text, remainder = self._list[index].text.split(&#34;{{&#34;, 1)
+            end = &#34;&#34;
+            if &#34;}}&#34; in remainder:
+                end = remainder.split(&#34;}}&#34;, 1)[1]
+            new_text = &#34;{0}{1}{2}&#34;.format(start_text, new_value, end)
+            self._list[index].text = new_text
+            self._list[index].element.text = new_text
+
+        def truncate_end(self, index):
+            end_text = self._list[index].text.split(&#34;}}&#34;, 1)[-1]
+            self._list[index].text = end_text
+            self._list[index].element.text = end_text
+
+        def plaintext_string_list(self):
+            return [x.text for x in self._list]
+
+        def reset(self):
+            for i in range(0, len(self._list)):
+                start_position = 0 if i == 0 else self._list[i-1].end_position + 1
+                self._list[i] = TextReplace.TextElementInfo(self._list[i].element, start_position)
+
+
+            
+    def replace_handlebars(self, info_list, params):
+        &#34;&#34;&#34;
+        Method that finds template tags and replaces them 
+        &#34;&#34;&#34;
+        for key, val in params.items():
+            match_key = &#34;{{&#34; + key + &#34;}}&#34;
+            match_start_position =  info_list.get_position(match_key)
+            if match_start_position &gt; -1:
+                match_end_position = match_start_position + len(match_key)
+                match_start_index = info_list.get_list_index_of_position(match_start_position)
+                match_end_index = info_list.get_list_index_of_position(match_end_position)
+                if match_start_index &lt; match_end_index:
+                    info_list.truncate_end(match_end_index)
+                for i in range(match_start_index + 1, match_end_index):
+                    info_list.set_text_to_empty_string(i)
+                info_list.set_start_to_new_value(match_start_index, val)
+                info_list.reset()
+                self.replace_handlebars(info_list, params)
+
+
+    def transform_function(self, lxml_element, params):
+        &#34;&#34;&#34;
+        Replaces template tags located {{inside_handlebars}} that match keys in the
+        `params` dict with values from the `params` dict. 
+
+        This method searches for match for plain text strings, so that if template
+        tags are split across xml `&lt;t&gt;` elements, they are still identified and replaced. 
+
+        Parameters
+        -----------
+        lxml_element : lxml.etree.Element
+            An element containing as least one an `&lt;t&gt;` element
+
+        params : dict
+            A dictionary that maps template tags (no handlebars) to their respective
+            replacement values.
+        &#34;&#34;&#34;
+        text_list = lxml_element.findall(&#39;.//{*}t&#39;)
+        info_list = TextReplace.TextList()
+        position = 0
+        for tag in text_list:
+            info = self.TextElementInfo(tag, position)
+            position = info.end_position + 1
+            info_list.append(info)
+        self.replace_handlebars(info_list, params)
+        return lxml_element</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase">XmlTransformBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml_editors.TextReplace.TextElementInfo"><code class="name">var <span class="ident">TextElementInfo</span></code></dt>
+<dd>
+<section class="desc"><p>Holds metadata for a list of <code>&lt;t&gt;</code> tags from an Office Open Xml document.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L150-L159" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class TextElementInfo(object):
+    &#34;&#34;&#34;
+    Holds metadata for a list of `&lt;t&gt;` tags from an Office Open Xml document. 
+    &#34;&#34;&#34;
+    def __init__(self, element: lxml.etree.Element, start_position: int):
+        self.element = element
+        self.text = &#34;&#34; if not element.text else element.text
+        self.length = len(self.text)
+        self.start_position = start_position
+        self.end_position = self.start_position + self.length - 1</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml_editors.TextReplace.TextList"><code class="name">var <span class="ident">TextList</span></code></dt>
+<dd>
+<section class="desc"><p>Class for managing a list of <code>TextElementInfo</code> objects</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L161-L228" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class TextList(object):
+    &#34;&#34;&#34;
+    Class for managing a list of `TextElementInfo` objects
+    &#34;&#34;&#34;
+    _list: typing.List[&#39;TextReplace.TextElementInfo&#39;]
+
+    def __init__(self):
+        self._list = []
+
+    def append(self, text_element_info):
+        if isinstance(text_element_info, globals()[&#39;TextReplace&#39;].TextElementInfo):
+            self._list.append(text_element_info)
+        else:
+            raise presalytics.lib.exceptions.InvalidArgumentException(message=&#34;Argument must be an instance of class &#39;TextElementInfo&#39;&#34;)
+    
+    def set_text(self, index, new_string):
+        self._list[index].text = new_string
+        self._list[index].element.text = new_string
+
+    def get_text(self, index):
+        return self._list[index].text
+
+    def get_plaintext_string(self):
+        ret = &#34;&#34;
+        for item in self._list:
+            ret += item.text
+        return ret
+
+    def get_position(self, match_string):
+        return self.get_plaintext_string().find(match_string)
+
+    def get_list_index_of_position(self, position: int):
+        for item in self._list:
+            if item.start_position &lt;= position and item.end_position &gt;= position:
+                return self.get_index(item)
+        raise presalytics.lib.exceptions.InvalidArgumentException(message=&#34;Position {} out of range&#34;.format(position))
+    
+    def get_index(self, text_element_info: &#39;TextReplace.TextElementInfo&#39;):
+        for i in range(len(self._list)):
+            if self._list[i] == text_element_info:
+                return i
+        raise presalytics.lib.exceptions.InvalidArgumentException(message=&#34;Supplied argument on in self._list&#34;)
+    
+    def set_text_to_empty_string(self, index):
+        self._list[index].text = &#34;&#34;
+        self._list[index].element.text = &#34;&#34;
+
+    def set_start_to_new_value(self, index, new_value):
+        start_text, remainder = self._list[index].text.split(&#34;{{&#34;, 1)
+        end = &#34;&#34;
+        if &#34;}}&#34; in remainder:
+            end = remainder.split(&#34;}}&#34;, 1)[1]
+        new_text = &#34;{0}{1}{2}&#34;.format(start_text, new_value, end)
+        self._list[index].text = new_text
+        self._list[index].element.text = new_text
+
+    def truncate_end(self, index):
+        end_text = self._list[index].text.split(&#34;}}&#34;, 1)[-1]
+        self._list[index].text = end_text
+        self._list[index].element.text = end_text
+
+    def plaintext_string_list(self):
+        return [x.text for x in self._list]
+
+    def reset(self):
+        for i in range(0, len(self._list)):
+            start_position = 0 if i == 0 else self._list[i-1].end_position + 1
+            self._list[i] = TextReplace.TextElementInfo(self._list[i].element, start_position)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml_editors.TextReplace.replace_handlebars"><code class="name flex">
+<span>def <span class="ident">replace_handlebars</span></span>(<span>self, info_list, params)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Method that finds template tags and replaces them</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L232-L249" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def replace_handlebars(self, info_list, params):
+    &#34;&#34;&#34;
+    Method that finds template tags and replaces them 
+    &#34;&#34;&#34;
+    for key, val in params.items():
+        match_key = &#34;{{&#34; + key + &#34;}}&#34;
+        match_start_position =  info_list.get_position(match_key)
+        if match_start_position &gt; -1:
+            match_end_position = match_start_position + len(match_key)
+            match_start_index = info_list.get_list_index_of_position(match_start_position)
+            match_end_index = info_list.get_list_index_of_position(match_end_position)
+            if match_start_index &lt; match_end_index:
+                info_list.truncate_end(match_end_index)
+            for i in range(match_start_index + 1, match_end_index):
+                info_list.set_text_to_empty_string(i)
+            info_list.set_start_to_new_value(match_start_index, val)
+            info_list.reset()
+            self.replace_handlebars(info_list, params)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml_editors.TextReplace.transform_function"><code class="name flex">
+<span>def <span class="ident">transform_function</span></span>(<span>self, lxml_element, params)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Replaces template tags located {{inside_handlebars}} that match keys in the
+<code>params</code> dict with values from the <code>params</code> dict. </p>
+<p>This method searches for match for plain text strings, so that if template
+tags are split across xml <code>&lt;t&gt;</code> elements, they are still identified and replaced. </p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>lxml_element</code></strong> :&ensp;<code>lxml.etree.Element</code></dt>
+<dd>An element containing as least one an <code>&lt;t&gt;</code> element</dd>
+<dt><strong><code>params</code></strong> :&ensp;<code>dict</code></dt>
+<dd>A dictionary that maps template tags (no handlebars) to their respective
+replacement values.</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L252-L277" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def transform_function(self, lxml_element, params):
+    &#34;&#34;&#34;
+    Replaces template tags located {{inside_handlebars}} that match keys in the
+    `params` dict with values from the `params` dict. 
+
+    This method searches for match for plain text strings, so that if template
+    tags are split across xml `&lt;t&gt;` elements, they are still identified and replaced. 
+
+    Parameters
+    -----------
+    lxml_element : lxml.etree.Element
+        An element containing as least one an `&lt;t&gt;` element
+
+    params : dict
+        A dictionary that maps template tags (no handlebars) to their respective
+        replacement values.
+    &#34;&#34;&#34;
+    text_list = lxml_element.findall(&#39;.//{*}t&#39;)
+    info_list = TextReplace.TextList()
+    position = 0
+    for tag in text_list:
+        info = self.TextElementInfo(tag, position)
+        position = info.end_position + 1
+        info_list.append(info)
+    self.replace_handlebars(info_list, params)
+    return lxml_element</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase">XmlTransformBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase.execute" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase.execute">execute</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml_editors.XmlTransformRegistry"><code class="flex name class">
+<span>class <span class="ident">XmlTransformRegistry</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Registry for XmlTransform Classes.
+Read by <a title="presalytics.lib.widgets.ooxml_editors.MultiXmlTransform" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.MultiXmlTransform"><code>MultiXmlTransform</code></a>
+and <a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget"><code>OoxmlEditorWidget</code></a> so XmlTransformBase subclasses
+can be deserialized at run-time without a loaded instance in <code>locals()</code>.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L280-L295" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class XmlTransformRegistry(presalytics.lib.registry.RegistryBase):
+    &#34;&#34;&#34;
+    Registry for XmlTransform Classes.  Read by `presalytics.lib.widgets.ooxml_editors.MultiXmlTransform`
+    and `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget` so XmlTransformBase subclasses
+    can be deserialized at run-time without a loaded instance in `locals()`.
+    &#34;&#34;&#34;
+    def __init__(self):
+        include_paths = presalytics.COMPONENTS.autodiscover_paths # todo: Change this line -does not exist at timport time.
+        reserved_names = presalytics.COMPONENTS.reserved_names
+        super(XmlTransformRegistry, self).__init__(autodiscover_paths=include_paths, reserved_names=reserved_names)
+
+    def get_name(self, klass):
+        return getattr(klass, &#34;__xml_transform_name__&#34;, None)
+
+    def get_type(self, klass):
+        return getattr(klass, &#34;__xml_transform_kind__&#34;, None)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.registry.RegistryBase" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase">RegistryBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.widgets.ooxml_editors.XmlTransformRegistry.get_name"><code class="name flex">
+<span>def <span class="ident">get_name</span></span>(<span>self, klass)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L291-L292" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_name(self, klass):
+    return getattr(klass, &#34;__xml_transform_name__&#34;, None)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml_editors.XmlTransformRegistry.get_type"><code class="name flex">
+<span>def <span class="ident">get_type</span></span>(<span>self, klass)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L294-L295" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_type(self, klass):
+    return getattr(klass, &#34;__xml_transform_kind__&#34;, None)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.lib.registry.RegistryBase" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase">RegistryBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.lib.registry.RegistryBase.module_is_in_stackframe" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.module_is_in_stackframe">module_is_in_stackframe</a></code></li>
+<li><code><a title="presalytics.lib.registry.RegistryBase.register" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.register">register</a></code></li>
+<li><code><a title="presalytics.lib.registry.RegistryBase.show_errors" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.show_errors">show_errors</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml_editors.MultiXmlTransform"><code class="flex name class">
+<span>class <span class="ident">MultiXmlTransform</span></span>
+<span>(</span><span>transforms, fail_quietly=True, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class allow users to run mutiple transforms on multiple targets in a single widget.
+<a title="presalytics.lib.widgets.ooxml_editors.MultiXmlTransform" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.MultiXmlTransform"><code>MultiXmlTransform</code></a>
+wraps multiple subclasses of <a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase"><code>XmlTransformBase</code></a>, creates instances of
+them, and feeds them into an <a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget"><code>OoxmlEditorWidget</code></a> instance.
+To do this,
+the <a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase"><code>XmlTransformBase</code></a> subclasses must be loaded into the
+<a title="presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY"><code>XML_TRANSFORM_REGISTRY</code></a> when called.</p>
+<p>The function parameters for the </p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>fail_quietly</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Defaults to false.
+Indicates whether an exception should be raised when a subclass specified
+in the function parameters cannot not be found in the <a title="presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY"><code>XML_TRANSFORM_REGISTRY</code></a>
+instance.</dd>
+</dl>
+<h2 id="function-parameters-dictionary">Function Parameters Dictionary</h2>
+<dl>
+<dt><strong><code>transforms_list</code></strong> :&ensp;<code>list</code> of <code>dict</code></dt>
+<dd>
+<p>A list of dictionaries, with each item in the list consiting of a dictionary of two entries.<br>
+The entries are as follows:</p>
+<ul>
+<li>
+<p>name: [str]
+The name of the the subclass of <a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase"><code>XmlTransformBase</code></a> that
+will be that will be initialized</p>
+</li>
+<li>
+<p>function_params: [dict]
+The <code>params</code> that will be the loaded into the instance's <code>transform_function</code></p>
+</li>
+</ul>
+</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L319-L376" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class MultiXmlTransform(XmlTransformBase):
+    &#34;&#34;&#34;
+    This class allow users to run mutiple transforms on multiple targets in a single widget.  `MultiXmlTransform`
+    wraps multiple subclasses of `presalytics.lib.widgets.ooxml_editors.XmlTransformBase`, creates instances of
+    them, and feeds them into an `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget` instance.  To do this,
+    the `presalytics.lib.widgets.ooxml_editors.XmlTransformBase` subclasses must be loaded into the 
+    `presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY` when called.
+
+    The function parameters for the 
+
+    Parameters
+    ----------
+    fail_quietly: bool, optional
+        Defaults to false.  Indicates whether an exception should be raised when a subclass specified
+        in the function parameters cannot not be found in the `presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY`
+        instance. 
+        
+
+    Function Parameters Dictionary
+    ----------
+    transforms_list: list of dict
+        A list of dictionaries, with each item in the list consiting of a dictionary of two entries.  
+        The entries are as follows:
+         
+         * name: [str]
+            The name of the the subclass of `presalytics.lib.widgets.ooxml_editors.XmlTransformBase` that
+            will be that will be initialized
+         
+         * function_params: [dict]
+            The `params` that will be the loaded into the instance&#39;s `transform_function` 
+    &#34;&#34;&#34;
+    transform_instances: typing.List[XmlTransformBase]
+
+    __xml_transform_name__ = &#34;MultiXmlTransform&#34;
+
+    def __init__(self, transforms: typing.Dict[str, typing.List[typing.Dict[str, typing.Any]]], fail_quietly=True, **kwargs):
+        super(MultiXmlTransform, self).__init__(transforms, **kwargs)
+        transforms_list = transforms.get(&#34;transforms_list&#34;, None)
+        self.fail_quietly = fail_quietly
+        self.transform_instances = []
+        self.transform_registry = get_transform_registry()
+        for _transform in transforms_list: #type: ignore
+            key = &#34;XmlTransform.&#34; + _transform[&#34;name&#34;]
+            transform_class = self.transform_registry.get(key)
+            if not transform_class:
+                message = &#34;Could not find XmlTransform with name &#39;{}&#39;&#34;.format(_transform[&#34;name&#34;])
+                if self.fail_quietly:
+                    logging.info(message)
+                else:
+                    raise self.transform_registry.raise_error(message) #noqa
+            else:
+                inst = transform_class(_transform[&#34;function_params&#34;])
+                self.transform_instances.append(inst)
+
+    def transform_function(self, lxml_element, params):
+        for inst in self.transform_instances:
+            lxml_element = inst.execute(lxml_element)
+        return lxml_element    </code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase">XmlTransformBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase">XmlTransformBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase.execute" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase.execute">execute</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase.transform_function" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase.transform_function">transform_function</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget"><code class="flex name class">
+<span>class <span class="ident">OoxmlEditorWidget</span></span>
+<span>(</span><span>name, story_id, object_ooxml_id, endpoint_map, transform_class, transform_params={}, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Edits a <code>widget</code> from a Presentation or Spreadsheet document and renders
+the edited widget.</p>
+<p>This class interacts with the Presalytics API to extract SVG objects from
+Presentation and spreadsheet documents, from Presaltytics Ooxml Automation
+service objects that have already been loaded into the API.
+This class requires
+that users supply <code>transform_function</code> by subclassing
+<a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase"><code>XmlTransformBase</code></a>, and an optional set of
+parameters to act as variables in the transform function.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>filename</code></strong> :&ensp;<code>str</code></dt>
+<dd>The local filepath a presentation or spreadsheet file containing
+the object to be rendered</dd>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The widget name.
+If not provided, attribute will be set as the <code>object_name</code>
+or <code>filename</code></dd>
+<dt><strong><code>story_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>The the id of the story in the Presalytics API Story service.
+If not provided,
+a new story will be created.
+Do not supply if this object has not yet been created.</dd>
+<dt><strong><code>object_ooxml_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>The identifier of the Ooxml Automation service object bound the Story. Do not supply if this
+object has not yet been created.</dd>
+<dt><strong><code>endpoint_map</code></strong> :&ensp;<a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code>OoxmlEndpointMap</code></a></dt>
+<dd>Reference to the Presalytics API Ooxml Automation service endpoint and object type
+that for the object of interest</dd>
+<dt><strong><code>tranform_class</code></strong> :&ensp;<code>subclass</code> of <a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase"><code>XmlTransformBase</code></a></dt>
+<dd>A class containing a <code>transform_function</code> method that transforms Open Office Xml via
+an <code>lxml.etree.Element</code> instance</dd>
+<dt><strong><code>transform_params</code></strong> :&ensp;<code>dict</code>, optional</dt>
+<dd>A dictionary of parameters that will be passed to the <code>transform_class</code>'s <code>transform_function</code>
+as variables to modify the underlying OpenOfficeXml</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L379-L496" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
+    &#34;&#34;&#34;
+    Edits a `widget` from a Presentation or Spreadsheet document and renders 
+    the edited widget.
+
+    This class interacts with the Presalytics API to extract SVG objects from
+    Presentation and spreadsheet documents, from Presaltytics Ooxml Automation
+    service objects that have already been loaded into the API.  This class requires
+    that users supply `transform_function` by subclassing 
+    `presalytics.lib.widgets.ooxml_editors.XmlTransformBase`, and an optional set of 
+    parameters to act as variables in the transform function.
+
+    Parameters
+    ----------
+    filename : str
+        The local filepath a presentation or spreadsheet file containing
+        the object to be rendered
+
+    name : str
+        The widget name.  If not provided, attribute will be set as the `object_name` 
+        or `filename`
+
+    story_id : str
+        The the id of the story in the Presalytics API Story service.  If not provided, 
+        a new story will be created.  Do not supply if this object has not yet been created. 
+    
+    object_ooxml_id : str
+        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this 
+        object has not yet been created.
+
+    endpoint_map : presalytics.lib.widgets.ooxml.OoxmlEndpointMap
+        Reference to the Presalytics API Ooxml Automation service endpoint and object type
+        that for the object of interest
+
+    tranform_class : subclass of presalytics.lib.widgets.ooxml_editors.XmlTransformBase
+        A class containing a `transform_function` method that transforms Open Office Xml via
+        an `lxml.etree.Element` instance
+
+    transform_params : dict, optional
+        A dictionary of parameters that will be passed to the `transform_class`&#39;s `transform_function`
+        as variables to modify the underlying OpenOfficeXml 
+    
+    &#34;&#34;&#34;
     transform: XmlTransformBase
 
     __component_kind__ = &#39;ooxml-xml-editor&#39;
@@ -349,53 +1541,65 @@ own custom initialization.</p></section>
                  story_id,
                  object_ooxml_id,
                  endpoint_map,
-                 transform_class=None,
-                 transform_params=None,
+                 transform_class,
+                 transform_params={},
                  **kwargs):
         super(OoxmlEditorWidget, self).__init__(name, story_id=story_id, object_ooxml_id=object_ooxml_id, endpoint_map=endpoint_map, **kwargs)
         self.name = name
         self.transform = transform_class(transform_params)
-        self.svg_data = self.update()
+        self.update()
         self.svg_html = self.create_container(**self.client_info)
         self.outline_widget = self.serialize()
 
     def update_xml(self, xml_str) -&gt; str:
+        &#34;&#34;&#34;
+        Runs the `transform_function` Open Office Xml data downloaded via the Presalytics API
+        &#34;&#34;&#34;
         xml = lxml.etree.fromstring(xml_str)
         new_xml = self.transform.execute(xml)
         new_xml_str = lxml.etree.tostring(new_xml)
         return new_xml_str
 
     def update(self):
+        &#34;&#34;&#34;
+        Update the widget, include changes to the Xml
+        &#34;&#34;&#34;
         client = self.get_client()
-        auth_header = client.get_auth_header()
+        headers = client.get_auth_header()
+        headers.update(client.get_request_id_header())
         if self.transform:
             xml_url = self.endpoint_map.get_xml_url(self.object_ooxml_id)
-            xml_response = requests.get(xml_url, headers=auth_header)
+            xml_response = requests.get(xml_url + &#34;?updated=false&#34;, headers=headers)
             if xml_response.status_code != 200:
                 raise presalytics.lib.exceptions.ApiError(message=xml_response.text)
             dto = xml_response.json()
             new_xml = self.update_xml(dto[&#34;openOfficeXml&#34;])
             dto[&#34;openOfficeXml&#34;] = new_xml.decode(&#39;utf-8&#39;)
-            xml_update_response = requests.put(xml_url, json=dto, headers=auth_header)
+            xml_update_response = requests.put(xml_url, json=dto, headers=headers)
             if xml_response.status_code != 200:
                 raise presalytics.lib.exceptions.ApiError(message=xml_update_response.content)
-        svg_data = self.get_svg(self.object_ooxml_id)
-        return svg_data
 
     @classmethod
-    def deseriailize(cls, component, **kwargs):
+    def deserialize(cls, component, **kwargs):
         endpoint_map = presalytics.lib.widgets.ooxml.OoxmlEndpointMap(component.data[&#34;endpoint_id&#34;])
+        class_key = &#34;XmlTransform.&#34; + component.data.get(&#34;transform_class&#34;, &#34;&#34;)
+        transform_class = get_transform_registry().get(class_key)
+        transform_params = component.data.get(&#34;transform_params&#34;, {})
         return cls(component.name,
                    component.data[&#34;story_id&#34;],
                    component.data[&#34;object_ooxml_id&#34;],
-                   endpoint_map
-                   )
+                   endpoint_map,
+                   transform_class=transform_class,
+                   transform_params=transform_params,
+                   **kwargs)
 
     def serialize(self, **kwargs):
         data = {
             &#34;story_id&#34;: self.story_id,
             &#34;object_ooxml_id&#34;: self.object_ooxml_id,
-            &#34;endpoint_id&#34;: self.endpoint_map.endpoint_id
+            &#34;endpoint_id&#34;: self.endpoint_map.endpoint_id,
+            &#34;transform_class&#34;: self.transform.__xml_transform_name__,
+            &#34;transform_params&#34;: self.transform.function_params
         }
         widget = presalytics.story.outline.Widget(
             name=self.name,
@@ -411,74 +1615,56 @@ own custom initialization.</p></section>
 <li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
 <li>abc.ABC</li>
 </ul>
-<h3>Static methods</h3>
+<h3>Methods</h3>
 <dl>
-<dt id="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.deseriailize"><code class="name flex">
-<span>def <span class="ident">deseriailize</span></span>(<span>component, **kwargs)</span>
+<dt id="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update_xml"><code class="name flex">
+<span>def <span class="ident">update_xml</span></span>(<span>self, xml_str)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Runs the <code>transform_function</code> Open Office Xml data downloaded via the Presalytics API</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L116-L123" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L441-L448" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">@classmethod
-def deseriailize(cls, component, **kwargs):
-    endpoint_map = presalytics.lib.widgets.ooxml.OoxmlEndpointMap(component.data[&#34;endpoint_id&#34;])
-    return cls(component.name,
-               component.data[&#34;story_id&#34;],
-               component.data[&#34;object_ooxml_id&#34;],
-               endpoint_map
-               )</code></pre>
+<pre><code class="python">def update_xml(self, xml_str) -&gt; str:
+    &#34;&#34;&#34;
+    Runs the `transform_function` Open Office Xml data downloaded via the Presalytics API
+    &#34;&#34;&#34;
+    xml = lxml.etree.fromstring(xml_str)
+    new_xml = self.transform.execute(xml)
+    new_xml_str = lxml.etree.tostring(new_xml)
+    return new_xml_str</code></pre>
 </details>
 </dd>
-</dl>
-<h3>Methods</h3>
-<dl>
 <dt id="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update"><code class="name flex">
 <span>def <span class="ident">update</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Update the widget, include changes to the Xml</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L99-L114" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L450-L467" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update(self):
+    &#34;&#34;&#34;
+    Update the widget, include changes to the Xml
+    &#34;&#34;&#34;
     client = self.get_client()
-    auth_header = client.get_auth_header()
+    headers = client.get_auth_header()
+    headers.update(client.get_request_id_header())
     if self.transform:
         xml_url = self.endpoint_map.get_xml_url(self.object_ooxml_id)
-        xml_response = requests.get(xml_url, headers=auth_header)
+        xml_response = requests.get(xml_url + &#34;?updated=false&#34;, headers=headers)
         if xml_response.status_code != 200:
             raise presalytics.lib.exceptions.ApiError(message=xml_response.text)
         dto = xml_response.json()
         new_xml = self.update_xml(dto[&#34;openOfficeXml&#34;])
         dto[&#34;openOfficeXml&#34;] = new_xml.decode(&#39;utf-8&#39;)
-        xml_update_response = requests.put(xml_url, json=dto, headers=auth_header)
+        xml_update_response = requests.put(xml_url, json=dto, headers=headers)
         if xml_response.status_code != 200:
-            raise presalytics.lib.exceptions.ApiError(message=xml_update_response.content)
-    svg_data = self.get_svg(self.object_ooxml_id)
-    return svg_data</code></pre>
-</details>
-</dd>
-<dt id="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update_xml"><code class="name flex">
-<span>def <span class="ident">update_xml</span></span>(<span>self, xml_str) -> str</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L93-L97" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def update_xml(self, xml_str) -&gt; str:
-    xml = lxml.etree.fromstring(xml_str)
-    new_xml = self.transform.execute(xml)
-    new_xml_str = lxml.etree.tostring(new_xml)
-    return new_xml_str</code></pre>
+            raise presalytics.lib.exceptions.ApiError(message=xml_update_response.content)</code></pre>
 </details>
 </dd>
 </dl>
@@ -486,76 +1672,16 @@ def deseriailize(cls, component, **kwargs):
 <ul class="hlist">
 <li><code><b><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></b></code>:
 <ul class="hlist">
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container">create_container</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
 </ul>
 </li>
 </ul>
-</dd>
-<dt id="presalytics.lib.widgets.ooxml_editors.XmlTransformBase"><code class="flex name class">
-<span>class <span class="ident">XmlTransformBase</span></span>
-<span>(</span><span>function_params: Dict, *args, **kwargs)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Helper class that provides a standard way to create an ABC using
-inheritance.</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L13-L22" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">class XmlTransformBase(abc.ABC):
-    def __init__(self, function_params: typing.Dict, *args, **kwargs):
-        self.function_params = function_params
-
-    @abc.abstractmethod
-    def transform_function(self, lxml_element: lxml.etree.Element, params: typing.Dict) -&gt; lxml.etree.Element:
-        pass
-
-    def execute(self, lxml_element: lxml.etree.Element):
-        return self.transform_function(lxml_element, self.function_params)</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>abc.ABC</li>
-</ul>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="presalytics.lib.widgets.ooxml_editors.ChangeShapeColor" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.ChangeShapeColor">ChangeShapeColor</a></li>
-</ul>
-<h3>Methods</h3>
-<dl>
-<dt id="presalytics.lib.widgets.ooxml_editors.XmlTransformBase.execute"><code class="name flex">
-<span>def <span class="ident">execute</span></span>(<span>self, lxml_element: <cyfunction Element at 0x7fdddf308df0>)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L21-L22" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def execute(self, lxml_element: lxml.etree.Element):
-    return self.transform_function(lxml_element, self.function_params)</code></pre>
-</details>
-</dd>
-<dt id="presalytics.lib.widgets.ooxml_editors.XmlTransformBase.transform_function"><code class="name flex">
-<span>def <span class="ident">transform_function</span></span>(<span>self, lxml_element: <cyfunction Element at 0x7fdddf308df0>, params: Dict) -> <cyfunction Element at 0x7fdddf308df0></span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L17-L19" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@abc.abstractmethod
-def transform_function(self, lxml_element: lxml.etree.Element, params: typing.Dict) -&gt; lxml.etree.Element:
-    pass</code></pre>
-</details>
-</dd>
-</dl>
 </dd>
 </dl>
 </section>
@@ -571,8 +1697,25 @@ def transform_function(self, lxml_element: lxml.etree.Element, params: typing.Di
 <li><code><a title="presalytics.lib.widgets" href="/python-client/presalytics/lib/widgets/index.html">presalytics.lib.widgets</a></code></li>
 </ul>
 </li>
+<li><h3><a href="#header-variables">Global variables</a></h3>
+<ul class="">
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XML_TRANSFORM_REGISTRY">XML_TRANSFORM_REGISTRY</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.get_transform_registry" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.get_transform_registry">get_transform_registry</a></code></li>
+</ul>
+</li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
+<li>
+<h4><code><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase">XmlTransformBase</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase.transform_function" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase.transform_function">transform_function</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase.execute" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase.execute">execute</a></code></li>
+</ul>
+</li>
 <li>
 <h4><code><a title="presalytics.lib.widgets.ooxml_editors.ChangeShapeColor" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.ChangeShapeColor">ChangeShapeColor</a></code></h4>
 <ul class="">
@@ -581,18 +1724,29 @@ def transform_function(self, lxml_element: lxml.etree.Element, params: typing.Di
 </ul>
 </li>
 <li>
-<h4><code><a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget">OoxmlEditorWidget</a></code></h4>
+<h4><code><a title="presalytics.lib.widgets.ooxml_editors.TextReplace" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.TextReplace">TextReplace</a></code></h4>
 <ul class="">
-<li><code><a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.deseriailize" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.deseriailize">deseriailize</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update">update</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update_xml" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update_xml">update_xml</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.TextReplace.replace_handlebars" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.TextReplace.replace_handlebars">replace_handlebars</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.TextReplace.transform_function" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.TextReplace.transform_function">transform_function</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.TextReplace.TextElementInfo" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.TextReplace.TextElementInfo">TextElementInfo</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.TextReplace.TextList" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.TextReplace.TextList">TextList</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase">XmlTransformBase</a></code></h4>
+<h4><code><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformRegistry" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformRegistry">XmlTransformRegistry</a></code></h4>
 <ul class="">
-<li><code><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase.execute" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase.execute">execute</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformBase.transform_function" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformBase.transform_function">transform_function</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformRegistry.get_name" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformRegistry.get_name">get_name</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.XmlTransformRegistry.get_type" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.XmlTransformRegistry.get_type">get_type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="presalytics.lib.widgets.ooxml_editors.MultiXmlTransform" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.MultiXmlTransform">MultiXmlTransform</a></code></h4>
+</li>
+<li>
+<h4><code><a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget">OoxmlEditorWidget</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update_xml" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update_xml">update_xml</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget.update">update</a></code></li>
 </ul>
 </li>
 </ul>

@@ -482,7 +482,7 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -496,7 +496,7 @@ in the keyword argument list.
 For example:
 dict(one=1, two=2)</p></section>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -513,50 +513,27 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.type_id"><code class="name">var <span class="ident">type_id</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the id of this ChartPlotType.
+<section class="desc"><p>Gets the type_id of this ChartPlotType.
 # noqa: E501</p>
-<p>:return: The id of this ChartPlotType.
+<p>:return: The type_id of this ChartPlotType.
 # noqa: E501
-:rtype: str</p></section>
+:rtype: int</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.py#L157-L165" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.py#L73-L81" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def id(self):
-    &#34;&#34;&#34;Gets the id of this ChartPlotType.  # noqa: E501
+def type_id(self):
+    &#34;&#34;&#34;Gets the type_id of this ChartPlotType.  # noqa: E501
 
 
-    :return: The id of this ChartPlotType.  # noqa: E501
-    :rtype: str
+    :return: The type_id of this ChartPlotType.  # noqa: E501
+    :rtype: int
     &#34;&#34;&#34;
-    return self._id</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.plot_qualifed_assy"><code class="name">var <span class="ident">plot_qualifed_assy</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the plot_qualifed_assy of this ChartPlotType.
-# noqa: E501</p>
-<p>:return: The plot_qualifed_assy of this ChartPlotType.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.py#L115-L123" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def plot_qualifed_assy(self):
-    &#34;&#34;&#34;Gets the plot_qualifed_assy of this ChartPlotType.  # noqa: E501
-
-
-    :return: The plot_qualifed_assy of this ChartPlotType.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._plot_qualifed_assy</code></pre>
+    return self._type_id</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.plot_type_name"><code class="name">var <span class="ident">plot_type_name</span></code></dt>
@@ -582,6 +559,29 @@ def plot_type_name(self):
     return self._plot_type_name</code></pre>
 </details>
 </dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.plot_qualifed_assy"><code class="name">var <span class="ident">plot_qualifed_assy</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the plot_qualifed_assy of this ChartPlotType.
+# noqa: E501</p>
+<p>:return: The plot_qualifed_assy of this ChartPlotType.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.py#L115-L123" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def plot_qualifed_assy(self):
+    &#34;&#34;&#34;Gets the plot_qualifed_assy of this ChartPlotType.  # noqa: E501
+
+
+    :return: The plot_qualifed_assy of this ChartPlotType.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._plot_qualifed_assy</code></pre>
+</details>
+</dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.row_col_type_id"><code class="name">var <span class="ident">row_col_type_id</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the row_col_type_id of this ChartPlotType.
@@ -605,27 +605,27 @@ def row_col_type_id(self):
     return self._row_col_type_id</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.type_id"><code class="name">var <span class="ident">type_id</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.id"><code class="name">var <span class="ident">id</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the type_id of this ChartPlotType.
+<section class="desc"><p>Gets the id of this ChartPlotType.
 # noqa: E501</p>
-<p>:return: The type_id of this ChartPlotType.
+<p>:return: The id of this ChartPlotType.
 # noqa: E501
-:rtype: int</p></section>
+:rtype: str</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.py#L73-L81" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.py#L157-L165" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def type_id(self):
-    &#34;&#34;&#34;Gets the type_id of this ChartPlotType.  # noqa: E501
+def id(self):
+    &#34;&#34;&#34;Gets the id of this ChartPlotType.  # noqa: E501
 
 
-    :return: The type_id of this ChartPlotType.  # noqa: E501
-    :rtype: int
+    :return: The id of this ChartPlotType.  # noqa: E501
+    :rtype: str
     &#34;&#34;&#34;
-    return self._type_id</code></pre>
+    return self._id</code></pre>
 </details>
 </dd>
 </dl>
@@ -702,15 +702,15 @@ def type_id(self):
 <li>
 <h4><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.html#presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType">ChartPlotType</a></code></h4>
 <ul class="two-column">
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.html#presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.attribute_map">attribute_map</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.html#presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.id">id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.html#presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.openapi_types">openapi_types</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.plot_qualifed_assy" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.html#presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.plot_qualifed_assy">plot_qualifed_assy</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.plot_type_name" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.html#presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.plot_type_name">plot_type_name</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.row_col_type_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.html#presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.row_col_type_id">row_col_type_id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.to_dict" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.html#presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.to_str" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.html#presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.to_str">to_str</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.type_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.html#presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.type_id">type_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.plot_type_name" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.html#presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.plot_type_name">plot_type_name</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.plot_qualifed_assy" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.html#presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.plot_qualifed_assy">plot_qualifed_assy</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.row_col_type_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.html#presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.row_col_type_id">row_col_type_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.html#presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.id">id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.html#presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_plot_type.html#presalytics.client.presalytics_ooxml_automation.models.chart_plot_type.ChartPlotType.attribute_map">attribute_map</a></code></li>
 </ul>
 </li>
 </ul>

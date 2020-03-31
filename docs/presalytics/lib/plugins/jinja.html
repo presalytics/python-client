@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/jinja.py#L0-L25" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/jinja.py#L0-L53" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import jinja2
 import presalytics.lib.exceptions
@@ -31,6 +31,31 @@ import typing
 
 
 class JinjaPluginMakerMixin(object):
+    &#34;&#34;&#34;
+    Mixin that helps plugins use Jinja2 python library for dynamically rendering 
+    plugins based on the config dictionary.  Values from the `config` are pass 
+    to the Jinja2 templating engine rendered into the html fragment via a 
+    double-handlered placeholder (e.g., `{{ config_dict_key }}`)
+
+    For more information on how to design a Jinja2 template, visit 
+    https://jinja.palletsprojects.com
+
+    Attributes
+    ----------
+    template : str
+        the template property on a class that takes this mixin must 
+        return a string with double-handlebarred placeholders
+
+    Configuration Values
+    ----------
+    jinja_options : dict
+        Options to be passed to the Jinja2 environment.  See a list of options on the 
+        [Jinja2 API Page](https://jinja.palletsprojects.com/en/2.11.x/api/#jinja2.Environment)
+
+    **kwargs : dict
+        Other keyword arguments will be passed as variables to the Jinja2 rendering engine to that
+        fill placeholders in the template
+    &#34;&#34;&#34;
     template: typing.Optional[str]
     template = None
 
@@ -38,6 +63,9 @@ class JinjaPluginMakerMixin(object):
         super(JinjaPluginMakerMixin, self).__init__(*args, *kwargs)
 
     def render(self, config: typing.Dict):
+        &#34;&#34;&#34;
+        Loads the Configuration Value into the template and returns the filled out html fragment
+        &#34;&#34;&#34;
         options = {
             &#34;loader&#34;: jinja2.BaseLoader()
         }
@@ -67,13 +95,60 @@ class JinjaPluginMakerMixin(object):
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Mixin that helps plugins use Jinja2 python library for dynamically rendering
+plugins based on the config dictionary.
+Values from the <code>config</code> are pass
+to the Jinja2 templating engine rendered into the html fragment via a
+double-handlered placeholder (e.g., <code>{{ config_dict_key }}</code>)</p>
+<p>For more information on how to design a Jinja2 template, visit
+<a href="https://jinja.palletsprojects.com">https://jinja.palletsprojects.com</a></p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>template</code></strong> :&ensp;<code>str</code></dt>
+<dd>the template property on a class that takes this mixin must
+return a string with double-handlebarred placeholders</dd>
+</dl>
+<h2 id="configuration-values">Configuration Values</h2>
+<dl>
+<dt><strong><code>jinja_options</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Options to be passed to the Jinja2 environment.
+See a list of options on the
+<a href="https://jinja.palletsprojects.com/en/2.11.x/api/#jinja2.Environment">Jinja2 API Page</a></dd>
+<dt><strong><code>**kwargs</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Other keyword arguments will be passed as variables to the Jinja2 rendering engine to that
+fill placeholders in the template</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/jinja.py#L6-L26" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/jinja.py#L6-L54" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class JinjaPluginMakerMixin(object):
+    &#34;&#34;&#34;
+    Mixin that helps plugins use Jinja2 python library for dynamically rendering 
+    plugins based on the config dictionary.  Values from the `config` are pass 
+    to the Jinja2 templating engine rendered into the html fragment via a 
+    double-handlered placeholder (e.g., `{{ config_dict_key }}`)
+
+    For more information on how to design a Jinja2 template, visit 
+    https://jinja.palletsprojects.com
+
+    Attributes
+    ----------
+    template : str
+        the template property on a class that takes this mixin must 
+        return a string with double-handlebarred placeholders
+
+    Configuration Values
+    ----------
+    jinja_options : dict
+        Options to be passed to the Jinja2 environment.  See a list of options on the 
+        [Jinja2 API Page](https://jinja.palletsprojects.com/en/2.11.x/api/#jinja2.Environment)
+
+    **kwargs : dict
+        Other keyword arguments will be passed as variables to the Jinja2 rendering engine to that
+        fill placeholders in the template
+    &#34;&#34;&#34;
     template: typing.Optional[str]
     template = None
 
@@ -81,6 +156,9 @@ class JinjaPluginMakerMixin(object):
         super(JinjaPluginMakerMixin, self).__init__(*args, *kwargs)
 
     def render(self, config: typing.Dict):
+        &#34;&#34;&#34;
+        Loads the Configuration Value into the template and returns the filled out html fragment
+        &#34;&#34;&#34;
         options = {
             &#34;loader&#34;: jinja2.BaseLoader()
         }
@@ -109,34 +187,20 @@ class JinjaPluginMakerMixin(object):
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="presalytics.lib.plugins.jinja.JinjaPluginMakerMixin.get_template"><code class="name flex">
-<span>def <span class="ident">get_template</span></span>(<span>self) -> str</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/jinja.py#L22-L26" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def get_template(self) -&gt; str:
-    if not self.template:
-        raise presalytics.lib.exceptions.ValidationError(&#34;Plugins the use the JinjaPluginMakerMixin must have a defiined template attribute.&#34;)
-    else:
-        return self.template</code></pre>
-</details>
-</dd>
 <dt id="presalytics.lib.plugins.jinja.JinjaPluginMakerMixin.render"><code class="name flex">
-<span>def <span class="ident">render</span></span>(<span>self, config: Dict)</span>
+<span>def <span class="ident">render</span></span>(<span>self, config)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Loads the Configuration Value into the template and returns the filled out html fragment</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/jinja.py#L13-L20" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/jinja.py#L38-L48" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render(self, config: typing.Dict):
+    &#34;&#34;&#34;
+    Loads the Configuration Value into the template and returns the filled out html fragment
+    &#34;&#34;&#34;
     options = {
         &#34;loader&#34;: jinja2.BaseLoader()
     }
@@ -144,6 +208,23 @@ class JinjaPluginMakerMixin(object):
         options.update(config.pop(&#34;jinja_options&#34;))
     template = jinja2.Environment(**options).from_string(self.get_template())
     return template.render(config)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.plugins.jinja.JinjaPluginMakerMixin.get_template"><code class="name flex">
+<span>def <span class="ident">get_template</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/jinja.py#L50-L54" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_template(self) -&gt; str:
+    if not self.template:
+        raise presalytics.lib.exceptions.ValidationError(&#34;Plugins the use the JinjaPluginMakerMixin must have a defiined template attribute.&#34;)
+    else:
+        return self.template</code></pre>
 </details>
 </dd>
 </dl>
@@ -167,8 +248,8 @@ class JinjaPluginMakerMixin(object):
 <li>
 <h4><code><a title="presalytics.lib.plugins.jinja.JinjaPluginMakerMixin" href="/python-client/presalytics/lib/plugins/jinja.html#presalytics.lib.plugins.jinja.JinjaPluginMakerMixin">JinjaPluginMakerMixin</a></code></h4>
 <ul class="">
-<li><code><a title="presalytics.lib.plugins.jinja.JinjaPluginMakerMixin.get_template" href="/python-client/presalytics/lib/plugins/jinja.html#presalytics.lib.plugins.jinja.JinjaPluginMakerMixin.get_template">get_template</a></code></li>
 <li><code><a title="presalytics.lib.plugins.jinja.JinjaPluginMakerMixin.render" href="/python-client/presalytics/lib/plugins/jinja.html#presalytics.lib.plugins.jinja.JinjaPluginMakerMixin.render">render</a></code></li>
+<li><code><a title="presalytics.lib.plugins.jinja.JinjaPluginMakerMixin.get_template" href="/python-client/presalytics/lib/plugins/jinja.html#presalytics.lib.plugins.jinja.JinjaPluginMakerMixin.get_template">get_template</a></code></li>
 <li><code><a title="presalytics.lib.plugins.jinja.JinjaPluginMakerMixin.template" href="/python-client/presalytics/lib/plugins/jinja.html#presalytics.lib.plugins.jinja.JinjaPluginMakerMixin.template">template</a></code></li>
 </ul>
 </li>

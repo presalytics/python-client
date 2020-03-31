@@ -694,7 +694,7 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -708,7 +708,7 @@ in the keyword argument list.
 For example:
 dict(one=1, two=2)</p></section>
 </dd>
-<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -725,27 +725,27 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.collaborator_user_id"><code class="name">var <span class="ident">collaborator_user_id</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.id"><code class="name">var <span class="ident">id</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the collaborator_user_id of this StoryOutlineHistory.
+<section class="desc"><p>Gets the id of this StoryOutlineHistory.
 # noqa: E501</p>
-<p>:return: The collaborator_user_id of this StoryOutlineHistory.
+<p>:return: The id of this StoryOutlineHistory.
 # noqa: E501
 :rtype: str</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L263-L271" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L95-L103" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def collaborator_user_id(self):
-    &#34;&#34;&#34;Gets the collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
+def id(self):
+    &#34;&#34;&#34;Gets the id of this StoryOutlineHistory.  # noqa: E501
 
 
-    :return: The collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
+    :return: The id of this StoryOutlineHistory.  # noqa: E501
     :rtype: str
     &#34;&#34;&#34;
-    return self._collaborator_user_id</code></pre>
+    return self._id</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.created_at"><code class="name">var <span class="ident">created_at</span></code></dt>
@@ -794,98 +794,6 @@ def created_by(self):
     return self._created_by</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.id"><code class="name">var <span class="ident">id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the id of this StoryOutlineHistory.
-# noqa: E501</p>
-<p>:return: The id of this StoryOutlineHistory.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L95-L103" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def id(self):
-    &#34;&#34;&#34;Gets the id of this StoryOutlineHistory.  # noqa: E501
-
-
-    :return: The id of this StoryOutlineHistory.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._id</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.outline"><code class="name">var <span class="ident">outline</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the outline of this StoryOutlineHistory.
-# noqa: E501</p>
-<p>:return: The outline of this StoryOutlineHistory.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L242-L250" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def outline(self):
-    &#34;&#34;&#34;Gets the outline of this StoryOutlineHistory.  # noqa: E501
-
-
-    :return: The outline of this StoryOutlineHistory.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._outline</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.revision_number"><code class="name">var <span class="ident">revision_number</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the revision_number of this StoryOutlineHistory.
-# noqa: E501</p>
-<p>:return: The revision_number of this StoryOutlineHistory.
-# noqa: E501
-:rtype: int</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L221-L229" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def revision_number(self):
-    &#34;&#34;&#34;Gets the revision_number of this StoryOutlineHistory.  # noqa: E501
-
-
-    :return: The revision_number of this StoryOutlineHistory.  # noqa: E501
-    :rtype: int
-    &#34;&#34;&#34;
-    return self._revision_number</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.story_id"><code class="name">var <span class="ident">story_id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the story_id of this StoryOutlineHistory.
-# noqa: E501</p>
-<p>:return: The story_id of this StoryOutlineHistory.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L200-L208" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def story_id(self):
-    &#34;&#34;&#34;Gets the story_id of this StoryOutlineHistory.  # noqa: E501
-
-
-    :return: The story_id of this StoryOutlineHistory.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._story_id</code></pre>
-</details>
-</dd>
 <dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.updated_at"><code class="name">var <span class="ident">updated_at</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the updated_at of this StoryOutlineHistory.
@@ -930,6 +838,98 @@ def updated_by(self):
     :rtype: str
     &#34;&#34;&#34;
     return self._updated_by</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.story_id"><code class="name">var <span class="ident">story_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the story_id of this StoryOutlineHistory.
+# noqa: E501</p>
+<p>:return: The story_id of this StoryOutlineHistory.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L200-L208" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def story_id(self):
+    &#34;&#34;&#34;Gets the story_id of this StoryOutlineHistory.  # noqa: E501
+
+
+    :return: The story_id of this StoryOutlineHistory.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._story_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.revision_number"><code class="name">var <span class="ident">revision_number</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the revision_number of this StoryOutlineHistory.
+# noqa: E501</p>
+<p>:return: The revision_number of this StoryOutlineHistory.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L221-L229" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def revision_number(self):
+    &#34;&#34;&#34;Gets the revision_number of this StoryOutlineHistory.  # noqa: E501
+
+
+    :return: The revision_number of this StoryOutlineHistory.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._revision_number</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.outline"><code class="name">var <span class="ident">outline</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the outline of this StoryOutlineHistory.
+# noqa: E501</p>
+<p>:return: The outline of this StoryOutlineHistory.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L242-L250" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def outline(self):
+    &#34;&#34;&#34;Gets the outline of this StoryOutlineHistory.  # noqa: E501
+
+
+    :return: The outline of this StoryOutlineHistory.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._outline</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.collaborator_user_id"><code class="name">var <span class="ident">collaborator_user_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the collaborator_user_id of this StoryOutlineHistory.
+# noqa: E501</p>
+<p>:return: The collaborator_user_id of this StoryOutlineHistory.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L263-L271" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def collaborator_user_id(self):
+    &#34;&#34;&#34;Gets the collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
+
+
+    :return: The collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._collaborator_user_id</code></pre>
 </details>
 </dd>
 </dl>
@@ -1006,19 +1006,19 @@ def updated_by(self):
 <li>
 <h4><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory">StoryOutlineHistory</a></code></h4>
 <ul class="">
-<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.attribute_map" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.attribute_map">attribute_map</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.collaborator_user_id" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.collaborator_user_id">collaborator_user_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.created_at" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.created_at">created_at</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.created_by" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.created_by">created_by</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.id" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.id">id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.openapi_types" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.openapi_types">openapi_types</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.outline" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.outline">outline</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.revision_number" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.revision_number">revision_number</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.story_id" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.story_id">story_id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.to_dict" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.to_str" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.to_str">to_str</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.id" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.id">id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.created_at" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.created_at">created_at</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.created_by" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.created_by">created_by</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.updated_at" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.updated_at">updated_at</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.updated_by" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.updated_by">updated_by</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.story_id" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.story_id">story_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.revision_number" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.revision_number">revision_number</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.outline" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.outline">outline</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.collaborator_user_id" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.collaborator_user_id">collaborator_user_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.openapi_types" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.attribute_map" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.attribute_map">attribute_map</a></code></li>
 </ul>
 </li>
 </ul>

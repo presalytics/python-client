@@ -434,7 +434,7 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -448,7 +448,7 @@ in the keyword argument list.
 For example:
 dict(one=1, two=2)</p></section>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -465,29 +465,6 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.axis_data_type_id"><code class="name">var <span class="ident">axis_data_type_id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the axis_data_type_id of this ChartAxes.
-# noqa: E501</p>
-<p>:return: The axis_data_type_id of this ChartAxes.
-# noqa: E501
-:rtype: int</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_axes.py#L112-L120" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def axis_data_type_id(self):
-    &#34;&#34;&#34;Gets the axis_data_type_id of this ChartAxes.  # noqa: E501
-
-
-    :return: The axis_data_type_id of this ChartAxes.  # noqa: E501
-    :rtype: int
-    &#34;&#34;&#34;
-    return self._axis_data_type_id</code></pre>
-</details>
-</dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.charts_id"><code class="name">var <span class="ident">charts_id</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the charts_id of this ChartAxes.
@@ -511,29 +488,6 @@ def charts_id(self):
     return self._charts_id</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.id"><code class="name">var <span class="ident">id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the id of this ChartAxes.
-# noqa: E501</p>
-<p>:return: The id of this ChartAxes.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_axes.py#L133-L141" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def id(self):
-    &#34;&#34;&#34;Gets the id of this ChartAxes.  # noqa: E501
-
-
-    :return: The id of this ChartAxes.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._id</code></pre>
-</details>
-</dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.ooxml_id"><code class="name">var <span class="ident">ooxml_id</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the ooxml_id of this ChartAxes.
@@ -555,6 +509,52 @@ def ooxml_id(self):
     :rtype: int
     &#34;&#34;&#34;
     return self._ooxml_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.axis_data_type_id"><code class="name">var <span class="ident">axis_data_type_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the axis_data_type_id of this ChartAxes.
+# noqa: E501</p>
+<p>:return: The axis_data_type_id of this ChartAxes.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_axes.py#L112-L120" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def axis_data_type_id(self):
+    &#34;&#34;&#34;Gets the axis_data_type_id of this ChartAxes.  # noqa: E501
+
+
+    :return: The axis_data_type_id of this ChartAxes.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._axis_data_type_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the id of this ChartAxes.
+# noqa: E501</p>
+<p>:return: The id of this ChartAxes.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_axes.py#L133-L141" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def id(self):
+    &#34;&#34;&#34;Gets the id of this ChartAxes.  # noqa: E501
+
+
+    :return: The id of this ChartAxes.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._id</code></pre>
 </details>
 </dd>
 </dl>
@@ -631,14 +631,14 @@ def ooxml_id(self):
 <li>
 <h4><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_axes.html#presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes">ChartAxes</a></code></h4>
 <ul class="two-column">
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_axes.html#presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.attribute_map">attribute_map</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.axis_data_type_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_axes.html#presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.axis_data_type_id">axis_data_type_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.charts_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_axes.html#presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.charts_id">charts_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_axes.html#presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.id">id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.ooxml_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_axes.html#presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.ooxml_id">ooxml_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_axes.html#presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.openapi_types">openapi_types</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.to_dict" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_axes.html#presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.to_str" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_axes.html#presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.to_str">to_str</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.charts_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_axes.html#presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.charts_id">charts_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.ooxml_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_axes.html#presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.ooxml_id">ooxml_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.axis_data_type_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_axes.html#presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.axis_data_type_id">axis_data_type_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_axes.html#presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.id">id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_axes.html#presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_axes.html#presalytics.client.presalytics_ooxml_automation.models.chart_axes.ChartAxes.attribute_map">attribute_map</a></code></li>
 </ul>
 </li>
 </ul>

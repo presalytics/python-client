@@ -530,7 +530,7 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -544,7 +544,7 @@ in the keyword argument list.
 For example:
 dict(one=1, two=2)</p></section>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -561,6 +561,52 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.shape_tree_id"><code class="name">var <span class="ident">shape_tree_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the shape_tree_id of this SlideGroupElements.
+# noqa: E501</p>
+<p>:return: The shape_tree_id of this SlideGroupElements.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.py#L76-L84" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def shape_tree_id(self):
+    &#34;&#34;&#34;Gets the shape_tree_id of this SlideGroupElements.  # noqa: E501
+
+
+    :return: The shape_tree_id of this SlideGroupElements.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._shape_tree_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.parent_group_element_id"><code class="name">var <span class="ident">parent_group_element_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the parent_group_element_id of this SlideGroupElements.
+# noqa: E501</p>
+<p>:return: The parent_group_element_id of this SlideGroupElements.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.py#L97-L105" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def parent_group_element_id(self):
+    &#34;&#34;&#34;Gets the parent_group_element_id of this SlideGroupElements.  # noqa: E501
+
+
+    :return: The parent_group_element_id of this SlideGroupElements.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._parent_group_element_id</code></pre>
+</details>
+</dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.group_element_type_id"><code class="name">var <span class="ident">group_element_type_id</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the group_element_type_id of this SlideGroupElements.
@@ -607,75 +653,6 @@ def group_element_type_pk(self):
     return self._group_element_type_pk</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.id"><code class="name">var <span class="ident">id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the id of this SlideGroupElements.
-# noqa: E501</p>
-<p>:return: The id of this SlideGroupElements.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.py#L181-L189" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def id(self):
-    &#34;&#34;&#34;Gets the id of this SlideGroupElements.  # noqa: E501
-
-
-    :return: The id of this SlideGroupElements.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._id</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.parent_group_element_id"><code class="name">var <span class="ident">parent_group_element_id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the parent_group_element_id of this SlideGroupElements.
-# noqa: E501</p>
-<p>:return: The parent_group_element_id of this SlideGroupElements.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.py#L97-L105" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def parent_group_element_id(self):
-    &#34;&#34;&#34;Gets the parent_group_element_id of this SlideGroupElements.  # noqa: E501
-
-
-    :return: The parent_group_element_id of this SlideGroupElements.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._parent_group_element_id</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.shape_tree_id"><code class="name">var <span class="ident">shape_tree_id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the shape_tree_id of this SlideGroupElements.
-# noqa: E501</p>
-<p>:return: The shape_tree_id of this SlideGroupElements.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.py#L76-L84" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def shape_tree_id(self):
-    &#34;&#34;&#34;Gets the shape_tree_id of this SlideGroupElements.  # noqa: E501
-
-
-    :return: The shape_tree_id of this SlideGroupElements.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._shape_tree_id</code></pre>
-</details>
-</dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.ultimate_parent_shape_tree_id"><code class="name">var <span class="ident">ultimate_parent_shape_tree_id</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the ultimate_parent_shape_tree_id of this SlideGroupElements.
@@ -697,6 +674,29 @@ def ultimate_parent_shape_tree_id(self):
     :rtype: str
     &#34;&#34;&#34;
     return self._ultimate_parent_shape_tree_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the id of this SlideGroupElements.
+# noqa: E501</p>
+<p>:return: The id of this SlideGroupElements.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.py#L181-L189" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def id(self):
+    &#34;&#34;&#34;Gets the id of this SlideGroupElements.  # noqa: E501
+
+
+    :return: The id of this SlideGroupElements.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._id</code></pre>
 </details>
 </dd>
 </dl>
@@ -773,16 +773,16 @@ def ultimate_parent_shape_tree_id(self):
 <li>
 <h4><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements">SlideGroupElements</a></code></h4>
 <ul class="">
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.attribute_map">attribute_map</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.group_element_type_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.group_element_type_id">group_element_type_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.group_element_type_pk" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.group_element_type_pk">group_element_type_pk</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.id">id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.openapi_types">openapi_types</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.parent_group_element_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.parent_group_element_id">parent_group_element_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.shape_tree_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.shape_tree_id">shape_tree_id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.to_dict" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.to_str" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.to_str">to_str</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.shape_tree_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.shape_tree_id">shape_tree_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.parent_group_element_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.parent_group_element_id">parent_group_element_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.group_element_type_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.group_element_type_id">group_element_type_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.group_element_type_pk" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.group_element_type_pk">group_element_type_pk</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.ultimate_parent_shape_tree_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.ultimate_parent_shape_tree_id">ultimate_parent_shape_tree_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.id">id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_elements.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_elements.SlideGroupElements.attribute_map">attribute_map</a></code></li>
 </ul>
 </li>
 </ul>

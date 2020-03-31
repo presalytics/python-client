@@ -792,7 +792,7 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -806,7 +806,7 @@ in the keyword argument list.
 For example:
 dict(one=1, two=2)</p></section>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -823,27 +823,27 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.axis"><code class="name">var <span class="ident">axis</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.name_format_type"><code class="name">var <span class="ident">name_format_type</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the axis of this ChartRowCollectionsDetails.
+<section class="desc"><p>Gets the name_format_type of this ChartRowCollectionsDetails.
 # noqa: E501</p>
-<p>:return: The axis of this ChartRowCollectionsDetails.
+<p>:return: The name_format_type of this ChartRowCollectionsDetails.
 # noqa: E501
-:rtype: object</p></section>
+:rtype: int</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.py#L144-L152" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.py#L102-L110" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def axis(self):
-    &#34;&#34;&#34;Gets the axis of this ChartRowCollectionsDetails.  # noqa: E501
+def name_format_type(self):
+    &#34;&#34;&#34;Gets the name_format_type of this ChartRowCollectionsDetails.  # noqa: E501
 
 
-    :return: The axis of this ChartRowCollectionsDetails.  # noqa: E501
-    :rtype: object
+    :return: The name_format_type of this ChartRowCollectionsDetails.  # noqa: E501
+    :rtype: int
     &#34;&#34;&#34;
-    return self._axis</code></pre>
+    return self._name_format_type</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.axis_id"><code class="name">var <span class="ident">axis_id</span></code></dt>
@@ -869,27 +869,27 @@ def axis_id(self):
     return self._axis_id</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.chart_data"><code class="name">var <span class="ident">chart_data</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.axis"><code class="name">var <span class="ident">axis</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the chart_data of this ChartRowCollectionsDetails.
+<section class="desc"><p>Gets the axis of this ChartRowCollectionsDetails.
 # noqa: E501</p>
-<p>:return: The chart_data of this ChartRowCollectionsDetails.
+<p>:return: The axis of this ChartRowCollectionsDetails.
 # noqa: E501
 :rtype: object</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.py#L186-L194" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.py#L144-L152" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def chart_data(self):
-    &#34;&#34;&#34;Gets the chart_data of this ChartRowCollectionsDetails.  # noqa: E501
+def axis(self):
+    &#34;&#34;&#34;Gets the axis of this ChartRowCollectionsDetails.  # noqa: E501
 
 
-    :return: The chart_data of this ChartRowCollectionsDetails.  # noqa: E501
+    :return: The axis of this ChartRowCollectionsDetails.  # noqa: E501
     :rtype: object
     &#34;&#34;&#34;
-    return self._chart_data</code></pre>
+    return self._axis</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.chart_data_id"><code class="name">var <span class="ident">chart_data_id</span></code></dt>
@@ -915,96 +915,27 @@ def chart_data_id(self):
     return self._chart_data_id</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.date_created"><code class="name">var <span class="ident">date_created</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.chart_data"><code class="name">var <span class="ident">chart_data</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the date_created of this ChartRowCollectionsDetails.
+<section class="desc"><p>Gets the chart_data of this ChartRowCollectionsDetails.
 # noqa: E501</p>
-<p>:return: The date_created of this ChartRowCollectionsDetails.
+<p>:return: The chart_data of this ChartRowCollectionsDetails.
 # noqa: E501
-:rtype: datetime</p></section>
+:rtype: object</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.py#L249-L257" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.py#L186-L194" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def date_created(self):
-    &#34;&#34;&#34;Gets the date_created of this ChartRowCollectionsDetails.  # noqa: E501
+def chart_data(self):
+    &#34;&#34;&#34;Gets the chart_data of this ChartRowCollectionsDetails.  # noqa: E501
 
 
-    :return: The date_created of this ChartRowCollectionsDetails.  # noqa: E501
-    :rtype: datetime
+    :return: The chart_data of this ChartRowCollectionsDetails.  # noqa: E501
+    :rtype: object
     &#34;&#34;&#34;
-    return self._date_created</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.date_modified"><code class="name">var <span class="ident">date_modified</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the date_modified of this ChartRowCollectionsDetails.
-# noqa: E501</p>
-<p>:return: The date_modified of this ChartRowCollectionsDetails.
-# noqa: E501
-:rtype: datetime</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.py#L291-L299" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def date_modified(self):
-    &#34;&#34;&#34;Gets the date_modified of this ChartRowCollectionsDetails.  # noqa: E501
-
-
-    :return: The date_modified of this ChartRowCollectionsDetails.  # noqa: E501
-    :rtype: datetime
-    &#34;&#34;&#34;
-    return self._date_modified</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.id"><code class="name">var <span class="ident">id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the id of this ChartRowCollectionsDetails.
-# noqa: E501</p>
-<p>:return: The id of this ChartRowCollectionsDetails.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.py#L228-L236" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def id(self):
-    &#34;&#34;&#34;Gets the id of this ChartRowCollectionsDetails.  # noqa: E501
-
-
-    :return: The id of this ChartRowCollectionsDetails.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._id</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.name_format_type"><code class="name">var <span class="ident">name_format_type</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the name_format_type of this ChartRowCollectionsDetails.
-# noqa: E501</p>
-<p>:return: The name_format_type of this ChartRowCollectionsDetails.
-# noqa: E501
-:rtype: int</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.py#L102-L110" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def name_format_type(self):
-    &#34;&#34;&#34;Gets the name_format_type of this ChartRowCollectionsDetails.  # noqa: E501
-
-
-    :return: The name_format_type of this ChartRowCollectionsDetails.  # noqa: E501
-    :rtype: int
-    &#34;&#34;&#34;
-    return self._name_format_type</code></pre>
+    return self._chart_data</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.rows"><code class="name">var <span class="ident">rows</span></code></dt>
@@ -1030,6 +961,52 @@ def rows(self):
     return self._rows</code></pre>
 </details>
 </dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the id of this ChartRowCollectionsDetails.
+# noqa: E501</p>
+<p>:return: The id of this ChartRowCollectionsDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.py#L228-L236" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def id(self):
+    &#34;&#34;&#34;Gets the id of this ChartRowCollectionsDetails.  # noqa: E501
+
+
+    :return: The id of this ChartRowCollectionsDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.date_created"><code class="name">var <span class="ident">date_created</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the date_created of this ChartRowCollectionsDetails.
+# noqa: E501</p>
+<p>:return: The date_created of this ChartRowCollectionsDetails.
+# noqa: E501
+:rtype: datetime</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.py#L249-L257" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def date_created(self):
+    &#34;&#34;&#34;Gets the date_created of this ChartRowCollectionsDetails.  # noqa: E501
+
+
+    :return: The date_created of this ChartRowCollectionsDetails.  # noqa: E501
+    :rtype: datetime
+    &#34;&#34;&#34;
+    return self._date_created</code></pre>
+</details>
+</dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.user_created"><code class="name">var <span class="ident">user_created</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the user_created of this ChartRowCollectionsDetails.
@@ -1051,6 +1028,29 @@ def user_created(self):
     :rtype: str
     &#34;&#34;&#34;
     return self._user_created</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.date_modified"><code class="name">var <span class="ident">date_modified</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the date_modified of this ChartRowCollectionsDetails.
+# noqa: E501</p>
+<p>:return: The date_modified of this ChartRowCollectionsDetails.
+# noqa: E501
+:rtype: datetime</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.py#L291-L299" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def date_modified(self):
+    &#34;&#34;&#34;Gets the date_modified of this ChartRowCollectionsDetails.  # noqa: E501
+
+
+    :return: The date_modified of this ChartRowCollectionsDetails.  # noqa: E501
+    :rtype: datetime
+    &#34;&#34;&#34;
+    return self._date_modified</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.user_modified"><code class="name">var <span class="ident">user_modified</span></code></dt>
@@ -1150,21 +1150,21 @@ def user_modified(self):
 <li>
 <h4><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails">ChartRowCollectionsDetails</a></code></h4>
 <ul class="two-column">
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.attribute_map">attribute_map</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.axis" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.axis">axis</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.axis_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.axis_id">axis_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.chart_data" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.chart_data">chart_data</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.chart_data_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.chart_data_id">chart_data_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.date_created" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.date_created">date_created</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.date_modified" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.date_modified">date_modified</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.id">id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.name_format_type" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.name_format_type">name_format_type</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.openapi_types">openapi_types</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.rows" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.rows">rows</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.to_dict" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.to_str" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.to_str">to_str</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.name_format_type" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.name_format_type">name_format_type</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.axis_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.axis_id">axis_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.axis" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.axis">axis</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.chart_data_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.chart_data_id">chart_data_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.chart_data" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.chart_data">chart_data</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.rows" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.rows">rows</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.id">id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.date_created" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.date_created">date_created</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.user_created" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.user_created">user_created</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.date_modified" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.date_modified">date_modified</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.user_modified" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.user_modified">user_modified</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_row_collections_details.html#presalytics.client.presalytics_ooxml_automation.models.chart_row_collections_details.ChartRowCollectionsDetails.attribute_map">attribute_map</a></code></li>
 </ul>
 </li>
 </ul>

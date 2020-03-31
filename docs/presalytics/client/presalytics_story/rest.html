@@ -337,6 +337,94 @@ class RESTClientObject(object):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="presalytics.client.presalytics_story.rest.RESTResponse"><code class="flex name class">
+<span>class <span class="ident">RESTResponse</span></span>
+<span>(</span><span>resp)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The abstract base class for all I/O classes, acting on streams of
+bytes. There is no public constructor.</p>
+<p>This class provides dummy implementations for many methods that
+derived classes can override selectively; the default implementations
+represent a file that cannot be read, written or seeked.</p>
+<p>Even though IOBase does not declare read, readinto, or write because
+their signatures will vary, implementations and clients should
+consider those methods part of the interface. Also, implementations
+may raise UnsupportedOperation when operations they do not support are
+called.</p>
+<p>The basic type used for binary data read from or written to a file is
+bytes. Other bytes-like objects are accepted as method arguments too.
+In some cases (such as readinto), a writable object is required. Text
+I/O classes work with str data.</p>
+<p>Note that calling any method (except additional calls to close(),
+which are ignored) on a closed stream should raise a ValueError.</p>
+<p>IOBase (and its subclasses) support the iterator protocol, meaning
+that an IOBase object can be iterated over yielding the lines in a
+stream.</p>
+<p>IOBase also supports the :keyword:<code>with</code> statement. In this example,
+fp is closed after the suite of the with statement is complete:</p>
+<p>with open('spam.txt', 'r') as fp:
+fp.write('Spam and eggs!')</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L33-L47" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class RESTResponse(io.IOBase):
+
+    def __init__(self, resp):
+        self.urllib3_response = resp
+        self.status = resp.status
+        self.reason = resp.reason
+        self.data = resp.data
+
+    def getheaders(self):
+        &#34;&#34;&#34;Returns a dictionary of the response headers.&#34;&#34;&#34;
+        return self.urllib3_response.getheaders()
+
+    def getheader(self, name, default=None):
+        &#34;&#34;&#34;Returns a given response header.&#34;&#34;&#34;
+        return self.urllib3_response.getheader(name, default)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>io.IOBase</li>
+<li>_io._IOBase</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.client.presalytics_story.rest.RESTResponse.getheaders"><code class="name flex">
+<span>def <span class="ident">getheaders</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns a dictionary of the response headers.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L41-L43" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def getheaders(self):
+    &#34;&#34;&#34;Returns a dictionary of the response headers.&#34;&#34;&#34;
+    return self.urllib3_response.getheaders()</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.rest.RESTResponse.getheader"><code class="name flex">
+<span>def <span class="ident">getheader</span></span>(<span>self, name, default=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns a given response header.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L45-L47" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def getheader(self, name, default=None):
+    &#34;&#34;&#34;Returns a given response header.&#34;&#34;&#34;
+    return self.urllib3_response.getheader(name, default)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
 <dt id="presalytics.client.presalytics_story.rest.RESTClientObject"><code class="flex name class">
 <span>class <span class="ident">RESTClientObject</span></span>
 <span>(</span><span>configuration, pools_size=4, maxsize=None)</span>
@@ -598,148 +686,6 @@ class RESTClientObject(object):
 </details>
 <h3>Methods</h3>
 <dl>
-<dt id="presalytics.client.presalytics_story.rest.RESTClientObject.DELETE"><code class="name flex">
-<span>def <span class="ident">DELETE</span></span>(<span>self, url, headers=None, query_params=None, body=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L259-L266" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def DELETE(self, url, headers=None, query_params=None, body=None,
-           _preload_content=True, _request_timeout=None):
-    return self.request(&#34;DELETE&#34;, url,
-                        headers=headers,
-                        query_params=query_params,
-                        _preload_content=_preload_content,
-                        _request_timeout=_request_timeout,
-                        body=body)</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.rest.RESTClientObject.GET"><code class="name flex">
-<span>def <span class="ident">GET</span></span>(<span>self, url, headers=None, query_params=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L233-L239" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def GET(self, url, headers=None, query_params=None, _preload_content=True,
-        _request_timeout=None):
-    return self.request(&#34;GET&#34;, url,
-                        headers=headers,
-                        _preload_content=_preload_content,
-                        _request_timeout=_request_timeout,
-                        query_params=query_params)</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.rest.RESTClientObject.HEAD"><code class="name flex">
-<span>def <span class="ident">HEAD</span></span>(<span>self, url, headers=None, query_params=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L241-L247" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def HEAD(self, url, headers=None, query_params=None, _preload_content=True,
-         _request_timeout=None):
-    return self.request(&#34;HEAD&#34;, url,
-                        headers=headers,
-                        _preload_content=_preload_content,
-                        _request_timeout=_request_timeout,
-                        query_params=query_params)</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.rest.RESTClientObject.OPTIONS"><code class="name flex">
-<span>def <span class="ident">OPTIONS</span></span>(<span>self, url, headers=None, query_params=None, post_params=None, body=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L249-L257" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def OPTIONS(self, url, headers=None, query_params=None, post_params=None,
-            body=None, _preload_content=True, _request_timeout=None):
-    return self.request(&#34;OPTIONS&#34;, url,
-                        headers=headers,
-                        query_params=query_params,
-                        post_params=post_params,
-                        _preload_content=_preload_content,
-                        _request_timeout=_request_timeout,
-                        body=body)</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.rest.RESTClientObject.PATCH"><code class="name flex">
-<span>def <span class="ident">PATCH</span></span>(<span>self, url, headers=None, query_params=None, post_params=None, body=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L288-L296" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def PATCH(self, url, headers=None, query_params=None, post_params=None,
-          body=None, _preload_content=True, _request_timeout=None):
-    return self.request(&#34;PATCH&#34;, url,
-                        headers=headers,
-                        query_params=query_params,
-                        post_params=post_params,
-                        _preload_content=_preload_content,
-                        _request_timeout=_request_timeout,
-                        body=body)</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.rest.RESTClientObject.POST"><code class="name flex">
-<span>def <span class="ident">POST</span></span>(<span>self, url, headers=None, query_params=None, post_params=None, body=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L268-L276" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def POST(self, url, headers=None, query_params=None, post_params=None,
-         body=None, _preload_content=True, _request_timeout=None):
-    return self.request(&#34;POST&#34;, url,
-                        headers=headers,
-                        query_params=query_params,
-                        post_params=post_params,
-                        _preload_content=_preload_content,
-                        _request_timeout=_request_timeout,
-                        body=body)</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.rest.RESTClientObject.PUT"><code class="name flex">
-<span>def <span class="ident">PUT</span></span>(<span>self, url, headers=None, query_params=None, post_params=None, body=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L278-L286" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def PUT(self, url, headers=None, query_params=None, post_params=None,
-        body=None, _preload_content=True, _request_timeout=None):
-    return self.request(&#34;PUT&#34;, url,
-                        headers=headers,
-                        query_params=query_params,
-                        post_params=post_params,
-                        _preload_content=_preload_content,
-                        _request_timeout=_request_timeout,
-                        body=body)</code></pre>
-</details>
-</dd>
 <dt id="presalytics.client.presalytics_story.rest.RESTClientObject.request"><code class="name flex">
 <span>def <span class="ident">request</span></span>(<span>self, method, url, query_params=None, headers=None, body=None, post_params=None)</span>
 </code></dt>
@@ -890,92 +836,146 @@ timeout. It can also be a pair (tuple) of
     return r</code></pre>
 </details>
 </dd>
-</dl>
-</dd>
-<dt id="presalytics.client.presalytics_story.rest.RESTResponse"><code class="flex name class">
-<span>class <span class="ident">RESTResponse</span></span>
-<span>(</span><span>resp)</span>
+<dt id="presalytics.client.presalytics_story.rest.RESTClientObject.GET"><code class="name flex">
+<span>def <span class="ident">GET</span></span>(<span>self, url, headers=None, query_params=None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>The abstract base class for all I/O classes, acting on streams of
-bytes. There is no public constructor.</p>
-<p>This class provides dummy implementations for many methods that
-derived classes can override selectively; the default implementations
-represent a file that cannot be read, written or seeked.</p>
-<p>Even though IOBase does not declare read, readinto, or write because
-their signatures will vary, implementations and clients should
-consider those methods part of the interface. Also, implementations
-may raise UnsupportedOperation when operations they do not support are
-called.</p>
-<p>The basic type used for binary data read from or written to a file is
-bytes. Other bytes-like objects are accepted as method arguments too.
-In some cases (such as readinto), a writable object is required. Text
-I/O classes work with str data.</p>
-<p>Note that calling any method (except additional calls to close(),
-which are ignored) on a closed stream should raise a ValueError.</p>
-<p>IOBase (and its subclasses) support the iterator protocol, meaning
-that an IOBase object can be iterated over yielding the lines in a
-stream.</p>
-<p>IOBase also supports the :keyword:<code>with</code> statement. In this example,
-fp is closed after the suite of the with statement is complete:</p>
-<p>with open('spam.txt', 'r') as fp:
-fp.write('Spam and eggs!')</p></section>
+<section class="desc"></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L33-L47" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L233-L239" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">class RESTResponse(io.IOBase):
-
-    def __init__(self, resp):
-        self.urllib3_response = resp
-        self.status = resp.status
-        self.reason = resp.reason
-        self.data = resp.data
-
-    def getheaders(self):
-        &#34;&#34;&#34;Returns a dictionary of the response headers.&#34;&#34;&#34;
-        return self.urllib3_response.getheaders()
-
-    def getheader(self, name, default=None):
-        &#34;&#34;&#34;Returns a given response header.&#34;&#34;&#34;
-        return self.urllib3_response.getheader(name, default)</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>io.IOBase</li>
-<li>_io._IOBase</li>
-</ul>
-<h3>Methods</h3>
-<dl>
-<dt id="presalytics.client.presalytics_story.rest.RESTResponse.getheader"><code class="name flex">
-<span>def <span class="ident">getheader</span></span>(<span>self, name, default=None)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Returns a given response header.</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L45-L47" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def getheader(self, name, default=None):
-    &#34;&#34;&#34;Returns a given response header.&#34;&#34;&#34;
-    return self.urllib3_response.getheader(name, default)</code></pre>
+<pre><code class="python">def GET(self, url, headers=None, query_params=None, _preload_content=True,
+        _request_timeout=None):
+    return self.request(&#34;GET&#34;, url,
+                        headers=headers,
+                        _preload_content=_preload_content,
+                        _request_timeout=_request_timeout,
+                        query_params=query_params)</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_story.rest.RESTResponse.getheaders"><code class="name flex">
-<span>def <span class="ident">getheaders</span></span>(<span>self)</span>
+<dt id="presalytics.client.presalytics_story.rest.RESTClientObject.HEAD"><code class="name flex">
+<span>def <span class="ident">HEAD</span></span>(<span>self, url, headers=None, query_params=None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Returns a dictionary of the response headers.</p></section>
+<section class="desc"></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L41-L43" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L241-L247" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">def getheaders(self):
-    &#34;&#34;&#34;Returns a dictionary of the response headers.&#34;&#34;&#34;
-    return self.urllib3_response.getheaders()</code></pre>
+<pre><code class="python">def HEAD(self, url, headers=None, query_params=None, _preload_content=True,
+         _request_timeout=None):
+    return self.request(&#34;HEAD&#34;, url,
+                        headers=headers,
+                        _preload_content=_preload_content,
+                        _request_timeout=_request_timeout,
+                        query_params=query_params)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.rest.RESTClientObject.OPTIONS"><code class="name flex">
+<span>def <span class="ident">OPTIONS</span></span>(<span>self, url, headers=None, query_params=None, post_params=None, body=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L249-L257" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def OPTIONS(self, url, headers=None, query_params=None, post_params=None,
+            body=None, _preload_content=True, _request_timeout=None):
+    return self.request(&#34;OPTIONS&#34;, url,
+                        headers=headers,
+                        query_params=query_params,
+                        post_params=post_params,
+                        _preload_content=_preload_content,
+                        _request_timeout=_request_timeout,
+                        body=body)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.rest.RESTClientObject.DELETE"><code class="name flex">
+<span>def <span class="ident">DELETE</span></span>(<span>self, url, headers=None, query_params=None, body=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L259-L266" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def DELETE(self, url, headers=None, query_params=None, body=None,
+           _preload_content=True, _request_timeout=None):
+    return self.request(&#34;DELETE&#34;, url,
+                        headers=headers,
+                        query_params=query_params,
+                        _preload_content=_preload_content,
+                        _request_timeout=_request_timeout,
+                        body=body)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.rest.RESTClientObject.POST"><code class="name flex">
+<span>def <span class="ident">POST</span></span>(<span>self, url, headers=None, query_params=None, post_params=None, body=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L268-L276" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def POST(self, url, headers=None, query_params=None, post_params=None,
+         body=None, _preload_content=True, _request_timeout=None):
+    return self.request(&#34;POST&#34;, url,
+                        headers=headers,
+                        query_params=query_params,
+                        post_params=post_params,
+                        _preload_content=_preload_content,
+                        _request_timeout=_request_timeout,
+                        body=body)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.rest.RESTClientObject.PUT"><code class="name flex">
+<span>def <span class="ident">PUT</span></span>(<span>self, url, headers=None, query_params=None, post_params=None, body=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L278-L286" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def PUT(self, url, headers=None, query_params=None, post_params=None,
+        body=None, _preload_content=True, _request_timeout=None):
+    return self.request(&#34;PUT&#34;, url,
+                        headers=headers,
+                        query_params=query_params,
+                        post_params=post_params,
+                        _preload_content=_preload_content,
+                        _request_timeout=_request_timeout,
+                        body=body)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.rest.RESTClientObject.PATCH"><code class="name flex">
+<span>def <span class="ident">PATCH</span></span>(<span>self, url, headers=None, query_params=None, post_params=None, body=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/rest.py#L288-L296" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def PATCH(self, url, headers=None, query_params=None, post_params=None,
+          body=None, _preload_content=True, _request_timeout=None):
+    return self.request(&#34;PATCH&#34;, url,
+                        headers=headers,
+                        query_params=query_params,
+                        post_params=post_params,
+                        _preload_content=_preload_content,
+                        _request_timeout=_request_timeout,
+                        body=body)</code></pre>
 </details>
 </dd>
 </dl>
@@ -997,23 +997,23 @@ fp.write('Spam and eggs!')</p></section>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject">RESTClientObject</a></code></h4>
-<ul class="two-column">
-<li><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject.DELETE" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject.DELETE">DELETE</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject.GET" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject.GET">GET</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject.HEAD" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject.HEAD">HEAD</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject.OPTIONS" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject.OPTIONS">OPTIONS</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject.PATCH" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject.PATCH">PATCH</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject.POST" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject.POST">POST</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject.PUT" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject.PUT">PUT</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject.request" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject.request">request</a></code></li>
+<h4><code><a title="presalytics.client.presalytics_story.rest.RESTResponse" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTResponse">RESTResponse</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.client.presalytics_story.rest.RESTResponse.getheaders" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTResponse.getheaders">getheaders</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.rest.RESTResponse.getheader" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTResponse.getheader">getheader</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="presalytics.client.presalytics_story.rest.RESTResponse" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTResponse">RESTResponse</a></code></h4>
-<ul class="">
-<li><code><a title="presalytics.client.presalytics_story.rest.RESTResponse.getheader" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTResponse.getheader">getheader</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.rest.RESTResponse.getheaders" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTResponse.getheaders">getheaders</a></code></li>
+<h4><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject">RESTClientObject</a></code></h4>
+<ul class="two-column">
+<li><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject.request" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject.request">request</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject.GET" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject.GET">GET</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject.HEAD" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject.HEAD">HEAD</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject.OPTIONS" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject.OPTIONS">OPTIONS</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject.DELETE" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject.DELETE">DELETE</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject.POST" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject.POST">POST</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject.PUT" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject.PUT">PUT</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.rest.RESTClientObject.PATCH" href="/python-client/presalytics/client/presalytics_story/rest.html#presalytics.client.presalytics_story.rest.RESTClientObject.PATCH">PATCH</a></code></li>
 </ul>
 </li>
 </ul>

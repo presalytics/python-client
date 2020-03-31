@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L0-L97" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L0-L350" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import os
 import typing
@@ -53,7 +53,68 @@ class WidgetPage(presalytics.story.components.PageTemplateBase):
         return self.widgets[0].to_html()
 
 
+def htmlize(widget):
+    &#34;&#34;&#34;
+    Jinja filter to render a widget to a html string
+    &#34;&#34;&#34;
+    html = widget.to_html()
+    try:
+        html = html.decode(&#39;utf-8&#39;)
+    except Exception:
+        pass
+    return html
+    
+
+
 class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
+    &#34;&#34;&#34;
+    Base class for building objects that render html from `presalytics.story.outline.Page` 
+    objects that implementing the [Jinja2](https://jinja.palletsprojects.com/) 
+    python library.
+
+    Instances of this class will look for templates located at file location identified by the
+    `__template_file__` attribute.  If not template is found, the content in the `template_string`
+    attribute will be used. Templates should call each widget&#39;s `to_html()` method in a placeholder
+    in order to generate valid html for the page.      
+
+    *About building templates*: Templates are passed a `widgets` attribute and a `widget_index` 
+    integer (initialized at 0) as part of the context during rendering,. To render 
+    multiple widgets on a page, the following pattern can be used inside of templates to 
+    increment through the widgets as the jinja2 rendering engine moves through the template:
+        
+        {{ widgets[widget_index.next()].to_html().decode(&#39;utf-8&#39;) }}  // renders widget and increments widget_index
+
+    Please also note that if `&lt;script&gt;` tags are included in the template, they will be 
+    stripped out downstream by a `presalytics.story.components.Renderer` for security
+    reasons.  Scripts included in templates will not make it to the browser.
+
+    Parameters
+    ----------
+    page : presalytics.story.outline.Page
+        The page to be rendered
+
+    Attributes
+    ----------
+    __template_file__ : str
+        The filename to an html file containing a fragment that will be rendered into 
+        a page by a `presalytics.story.components.Renderer`
+    
+    __template_paths__ : list of str
+        user-defined filepaths to directories where Jinja2 should look for the `__template_file__`
+
+    __css__ : list of str
+        Each str in this list is a key that maps to an entry in the
+        `presalytics.lib.plugins.local.LocalStylesPlugin.LOCAL_STYLES_MAP`. Ids matched here 
+        load the css files as a dependent plugin.
+
+    template_paths : list of str
+        The folders Jinja2 will look in. Includes that html directory adjacent to this `__file__`, 
+        appending with the files in the `__template_paths__`
+
+    widgets : list of subclass instances of presalytics.story.components.WidgetBase
+        Widget to be rendered into the placeholders in the template identified by `__template_file__`
+    
+    &#34;&#34;&#34;
     __css__: typing.Sequence[str]
     __template_file__: str
     __template_paths__: typing.List[str]
@@ -62,12 +123,38 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
     __template_paths__ = []
     __css__ = []
 
+    class WidgetIndexer(object):
+        &#34;&#34;&#34;
+        A counter class for 
+
+        call `widgetindex.next()` in html templates to move this the widget list
+        &#34;&#34;&#34;
+        def __init__(self):
+            self._val = 0
+        
+        def next(self):
+            &#34;&#34;&#34;
+            Returns the current widget index and increments the value for the next call 
+            &#34;&#34;&#34;
+            cur = self._val
+            self._val += 1
+            return cur
+
     def __init__(self, page: &#39;Page&#39;, **kwargs) -&gt; None:
         super().__init__(page, **kwargs)
         pkg_templates = os.path.join(os.path.dirname(__file__), &#34;html&#34;)
-        self.template_paths = [pkg_templates]
+        self.template_paths = [pkg_templates, os.getcwd()]
         if len(self.__template_paths__) &gt; 0:
             self.template_paths[0:0] = self.__template_paths__
+        self.is_template_local = self.check_for_file()
+        if self.is_template_local:
+            self.template_string = self.read_template_string()
+        elif self.outline_page.additional_properties.get(&#34;template_string&#34;, None):
+            self.template_string = self.outline_page.additional_properties.get(&#34;template_string&#34;)
+        else:
+            self.template_string = None
+        if len(kwargs.keys()) &gt; 0:
+            self.outline_page.additional_properties.update(kwargs)
 
     @classmethod
     def deserialize(cls, component, **kwargs):
@@ -92,37 +179,199 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
         for plugin_data in self.__plugins__:
             updated_plugins.append(presalytics.story.outline.Plugin(**plugin_data))
         self.outline_page.plugins = updated_plugins
+        if self.template_string:
+            self.outline_page.additional_properties[&#34;template_string&#34;] = self.template_string
         return self.outline_page
 
     def get_template_name(self):
         &#34;&#34;&#34;
-        Requires subclasses have either a &#34;__template___&#34; property or override this method
+        Requires subclasses have either a `__template_file__` class property, or override this method
         &#34;&#34;&#34;
         if self.__template_file__:
             return self.__template_file__
         else:
             raise NotImplementedError
+    
+    def render(self, **kwargs):
+        &#34;&#34;&#34;
+        Renders the widgets to html
+        &#34;&#34;&#34;
+        if self.is_template_local:
+            return self.render_from_file(**kwargs)
+        elif self.template_string:
+            return self.render_from_backup_string(**kwargs)
+        else:
+            raise presalytics.lib.exceptions.MissingConfigException(&#34;Missing __template_file__: {}&#34;.format(self.get_template_name()))
 
-    def render(self, **kwargs) -&gt; str:
-        template = self.load_jinja_template()
+    def _make_context(self):
         context = {
             &#34;widgets&#34;: self.widgets,
-            &#34;widget_index&#34;: 0
+            &#34;widget_index&#34;: self.WidgetIndexer()
         }
         if self.outline_page.additional_properties:
             context.update(self.outline_page.additional_properties)
+            context.pop(&#34;template_string&#34;, None)
+        return context
+
+    def render_from_file(self, **kwargs) -&gt; str:
+        &#34;&#34;&#34;
+        Returns rendered html with widgets rendered into template placeholders
+        &#34;&#34;&#34;
+        template = self.load_jinja_template()
+        context = self._make_context()
         return template.render(**context)
 
+    def render_from_backup_string(self, **kwargs):
+        &#34;&#34;&#34;
+        Returns rendered html with widgets rendered into template placeholders
+        &#34;&#34;&#34;
+        context = self._make_context()
+        options = {
+            &#34;loader&#34;: jinja2.BaseLoader()
+        }
+        if context.get(&#34;jinja_options&#34;, None):
+            options.update(context.pop(&#34;jinja_options&#34;))
+        env = jinja2.Environment(**options)
+        env.filters[&#39;htmlize&#39;] = htmlize
+        template = env.from_string(self.template_string)
+        return template.render(**context)
+
+    def read_template_string(self) -&gt; typing.Optional[str]:
+        &#34;&#34;&#34;
+        Finds the template file and reads it into a string
+        &#34;&#34;&#34;
+        for _dir in self.template_paths:
+            fpath = os.path.join(_dir, self.get_template_name())
+            if os.path.exists(fpath):
+                with open(fpath, &#39;r&#39;) as f:
+                    template_string = f.read()
+                return template_string
+        return None
+
+
+
     def load_jinja_template(self) -&gt; jinja2.Template:
+        &#34;&#34;&#34;
+        Uses the fileloader to load a local template file into the jinja2 environment
+        &#34;&#34;&#34;
         loader = jinja2.FileSystemLoader(self.template_paths)
         env = jinja2.Environment(loader=loader)
+        env.filters[&#39;htmlize&#39;] = htmlize
         return env.get_template(self.get_template_name())
+
+    def check_for_file(self):
+        &#34;&#34;&#34;
+        Checks whether `__template_file__` exists locally
+        &#34;&#34;&#34;
+        for _dir in self.template_paths:
+            fpath = os.path.join(_dir, self.get_template_name())
+            if os.path.exists(fpath):
+                return True
+        return False
 
 
 class TitleWithSingleItem(JinjaTemplateBuilder):
+    &#34;&#34;&#34;
+    Simple single-widget page with a title
+    &#34;&#34;&#34;
     __component_kind__ = &#39;TitleWithSingleItem&#39;
-    __css__ = [&#39;single_item_grid&#39;]
-    __template_file__ = &#39;title_with_single_widget.html&#39;</code></pre>
+    __css__ = [&#39;flex_row&#39;, &#39;light_grey&#39;, &#39;responsive_title&#39;]
+    __template_file__ = &#39;title_with_single_widget.html&#39;
+
+
+class TwoUpWithTitle(JinjaTemplateBuilder): 
+    &#34;&#34;&#34;
+    View two widgets side-by-side on one page
+    &#34;&#34;&#34;
+    __component_kind__ = &#34;TwoUpWithTitle&#34;
+    __css__ = [&#39;flex_row&#39;, &#39;light_grey&#39;, &#39;responsive_title&#39;]
+    __template_file__ = &#39;two_up_with_title.html&#39;
+
+
+class BootstrapCustomTemplate(JinjaTemplateBuilder):
+    &#34;&#34;&#34;
+    Build customer repsonsive tempaltes using bootstrap to layout widgets
+    
+    The `presalytics.story.outline.Page` must contain an entry named &#34;template_file&#34; in the its data dictionary.
+    The values of the &#34;template_file&#34; varialble must a file path to an html file in the
+    current working directory
+
+    Parameters:
+    ----------
+    name: str
+        the page instance name
+
+    page: presalytics.story.outline.Page
+        A story outline page object to create the widget from
+    
+    template_file: str
+        A local file path to an html file that wil be used as a template for rendering the page.
+        The file path is relative to the current working directory.
+
+    kwargs: dict, optional
+        **kwargs can include parameters to pass to the template rendering context. For example, 
+        when kwargs is passed `title=&#34;An Example Title&#34;`, during rendering, the template&#39;s
+         `{{title}}` place holder will be replaced with with `An Example Title` 
+        
+    &#34;&#34;&#34;
+    template_file: str
+
+    __component_kind__ = &#34;bootstrap-custom&#34;
+
+    __plugins__ = [
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;jquery&#39;
+            }
+        },
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;popper&#39;
+            }
+        },
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;bootstrap4&#39;
+            }
+        },
+        {
+            &#39;name&#39;: &#39;external_links&#39;,
+            &#39;kind&#39;: &#39;style&#39;,
+            &#39;config&#39;: {
+                &#39;approved_styles_key&#39;: &#39;bootstrap4&#39;
+            }
+        },
+    ]
+
+
+    def __init__(self, page: &#39;Page&#39;, name=None, template_file=None, **kwargs) -&gt; None:
+        try:        
+            self.template_file = template_file
+            if not self.template_file:
+                self.template_file = page.additional_properties[&#34;template_file&#34;]
+        except (KeyError, AttributeError):
+            raise presalytics.lib.exceptions.InvalidConfigurationError(message=&#34;BootstrapCustomTemplate requires a &#39;template_file&#39; passed either via &#39;additional_properties` or a keyword argument&#34;)
+        super(BootstrapCustomTemplate, self).__init__(page, **kwargs)
+        self.outline_page.additional_properties[&#34;template_file&#34;] = self.template_file
+        self.name = name
+        if not self.name:
+            self.name = page.name
+        self.outline_page.name = self.name
+        self.outline_page.kind = self.__component_kind__
+
+    def get_template_name(self):
+        return self.template_file
+
+    def serialize(self):
+        if self.template_string:
+            self.outline_page.additional_properties[&#34;template_string&#34;] = self.template_string
+        return self.outline_page</code></pre>
 </details>
 </section>
 <section>
@@ -130,271 +379,55 @@ class TitleWithSingleItem(JinjaTemplateBuilder):
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="presalytics.lib.templates.base.htmlize"><code class="name flex">
+<span>def <span class="ident">htmlize</span></span>(<span>widget)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Jinja filter to render a widget to a html string</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L29-L38" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def htmlize(widget):
+    &#34;&#34;&#34;
+    Jinja filter to render a widget to a html string
+    &#34;&#34;&#34;
+    html = widget.to_html()
+    try:
+        html = html.decode(&#39;utf-8&#39;)
+    except Exception:
+        pass
+    return html</code></pre>
+</details>
+</dd>
+</dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="presalytics.lib.templates.base.JinjaTemplateBuilder"><code class="flex name class">
-<span>class <span class="ident">JinjaTemplateBuilder</span></span>
-<span>(</span><span>page: Page, **kwargs)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Inherit from this base class to render templates to html via the
-presalytics.story.revealer.Revealer class.</p>
-<h2 id="parameters">Parameters:</h2>
-<p>page: Page
-A presalytics.story.outline.Page object for instalizing the class</p>
-<h2 id="attributes">Attributes:</h2>
-<p>outline_page: Page
-A presalytics.story.outline.Page object</p>
-<p>widgets: List[WidgetComponentBase]
-A list widget that will be loaded into templates and rendered via placeholders.
-These widgets must have a "to_html(self, data, **kwargs)" method.</p>
-<p>css: List[str]
-A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
-in the presalytics.lib.templates.base module.</p>
-<p>js: List[str]
-A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
-in the presalytics.lib.templates.base module.</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L29-L92" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
-    __css__: typing.Sequence[str]
-    __template_file__: str
-    __template_paths__: typing.List[str]
-    template_paths: typing.List[str]
-
-    __template_paths__ = []
-    __css__ = []
-
-    def __init__(self, page: &#39;Page&#39;, **kwargs) -&gt; None:
-        super().__init__(page, **kwargs)
-        pkg_templates = os.path.join(os.path.dirname(__file__), &#34;html&#34;)
-        self.template_paths = [pkg_templates]
-        if len(self.__template_paths__) &gt; 0:
-            self.template_paths[0:0] = self.__template_paths__
-
-    @classmethod
-    def deserialize(cls, component, **kwargs):
-        return cls(component, **kwargs)
-
-    @util.classproperty
-    def __plugins__(cls):
-        plugin_list = []
-        for id in cls.__css__:
-            new_item = {
-                &#39;kind&#39;: &#39;style&#39;,
-                &#39;name&#39;: &#39;local&#39;,
-                &#39;config&#39;: {
-                    &#39;css_file_id&#39;: id
-                }
-            }
-            plugin_list.append(new_item)
-        return plugin_list
-
-    def serialize(self):
-        updated_plugins = []
-        for plugin_data in self.__plugins__:
-            updated_plugins.append(presalytics.story.outline.Plugin(**plugin_data))
-        self.outline_page.plugins = updated_plugins
-        return self.outline_page
-
-    def get_template_name(self):
-        &#34;&#34;&#34;
-        Requires subclasses have either a &#34;__template___&#34; property or override this method
-        &#34;&#34;&#34;
-        if self.__template_file__:
-            return self.__template_file__
-        else:
-            raise NotImplementedError
-
-    def render(self, **kwargs) -&gt; str:
-        template = self.load_jinja_template()
-        context = {
-            &#34;widgets&#34;: self.widgets,
-            &#34;widget_index&#34;: 0
-        }
-        if self.outline_page.additional_properties:
-            context.update(self.outline_page.additional_properties)
-        return template.render(**context)
-
-    def load_jinja_template(self) -&gt; jinja2.Template:
-        loader = jinja2.FileSystemLoader(self.template_paths)
-        env = jinja2.Environment(loader=loader)
-        return env.get_template(self.get_template_name())</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="presalytics.story.components.PageTemplateBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase">PageTemplateBase</a></li>
-<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
-<li>abc.ABC</li>
-</ul>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="presalytics.lib.templates.base.TitleWithSingleItem" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.TitleWithSingleItem">TitleWithSingleItem</a></li>
-</ul>
-<h3>Static methods</h3>
-<dl>
-<dt id="presalytics.lib.templates.base.JinjaTemplateBuilder.deserialize"><code class="name flex">
-<span>def <span class="ident">deserialize</span></span>(<span>component, **kwargs)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L45-L47" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@classmethod
-def deserialize(cls, component, **kwargs):
-    return cls(component, **kwargs)</code></pre>
-</details>
-</dd>
-</dl>
-<h3>Methods</h3>
-<dl>
-<dt id="presalytics.lib.templates.base.JinjaTemplateBuilder.get_template_name"><code class="name flex">
-<span>def <span class="ident">get_template_name</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Requires subclasses have either a "__template___" property or override this method</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L70-L77" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def get_template_name(self):
-    &#34;&#34;&#34;
-    Requires subclasses have either a &#34;__template___&#34; property or override this method
-    &#34;&#34;&#34;
-    if self.__template_file__:
-        return self.__template_file__
-    else:
-        raise NotImplementedError</code></pre>
-</details>
-</dd>
-<dt id="presalytics.lib.templates.base.JinjaTemplateBuilder.load_jinja_template"><code class="name flex">
-<span>def <span class="ident">load_jinja_template</span></span>(<span>self) -> jinja2.environment.Template</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L89-L92" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def load_jinja_template(self) -&gt; jinja2.Template:
-    loader = jinja2.FileSystemLoader(self.template_paths)
-    env = jinja2.Environment(loader=loader)
-    return env.get_template(self.get_template_name())</code></pre>
-</details>
-</dd>
-<dt id="presalytics.lib.templates.base.JinjaTemplateBuilder.serialize"><code class="name flex">
-<span>def <span class="ident">serialize</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L63-L68" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def serialize(self):
-    updated_plugins = []
-    for plugin_data in self.__plugins__:
-        updated_plugins.append(presalytics.story.outline.Plugin(**plugin_data))
-    self.outline_page.plugins = updated_plugins
-    return self.outline_page</code></pre>
-</details>
-</dd>
-</dl>
-<h3>Inherited members</h3>
-<ul class="hlist">
-<li><code><b><a title="presalytics.story.components.PageTemplateBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase">PageTemplateBase</a></b></code>:
-<ul class="hlist">
-<li><code><a title="presalytics.story.components.PageTemplateBase.get_page_widgets" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.get_page_widgets">get_page_widgets</a></code></li>
-<li><code><a title="presalytics.story.components.PageTemplateBase.load_widget" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.load_widget">load_widget</a></code></li>
-<li><code><a title="presalytics.story.components.PageTemplateBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.render">render</a></code></li>
-</ul>
-</li>
-</ul>
-</dd>
-<dt id="presalytics.lib.templates.base.TitleWithSingleItem"><code class="flex name class">
-<span>class <span class="ident">TitleWithSingleItem</span></span>
-<span>(</span><span>page: Page, **kwargs)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Inherit from this base class to render templates to html via the
-presalytics.story.revealer.Revealer class.</p>
-<h2 id="parameters">Parameters:</h2>
-<p>page: Page
-A presalytics.story.outline.Page object for instalizing the class</p>
-<h2 id="attributes">Attributes:</h2>
-<p>outline_page: Page
-A presalytics.story.outline.Page object</p>
-<p>widgets: List[WidgetComponentBase]
-A list widget that will be loaded into templates and rendered via placeholders.
-These widgets must have a "to_html(self, data, **kwargs)" method.</p>
-<p>css: List[str]
-A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
-in the presalytics.lib.templates.base module.</p>
-<p>js: List[str]
-A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
-in the presalytics.lib.templates.base module.</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L95-L98" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">class TitleWithSingleItem(JinjaTemplateBuilder):
-    __component_kind__ = &#39;TitleWithSingleItem&#39;
-    __css__ = [&#39;single_item_grid&#39;]
-    __template_file__ = &#39;title_with_single_widget.html&#39;</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="presalytics.lib.templates.base.JinjaTemplateBuilder" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder">JinjaTemplateBuilder</a></li>
-<li><a title="presalytics.story.components.PageTemplateBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase">PageTemplateBase</a></li>
-<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
-<li>abc.ABC</li>
-</ul>
-<h3>Inherited members</h3>
-<ul class="hlist">
-<li><code><b><a title="presalytics.lib.templates.base.JinjaTemplateBuilder" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder">JinjaTemplateBuilder</a></b></code>:
-<ul class="hlist">
-<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.get_page_widgets" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.get_page_widgets">get_page_widgets</a></code></li>
-<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.get_template_name" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.get_template_name">get_template_name</a></code></li>
-<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.load_widget" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.load_widget">load_widget</a></code></li>
-<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.render">render</a></code></li>
-</ul>
-</li>
-</ul>
-</dd>
 <dt id="presalytics.lib.templates.base.WidgetPage"><code class="flex name class">
 <span>class <span class="ident">WidgetPage</span></span>
-<span>(</span><span>page: Page, **kwargs)</span>
+<span>(</span><span>page, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Inherit from this base class to render templates to html via the
-presalytics.story.revealer.Revealer class.</p>
-<h2 id="parameters">Parameters:</h2>
-<p>page: Page
-A presalytics.story.outline.Page object for instalizing the class</p>
-<h2 id="attributes">Attributes:</h2>
-<p>outline_page: Page
-A presalytics.story.outline.Page object</p>
-<p>widgets: List[WidgetComponentBase]
-A list widget that will be loaded into templates and rendered via placeholders.
-These widgets must have a "to_html(self, data, **kwargs)" method.</p>
-<p>css: List[str]
-A list of keys in dot notation that point to links in the ALLOWED_STYLES dictionary
-in the presalytics.lib.templates.base module.</p>
-<p>js: List[str]
-A list of keys in dot notation that point to links in the ALLOWED_SCRIPTS dictionary
-in the presalytics.lib.templates.base module.</p></section>
+<a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer"><code>Revealer</code></a> class.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>page</code></strong> :&ensp;<code>Page</code></dt>
+<dd>A presalytics.story.outline.Page object for instalizing the class</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>outline_page</code></strong> :&ensp;<a title="presalytics.story.outline.Page" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page"><code>Page</code></a></dt>
+<dd>The page data</dd>
+<dt><strong><code>widgets</code></strong> :&ensp;<code>list</code> of <code>subclasses</code> of <a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase"><code>WidgetBase</code></a></dt>
+<dd>A list widget that will be loaded into templates and rendered via placeholders.
+These widgets must have a "to_html(self, data, **kwargs)" method.</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -422,38 +455,467 @@ in the presalytics.lib.templates.base module.</p></section>
 <li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
 <li>abc.ABC</li>
 </ul>
-<h3>Static methods</h3>
-<dl>
-<dt id="presalytics.lib.templates.base.WidgetPage.deserialize"><code class="name flex">
-<span>def <span class="ident">deserialize</span></span>(<span>component, **kwargs)</span>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.story.components.PageTemplateBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase">PageTemplateBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.story.components.PageTemplateBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.story.components.PageTemplateBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.story.components.PageTemplateBase.get_page_widgets" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.get_page_widgets">get_page_widgets</a></code></li>
+<li><code><a title="presalytics.story.components.PageTemplateBase.load_widget" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.load_widget">load_widget</a></code></li>
+<li><code><a title="presalytics.story.components.PageTemplateBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.render">render</a></code></li>
+<li><code><a title="presalytics.story.components.PageTemplateBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.serialize">serialize</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="presalytics.lib.templates.base.JinjaTemplateBuilder"><code class="flex name class">
+<span>class <span class="ident">JinjaTemplateBuilder</span></span>
+<span>(</span><span>page, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Base class for building objects that render html from <a title="presalytics.story.outline.Page" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page"><code>Page</code></a>
+objects that implementing the <a href="https://jinja.palletsprojects.com/">Jinja2</a>
+python library.</p>
+<p>Instances of this class will look for templates located at file location identified by the
+<code>__template_file__</code> attribute.
+If not template is found, the content in the <code>template_string</code>
+attribute will be used. Templates should call each widget's <code>to_html()</code> method in a placeholder
+in order to generate valid html for the page.
+</p>
+<p><em>About building templates</em>: Templates are passed a <code>widgets</code> attribute and a <code>widget_index</code>
+integer (initialized at 0) as part of the context during rendering,. To render
+multiple widgets on a page, the following pattern can be used inside of templates to
+increment through the widgets as the jinja2 rendering engine moves through the template:</p>
+<pre><code>{{ widgets[widget_index.next()].to_html().decode('utf-8') }}  // renders widget and increments widget_index
+</code></pre>
+<p>Please also note that if <code>&lt;script&gt;</code> tags are included in the template, they will be
+stripped out downstream by a <a title="presalytics.story.components.Renderer" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer"><code>Renderer</code></a> for security
+reasons.
+Scripts included in templates will not make it to the browser.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>page</code></strong> :&ensp;<a title="presalytics.story.outline.Page" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page"><code>Page</code></a></dt>
+<dd>The page to be rendered</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>__template_file__</code></strong> :&ensp;<code>str</code></dt>
+<dd>The filename to an html file containing a fragment that will be rendered into
+a page by a <a title="presalytics.story.components.Renderer" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer"><code>Renderer</code></a></dd>
+<dt><strong><code>__template_paths__</code></strong> :&ensp;<code>list</code> of <code>str</code></dt>
+<dd>user-defined filepaths to directories where Jinja2 should look for the <code>__template_file__</code></dd>
+<dt><strong><code>__css__</code></strong> :&ensp;<code>list</code> of <code>str</code></dt>
+<dd>Each str in this list is a key that maps to an entry in the
+<a title="presalytics.lib.plugins.local.LocalStylesPlugin.LOCAL_STYLES_MAP" href="/python-client/presalytics/lib/plugins/local.html#presalytics.lib.plugins.local.LocalStylesPlugin.LOCAL_STYLES_MAP"><code>LocalStylesPlugin.LOCAL_STYLES_MAP</code></a>. Ids matched here
+load the css files as a dependent plugin.</dd>
+<dt><strong><code>template_paths</code></strong> :&ensp;<code>list</code> of <code>str</code></dt>
+<dd>The folders Jinja2 will look in. Includes that html directory adjacent to this <code>__file__</code>,
+appending with the files in the <code>__template_paths__</code></dd>
+<dt><strong><code>widgets</code></strong> :&ensp;<code>list</code> of <code>subclass</code> <code>instances</code> of <a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase"><code>WidgetBase</code></a></dt>
+<dd>Widget to be rendered into the placeholders in the template identified by <code>__template_file__</code></dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L18-L20" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L42-L243" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">@classmethod
-def deserialize(cls, component, **kwargs):
-    return cls(component, **kwargs)</code></pre>
+<pre><code class="python">class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
+    &#34;&#34;&#34;
+    Base class for building objects that render html from `presalytics.story.outline.Page` 
+    objects that implementing the [Jinja2](https://jinja.palletsprojects.com/) 
+    python library.
+
+    Instances of this class will look for templates located at file location identified by the
+    `__template_file__` attribute.  If not template is found, the content in the `template_string`
+    attribute will be used. Templates should call each widget&#39;s `to_html()` method in a placeholder
+    in order to generate valid html for the page.      
+
+    *About building templates*: Templates are passed a `widgets` attribute and a `widget_index` 
+    integer (initialized at 0) as part of the context during rendering,. To render 
+    multiple widgets on a page, the following pattern can be used inside of templates to 
+    increment through the widgets as the jinja2 rendering engine moves through the template:
+        
+        {{ widgets[widget_index.next()].to_html().decode(&#39;utf-8&#39;) }}  // renders widget and increments widget_index
+
+    Please also note that if `&lt;script&gt;` tags are included in the template, they will be 
+    stripped out downstream by a `presalytics.story.components.Renderer` for security
+    reasons.  Scripts included in templates will not make it to the browser.
+
+    Parameters
+    ----------
+    page : presalytics.story.outline.Page
+        The page to be rendered
+
+    Attributes
+    ----------
+    __template_file__ : str
+        The filename to an html file containing a fragment that will be rendered into 
+        a page by a `presalytics.story.components.Renderer`
+    
+    __template_paths__ : list of str
+        user-defined filepaths to directories where Jinja2 should look for the `__template_file__`
+
+    __css__ : list of str
+        Each str in this list is a key that maps to an entry in the
+        `presalytics.lib.plugins.local.LocalStylesPlugin.LOCAL_STYLES_MAP`. Ids matched here 
+        load the css files as a dependent plugin.
+
+    template_paths : list of str
+        The folders Jinja2 will look in. Includes that html directory adjacent to this `__file__`, 
+        appending with the files in the `__template_paths__`
+
+    widgets : list of subclass instances of presalytics.story.components.WidgetBase
+        Widget to be rendered into the placeholders in the template identified by `__template_file__`
+    
+    &#34;&#34;&#34;
+    __css__: typing.Sequence[str]
+    __template_file__: str
+    __template_paths__: typing.List[str]
+    template_paths: typing.List[str]
+
+    __template_paths__ = []
+    __css__ = []
+
+    class WidgetIndexer(object):
+        &#34;&#34;&#34;
+        A counter class for 
+
+        call `widgetindex.next()` in html templates to move this the widget list
+        &#34;&#34;&#34;
+        def __init__(self):
+            self._val = 0
+        
+        def next(self):
+            &#34;&#34;&#34;
+            Returns the current widget index and increments the value for the next call 
+            &#34;&#34;&#34;
+            cur = self._val
+            self._val += 1
+            return cur
+
+    def __init__(self, page: &#39;Page&#39;, **kwargs) -&gt; None:
+        super().__init__(page, **kwargs)
+        pkg_templates = os.path.join(os.path.dirname(__file__), &#34;html&#34;)
+        self.template_paths = [pkg_templates, os.getcwd()]
+        if len(self.__template_paths__) &gt; 0:
+            self.template_paths[0:0] = self.__template_paths__
+        self.is_template_local = self.check_for_file()
+        if self.is_template_local:
+            self.template_string = self.read_template_string()
+        elif self.outline_page.additional_properties.get(&#34;template_string&#34;, None):
+            self.template_string = self.outline_page.additional_properties.get(&#34;template_string&#34;)
+        else:
+            self.template_string = None
+        if len(kwargs.keys()) &gt; 0:
+            self.outline_page.additional_properties.update(kwargs)
+
+    @classmethod
+    def deserialize(cls, component, **kwargs):
+        return cls(component, **kwargs)
+
+    @util.classproperty
+    def __plugins__(cls):
+        plugin_list = []
+        for id in cls.__css__:
+            new_item = {
+                &#39;kind&#39;: &#39;style&#39;,
+                &#39;name&#39;: &#39;local&#39;,
+                &#39;config&#39;: {
+                    &#39;css_file_id&#39;: id
+                }
+            }
+            plugin_list.append(new_item)
+        return plugin_list
+
+    def serialize(self):
+        updated_plugins = []
+        for plugin_data in self.__plugins__:
+            updated_plugins.append(presalytics.story.outline.Plugin(**plugin_data))
+        self.outline_page.plugins = updated_plugins
+        if self.template_string:
+            self.outline_page.additional_properties[&#34;template_string&#34;] = self.template_string
+        return self.outline_page
+
+    def get_template_name(self):
+        &#34;&#34;&#34;
+        Requires subclasses have either a `__template_file__` class property, or override this method
+        &#34;&#34;&#34;
+        if self.__template_file__:
+            return self.__template_file__
+        else:
+            raise NotImplementedError
+    
+    def render(self, **kwargs):
+        &#34;&#34;&#34;
+        Renders the widgets to html
+        &#34;&#34;&#34;
+        if self.is_template_local:
+            return self.render_from_file(**kwargs)
+        elif self.template_string:
+            return self.render_from_backup_string(**kwargs)
+        else:
+            raise presalytics.lib.exceptions.MissingConfigException(&#34;Missing __template_file__: {}&#34;.format(self.get_template_name()))
+
+    def _make_context(self):
+        context = {
+            &#34;widgets&#34;: self.widgets,
+            &#34;widget_index&#34;: self.WidgetIndexer()
+        }
+        if self.outline_page.additional_properties:
+            context.update(self.outline_page.additional_properties)
+            context.pop(&#34;template_string&#34;, None)
+        return context
+
+    def render_from_file(self, **kwargs) -&gt; str:
+        &#34;&#34;&#34;
+        Returns rendered html with widgets rendered into template placeholders
+        &#34;&#34;&#34;
+        template = self.load_jinja_template()
+        context = self._make_context()
+        return template.render(**context)
+
+    def render_from_backup_string(self, **kwargs):
+        &#34;&#34;&#34;
+        Returns rendered html with widgets rendered into template placeholders
+        &#34;&#34;&#34;
+        context = self._make_context()
+        options = {
+            &#34;loader&#34;: jinja2.BaseLoader()
+        }
+        if context.get(&#34;jinja_options&#34;, None):
+            options.update(context.pop(&#34;jinja_options&#34;))
+        env = jinja2.Environment(**options)
+        env.filters[&#39;htmlize&#39;] = htmlize
+        template = env.from_string(self.template_string)
+        return template.render(**context)
+
+    def read_template_string(self) -&gt; typing.Optional[str]:
+        &#34;&#34;&#34;
+        Finds the template file and reads it into a string
+        &#34;&#34;&#34;
+        for _dir in self.template_paths:
+            fpath = os.path.join(_dir, self.get_template_name())
+            if os.path.exists(fpath):
+                with open(fpath, &#39;r&#39;) as f:
+                    template_string = f.read()
+                return template_string
+        return None
+
+
+
+    def load_jinja_template(self) -&gt; jinja2.Template:
+        &#34;&#34;&#34;
+        Uses the fileloader to load a local template file into the jinja2 environment
+        &#34;&#34;&#34;
+        loader = jinja2.FileSystemLoader(self.template_paths)
+        env = jinja2.Environment(loader=loader)
+        env.filters[&#39;htmlize&#39;] = htmlize
+        return env.get_template(self.get_template_name())
+
+    def check_for_file(self):
+        &#34;&#34;&#34;
+        Checks whether `__template_file__` exists locally
+        &#34;&#34;&#34;
+        for _dir in self.template_paths:
+            fpath = os.path.join(_dir, self.get_template_name())
+            if os.path.exists(fpath):
+                return True
+        return False</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.story.components.PageTemplateBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase">PageTemplateBase</a></li>
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.templates.base.BootstrapCustomTemplate" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.BootstrapCustomTemplate">BootstrapCustomTemplate</a></li>
+<li><a title="presalytics.lib.templates.base.TitleWithSingleItem" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.TitleWithSingleItem">TitleWithSingleItem</a></li>
+<li><a title="presalytics.lib.templates.base.TwoUpWithTitle" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.TwoUpWithTitle">TwoUpWithTitle</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.lib.templates.base.JinjaTemplateBuilder.WidgetIndexer"><code class="name">var <span class="ident">WidgetIndexer</span></code></dt>
+<dd>
+<section class="desc"><p>A counter class for </p>
+<p>call <code>widgetindex.next()</code> in html templates to move this the widget list</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L99-L114" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class WidgetIndexer(object):
+    &#34;&#34;&#34;
+    A counter class for 
+
+    call `widgetindex.next()` in html templates to move this the widget list
+    &#34;&#34;&#34;
+    def __init__(self):
+        self._val = 0
+    
+    def next(self):
+        &#34;&#34;&#34;
+        Returns the current widget index and increments the value for the next call 
+        &#34;&#34;&#34;
+        cur = self._val
+        self._val += 1
+        return cur</code></pre>
 </details>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="presalytics.lib.templates.base.WidgetPage.serialize"><code class="name flex">
-<span>def <span class="ident">serialize</span></span>(<span>self)</span>
+<dt id="presalytics.lib.templates.base.JinjaTemplateBuilder.get_template_name"><code class="name flex">
+<span>def <span class="ident">get_template_name</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Requires subclasses have either a <code>__template_file__</code> class property, or override this method</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L22-L23" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L159-L166" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">def serialize(self):
-    return self.outline_page</code></pre>
+<pre><code class="python">def get_template_name(self):
+    &#34;&#34;&#34;
+    Requires subclasses have either a `__template_file__` class property, or override this method
+    &#34;&#34;&#34;
+    if self.__template_file__:
+        return self.__template_file__
+    else:
+        raise NotImplementedError</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.templates.base.JinjaTemplateBuilder.render"><code class="name flex">
+<span>def <span class="ident">render</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Renders the widgets to html</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L168-L177" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def render(self, **kwargs):
+    &#34;&#34;&#34;
+    Renders the widgets to html
+    &#34;&#34;&#34;
+    if self.is_template_local:
+        return self.render_from_file(**kwargs)
+    elif self.template_string:
+        return self.render_from_backup_string(**kwargs)
+    else:
+        raise presalytics.lib.exceptions.MissingConfigException(&#34;Missing __template_file__: {}&#34;.format(self.get_template_name()))</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_file"><code class="name flex">
+<span>def <span class="ident">render_from_file</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns rendered html with widgets rendered into template placeholders</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L189-L195" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def render_from_file(self, **kwargs) -&gt; str:
+    &#34;&#34;&#34;
+    Returns rendered html with widgets rendered into template placeholders
+    &#34;&#34;&#34;
+    template = self.load_jinja_template()
+    context = self._make_context()
+    return template.render(**context)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_backup_string"><code class="name flex">
+<span>def <span class="ident">render_from_backup_string</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns rendered html with widgets rendered into template placeholders</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L197-L210" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def render_from_backup_string(self, **kwargs):
+    &#34;&#34;&#34;
+    Returns rendered html with widgets rendered into template placeholders
+    &#34;&#34;&#34;
+    context = self._make_context()
+    options = {
+        &#34;loader&#34;: jinja2.BaseLoader()
+    }
+    if context.get(&#34;jinja_options&#34;, None):
+        options.update(context.pop(&#34;jinja_options&#34;))
+    env = jinja2.Environment(**options)
+    env.filters[&#39;htmlize&#39;] = htmlize
+    template = env.from_string(self.template_string)
+    return template.render(**context)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.templates.base.JinjaTemplateBuilder.read_template_string"><code class="name flex">
+<span>def <span class="ident">read_template_string</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Finds the template file and reads it into a string</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L212-L222" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def read_template_string(self) -&gt; typing.Optional[str]:
+    &#34;&#34;&#34;
+    Finds the template file and reads it into a string
+    &#34;&#34;&#34;
+    for _dir in self.template_paths:
+        fpath = os.path.join(_dir, self.get_template_name())
+        if os.path.exists(fpath):
+            with open(fpath, &#39;r&#39;) as f:
+                template_string = f.read()
+            return template_string
+    return None</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.templates.base.JinjaTemplateBuilder.load_jinja_template"><code class="name flex">
+<span>def <span class="ident">load_jinja_template</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Uses the fileloader to load a local template file into the jinja2 environment</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L226-L233" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def load_jinja_template(self) -&gt; jinja2.Template:
+    &#34;&#34;&#34;
+    Uses the fileloader to load a local template file into the jinja2 environment
+    &#34;&#34;&#34;
+    loader = jinja2.FileSystemLoader(self.template_paths)
+    env = jinja2.Environment(loader=loader)
+    env.filters[&#39;htmlize&#39;] = htmlize
+    return env.get_template(self.get_template_name())</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.templates.base.JinjaTemplateBuilder.check_for_file"><code class="name flex">
+<span>def <span class="ident">check_for_file</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Checks whether <code>__template_file__</code> exists locally</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L235-L243" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def check_for_file(self):
+    &#34;&#34;&#34;
+    Checks whether `__template_file__` exists locally
+    &#34;&#34;&#34;
+    for _dir in self.template_paths:
+        fpath = os.path.join(_dir, self.get_template_name())
+        if os.path.exists(fpath):
+            return True
+    return False</code></pre>
 </details>
 </dd>
 </dl>
@@ -461,9 +923,244 @@ def deserialize(cls, component, **kwargs):
 <ul class="hlist">
 <li><code><b><a title="presalytics.story.components.PageTemplateBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase">PageTemplateBase</a></b></code>:
 <ul class="hlist">
+<li><code><a title="presalytics.story.components.PageTemplateBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.story.components.PageTemplateBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
 <li><code><a title="presalytics.story.components.PageTemplateBase.get_page_widgets" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.get_page_widgets">get_page_widgets</a></code></li>
 <li><code><a title="presalytics.story.components.PageTemplateBase.load_widget" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.load_widget">load_widget</a></code></li>
-<li><code><a title="presalytics.story.components.PageTemplateBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.render">render</a></code></li>
+<li><code><a title="presalytics.story.components.PageTemplateBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.serialize">serialize</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="presalytics.lib.templates.base.TitleWithSingleItem"><code class="flex name class">
+<span>class <span class="ident">TitleWithSingleItem</span></span>
+<span>(</span><span>page, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Simple single-widget page with a title</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L246-L252" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class TitleWithSingleItem(JinjaTemplateBuilder):
+    &#34;&#34;&#34;
+    Simple single-widget page with a title
+    &#34;&#34;&#34;
+    __component_kind__ = &#39;TitleWithSingleItem&#39;
+    __css__ = [&#39;flex_row&#39;, &#39;light_grey&#39;, &#39;responsive_title&#39;]
+    __template_file__ = &#39;title_with_single_widget.html&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.templates.base.JinjaTemplateBuilder" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder">JinjaTemplateBuilder</a></li>
+<li><a title="presalytics.story.components.PageTemplateBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase">PageTemplateBase</a></li>
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.lib.templates.base.JinjaTemplateBuilder" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder">JinjaTemplateBuilder</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.WidgetIndexer" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.WidgetIndexer">WidgetIndexer</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.check_for_file" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.check_for_file">check_for_file</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.get_page_widgets" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.get_page_widgets">get_page_widgets</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.get_template_name" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.get_template_name">get_template_name</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.load_jinja_template" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.load_jinja_template">load_jinja_template</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.load_widget" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.load_widget">load_widget</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.read_template_string" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.read_template_string">read_template_string</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.render" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.render">render</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_backup_string" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_backup_string">render_from_backup_string</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_file" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_file">render_from_file</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.serialize">serialize</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="presalytics.lib.templates.base.TwoUpWithTitle"><code class="flex name class">
+<span>class <span class="ident">TwoUpWithTitle</span></span>
+<span>(</span><span>page, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>View two widgets side-by-side on one page</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L255-L261" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class TwoUpWithTitle(JinjaTemplateBuilder): 
+    &#34;&#34;&#34;
+    View two widgets side-by-side on one page
+    &#34;&#34;&#34;
+    __component_kind__ = &#34;TwoUpWithTitle&#34;
+    __css__ = [&#39;flex_row&#39;, &#39;light_grey&#39;, &#39;responsive_title&#39;]
+    __template_file__ = &#39;two_up_with_title.html&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.templates.base.JinjaTemplateBuilder" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder">JinjaTemplateBuilder</a></li>
+<li><a title="presalytics.story.components.PageTemplateBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase">PageTemplateBase</a></li>
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.lib.templates.base.JinjaTemplateBuilder" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder">JinjaTemplateBuilder</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.WidgetIndexer" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.WidgetIndexer">WidgetIndexer</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.check_for_file" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.check_for_file">check_for_file</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.get_page_widgets" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.get_page_widgets">get_page_widgets</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.get_template_name" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.get_template_name">get_template_name</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.load_jinja_template" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.load_jinja_template">load_jinja_template</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.load_widget" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.load_widget">load_widget</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.read_template_string" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.read_template_string">read_template_string</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.render" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.render">render</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_backup_string" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_backup_string">render_from_backup_string</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_file" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_file">render_from_file</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.serialize">serialize</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="presalytics.lib.templates.base.BootstrapCustomTemplate"><code class="flex name class">
+<span>class <span class="ident">BootstrapCustomTemplate</span></span>
+<span>(</span><span>page, name=None, template_file=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Build customer repsonsive tempaltes using bootstrap to layout widgets</p>
+<p>The <a title="presalytics.story.outline.Page" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page"><code>Page</code></a> must contain an entry named "template_file" in the its data dictionary.
+The values of the "template_file" varialble must a file path to an html file in the
+current working directory</p>
+<h2 id="parameters">Parameters:</h2>
+<p>name: str
+the page instance name</p>
+<p>page: presalytics.story.outline.Page
+A story outline page object to create the widget from</p>
+<p>template_file: str
+A local file path to an html file that wil be used as a template for rendering the page.
+The file path is relative to the current working directory.</p>
+<p>kwargs: dict, optional
+**kwargs can include parameters to pass to the template rendering context. For example,
+when kwargs is passed <code>title="An Example Title"</code>, during rendering, the template's
+<code>{{title}}</code> place holder will be replaced with with <code>An Example Title</code></p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/templates/base.py#L264-L347" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class BootstrapCustomTemplate(JinjaTemplateBuilder):
+    &#34;&#34;&#34;
+    Build customer repsonsive tempaltes using bootstrap to layout widgets
+    
+    The `presalytics.story.outline.Page` must contain an entry named &#34;template_file&#34; in the its data dictionary.
+    The values of the &#34;template_file&#34; varialble must a file path to an html file in the
+    current working directory
+
+    Parameters:
+    ----------
+    name: str
+        the page instance name
+
+    page: presalytics.story.outline.Page
+        A story outline page object to create the widget from
+    
+    template_file: str
+        A local file path to an html file that wil be used as a template for rendering the page.
+        The file path is relative to the current working directory.
+
+    kwargs: dict, optional
+        **kwargs can include parameters to pass to the template rendering context. For example, 
+        when kwargs is passed `title=&#34;An Example Title&#34;`, during rendering, the template&#39;s
+         `{{title}}` place holder will be replaced with with `An Example Title` 
+        
+    &#34;&#34;&#34;
+    template_file: str
+
+    __component_kind__ = &#34;bootstrap-custom&#34;
+
+    __plugins__ = [
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;jquery&#39;
+            }
+        },
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;popper&#39;
+            }
+        },
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;bootstrap4&#39;
+            }
+        },
+        {
+            &#39;name&#39;: &#39;external_links&#39;,
+            &#39;kind&#39;: &#39;style&#39;,
+            &#39;config&#39;: {
+                &#39;approved_styles_key&#39;: &#39;bootstrap4&#39;
+            }
+        },
+    ]
+
+
+    def __init__(self, page: &#39;Page&#39;, name=None, template_file=None, **kwargs) -&gt; None:
+        try:        
+            self.template_file = template_file
+            if not self.template_file:
+                self.template_file = page.additional_properties[&#34;template_file&#34;]
+        except (KeyError, AttributeError):
+            raise presalytics.lib.exceptions.InvalidConfigurationError(message=&#34;BootstrapCustomTemplate requires a &#39;template_file&#39; passed either via &#39;additional_properties` or a keyword argument&#34;)
+        super(BootstrapCustomTemplate, self).__init__(page, **kwargs)
+        self.outline_page.additional_properties[&#34;template_file&#34;] = self.template_file
+        self.name = name
+        if not self.name:
+            self.name = page.name
+        self.outline_page.name = self.name
+        self.outline_page.kind = self.__component_kind__
+
+    def get_template_name(self):
+        return self.template_file
+
+    def serialize(self):
+        if self.template_string:
+            self.outline_page.additional_properties[&#34;template_string&#34;] = self.template_string
+        return self.outline_page</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.templates.base.JinjaTemplateBuilder" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder">JinjaTemplateBuilder</a></li>
+<li><a title="presalytics.story.components.PageTemplateBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase">PageTemplateBase</a></li>
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.lib.templates.base.JinjaTemplateBuilder" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder">JinjaTemplateBuilder</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.WidgetIndexer" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.WidgetIndexer">WidgetIndexer</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.check_for_file" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.check_for_file">check_for_file</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.get_page_widgets" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.get_page_widgets">get_page_widgets</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.get_template_name" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.get_template_name">get_template_name</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.load_jinja_template" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.load_jinja_template">load_jinja_template</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.load_widget" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.load_widget">load_widget</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.read_template_string" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.read_template_string">read_template_string</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.render" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.render">render</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_backup_string" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_backup_string">render_from_backup_string</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_file" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_file">render_from_file</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.serialize">serialize</a></code></li>
 </ul>
 </li>
 </ul>
@@ -482,26 +1179,37 @@ def deserialize(cls, component, **kwargs):
 <li><code><a title="presalytics.lib.templates" href="/python-client/presalytics/lib/templates/index.html">presalytics.lib.templates</a></code></li>
 </ul>
 </li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="presalytics.lib.templates.base.htmlize" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.htmlize">htmlize</a></code></li>
+</ul>
+</li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="presalytics.lib.templates.base.WidgetPage" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.WidgetPage">WidgetPage</a></code></h4>
+</li>
+<li>
 <h4><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder">JinjaTemplateBuilder</a></code></h4>
 <ul class="">
-<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.deserialize" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.deserialize">deserialize</a></code></li>
 <li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.get_template_name" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.get_template_name">get_template_name</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.render" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.render">render</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_file" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_file">render_from_file</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_backup_string" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.render_from_backup_string">render_from_backup_string</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.read_template_string" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.read_template_string">read_template_string</a></code></li>
 <li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.load_jinja_template" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.load_jinja_template">load_jinja_template</a></code></li>
-<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.serialize" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.serialize">serialize</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.check_for_file" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.check_for_file">check_for_file</a></code></li>
+<li><code><a title="presalytics.lib.templates.base.JinjaTemplateBuilder.WidgetIndexer" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder.WidgetIndexer">WidgetIndexer</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="presalytics.lib.templates.base.TitleWithSingleItem" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.TitleWithSingleItem">TitleWithSingleItem</a></code></h4>
 </li>
 <li>
-<h4><code><a title="presalytics.lib.templates.base.WidgetPage" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.WidgetPage">WidgetPage</a></code></h4>
-<ul class="">
-<li><code><a title="presalytics.lib.templates.base.WidgetPage.deserialize" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.WidgetPage.deserialize">deserialize</a></code></li>
-<li><code><a title="presalytics.lib.templates.base.WidgetPage.serialize" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.WidgetPage.serialize">serialize</a></code></li>
-</ul>
+<h4><code><a title="presalytics.lib.templates.base.TwoUpWithTitle" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.TwoUpWithTitle">TwoUpWithTitle</a></code></h4>
+</li>
+<li>
+<h4><code><a title="presalytics.lib.templates.base.BootstrapCustomTemplate" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.BootstrapCustomTemplate">BootstrapCustomTemplate</a></code></h4>
 </li>
 </ul>
 </li>

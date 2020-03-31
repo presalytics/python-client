@@ -528,7 +528,7 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -542,7 +542,7 @@ in the keyword argument list.
 For example:
 dict(one=1, two=2)</p></section>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -559,6 +559,52 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.shape_id"><code class="name">var <span class="ident">shape_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the shape_id of this SharedTextContainer.
+# noqa: E501</p>
+<p>:return: The shape_id of this SharedTextContainer.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.py#L75-L83" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def shape_id(self):
+    &#34;&#34;&#34;Gets the shape_id of this SharedTextContainer.  # noqa: E501
+
+
+    :return: The shape_id of this SharedTextContainer.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._shape_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.outer_xml"><code class="name">var <span class="ident">outer_xml</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the outer_xml of this SharedTextContainer.
+# noqa: E501</p>
+<p>:return: The outer_xml of this SharedTextContainer.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.py#L96-L104" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def outer_xml(self):
+    &#34;&#34;&#34;Gets the outer_xml of this SharedTextContainer.  # noqa: E501
+
+
+    :return: The outer_xml of this SharedTextContainer.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._outer_xml</code></pre>
+</details>
+</dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.axis_id"><code class="name">var <span class="ident">axis_id</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the axis_id of this SharedTextContainer.
@@ -605,75 +651,6 @@ def chart_id(self):
     return self._chart_id</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.id"><code class="name">var <span class="ident">id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the id of this SharedTextContainer.
-# noqa: E501</p>
-<p>:return: The id of this SharedTextContainer.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.py#L180-L188" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def id(self):
-    &#34;&#34;&#34;Gets the id of this SharedTextContainer.  # noqa: E501
-
-
-    :return: The id of this SharedTextContainer.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._id</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.outer_xml"><code class="name">var <span class="ident">outer_xml</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the outer_xml of this SharedTextContainer.
-# noqa: E501</p>
-<p>:return: The outer_xml of this SharedTextContainer.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.py#L96-L104" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def outer_xml(self):
-    &#34;&#34;&#34;Gets the outer_xml of this SharedTextContainer.  # noqa: E501
-
-
-    :return: The outer_xml of this SharedTextContainer.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._outer_xml</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.shape_id"><code class="name">var <span class="ident">shape_id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the shape_id of this SharedTextContainer.
-# noqa: E501</p>
-<p>:return: The shape_id of this SharedTextContainer.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.py#L75-L83" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def shape_id(self):
-    &#34;&#34;&#34;Gets the shape_id of this SharedTextContainer.  # noqa: E501
-
-
-    :return: The shape_id of this SharedTextContainer.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._shape_id</code></pre>
-</details>
-</dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.table_cell_id"><code class="name">var <span class="ident">table_cell_id</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the table_cell_id of this SharedTextContainer.
@@ -695,6 +672,29 @@ def table_cell_id(self):
     :rtype: str
     &#34;&#34;&#34;
     return self._table_cell_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the id of this SharedTextContainer.
+# noqa: E501</p>
+<p>:return: The id of this SharedTextContainer.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.py#L180-L188" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def id(self):
+    &#34;&#34;&#34;Gets the id of this SharedTextContainer.  # noqa: E501
+
+
+    :return: The id of this SharedTextContainer.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._id</code></pre>
 </details>
 </dd>
 </dl>
@@ -771,16 +771,16 @@ def table_cell_id(self):
 <li>
 <h4><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer">SharedTextContainer</a></code></h4>
 <ul class="two-column">
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.attribute_map">attribute_map</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.axis_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.axis_id">axis_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.chart_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.chart_id">chart_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.id">id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.openapi_types">openapi_types</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.outer_xml" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.outer_xml">outer_xml</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.shape_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.shape_id">shape_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.table_cell_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.table_cell_id">table_cell_id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.to_dict" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.to_str" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.to_str">to_str</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.shape_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.shape_id">shape_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.outer_xml" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.outer_xml">outer_xml</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.axis_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.axis_id">axis_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.chart_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.chart_id">chart_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.table_cell_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.table_cell_id">table_cell_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.id">id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_text_container.html#presalytics.client.presalytics_ooxml_automation.models.shared_text_container.SharedTextContainer.attribute_map">attribute_map</a></code></li>
 </ul>
 </li>
 </ul>

@@ -480,7 +480,7 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -494,7 +494,7 @@ in the keyword argument list.
 For example:
 dict(one=1, two=2)</p></section>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -511,27 +511,27 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.chart_data_id"><code class="name">var <span class="ident">chart_data_id</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.value"><code class="name">var <span class="ident">value</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the chart_data_id of this ChartDataPoints.
+<section class="desc"><p>Gets the value of this ChartDataPoints.
 # noqa: E501</p>
-<p>:return: The chart_data_id of this ChartDataPoints.
+<p>:return: The value of this ChartDataPoints.
 # noqa: E501
-:rtype: str</p></section>
+:rtype: float</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.py#L135-L143" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.py#L72-L80" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def chart_data_id(self):
-    &#34;&#34;&#34;Gets the chart_data_id of this ChartDataPoints.  # noqa: E501
+def value(self):
+    &#34;&#34;&#34;Gets the value of this ChartDataPoints.  # noqa: E501
 
 
-    :return: The chart_data_id of this ChartDataPoints.  # noqa: E501
-    :rtype: str
+    :return: The value of this ChartDataPoints.  # noqa: E501
+    :rtype: float
     &#34;&#34;&#34;
-    return self._chart_data_id</code></pre>
+    return self._value</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.column_id"><code class="name">var <span class="ident">column_id</span></code></dt>
@@ -557,29 +557,6 @@ def column_id(self):
     return self._column_id</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.id"><code class="name">var <span class="ident">id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the id of this ChartDataPoints.
-# noqa: E501</p>
-<p>:return: The id of this ChartDataPoints.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.py#L156-L164" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def id(self):
-    &#34;&#34;&#34;Gets the id of this ChartDataPoints.  # noqa: E501
-
-
-    :return: The id of this ChartDataPoints.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._id</code></pre>
-</details>
-</dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.row_id"><code class="name">var <span class="ident">row_id</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the row_id of this ChartDataPoints.
@@ -603,27 +580,50 @@ def row_id(self):
     return self._row_id</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.value"><code class="name">var <span class="ident">value</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.chart_data_id"><code class="name">var <span class="ident">chart_data_id</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the value of this ChartDataPoints.
+<section class="desc"><p>Gets the chart_data_id of this ChartDataPoints.
 # noqa: E501</p>
-<p>:return: The value of this ChartDataPoints.
+<p>:return: The chart_data_id of this ChartDataPoints.
 # noqa: E501
-:rtype: float</p></section>
+:rtype: str</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.py#L72-L80" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.py#L135-L143" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def value(self):
-    &#34;&#34;&#34;Gets the value of this ChartDataPoints.  # noqa: E501
+def chart_data_id(self):
+    &#34;&#34;&#34;Gets the chart_data_id of this ChartDataPoints.  # noqa: E501
 
 
-    :return: The value of this ChartDataPoints.  # noqa: E501
-    :rtype: float
+    :return: The chart_data_id of this ChartDataPoints.  # noqa: E501
+    :rtype: str
     &#34;&#34;&#34;
-    return self._value</code></pre>
+    return self._chart_data_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the id of this ChartDataPoints.
+# noqa: E501</p>
+<p>:return: The id of this ChartDataPoints.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.py#L156-L164" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def id(self):
+    &#34;&#34;&#34;Gets the id of this ChartDataPoints.  # noqa: E501
+
+
+    :return: The id of this ChartDataPoints.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._id</code></pre>
 </details>
 </dd>
 </dl>
@@ -700,15 +700,15 @@ def value(self):
 <li>
 <h4><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.html#presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints">ChartDataPoints</a></code></h4>
 <ul class="two-column">
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.html#presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.attribute_map">attribute_map</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.chart_data_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.html#presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.chart_data_id">chart_data_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.column_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.html#presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.column_id">column_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.html#presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.id">id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.html#presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.openapi_types">openapi_types</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.row_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.html#presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.row_id">row_id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.to_dict" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.html#presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.to_str" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.html#presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.to_str">to_str</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.value" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.html#presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.value">value</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.column_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.html#presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.column_id">column_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.row_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.html#presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.row_id">row_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.chart_data_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.html#presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.chart_data_id">chart_data_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.html#presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.id">id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.html#presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/chart_data_points.html#presalytics.client.presalytics_ooxml_automation.models.chart_data_points.ChartDataPoints.attribute_map">attribute_map</a></code></li>
 </ul>
 </li>
 </ul>

@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/ooxml.py#L0-L24" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/ooxml.py#L0-L28" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import sass
 import os
@@ -32,6 +32,10 @@ import presalytics.lib.plugins.reveal_theme
 
 
 class OoxmlTheme(presalytics.lib.plugins.reveal_theme.RevealCustomTheme):
+    &#34;&#34;&#34;
+    This class takes theme data from an Presalytics API Ooxml Automation service Theme object
+    and feeds those values into the `presalytics.lib.plugins.reveal_theme.RevealCustomTheme`
+    &#34;&#34;&#34;
     __plugin_name__ = &#39;ooxml-theme&#39;
 
     def to_style(self, config, **kwargs):
@@ -66,14 +70,18 @@ class OoxmlTheme(presalytics.lib.plugins.reveal_theme.RevealCustomTheme):
 <span>(</span><span>**kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>A script plugin render configures templated scripts to append to the body
-tag of an html document</p></section>
+<section class="desc"><p>This class takes theme data from an Presalytics API Ooxml Automation service Theme object
+and feeds those values into the <a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme"><code>RevealCustomTheme</code></a></p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/ooxml.py#L7-L25" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/ooxml.py#L7-L29" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlTheme(presalytics.lib.plugins.reveal_theme.RevealCustomTheme):
+    &#34;&#34;&#34;
+    This class takes theme data from an Presalytics API Ooxml Automation service Theme object
+    and feeds those values into the `presalytics.lib.plugins.reveal_theme.RevealCustomTheme`
+    &#34;&#34;&#34;
     __plugin_name__ = &#39;ooxml-theme&#39;
 
     def to_style(self, config, **kwargs):
@@ -106,8 +114,11 @@ tag of an html document</p></section>
 <ul class="hlist">
 <li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.defaults" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme.defaults">defaults</a></code></li>
 <li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.fonts_base_url" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme.fonts_base_url">fonts_base_url</a></code></li>
+<li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_base_scss" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_base_scss">get_base_scss</a></code></li>
+<li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_font_link" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_font_link">get_font_link</a></code></li>
+<li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_fonts" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_fonts">get_fonts</a></code></li>
 <li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_tag" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase.get_tag">get_tag</a></code></li>
-<li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.to_style" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin.to_style">to_style</a></code></li>
+<li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.to_style" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme.to_style">to_style</a></code></li>
 </ul>
 </li>
 </ul>

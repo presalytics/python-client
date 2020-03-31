@@ -638,7 +638,7 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -652,7 +652,7 @@ in the keyword argument list.
 For example:
 dict(one=1, two=2)</p></section>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -669,50 +669,50 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.date_created"><code class="name">var <span class="ident">date_created</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.type_id"><code class="name">var <span class="ident">type_id</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the date_created of this SlideGroupElementTypesDetails.
+<section class="desc"><p>Gets the type_id of this SlideGroupElementTypesDetails.
 # noqa: E501</p>
-<p>:return: The date_created of this SlideGroupElementTypesDetails.
+<p>:return: The type_id of this SlideGroupElementTypesDetails.
 # noqa: E501
-:rtype: datetime</p></section>
+:rtype: int</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.py#L172-L180" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.py#L88-L96" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def date_created(self):
-    &#34;&#34;&#34;Gets the date_created of this SlideGroupElementTypesDetails.  # noqa: E501
+def type_id(self):
+    &#34;&#34;&#34;Gets the type_id of this SlideGroupElementTypesDetails.  # noqa: E501
 
 
-    :return: The date_created of this SlideGroupElementTypesDetails.  # noqa: E501
-    :rtype: datetime
+    :return: The type_id of this SlideGroupElementTypesDetails.  # noqa: E501
+    :rtype: int
     &#34;&#34;&#34;
-    return self._date_created</code></pre>
+    return self._type_id</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.date_modified"><code class="name">var <span class="ident">date_modified</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.name"><code class="name">var <span class="ident">name</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the date_modified of this SlideGroupElementTypesDetails.
+<section class="desc"><p>Gets the name of this SlideGroupElementTypesDetails.
 # noqa: E501</p>
-<p>:return: The date_modified of this SlideGroupElementTypesDetails.
+<p>:return: The name of this SlideGroupElementTypesDetails.
 # noqa: E501
-:rtype: datetime</p></section>
+:rtype: str</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.py#L214-L222" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.py#L109-L117" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def date_modified(self):
-    &#34;&#34;&#34;Gets the date_modified of this SlideGroupElementTypesDetails.  # noqa: E501
+def name(self):
+    &#34;&#34;&#34;Gets the name of this SlideGroupElementTypesDetails.  # noqa: E501
 
 
-    :return: The date_modified of this SlideGroupElementTypesDetails.  # noqa: E501
-    :rtype: datetime
+    :return: The name of this SlideGroupElementTypesDetails.  # noqa: E501
+    :rtype: str
     &#34;&#34;&#34;
-    return self._date_modified</code></pre>
+    return self._name</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.description"><code class="name">var <span class="ident">description</span></code></dt>
@@ -761,50 +761,27 @@ def id(self):
     return self._id</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.date_created"><code class="name">var <span class="ident">date_created</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the name of this SlideGroupElementTypesDetails.
+<section class="desc"><p>Gets the date_created of this SlideGroupElementTypesDetails.
 # noqa: E501</p>
-<p>:return: The name of this SlideGroupElementTypesDetails.
+<p>:return: The date_created of this SlideGroupElementTypesDetails.
 # noqa: E501
-:rtype: str</p></section>
+:rtype: datetime</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.py#L109-L117" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.py#L172-L180" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def name(self):
-    &#34;&#34;&#34;Gets the name of this SlideGroupElementTypesDetails.  # noqa: E501
+def date_created(self):
+    &#34;&#34;&#34;Gets the date_created of this SlideGroupElementTypesDetails.  # noqa: E501
 
 
-    :return: The name of this SlideGroupElementTypesDetails.  # noqa: E501
-    :rtype: str
+    :return: The date_created of this SlideGroupElementTypesDetails.  # noqa: E501
+    :rtype: datetime
     &#34;&#34;&#34;
-    return self._name</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.type_id"><code class="name">var <span class="ident">type_id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the type_id of this SlideGroupElementTypesDetails.
-# noqa: E501</p>
-<p>:return: The type_id of this SlideGroupElementTypesDetails.
-# noqa: E501
-:rtype: int</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.py#L88-L96" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def type_id(self):
-    &#34;&#34;&#34;Gets the type_id of this SlideGroupElementTypesDetails.  # noqa: E501
-
-
-    :return: The type_id of this SlideGroupElementTypesDetails.  # noqa: E501
-    :rtype: int
-    &#34;&#34;&#34;
-    return self._type_id</code></pre>
+    return self._date_created</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.user_created"><code class="name">var <span class="ident">user_created</span></code></dt>
@@ -828,6 +805,29 @@ def user_created(self):
     :rtype: str
     &#34;&#34;&#34;
     return self._user_created</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.date_modified"><code class="name">var <span class="ident">date_modified</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the date_modified of this SlideGroupElementTypesDetails.
+# noqa: E501</p>
+<p>:return: The date_modified of this SlideGroupElementTypesDetails.
+# noqa: E501
+:rtype: datetime</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.py#L214-L222" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def date_modified(self):
+    &#34;&#34;&#34;Gets the date_modified of this SlideGroupElementTypesDetails.  # noqa: E501
+
+
+    :return: The date_modified of this SlideGroupElementTypesDetails.  # noqa: E501
+    :rtype: datetime
+    &#34;&#34;&#34;
+    return self._date_modified</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.user_modified"><code class="name">var <span class="ident">user_modified</span></code></dt>
@@ -927,18 +927,18 @@ def user_modified(self):
 <li>
 <h4><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails">SlideGroupElementTypesDetails</a></code></h4>
 <ul class="two-column">
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.attribute_map">attribute_map</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.date_created" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.date_created">date_created</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.date_modified" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.date_modified">date_modified</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.description" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.description">description</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.id">id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.name" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.name">name</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.openapi_types">openapi_types</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.to_dict" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.to_str" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.to_str">to_str</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.type_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.type_id">type_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.name" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.name">name</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.description" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.description">description</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.id">id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.date_created" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.date_created">date_created</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.user_created" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.user_created">user_created</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.date_modified" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.date_modified">date_modified</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.user_modified" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.user_modified">user_modified</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_group_element_types_details.html#presalytics.client.presalytics_ooxml_automation.models.slide_group_element_types_details.SlideGroupElementTypesDetails.attribute_map">attribute_map</a></code></li>
 </ul>
 </li>
 </ul>

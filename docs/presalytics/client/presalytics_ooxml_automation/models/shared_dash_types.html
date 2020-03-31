@@ -480,7 +480,7 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -494,7 +494,7 @@ in the keyword argument list.
 For example:
 dict(one=1, two=2)</p></section>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -511,50 +511,27 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.description"><code class="name">var <span class="ident">description</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.type_id"><code class="name">var <span class="ident">type_id</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the description of this SharedDashTypes.
+<section class="desc"><p>Gets the type_id of this SharedDashTypes.
 # noqa: E501</p>
-<p>:return: The description of this SharedDashTypes.
+<p>:return: The type_id of this SharedDashTypes.
 # noqa: E501
-:rtype: str</p></section>
+:rtype: int</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.py#L114-L122" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.py#L72-L80" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def description(self):
-    &#34;&#34;&#34;Gets the description of this SharedDashTypes.  # noqa: E501
+def type_id(self):
+    &#34;&#34;&#34;Gets the type_id of this SharedDashTypes.  # noqa: E501
 
 
-    :return: The description of this SharedDashTypes.  # noqa: E501
-    :rtype: str
+    :return: The type_id of this SharedDashTypes.  # noqa: E501
+    :rtype: int
     &#34;&#34;&#34;
-    return self._description</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.id"><code class="name">var <span class="ident">id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the id of this SharedDashTypes.
-# noqa: E501</p>
-<p>:return: The id of this SharedDashTypes.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.py#L156-L164" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def id(self):
-    &#34;&#34;&#34;Gets the id of this SharedDashTypes.  # noqa: E501
-
-
-    :return: The id of this SharedDashTypes.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._id</code></pre>
+    return self._type_id</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.name"><code class="name">var <span class="ident">name</span></code></dt>
@@ -580,6 +557,29 @@ def name(self):
     return self._name</code></pre>
 </details>
 </dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.description"><code class="name">var <span class="ident">description</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the description of this SharedDashTypes.
+# noqa: E501</p>
+<p>:return: The description of this SharedDashTypes.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.py#L114-L122" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def description(self):
+    &#34;&#34;&#34;Gets the description of this SharedDashTypes.  # noqa: E501
+
+
+    :return: The description of this SharedDashTypes.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._description</code></pre>
+</details>
+</dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.serialized_as"><code class="name">var <span class="ident">serialized_as</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the serialized_as of this SharedDashTypes.
@@ -603,27 +603,27 @@ def serialized_as(self):
     return self._serialized_as</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.type_id"><code class="name">var <span class="ident">type_id</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.id"><code class="name">var <span class="ident">id</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the type_id of this SharedDashTypes.
+<section class="desc"><p>Gets the id of this SharedDashTypes.
 # noqa: E501</p>
-<p>:return: The type_id of this SharedDashTypes.
+<p>:return: The id of this SharedDashTypes.
 # noqa: E501
-:rtype: int</p></section>
+:rtype: str</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.py#L72-L80" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.py#L156-L164" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def type_id(self):
-    &#34;&#34;&#34;Gets the type_id of this SharedDashTypes.  # noqa: E501
+def id(self):
+    &#34;&#34;&#34;Gets the id of this SharedDashTypes.  # noqa: E501
 
 
-    :return: The type_id of this SharedDashTypes.  # noqa: E501
-    :rtype: int
+    :return: The id of this SharedDashTypes.  # noqa: E501
+    :rtype: str
     &#34;&#34;&#34;
-    return self._type_id</code></pre>
+    return self._id</code></pre>
 </details>
 </dd>
 </dl>
@@ -700,15 +700,15 @@ def type_id(self):
 <li>
 <h4><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.html#presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes">SharedDashTypes</a></code></h4>
 <ul class="two-column">
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.html#presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.attribute_map">attribute_map</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.description" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.html#presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.description">description</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.html#presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.id">id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.name" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.html#presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.name">name</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.html#presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.openapi_types">openapi_types</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.serialized_as" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.html#presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.serialized_as">serialized_as</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.to_dict" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.html#presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.to_str" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.html#presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.to_str">to_str</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.type_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.html#presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.type_id">type_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.name" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.html#presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.name">name</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.description" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.html#presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.description">description</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.serialized_as" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.html#presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.serialized_as">serialized_as</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.html#presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.id">id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.html#presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_dash_types.html#presalytics.client.presalytics_ooxml_automation.models.shared_dash_types.SharedDashTypes.attribute_map">attribute_map</a></code></li>
 </ul>
 </li>
 </ul>

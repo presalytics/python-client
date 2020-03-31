@@ -688,7 +688,7 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -702,7 +702,7 @@ in the keyword argument list.
 For example:
 dict(one=1, two=2)</p></section>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -719,50 +719,73 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.date_created"><code class="name">var <span class="ident">date_created</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.theme_id"><code class="name">var <span class="ident">theme_id</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the date_created of this ThemeCustomColorsDetails.
+<section class="desc"><p>Gets the theme_id of this ThemeCustomColorsDetails.
 # noqa: E501</p>
-<p>:return: The date_created of this ThemeCustomColorsDetails.
+<p>:return: The theme_id of this ThemeCustomColorsDetails.
 # noqa: E501
-:rtype: datetime</p></section>
+:rtype: str</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.py#L197-L205" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.py#L92-L100" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def date_created(self):
-    &#34;&#34;&#34;Gets the date_created of this ThemeCustomColorsDetails.  # noqa: E501
+def theme_id(self):
+    &#34;&#34;&#34;Gets the theme_id of this ThemeCustomColorsDetails.  # noqa: E501
 
 
-    :return: The date_created of this ThemeCustomColorsDetails.  # noqa: E501
-    :rtype: datetime
+    :return: The theme_id of this ThemeCustomColorsDetails.  # noqa: E501
+    :rtype: str
     &#34;&#34;&#34;
-    return self._date_created</code></pre>
+    return self._theme_id</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.date_modified"><code class="name">var <span class="ident">date_modified</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.theme"><code class="name">var <span class="ident">theme</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the date_modified of this ThemeCustomColorsDetails.
+<section class="desc"><p>Gets the theme of this ThemeCustomColorsDetails.
 # noqa: E501</p>
-<p>:return: The date_modified of this ThemeCustomColorsDetails.
+<p>:return: The theme of this ThemeCustomColorsDetails.
 # noqa: E501
-:rtype: datetime</p></section>
+:rtype: object</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.py#L239-L247" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.py#L113-L121" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def date_modified(self):
-    &#34;&#34;&#34;Gets the date_modified of this ThemeCustomColorsDetails.  # noqa: E501
+def theme(self):
+    &#34;&#34;&#34;Gets the theme of this ThemeCustomColorsDetails.  # noqa: E501
 
 
-    :return: The date_modified of this ThemeCustomColorsDetails.  # noqa: E501
-    :rtype: datetime
+    :return: The theme of this ThemeCustomColorsDetails.  # noqa: E501
+    :rtype: object
     &#34;&#34;&#34;
-    return self._date_modified</code></pre>
+    return self._theme</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the name of this ThemeCustomColorsDetails.
+# noqa: E501</p>
+<p>:return: The name of this ThemeCustomColorsDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.py#L134-L142" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def name(self):
+    &#34;&#34;&#34;Gets the name of this ThemeCustomColorsDetails.  # noqa: E501
+
+
+    :return: The name of this ThemeCustomColorsDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._name</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.hex_value"><code class="name">var <span class="ident">hex_value</span></code></dt>
@@ -811,73 +834,27 @@ def id(self):
     return self._id</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.date_created"><code class="name">var <span class="ident">date_created</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the name of this ThemeCustomColorsDetails.
+<section class="desc"><p>Gets the date_created of this ThemeCustomColorsDetails.
 # noqa: E501</p>
-<p>:return: The name of this ThemeCustomColorsDetails.
+<p>:return: The date_created of this ThemeCustomColorsDetails.
 # noqa: E501
-:rtype: str</p></section>
+:rtype: datetime</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.py#L134-L142" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.py#L197-L205" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def name(self):
-    &#34;&#34;&#34;Gets the name of this ThemeCustomColorsDetails.  # noqa: E501
+def date_created(self):
+    &#34;&#34;&#34;Gets the date_created of this ThemeCustomColorsDetails.  # noqa: E501
 
 
-    :return: The name of this ThemeCustomColorsDetails.  # noqa: E501
-    :rtype: str
+    :return: The date_created of this ThemeCustomColorsDetails.  # noqa: E501
+    :rtype: datetime
     &#34;&#34;&#34;
-    return self._name</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.theme"><code class="name">var <span class="ident">theme</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the theme of this ThemeCustomColorsDetails.
-# noqa: E501</p>
-<p>:return: The theme of this ThemeCustomColorsDetails.
-# noqa: E501
-:rtype: object</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.py#L113-L121" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def theme(self):
-    &#34;&#34;&#34;Gets the theme of this ThemeCustomColorsDetails.  # noqa: E501
-
-
-    :return: The theme of this ThemeCustomColorsDetails.  # noqa: E501
-    :rtype: object
-    &#34;&#34;&#34;
-    return self._theme</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.theme_id"><code class="name">var <span class="ident">theme_id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the theme_id of this ThemeCustomColorsDetails.
-# noqa: E501</p>
-<p>:return: The theme_id of this ThemeCustomColorsDetails.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.py#L92-L100" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def theme_id(self):
-    &#34;&#34;&#34;Gets the theme_id of this ThemeCustomColorsDetails.  # noqa: E501
-
-
-    :return: The theme_id of this ThemeCustomColorsDetails.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._theme_id</code></pre>
+    return self._date_created</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.user_created"><code class="name">var <span class="ident">user_created</span></code></dt>
@@ -901,6 +878,29 @@ def user_created(self):
     :rtype: str
     &#34;&#34;&#34;
     return self._user_created</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.date_modified"><code class="name">var <span class="ident">date_modified</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the date_modified of this ThemeCustomColorsDetails.
+# noqa: E501</p>
+<p>:return: The date_modified of this ThemeCustomColorsDetails.
+# noqa: E501
+:rtype: datetime</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.py#L239-L247" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def date_modified(self):
+    &#34;&#34;&#34;Gets the date_modified of this ThemeCustomColorsDetails.  # noqa: E501
+
+
+    :return: The date_modified of this ThemeCustomColorsDetails.  # noqa: E501
+    :rtype: datetime
+    &#34;&#34;&#34;
+    return self._date_modified</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.user_modified"><code class="name">var <span class="ident">user_modified</span></code></dt>
@@ -1000,19 +1000,19 @@ def user_modified(self):
 <li>
 <h4><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails">ThemeCustomColorsDetails</a></code></h4>
 <ul class="two-column">
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.attribute_map">attribute_map</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.date_created" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.date_created">date_created</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.date_modified" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.date_modified">date_modified</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.hex_value" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.hex_value">hex_value</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.id">id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.name" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.name">name</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.openapi_types">openapi_types</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.theme" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.theme">theme</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.theme_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.theme_id">theme_id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.to_dict" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.to_str" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.to_str">to_str</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.theme_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.theme_id">theme_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.theme" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.theme">theme</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.name" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.name">name</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.hex_value" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.hex_value">hex_value</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.id">id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.date_created" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.date_created">date_created</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.user_created" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.user_created">user_created</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.date_modified" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.date_modified">date_modified</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.user_modified" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.user_modified">user_modified</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/theme_custom_colors_details.html#presalytics.client.presalytics_ooxml_automation.models.theme_custom_colors_details.ThemeCustomColorsDetails.attribute_map">attribute_map</a></code></li>
 </ul>
 </li>
 </ul>

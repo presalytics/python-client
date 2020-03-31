@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L0-L37" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L0-L56" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import pkgutil
 import importlib
@@ -37,6 +37,25 @@ logger = logging.getLogger(__name__)
 
 
 def load_config(additional_paths: typing.List[str] = []) -&gt; typing.Dict:
+    &#34;&#34;&#34;
+    Searches the current working directory and `additional_paths` for a loadable
+    module named `config.py`.  If a file is found and has a global variable named
+    &#39;PRESALYTICS&#39;, the dictionary contained in the &#39;PRESALYTICS&#39; is returned.
+
+    *Note*: A environment variable called `autodiscover_paths` is automatically
+    loaded into the `additional_paths` keyword argument the the `presalytics` module
+    is imported.
+
+    Parameters
+    ----------
+    additional_paths : list of str, optional
+        Additional filepaths to search for files named `config.py`
+
+    Returns
+    ----------
+    a `dict` containing the PRESALYTICS module environment configuration
+
+    &#34;&#34;&#34;
     current_path = os.getcwd()
     additional_paths.append(current_path)
     config_dict = None
@@ -47,7 +66,7 @@ def load_config(additional_paths: typing.List[str] = []) -&gt; typing.Dict:
                     config_path = os.path.join(path, name)
                     config_spec = importlib.util.spec_from_file_location(&#34;config&#34;, config_path)
                     config_mod = importlib.util.module_from_spec(config_spec)
-                    config_spec.loader.exec_module(config_mod)
+                    config_spec.loader.exec_module(config_mod) #type: ignore
                     config_dict = getattr(config_mod, &#34;PRESALYTICS&#34;, None)
                     if not config_dict:
                         config_dict = config_mod.__dict__
@@ -73,16 +92,48 @@ def load_config(additional_paths: typing.List[str] = []) -&gt; typing.Dict:
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="presalytics.lib.config_loader.load_config"><code class="name flex">
-<span>def <span class="ident">load_config</span></span>(<span>additional_paths: List[str] = []) -> Dict</span>
+<span>def <span class="ident">load_config</span></span>(<span>additional_paths=[])</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Searches the current working directory and <code>additional_paths</code> for a loadable
+module named <code>config.py</code>.
+If a file is found and has a global variable named
+'PRESALYTICS', the dictionary contained in the 'PRESALYTICS' is returned.</p>
+<p><em>Note</em>: A environment variable called <code>autodiscover_paths</code> is automatically
+loaded into the <code>additional_paths</code> keyword argument the the <a title="presalytics" href="/python-client/presalytics/index.html"><code>presalytics</code></a> module
+is imported.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>additional_paths</code></strong> :&ensp;<code>list</code> of <code>str</code>, optional</dt>
+<dd>Additional filepaths to search for files named <code>config.py</code></dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>a <code>dict</code> containing the PRESALYTICS module environment configuration</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L12-L37" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L12-L56" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def load_config(additional_paths: typing.List[str] = []) -&gt; typing.Dict:
+    &#34;&#34;&#34;
+    Searches the current working directory and `additional_paths` for a loadable
+    module named `config.py`.  If a file is found and has a global variable named
+    &#39;PRESALYTICS&#39;, the dictionary contained in the &#39;PRESALYTICS&#39; is returned.
+
+    *Note*: A environment variable called `autodiscover_paths` is automatically
+    loaded into the `additional_paths` keyword argument the the `presalytics` module
+    is imported.
+
+    Parameters
+    ----------
+    additional_paths : list of str, optional
+        Additional filepaths to search for files named `config.py`
+
+    Returns
+    ----------
+    a `dict` containing the PRESALYTICS module environment configuration
+
+    &#34;&#34;&#34;
     current_path = os.getcwd()
     additional_paths.append(current_path)
     config_dict = None
@@ -93,7 +144,7 @@ def load_config(additional_paths: typing.List[str] = []) -&gt; typing.Dict:
                     config_path = os.path.join(path, name)
                     config_spec = importlib.util.spec_from_file_location(&#34;config&#34;, config_path)
                     config_mod = importlib.util.module_from_spec(config_spec)
-                    config_spec.loader.exec_module(config_mod)
+                    config_spec.loader.exec_module(config_mod) #type: ignore
                     config_dict = getattr(config_mod, &#34;PRESALYTICS&#34;, None)
                     if not config_dict:
                         config_dict = config_mod.__dict__

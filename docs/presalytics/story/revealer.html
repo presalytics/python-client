@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L0-L269" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L0-L225" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import os
 import shutil
@@ -38,6 +38,8 @@ import lxml.html
 import lxml.etree
 import lxml.html.builder as E
 import datetime
+import six
+import sys
 import presalytics
 import presalytics.lib
 import presalytics.lib.plugins
@@ -58,12 +60,28 @@ logger = logging.getLogger(&#39;presalytics.story.revealer&#39;)
 
 class Revealer(presalytics.story.components.Renderer):
     &#34;&#34;&#34;
-    This class renders &#39;Story Outines&#39; to reveal.js presentations
+    Renders `presalytics.story.outline.StoryOutline` objects to 
+    [reveal.js](https://github.com/hakimel/reveal.js/) presentations
+
+    Parameters
+    ----------
+    story_outline : presalytics.story.outline.StoryOutline
+        The presalytics StoryOutline to be rendered and presented
+    
+    Attributes
+    -----------
+    base : lxml.etree.Element
+        An etree element containing the base html for each slide
+
+    plugins : list of dict
+        Plugin data that transform to html `&lt;script&gt;` and `&lt;link&gt;` tags through
+        the rendering process
+
+    plugin_mgr : presalytics.lib.plugins.base.PluginManager
+        Sorts, validates, and renders plugins
+
     &#34;&#34;&#34;
-    story_outline: &#39;StoryOutline&#39;
     base: lxml.etree.Element
-    links: typing.Sequence[lxml.etree.Element]
-    plugins: typing.List[typing.Dict]
 
     __component_kind__ = &#39;revealer&#39;
 
@@ -71,140 +89,45 @@ class Revealer(presalytics.story.components.Renderer):
             self,
             story_outline: &#39;StoryOutline&#39;,
             **kwargs):
-        super(Revealer, self).__init__(**kwargs)
-        self.story_outline = story_outline
+        super(Revealer, self).__init__(story_outline, **kwargs)
         logger.info(&#34;Initializing story render for {}&#34;.format(story_outline.title))
         self.story_outline.validate()
-        self.base = self.make_base()
+        self.base = self._make_base()
         logger.info(&#34;Loading plugins&#34;)
         reveal_plugin_config = {
             &#39;kind&#39;: &#39;script&#39;,
             &#39;name&#39;: &#39;reveal&#39;,
             &#39;config&#39;: {}
         }
+        overrides_config = {
+            &#39;kind&#39;: &#39;style&#39;,
+            &#39;name&#39;: &#39;local&#39;,
+            &#39;config&#39;: {
+                &#34;css_file_id&#34;: &#34;reveal_overrides&#34;
+            }
+        }
         self.update_outline_from_instances()
-        self.plugins = [reveal_plugin_config]
+        self.plugins = [reveal_plugin_config, overrides_config]
         self.get_component_implicit_plugins()
-        outline_plugins = presalytics.lib.plugins.base.PluginManager.get_plugins_from_nested_dict(story_outline.to_dict())
+        outline_plugins = presalytics.lib.plugins.base.PluginManager.get_plugins_from_nested_dict(source_dict=self.story_outline.to_dict())
         self.plugins.extend(outline_plugins)
         self.plugin_mgr = presalytics.lib.plugins.base.PluginManager(self.plugins)
         logger.info(&#34;Revealer initilized.&#34;)
 
-    @classmethod
-    def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
-        return cls(component, **kwargs)
-
-    def serialize(self) -&gt; &#39;StoryOutline&#39;:
-        self.update_outline_from_instances()
-        return self.story_outline
-
-    def update_outline_from_instances(self, sub_dict: typing.Dict = None):
-        if not sub_dict:
-            sub_dict = self.story_outline.to_dict()
-        if sub_dict:
-            for key, val in sub_dict.items():
-                if key in [&#34;widgets&#34;, &#34;themes&#34;, &#34;pages&#34;]:
-                    if isinstance(val, list):
-                        for list_item in val:
-                            if isinstance(list_item, dict):
-                                if &#34;kind&#34; in list_item:
-                                    class_key = key.rstrip(&#34;s&#34;) + &#34;.&#34; + list_item[&#34;kind&#34;]
-                                    klass = presalytics.COMPONENTS.get(class_key)
-                                    if klass:
-                                        if &#34;name&#34; in list_item:
-                                            instance_key = class_key + &#34;.&#34; + list_item[&#34;name&#34;]
-                                            inst = presalytics.COMPONENTS.get_instance(instance_key)
-                                            if inst:
-                                                self.set_outline_data_from_instance(inst)
-                if isinstance(val, dict):
-                    if len(val.keys()) &gt; 0:
-                        self.update_outline_from_instances(val)
-                if isinstance(val, list):
-                    for list_item in val:
-                        if isinstance(list_item, dict):
-                            self.update_outline_from_instances(list_item)
-
-    def get_component_implicit_plugins(self, sub_dict: typing.Dict = None):
-        if not sub_dict:
-            sub_dict = self.story_outline.to_dict()
-        if sub_dict:
-            for key, val in sub_dict.items():
-                if key in [&#34;widgets&#34;, &#34;themes&#34;, &#34;pages&#34;]:
-                    if isinstance(val, list):
-                        for list_item in val:
-                            if isinstance(list_item, dict):
-                                if &#34;kind&#34; in list_item:
-                                    class_key = key.rstrip(&#34;s&#34;) + &#34;.&#34; + list_item[&#34;kind&#34;]
-                                    klass = presalytics.COMPONENTS.get(class_key)
-                                    if klass:
-                                        if len(klass.__plugins__) &gt; 0:
-                                            self.plugins.extend(klass.__plugins__)
-                                                
-                if isinstance(val, dict):
-                    if len(val.keys()) &gt; 0:
-                        self.get_component_implicit_plugins(val)
-                if isinstance(val, list):
-                    for list_item in val:
-                        if isinstance(list_item, dict):
-                            self.get_component_implicit_plugins(list_item)
-
-    def set_outline_data_from_instance(self, inst: &#39;ComponentBase&#39;):
-        if inst.__component_type__ == &#39;widget&#39;:
-            self.set_widget_outline_data(inst)
-        if inst.__component_type__ == &#39;page&#39;:
-            self.set_page_outline_data(inst)
-        if inst.__component_type__ == &#39;theme&#39;:
-            self.set_theme_outline_data(inst)
-
-    def set_theme_outline_data(self, inst: &#39;ThemeBase&#39;):
-        theme_index = None
-        for t in range(0, len(self.story_outline.themes)):
-            if inst.name == self.story_outline.themes[t].name:
-                theme_index = t
-            if theme_index:
-                break
-        theme_outline = inst.serialize()
-        if theme_index:
-            self.story_outline.themes[theme_index] = theme_outline    
-
-    def set_page_outline_data(self, inst: &#39;PageTemplateBase&#39;):
-        page_index = None
-        for p in range(0, len(self.story_outline.pages)):
-            if inst.name == self.story_outline.pages[p].name:
-                page_index = p
-            if page_index:
-                break
-        page_outline = inst.serialize()
-        if page_index:
-            self.story_outline.pages[page_index] = page_outline
-
-
-    def set_widget_outline_data(self, inst: &#39;WidgetBase&#39;):
-        widget_index = None
-        page_index = None
-        for p in range(0, len(self.story_outline.pages)):
-            for w in range(0, len(self.story_outline.pages[p].widgets)):
-                widget = self.story_outline.pages[p].widgets[w]
-                if widget.name == inst.name:
-                    page_index = p
-                    widget_index = w
-                if page_index:
-                    break
-            if page_index:
-                break
-        w_outline = inst.serialize()
-        if isinstance(page_index, int) and isinstance(widget_index, int):
-            self.story_outline.pages[page_index].widgets[widget_index] = w_outline  
-
-    def update_outline(self):
-        raise NotImplementedError
-
-    def make_base(self):
+    def _make_base(self):
         base = lxml.etree.Element(&#34;div&#34;, attrib={&#34;class&#34;: &#34;reveal&#34;})
         lxml.etree.SubElement(base, &#34;div&#34;, attrib={&#34;class&#34;: &#34;slides&#34;})
         return base
 
     def package_as_standalone(self):
+        &#34;&#34;&#34;
+        Render the story outline as a html document with only the 
+        reveal.js presentation as conent
+
+        Returns
+        ----------
+        A `str` containing a complete html document with the presentation
+        &#34;&#34;&#34;
         pres = self.render()
         body = E.BODY()
         body.append(pres)
@@ -232,25 +155,20 @@ class Revealer(presalytics.story.components.Renderer):
     #     script_string = plugin_class().to_string(plugin_config)
     #     return lxml.html.fragment_fromstring(script_string)
 
-    def strip_unauthorized_scripts(self, body):
-        allowed_scripts = presalytics.lib.plugins.external.ALLOWED_SCRIPTS.flatten().values()
-        script_elements = body.findall(&#34;.//script&#34;)
-        for ele in script_elements:
-            try:
-                link = ele.get(&#34;src&#34;)
-            except KeyError:
-                ele.getparent().remove(ele)
-            if link not in allowed_scripts:
-                ele.getparent().remove(ele)
-        return body
-
     def update_info(self):
+        &#34;&#34;&#34;
+        Updates story metadata
+        &#34;&#34;&#34;
         info = self.story_outline.info
         info.date_modified = datetime.datetime.utcnow()
 
     def render(self):
         &#34;&#34;&#34;
-        This method returns a t
+        Creates a reveal.js presenation html fragement
+
+        Returns:
+        ---------
+        A `str` html fragment containing a reveal.js presentation
         &#34;&#34;&#34;
         reveal_base = self.base
         for page in self.story_outline.pages:
@@ -262,21 +180,59 @@ class Revealer(presalytics.story.components.Renderer):
         return reveal_base
 
     def render_page(self, page: &#39;Page&#39;) -&gt; str:
+        &#34;&#34;&#34;
+        Creates a reveal.js slide
+
+        Returns
+        ----------
+        A `str` html framgment of the page
+        &#34;&#34;&#34;
         class_key = &#34;page.&#34; + page.kind
         key = class_key + &#34;.&#34; + page.name
-        if presalytics.COMPONENTS.get_instance(key):
-            page_instance = presalytics.COMPONENTS.get_instance(key)
-        else:
-            klass = presalytics.COMPONENTS.get(class_key)
-            deserialize_method = getattr(klass, &#34;deserialize&#34;, None)
-            if callable(deserialize_method):
-                page_instance = deserialize_method(page, client_info=self.client_info)
+        try:
+            if presalytics.COMPONENTS.get_instance(key):
+                page_instance = presalytics.COMPONENTS.get_instance(key)
             else:
-                message = &#39;Page component instance or class (kind) &#34;{0}&#34; unavailable in component registry&#39;.format(key)
-                raise presalytics.lib.exceptions.MissingConfigException(message)
-        return page_instance.render()
+                klass = presalytics.COMPONENTS.get(class_key)
+                deserialize_method = getattr(klass, &#34;deserialize&#34;, None)
+                if callable(deserialize_method):
+                    page_instance = deserialize_method(page, client_info=self.client_info)
+                else:
+                    message = &#39;Page component instance or class (kind) &#34;{0}&#34; unavailable in component registry&#39;.format(key)
+                    raise presalytics.lib.exceptions.MissingConfigException(message)
+            page_html = page_instance.render()
+        except Exception as ex:
+            logger.exception(ex)
+            t, v, tb = sys.exc_info()
+            if not presalytics.CONFIG.get(&#34;DEBUG&#34;, False):
+                page_html = presalytics.lib.exceptions.RenderExceptionHandler(ex, &#34;page&#34;, traceback=tb).render_exception()
+            else:
+                six.reraise(t, v, tb)
+        return page_html
 
     def present(self, files_path=None, debug=True, port=8082, host=&#39;127.0.0.1&#39;):
+        &#34;&#34;&#34;
+        Creates and opens the rendered story in the browser.  Story files are served by 
+        a local flask server.  Not for production use.  Press Ctrl + C to close the server.
+
+        Parameters
+        ----------
+        files_path : str
+            filepath to a local folder that will work as root folder for a local flask
+            server.  Defaults to the user&#39;s temporary files directory
+
+        debug : str
+            Defaults to True.  Indicates whether the flask server should be started
+            in debug mode.
+        
+        port : str
+            The network port to serve the story onto.  Defautls to 8082.
+        
+        host : str
+            The host to for the local server.  Typically either localhost or the default gateway.
+            Defaults to 127.0.0.1 (localhost).
+        
+        &#34;&#34;&#34;
         logger.info(&#34;Building story rendering at http://{0}:{1}&#34;.format(host, port))
         if not files_path:
             files_path = tempfile.gettempdir()
@@ -308,23 +264,55 @@ class Revealer(presalytics.story.components.Renderer):
 <dl>
 <dt id="presalytics.story.revealer.Revealer"><code class="flex name class">
 <span>class <span class="ident">Revealer</span></span>
-<span>(</span><span>story_outline: StoryOutline, **kwargs)</span>
+<span>(</span><span>story_outline, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>This class renders 'Story Outines' to reveal.js presentations</p></section>
+<section class="desc"><p>Renders <a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a> objects to
+<a href="https://github.com/hakimel/reveal.js/">reveal.js</a> presentations</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>story_outline</code></strong> :&ensp;<a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a></dt>
+<dd>The presalytics StoryOutline to be rendered and presented</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>base</code></strong> :&ensp;<code>lxml.etree.Element</code></dt>
+<dd>An etree element containing the base html for each slide</dd>
+<dt><strong><code>plugins</code></strong> :&ensp;<code>list</code> of <code>dict</code></dt>
+<dd>Plugin data that transform to html <code>&lt;script&gt;</code> and <code>&lt;link&gt;</code> tags through
+the rendering process</dd>
+<dt><strong><code>plugin_mgr</code></strong> :&ensp;<a title="presalytics.lib.plugins.base.PluginManager" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginManager"><code>PluginManager</code></a></dt>
+<dd>Sorts, validates, and renders plugins</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L32-L270" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L34-L226" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Revealer(presalytics.story.components.Renderer):
     &#34;&#34;&#34;
-    This class renders &#39;Story Outines&#39; to reveal.js presentations
+    Renders `presalytics.story.outline.StoryOutline` objects to 
+    [reveal.js](https://github.com/hakimel/reveal.js/) presentations
+
+    Parameters
+    ----------
+    story_outline : presalytics.story.outline.StoryOutline
+        The presalytics StoryOutline to be rendered and presented
+    
+    Attributes
+    -----------
+    base : lxml.etree.Element
+        An etree element containing the base html for each slide
+
+    plugins : list of dict
+        Plugin data that transform to html `&lt;script&gt;` and `&lt;link&gt;` tags through
+        the rendering process
+
+    plugin_mgr : presalytics.lib.plugins.base.PluginManager
+        Sorts, validates, and renders plugins
+
     &#34;&#34;&#34;
-    story_outline: &#39;StoryOutline&#39;
     base: lxml.etree.Element
-    links: typing.Sequence[lxml.etree.Element]
-    plugins: typing.List[typing.Dict]
 
     __component_kind__ = &#39;revealer&#39;
 
@@ -332,140 +320,45 @@ class Revealer(presalytics.story.components.Renderer):
             self,
             story_outline: &#39;StoryOutline&#39;,
             **kwargs):
-        super(Revealer, self).__init__(**kwargs)
-        self.story_outline = story_outline
+        super(Revealer, self).__init__(story_outline, **kwargs)
         logger.info(&#34;Initializing story render for {}&#34;.format(story_outline.title))
         self.story_outline.validate()
-        self.base = self.make_base()
+        self.base = self._make_base()
         logger.info(&#34;Loading plugins&#34;)
         reveal_plugin_config = {
             &#39;kind&#39;: &#39;script&#39;,
             &#39;name&#39;: &#39;reveal&#39;,
             &#39;config&#39;: {}
         }
+        overrides_config = {
+            &#39;kind&#39;: &#39;style&#39;,
+            &#39;name&#39;: &#39;local&#39;,
+            &#39;config&#39;: {
+                &#34;css_file_id&#34;: &#34;reveal_overrides&#34;
+            }
+        }
         self.update_outline_from_instances()
-        self.plugins = [reveal_plugin_config]
+        self.plugins = [reveal_plugin_config, overrides_config]
         self.get_component_implicit_plugins()
-        outline_plugins = presalytics.lib.plugins.base.PluginManager.get_plugins_from_nested_dict(story_outline.to_dict())
+        outline_plugins = presalytics.lib.plugins.base.PluginManager.get_plugins_from_nested_dict(source_dict=self.story_outline.to_dict())
         self.plugins.extend(outline_plugins)
         self.plugin_mgr = presalytics.lib.plugins.base.PluginManager(self.plugins)
         logger.info(&#34;Revealer initilized.&#34;)
 
-    @classmethod
-    def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
-        return cls(component, **kwargs)
-
-    def serialize(self) -&gt; &#39;StoryOutline&#39;:
-        self.update_outline_from_instances()
-        return self.story_outline
-
-    def update_outline_from_instances(self, sub_dict: typing.Dict = None):
-        if not sub_dict:
-            sub_dict = self.story_outline.to_dict()
-        if sub_dict:
-            for key, val in sub_dict.items():
-                if key in [&#34;widgets&#34;, &#34;themes&#34;, &#34;pages&#34;]:
-                    if isinstance(val, list):
-                        for list_item in val:
-                            if isinstance(list_item, dict):
-                                if &#34;kind&#34; in list_item:
-                                    class_key = key.rstrip(&#34;s&#34;) + &#34;.&#34; + list_item[&#34;kind&#34;]
-                                    klass = presalytics.COMPONENTS.get(class_key)
-                                    if klass:
-                                        if &#34;name&#34; in list_item:
-                                            instance_key = class_key + &#34;.&#34; + list_item[&#34;name&#34;]
-                                            inst = presalytics.COMPONENTS.get_instance(instance_key)
-                                            if inst:
-                                                self.set_outline_data_from_instance(inst)
-                if isinstance(val, dict):
-                    if len(val.keys()) &gt; 0:
-                        self.update_outline_from_instances(val)
-                if isinstance(val, list):
-                    for list_item in val:
-                        if isinstance(list_item, dict):
-                            self.update_outline_from_instances(list_item)
-
-    def get_component_implicit_plugins(self, sub_dict: typing.Dict = None):
-        if not sub_dict:
-            sub_dict = self.story_outline.to_dict()
-        if sub_dict:
-            for key, val in sub_dict.items():
-                if key in [&#34;widgets&#34;, &#34;themes&#34;, &#34;pages&#34;]:
-                    if isinstance(val, list):
-                        for list_item in val:
-                            if isinstance(list_item, dict):
-                                if &#34;kind&#34; in list_item:
-                                    class_key = key.rstrip(&#34;s&#34;) + &#34;.&#34; + list_item[&#34;kind&#34;]
-                                    klass = presalytics.COMPONENTS.get(class_key)
-                                    if klass:
-                                        if len(klass.__plugins__) &gt; 0:
-                                            self.plugins.extend(klass.__plugins__)
-                                                
-                if isinstance(val, dict):
-                    if len(val.keys()) &gt; 0:
-                        self.get_component_implicit_plugins(val)
-                if isinstance(val, list):
-                    for list_item in val:
-                        if isinstance(list_item, dict):
-                            self.get_component_implicit_plugins(list_item)
-
-    def set_outline_data_from_instance(self, inst: &#39;ComponentBase&#39;):
-        if inst.__component_type__ == &#39;widget&#39;:
-            self.set_widget_outline_data(inst)
-        if inst.__component_type__ == &#39;page&#39;:
-            self.set_page_outline_data(inst)
-        if inst.__component_type__ == &#39;theme&#39;:
-            self.set_theme_outline_data(inst)
-
-    def set_theme_outline_data(self, inst: &#39;ThemeBase&#39;):
-        theme_index = None
-        for t in range(0, len(self.story_outline.themes)):
-            if inst.name == self.story_outline.themes[t].name:
-                theme_index = t
-            if theme_index:
-                break
-        theme_outline = inst.serialize()
-        if theme_index:
-            self.story_outline.themes[theme_index] = theme_outline    
-
-    def set_page_outline_data(self, inst: &#39;PageTemplateBase&#39;):
-        page_index = None
-        for p in range(0, len(self.story_outline.pages)):
-            if inst.name == self.story_outline.pages[p].name:
-                page_index = p
-            if page_index:
-                break
-        page_outline = inst.serialize()
-        if page_index:
-            self.story_outline.pages[page_index] = page_outline
-
-
-    def set_widget_outline_data(self, inst: &#39;WidgetBase&#39;):
-        widget_index = None
-        page_index = None
-        for p in range(0, len(self.story_outline.pages)):
-            for w in range(0, len(self.story_outline.pages[p].widgets)):
-                widget = self.story_outline.pages[p].widgets[w]
-                if widget.name == inst.name:
-                    page_index = p
-                    widget_index = w
-                if page_index:
-                    break
-            if page_index:
-                break
-        w_outline = inst.serialize()
-        if isinstance(page_index, int) and isinstance(widget_index, int):
-            self.story_outline.pages[page_index].widgets[widget_index] = w_outline  
-
-    def update_outline(self):
-        raise NotImplementedError
-
-    def make_base(self):
+    def _make_base(self):
         base = lxml.etree.Element(&#34;div&#34;, attrib={&#34;class&#34;: &#34;reveal&#34;})
         lxml.etree.SubElement(base, &#34;div&#34;, attrib={&#34;class&#34;: &#34;slides&#34;})
         return base
 
     def package_as_standalone(self):
+        &#34;&#34;&#34;
+        Render the story outline as a html document with only the 
+        reveal.js presentation as conent
+
+        Returns
+        ----------
+        A `str` containing a complete html document with the presentation
+        &#34;&#34;&#34;
         pres = self.render()
         body = E.BODY()
         body.append(pres)
@@ -493,25 +386,20 @@ class Revealer(presalytics.story.components.Renderer):
     #     script_string = plugin_class().to_string(plugin_config)
     #     return lxml.html.fragment_fromstring(script_string)
 
-    def strip_unauthorized_scripts(self, body):
-        allowed_scripts = presalytics.lib.plugins.external.ALLOWED_SCRIPTS.flatten().values()
-        script_elements = body.findall(&#34;.//script&#34;)
-        for ele in script_elements:
-            try:
-                link = ele.get(&#34;src&#34;)
-            except KeyError:
-                ele.getparent().remove(ele)
-            if link not in allowed_scripts:
-                ele.getparent().remove(ele)
-        return body
-
     def update_info(self):
+        &#34;&#34;&#34;
+        Updates story metadata
+        &#34;&#34;&#34;
         info = self.story_outline.info
         info.date_modified = datetime.datetime.utcnow()
 
     def render(self):
         &#34;&#34;&#34;
-        This method returns a t
+        Creates a reveal.js presenation html fragement
+
+        Returns:
+        ---------
+        A `str` html fragment containing a reveal.js presentation
         &#34;&#34;&#34;
         reveal_base = self.base
         for page in self.story_outline.pages:
@@ -523,21 +411,59 @@ class Revealer(presalytics.story.components.Renderer):
         return reveal_base
 
     def render_page(self, page: &#39;Page&#39;) -&gt; str:
+        &#34;&#34;&#34;
+        Creates a reveal.js slide
+
+        Returns
+        ----------
+        A `str` html framgment of the page
+        &#34;&#34;&#34;
         class_key = &#34;page.&#34; + page.kind
         key = class_key + &#34;.&#34; + page.name
-        if presalytics.COMPONENTS.get_instance(key):
-            page_instance = presalytics.COMPONENTS.get_instance(key)
-        else:
-            klass = presalytics.COMPONENTS.get(class_key)
-            deserialize_method = getattr(klass, &#34;deserialize&#34;, None)
-            if callable(deserialize_method):
-                page_instance = deserialize_method(page, client_info=self.client_info)
+        try:
+            if presalytics.COMPONENTS.get_instance(key):
+                page_instance = presalytics.COMPONENTS.get_instance(key)
             else:
-                message = &#39;Page component instance or class (kind) &#34;{0}&#34; unavailable in component registry&#39;.format(key)
-                raise presalytics.lib.exceptions.MissingConfigException(message)
-        return page_instance.render()
+                klass = presalytics.COMPONENTS.get(class_key)
+                deserialize_method = getattr(klass, &#34;deserialize&#34;, None)
+                if callable(deserialize_method):
+                    page_instance = deserialize_method(page, client_info=self.client_info)
+                else:
+                    message = &#39;Page component instance or class (kind) &#34;{0}&#34; unavailable in component registry&#39;.format(key)
+                    raise presalytics.lib.exceptions.MissingConfigException(message)
+            page_html = page_instance.render()
+        except Exception as ex:
+            logger.exception(ex)
+            t, v, tb = sys.exc_info()
+            if not presalytics.CONFIG.get(&#34;DEBUG&#34;, False):
+                page_html = presalytics.lib.exceptions.RenderExceptionHandler(ex, &#34;page&#34;, traceback=tb).render_exception()
+            else:
+                six.reraise(t, v, tb)
+        return page_html
 
     def present(self, files_path=None, debug=True, port=8082, host=&#39;127.0.0.1&#39;):
+        &#34;&#34;&#34;
+        Creates and opens the rendered story in the browser.  Story files are served by 
+        a local flask server.  Not for production use.  Press Ctrl + C to close the server.
+
+        Parameters
+        ----------
+        files_path : str
+            filepath to a local folder that will work as root folder for a local flask
+            server.  Defaults to the user&#39;s temporary files directory
+
+        debug : str
+            Defaults to True.  Indicates whether the flask server should be started
+            in debug mode.
+        
+        port : str
+            The network port to serve the story onto.  Defautls to 8082.
+        
+        host : str
+            The host to for the local server.  Typically either localhost or the default gateway.
+            Defaults to 127.0.0.1 (localhost).
+        
+        &#34;&#34;&#34;
         logger.info(&#34;Building story rendering at http://{0}:{1}&#34;.format(host, port))
         if not files_path:
             files_path = tempfile.gettempdir()
@@ -563,88 +489,30 @@ class Revealer(presalytics.story.components.Renderer):
 <li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
 <li>abc.ABC</li>
 </ul>
-<h3>Static methods</h3>
-<dl>
-<dt id="presalytics.story.revealer.Revealer.deserialize"><code class="name flex">
-<span>def <span class="ident">deserialize</span></span>(<span>component: StoryOutline, **kwargs)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L66-L68" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@classmethod
-def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
-    return cls(component, **kwargs)</code></pre>
-</details>
-</dd>
-</dl>
 <h3>Methods</h3>
 <dl>
-<dt id="presalytics.story.revealer.Revealer.get_component_implicit_plugins"><code class="name flex">
-<span>def <span class="ident">get_component_implicit_plugins</span></span>(<span>self, sub_dict: Dict = None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L100-L122" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def get_component_implicit_plugins(self, sub_dict: typing.Dict = None):
-    if not sub_dict:
-        sub_dict = self.story_outline.to_dict()
-    if sub_dict:
-        for key, val in sub_dict.items():
-            if key in [&#34;widgets&#34;, &#34;themes&#34;, &#34;pages&#34;]:
-                if isinstance(val, list):
-                    for list_item in val:
-                        if isinstance(list_item, dict):
-                            if &#34;kind&#34; in list_item:
-                                class_key = key.rstrip(&#34;s&#34;) + &#34;.&#34; + list_item[&#34;kind&#34;]
-                                klass = presalytics.COMPONENTS.get(class_key)
-                                if klass:
-                                    if len(klass.__plugins__) &gt; 0:
-                                        self.plugins.extend(klass.__plugins__)
-                                            
-            if isinstance(val, dict):
-                if len(val.keys()) &gt; 0:
-                    self.get_component_implicit_plugins(val)
-            if isinstance(val, list):
-                for list_item in val:
-                    if isinstance(list_item, dict):
-                        self.get_component_implicit_plugins(list_item)</code></pre>
-</details>
-</dd>
-<dt id="presalytics.story.revealer.Revealer.make_base"><code class="name flex">
-<span>def <span class="ident">make_base</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L175-L178" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def make_base(self):
-    base = lxml.etree.Element(&#34;div&#34;, attrib={&#34;class&#34;: &#34;reveal&#34;})
-    lxml.etree.SubElement(base, &#34;div&#34;, attrib={&#34;class&#34;: &#34;slides&#34;})
-    return base</code></pre>
-</details>
-</dd>
 <dt id="presalytics.story.revealer.Revealer.package_as_standalone"><code class="name flex">
 <span>def <span class="ident">package_as_standalone</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Render the story outline as a html document with only the
+reveal.js presentation as conent</p>
+<h2 id="returns">Returns</h2>
+<p>A <code>str</code> containing a complete html document with the presentation</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L180-L199" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L95-L122" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def package_as_standalone(self):
+    &#34;&#34;&#34;
+    Render the story outline as a html document with only the 
+    reveal.js presentation as conent
+
+    Returns
+    ----------
+    A `str` containing a complete html document with the presentation
+    &#34;&#34;&#34;
     pres = self.render()
     body = E.BODY()
     body.append(pres)
@@ -666,17 +534,153 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
     return lxml.html.tostring(html, pretty_print=True)</code></pre>
 </details>
 </dd>
+<dt id="presalytics.story.revealer.Revealer.update_info"><code class="name flex">
+<span>def <span class="ident">update_info</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Updates story metadata</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L131-L136" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def update_info(self):
+    &#34;&#34;&#34;
+    Updates story metadata
+    &#34;&#34;&#34;
+    info = self.story_outline.info
+    info.date_modified = datetime.datetime.utcnow()</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.render"><code class="name flex">
+<span>def <span class="ident">render</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Creates a reveal.js presenation html fragement</p>
+<h2 id="returns">Returns:</h2>
+<p>A <code>str</code> html fragment containing a reveal.js presentation</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L138-L153" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def render(self):
+    &#34;&#34;&#34;
+    Creates a reveal.js presenation html fragement
+
+    Returns:
+    ---------
+    A `str` html fragment containing a reveal.js presentation
+    &#34;&#34;&#34;
+    reveal_base = self.base
+    for page in self.story_outline.pages:
+        slides_container = reveal_base[0]
+        slide = lxml.etree.SubElement(slides_container, &#34;section&#34;)
+        page_html = self.render_page(page)
+        slide_fragment = lxml.html.fragment_fromstring(page_html)
+        slide.append(slide_fragment)
+    return reveal_base</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.render_page"><code class="name flex">
+<span>def <span class="ident">render_page</span></span>(<span>self, page)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Creates a reveal.js slide</p>
+<h2 id="returns">Returns</h2>
+<p>A <code>str</code> html framgment of the page</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L155-L184" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def render_page(self, page: &#39;Page&#39;) -&gt; str:
+    &#34;&#34;&#34;
+    Creates a reveal.js slide
+
+    Returns
+    ----------
+    A `str` html framgment of the page
+    &#34;&#34;&#34;
+    class_key = &#34;page.&#34; + page.kind
+    key = class_key + &#34;.&#34; + page.name
+    try:
+        if presalytics.COMPONENTS.get_instance(key):
+            page_instance = presalytics.COMPONENTS.get_instance(key)
+        else:
+            klass = presalytics.COMPONENTS.get(class_key)
+            deserialize_method = getattr(klass, &#34;deserialize&#34;, None)
+            if callable(deserialize_method):
+                page_instance = deserialize_method(page, client_info=self.client_info)
+            else:
+                message = &#39;Page component instance or class (kind) &#34;{0}&#34; unavailable in component registry&#39;.format(key)
+                raise presalytics.lib.exceptions.MissingConfigException(message)
+        page_html = page_instance.render()
+    except Exception as ex:
+        logger.exception(ex)
+        t, v, tb = sys.exc_info()
+        if not presalytics.CONFIG.get(&#34;DEBUG&#34;, False):
+            page_html = presalytics.lib.exceptions.RenderExceptionHandler(ex, &#34;page&#34;, traceback=tb).render_exception()
+        else:
+            six.reraise(t, v, tb)
+    return page_html</code></pre>
+</details>
+</dd>
 <dt id="presalytics.story.revealer.Revealer.present"><code class="name flex">
 <span>def <span class="ident">present</span></span>(<span>self, files_path=None, debug=True, port=8082, host='127.0.0.1')</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Creates and opens the rendered story in the browser.
+Story files are served by
+a local flask server.
+Not for production use.
+Press Ctrl + C to close the server.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>files_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>filepath to a local folder that will work as root folder for a local flask
+server.
+Defaults to the user's temporary files directory</dd>
+<dt><strong><code>debug</code></strong> :&ensp;<code>str</code></dt>
+<dd>Defaults to True.
+Indicates whether the flask server should be started
+in debug mode.</dd>
+<dt><strong><code>port</code></strong> :&ensp;<code>str</code></dt>
+<dd>The network port to serve the story onto.
+Defautls to 8082.</dd>
+<dt><strong><code>host</code></strong> :&ensp;<code>str</code></dt>
+<dd>The host to for the local server.
+Typically either localhost or the default gateway.
+Defaults to 127.0.0.1 (localhost).</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L252-L270" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L186-L226" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def present(self, files_path=None, debug=True, port=8082, host=&#39;127.0.0.1&#39;):
+    &#34;&#34;&#34;
+    Creates and opens the rendered story in the browser.  Story files are served by 
+    a local flask server.  Not for production use.  Press Ctrl + C to close the server.
+
+    Parameters
+    ----------
+    files_path : str
+        filepath to a local folder that will work as root folder for a local flask
+        server.  Defaults to the user&#39;s temporary files directory
+
+    debug : str
+        Defaults to True.  Indicates whether the flask server should be started
+        in debug mode.
+    
+    port : str
+        The network port to serve the story onto.  Defautls to 8082.
+    
+    host : str
+        The host to for the local server.  Typically either localhost or the default gateway.
+        Defaults to 127.0.0.1 (localhost).
+    
+    &#34;&#34;&#34;
     logger.info(&#34;Building story rendering at http://{0}:{1}&#34;.format(host, port))
     if not files_path:
         files_path = tempfile.gettempdir()
@@ -697,252 +701,23 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
     server.run()</code></pre>
 </details>
 </dd>
-<dt id="presalytics.story.revealer.Revealer.render"><code class="name flex">
-<span>def <span class="ident">render</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>This method returns a t</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L224-L235" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def render(self):
-    &#34;&#34;&#34;
-    This method returns a t
-    &#34;&#34;&#34;
-    reveal_base = self.base
-    for page in self.story_outline.pages:
-        slides_container = reveal_base[0]
-        slide = lxml.etree.SubElement(slides_container, &#34;section&#34;)
-        page_html = self.render_page(page)
-        slide_fragment = lxml.html.fragment_fromstring(page_html)
-        slide.append(slide_fragment)
-    return reveal_base</code></pre>
-</details>
-</dd>
-<dt id="presalytics.story.revealer.Revealer.render_page"><code class="name flex">
-<span>def <span class="ident">render_page</span></span>(<span>self, page: Page) -> str</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L237-L250" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def render_page(self, page: &#39;Page&#39;) -&gt; str:
-    class_key = &#34;page.&#34; + page.kind
-    key = class_key + &#34;.&#34; + page.name
-    if presalytics.COMPONENTS.get_instance(key):
-        page_instance = presalytics.COMPONENTS.get_instance(key)
-    else:
-        klass = presalytics.COMPONENTS.get(class_key)
-        deserialize_method = getattr(klass, &#34;deserialize&#34;, None)
-        if callable(deserialize_method):
-            page_instance = deserialize_method(page, client_info=self.client_info)
-        else:
-            message = &#39;Page component instance or class (kind) &#34;{0}&#34; unavailable in component registry&#39;.format(key)
-            raise presalytics.lib.exceptions.MissingConfigException(message)
-    return page_instance.render()</code></pre>
-</details>
-</dd>
-<dt id="presalytics.story.revealer.Revealer.serialize"><code class="name flex">
-<span>def <span class="ident">serialize</span></span>(<span>self) -> 'StoryOutline'</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L70-L72" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def serialize(self) -&gt; &#39;StoryOutline&#39;:
-    self.update_outline_from_instances()
-    return self.story_outline</code></pre>
-</details>
-</dd>
-<dt id="presalytics.story.revealer.Revealer.set_outline_data_from_instance"><code class="name flex">
-<span>def <span class="ident">set_outline_data_from_instance</span></span>(<span>self, inst: ComponentBase)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L124-L130" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def set_outline_data_from_instance(self, inst: &#39;ComponentBase&#39;):
-    if inst.__component_type__ == &#39;widget&#39;:
-        self.set_widget_outline_data(inst)
-    if inst.__component_type__ == &#39;page&#39;:
-        self.set_page_outline_data(inst)
-    if inst.__component_type__ == &#39;theme&#39;:
-        self.set_theme_outline_data(inst)</code></pre>
-</details>
-</dd>
-<dt id="presalytics.story.revealer.Revealer.set_page_outline_data"><code class="name flex">
-<span>def <span class="ident">set_page_outline_data</span></span>(<span>self, inst: PageTemplateBase)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L143-L152" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def set_page_outline_data(self, inst: &#39;PageTemplateBase&#39;):
-    page_index = None
-    for p in range(0, len(self.story_outline.pages)):
-        if inst.name == self.story_outline.pages[p].name:
-            page_index = p
-        if page_index:
-            break
-    page_outline = inst.serialize()
-    if page_index:
-        self.story_outline.pages[page_index] = page_outline</code></pre>
-</details>
-</dd>
-<dt id="presalytics.story.revealer.Revealer.set_theme_outline_data"><code class="name flex">
-<span>def <span class="ident">set_theme_outline_data</span></span>(<span>self, inst: ThemeBase)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L132-L141" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def set_theme_outline_data(self, inst: &#39;ThemeBase&#39;):
-    theme_index = None
-    for t in range(0, len(self.story_outline.themes)):
-        if inst.name == self.story_outline.themes[t].name:
-            theme_index = t
-        if theme_index:
-            break
-    theme_outline = inst.serialize()
-    if theme_index:
-        self.story_outline.themes[theme_index] = theme_outline    </code></pre>
-</details>
-</dd>
-<dt id="presalytics.story.revealer.Revealer.set_widget_outline_data"><code class="name flex">
-<span>def <span class="ident">set_widget_outline_data</span></span>(<span>self, inst: WidgetBase)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L155-L170" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def set_widget_outline_data(self, inst: &#39;WidgetBase&#39;):
-    widget_index = None
-    page_index = None
-    for p in range(0, len(self.story_outline.pages)):
-        for w in range(0, len(self.story_outline.pages[p].widgets)):
-            widget = self.story_outline.pages[p].widgets[w]
-            if widget.name == inst.name:
-                page_index = p
-                widget_index = w
-            if page_index:
-                break
-        if page_index:
-            break
-    w_outline = inst.serialize()
-    if isinstance(page_index, int) and isinstance(widget_index, int):
-        self.story_outline.pages[page_index].widgets[widget_index] = w_outline  </code></pre>
-</details>
-</dd>
-<dt id="presalytics.story.revealer.Revealer.strip_unauthorized_scripts"><code class="name flex">
-<span>def <span class="ident">strip_unauthorized_scripts</span></span>(<span>self, body)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L208-L218" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def strip_unauthorized_scripts(self, body):
-    allowed_scripts = presalytics.lib.plugins.external.ALLOWED_SCRIPTS.flatten().values()
-    script_elements = body.findall(&#34;.//script&#34;)
-    for ele in script_elements:
-        try:
-            link = ele.get(&#34;src&#34;)
-        except KeyError:
-            ele.getparent().remove(ele)
-        if link not in allowed_scripts:
-            ele.getparent().remove(ele)
-    return body</code></pre>
-</details>
-</dd>
-<dt id="presalytics.story.revealer.Revealer.update_info"><code class="name flex">
-<span>def <span class="ident">update_info</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L220-L222" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def update_info(self):
-    info = self.story_outline.info
-    info.date_modified = datetime.datetime.utcnow()</code></pre>
-</details>
-</dd>
-<dt id="presalytics.story.revealer.Revealer.update_outline"><code class="name flex">
-<span>def <span class="ident">update_outline</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L172-L173" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def update_outline(self):
-    raise NotImplementedError</code></pre>
-</details>
-</dd>
-<dt id="presalytics.story.revealer.Revealer.update_outline_from_instances"><code class="name flex">
-<span>def <span class="ident">update_outline_from_instances</span></span>(<span>self, sub_dict: Dict = None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L74-L98" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def update_outline_from_instances(self, sub_dict: typing.Dict = None):
-    if not sub_dict:
-        sub_dict = self.story_outline.to_dict()
-    if sub_dict:
-        for key, val in sub_dict.items():
-            if key in [&#34;widgets&#34;, &#34;themes&#34;, &#34;pages&#34;]:
-                if isinstance(val, list):
-                    for list_item in val:
-                        if isinstance(list_item, dict):
-                            if &#34;kind&#34; in list_item:
-                                class_key = key.rstrip(&#34;s&#34;) + &#34;.&#34; + list_item[&#34;kind&#34;]
-                                klass = presalytics.COMPONENTS.get(class_key)
-                                if klass:
-                                    if &#34;name&#34; in list_item:
-                                        instance_key = class_key + &#34;.&#34; + list_item[&#34;name&#34;]
-                                        inst = presalytics.COMPONENTS.get_instance(instance_key)
-                                        if inst:
-                                            self.set_outline_data_from_instance(inst)
-            if isinstance(val, dict):
-                if len(val.keys()) &gt; 0:
-                    self.update_outline_from_instances(val)
-            if isinstance(val, list):
-                for list_item in val:
-                    if isinstance(list_item, dict):
-                        self.update_outline_from_instances(list_item)</code></pre>
-</details>
-</dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.story.components.Renderer" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer">Renderer</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.story.components.Renderer.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.story.components.Renderer.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.story.components.Renderer.get_component_implicit_plugins" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer.get_component_implicit_plugins">get_component_implicit_plugins</a></code></li>
+<li><code><a title="presalytics.story.components.Renderer.manage" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer.manage">manage</a></code></li>
+<li><code><a title="presalytics.story.components.Renderer.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer.serialize">serialize</a></code></li>
+<li><code><a title="presalytics.story.components.Renderer.strip_unauthorized_scripts" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer.strip_unauthorized_scripts">strip_unauthorized_scripts</a></code></li>
+<li><code><a title="presalytics.story.components.Renderer.update_outline_from_instances" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer.update_outline_from_instances">update_outline_from_instances</a></code></li>
+<li><code><a title="presalytics.story.components.Renderer.update_story" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer.update_story">update_story</a></code></li>
+<li><code><a title="presalytics.story.components.Renderer.view" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer.view">view</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -963,22 +738,11 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 <li>
 <h4><code><a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer">Revealer</a></code></h4>
 <ul class="">
-<li><code><a title="presalytics.story.revealer.Revealer.deserialize" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.deserialize">deserialize</a></code></li>
-<li><code><a title="presalytics.story.revealer.Revealer.get_component_implicit_plugins" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.get_component_implicit_plugins">get_component_implicit_plugins</a></code></li>
-<li><code><a title="presalytics.story.revealer.Revealer.make_base" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.make_base">make_base</a></code></li>
 <li><code><a title="presalytics.story.revealer.Revealer.package_as_standalone" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.package_as_standalone">package_as_standalone</a></code></li>
-<li><code><a title="presalytics.story.revealer.Revealer.present" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.present">present</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.update_info" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.update_info">update_info</a></code></li>
 <li><code><a title="presalytics.story.revealer.Revealer.render" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.render">render</a></code></li>
 <li><code><a title="presalytics.story.revealer.Revealer.render_page" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.render_page">render_page</a></code></li>
-<li><code><a title="presalytics.story.revealer.Revealer.serialize" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.serialize">serialize</a></code></li>
-<li><code><a title="presalytics.story.revealer.Revealer.set_outline_data_from_instance" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.set_outline_data_from_instance">set_outline_data_from_instance</a></code></li>
-<li><code><a title="presalytics.story.revealer.Revealer.set_page_outline_data" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.set_page_outline_data">set_page_outline_data</a></code></li>
-<li><code><a title="presalytics.story.revealer.Revealer.set_theme_outline_data" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.set_theme_outline_data">set_theme_outline_data</a></code></li>
-<li><code><a title="presalytics.story.revealer.Revealer.set_widget_outline_data" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.set_widget_outline_data">set_widget_outline_data</a></code></li>
-<li><code><a title="presalytics.story.revealer.Revealer.strip_unauthorized_scripts" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.strip_unauthorized_scripts">strip_unauthorized_scripts</a></code></li>
-<li><code><a title="presalytics.story.revealer.Revealer.update_info" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.update_info">update_info</a></code></li>
-<li><code><a title="presalytics.story.revealer.Revealer.update_outline" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.update_outline">update_outline</a></code></li>
-<li><code><a title="presalytics.story.revealer.Revealer.update_outline_from_instances" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.update_outline_from_instances">update_outline_from_instances</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.present" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.present">present</a></code></li>
 </ul>
 </li>
 </ul>

@@ -892,7 +892,7 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -906,7 +906,7 @@ in the keyword argument list.
 For example:
 dict(one=1, two=2)</p></section>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -923,73 +923,27 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.connector_id"><code class="name">var <span class="ident">connector_id</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.name"><code class="name">var <span class="ident">name</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the connector_id of this SharedEffectsDetails.
+<section class="desc"><p>Gets the name of this SharedEffectsDetails.
 # noqa: E501</p>
-<p>:return: The connector_id of this SharedEffectsDetails.
+<p>:return: The name of this SharedEffectsDetails.
 # noqa: E501
 :rtype: str</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L194-L202" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L110-L118" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def connector_id(self):
-    &#34;&#34;&#34;Gets the connector_id of this SharedEffectsDetails.  # noqa: E501
+def name(self):
+    &#34;&#34;&#34;Gets the name of this SharedEffectsDetails.  # noqa: E501
 
 
-    :return: The connector_id of this SharedEffectsDetails.  # noqa: E501
+    :return: The name of this SharedEffectsDetails.  # noqa: E501
     :rtype: str
     &#34;&#34;&#34;
-    return self._connector_id</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.date_created"><code class="name">var <span class="ident">date_created</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the date_created of this SharedEffectsDetails.
-# noqa: E501</p>
-<p>:return: The date_created of this SharedEffectsDetails.
-# noqa: E501
-:rtype: datetime</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L299-L307" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def date_created(self):
-    &#34;&#34;&#34;Gets the date_created of this SharedEffectsDetails.  # noqa: E501
-
-
-    :return: The date_created of this SharedEffectsDetails.  # noqa: E501
-    :rtype: datetime
-    &#34;&#34;&#34;
-    return self._date_created</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.date_modified"><code class="name">var <span class="ident">date_modified</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the date_modified of this SharedEffectsDetails.
-# noqa: E501</p>
-<p>:return: The date_modified of this SharedEffectsDetails.
-# noqa: E501
-:rtype: datetime</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L341-L349" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def date_modified(self):
-    &#34;&#34;&#34;Gets the date_modified of this SharedEffectsDetails.  # noqa: E501
-
-
-    :return: The date_modified of this SharedEffectsDetails.  # noqa: E501
-    :rtype: datetime
-    &#34;&#34;&#34;
-    return self._date_modified</code></pre>
+    return self._name</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_attributes"><code class="name">var <span class="ident">effect_attributes</span></code></dt>
@@ -1015,119 +969,27 @@ def effect_attributes(self):
     return self._effect_attributes</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_map"><code class="name">var <span class="ident">effect_map</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.shape_id"><code class="name">var <span class="ident">shape_id</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the effect_map of this SharedEffectsDetails.
+<section class="desc"><p>Gets the shape_id of this SharedEffectsDetails.
 # noqa: E501</p>
-<p>:return: The effect_map of this SharedEffectsDetails.
-# noqa: E501
-:rtype: object</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L257-L265" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def effect_map(self):
-    &#34;&#34;&#34;Gets the effect_map of this SharedEffectsDetails.  # noqa: E501
-
-
-    :return: The effect_map of this SharedEffectsDetails.  # noqa: E501
-    :rtype: object
-    &#34;&#34;&#34;
-    return self._effect_map</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_map_id"><code class="name">var <span class="ident">effect_map_id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the effect_map_id of this SharedEffectsDetails.
-# noqa: E501</p>
-<p>:return: The effect_map_id of this SharedEffectsDetails.
+<p>:return: The shape_id of this SharedEffectsDetails.
 # noqa: E501
 :rtype: str</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L236-L244" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L152-L160" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def effect_map_id(self):
-    &#34;&#34;&#34;Gets the effect_map_id of this SharedEffectsDetails.  # noqa: E501
+def shape_id(self):
+    &#34;&#34;&#34;Gets the shape_id of this SharedEffectsDetails.  # noqa: E501
 
 
-    :return: The effect_map_id of this SharedEffectsDetails.  # noqa: E501
+    :return: The shape_id of this SharedEffectsDetails.  # noqa: E501
     :rtype: str
     &#34;&#34;&#34;
-    return self._effect_map_id</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.id"><code class="name">var <span class="ident">id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the id of this SharedEffectsDetails.
-# noqa: E501</p>
-<p>:return: The id of this SharedEffectsDetails.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L278-L286" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def id(self):
-    &#34;&#34;&#34;Gets the id of this SharedEffectsDetails.  # noqa: E501
-
-
-    :return: The id of this SharedEffectsDetails.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._id</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.name"><code class="name">var <span class="ident">name</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the name of this SharedEffectsDetails.
-# noqa: E501</p>
-<p>:return: The name of this SharedEffectsDetails.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L110-L118" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def name(self):
-    &#34;&#34;&#34;Gets the name of this SharedEffectsDetails.  # noqa: E501
-
-
-    :return: The name of this SharedEffectsDetails.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._name</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.parent_connector"><code class="name">var <span class="ident">parent_connector</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the parent_connector of this SharedEffectsDetails.
-# noqa: E501</p>
-<p>:return: The parent_connector of this SharedEffectsDetails.
-# noqa: E501
-:rtype: object</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L215-L223" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def parent_connector(self):
-    &#34;&#34;&#34;Gets the parent_connector of this SharedEffectsDetails.  # noqa: E501
-
-
-    :return: The parent_connector of this SharedEffectsDetails.  # noqa: E501
-    :rtype: object
-    &#34;&#34;&#34;
-    return self._parent_connector</code></pre>
+    return self._shape_id</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.parent_shape"><code class="name">var <span class="ident">parent_shape</span></code></dt>
@@ -1153,27 +1015,142 @@ def parent_shape(self):
     return self._parent_shape</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.shape_id"><code class="name">var <span class="ident">shape_id</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.connector_id"><code class="name">var <span class="ident">connector_id</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the shape_id of this SharedEffectsDetails.
+<section class="desc"><p>Gets the connector_id of this SharedEffectsDetails.
 # noqa: E501</p>
-<p>:return: The shape_id of this SharedEffectsDetails.
+<p>:return: The connector_id of this SharedEffectsDetails.
 # noqa: E501
 :rtype: str</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L152-L160" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L194-L202" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def shape_id(self):
-    &#34;&#34;&#34;Gets the shape_id of this SharedEffectsDetails.  # noqa: E501
+def connector_id(self):
+    &#34;&#34;&#34;Gets the connector_id of this SharedEffectsDetails.  # noqa: E501
 
 
-    :return: The shape_id of this SharedEffectsDetails.  # noqa: E501
+    :return: The connector_id of this SharedEffectsDetails.  # noqa: E501
     :rtype: str
     &#34;&#34;&#34;
-    return self._shape_id</code></pre>
+    return self._connector_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.parent_connector"><code class="name">var <span class="ident">parent_connector</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the parent_connector of this SharedEffectsDetails.
+# noqa: E501</p>
+<p>:return: The parent_connector of this SharedEffectsDetails.
+# noqa: E501
+:rtype: object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L215-L223" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def parent_connector(self):
+    &#34;&#34;&#34;Gets the parent_connector of this SharedEffectsDetails.  # noqa: E501
+
+
+    :return: The parent_connector of this SharedEffectsDetails.  # noqa: E501
+    :rtype: object
+    &#34;&#34;&#34;
+    return self._parent_connector</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_map_id"><code class="name">var <span class="ident">effect_map_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the effect_map_id of this SharedEffectsDetails.
+# noqa: E501</p>
+<p>:return: The effect_map_id of this SharedEffectsDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L236-L244" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def effect_map_id(self):
+    &#34;&#34;&#34;Gets the effect_map_id of this SharedEffectsDetails.  # noqa: E501
+
+
+    :return: The effect_map_id of this SharedEffectsDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._effect_map_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_map"><code class="name">var <span class="ident">effect_map</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the effect_map of this SharedEffectsDetails.
+# noqa: E501</p>
+<p>:return: The effect_map of this SharedEffectsDetails.
+# noqa: E501
+:rtype: object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L257-L265" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def effect_map(self):
+    &#34;&#34;&#34;Gets the effect_map of this SharedEffectsDetails.  # noqa: E501
+
+
+    :return: The effect_map of this SharedEffectsDetails.  # noqa: E501
+    :rtype: object
+    &#34;&#34;&#34;
+    return self._effect_map</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the id of this SharedEffectsDetails.
+# noqa: E501</p>
+<p>:return: The id of this SharedEffectsDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L278-L286" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def id(self):
+    &#34;&#34;&#34;Gets the id of this SharedEffectsDetails.  # noqa: E501
+
+
+    :return: The id of this SharedEffectsDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.date_created"><code class="name">var <span class="ident">date_created</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the date_created of this SharedEffectsDetails.
+# noqa: E501</p>
+<p>:return: The date_created of this SharedEffectsDetails.
+# noqa: E501
+:rtype: datetime</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L299-L307" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def date_created(self):
+    &#34;&#34;&#34;Gets the date_created of this SharedEffectsDetails.  # noqa: E501
+
+
+    :return: The date_created of this SharedEffectsDetails.  # noqa: E501
+    :rtype: datetime
+    &#34;&#34;&#34;
+    return self._date_created</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.user_created"><code class="name">var <span class="ident">user_created</span></code></dt>
@@ -1197,6 +1174,29 @@ def user_created(self):
     :rtype: str
     &#34;&#34;&#34;
     return self._user_created</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.date_modified"><code class="name">var <span class="ident">date_modified</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the date_modified of this SharedEffectsDetails.
+# noqa: E501</p>
+<p>:return: The date_modified of this SharedEffectsDetails.
+# noqa: E501
+:rtype: datetime</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.py#L341-L349" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def date_modified(self):
+    &#34;&#34;&#34;Gets the date_modified of this SharedEffectsDetails.  # noqa: E501
+
+
+    :return: The date_modified of this SharedEffectsDetails.  # noqa: E501
+    :rtype: datetime
+    &#34;&#34;&#34;
+    return self._date_modified</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.user_modified"><code class="name">var <span class="ident">user_modified</span></code></dt>
@@ -1296,23 +1296,23 @@ def user_modified(self):
 <li>
 <h4><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails">SharedEffectsDetails</a></code></h4>
 <ul class="two-column">
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.attribute_map">attribute_map</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.connector_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.connector_id">connector_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.date_created" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.date_created">date_created</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.date_modified" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.date_modified">date_modified</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_attributes" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_attributes">effect_attributes</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_map">effect_map</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_map_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_map_id">effect_map_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.id">id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.name" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.name">name</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.openapi_types">openapi_types</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.parent_connector" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.parent_connector">parent_connector</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.parent_shape" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.parent_shape">parent_shape</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.shape_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.shape_id">shape_id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.to_dict" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.to_str" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.to_str">to_str</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.name" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.name">name</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_attributes" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_attributes">effect_attributes</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.shape_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.shape_id">shape_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.parent_shape" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.parent_shape">parent_shape</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.connector_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.connector_id">connector_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.parent_connector" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.parent_connector">parent_connector</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_map_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_map_id">effect_map_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.effect_map">effect_map</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.id">id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.date_created" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.date_created">date_created</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.user_created" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.user_created">user_created</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.date_modified" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.date_modified">date_modified</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.user_modified" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.user_modified">user_modified</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/shared_effects_details.html#presalytics.client.presalytics_ooxml_automation.models.shared_effects_details.SharedEffectsDetails.attribute_map">attribute_map</a></code></li>
 </ul>
 </li>
 </ul>

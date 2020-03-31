@@ -952,7 +952,7 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -966,7 +966,7 @@ in the keyword argument list.
 For example:
 dict(one=1, two=2)</p></section>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -983,6 +983,29 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.slide_master_id"><code class="name">var <span class="ident">slide_master_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the slide_master_id of this SlideColorMaps.
+# noqa: E501</p>
+<p>:return: The slide_master_id of this SlideColorMaps.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.py#L119-L127" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def slide_master_id(self):
+    &#34;&#34;&#34;Gets the slide_master_id of this SlideColorMaps.  # noqa: E501
+
+
+    :return: The slide_master_id of this SlideColorMaps.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._slide_master_id</code></pre>
+</details>
+</dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.accent1"><code class="name">var <span class="ident">accent1</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the accent1 of this SlideColorMaps.
@@ -1121,6 +1144,52 @@ def accent6(self):
     return self._accent6</code></pre>
 </details>
 </dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.text1"><code class="name">var <span class="ident">text1</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the text1 of this SlideColorMaps.
+# noqa: E501</p>
+<p>:return: The text1 of this SlideColorMaps.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.py#L266-L274" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def text1(self):
+    &#34;&#34;&#34;Gets the text1 of this SlideColorMaps.  # noqa: E501
+
+
+    :return: The text1 of this SlideColorMaps.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._text1</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.text2"><code class="name">var <span class="ident">text2</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the text2 of this SlideColorMaps.
+# noqa: E501</p>
+<p>:return: The text2 of this SlideColorMaps.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.py#L287-L295" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def text2(self):
+    &#34;&#34;&#34;Gets the text2 of this SlideColorMaps.  # noqa: E501
+
+
+    :return: The text2 of this SlideColorMaps.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._text2</code></pre>
+</details>
+</dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.background1"><code class="name">var <span class="ident">background1</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the background1 of this SlideColorMaps.
@@ -1167,29 +1236,6 @@ def background2(self):
     return self._background2</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.followed_hyperlink"><code class="name">var <span class="ident">followed_hyperlink</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the followed_hyperlink of this SlideColorMaps.
-# noqa: E501</p>
-<p>:return: The followed_hyperlink of this SlideColorMaps.
-# noqa: E501
-:rtype: int</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.py#L371-L379" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def followed_hyperlink(self):
-    &#34;&#34;&#34;Gets the followed_hyperlink of this SlideColorMaps.  # noqa: E501
-
-
-    :return: The followed_hyperlink of this SlideColorMaps.  # noqa: E501
-    :rtype: int
-    &#34;&#34;&#34;
-    return self._followed_hyperlink</code></pre>
-</details>
-</dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.hyperlink"><code class="name">var <span class="ident">hyperlink</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the hyperlink of this SlideColorMaps.
@@ -1213,6 +1259,29 @@ def hyperlink(self):
     return self._hyperlink</code></pre>
 </details>
 </dd>
+<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.followed_hyperlink"><code class="name">var <span class="ident">followed_hyperlink</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the followed_hyperlink of this SlideColorMaps.
+# noqa: E501</p>
+<p>:return: The followed_hyperlink of this SlideColorMaps.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.py#L371-L379" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def followed_hyperlink(self):
+    &#34;&#34;&#34;Gets the followed_hyperlink of this SlideColorMaps.  # noqa: E501
+
+
+    :return: The followed_hyperlink of this SlideColorMaps.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._followed_hyperlink</code></pre>
+</details>
+</dd>
 <dt id="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.id"><code class="name">var <span class="ident">id</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the id of this SlideColorMaps.
@@ -1234,75 +1303,6 @@ def id(self):
     :rtype: str
     &#34;&#34;&#34;
     return self._id</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.slide_master_id"><code class="name">var <span class="ident">slide_master_id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the slide_master_id of this SlideColorMaps.
-# noqa: E501</p>
-<p>:return: The slide_master_id of this SlideColorMaps.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.py#L119-L127" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def slide_master_id(self):
-    &#34;&#34;&#34;Gets the slide_master_id of this SlideColorMaps.  # noqa: E501
-
-
-    :return: The slide_master_id of this SlideColorMaps.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._slide_master_id</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.text1"><code class="name">var <span class="ident">text1</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the text1 of this SlideColorMaps.
-# noqa: E501</p>
-<p>:return: The text1 of this SlideColorMaps.
-# noqa: E501
-:rtype: int</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.py#L266-L274" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def text1(self):
-    &#34;&#34;&#34;Gets the text1 of this SlideColorMaps.  # noqa: E501
-
-
-    :return: The text1 of this SlideColorMaps.  # noqa: E501
-    :rtype: int
-    &#34;&#34;&#34;
-    return self._text1</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.text2"><code class="name">var <span class="ident">text2</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the text2 of this SlideColorMaps.
-# noqa: E501</p>
-<p>:return: The text2 of this SlideColorMaps.
-# noqa: E501
-:rtype: int</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.py#L287-L295" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def text2(self):
-    &#34;&#34;&#34;Gets the text2 of this SlideColorMaps.  # noqa: E501
-
-
-    :return: The text2 of this SlideColorMaps.  # noqa: E501
-    :rtype: int
-    &#34;&#34;&#34;
-    return self._text2</code></pre>
 </details>
 </dd>
 </dl>
@@ -1379,24 +1379,24 @@ def text2(self):
 <li>
 <h4><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps">SlideColorMaps</a></code></h4>
 <ul class="two-column">
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.to_dict" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.to_dict">to_dict</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.to_str" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.to_str">to_str</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.slide_master_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.slide_master_id">slide_master_id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.accent1" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.accent1">accent1</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.accent2" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.accent2">accent2</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.accent3" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.accent3">accent3</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.accent4" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.accent4">accent4</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.accent5" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.accent5">accent5</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.accent6" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.accent6">accent6</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.attribute_map">attribute_map</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.background1" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.background1">background1</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.background2" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.background2">background2</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.followed_hyperlink" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.followed_hyperlink">followed_hyperlink</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.hyperlink" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.hyperlink">hyperlink</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.id">id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.openapi_types">openapi_types</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.slide_master_id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.slide_master_id">slide_master_id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.text1" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.text1">text1</a></code></li>
 <li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.text2" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.text2">text2</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.to_dict" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.to_dict">to_dict</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.to_str" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.to_str">to_str</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.background1" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.background1">background1</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.background2" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.background2">background2</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.hyperlink" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.hyperlink">hyperlink</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.followed_hyperlink" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.followed_hyperlink">followed_hyperlink</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.id" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.id">id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.openapi_types" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.attribute_map" href="/python-client/presalytics/client/presalytics_ooxml_automation/models/slide_color_maps.html#presalytics.client.presalytics_ooxml_automation.models.slide_color_maps.SlideColorMaps.attribute_map">attribute_map</a></code></li>
 </ul>
 </li>
 </ul>

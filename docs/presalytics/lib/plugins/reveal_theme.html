@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal_theme.py#L0-L101" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal_theme.py#L0-L130" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import os
 import posixpath
@@ -34,12 +34,28 @@ import presalytics.lib.plugins.base
 
 
 class RevealCustomTheme(presalytics.lib.plugins.base.StylePlugin):
+    &#34;&#34;&#34;
+    Plugin to for customizing reveal.js settings for a given story
+
+    This plugin&#39;s configuration dictionary keys and that load them in
+    as variable to a _variables.scss file and compiles the scss using the
+    sass python package. 
+
+    See reveal.js&#39; [Creating a Theme](https://github.com/hakimel/reveal.js/blob/8a54118f43b91030f3965088d5e1c1c7598a5cd3/css/theme/README.md)
+    page for more information regarding configuration values.
+    &#34;&#34;&#34;
     __plugin_name__ = &#39;reveal_custom_theme&#39;
     defaults: typing.Dict[str, str]
 
     fonts_base_url = &#39;https://fonts.googleapis.com/css?family={0}&#39;
+    &#34;&#34;&#34;
+    Google fonts base url for loading fonts via a `&lt;link&gt;` tag 
+    &#34;&#34;&#34;
 
     def to_style(self, config, **kwargs):
+        &#34;&#34;&#34;
+        Returns compiled scss and links to download fonts
+        &#34;&#34;&#34;
         scss_variables = self.defaults
         scss_variables.update(config)
         scss_string = self.get_base_scss(scss_variables)
@@ -49,6 +65,9 @@ class RevealCustomTheme(presalytics.lib.plugins.base.StylePlugin):
         return links + style_string
 
     def get_fonts(self, fonts: typing.List[str]):
+        &#34;&#34;&#34;
+        Creates `&lt;link&gt;` tags from font names
+        &#34;&#34;&#34;
         links = &#34;&#34;
         for font in fonts:
             link = self.get_font_link(font)
@@ -57,6 +76,10 @@ class RevealCustomTheme(presalytics.lib.plugins.base.StylePlugin):
         return links
 
     def get_font_link(self, font_name) -&gt; typing.Optional[str]:
+        &#34;&#34;&#34;
+        Tests whether a given font is available for download form google fonts.  Returns
+        the link tag if available
+        &#34;&#34;&#34;
         test_url = self.fonts_base_url.format(font_name)
         r = requests.get(test_url)
         if r.status_code == 200:
@@ -65,6 +88,9 @@ class RevealCustomTheme(presalytics.lib.plugins.base.StylePlugin):
             return None
 
     def get_base_scss(self, scss_variables):
+        &#34;&#34;&#34;
+        loads the reveal.js scss files into string to be compiled by the sass module
+        &#34;&#34;&#34;
         scss_folder = os.path.join(os.path.dirname(__file__), &#34;scss&#34;)
         mixins_file = os.path.join(scss_folder, &#34;reveal-mixins.scss&#34;)
         settings_file = os.path.join(scss_folder, &#34;reveal-settings.scss&#34;)
@@ -126,7 +152,10 @@ class RevealCustomTheme(presalytics.lib.plugins.base.StylePlugin):
         # Text selection
         &#34;selection_background_color&#34;: &#34;#FF5E99&#34;,
         &#34;selection_color&#34;: &#34;#fff&#34;
-    }</code></pre>
+    }
+    &#34;&#34;&#34;
+    Default reveal.js theme configuration for presalytics stories
+    &#34;&#34;&#34;</code></pre>
 </details>
 </section>
 <section>
@@ -143,20 +172,40 @@ class RevealCustomTheme(presalytics.lib.plugins.base.StylePlugin):
 <span>(</span><span>**kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>A script plugin render configures templated scripts to append to the body
-tag of an html document</p></section>
+<section class="desc"><p>Plugin to for customizing reveal.js settings for a given story</p>
+<p>This plugin's configuration dictionary keys and that load them in
+as variable to a _variables.scss file and compiles the scss using the
+sass python package. </p>
+<p>See reveal.js' <a href="https://github.com/hakimel/reveal.js/blob/8a54118f43b91030f3965088d5e1c1c7598a5cd3/css/theme/README.md">Creating a Theme</a>
+page for more information regarding configuration values.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal_theme.py#L9-L102" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal_theme.py#L9-L131" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class RevealCustomTheme(presalytics.lib.plugins.base.StylePlugin):
+    &#34;&#34;&#34;
+    Plugin to for customizing reveal.js settings for a given story
+
+    This plugin&#39;s configuration dictionary keys and that load them in
+    as variable to a _variables.scss file and compiles the scss using the
+    sass python package. 
+
+    See reveal.js&#39; [Creating a Theme](https://github.com/hakimel/reveal.js/blob/8a54118f43b91030f3965088d5e1c1c7598a5cd3/css/theme/README.md)
+    page for more information regarding configuration values.
+    &#34;&#34;&#34;
     __plugin_name__ = &#39;reveal_custom_theme&#39;
     defaults: typing.Dict[str, str]
 
     fonts_base_url = &#39;https://fonts.googleapis.com/css?family={0}&#39;
+    &#34;&#34;&#34;
+    Google fonts base url for loading fonts via a `&lt;link&gt;` tag 
+    &#34;&#34;&#34;
 
     def to_style(self, config, **kwargs):
+        &#34;&#34;&#34;
+        Returns compiled scss and links to download fonts
+        &#34;&#34;&#34;
         scss_variables = self.defaults
         scss_variables.update(config)
         scss_string = self.get_base_scss(scss_variables)
@@ -166,6 +215,9 @@ tag of an html document</p></section>
         return links + style_string
 
     def get_fonts(self, fonts: typing.List[str]):
+        &#34;&#34;&#34;
+        Creates `&lt;link&gt;` tags from font names
+        &#34;&#34;&#34;
         links = &#34;&#34;
         for font in fonts:
             link = self.get_font_link(font)
@@ -174,6 +226,10 @@ tag of an html document</p></section>
         return links
 
     def get_font_link(self, font_name) -&gt; typing.Optional[str]:
+        &#34;&#34;&#34;
+        Tests whether a given font is available for download form google fonts.  Returns
+        the link tag if available
+        &#34;&#34;&#34;
         test_url = self.fonts_base_url.format(font_name)
         r = requests.get(test_url)
         if r.status_code == 200:
@@ -182,6 +238,9 @@ tag of an html document</p></section>
             return None
 
     def get_base_scss(self, scss_variables):
+        &#34;&#34;&#34;
+        loads the reveal.js scss files into string to be compiled by the sass module
+        &#34;&#34;&#34;
         scss_folder = os.path.join(os.path.dirname(__file__), &#34;scss&#34;)
         mixins_file = os.path.join(scss_folder, &#34;reveal-mixins.scss&#34;)
         settings_file = os.path.join(scss_folder, &#34;reveal-settings.scss&#34;)
@@ -243,7 +302,10 @@ tag of an html document</p></section>
         # Text selection
         &#34;selection_background_color&#34;: &#34;#FF5E99&#34;,
         &#34;selection_color&#34;: &#34;#fff&#34;
-    }</code></pre>
+    }
+    &#34;&#34;&#34;
+    Default reveal.js theme configuration for presalytics stories
+    &#34;&#34;&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -257,46 +319,101 @@ tag of an html document</p></section>
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.defaults"><code class="name">var <span class="ident">defaults</span></code></dt>
-<dd>
-<section class="desc"><p>dict() -&gt; new empty dictionary
-dict(mapping) -&gt; new dictionary initialized from a mapping object's
-(key, value) pairs
-dict(iterable) -&gt; new dictionary initialized as if via:
-d = {}
-for k, v in iterable:
-d[k] = v
-dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
-in the keyword argument list.
-For example:
-dict(one=1, two=2)</p></section>
-</dd>
 <dt id="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.fonts_base_url"><code class="name">var <span class="ident">fonts_base_url</span></code></dt>
 <dd>
-<section class="desc"><p>str(object='') -&gt; str
-str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
-<p>Create a new string object from the given object. If encoding or
-errors is specified, then the object must expose a data buffer
-that will be decoded using the given encoding and error handler.
-Otherwise, returns the result of object.<strong>str</strong>() (if defined)
-or repr(object).
-encoding defaults to sys.getdefaultencoding().
-errors defaults to 'strict'.</p></section>
+<section class="desc"><p>Google fonts base url for loading fonts via a <code>&lt;link&gt;</code> tag</p></section>
+</dd>
+<dt id="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.defaults"><code class="name">var <span class="ident">defaults</span></code></dt>
+<dd>
+<section class="desc"><p>Default reveal.js theme configuration for presalytics stories</p></section>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.to_style"><code class="name flex">
+<span>def <span class="ident">to_style</span></span>(<span>self, config, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns compiled scss and links to download fonts</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal_theme.py#L28-L38" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_style(self, config, **kwargs):
+    &#34;&#34;&#34;
+    Returns compiled scss and links to download fonts
+    &#34;&#34;&#34;
+    scss_variables = self.defaults
+    scss_variables.update(config)
+    scss_string = self.get_base_scss(scss_variables)
+    new_css = sass.compile(string=scss_string)
+    style_string = &#34;&lt;style&gt;\n{0}\n&lt;/style&gt;&#34;.format(new_css)
+    links = self.get_fonts(config[&#34;fonts&#34;])
+    return links + style_string</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_fonts"><code class="name flex">
+<span>def <span class="ident">get_fonts</span></span>(<span>self, fonts)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Creates <code>&lt;link&gt;</code> tags from font names</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal_theme.py#L40-L49" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_fonts(self, fonts: typing.List[str]):
+    &#34;&#34;&#34;
+    Creates `&lt;link&gt;` tags from font names
+    &#34;&#34;&#34;
+    links = &#34;&#34;
+    for font in fonts:
+        link = self.get_font_link(font)
+        if link:
+            links = links + link + &#34;\n&#34;
+    return links</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_font_link"><code class="name flex">
+<span>def <span class="ident">get_font_link</span></span>(<span>self, font_name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Tests whether a given font is available for download form google fonts.
+Returns
+the link tag if available</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal_theme.py#L51-L61" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_font_link(self, font_name) -&gt; typing.Optional[str]:
+    &#34;&#34;&#34;
+    Tests whether a given font is available for download form google fonts.  Returns
+    the link tag if available
+    &#34;&#34;&#34;
+    test_url = self.fonts_base_url.format(font_name)
+    r = requests.get(test_url)
+    if r.status_code == 200:
+        return &#39;&lt;link href=&#34;{0}&#34; rel=&#34;stylesheet&#34;&gt;&#39;.format(test_url)
+    else:
+        return None</code></pre>
+</details>
+</dd>
 <dt id="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_base_scss"><code class="name flex">
 <span>def <span class="ident">get_base_scss</span></span>(<span>self, scss_variables)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>loads the reveal.js scss files into string to be compiled by the sass module</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal_theme.py#L40-L62" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal_theme.py#L63-L88" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_base_scss(self, scss_variables):
+    &#34;&#34;&#34;
+    loads the reveal.js scss files into string to be compiled by the sass module
+    &#34;&#34;&#34;
     scss_folder = os.path.join(os.path.dirname(__file__), &#34;scss&#34;)
     mixins_file = os.path.join(scss_folder, &#34;reveal-mixins.scss&#34;)
     settings_file = os.path.join(scss_folder, &#34;reveal-settings.scss&#34;)
@@ -321,51 +438,12 @@ errors defaults to 'strict'.</p></section>
     return scss_string</code></pre>
 </details>
 </dd>
-<dt id="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_font_link"><code class="name flex">
-<span>def <span class="ident">get_font_link</span></span>(<span>self, font_name) -> Union[str, NoneType]</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal_theme.py#L32-L38" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def get_font_link(self, font_name) -&gt; typing.Optional[str]:
-    test_url = self.fonts_base_url.format(font_name)
-    r = requests.get(test_url)
-    if r.status_code == 200:
-        return &#39;&lt;link href=&#34;{0}&#34; rel=&#34;stylesheet&#34;&gt;&#39;.format(test_url)
-    else:
-        return None</code></pre>
-</details>
-</dd>
-<dt id="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_fonts"><code class="name flex">
-<span>def <span class="ident">get_fonts</span></span>(<span>self, fonts: List[str])</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal_theme.py#L24-L30" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def get_fonts(self, fonts: typing.List[str]):
-    links = &#34;&#34;
-    for font in fonts:
-        link = self.get_font_link(font)
-        if link:
-            links = links + link + &#34;\n&#34;
-    return links</code></pre>
-</details>
-</dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="presalytics.lib.plugins.base.StylePlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin">StylePlugin</a></b></code>:
 <ul class="hlist">
 <li><code><a title="presalytics.lib.plugins.base.StylePlugin.get_tag" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase.get_tag">get_tag</a></code></li>
-<li><code><a title="presalytics.lib.plugins.base.StylePlugin.to_style" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin.to_style">to_style</a></code></li>
 </ul>
 </li>
 </ul>
@@ -388,12 +466,13 @@ errors defaults to 'strict'.</p></section>
 <ul>
 <li>
 <h4><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme">RevealCustomTheme</a></code></h4>
-<ul class="">
-<li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.defaults" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme.defaults">defaults</a></code></li>
-<li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.fonts_base_url" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme.fonts_base_url">fonts_base_url</a></code></li>
-<li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_base_scss" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_base_scss">get_base_scss</a></code></li>
-<li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_font_link" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_font_link">get_font_link</a></code></li>
+<ul class="two-column">
+<li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.to_style" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme.to_style">to_style</a></code></li>
 <li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_fonts" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_fonts">get_fonts</a></code></li>
+<li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_font_link" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_font_link">get_font_link</a></code></li>
+<li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_base_scss" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme.get_base_scss">get_base_scss</a></code></li>
+<li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.fonts_base_url" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme.fonts_base_url">fonts_base_url</a></code></li>
+<li><code><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme.defaults" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme.defaults">defaults</a></code></li>
 </ul>
 </li>
 </ul>

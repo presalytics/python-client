@@ -434,7 +434,7 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -448,7 +448,7 @@ in the keyword argument list.
 For example:
 dict(one=1, two=2)</p></section>
 </dd>
-<dt id="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -465,6 +465,29 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
+<dt id="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.title"><code class="name">var <span class="ident">title</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the title of this ProblemDetail.
+# noqa: E501</p>
+<p>:return: The title of this ProblemDetail.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/problem_detail.py#L70-L78" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def title(self):
+    &#34;&#34;&#34;Gets the title of this ProblemDetail.  # noqa: E501
+
+
+    :return: The title of this ProblemDetail.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._title</code></pre>
+</details>
+</dd>
 <dt id="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.detail"><code class="name">var <span class="ident">detail</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the detail of this ProblemDetail.
@@ -509,29 +532,6 @@ def status(self):
     :rtype: int
     &#34;&#34;&#34;
     return self._status</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.title"><code class="name">var <span class="ident">title</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the title of this ProblemDetail.
-# noqa: E501</p>
-<p>:return: The title of this ProblemDetail.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/problem_detail.py#L70-L78" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def title(self):
-    &#34;&#34;&#34;Gets the title of this ProblemDetail.  # noqa: E501
-
-
-    :return: The title of this ProblemDetail.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._title</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.type"><code class="name">var <span class="ident">type</span></code></dt>
@@ -631,14 +631,14 @@ def type(self):
 <li>
 <h4><code><a title="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail" href="/python-client/presalytics/client/presalytics_story/models/problem_detail.html#presalytics.client.presalytics_story.models.problem_detail.ProblemDetail">ProblemDetail</a></code></h4>
 <ul class="two-column">
-<li><code><a title="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.attribute_map" href="/python-client/presalytics/client/presalytics_story/models/problem_detail.html#presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.attribute_map">attribute_map</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.detail" href="/python-client/presalytics/client/presalytics_story/models/problem_detail.html#presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.detail">detail</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.openapi_types" href="/python-client/presalytics/client/presalytics_story/models/problem_detail.html#presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.openapi_types">openapi_types</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.status" href="/python-client/presalytics/client/presalytics_story/models/problem_detail.html#presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.status">status</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.title" href="/python-client/presalytics/client/presalytics_story/models/problem_detail.html#presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.title">title</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.to_dict" href="/python-client/presalytics/client/presalytics_story/models/problem_detail.html#presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.to_str" href="/python-client/presalytics/client/presalytics_story/models/problem_detail.html#presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.to_str">to_str</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.title" href="/python-client/presalytics/client/presalytics_story/models/problem_detail.html#presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.title">title</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.detail" href="/python-client/presalytics/client/presalytics_story/models/problem_detail.html#presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.detail">detail</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.status" href="/python-client/presalytics/client/presalytics_story/models/problem_detail.html#presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.status">status</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.type" href="/python-client/presalytics/client/presalytics_story/models/problem_detail.html#presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.type">type</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.openapi_types" href="/python-client/presalytics/client/presalytics_story/models/problem_detail.html#presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.attribute_map" href="/python-client/presalytics/client/presalytics_story/models/problem_detail.html#presalytics.client.presalytics_story.models.problem_detail.ProblemDetail.attribute_map">attribute_map</a></code></li>
 </ul>
 </li>
 </ul>

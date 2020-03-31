@@ -590,7 +590,7 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -604,7 +604,7 @@ in the keyword argument list.
 For example:
 dict(one=1, two=2)</p></section>
 </dd>
-<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
 <dd>
 <section class="desc"><p>dict() -&gt; new empty dictionary
 dict(mapping) -&gt; new dictionary initialized from a mapping object's
@@ -621,73 +621,27 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.collaborators"><code class="name">var <span class="ident">collaborators</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.title"><code class="name">var <span class="ident">title</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the collaborators of this StoryAllOf.
+<section class="desc"><p>Gets the title of this StoryAllOf.
 # noqa: E501</p>
-<p>:return: The collaborators of this StoryAllOf.
+<p>:return: The title of this StoryAllOf.
 # noqa: E501
-:rtype: list[StoryCollaborator]</p></section>
+:rtype: str</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L148-L156" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L85-L93" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def collaborators(self):
-    &#34;&#34;&#34;Gets the collaborators of this StoryAllOf.  # noqa: E501
+def title(self):
+    &#34;&#34;&#34;Gets the title of this StoryAllOf.  # noqa: E501
 
 
-    :return: The collaborators of this StoryAllOf.  # noqa: E501
-    :rtype: list[StoryCollaborator]
+    :return: The title of this StoryAllOf.  # noqa: E501
+    :rtype: str
     &#34;&#34;&#34;
-    return self._collaborators</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.is_public"><code class="name">var <span class="ident">is_public</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the is_public of this StoryAllOf.
-# noqa: E501</p>
-<p>:return: The is_public of this StoryAllOf.
-# noqa: E501
-:rtype: bool</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L211-L219" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def is_public(self):
-    &#34;&#34;&#34;Gets the is_public of this StoryAllOf.  # noqa: E501
-
-
-    :return: The is_public of this StoryAllOf.  # noqa: E501
-    :rtype: bool
-    &#34;&#34;&#34;
-    return self._is_public</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.ooxml_documents"><code class="name">var <span class="ident">ooxml_documents</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the ooxml_documents of this StoryAllOf.
-# noqa: E501</p>
-<p>:return: The ooxml_documents of this StoryAllOf.
-# noqa: E501
-:rtype: list[OoxmlDocument]</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L190-L198" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def ooxml_documents(self):
-    &#34;&#34;&#34;Gets the ooxml_documents of this StoryAllOf.  # noqa: E501
-
-
-    :return: The ooxml_documents of this StoryAllOf.  # noqa: E501
-    :rtype: list[OoxmlDocument]
-    &#34;&#34;&#34;
-    return self._ooxml_documents</code></pre>
+    return self._title</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.outline"><code class="name">var <span class="ident">outline</span></code></dt>
@@ -736,6 +690,29 @@ def outline_history(self):
     return self._outline_history</code></pre>
 </details>
 </dd>
+<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.collaborators"><code class="name">var <span class="ident">collaborators</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the collaborators of this StoryAllOf.
+# noqa: E501</p>
+<p>:return: The collaborators of this StoryAllOf.
+# noqa: E501
+:rtype: list[StoryCollaborator]</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L148-L156" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def collaborators(self):
+    &#34;&#34;&#34;Gets the collaborators of this StoryAllOf.  # noqa: E501
+
+
+    :return: The collaborators of this StoryAllOf.  # noqa: E501
+    :rtype: list[StoryCollaborator]
+    &#34;&#34;&#34;
+    return self._collaborators</code></pre>
+</details>
+</dd>
 <dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.revision"><code class="name">var <span class="ident">revision</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the revision of this StoryAllOf.
@@ -759,27 +736,50 @@ def revision(self):
     return self._revision</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.title"><code class="name">var <span class="ident">title</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.ooxml_documents"><code class="name">var <span class="ident">ooxml_documents</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the title of this StoryAllOf.
+<section class="desc"><p>Gets the ooxml_documents of this StoryAllOf.
 # noqa: E501</p>
-<p>:return: The title of this StoryAllOf.
+<p>:return: The ooxml_documents of this StoryAllOf.
 # noqa: E501
-:rtype: str</p></section>
+:rtype: list[OoxmlDocument]</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L85-L93" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L190-L198" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def title(self):
-    &#34;&#34;&#34;Gets the title of this StoryAllOf.  # noqa: E501
+def ooxml_documents(self):
+    &#34;&#34;&#34;Gets the ooxml_documents of this StoryAllOf.  # noqa: E501
 
 
-    :return: The title of this StoryAllOf.  # noqa: E501
-    :rtype: str
+    :return: The ooxml_documents of this StoryAllOf.  # noqa: E501
+    :rtype: list[OoxmlDocument]
     &#34;&#34;&#34;
-    return self._title</code></pre>
+    return self._ooxml_documents</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.is_public"><code class="name">var <span class="ident">is_public</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the is_public of this StoryAllOf.
+# noqa: E501</p>
+<p>:return: The is_public of this StoryAllOf.
+# noqa: E501
+:rtype: bool</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L211-L219" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def is_public(self):
+    &#34;&#34;&#34;Gets the is_public of this StoryAllOf.  # noqa: E501
+
+
+    :return: The is_public of this StoryAllOf.  # noqa: E501
+    :rtype: bool
+    &#34;&#34;&#34;
+    return self._is_public</code></pre>
 </details>
 </dd>
 </dl>
@@ -856,17 +856,17 @@ def title(self):
 <li>
 <h4><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf">StoryAllOf</a></code></h4>
 <ul class="two-column">
-<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.attribute_map" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.attribute_map">attribute_map</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.collaborators" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.collaborators">collaborators</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.is_public" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.is_public">is_public</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.ooxml_documents" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.ooxml_documents">ooxml_documents</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.openapi_types" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.openapi_types">openapi_types</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.outline" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.outline">outline</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.outline_history" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.outline_history">outline_history</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.revision" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.revision">revision</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.title" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.title">title</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.to_dict" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.to_str" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.to_str">to_str</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.title" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.title">title</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.outline" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.outline">outline</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.outline_history" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.outline_history">outline_history</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.collaborators" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.collaborators">collaborators</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.revision" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.revision">revision</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.ooxml_documents" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.ooxml_documents">ooxml_documents</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.is_public" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.is_public">is_public</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.openapi_types" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.attribute_map" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.attribute_map">attribute_map</a></code></li>
 </ul>
 </li>
 </ul>

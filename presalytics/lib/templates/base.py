@@ -158,7 +158,7 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
 
     def get_template_name(self):
         """
-        Requires subclasses have either a `__template_file__` class property, a or override this method
+        Requires subclasses have either a `__template_file__` class property, or override this method
         """
         if self.__template_file__:
             return self.__template_file__

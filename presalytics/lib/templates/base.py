@@ -155,6 +155,8 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
         for plugin_data in self.__plugins__:
             updated_plugins.append(presalytics.story.outline.Plugin(**plugin_data))
         self.outline_page.plugins = updated_plugins
+        if self.template_string:
+            self.outline_page.additional_properties["template_string"] = self.template_string
         return self.outline_page
 
     def get_template_name(self):
@@ -175,7 +177,7 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
         elif self.template_string:
             self.render_from_backup_string(**kwargs)
         else:
-            raise presalytics.lib.exceptions.MissingConfigException("Missing __template_file__: {}".format(self.__template_file__))
+            raise presalytics.lib.exceptions.MissingConfigException("Missing __template_file__: {}".format(self.get_template_name()))
 
     def _make_context(self):
         context = {
@@ -343,6 +345,8 @@ class BootstrapCustomTemplate(JinjaTemplateBuilder):
         return self.template_file
 
     def serialize(self):
+        if self.template_string:
+            self.outline_page.additional_properties["template_string"] = self.template_string
         return self.outline_page
 
 

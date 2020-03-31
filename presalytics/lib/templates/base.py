@@ -172,7 +172,7 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
         if self.is_template_local:
             return self.render_from_file(**kwargs)
         elif self.template_string:
-            self.render_from_backup_string(**kwargs)
+            return self.render_from_backup_string(**kwargs)
         else:
             raise presalytics.lib.exceptions.MissingConfigException("Missing __template_file__: {}".format(self.get_template_name()))
 

@@ -129,9 +129,6 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
         if len(kwargs.keys()) > 0:
             self.outline_page.additional_properties.update(kwargs)
 
-
-        
-
     @classmethod
     def deserialize(cls, component, **kwargs):
         return cls(component, **kwargs)

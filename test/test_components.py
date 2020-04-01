@@ -151,6 +151,9 @@ class TestComponents(unittest.TestCase):
         df = updater.get_dataframe()
         updater.put_dataframe(df)
 
+        html = updater.to_html()
+
+        self.assertTrue(len(html) > 0)
 
         widget = updater.serialize()
 

@@ -707,6 +707,13 @@ class UpdaterWidgetBase(OoxmlWidgetBase):
         setattr(dto, self._get_dto_table_name(), data_table)
         self.put_dto(dto)
 
+    def to_html(self):
+        """
+        Returns html for this object
+        """
+        self.svg_html = self.create_container()
+        return self.svg_html
+
     def serialize(self):
         data = {
             "story_id": self.story_id,
@@ -734,8 +741,6 @@ class UpdaterWidgetBase(OoxmlWidgetBase):
         )
 
         
-
-
 class ChartUpdaterWidget(UpdaterWidgetBase):
     """
     Updates a Chart in the Ooxml Automation service API at the the endpoint '/Chart/ChartUpdate/'

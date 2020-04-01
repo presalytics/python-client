@@ -779,7 +779,7 @@ class ChartUpdaterWidget(UpdaterWidgetBase):
                 dto: 'ChartChartDataDTO' = None, 
                 data_table: typing.Sequence[typing.Sequence] = None,
                 **kwargs):
-        super().__init__(name, story_id, chart_id, OoxmlEndpointMap.chart(), dto=dto, data_table=data_table)
+        super().__init__(name, story_id, chart_id, OoxmlEndpointMap.chart(), dto=dto, data_table=data_table, **kwargs)
         self.chart_id = chart_id
 
 
@@ -856,7 +856,7 @@ class TableUpdaterWidget(UpdaterWidgetBase):
                 dto: 'TableTableDataDTO' = None, 
                 data_table: typing.Sequence[typing.Sequence] = None,
                 **kwargs):
-        super().__init__(name, story_id, table_id, OoxmlEndpointMap.table(), dto=dto, data_table=data_table)
+        super().__init__(name, story_id, table_id, OoxmlEndpointMap.table(), dto=dto, data_table=data_table, **kwargs)
         self.table_id = table_id
 
 

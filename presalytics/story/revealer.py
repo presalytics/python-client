@@ -91,6 +91,14 @@ class Revealer(presalytics.story.components.Renderer):
         base = lxml.etree.Element("div", attrib={"class": "reveal"})
         lxml.etree.SubElement(base, "div", attrib={"class": "slides"})
         return base
+    
+    def get_meta_tags(self):
+        tags = [
+            '<meta charset="utf-8">',
+            '<meta http-equiv="X-UA-Compatible" content="IE=edge">'
+            '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">'
+        ]
+        return tags
 
     def package_as_standalone(self):
         """
@@ -110,6 +118,9 @@ class Revealer(presalytics.story.components.Renderer):
             for item in lxml_scripts:
                 body.append(item)
         head = E.HEAD()
+        for meta in self.get_meta_tags():
+            lxml_meta = lxml.html.fragment_fromstring(meta)
+            head.append(lxml_meta)
         for link in self.plugin_mgr.get_styles():
             lxml_links = lxml.html.fragments_fromstring(link)
             for item in lxml_links:

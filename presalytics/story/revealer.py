@@ -95,7 +95,7 @@ class Revealer(presalytics.story.components.Renderer):
     def get_meta_tags(self):
         tags = [
             '<meta charset="utf-8">',
-            '<meta http-equiv="X-UA-Compatible" content="IE=edge">'
+            '<meta http-equiv="X-UA-Compatible" content="IE=edge">',
             '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">'
         ]
         return tags

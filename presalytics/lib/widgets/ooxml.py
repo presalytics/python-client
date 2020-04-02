@@ -323,6 +323,7 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
 
 
     def to_html(self, **kwargs):
+        self.svg_html = self.create_container()
         return self.svg_html
 
     def get_svg(self, id, timeout_iterator=0) -> str:

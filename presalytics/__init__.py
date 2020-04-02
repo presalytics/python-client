@@ -188,10 +188,11 @@ from presalytics.lib.templates.base import (
 )
 from presalytics.lib.widgets.matplotlib import MatplotlibFigure, MatplotlibResponsiveFigure
 from presalytics.lib.widgets.ooxml import (
+    OoxmlWidgetBase,
     OoxmlFileWidget, 
     OoxmlEndpointMap,
     ChartUpdaterWidget,
-    TableUpdaterWidget,
+    TableUpdaterWidget
 )
 from presalytics.story.outline import StoryOutline
 from presalytics.story.revealer import Revealer
@@ -224,6 +225,7 @@ __all__ = [
     'MatplotlibResponsiveFigure',
     'OoxmlFileWidget',
     'OoxmlEndpointMap',
+    'OoxmlWidgetBase',
     'OoxmlEditorWidget',
     'ChartUpdaterWidget',
     'TableUpdaterWidget',

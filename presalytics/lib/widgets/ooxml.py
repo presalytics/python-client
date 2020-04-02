@@ -323,6 +323,9 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
 
 
     def to_html(self, **kwargs):
+        """
+        Returns an html string that will render the object at the endpoint
+        """
         self.svg_html = self.create_container()
         return self.svg_html
 
@@ -347,6 +350,9 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         return svg_data
 
     def get_svg_file(self, filename=None):
+        """
+        Writes an svg representation of the object to current working directory.  Filname is optional.
+        """
         if not filename:
             filename = self.endpoint_map.get_object_type() + "-" + self.object_ooxml_id + ".pptx"
         with open(filename, 'w') as f:
@@ -707,13 +713,6 @@ class UpdaterWidgetBase(OoxmlWidgetBase):
         dto = self.get_dto()
         setattr(dto, self._get_dto_table_name(), data_table)
         self.put_dto(dto)
-
-    def to_html(self):
-        """
-        Returns html for this object
-        """
-        self.svg_html = self.create_container()
-        return self.svg_html
 
     def serialize(self):
         data = {

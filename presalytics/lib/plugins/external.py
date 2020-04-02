@@ -73,7 +73,7 @@ class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
             'customizations': '{0}/static/css/reveal-customizations.css'.format(site_host) 
         },
         'preloaders' : '{0}/static/css/preloaders.css'.format(site_host),
-        'bootstrap4': "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        'bootstrap4': "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     }
     
     """
@@ -132,7 +132,7 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
         'mpl-responsive': '{0}/static/js/mpl-responsive.js'.format(site_host),
         'jquery': 'https://code.jquery.com/jquery-3.4.1.min.js',
         'popper': 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js',
-        'bootstrap4': 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js'
+        'bootstrap4': 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js'
     }
     """
     Static nested dictionary containing links to external scripts that will be rendered alongside this plugin

@@ -69,7 +69,8 @@ class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
                 'solarized': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/solarized.min.css',
                 'white': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css'
             },
-            'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css'
+            'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css',
+            'customizations': '{0}/static/css/reveal-customizations.css'.format(site_host) 
         },
         'preloaders' : '{0}/static/css/preloaders.css'.format(site_host),
         'bootstrap4': "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
@@ -122,7 +123,8 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
             'math': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js',
             'zoom': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js',
             'notes': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js',
-            'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js'
+            'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js',
+            'customizations': '{0}/static/js/reveal-customizations.js'.format(site_host),
 
         },
         'mpld3': '{0}/static/mpld3/mpld3.min.js'.format(site_host),

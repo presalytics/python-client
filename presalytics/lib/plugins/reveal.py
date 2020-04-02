@@ -34,6 +34,22 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
                 'approved_styles_key': 'reveal.themes.white'
             }
         },
+        {
+            'kind': 'style',
+            'name': 'external_links',
+            'config': {
+                'approved_styles_key': 'reveal.customizations'
+            }
+        },
+        {
+            'kind': 'script',
+            'name': 'external_scripts',
+            'config': {
+                'approved_scripts_key': 'reveal.customizations'
+            }
+        },
+        
+        
     ]
 
     def to_script(self, config, **kwargs):

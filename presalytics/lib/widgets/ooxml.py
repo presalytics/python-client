@@ -258,6 +258,8 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
     endpoint_map: OoxmlEndpointMap
     data: typing.Dict
 
+    __component_kind__ = "ooxml-base-widget"
+
     __plugins__ = [
         {
             'name': 'external_scripts',
@@ -357,6 +359,30 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
             filename = self.endpoint_map.get_object_type() + "-" + self.object_ooxml_id + ".pptx"
         with open(filename, 'w') as f:
             f.write(self.get_svg(self.object_ooxml_id))
+
+    def serialize(self):
+        data = {
+            "story_id": self.story_id,
+            "object_id": self.object_ooxml_id,
+            "endpoint_id": self.endpoint_map.endpoint_id
+        }
+        widget = presalytics.story.outline.Widget(
+            name=self.name,
+            kind=self.__component_kind__,
+            data=data,
+            plugins=None
+        )
+        return widget
+
+    @classmethod
+    def deserialize(cls, component, **kwargs):
+        return cls(
+            component.name, 
+            component.data["story_id"], 
+            component.data["object_id"],
+            OoxmlEndpointMap(component.data["endpoint_id"])
+            **kwargs
+        )
 
 
 class OoxmlFileWidget(OoxmlWidgetBase):

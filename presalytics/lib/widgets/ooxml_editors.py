@@ -237,7 +237,7 @@ class TextReplace(XmlTransformBase):
             match_key = "{{" + key + "}}"
             match_start_position =  info_list.get_position(match_key)
             if match_start_position > -1:
-                match_end_position = match_start_position + len(match_key)
+                match_end_position = match_start_position + len(match_key) - 1
                 match_start_index = info_list.get_list_index_of_position(match_start_position)
                 match_end_index = info_list.get_list_index_of_position(match_end_position)
                 if match_start_index < match_end_index:

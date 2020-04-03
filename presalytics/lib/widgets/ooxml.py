@@ -380,7 +380,7 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
             component.name, 
             component.data["story_id"], 
             component.data["object_id"],
-            OoxmlEndpointMap(component.data["endpoint_id"])
+            OoxmlEndpointMap(component.data["endpoint_id"]),
             **kwargs
         )
 

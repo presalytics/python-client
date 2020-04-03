@@ -113,8 +113,8 @@ class RenderExceptionHandler(object):
         self.exception = exception
         self.target_type = target_type
         self.exception_type = self.exception.__class__.__name__
-        first_frame = self.get_source_frame(traceback)
         try: 
+            first_frame = self.get_source_frame(traceback)
             self.source_module = first_frame.tb_frame.f_globals['__name__']
         except Exception:
             self.source_module = "unidentitied"

@@ -17,6 +17,7 @@ import presalytics
 import presalytics.lib
 import presalytics.lib.plugins
 import presalytics.lib.plugins.base
+import presalytics.lib.plugins.reveal
 import presalytics.lib.templates
 import presalytics.lib.templates.base
 import presalytics.story.util
@@ -55,6 +56,7 @@ class Revealer(presalytics.story.components.Renderer):
 
     """
     base: lxml.etree.Element
+    reveal_params: typing.Dict[str, typing.Any]
 
     __component_kind__ = 'revealer'
 
@@ -67,10 +69,14 @@ class Revealer(presalytics.story.components.Renderer):
         self.story_outline.validate()
         self.base = self._make_base()
         logger.info("Loading plugins")
+        reveal_params = {}
+        for key, val in kwargs.items():
+            if key in presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config.keys():
+                reveal_params.update({key, val})
         reveal_plugin_config = {
             'kind': 'script',
             'name': 'reveal',
-            'config': {}
+            'config': {"reveal_params": reveal_params} if len(reveal_params.keys()) > 0 else {}
         }
         overrides_config = {
             'kind': 'style',

@@ -72,7 +72,7 @@ class Revealer(presalytics.story.components.Renderer):
         reveal_params = {}
         for key, val in kwargs.items():
             if key in presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config.keys():
-                reveal_params.update({key, val})
+                reveal_params.update({key: val})
         reveal_plugin_config = {
             'kind': 'script',
             'name': 'reveal',

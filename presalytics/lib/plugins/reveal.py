@@ -112,7 +112,7 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
         'touch': True,
 
         # Loop the presentation
-        'loop': False,
+        'loop': True,
 
         # Change the presentation direction to be RTL
         'rtl': False,

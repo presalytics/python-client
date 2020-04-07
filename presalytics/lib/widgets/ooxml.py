@@ -312,7 +312,7 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
             'data-object-type': self.endpoint_map.endpoint_id,
             'data-object-id': self.object_ooxml_id
         })
-        preloader_container_div = lxml.etree.SubElement(svg_container_div, "div", attrib={"class":"preloader-container"})
+        preloader_container_div = lxml.html.Element( "div", {"class":"preloader-container"})
         preloader_row_div = lxml.etree.SubElement(preloader_container_div, "div", attrib={"class":"preloader-row"})
         preloader_file = os.path.join(os.path.dirname(__file__), "img", "preloader.svg")
         svg = lxml.html.parse(preloader_file)
@@ -320,7 +320,7 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         empty_parent_div = lxml.html.Element("div", {
             'class': 'empty-parent bg-light'
         })
-        empty_parent_div.append(svg_container_div)
+        empty_parent_div.extend([svg_container_div, preloader_container_div])
         return lxml.html.tostring(empty_parent_div)
 
 

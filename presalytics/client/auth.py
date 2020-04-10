@@ -62,12 +62,18 @@ class TokenUtil(object):
             return True
 
     def _load_token_file(self):
-        if self.token_cache:
-            self.token = self.load_token_from_file(self.token_file)
+        try:
+            if self.token_cache:
+                self.token = self.load_token_from_file(self.token_file)
+        except Exception:
+            logger.error("Unable to load token from cache.  If you do want intend to cache tokens, use configuration CACHE_TOKENS=False")
 
     def _put_token_file(self):
-        if self.token_cache:
-            self.put_token_file(self.token, self.token_file)
+        try:
+            if self.token_cache:
+                self.put_token_file(self.token, self.token_file)
+        except Exception:
+            logger.error("Failed to cache token.  Likely a write permissions error for the filesystem.")
 
     def process_keycloak_token(self, keycloak_token):
         access_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=keycloak_token['expires_in'])

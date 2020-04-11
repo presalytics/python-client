@@ -74,6 +74,7 @@ def create_story_from_ooxml_file(filename: str, client_info={}) -> 'Story':
     story: 'Story'
     logger.info("Starting presalytics tool: create_story_from_ooxml_file")
     logger.info("Intializing presalytics client.")
+    
     client = presalytics.Client(**client_info)
     logger.info("Sending file to presalytics server for document processing and base story creation")
     story = client.story.story_post_file(file=filename)
@@ -146,15 +147,20 @@ def create_outline_from_ooxml_document(story_api: 'Story',
         _description = description
     else:
         _description = ""
-
-    pages = create_pages_from_ooxml_document(story_api, ooxml_document, client_info=client_info)
-
-    if themes:
-        _themes = themes
-    else:
-        ooxml_id = pages[0].widgets[0].data["document_ooxml_id"]
-        _themes = [create_theme_from_ooxml_document(ooxml_id, client_info=client_info)]
-
+    try:
+        pages = create_pages_from_ooxml_document(story_api, ooxml_document, client_info=client_info)
+    except Exception as ex:
+        logger.error("Error adding pages to outline", exc_info=True)
+        pages = []
+    try:
+        if themes:
+            _themes = themes
+        else:
+            ooxml_id = pages[0].widgets[0].data["document_ooxml_id"]
+            _themes = [create_theme_from_ooxml_document(ooxml_id, client_info=client_info)]
+    except Exception:
+        logger.error("Unable to add theme to ooxml_story", exc_info=True)
+    
     if title:
         _title = title
     else:
@@ -202,25 +208,28 @@ def create_pages_from_ooxml_document(story: 'Story',
         slides_meta = [x for x in child_objects if x.object_type == "Slide.Slides"]
         ep_map = presalytics.OoxmlEndpointMap.slide()
         for slide in slides_meta:
-            widget = presalytics.OoxmlFileWidget(
-                filename=ooxml_document.filename,
-                name=slide.entity_name,
-                endpoint_map=ep_map,
-                object_name=slide.entity_name,
-                object_ooxml_id=slide.entity_id,
-                document_ooxml_id=ooxml_document.id,
-                story_id=story.id,
-                client_info=client_info
-            )
-            widget_kind = "widget-page"
-            widget_name = slide.entity_name
-            widgets = [widget.serialize()]
-            page = presalytics.story.outline.Page(
-                kind=widget_kind,
-                name=widget_name,
-                widgets=widgets
-            )
-            pages.append(page)
+            try:
+                widget = presalytics.OoxmlFileWidget(
+                    filename=ooxml_document.filename,
+                    name=slide.entity_name,
+                    endpoint_map=ep_map,
+                    object_name=slide.entity_name,
+                    object_ooxml_id=slide.entity_id,
+                    document_ooxml_id=ooxml_document.id,
+                    story_id=story.id,
+                    client_info=client_info
+                )
+                widget_kind = "widget-page"
+                widget_name = slide.entity_name
+                widgets = [widget.serialize()]
+                page = presalytics.story.outline.Page(
+                    kind=widget_kind,
+                    name=widget_name,
+                    widgets=widgets
+                )
+                pages.append(page)
+            except:
+                logger.error("Unable to add widget {0} to outline ooxml document {1}".format(slide.entity_name, ooxml_document.id))
     # TODO: insert excel chart handling here
     return pages
 

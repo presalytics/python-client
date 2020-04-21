@@ -94,8 +94,21 @@ class Revealer(presalytics.story.components.Renderer):
         logger.info("Revealer initilized.")
 
     def _make_base(self):
-        base = lxml.etree.Element("div", attrib={"class": "reveal"})
+        base = lxml.etree.Element("div", attrib={
+            "class": "reveal",
+        })
         lxml.etree.SubElement(base, "div", attrib={"class": "slides"})
+        try:
+            token = self.get_client().get_auth_header().get("Authorization").lstrip('Bearer').strip()
+            base.attrib['data-jwt'] = token
+        except Exception:
+            logger.info("Could not obtain access token from revealer component.")
+
+        try:
+            story_id = self.story_outline.story_id
+            base.attrib['data-story-id'] = story_id
+        except Exception:
+            logger.info("Revealer could not extract story_id from outline.")
         return base
     
     def get_meta_tags(self):

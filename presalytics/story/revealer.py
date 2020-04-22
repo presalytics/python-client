@@ -99,8 +99,11 @@ class Revealer(presalytics.story.components.Renderer):
         })
         lxml.etree.SubElement(base, "div", attrib={"class": "slides"})
         try:
-            token = self.get_client().get_auth_header().get("Authorization").lstrip('Bearer').strip()
-            base.attrib['data-jwt'] = token
+            client = self.get_client()
+            website_token = client.token_util.token["access_token"]
+            client.exchange_token(website_token, audience='story')
+            ui_token = client.token_util.token["access_token"]
+            base.attrib['data-jwt'] = ui_token
         except Exception:
             logger.info("Could not obtain access token from revealer component.")
 

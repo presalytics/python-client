@@ -124,7 +124,7 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
             'zoom': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js',
             'notes': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js',
             'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js',
-            'customizations': '{0}/static/js/reveal-customizations.js'.format(site_host),
+            'customizations': '{0}/static/js/revealcustomizations.js'.format(site_host),
 
         },
         'mpld3': '{0}/static/mpld3/mpld3.min.js'.format(site_host),

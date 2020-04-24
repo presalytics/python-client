@@ -104,6 +104,7 @@ class Revealer(presalytics.story.components.Renderer):
             client.exchange_token(website_token, audience='story-ui')
             base.attrib['data-jwt'] = client.token_util.token["access_token"]
             base.attrib['data-jwt-refresh'] = client.token_util.token["refresh_token"]
+            base.attrib['data-story-target'] = client.story.api_client.configuration.host
         except Exception as ex:
             logger.exception(ex, "Could not obtain access token from revealer component.")
 

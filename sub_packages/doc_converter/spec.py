@@ -7,7 +7,7 @@ env.read_env()
 doc_converter_host = env("DOC_CONVERTER_HOST", "https://api.presalytics.io")
 
 SPEC = {
-        "update": True,
+        "update": False,
         "update_type": "patch",
         "endpoint": "{}/doc-converter/openapi.json".format(doc_converter_host),
         "package_name": "presalytics_doc_converter",

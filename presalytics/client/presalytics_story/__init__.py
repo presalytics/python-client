@@ -35,10 +35,15 @@ from presalytics.client.presalytics_story.models.outline import Outline
 from presalytics.client.presalytics_story.models.permission_type import PermissionType
 from presalytics.client.presalytics_story.models.permission_type_all_of import PermissionTypeAllOf
 from presalytics.client.presalytics_story.models.problem_detail import ProblemDetail
+from presalytics.client.presalytics_story.models.required_parameters_to_create_a_view import RequiredParametersToCreateAView
+from presalytics.client.presalytics_story.models.session import Session
+from presalytics.client.presalytics_story.models.session_all_of import SessionAllOf
 from presalytics.client.presalytics_story.models.story import Story
 from presalytics.client.presalytics_story.models.story_all_of import StoryAllOf
 from presalytics.client.presalytics_story.models.story_collaborator import StoryCollaborator
 from presalytics.client.presalytics_story.models.story_collaborator_all_of import StoryCollaboratorAllOf
 from presalytics.client.presalytics_story.models.story_outline_history import StoryOutlineHistory
 from presalytics.client.presalytics_story.models.story_outline_history_all_of import StoryOutlineHistoryAllOf
+from presalytics.client.presalytics_story.models.view import View
+from presalytics.client.presalytics_story.models.view_all_of import ViewAllOf
 

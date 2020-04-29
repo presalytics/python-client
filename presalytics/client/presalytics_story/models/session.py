@@ -40,7 +40,8 @@ class Session(object):
         'updated_by': 'str',
         'collaborator_id': 'str',
         'outline_revision': 'int',
-        'host': 'str'
+        'host': 'str',
+        'views': 'list[View]'
     }
 
     attribute_map = {
@@ -51,10 +52,11 @@ class Session(object):
         'updated_by': 'updated_by',
         'collaborator_id': 'collaborator_id',
         'outline_revision': 'outline_revision',
-        'host': 'host'
+        'host': 'host',
+        'views': 'views'
     }
 
-    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, collaborator_id=None, outline_revision=None, host=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, collaborator_id=None, outline_revision=None, host=None, views=None, local_vars_configuration=None):  # noqa: E501
         """Session - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -68,6 +70,7 @@ class Session(object):
         self._collaborator_id = None
         self._outline_revision = None
         self._host = None
+        self._views = None
         self.discriminator = None
 
         if id is not None:
@@ -86,6 +89,8 @@ class Session(object):
             self.outline_revision = outline_revision
         if host is not None:
             self.host = host
+        if views is not None:
+            self.views = views
 
     @property
     def id(self):
@@ -254,6 +259,27 @@ class Session(object):
         """
 
         self._host = host
+
+    @property
+    def views(self):
+        """Gets the views of this Session.  # noqa: E501
+
+
+        :return: The views of this Session.  # noqa: E501
+        :rtype: list[View]
+        """
+        return self._views
+
+    @views.setter
+    def views(self, views):
+        """Sets the views of this Session.
+
+
+        :param views: The views of this Session.  # noqa: E501
+        :type: list[View]
+        """
+
+        self._views = views
 
     def to_dict(self):
         """Returns the model properties as a dict"""

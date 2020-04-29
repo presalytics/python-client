@@ -35,16 +35,18 @@ class SessionAllOf(object):
     openapi_types = {
         'collaborator_id': 'str',
         'outline_revision': 'int',
-        'host': 'str'
+        'host': 'str',
+        'views': 'list[View]'
     }
 
     attribute_map = {
         'collaborator_id': 'collaborator_id',
         'outline_revision': 'outline_revision',
-        'host': 'host'
+        'host': 'host',
+        'views': 'views'
     }
 
-    def __init__(self, collaborator_id=None, outline_revision=None, host=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, collaborator_id=None, outline_revision=None, host=None, views=None, local_vars_configuration=None):  # noqa: E501
         """SessionAllOf - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -53,6 +55,7 @@ class SessionAllOf(object):
         self._collaborator_id = None
         self._outline_revision = None
         self._host = None
+        self._views = None
         self.discriminator = None
 
         if collaborator_id is not None:
@@ -61,6 +64,8 @@ class SessionAllOf(object):
             self.outline_revision = outline_revision
         if host is not None:
             self.host = host
+        if views is not None:
+            self.views = views
 
     @property
     def collaborator_id(self):
@@ -124,6 +129,27 @@ class SessionAllOf(object):
         """
 
         self._host = host
+
+    @property
+    def views(self):
+        """Gets the views of this SessionAllOf.  # noqa: E501
+
+
+        :return: The views of this SessionAllOf.  # noqa: E501
+        :rtype: list[View]
+        """
+        return self._views
+
+    @views.setter
+    def views(self, views):
+        """Sets the views of this SessionAllOf.
+
+
+        :param views: The views of this SessionAllOf.  # noqa: E501
+        :type: list[View]
+        """
+
+        self._views = views
 
     def to_dict(self):
         """Returns the model properties as a dict"""

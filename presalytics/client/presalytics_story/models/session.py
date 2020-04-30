@@ -41,7 +41,8 @@ class Session(object):
         'collaborator_id': 'str',
         'outline_revision': 'int',
         'host': 'str',
-        'views': 'list[View]'
+        'views': 'list[View]',
+        'collaborator': 'StoryCollaborator'
     }
 
     attribute_map = {
@@ -53,10 +54,11 @@ class Session(object):
         'collaborator_id': 'collaborator_id',
         'outline_revision': 'outline_revision',
         'host': 'host',
-        'views': 'views'
+        'views': 'views',
+        'collaborator': 'collaborator'
     }
 
-    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, collaborator_id=None, outline_revision=None, host=None, views=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, collaborator_id=None, outline_revision=None, host=None, views=None, collaborator=None, local_vars_configuration=None):  # noqa: E501
         """Session - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -71,6 +73,7 @@ class Session(object):
         self._outline_revision = None
         self._host = None
         self._views = None
+        self._collaborator = None
         self.discriminator = None
 
         if id is not None:
@@ -91,6 +94,8 @@ class Session(object):
             self.host = host
         if views is not None:
             self.views = views
+        if collaborator is not None:
+            self.collaborator = collaborator
 
     @property
     def id(self):
@@ -280,6 +285,27 @@ class Session(object):
         """
 
         self._views = views
+
+    @property
+    def collaborator(self):
+        """Gets the collaborator of this Session.  # noqa: E501
+
+
+        :return: The collaborator of this Session.  # noqa: E501
+        :rtype: StoryCollaborator
+        """
+        return self._collaborator
+
+    @collaborator.setter
+    def collaborator(self, collaborator):
+        """Sets the collaborator of this Session.
+
+
+        :param collaborator: The collaborator of this Session.  # noqa: E501
+        :type: StoryCollaborator
+        """
+
+        self._collaborator = collaborator
 
     def to_dict(self):
         """Returns the model properties as a dict"""

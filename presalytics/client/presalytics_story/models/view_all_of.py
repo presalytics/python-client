@@ -33,6 +33,7 @@ class ViewAllOf(object):
                             and the value is json key in definition.
     """
     openapi_types = {
+        'page_number': 'int',
         'session_id': 'str',
         'start_time': 'datetime',
         'end_time': 'datetime',
@@ -42,6 +43,7 @@ class ViewAllOf(object):
     }
 
     attribute_map = {
+        'page_number': 'page_number',
         'session_id': 'session_id',
         'start_time': 'start_time',
         'end_time': 'end_time',
@@ -50,12 +52,13 @@ class ViewAllOf(object):
         'additional': 'additional'
     }
 
-    def __init__(self, session_id=None, start_time=None, end_time=None, active_msecs=None, total_msecs=None, additional=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(self, page_number=None, session_id=None, start_time=None, end_time=None, active_msecs=None, total_msecs=None, additional=None, local_vars_configuration=None):  # noqa: E501
         """ViewAllOf - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
         self.local_vars_configuration = local_vars_configuration
 
+        self._page_number = None
         self._session_id = None
         self._start_time = None
         self._end_time = None
@@ -64,6 +67,8 @@ class ViewAllOf(object):
         self._additional = None
         self.discriminator = None
 
+        if page_number is not None:
+            self.page_number = page_number
         if session_id is not None:
             self.session_id = session_id
         if start_time is not None:
@@ -76,6 +81,27 @@ class ViewAllOf(object):
             self.total_msecs = total_msecs
         if additional is not None:
             self.additional = additional
+
+    @property
+    def page_number(self):
+        """Gets the page_number of this ViewAllOf.  # noqa: E501
+
+
+        :return: The page_number of this ViewAllOf.  # noqa: E501
+        :rtype: int
+        """
+        return self._page_number
+
+    @page_number.setter
+    def page_number(self, page_number):
+        """Sets the page_number of this ViewAllOf.
+
+
+        :param page_number: The page_number of this ViewAllOf.  # noqa: E501
+        :type: int
+        """
+
+        self._page_number = page_number
 
     @property
     def session_id(self):

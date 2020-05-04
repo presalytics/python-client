@@ -10,7 +10,7 @@
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "presalytics"
-VERSION = "0.4.3"
+VERSION = "0.4.4"
 
 # To install the library, run the following
 #
@@ -47,7 +47,7 @@ with open("README.md", "r") as fh:
 setup(
     name=NAME,
     version=VERSION,
-    description="Prealytics Python Client",
+    description="Presalytics Python Client",
     author_email="inquiries@presalytics.io",
     url="https://presalytics.io/docs",
     keywords=["Presalytics"],

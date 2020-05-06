@@ -10,7 +10,7 @@
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "presalytics"
-VERSION = "0.4.5"
+VERSION = "0.5.0"
 
 # To install the library, run the following
 #
@@ -26,7 +26,6 @@ REQUIRES = [
     "python-dateutil",
     "flask",
     "requests",
-    "python-keycloak",
     "environs",
     "matplotlib",
     "lxml",

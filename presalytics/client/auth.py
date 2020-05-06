@@ -35,8 +35,7 @@ class TokenUtil(object):
                 self.token = {
                     'access_token': token['access_token'],
                     'access_token_expire_time': token["access_token_expire_time"],
-                    'refresh_token': token["refresh_token"],
-                    'refresh_token_expire_time': token["refresh_token_expire_time"]
+                    'refresh_token': token["refresh_token"]
                 }
                 if self.token_cache:
                     self._put_token_file()
@@ -46,15 +45,6 @@ class TokenUtil(object):
     def is_api_access_token_expired(self):
         try:
             expire_datetime = dateutil.parser.parse(self.token['access_token_expire_time']).astimezone(datetime.timezone.utc)
-            if expire_datetime < datetime.datetime.utcnow().astimezone(datetime.timezone.utc):
-                return True
-            return False
-        except Exception:
-            return True
-
-    def is_api_refresh_token_expired(self):
-        try:
-            expire_datetime = dateutil.parser.parse(self.token['refresh_token_expire_time']).astimezone(datetime.timezone.utc)
             if expire_datetime < datetime.datetime.utcnow().astimezone(datetime.timezone.utc):
                 return True
             return False
@@ -75,15 +65,13 @@ class TokenUtil(object):
         except Exception:
             logger.error("Failed to cache token.  Likely a write permissions error for the filesystem.")
 
-    def process_keycloak_token(self, keycloak_token):
-        access_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=keycloak_token['expires_in'])
-        refresh_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=keycloak_token['refresh_expires_in'])
+    def process_token(self, token):
+        access_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=token['expires_in'])
 
         self.token = {
-            'access_token': keycloak_token['access_token'],
-            'refresh_token': keycloak_token['refresh_token'],
-            'access_token_expire_time': access_token_expire_time.isoformat(),
-            'refresh_token_expire_time': refresh_token_expire_time.isoformat()
+            'access_token': token['access_token'],
+            'refresh_token': token['refresh_token'],
+            'access_token_expire_time': access_token_expire_time.isoformat()
         }
 
         return self.token
@@ -123,7 +111,7 @@ class AuthenticationMixIn(object):
             Missing reference to Client class.  Client was like garbage collected by the intepreter.\n  
             Please initialize the Client class on its own line to avoid this error.  For example:\n\n
             client = presalytics.Client()\n
-            story = client.story.story_id_get(story_id)\n\n
+            story = client.story.story_id_get(story_id)
             """
             raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
         auth_header = self.parent().get_auth_header()
@@ -167,10 +155,6 @@ class AuthenticationMixIn(object):
             else:
                 t, v, tb = sys.exc_info()
                 six.reraise(t, v, tb)
-
-    # def update_timezones(self, response)
-
-    #     return response
 
     def update_configuration(self):
         """

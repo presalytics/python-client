@@ -101,7 +101,6 @@ class Revealer(presalytics.story.components.Renderer):
         try:
             client = self.get_client()
             website_token = client.token_util.token["access_token"]
-            client.exchange_token(website_token, audience='story-ui')
             base.attrib['data-jwt'] = client.token_util.token["access_token"]
             base.attrib['data-jwt-refresh'] = client.token_util.token["refresh_token"]
             if presalytics.CONFIG.get("BROWSER_API_HOST", None):

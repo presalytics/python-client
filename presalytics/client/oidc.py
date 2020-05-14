@@ -8,13 +8,31 @@ import webbrowser
 import json
 import time
 import jose
+import os
 import jose.jwt
+import cachetools
 import presalytics.lib
 import presalytics.lib.exceptions
 import presalytics.lib.constants as cnst
 
 
 logger = logging.getLogger(__name__)
+
+
+@cachetools.cached(cache=cachetools.TTLCache(maxsize=4096, ttl=300))  # Cache result for 5 minutes
+def get_jwks():
+    auth_host = os.environ.get("OIDC_AUTH_HOST", cnst.OIDC_AUTH_HOST)
+    jwks_path = os.environ.get("jwks_path", ".well-known/jwks.json")
+    jwks_endpoint = posixpath.join(auth_host, jwks_path)
+    r = requests.get(jwks_endpoint)
+    if r.status_code == 200:
+        jwks = r.json()
+        logger.debug('Updated Json Web Key Set from {}'.format(jwks_endpoint))
+        return jwks
+    else:
+        raise presalytics.lib.exceptions.ApiError(message="Could not get jwks from Uri", status_code=r.status_code)
+
+
 
 class OidcClient(object):
     """
@@ -44,14 +62,18 @@ class OidcClient(object):
         self.well_known_endpoint = posixpath.join(self.auth_host, kwargs.get("well_known_path", ".well-known/openid-configuration"))
         self.token_endpoint = posixpath.join(self.auth_host, kwargs.get("token_path", "oauth/token"))
         self.authorization_endpoint = posixpath.join(self.auth_host, kwargs.get("authorization_path", "authorization"))
-        self.device_endpoint = posixpath.join(self.auth_host, kwargs.get("device_path", "device/code"))
+        self.device_endpoint = posixpath.join(self.auth_host, kwargs.get("device_path", "oauth/device/code"))
         self.jwks_endpoint = posixpath.join(self.auth_host, kwargs.get("jwks_path", ".well-known/jwks.json"))
         self.userinfo_endpoint = posixpath.join(self.auth_host, kwargs.get("userinfo_path", "userinfo"))
         self.client_id = client_id if client_id else cnst.DEFAULT_CLIENT_ID
         self.audience = kwargs.get("audience", cnst.DEFAULT_AUDIENCE)
         self.client_secret = client_secret
-        self.default_scopes = "email profile offline_access"
+        self.default_scopes = "openid email profile offline_access"
         self.validate_tokens = validate_tokens
+        self.repoll_errors = [
+            "authorization_pending",
+            "slow_down"
+        ]
 
     def token(self, username, password=None, audience=None, scope=None, **kwargs) -> typing.Dict:
         """
@@ -82,9 +104,15 @@ class OidcClient(object):
                 'scope': scope
             }
 
-            device_code_response = self._post(self.device_endpoint, data)
-
-            webbrowser.open_new_tab(device_code_response["verification_uri_complete"])
+            device_code_response = self._post(self.device_endpoint, device_data)
+            user_code_message = "This device's user code is: {}.  Please verify this code when logging in.".format(device_code_response["user_code"])
+            print(user_code_message)
+            cli_message = "Please open a webrowser to {0} and login.".format(device_code_response["verification_uri_complete"])
+            print(cli_message)
+            try:
+                webbrowser.open_new_tab(device_code_response["verification_uri_complete"])
+            except:
+                pass
             sleep_interval = device_code_response["interval"]
             auth_data = {
                 "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
@@ -94,28 +122,29 @@ class OidcClient(object):
             headers = {
                 'content-type': 'application/x-www-form-urlencoded'
             }
-            repoll_errors = [
-                "authorization_pending",
-                "slow_down"
-            ]
             repoll = True
             while repoll:
-                try:
-                    token_response = requests.post(self.token_endpoint, auth_data, headers=headers)
-                    if token_response.status_code != 200:
-                        err_resp = token_response.json()
-                        err_msg = err_resp["error"]
-                        if err_msg in repoll_errors:
+                token_response = requests.post(self.token_endpoint, auth_data, headers=headers)
+                if token_response.status_code != 200:
+                    err_resp = token_response.json()
+                    err_msg = err_resp["error"]
+                    if err_msg in self.repoll_errors:
+                        time.sleep(sleep_interval)
+                        if err_msg == "slow_down":
                             time.sleep(sleep_interval)
-                            if err_msg == "slow_down":
-                                time.sleep(sleep_interval)                            
-                        else:
-                            message = "Error: {0} -- {1}".format(err_msg, err_resp["error_description"])
-                            raise presalytics.lib.exceptions.ApiError()
-                except Exception as ex:
-                    logger.exception(ex)
+                        logger.debug("User has not yet logged in.  Repolling..")                     
+                    else:
+                        message = "Error: {0} -- {1}".format(err_msg, err_resp["error_description"])
+                        raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
+                else:
                     repoll = False
             token_data = token_response.json()
+            if token_data.get('access_token', None):
+                print("Login Success! Please continue with your work.")
+                logger.debug("User logged in successfully.")
+            else:
+                message = "Error: {0} -- {1}".format(err_msg, err_resp["error_description"])
+                raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
         if self.validate_tokens:
             self.validate_token(token_data["access_token"])
         return token_data
@@ -126,6 +155,7 @@ class OidcClient(object):
         """
         unverified_header = jose.jwt.get_unverified_header(token)
         rsa_key = {}
+        jwks = get_jwks()
         for key in jwks["keys"]:
             if key["kid"] == unverified_header["kid"]:
                 rsa_key = {
@@ -150,8 +180,11 @@ class OidcClient(object):
                 raise presalytics.lib.exceptions.ApiError(message="invalid_claims: check audience and issuer", status_code=401)
             except Exception:
                 raise presalytics.lib.exceptions.ApiError(message="invalid token (likely malformed)", status_code=401)
+            logger.debug("Access token validated.")
             return payload
+        
         raise presalytics.lib.exceptions.ApiError(message="invalid_header: could not find key in jwks",status_code=401)
+        
 
 
     def refresh_token(self, refresh_token, scope=None):
@@ -180,6 +213,7 @@ class OidcClient(object):
             response = requests.post(endpoint, data, headers=headers)
         except Exception as ex:
             logger.exception(ex)
+            raise ex
 
         return self._handle_response(response)
 
@@ -196,7 +230,7 @@ class OidcClient(object):
             except (KeyError, ValueError):
                 message = response.content
             raise presalytics.lib.exceptions.ApiError(message=message, status_code=response.status_code)
-        elif response.status == 204:
+        elif response.status_code == 204:
             data = None
         elif response.status_code == 200:
             try:
@@ -211,7 +245,7 @@ class OidcClient(object):
                 except Exception:
                     pass
         return data
-        
+
 
         
 

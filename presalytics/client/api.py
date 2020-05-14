@@ -92,7 +92,7 @@ class Client(object):
         raise an `presalytics.lib.exceptions.InvalidTokenException`.
 
     cache_tokens : bool, optional
-        Defaults to True.  Toggles whether or the client should cache its acquired tokens in file called "token.json"
+        Defaults to False.  Toggles whether or the client should cache its acquired tokens in file called "token.json"
         in the current working directory.  Minimizes the number of times a user is required to login.  Set to False
         in multi-user environments.
 
@@ -211,7 +211,9 @@ class Client(object):
             password=None,
             delegate_login=False,
             token=None,
-            cache_tokens=True,
+            cache_tokens=False,
+            client_id=None,
+            client_secret=None,
             **kwargs):
     
         if username:
@@ -234,22 +236,28 @@ class Client(object):
             self.password = None
             self.direct_grant = False
         try:
-            self.client_id = presalytics.CONFIG['CLIENT_ID']
+            if client_id:
+                self.client_id = client_id
+            else:
+                self.client_id = presalytics.CONFIG['CLIENT_ID']
         except KeyError:
             self.client_id = cnst.DEFAULT_CLIENT_ID
         try:
-            self.client_secret = presalytics.CONFIG['CLIENT_SECRET']
+            if client_secret:
+                self.client_secret = client_secret
+            else:
+                self.client_secret = presalytics.CONFIG['CLIENT_SECRET']
             self.confidential_client = True
         except KeyError:
             self.client_secret = None
             self.confidential_client = False
-        self.verify_https = presalytics.CONFIG.get("VERIFY_HTTPS", True)
+
         try:
             self.site_host = presalytics.CONFIG["HOSTS"]["SITE"]
         except KeyError:
             self.site_host = cnst.SITE_HOST
-        self.login_sleep_interval = 5  # seconds
-        self.login_timeout = 60  # seconds
+
+
         try:
             self.redirect_uri = presalytics.CONFIG["REDIRECT_URI"]
         except KeyError:
@@ -303,14 +311,19 @@ class Client(object):
         an `presalytics.lib.exceptions.InvalidTokenException` when `deletegate_login` is True.
         """
         if self.token_util.is_api_access_token_expired():
-            try:
+            if self.token_util.token.get('refresh_token', None):
                 refresh_token = self.token_util.token["refresh_token"]
                 token = self.oidc.refresh_token(refresh_token)
                 self.token_util.process_token(token)
                 logger.debug("Refresh token granted successfully.")
-            except presalytics.lib.exceptions.ApiError:
-                if not self._delegate_login:
-                    self.oidc.token(username=self.username)
+            else:
+                if self.direct_grant:
+                    token = self.oidc.token(username=self.username, password=self.password)
+                elif self._delegate_login:
+                    raise presalytics.lib.exceptions.ApiError("Unauthorized. Token has expired", status_code=401)
+                else:
+                    token = self.oidc.token(username=self.username)
+                self.token_util.process_token(token)
             if self.token_util.token_cache:
                 self.token_util._put_token_file()
         return self.token_util.token

@@ -84,8 +84,8 @@ LOG_LEVEL : str, optional
     Defaults to `DEBUG`
 
 USERNAME : str, optional
-    The user's Presalytics API username.  Will be passed to instances of the 
-    `presalytics.client.api.Client` object.
+    The user's Presalytics API email/username.  This is the email address that the user uses when logging in at 
+    https://login.presalytics.io.  Will be passed to instances of the `presalytics.client.api.Client` object.
 
 PASSWORD : str, optional
     The user's Presalytics API username.  Will be passed to instances of the 

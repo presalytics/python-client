@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class TokenUtil(object):
-    def __init__(self, token=None, token_file=None, token_cache=True):
+    def __init__(self, token=None, token_file=None, token_cache=False):
         self.token_cache = token_cache
         if token_file is None:
             self.token_file = presalytics.lib.constants.TOKEN_FILE
@@ -32,18 +32,21 @@ class TokenUtil(object):
             pass
         if token is not None:
             try:
-                self.token = {
-                    'access_token': token['access_token'],
-                    'access_token_expire_time': token["access_token_expire_time"],
-                    'refresh_token': token["refresh_token"]
-                }
+                self.process_token(token)    
                 if self.token_cache:
                     self._put_token_file()
             except Exception:
                 raise presalytics.lib.exceptions.MisConfiguredTokenException()
+        else:
+            self.token = {}
 
     def is_api_access_token_expired(self):
         try:
+            if not self.token.get('access_token_expire_time', None):
+                if self.token.get('access_token', None):
+                    return False  # If expire time unknown, instruct client to call endpoint
+                else:
+                    return True  # If no token, instruct client to acquire token
             expire_datetime = dateutil.parser.parse(self.token['access_token_expire_time']).astimezone(datetime.timezone.utc)
             if expire_datetime < datetime.datetime.utcnow().astimezone(datetime.timezone.utc):
                 return True
@@ -56,7 +59,7 @@ class TokenUtil(object):
             if self.token_cache:
                 self.token = self.load_token_from_file(self.token_file)
         except Exception:
-            logger.error("Unable to load token from cache.  If you do want intend to cache tokens, use configuration CACHE_TOKENS=False")
+            logger.error("Unable to load token from cache.  If you do intend to cache tokens, use configuration CACHE_TOKENS=False")
 
     def _put_token_file(self):
         try:
@@ -66,14 +69,24 @@ class TokenUtil(object):
             logger.error("Failed to cache token.  Likely a write permissions error for the filesystem.")
 
     def process_token(self, token):
-        access_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=token['expires_in'])
-
         self.token = {
-            'access_token': token['access_token'],
-            'refresh_token': token['refresh_token'],
-            'access_token_expire_time': access_token_expire_time.isoformat()
+            'access_token': token['access_token']
         }
-
+        if not token.get('access_token_expire_time', None):
+            if token.get('expires_in', None):
+                access_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=token['expires_in'])
+            else:
+                pass    # TODO: add logic to introspect token for expire time 
+        else:
+            access_token_expire_time = token["access_token_expire_time"]
+        if access_token_expire_time:
+            self.token.update({
+                "access_token_expire_time": access_token_expire_time
+            })
+        if token.get('refresh_token', None):
+            self.token.update({
+                "refresh_token": token["refresh_token"]
+            })
         return self.token
 
     @staticmethod
@@ -127,12 +140,25 @@ class AuthenticationMixIn(object):
 
             endpoint = self.configuration.host + resource_path
             logger.info("Sending {0} message to {1}. Request Id: {2}".format(method, endpoint, request_id))
-            response = super(AuthenticationMixIn, self).call_api(
-                resource_path, method, path_params,
-                query_params, header_params, body, post_params, files, response_type,
-                auth_settings, async_req, _return_http_data_only, collection_formats, _preload_content,
-                _request_timeout, _host
+            call_args = (
+                resource_path, 
+                method, 
+                path_params,
+                query_params, 
+                header_params, 
+                body, 
+                post_params, 
+                files, 
+                response_type,
+                auth_settings, 
+                async_req, 
+                _return_http_data_only, 
+                collection_formats, 
+                _preload_content,
+                _request_timeout, 
+                _host
             )
+            response = super(AuthenticationMixIn, self).call_api(call_args)
             logger.info("{0} response received from {1}".format(method, endpoint))
             return response
         except Exception as e:
@@ -146,6 +172,10 @@ class AuthenticationMixIn(object):
                         d = e.body + addendum
                     e.body = json.dumps(d)
                     logging.error(d)
+                    if d["status"] == 401:
+                        logging.debug("Refeshing token from unauathorize call and retrying")
+                        self.parent().refresh_token()
+                        return super(AuthenticationMixIn, self).call_api(call_args)
                 except Exception:
                     pass
                 if self._ignore_api_exceptions:

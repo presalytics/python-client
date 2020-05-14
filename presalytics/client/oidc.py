@@ -251,6 +251,23 @@ class OidcClient(object):
                 except Exception:
                     pass
         return data
+    
+    def client_credentials_token(self, scope=None):
+        if not self.client_secret:
+            raise presalytics.lib.exceptions.ApiError(message="Must have client secret for client credentials grant", status_code=400)
+        if not scope:
+            scope = self.default_scopes
+        post_data = {
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "grant_type": "client_credentials",
+            "audience": self.audience
+        }
+        repsonse = self._post(self.token_endpoint, data)
+
+        return self._handle_response(repsonse)
+    
+        
 
 
         

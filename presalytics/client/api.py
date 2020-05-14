@@ -277,7 +277,7 @@ class Client(object):
             if token.get('access_token_expire_time', None):
                 self.token_util.token = token
             elif token.get('expires_in', None):
-                self.token_util.process_keycloak_token(token)
+                self.token_util.process_token(token)
             else:
                 raise presalytics.lib.exceptions.InvalidTokenException(message="Unknown token format.")
             if self.token_util.token_cache:

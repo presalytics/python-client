@@ -162,7 +162,7 @@ class WidgetBase(ComponentBase):
         **kwargs:
             Optional keyword arguments can be used in subclass to modify the behavior of the `to_html` function.
             these keyword arguments should be invariant through successive updates to the chart.  For example,
-            keycloak argument should control the styling of the widget, which should not change as the data in
+            keyword arguments could control the styling of the widget, which should not change as the data in
             the object (e.g., a chart) is updated.  Keyword arguments are loaded via `additional_properties`
             parameter in in the `presalytics.story.outline.Widget` object.
 

@@ -265,9 +265,7 @@ class OidcClient(object):
             "grant_type": "client_credentials",
             "audience": audience
         }
-        repsonse = self._post(self.token_endpoint, data)
-
-        return self._handle_response(repsonse)
+        return self._post(self.token_endpoint, data)
     
         
 

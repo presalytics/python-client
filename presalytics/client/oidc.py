@@ -191,7 +191,7 @@ class OidcClient(object):
         """
         Exchange a refresh token for an access token
         """
-       if not scope:
+        if not scope:
             scope = self.default_scopes
         if not self.client_secret:
             raise presalytics.lib.ApiError(message="Cannot refresh token without client secret", status_code=401)

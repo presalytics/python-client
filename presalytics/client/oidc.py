@@ -132,7 +132,7 @@ class OidcClient(object):
                         time.sleep(sleep_interval)
                         if err_msg == "slow_down":
                             time.sleep(sleep_interval)
-                        logger.debug("User has not yet logged in.  Repolling..")                     
+                        logger.debug("User has not yet logged in.  Repolling...")                     
                     else:
                         message = "Error: {0} -- {1}".format(err_msg, err_resp["error_description"])
                         raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
@@ -191,16 +191,20 @@ class OidcClient(object):
         """
         Exchange a refresh token for an access token
         """
-        if not scope:
+       if not scope:
             scope = self.default_scopes
+        if not self.client_secret:
+            raise presalytics.lib.ApiError(message="Cannot refresh token without client secret", status_code=401)
         data = {
             "grant_type": "refresh_token",
             "client_id": self.client_id,
             "refresh_token": refresh_token,
-            "scope": scope
+            "scope": scope,
+            "audience": self.audience,
+            "client_secret": self.client_secret
         }
 
-        self._post(self.token_endpoint, data)
+        token_data = self._post(self.token_endpoint, data)
         
         if self.validate_tokens:
             self.validate_token(token_data["access_token"])
@@ -220,7 +224,9 @@ class OidcClient(object):
 
     def _handle_response(self, response):
         if response.status_code == 401:
-            raise presalytics.lib.exceptions.ApiError(message="Unauthorized")
+            raise presalytics.lib.exceptions.ApiError(message="Unauthorized", status_code=401)
+        elif response.status_code == 403:
+            raise presalytics.lib.exceptions.ApiError(message=str(response.body), status_code=403)
         elif response.status_code == 409:
             logger.error("Value already exists")
             data = None

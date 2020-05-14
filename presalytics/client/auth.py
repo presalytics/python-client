@@ -47,12 +47,21 @@ class TokenUtil(object):
                     return False  # If expire time unknown, instruct client to call endpoint
                 else:
                     return True  # If no token, instruct client to acquire token
-            expire_datetime = dateutil.parser.parse(self.token['access_token_expire_time']).astimezone(datetime.timezone.utc)
+            token_expiry = self.token['access_token_expire_time']
+            if isinstance(token_expiry, datetime.datetime):
+                expire_datetime = token_expiry.astimezone(datetime.timezone.utc)
+            elif isinstance(token_expiry, str):
+                expire_datetime = dateutil.parser.parse(self.token['access_token_expire_time']).astimezone(datetime.timezone.utc)
+            else:
+                logger.error("Token expire time not of type str (isoformat) or datetime.datetime")
+                return True  # Get a new token on type error
             if expire_datetime < datetime.datetime.utcnow().astimezone(datetime.timezone.utc):
                 return True
-            return False
-        except Exception:
-            return True
+            else:
+                return False
+        except Exception as ex:
+            logger.exception(ex)
+            return True # Get a new token on unknown errors
 
     def _load_token_file(self):
         try:
@@ -158,7 +167,7 @@ class AuthenticationMixIn(object):
                 _request_timeout, 
                 _host
             )
-            response = super(AuthenticationMixIn, self).call_api(call_args)
+            response = super(AuthenticationMixIn, self).call_api(*call_args)
             logger.info("{0} response received from {1}".format(method, endpoint))
             return response
         except Exception as e:
@@ -173,9 +182,9 @@ class AuthenticationMixIn(object):
                     e.body = json.dumps(d)
                     logging.error(d)
                     if d["status"] == 401:
-                        logging.debug("Refeshing token from unauathorize call and retrying")
+                        logging.debug("Refeshing token from unauathorized call and retrying")
                         self.parent().refresh_token()
-                        return super(AuthenticationMixIn, self).call_api(call_args)
+                        return super(AuthenticationMixIn, self).call_api(*call_args)
                 except Exception:
                     pass
                 if self._ignore_api_exceptions:

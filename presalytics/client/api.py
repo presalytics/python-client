@@ -225,7 +225,8 @@ class Client(object):
                 if token:
                     self.username = None
                 else:
-                    raise presalytics.lib.exceptions.MissingConfigException("Configuration variable PRESALYTICS_USERNAME is required when client is not initalized with an API token.  Please reconfigure and retry.")
+                    if not client_secret:
+                        raise presalytics.lib.exceptions.MissingConfigException("when not passing tokens directly, a clien must have either a client_secrect or a username")
         try:
             if password:
                 self.password = password

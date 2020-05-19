@@ -320,6 +320,8 @@ class Client(object):
             else:
                 if self.direct_grant:
                     token = self.oidc.token(username=self.username, password=self.password)
+                elif self.confidential_client:
+                    token = self.oidc.client_credentials_token()
                 elif self._delegate_login:
                     raise presalytics.lib.exceptions.ApiError("Unauthorized. Token has expired", status_code=401)
                 else:

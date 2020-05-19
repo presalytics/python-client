@@ -265,7 +265,7 @@ class OidcClient(object):
             "grant_type": "client_credentials",
             "audience": audience
         }
-        return self._post(self.token_endpoint, data)
+        return self._post(self.token_endpoint, post_data)
     
         
 

@@ -226,7 +226,7 @@ class OidcClient(object):
         if response.status_code == 401:
             raise presalytics.lib.exceptions.ApiError(message="Unauthorized", status_code=401)
         elif response.status_code == 403:
-            raise presalytics.lib.exceptions.ApiError(message=str(response.body), status_code=403)
+            raise presalytics.lib.exceptions.ApiError(message="Forbidden", status_code=403)
         elif response.status_code == 409:
             logger.error("Value already exists")
             data = None

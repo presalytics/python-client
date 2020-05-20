@@ -18,7 +18,7 @@ import re  # noqa: F401
 import six
 
 from presalytics.client.presalytics_ooxml_automation.api_client import ApiClient
-from presalytics.client.presalytics_ooxml_automation.exceptions import (  # noqa: F401
+from presalytics.client.presalytics_ooxml_automation.exceptions import (
     ApiTypeError,
     ApiValueError
 )
@@ -88,17 +88,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -109,8 +103,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `chart_axes_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -200,16 +194,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -307,17 +296,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -328,8 +311,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `chart_axisdatatypes_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -421,17 +404,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'type_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['type_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -442,8 +419,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'type_id' is set
-        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id'] is None):  # noqa: E501
+        if ('type_id' not in local_var_params or
+                local_var_params['type_id'] is None):
             raise ApiValueError("Missing the required parameter `type_id` when calling `chart_axisdatatypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
@@ -535,17 +512,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -556,8 +527,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `chart_chartdata_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -649,17 +620,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -670,8 +635,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `chart_columncollections_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -763,17 +728,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -784,8 +743,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `chart_columns_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -877,17 +836,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -898,8 +851,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `chart_datapoints_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -989,16 +942,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1096,17 +1044,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1117,8 +1059,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `chart_plottype_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -1210,17 +1152,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'type_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['type_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1231,8 +1167,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'type_id' is set
-        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id'] is None):  # noqa: E501
+        if ('type_id' not in local_var_params or
+                local_var_params['type_id'] is None):
             raise ApiValueError("Missing the required parameter `type_id` when calling `chart_plottype_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
@@ -1322,16 +1258,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1429,17 +1360,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1450,8 +1375,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `chart_rowcol_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -1543,17 +1468,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'type_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['type_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1564,8 +1483,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'type_id' is set
-        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id'] is None):  # noqa: E501
+        if ('type_id' not in local_var_params or
+                local_var_params['type_id'] is None):
             raise ApiValueError("Missing the required parameter `type_id` when calling `chart_rowcol_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
@@ -1657,17 +1576,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1678,8 +1591,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `chart_rowcollections_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -1769,16 +1682,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1876,17 +1784,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1897,8 +1799,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `chart_rownameformattypes_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -1990,17 +1892,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'type_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['type_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2011,8 +1907,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'type_id' is set
-        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id'] is None):  # noqa: E501
+        if ('type_id' not in local_var_params or
+                local_var_params['type_id'] is None):
             raise ApiValueError("Missing the required parameter `type_id` when calling `chart_rownameformattypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
@@ -2104,17 +2000,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2125,8 +2015,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `chart_rows_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -2218,17 +2108,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2239,15 +2123,15 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `charts_charts_chartupdate_get_id`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
         if 'id' in local_var_params:
-            path_params['Id'] = local_var_params['id']  # noqa: E501
+            path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
 
@@ -2290,8 +2174,8 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str id: (required)
-        :param ChartChartDataDTO chart_chart_data_dto:
+        :param str id: The Chart Id (required)
+        :param ChartChartDataDTO chart_chart_data_dto: The ChartDataDto Object
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -2316,8 +2200,8 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param str id: (required)
-        :param ChartChartDataDTO chart_chart_data_dto:
+        :param str id: The Chart Id (required)
+        :param ChartChartDataDTO chart_chart_data_dto: The ChartDataDto Object
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -2334,18 +2218,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'chart_chart_data_dto'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'chart_chart_data_dto']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2356,8 +2233,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `charts_charts_chartupdate_put_id`")  # noqa: E501
 
         collection_formats = {}
@@ -2455,17 +2332,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2476,8 +2347,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `charts_charts_childobjects_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -2569,17 +2440,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2590,8 +2455,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `charts_charts_details_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -2683,17 +2548,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2704,8 +2563,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `charts_charts_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -2799,18 +2658,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'updated'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'updated']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2821,18 +2673,18 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `charts_charts_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
         if 'id' in local_var_params:
-            path_params['Id'] = local_var_params['id']  # noqa: E501
+            path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
-        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+        if 'updated' in local_var_params:
             query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
@@ -2918,18 +2770,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'ooxml_dto'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'ooxml_dto']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2940,8 +2785,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `charts_charts_openofficexml_put_id`")  # noqa: E501
 
         collection_formats = {}
@@ -2987,17 +2832,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def charts_charts_svg_get_id(self, id, **kwargs):  # noqa: E501
+    def charts_charts_svg_get_id_use_cache(self, id, **kwargs):  # noqa: E501
         """Charts: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Chart as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.charts_charts_svg_get_id(id, async_req=True)
+        >>> thread = api.charts_charts_svg_get_id_use_cache(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -3010,19 +2856,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.charts_charts_svg_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.charts_charts_svg_get_id_use_cache_with_http_info(id, **kwargs)  # noqa: E501
 
-    def charts_charts_svg_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def charts_charts_svg_get_id_use_cache_with_http_info(self, id, **kwargs):  # noqa: E501
         """Charts: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Chart as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.charts_charts_svg_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.charts_charts_svg_get_id_use_cache_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -3039,30 +2886,24 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'use_cache']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method charts_charts_svg_get_id" % key
+                    " to method charts_charts_svg_get_id_use_cache" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `charts_charts_svg_get_id`")  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
+            raise ApiValueError("Missing the required parameter `id` when calling `charts_charts_svg_get_id_use_cache`")  # noqa: E501
 
         collection_formats = {}
 
@@ -3071,6 +2912,8 @@ class DefaultApi(object):
             path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'use_cache' in local_var_params:
+            query_params.append(('use_cache', local_var_params['use_cache']))  # noqa: E501
 
         header_params = {}
 
@@ -3153,17 +2996,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -3174,8 +3011,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `documents_childobjects_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -3267,17 +3104,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -3288,8 +3119,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `documents_delete_id`")  # noqa: E501
 
         collection_formats = {}
@@ -3375,16 +3206,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -3482,17 +3308,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -3503,8 +3323,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `documents_documenttype_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -3596,17 +3416,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'type_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['type_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -3617,8 +3431,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'type_id' is set
-        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id'] is None):  # noqa: E501
+        if ('type_id' not in local_var_params or
+                local_var_params['type_id'] is None):
             raise ApiValueError("Missing the required parameter `type_id` when calling `documents_documenttype_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
@@ -3658,17 +3472,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def documents_download_get_id(self, id, **kwargs):  # noqa: E501
+    def documents_download_get_id_orginal(self, id, **kwargs):  # noqa: E501
         """Documents: Download  # noqa: E501
 
         Download the into a bytestream for client-side processing.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.documents_download_get_id(id, async_req=True)
+        >>> thread = api.documents_download_get_id_orginal(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool orginal:
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -3681,19 +3496,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.documents_download_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.documents_download_get_id_orginal_with_http_info(id, **kwargs)  # noqa: E501
 
-    def documents_download_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def documents_download_get_id_orginal_with_http_info(self, id, **kwargs):  # noqa: E501
         """Documents: Download  # noqa: E501
 
         Download the into a bytestream for client-side processing.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.documents_download_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.documents_download_get_id_orginal_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool orginal:
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -3710,30 +3526,24 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'orginal']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method documents_download_get_id" % key
+                    " to method documents_download_get_id_orginal" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `documents_download_get_id`")  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
+            raise ApiValueError("Missing the required parameter `id` when calling `documents_download_get_id_orginal`")  # noqa: E501
 
         collection_formats = {}
 
@@ -3742,6 +3552,8 @@ class DefaultApi(object):
             path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'orginal' in local_var_params:
+            query_params.append(('orginal', local_var_params['orginal']))  # noqa: E501
 
         header_params = {}
 
@@ -3824,17 +3636,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -3845,8 +3651,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `documents_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -3940,18 +3746,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'file',
-            'story_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['file', 'story_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -3962,12 +3761,12 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'file' is set
-        if self.api_client.client_side_validation and ('file' not in local_var_params or  # noqa: E501
-                                                        local_var_params['file'] is None):  # noqa: E501
+        if ('file' not in local_var_params or
+                local_var_params['file'] is None):
             raise ApiValueError("Missing the required parameter `file` when calling `documents_post`")  # noqa: E501
         # verify the required parameter 'story_id' is set
-        if self.api_client.client_side_validation and ('story_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['story_id'] is None):  # noqa: E501
+        if ('story_id' not in local_var_params or
+                local_var_params['story_id'] is None):
             raise ApiValueError("Missing the required parameter `story_id` when calling `documents_post`")  # noqa: E501
 
         collection_formats = {}
@@ -4065,17 +3864,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -4086,8 +3879,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_colortransformationattributes_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -4179,17 +3972,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -4200,8 +3987,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_colortransformations_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -4291,16 +4078,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -4398,17 +4180,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -4419,8 +4195,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_colortypes_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -4512,17 +4288,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'type_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['type_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -4533,8 +4303,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'type_id' is set
-        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id'] is None):  # noqa: E501
+        if ('type_id' not in local_var_params or
+                local_var_params['type_id'] is None):
             raise ApiValueError("Missing the required parameter `type_id` when calling `shared_colortypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
@@ -4624,16 +4394,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -4731,17 +4496,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -4752,8 +4511,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_dashtypes_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -4845,17 +4604,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'type_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['type_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -4866,8 +4619,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'type_id' is set
-        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id'] is None):  # noqa: E501
+        if ('type_id' not in local_var_params or
+                local_var_params['type_id'] is None):
             raise ApiValueError("Missing the required parameter `type_id` when calling `shared_dashtypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
@@ -4959,17 +4712,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -4980,8 +4727,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_effectattributes_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -5073,17 +4820,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -5094,8 +4835,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_effects_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -5185,16 +4926,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -5292,17 +5028,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -5313,8 +5043,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_effecttypes_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -5406,17 +5136,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'type_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['type_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -5427,8 +5151,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'type_id' is set
-        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id'] is None):  # noqa: E501
+        if ('type_id' not in local_var_params or
+                local_var_params['type_id'] is None):
             raise ApiValueError("Missing the required parameter `type_id` when calling `shared_effecttypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
@@ -5520,17 +5244,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -5541,8 +5259,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_fillmap_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -5632,16 +5350,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -5739,17 +5452,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -5760,8 +5467,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_filltypes_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -5853,17 +5560,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'type_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['type_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -5874,8 +5575,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'type_id' is set
-        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id'] is None):  # noqa: E501
+        if ('type_id' not in local_var_params or
+                local_var_params['type_id'] is None):
             raise ApiValueError("Missing the required parameter `type_id` when calling `shared_filltypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
@@ -5967,17 +5668,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -5988,8 +5683,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_gradientfills_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -6081,17 +5776,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -6102,8 +5791,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_gradientstops_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -6195,17 +5884,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -6216,8 +5899,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_imagefills_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -6309,17 +5992,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -6330,8 +6007,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_images_childobjects_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -6423,17 +6100,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -6444,8 +6115,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_images_details_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -6537,17 +6208,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -6558,8 +6223,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_images_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -6592,6 +6257,114 @@ class DefaultApi(object):
             post_params=form_params,
             files=local_var_files,
             response_type='SharedPictures',  # noqa: E501
+            auth_settings=auth_settings,
+            async_req=local_var_params.get('async_req'),
+            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
+            _preload_content=local_var_params.get('_preload_content', True),
+            _request_timeout=local_var_params.get('_request_timeout'),
+            collection_formats=collection_formats)
+
+    def shared_images_getimage_put_id(self, id, **kwargs):  # noqa: E501
+        """Image: Download Image  # noqa: E501
+
+        Download Images extracted from Ooxml Documents  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.shared_images_getimage_put_id(id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str id: The Image Id (required)
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: None
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+        kwargs['_return_http_data_only'] = True
+        return self.shared_images_getimage_put_id_with_http_info(id, **kwargs)  # noqa: E501
+
+    def shared_images_getimage_put_id_with_http_info(self, id, **kwargs):  # noqa: E501
+        """Image: Download Image  # noqa: E501
+
+        Download Images extracted from Ooxml Documents  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.shared_images_getimage_put_id_with_http_info(id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str id: The Image Id (required)
+        :param _return_http_data_only: response data without head status code
+                                       and headers
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: None
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+
+        local_var_params = locals()
+
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
+
+        for key, val in six.iteritems(local_var_params['kwargs']):
+            if key not in all_params:
+                raise ApiTypeError(
+                    "Got an unexpected keyword argument '%s'"
+                    " to method shared_images_getimage_put_id" % key
+                )
+            local_var_params[key] = val
+        del local_var_params['kwargs']
+        # verify the required parameter 'id' is set
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
+            raise ApiValueError("Missing the required parameter `id` when calling `shared_images_getimage_put_id`")  # noqa: E501
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'id' in local_var_params:
+            path_params['Id'] = local_var_params['id']  # noqa: E501
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = []
+        local_var_files = {}
+
+        body_params = None
+        # HTTP header `Accept`
+        header_params['Accept'] = self.api_client.select_header_accept(
+            ['application/json'])  # noqa: E501
+
+        # Authentication setting
+        auth_settings = []  # noqa: E501
+
+        return self.api_client.call_api(
+            '/Images/GetImage/{Id}', 'PUT',
+            path_params,
+            query_params,
+            header_params,
+            body=body_params,
+            post_params=form_params,
+            files=local_var_files,
+            response_type=None,  # noqa: E501
             auth_settings=auth_settings,
             async_req=local_var_params.get('async_req'),
             _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
@@ -6653,18 +6426,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'updated'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'updated']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -6675,18 +6441,18 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_images_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
         if 'id' in local_var_params:
-            path_params['Id'] = local_var_params['id']  # noqa: E501
+            path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
-        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+        if 'updated' in local_var_params:
             query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
@@ -6772,18 +6538,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'ooxml_dto'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'ooxml_dto']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -6794,8 +6553,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_images_openofficexml_put_id`")  # noqa: E501
 
         collection_formats = {}
@@ -6841,17 +6600,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def shared_images_svg_get_id(self, id, **kwargs):  # noqa: E501
+    def shared_images_svg_get_id_use_cache(self, id, **kwargs):  # noqa: E501
         """Shared: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Shared as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.shared_images_svg_get_id(id, async_req=True)
+        >>> thread = api.shared_images_svg_get_id_use_cache(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -6864,19 +6624,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.shared_images_svg_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.shared_images_svg_get_id_use_cache_with_http_info(id, **kwargs)  # noqa: E501
 
-    def shared_images_svg_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def shared_images_svg_get_id_use_cache_with_http_info(self, id, **kwargs):  # noqa: E501
         """Shared: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Shared as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.shared_images_svg_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.shared_images_svg_get_id_use_cache_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -6893,30 +6654,24 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'use_cache']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method shared_images_svg_get_id" % key
+                    " to method shared_images_svg_get_id_use_cache" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `shared_images_svg_get_id`")  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
+            raise ApiValueError("Missing the required parameter `id` when calling `shared_images_svg_get_id_use_cache`")  # noqa: E501
 
         collection_formats = {}
 
@@ -6925,6 +6680,8 @@ class DefaultApi(object):
             path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'use_cache' in local_var_params:
+            query_params.append(('use_cache', local_var_params['use_cache']))  # noqa: E501
 
         header_params = {}
 
@@ -7005,16 +6762,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -7112,17 +6864,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -7133,8 +6879,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_lineendsizes_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -7226,17 +6972,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'type_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['type_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -7247,8 +6987,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'type_id' is set
-        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id'] is None):  # noqa: E501
+        if ('type_id' not in local_var_params or
+                local_var_params['type_id'] is None):
             raise ApiValueError("Missing the required parameter `type_id` when calling `shared_lineendsizes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
@@ -7338,16 +7078,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -7445,17 +7180,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -7466,8 +7195,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_lineendtypes_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -7559,17 +7288,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'type_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['type_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -7580,8 +7303,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'type_id' is set
-        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id'] is None):  # noqa: E501
+        if ('type_id' not in local_var_params or
+                local_var_params['type_id'] is None):
             raise ApiValueError("Missing the required parameter `type_id` when calling `shared_lineendtypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
@@ -7673,17 +7396,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -7694,8 +7411,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_lines_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -7787,17 +7504,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -7808,8 +7519,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_paragraph_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -7901,17 +7612,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -7922,8 +7627,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_solidfills_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -8015,17 +7720,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -8036,8 +7735,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_text_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -8129,17 +7828,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -8150,8 +7843,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `shared_textcontainer_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -8243,17 +7936,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -8264,8 +7951,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_colormaps_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -8357,17 +8044,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -8378,8 +8059,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_connectionshapes_childobjects_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -8471,17 +8152,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -8492,8 +8167,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_connectionshapes_details_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -8585,17 +8260,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -8606,8 +8275,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_connectionshapes_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -8701,18 +8370,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'updated'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'updated']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -8723,18 +8385,18 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_connectionshapes_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
         if 'id' in local_var_params:
-            path_params['Id'] = local_var_params['id']  # noqa: E501
+            path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
-        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+        if 'updated' in local_var_params:
             query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
@@ -8820,18 +8482,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'ooxml_dto'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'ooxml_dto']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -8842,8 +8497,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_connectionshapes_openofficexml_put_id`")  # noqa: E501
 
         collection_formats = {}
@@ -8889,17 +8544,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def slides_connectionshapes_svg_get_id(self, id, **kwargs):  # noqa: E501
+    def slides_connectionshapes_svg_get_id_use_cache(self, id, **kwargs):  # noqa: E501
         """Slides: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Slide as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_connectionshapes_svg_get_id(id, async_req=True)
+        >>> thread = api.slides_connectionshapes_svg_get_id_use_cache(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -8912,19 +8568,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.slides_connectionshapes_svg_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.slides_connectionshapes_svg_get_id_use_cache_with_http_info(id, **kwargs)  # noqa: E501
 
-    def slides_connectionshapes_svg_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def slides_connectionshapes_svg_get_id_use_cache_with_http_info(self, id, **kwargs):  # noqa: E501
         """Slides: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Slide as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_connectionshapes_svg_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.slides_connectionshapes_svg_get_id_use_cache_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -8941,30 +8598,24 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'use_cache']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method slides_connectionshapes_svg_get_id" % key
+                    " to method slides_connectionshapes_svg_get_id_use_cache" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `slides_connectionshapes_svg_get_id`")  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
+            raise ApiValueError("Missing the required parameter `id` when calling `slides_connectionshapes_svg_get_id_use_cache`")  # noqa: E501
 
         collection_formats = {}
 
@@ -8973,6 +8624,8 @@ class DefaultApi(object):
             path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'use_cache' in local_var_params:
+            query_params.append(('use_cache', local_var_params['use_cache']))  # noqa: E501
 
         header_params = {}
 
@@ -9055,17 +8708,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -9076,8 +8723,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_graphics_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -9167,16 +8814,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -9274,17 +8916,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -9295,8 +8931,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_graphictypes_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -9388,17 +9024,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'type_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['type_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -9409,8 +9039,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'type_id' is set
-        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id'] is None):  # noqa: E501
+        if ('type_id' not in local_var_params or
+                local_var_params['type_id'] is None):
             raise ApiValueError("Missing the required parameter `type_id` when calling `slides_graphictypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
@@ -9502,17 +9132,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -9523,8 +9147,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_groupelements_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -9614,16 +9238,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -9721,17 +9340,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -9742,8 +9355,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_groupelementtypes_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -9835,17 +9448,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'type_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['type_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -9856,8 +9463,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'type_id' is set
-        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id'] is None):  # noqa: E501
+        if ('type_id' not in local_var_params or
+                local_var_params['type_id'] is None):
             raise ApiValueError("Missing the required parameter `type_id` when calling `slides_groupelementtypes_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
@@ -9949,17 +9556,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -9970,8 +9571,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_groups_childobjects_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -10063,17 +9664,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -10084,8 +9679,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_groups_details_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -10177,17 +9772,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -10198,8 +9787,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_groups_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -10293,18 +9882,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'updated'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'updated']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -10315,18 +9897,18 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_groups_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
         if 'id' in local_var_params:
-            path_params['Id'] = local_var_params['id']  # noqa: E501
+            path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
-        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+        if 'updated' in local_var_params:
             query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
@@ -10412,18 +9994,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'ooxml_dto'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'ooxml_dto']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -10434,8 +10009,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_groups_openofficexml_put_id`")  # noqa: E501
 
         collection_formats = {}
@@ -10481,17 +10056,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def slides_groups_svg_get_id(self, id, **kwargs):  # noqa: E501
+    def slides_groups_svg_get_id_use_cache(self, id, **kwargs):  # noqa: E501
         """Slides: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Slide as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_groups_svg_get_id(id, async_req=True)
+        >>> thread = api.slides_groups_svg_get_id_use_cache(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -10504,19 +10080,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.slides_groups_svg_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.slides_groups_svg_get_id_use_cache_with_http_info(id, **kwargs)  # noqa: E501
 
-    def slides_groups_svg_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def slides_groups_svg_get_id_use_cache_with_http_info(self, id, **kwargs):  # noqa: E501
         """Slides: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Slide as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_groups_svg_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.slides_groups_svg_get_id_use_cache_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -10533,30 +10110,24 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'use_cache']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method slides_groups_svg_get_id" % key
+                    " to method slides_groups_svg_get_id_use_cache" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `slides_groups_svg_get_id`")  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
+            raise ApiValueError("Missing the required parameter `id` when calling `slides_groups_svg_get_id_use_cache`")  # noqa: E501
 
         collection_formats = {}
 
@@ -10565,6 +10136,8 @@ class DefaultApi(object):
             path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'use_cache' in local_var_params:
+            query_params.append(('use_cache', local_var_params['use_cache']))  # noqa: E501
 
         header_params = {}
 
@@ -10647,17 +10220,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -10668,8 +10235,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_shapes_childobjects_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -10761,17 +10328,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -10782,8 +10343,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_shapes_details_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -10875,17 +10436,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -10896,8 +10451,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_shapes_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -10991,18 +10546,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'updated'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'updated']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -11013,18 +10561,18 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_shapes_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
         if 'id' in local_var_params:
-            path_params['Id'] = local_var_params['id']  # noqa: E501
+            path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
-        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+        if 'updated' in local_var_params:
             query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
@@ -11110,18 +10658,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'ooxml_dto'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'ooxml_dto']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -11132,8 +10673,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_shapes_openofficexml_put_id`")  # noqa: E501
 
         collection_formats = {}
@@ -11179,17 +10720,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def slides_shapes_svg_get_id(self, id, **kwargs):  # noqa: E501
+    def slides_shapes_svg_get_id_use_cache(self, id, **kwargs):  # noqa: E501
         """Slides: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Slide as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_shapes_svg_get_id(id, async_req=True)
+        >>> thread = api.slides_shapes_svg_get_id_use_cache(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -11202,19 +10744,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.slides_shapes_svg_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.slides_shapes_svg_get_id_use_cache_with_http_info(id, **kwargs)  # noqa: E501
 
-    def slides_shapes_svg_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def slides_shapes_svg_get_id_use_cache_with_http_info(self, id, **kwargs):  # noqa: E501
         """Slides: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Slide as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_shapes_svg_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.slides_shapes_svg_get_id_use_cache_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -11231,30 +10774,24 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'use_cache']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method slides_shapes_svg_get_id" % key
+                    " to method slides_shapes_svg_get_id_use_cache" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `slides_shapes_svg_get_id`")  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
+            raise ApiValueError("Missing the required parameter `id` when calling `slides_shapes_svg_get_id_use_cache`")  # noqa: E501
 
         collection_formats = {}
 
@@ -11263,6 +10800,8 @@ class DefaultApi(object):
             path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'use_cache' in local_var_params:
+            query_params.append(('use_cache', local_var_params['use_cache']))  # noqa: E501
 
         header_params = {}
 
@@ -11345,17 +10884,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -11366,8 +10899,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_shapetrees_childobjects_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -11459,17 +10992,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -11480,8 +11007,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_shapetrees_details_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -11573,17 +11100,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -11594,8 +11115,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_shapetrees_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -11689,18 +11210,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'updated'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'updated']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -11711,18 +11225,18 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_shapetrees_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
         if 'id' in local_var_params:
-            path_params['Id'] = local_var_params['id']  # noqa: E501
+            path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
-        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+        if 'updated' in local_var_params:
             query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
@@ -11808,18 +11322,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'ooxml_dto'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'ooxml_dto']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -11830,8 +11337,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_shapetrees_openofficexml_put_id`")  # noqa: E501
 
         collection_formats = {}
@@ -11877,17 +11384,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def slides_shapetrees_svg_get_id(self, id, **kwargs):  # noqa: E501
+    def slides_shapetrees_svg_get_id_use_cache(self, id, **kwargs):  # noqa: E501
         """Slides: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Slide as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_shapetrees_svg_get_id(id, async_req=True)
+        >>> thread = api.slides_shapetrees_svg_get_id_use_cache(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -11900,19 +11408,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.slides_shapetrees_svg_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.slides_shapetrees_svg_get_id_use_cache_with_http_info(id, **kwargs)  # noqa: E501
 
-    def slides_shapetrees_svg_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def slides_shapetrees_svg_get_id_use_cache_with_http_info(self, id, **kwargs):  # noqa: E501
         """Slides: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Slide as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_shapetrees_svg_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.slides_shapetrees_svg_get_id_use_cache_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -11929,30 +11438,24 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'use_cache']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method slides_shapetrees_svg_get_id" % key
+                    " to method slides_shapetrees_svg_get_id_use_cache" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `slides_shapetrees_svg_get_id`")  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
+            raise ApiValueError("Missing the required parameter `id` when calling `slides_shapetrees_svg_get_id_use_cache`")  # noqa: E501
 
         collection_formats = {}
 
@@ -11961,6 +11464,8 @@ class DefaultApi(object):
             path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'use_cache' in local_var_params:
+            query_params.append(('use_cache', local_var_params['use_cache']))  # noqa: E501
 
         header_params = {}
 
@@ -12043,17 +11548,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -12064,8 +11563,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_slidemasters_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -12157,17 +11656,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -12178,8 +11671,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_slides_childobjects_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -12271,17 +11764,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -12292,8 +11779,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_slides_details_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -12385,17 +11872,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -12406,8 +11887,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_slides_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -12501,18 +11982,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'updated'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'updated']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -12523,18 +11997,18 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_slides_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
         if 'id' in local_var_params:
-            path_params['Id'] = local_var_params['id']  # noqa: E501
+            path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
-        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+        if 'updated' in local_var_params:
             query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
@@ -12620,18 +12094,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'ooxml_dto'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'ooxml_dto']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -12642,8 +12109,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_slides_openofficexml_put_id`")  # noqa: E501
 
         collection_formats = {}
@@ -12689,17 +12156,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def slides_slides_svg_get_id(self, id, **kwargs):  # noqa: E501
+    def slides_slides_svg_get_id_use_cache(self, id, **kwargs):  # noqa: E501
         """Slides: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Slide as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_slides_svg_get_id(id, async_req=True)
+        >>> thread = api.slides_slides_svg_get_id_use_cache(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -12712,19 +12180,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.slides_slides_svg_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.slides_slides_svg_get_id_use_cache_with_http_info(id, **kwargs)  # noqa: E501
 
-    def slides_slides_svg_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def slides_slides_svg_get_id_use_cache_with_http_info(self, id, **kwargs):  # noqa: E501
         """Slides: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Slide as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_slides_svg_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.slides_slides_svg_get_id_use_cache_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -12741,30 +12210,24 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'use_cache']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method slides_slides_svg_get_id" % key
+                    " to method slides_slides_svg_get_id_use_cache" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `slides_slides_svg_get_id`")  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
+            raise ApiValueError("Missing the required parameter `id` when calling `slides_slides_svg_get_id_use_cache`")  # noqa: E501
 
         collection_formats = {}
 
@@ -12773,6 +12236,8 @@ class DefaultApi(object):
             path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'use_cache' in local_var_params:
+            query_params.append(('use_cache', local_var_params['use_cache']))  # noqa: E501
 
         header_params = {}
 
@@ -12855,17 +12320,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -12876,8 +12335,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_smartarts_childobjects_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -12969,17 +12428,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -12990,8 +12443,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_smartarts_details_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -13083,17 +12536,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -13104,8 +12551,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_smartarts_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -13199,18 +12646,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'updated'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'updated']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -13221,18 +12661,18 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_smartarts_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
         if 'id' in local_var_params:
-            path_params['Id'] = local_var_params['id']  # noqa: E501
+            path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
-        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+        if 'updated' in local_var_params:
             query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
@@ -13318,18 +12758,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'ooxml_dto'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'ooxml_dto']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -13340,8 +12773,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `slides_smartarts_openofficexml_put_id`")  # noqa: E501
 
         collection_formats = {}
@@ -13387,17 +12820,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def slides_smartarts_svg_get_id(self, id, **kwargs):  # noqa: E501
+    def slides_smartarts_svg_get_id_use_cache(self, id, **kwargs):  # noqa: E501
         """Slides: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Slide as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_smartarts_svg_get_id(id, async_req=True)
+        >>> thread = api.slides_smartarts_svg_get_id_use_cache(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -13410,19 +12844,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.slides_smartarts_svg_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.slides_smartarts_svg_get_id_use_cache_with_http_info(id, **kwargs)  # noqa: E501
 
-    def slides_smartarts_svg_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def slides_smartarts_svg_get_id_use_cache_with_http_info(self, id, **kwargs):  # noqa: E501
         """Slides: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Slide as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.slides_smartarts_svg_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.slides_smartarts_svg_get_id_use_cache_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -13439,30 +12874,24 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'use_cache']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method slides_smartarts_svg_get_id" % key
+                    " to method slides_smartarts_svg_get_id_use_cache" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `slides_smartarts_svg_get_id`")  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
+            raise ApiValueError("Missing the required parameter `id` when calling `slides_smartarts_svg_get_id_use_cache`")  # noqa: E501
 
         collection_formats = {}
 
@@ -13471,6 +12900,8 @@ class DefaultApi(object):
             path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'use_cache' in local_var_params:
+            query_params.append(('use_cache', local_var_params['use_cache']))  # noqa: E501
 
         header_params = {}
 
@@ -13553,17 +12984,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -13574,8 +12999,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `tables_borders_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -13667,17 +13092,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -13688,8 +13107,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `tables_cells_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -13781,17 +13200,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -13802,8 +13215,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `tables_columns_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -13895,17 +13308,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -13916,8 +13323,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `tables_rows_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -14009,17 +13416,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -14030,8 +13431,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `tables_tables_childobjects_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -14123,17 +13524,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -14144,8 +13539,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `tables_tables_details_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -14237,17 +13632,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -14258,8 +13647,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `tables_tables_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -14353,18 +13742,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'updated'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'updated']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -14375,18 +13757,18 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `tables_tables_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
         if 'id' in local_var_params:
-            path_params['Id'] = local_var_params['id']  # noqa: E501
+            path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
-        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+        if 'updated' in local_var_params:
             query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
@@ -14472,18 +13854,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'ooxml_dto'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'ooxml_dto']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -14494,8 +13869,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `tables_tables_openofficexml_put_id`")  # noqa: E501
 
         collection_formats = {}
@@ -14541,17 +13916,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def tables_tables_svg_get_id(self, id, **kwargs):  # noqa: E501
+    def tables_tables_svg_get_id_use_cache(self, id, **kwargs):  # noqa: E501
         """Tables: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Table as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.tables_tables_svg_get_id(id, async_req=True)
+        >>> thread = api.tables_tables_svg_get_id_use_cache(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -14564,19 +13940,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.tables_tables_svg_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.tables_tables_svg_get_id_use_cache_with_http_info(id, **kwargs)  # noqa: E501
 
-    def tables_tables_svg_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def tables_tables_svg_get_id_use_cache_with_http_info(self, id, **kwargs):  # noqa: E501
         """Tables: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Table as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.tables_tables_svg_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.tables_tables_svg_get_id_use_cache_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -14593,30 +13970,24 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'use_cache']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method tables_tables_svg_get_id" % key
+                    " to method tables_tables_svg_get_id_use_cache" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `tables_tables_svg_get_id`")  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
+            raise ApiValueError("Missing the required parameter `id` when calling `tables_tables_svg_get_id_use_cache`")  # noqa: E501
 
         collection_formats = {}
 
@@ -14625,6 +13996,8 @@ class DefaultApi(object):
             path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'use_cache' in local_var_params:
+            query_params.append(('use_cache', local_var_params['use_cache']))  # noqa: E501
 
         header_params = {}
 
@@ -14707,17 +14080,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -14728,15 +14095,15 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `tables_tables_tableupdate_get_id`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
         if 'id' in local_var_params:
-            path_params['Id'] = local_var_params['id']  # noqa: E501
+            path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
 
@@ -14823,18 +14190,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'table_table_data_dto'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'table_table_data_dto']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -14845,8 +14205,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `tables_tables_tableupdate_put_id`")  # noqa: E501
 
         collection_formats = {}
@@ -14944,17 +14304,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -14965,8 +14319,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `theme_themes_childobjects_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -15058,17 +14412,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -15079,8 +14427,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `theme_themes_details_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -15172,17 +14520,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -15193,8 +14535,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `theme_themes_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -15288,18 +14630,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'updated'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'updated']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -15310,18 +14645,18 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `theme_themes_openofficexml_get_id_updated`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
         if 'id' in local_var_params:
-            path_params['Id'] = local_var_params['id']  # noqa: E501
+            path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
-        if 'updated' in local_var_params and local_var_params['updated'] is not None:  # noqa: E501
+        if 'updated' in local_var_params:
             query_params.append(('updated', local_var_params['updated']))  # noqa: E501
 
         header_params = {}
@@ -15407,18 +14742,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'ooxml_dto'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'ooxml_dto']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -15429,8 +14757,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `theme_themes_openofficexml_put_id`")  # noqa: E501
 
         collection_formats = {}
@@ -15476,17 +14804,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def theme_themes_svg_get_id(self, id, **kwargs):  # noqa: E501
+    def theme_themes_svg_get_id_use_cache(self, id, **kwargs):  # noqa: E501
         """Theme: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Theme as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.theme_themes_svg_get_id(id, async_req=True)
+        >>> thread = api.theme_themes_svg_get_id_use_cache(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -15499,19 +14828,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.theme_themes_svg_get_id_with_http_info(id, **kwargs)  # noqa: E501
+        return self.theme_themes_svg_get_id_use_cache_with_http_info(id, **kwargs)  # noqa: E501
 
-    def theme_themes_svg_get_id_with_http_info(self, id, **kwargs):  # noqa: E501
+    def theme_themes_svg_get_id_use_cache_with_http_info(self, id, **kwargs):  # noqa: E501
         """Theme: Get Svg file  # noqa: E501
 
         This endpoint is helpful for rending this Theme as an svg or image object that can then be rendered in a story, dashboard or website.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.theme_themes_svg_get_id_with_http_info(id, async_req=True)
+        >>> thread = api.theme_themes_svg_get_id_use_cache_with_http_info(id, async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
         :param str id: (required)
+        :param bool use_cache: Indicates whether API should retrieve content from a cache if aviable (true, default), or force an update (false)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -15528,30 +14858,24 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'use_cache']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method theme_themes_svg_get_id" % key
+                    " to method theme_themes_svg_get_id_use_cache" % key
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `theme_themes_svg_get_id`")  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
+            raise ApiValueError("Missing the required parameter `id` when calling `theme_themes_svg_get_id_use_cache`")  # noqa: E501
 
         collection_formats = {}
 
@@ -15560,6 +14884,8 @@ class DefaultApi(object):
             path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'use_cache' in local_var_params:
+            query_params.append(('use_cache', local_var_params['use_cache']))  # noqa: E501
 
         header_params = {}
 
@@ -15642,17 +14968,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -15663,8 +14983,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `themes_backgroundfills_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -15756,17 +15076,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -15777,8 +15091,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `themes_colors_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -15870,17 +15184,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -15891,8 +15199,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `themes_customcolors_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -15984,17 +15292,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -16005,8 +15307,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `themes_effectmap_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -16098,17 +15400,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -16119,8 +15415,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `themes_fills_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -16212,17 +15508,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -16233,8 +15523,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `themes_fonts_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -16324,16 +15614,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -16431,17 +15716,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -16452,8 +15731,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `themes_intensity_get_id`")  # noqa: E501
 
         collection_formats = {}
@@ -16545,17 +15824,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'type_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['type_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -16566,8 +15839,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'type_id' is set
-        if self.api_client.client_side_validation and ('type_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['type_id'] is None):  # noqa: E501
+        if ('type_id' not in local_var_params or
+                local_var_params['type_id'] is None):
             raise ApiValueError("Missing the required parameter `type_id` when calling `themes_intensity_typeid_get_type_id`")  # noqa: E501
 
         collection_formats = {}
@@ -16659,17 +15932,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -16680,8 +15947,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `themes_linemap_get_id`")  # noqa: E501
 
         collection_formats = {}

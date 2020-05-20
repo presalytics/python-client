@@ -18,7 +18,7 @@ import re  # noqa: F401
 import six
 
 from presalytics.client.presalytics_story.api_client import ApiClient
-from presalytics.client.presalytics_story.exceptions import (  # noqa: F401
+from presalytics.client.presalytics_story.exceptions import (
     ApiTypeError,
     ApiValueError
 )
@@ -88,17 +88,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'unknown_base_type'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['unknown_base_type']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -109,8 +103,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'unknown_base_type' is set
-        if self.api_client.client_side_validation and ('unknown_base_type' not in local_var_params or  # noqa: E501
-                                                        local_var_params['unknown_base_type'] is None):  # noqa: E501
+        if ('unknown_base_type' not in local_var_params or
+                local_var_params['unknown_base_type'] is None):
             raise ApiValueError("Missing the required parameter `unknown_base_type` when calling `collaborators_post`")  # noqa: E501
 
         collection_formats = {}
@@ -206,17 +200,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'session_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['session_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -227,8 +215,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'session_id' is set
-        if self.api_client.client_side_validation and ('session_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['session_id'] is None):  # noqa: E501
+        if ('session_id' not in local_var_params or
+                local_var_params['session_id'] is None):
             raise ApiValueError("Missing the required parameter `session_id` when calling `session_id_delete`")  # noqa: E501
 
         collection_formats = {}
@@ -322,18 +310,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'session_id',
-            'include_relationships'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['session_id', 'include_relationships']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -344,8 +325,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'session_id' is set
-        if self.api_client.client_side_validation and ('session_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['session_id'] is None):  # noqa: E501
+        if ('session_id' not in local_var_params or
+                local_var_params['session_id'] is None):
             raise ApiValueError("Missing the required parameter `session_id` when calling `session_id_get`")  # noqa: E501
 
         collection_formats = {}
@@ -355,7 +336,7 @@ class DefaultApi(object):
             path_params['session_id'] = local_var_params['session_id']  # noqa: E501
 
         query_params = []
-        if 'include_relationships' in local_var_params and local_var_params['include_relationships'] is not None:  # noqa: E501
+        if 'include_relationships' in local_var_params:
             query_params.append(('include_relationships', local_var_params['include_relationships']))  # noqa: E501
 
         header_params = {}
@@ -439,17 +420,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'session_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['session_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -460,8 +435,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'session_id' is set
-        if self.api_client.client_side_validation and ('session_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['session_id'] is None):  # noqa: E501
+        if ('session_id' not in local_var_params or
+                local_var_params['session_id'] is None):
             raise ApiValueError("Missing the required parameter `session_id` when calling `sessions_id_views_get`")  # noqa: E501
 
         collection_formats = {}
@@ -555,18 +530,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'session_id',
-            'required_parameters_to_create_a_view'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['session_id', 'required_parameters_to_create_a_view']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -577,12 +545,12 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'session_id' is set
-        if self.api_client.client_side_validation and ('session_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['session_id'] is None):  # noqa: E501
+        if ('session_id' not in local_var_params or
+                local_var_params['session_id'] is None):
             raise ApiValueError("Missing the required parameter `session_id` when calling `sessions_id_views_post`")  # noqa: E501
         # verify the required parameter 'required_parameters_to_create_a_view' is set
-        if self.api_client.client_side_validation and ('required_parameters_to_create_a_view' not in local_var_params or  # noqa: E501
-                                                        local_var_params['required_parameters_to_create_a_view'] is None):  # noqa: E501
+        if ('required_parameters_to_create_a_view' not in local_var_params or
+                local_var_params['required_parameters_to_create_a_view'] is None):
             raise ApiValueError("Missing the required parameter `required_parameters_to_create_a_view` when calling `sessions_id_views_post`")  # noqa: E501
 
         collection_formats = {}
@@ -678,16 +646,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -785,17 +748,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'include_relationships'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['include_relationships']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -811,7 +768,7 @@ class DefaultApi(object):
         path_params = {}
 
         query_params = []
-        if 'include_relationships' in local_var_params and local_var_params['include_relationships'] is not None:  # noqa: E501
+        if 'include_relationships' in local_var_params:
             query_params.append(('include_relationships', local_var_params['include_relationships']))  # noqa: E501
 
         header_params = {}
@@ -895,17 +852,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -916,8 +867,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `story_id_collaborators_get`")  # noqa: E501
 
         collection_formats = {}
@@ -1011,18 +962,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'unknown_base_type'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'unknown_base_type']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1033,12 +977,12 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `story_id_collaborators_inactive_post`")  # noqa: E501
         # verify the required parameter 'unknown_base_type' is set
-        if self.api_client.client_side_validation and ('unknown_base_type' not in local_var_params or  # noqa: E501
-                                                        local_var_params['unknown_base_type'] is None):  # noqa: E501
+        if ('unknown_base_type' not in local_var_params or
+                local_var_params['unknown_base_type'] is None):
             raise ApiValueError("Missing the required parameter `unknown_base_type` when calling `story_id_collaborators_inactive_post`")  # noqa: E501
 
         collection_formats = {}
@@ -1138,18 +1082,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'unknown_base_type'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'unknown_base_type']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1160,12 +1097,12 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `story_id_collaborators_post`")  # noqa: E501
         # verify the required parameter 'unknown_base_type' is set
-        if self.api_client.client_side_validation and ('unknown_base_type' not in local_var_params or  # noqa: E501
-                                                        local_var_params['unknown_base_type'] is None):  # noqa: E501
+        if ('unknown_base_type' not in local_var_params or
+                local_var_params['unknown_base_type'] is None):
             raise ApiValueError("Missing the required parameter `unknown_base_type` when calling `story_id_collaborators_post`")  # noqa: E501
 
         collection_formats = {}
@@ -1265,18 +1202,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'story_collaborator_userid'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'story_collaborator_userid']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1287,12 +1217,12 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `story_id_collaborators_userid_delete`")  # noqa: E501
         # verify the required parameter 'story_collaborator_userid' is set
-        if self.api_client.client_side_validation and ('story_collaborator_userid' not in local_var_params or  # noqa: E501
-                                                        local_var_params['story_collaborator_userid'] is None):  # noqa: E501
+        if ('story_collaborator_userid' not in local_var_params or
+                local_var_params['story_collaborator_userid'] is None):
             raise ApiValueError("Missing the required parameter `story_collaborator_userid` when calling `story_id_collaborators_userid_delete`")  # noqa: E501
 
         collection_formats = {}
@@ -1388,18 +1318,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'story_collaborator_userid'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'story_collaborator_userid']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1410,12 +1333,12 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `story_id_collaborators_userid_get`")  # noqa: E501
         # verify the required parameter 'story_collaborator_userid' is set
-        if self.api_client.client_side_validation and ('story_collaborator_userid' not in local_var_params or  # noqa: E501
-                                                        local_var_params['story_collaborator_userid'] is None):  # noqa: E501
+        if ('story_collaborator_userid' not in local_var_params or
+                local_var_params['story_collaborator_userid'] is None):
             raise ApiValueError("Missing the required parameter `story_collaborator_userid` when calling `story_id_collaborators_userid_get`")  # noqa: E501
 
         collection_formats = {}
@@ -1513,19 +1436,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'story_collaborator_userid',
-            'permissiontype'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'story_collaborator_userid', 'permissiontype']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1536,16 +1451,16 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `story_id_collaborators_userid_permissiontype_get`")  # noqa: E501
         # verify the required parameter 'story_collaborator_userid' is set
-        if self.api_client.client_side_validation and ('story_collaborator_userid' not in local_var_params or  # noqa: E501
-                                                        local_var_params['story_collaborator_userid'] is None):  # noqa: E501
+        if ('story_collaborator_userid' not in local_var_params or
+                local_var_params['story_collaborator_userid'] is None):
             raise ApiValueError("Missing the required parameter `story_collaborator_userid` when calling `story_id_collaborators_userid_permissiontype_get`")  # noqa: E501
         # verify the required parameter 'permissiontype' is set
-        if self.api_client.client_side_validation and ('permissiontype' not in local_var_params or  # noqa: E501
-                                                        local_var_params['permissiontype'] is None):  # noqa: E501
+        if ('permissiontype' not in local_var_params or
+                local_var_params['permissiontype'] is None):
             raise ApiValueError("Missing the required parameter `permissiontype` when calling `story_id_collaborators_userid_permissiontype_get`")  # noqa: E501
 
         collection_formats = {}
@@ -1645,19 +1560,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'story_collaborator_userid',
-            'story_collaborator'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'story_collaborator_userid', 'story_collaborator']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1668,16 +1575,16 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `story_id_collaborators_userid_put`")  # noqa: E501
         # verify the required parameter 'story_collaborator_userid' is set
-        if self.api_client.client_side_validation and ('story_collaborator_userid' not in local_var_params or  # noqa: E501
-                                                        local_var_params['story_collaborator_userid'] is None):  # noqa: E501
+        if ('story_collaborator_userid' not in local_var_params or
+                local_var_params['story_collaborator_userid'] is None):
             raise ApiValueError("Missing the required parameter `story_collaborator_userid` when calling `story_id_collaborators_userid_put`")  # noqa: E501
         # verify the required parameter 'story_collaborator' is set
-        if self.api_client.client_side_validation and ('story_collaborator' not in local_var_params or  # noqa: E501
-                                                        local_var_params['story_collaborator'] is None):  # noqa: E501
+        if ('story_collaborator' not in local_var_params or
+                local_var_params['story_collaborator'] is None):
             raise ApiValueError("Missing the required parameter `story_collaborator` when calling `story_id_collaborators_userid_put`")  # noqa: E501
 
         collection_formats = {}
@@ -1777,17 +1684,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1798,8 +1699,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `story_id_delete`")  # noqa: E501
 
         collection_formats = {}
@@ -1893,18 +1794,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'ooxml_automation_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'ooxml_automation_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1915,12 +1809,12 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `story_id_file_ooxmlautomationid_get`")  # noqa: E501
         # verify the required parameter 'ooxml_automation_id' is set
-        if self.api_client.client_side_validation and ('ooxml_automation_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['ooxml_automation_id'] is None):  # noqa: E501
+        if ('ooxml_automation_id' not in local_var_params or
+                local_var_params['ooxml_automation_id'] is None):
             raise ApiValueError("Missing the required parameter `ooxml_automation_id` when calling `story_id_file_ooxmlautomationid_get`")  # noqa: E501
 
         collection_formats = {}
@@ -2020,20 +1914,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'replace_existing',
-            'obsolete_id',
-            'file'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'replace_existing', 'obsolete_id', 'file']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2044,8 +1929,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `story_id_file_post`")  # noqa: E501
 
         collection_formats = {}
@@ -2055,9 +1940,9 @@ class DefaultApi(object):
             path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
-        if 'replace_existing' in local_var_params and local_var_params['replace_existing'] is not None:  # noqa: E501
+        if 'replace_existing' in local_var_params:
             query_params.append(('replace_existing', local_var_params['replace_existing']))  # noqa: E501
-        if 'obsolete_id' in local_var_params and local_var_params['obsolete_id'] is not None:  # noqa: E501
+        if 'obsolete_id' in local_var_params:
             query_params.append(('obsolete_id', local_var_params['obsolete_id']))  # noqa: E501
 
         header_params = {}
@@ -2150,18 +2035,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'include_relationships'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'include_relationships']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2172,8 +2050,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `story_id_get`")  # noqa: E501
 
         collection_formats = {}
@@ -2183,7 +2061,7 @@ class DefaultApi(object):
             path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
-        if 'include_relationships' in local_var_params and local_var_params['include_relationships'] is not None:  # noqa: E501
+        if 'include_relationships' in local_var_params:
             query_params.append(('include_relationships', local_var_params['include_relationships']))  # noqa: E501
 
         header_params = {}
@@ -2269,18 +2147,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'figure_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'figure_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2291,12 +2162,12 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `story_id_maplotlib_responsive_figure_id_get`")  # noqa: E501
         # verify the required parameter 'figure_id' is set
-        if self.api_client.client_side_validation and ('figure_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['figure_id'] is None):  # noqa: E501
+        if ('figure_id' not in local_var_params or
+                local_var_params['figure_id'] is None):
             raise ApiValueError("Missing the required parameter `figure_id` when calling `story_id_maplotlib_responsive_figure_id_get`")  # noqa: E501
 
         collection_formats = {}
@@ -2392,18 +2263,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'story'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'story']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2414,12 +2278,12 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `story_id_put`")  # noqa: E501
         # verify the required parameter 'story' is set
-        if self.api_client.client_side_validation and ('story' not in local_var_params or  # noqa: E501
-                                                        local_var_params['story'] is None):  # noqa: E501
+        if ('story' not in local_var_params or
+                local_var_params['story'] is None):
             raise ApiValueError("Missing the required parameter `story` when calling `story_id_put`")  # noqa: E501
 
         collection_formats = {}
@@ -2519,18 +2383,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'unknown_base_type'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'unknown_base_type']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2541,12 +2398,12 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `story_id_session_post`")  # noqa: E501
         # verify the required parameter 'unknown_base_type' is set
-        if self.api_client.client_side_validation and ('unknown_base_type' not in local_var_params or  # noqa: E501
-                                                        local_var_params['unknown_base_type'] is None):  # noqa: E501
+        if ('unknown_base_type' not in local_var_params or
+                local_var_params['unknown_base_type'] is None):
             raise ApiValueError("Missing the required parameter `unknown_base_type` when calling `story_id_session_post`")  # noqa: E501
 
         collection_formats = {}
@@ -2646,18 +2503,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'include_relationships'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['id', 'include_relationships']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2668,8 +2518,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
             raise ApiValueError("Missing the required parameter `id` when calling `story_id_sessions_get`")  # noqa: E501
 
         collection_formats = {}
@@ -2679,7 +2529,7 @@ class DefaultApi(object):
             path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
-        if 'include_relationships' in local_var_params and local_var_params['include_relationships'] is not None:  # noqa: E501
+        if 'include_relationships' in local_var_params:
             query_params.append(('include_relationships', local_var_params['include_relationships']))  # noqa: E501
 
         header_params = {}
@@ -2763,17 +2613,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'schema_version'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['schema_version']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2784,8 +2628,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'schema_version' is set
-        if self.api_client.client_side_validation and ('schema_version' not in local_var_params or  # noqa: E501
-                                                        local_var_params['schema_version'] is None):  # noqa: E501
+        if ('schema_version' not in local_var_params or
+                local_var_params['schema_version'] is None):
             raise ApiValueError("Missing the required parameter `schema_version` when calling `story_outline_schema`")  # noqa: E501
 
         collection_formats = {}
@@ -2875,16 +2719,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -2982,17 +2821,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'outline'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['outline']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -3003,8 +2836,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'outline' is set
-        if self.api_client.client_side_validation and ('outline' not in local_var_params or  # noqa: E501
-                                                        local_var_params['outline'] is None):  # noqa: E501
+        if ('outline' not in local_var_params or
+                local_var_params['outline'] is None):
             raise ApiValueError("Missing the required parameter `outline` when calling `story_post`")  # noqa: E501
 
         collection_formats = {}
@@ -3100,17 +2933,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'file'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['file']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -3215,17 +3042,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'view_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['view_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -3236,8 +3057,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'view_id' is set
-        if self.api_client.client_side_validation and ('view_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['view_id'] is None):  # noqa: E501
+        if ('view_id' not in local_var_params or
+                local_var_params['view_id'] is None):
             raise ApiValueError("Missing the required parameter `view_id` when calling `views_id_delete`")  # noqa: E501
 
         collection_formats = {}
@@ -3329,17 +3150,11 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'view_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
+        all_params = ['view_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -3350,8 +3165,8 @@ class DefaultApi(object):
             local_var_params[key] = val
         del local_var_params['kwargs']
         # verify the required parameter 'view_id' is set
-        if self.api_client.client_side_validation and ('view_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['view_id'] is None):  # noqa: E501
+        if ('view_id' not in local_var_params or
+                local_var_params['view_id'] is None):
             raise ApiValueError("Missing the required parameter `view_id` when calling `views_id_get`")  # noqa: E501
 
         collection_formats = {}

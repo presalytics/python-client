@@ -281,7 +281,7 @@ class Client(object):
                 self.token_util.token = {"access_token": token}
             
             # if token is a dictionary with an 'access_token_expire_time' key, it's previous been processed / deserialized
-            if token.get('access_token_expire_time', None):
+            elif token.get('access_token_expire_time', None):
                 self.token_util.token = token
 
             # if token has an 'expires_in' key, if has not been deserialized

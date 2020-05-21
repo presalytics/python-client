@@ -160,6 +160,7 @@ def create_outline_from_ooxml_document(story_api: 'Story',
             _themes = [create_theme_from_ooxml_document(ooxml_id, client_info=client_info)]
     except Exception:
         logger.error("Unable to add theme to ooxml_story", exc_info=True)
+        _themes = []
     
     if title:
         _title = title

@@ -9,6 +9,7 @@ import logging
 import json
 import environs
 import wsgi_microservice_middleware
+import functools
 import presalytics
 import presalytics.lib.exceptions
 import presalytics.lib.constants as cnst
@@ -43,11 +44,11 @@ class Client(object):
 
     *A note for server-side development*:
 
-    By default, the client class automatically caches tokens in a file called 
+    The client class can automatically cache tokens in a file called 
     "token.json", located in the python's current working directory.  This is done so
-    users running scripts do not have to acquire a new token every time an API call is
-    made. If building a client to operate in a multi-user environment, this behavior 
-    should be turned off so that user do not pull one another's tokens.
+    users running scripts accross multiple client instances do not have to acquire a new token 
+    every time an API call is made. If building a client to operate in a multi-user environment, 
+    this behavior should be turned off so that one user cannot not pull one another's tokens.
     To do this, ensure the following parameters are pass to the configuration either 
     via initialization or in a `presalytics.CONFIG` file: 
     
@@ -454,6 +455,15 @@ class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presal
         self.update_configuration()
 
 
+@functools.lru_cache(maxsize=None)
+def get_client():
+    """
+    Caches a client instance for default parameters set in `presalytics.CONFIG`.
+
+    DO NOT use in server-side operation
+    """
+    client = presalytics.Client()
+    return client
 
 
         

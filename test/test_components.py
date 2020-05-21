@@ -6,7 +6,7 @@ import typing
 import presalytics
 import io
 import lxml
-from test import get_test_client
+from presalytics.client.api import get_client
 if typing.TYPE_CHECKING:
     from presalytics.client.presalytics_story import Story, OoxmlDocument
     from presalytics.client.presalytics_ooxml_automation.models import ChartChartDataDTO, TableTableDataDTO
@@ -29,11 +29,11 @@ class TestComponents(unittest.TestCase):
         test_file = os.path.join(os.path.dirname(__file__), "files", "star.pptx")
         tmp_filename = os.path.join(os.path.dirname(__file__), os.path.basename(test_file))
         shutil.copyfile(test_file, tmp_filename)
-        client_info = get_test_client().get_client_info()
+        client_info = get_client().get_client_info()
         story = presalytics.create_story_from_ooxml_file(tmp_filename, client_info=client_info)
         outline = presalytics.StoryOutline.load(story.outline)
         old_widget = outline.pages[0].widgets[0]
-        childs = get_test_client().ooxml_automation.documents_childobjects_get_id(old_widget.data["document_ooxml_id"])
+        childs = get_client().ooxml_automation.documents_childobjects_get_id(old_widget.data["document_ooxml_id"])
         endpoint_map = presalytics.OoxmlEndpointMap.shape() 
         object_type = endpoint_map.get_object_type()
         info = next(x for x in childs if x.object_type == object_type)
@@ -66,7 +66,7 @@ class TestComponents(unittest.TestCase):
         
         presalytics.COMPONENTS.register(widget)
         story.outline = outline.dump()
-        get_test_client().story.story_id_put(story.id, story)
+        get_client().story.story_id_put(story.id, story)
         html = presalytics.Revealer(outline).package_as_standalone().decode('utf-8')
         self.assertIsInstance(html, str)
         os.remove(tmp_filename)
@@ -88,7 +88,7 @@ class TestComponents(unittest.TestCase):
         with open(test_file, 'rb') as f:
             _bytes = io.BytesIO(f.read())
 
-        story = presalytics.story_post_file_bytes(get_test_client(), _bytes, "testfile.pptx")
+        story = presalytics.story_post_file_bytes(get_client(), _bytes, "testfile.pptx")
         from presalytics.client.presalytics_story.models.story import Story
         self.assertIsInstance(story, Story)
 
@@ -121,10 +121,10 @@ class TestComponents(unittest.TestCase):
         document: "OoxmlDocument"
 
         test_file = os.path.join(os.path.dirname(__file__), "files", "bubblechart.pptx")
-        story = get_test_client().story.story_post_file(file=[test_file])
-        story_detailed = get_test_client().story.story_id_get(story.id, include_relationships=True)
+        story = get_client().story.story_post_file(file=[test_file])
+        story_detailed = get_client().story.story_id_get(story.id, include_relationships=True)
         document = story_detailed.ooxml_documents[0]
-        object_tree = get_test_client().ooxml_automation.documents_childobjects_get_id(document.ooxml_automation_id)
+        object_tree = get_client().ooxml_automation.documents_childobjects_get_id(document.ooxml_automation_id)
         endpoint_map = presalytics.OoxmlEndpointMap.chart() 
         object_type = endpoint_map.get_object_type()
         chart_id = next(entity.entity_id for entity in object_tree if entity.object_type == object_type)
@@ -167,10 +167,10 @@ class TestComponents(unittest.TestCase):
         dto: "TableTableDataDTO"
 
         test_file = os.path.join(os.path.dirname(__file__), "files", "table.pptx")
-        story = get_test_client().story.story_post_file(file=[test_file])
-        story_detailed = get_test_client().story.story_id_get(story.id, include_relationships=True)
+        story = get_client().story.story_post_file(file=[test_file])
+        story_detailed = get_client().story.story_id_get(story.id, include_relationships=True)
         document = story_detailed.ooxml_documents[0]
-        object_tree = get_test_client().ooxml_automation.documents_childobjects_get_id(document.ooxml_automation_id)
+        object_tree = get_client().ooxml_automation.documents_childobjects_get_id(document.ooxml_automation_id)
         endpoint_map = presalytics.OoxmlEndpointMap.table() 
         object_type = endpoint_map.get_object_type()
         table_id = next(entity.entity_id for entity in object_tree if entity.object_type == object_type)

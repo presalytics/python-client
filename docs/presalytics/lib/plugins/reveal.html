@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal.py#L0-L209" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal.py#L0-L225" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import presalytics.lib.plugins.base as ext
 import presalytics.lib.plugins.jinja as jinja
@@ -61,6 +61,22 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
                 &#39;approved_styles_key&#39;: &#39;reveal.themes.white&#39;
             }
         },
+        {
+            &#39;kind&#39;: &#39;style&#39;,
+            &#39;name&#39;: &#39;external_links&#39;,
+            &#39;config&#39;: {
+                &#39;approved_styles_key&#39;: &#39;reveal.customizations&#39;
+            }
+        },
+        {
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;reveal.customizations&#39;
+            }
+        },
+        
+        
     ]
 
     def to_script(self, config, **kwargs):
@@ -123,7 +139,7 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
         &#39;touch&#39;: True,
 
         # Loop the presentation
-        &#39;loop&#39;: False,
+        &#39;loop&#39;: True,
 
         # Change the presentation direction to be RTL
         &#39;rtl&#39;: False,
@@ -258,7 +274,7 @@ refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://g
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal.py#L5-L210" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal.py#L5-L226" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
     &#34;&#34;&#34;
@@ -292,6 +308,22 @@ refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://g
                 &#39;approved_styles_key&#39;: &#39;reveal.themes.white&#39;
             }
         },
+        {
+            &#39;kind&#39;: &#39;style&#39;,
+            &#39;name&#39;: &#39;external_links&#39;,
+            &#39;config&#39;: {
+                &#39;approved_styles_key&#39;: &#39;reveal.customizations&#39;
+            }
+        },
+        {
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;reveal.customizations&#39;
+            }
+        },
+        
+        
     ]
 
     def to_script(self, config, **kwargs):
@@ -354,7 +386,7 @@ refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://g
         &#39;touch&#39;: True,
 
         # Loop the presentation
-        &#39;loop&#39;: False,
+        &#39;loop&#39;: True,
 
         # Change the presentation direction to be RTL
         &#39;rtl&#39;: False,

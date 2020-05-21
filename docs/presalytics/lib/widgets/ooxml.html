@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L0-L865" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L0-L901" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import typing
 import time
@@ -285,6 +285,8 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
     endpoint_map: OoxmlEndpointMap
     data: typing.Dict
 
+    __component_kind__ = &#34;ooxml-base-widget&#34;
+
     __plugins__ = [
         {
             &#39;name&#39;: &#39;external_scripts&#39;,
@@ -337,7 +339,7 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
             &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
             &#39;data-object-id&#39;: self.object_ooxml_id
         })
-        preloader_container_div = lxml.etree.SubElement(svg_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-container&#34;})
+        preloader_container_div = lxml.html.Element( &#34;div&#34;, {&#34;class&#34;:&#34;preloader-container&#34;})
         preloader_row_div = lxml.etree.SubElement(preloader_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-row&#34;})
         preloader_file = os.path.join(os.path.dirname(__file__), &#34;img&#34;, &#34;preloader.svg&#34;)
         svg = lxml.html.parse(preloader_file)
@@ -345,11 +347,20 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         empty_parent_div = lxml.html.Element(&#34;div&#34;, {
             &#39;class&#39;: &#39;empty-parent bg-light&#39;
         })
-        empty_parent_div.append(svg_container_div)
+        empty_parent_div.extend([svg_container_div, preloader_container_div])
         return lxml.html.tostring(empty_parent_div)
 
 
     def to_html(self, **kwargs):
+        &#34;&#34;&#34;
+        Returns an html string that will render the object at the endpoint
+        &#34;&#34;&#34;
+        html = self.create_container()
+        try:
+            html = html.decode(&#39;utf-8&#39;)
+        except Exception:
+            pass
+        self.svg_html = html
         return self.svg_html
 
     def get_svg(self, id, timeout_iterator=0) -&gt; str:
@@ -373,10 +384,37 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         return svg_data
 
     def get_svg_file(self, filename=None):
+        &#34;&#34;&#34;
+        Writes an svg representation of the object to current working directory.  Filname is optional.
+        &#34;&#34;&#34;
         if not filename:
             filename = self.endpoint_map.get_object_type() + &#34;-&#34; + self.object_ooxml_id + &#34;.pptx&#34;
         with open(filename, &#39;w&#39;) as f:
             f.write(self.get_svg(self.object_ooxml_id))
+
+    def serialize(self):
+        data = {
+            &#34;story_id&#34;: self.story_id,
+            &#34;object_id&#34;: self.object_ooxml_id,
+            &#34;endpoint_id&#34;: self.endpoint_map.endpoint_id
+        }
+        widget = presalytics.story.outline.Widget(
+            name=self.name,
+            kind=self.__component_kind__,
+            data=data,
+            plugins=None
+        )
+        return widget
+
+    @classmethod
+    def deserialize(cls, component, **kwargs):
+        return cls(
+            component.name, 
+            component.data[&#34;story_id&#34;], 
+            component.data[&#34;object_id&#34;],
+            OoxmlEndpointMap(component.data[&#34;endpoint_id&#34;]),
+            **kwargs
+        )
 
 
 class OoxmlFileWidget(OoxmlWidgetBase):
@@ -761,8 +799,6 @@ class UpdaterWidgetBase(OoxmlWidgetBase):
         )
 
         
-
-
 class ChartUpdaterWidget(UpdaterWidgetBase):
     &#34;&#34;&#34;
     Updates a Chart in the Ooxml Automation service API at the the endpoint &#39;/Chart/ChartUpdate/&#39;
@@ -801,7 +837,7 @@ class ChartUpdaterWidget(UpdaterWidgetBase):
                 dto: &#39;ChartChartDataDTO&#39; = None, 
                 data_table: typing.Sequence[typing.Sequence] = None,
                 **kwargs):
-        super().__init__(name, story_id, chart_id, OoxmlEndpointMap.chart(), dto=dto, data_table=data_table)
+        super().__init__(name, story_id, chart_id, OoxmlEndpointMap.chart(), dto=dto, data_table=data_table, **kwargs)
         self.chart_id = chart_id
 
 
@@ -878,7 +914,7 @@ class TableUpdaterWidget(UpdaterWidgetBase):
                 dto: &#39;TableTableDataDTO&#39; = None, 
                 data_table: typing.Sequence[typing.Sequence] = None,
                 **kwargs):
-        super().__init__(name, story_id, table_id, OoxmlEndpointMap.table(), dto=dto, data_table=data_table)
+        super().__init__(name, story_id, table_id, OoxmlEndpointMap.table(), dto=dto, data_table=data_table, **kwargs)
         self.table_id = table_id
 
 
@@ -1451,7 +1487,7 @@ that for the object of interest</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L231-L352" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L231-L390" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
     &#34;&#34;&#34;
@@ -1482,6 +1518,8 @@ that for the object of interest</dd>
     &#34;&#34;&#34;
     endpoint_map: OoxmlEndpointMap
     data: typing.Dict
+
+    __component_kind__ = &#34;ooxml-base-widget&#34;
 
     __plugins__ = [
         {
@@ -1535,7 +1573,7 @@ that for the object of interest</dd>
             &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
             &#39;data-object-id&#39;: self.object_ooxml_id
         })
-        preloader_container_div = lxml.etree.SubElement(svg_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-container&#34;})
+        preloader_container_div = lxml.html.Element( &#34;div&#34;, {&#34;class&#34;:&#34;preloader-container&#34;})
         preloader_row_div = lxml.etree.SubElement(preloader_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-row&#34;})
         preloader_file = os.path.join(os.path.dirname(__file__), &#34;img&#34;, &#34;preloader.svg&#34;)
         svg = lxml.html.parse(preloader_file)
@@ -1543,11 +1581,20 @@ that for the object of interest</dd>
         empty_parent_div = lxml.html.Element(&#34;div&#34;, {
             &#39;class&#39;: &#39;empty-parent bg-light&#39;
         })
-        empty_parent_div.append(svg_container_div)
+        empty_parent_div.extend([svg_container_div, preloader_container_div])
         return lxml.html.tostring(empty_parent_div)
 
 
     def to_html(self, **kwargs):
+        &#34;&#34;&#34;
+        Returns an html string that will render the object at the endpoint
+        &#34;&#34;&#34;
+        html = self.create_container()
+        try:
+            html = html.decode(&#39;utf-8&#39;)
+        except Exception:
+            pass
+        self.svg_html = html
         return self.svg_html
 
     def get_svg(self, id, timeout_iterator=0) -&gt; str:
@@ -1571,10 +1618,37 @@ that for the object of interest</dd>
         return svg_data
 
     def get_svg_file(self, filename=None):
+        &#34;&#34;&#34;
+        Writes an svg representation of the object to current working directory.  Filname is optional.
+        &#34;&#34;&#34;
         if not filename:
             filename = self.endpoint_map.get_object_type() + &#34;-&#34; + self.object_ooxml_id + &#34;.pptx&#34;
         with open(filename, &#39;w&#39;) as f:
-            f.write(self.get_svg(self.object_ooxml_id))</code></pre>
+            f.write(self.get_svg(self.object_ooxml_id))
+
+    def serialize(self):
+        data = {
+            &#34;story_id&#34;: self.story_id,
+            &#34;object_id&#34;: self.object_ooxml_id,
+            &#34;endpoint_id&#34;: self.endpoint_map.endpoint_id
+        }
+        widget = presalytics.story.outline.Widget(
+            name=self.name,
+            kind=self.__component_kind__,
+            data=data,
+            plugins=None
+        )
+        return widget
+
+    @classmethod
+    def deserialize(cls, component, **kwargs):
+        return cls(
+            component.name, 
+            component.data[&#34;story_id&#34;], 
+            component.data[&#34;object_id&#34;],
+            OoxmlEndpointMap(component.data[&#34;endpoint_id&#34;]),
+            **kwargs
+        )</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1599,7 +1673,7 @@ will be rendered inside of a story</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L300-L322" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L302-L324" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def create_container(self, **kwargs):
     &#34;&#34;&#34;
@@ -1614,7 +1688,7 @@ will be rendered inside of a story</p></section>
         &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
         &#39;data-object-id&#39;: self.object_ooxml_id
     })
-    preloader_container_div = lxml.etree.SubElement(svg_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-container&#34;})
+    preloader_container_div = lxml.html.Element( &#34;div&#34;, {&#34;class&#34;:&#34;preloader-container&#34;})
     preloader_row_div = lxml.etree.SubElement(preloader_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-row&#34;})
     preloader_file = os.path.join(os.path.dirname(__file__), &#34;img&#34;, &#34;preloader.svg&#34;)
     svg = lxml.html.parse(preloader_file)
@@ -1622,8 +1696,31 @@ will be rendered inside of a story</p></section>
     empty_parent_div = lxml.html.Element(&#34;div&#34;, {
         &#39;class&#39;: &#39;empty-parent bg-light&#39;
     })
-    empty_parent_div.append(svg_container_div)
+    empty_parent_div.extend([svg_container_div, preloader_container_div])
     return lxml.html.tostring(empty_parent_div)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html"><code class="name flex">
+<span>def <span class="ident">to_html</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns an html string that will render the object at the endpoint</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L327-L337" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_html(self, **kwargs):
+    &#34;&#34;&#34;
+    Returns an html string that will render the object at the endpoint
+    &#34;&#34;&#34;
+    html = self.create_container()
+    try:
+        html = html.decode(&#39;utf-8&#39;)
+    except Exception:
+        pass
+    self.svg_html = html
+    return self.svg_html</code></pre>
 </details>
 </dd>
 <dt id="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg"><code class="name flex">
@@ -1634,7 +1731,7 @@ will be rendered inside of a story</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L328-L346" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L339-L357" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_svg(self, id, timeout_iterator=0) -&gt; str:
     &#34;&#34;&#34;
@@ -1661,13 +1758,17 @@ will be rendered inside of a story</p></section>
 <span>def <span class="ident">get_svg_file</span></span>(<span>self, filename=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Writes an svg representation of the object to current working directory.
+Filname is optional.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L348-L352" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L359-L366" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_svg_file(self, filename=None):
+    &#34;&#34;&#34;
+    Writes an svg representation of the object to current working directory.  Filname is optional.
+    &#34;&#34;&#34;
     if not filename:
         filename = self.endpoint_map.get_object_type() + &#34;-&#34; + self.object_ooxml_id + &#34;.pptx&#34;
     with open(filename, &#39;w&#39;) as f:
@@ -1683,7 +1784,6 @@ will be rendered inside of a story</p></section>
 <li><code><a title="presalytics.story.components.WidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
 <li><code><a title="presalytics.story.components.WidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
 <li><code><a title="presalytics.story.components.WidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
-<li><code><a title="presalytics.story.components.WidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1743,7 +1843,7 @@ idenitifiable by a combinatation of <code>object_ooxml_id</code> and <code>endpo
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L355-L582" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L393-L620" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlFileWidget(OoxmlWidgetBase):
     &#34;&#34;&#34;
@@ -1992,7 +2092,7 @@ the updated rendering data to the server</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L452-L509" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L490-L547" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update(self):
     &#34;&#34;&#34;
@@ -2063,9 +2163,10 @@ the updated rendering data to the server</p></section>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file">get_svg_file</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html">to_html</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2109,7 +2210,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L585-L734" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L623-L772" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class UpdaterWidgetBase(OoxmlWidgetBase):
     &#34;&#34;&#34;
@@ -2284,7 +2385,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L659-L663" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L697-L701" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def build_endpoint(self) -&gt; str:
     &#34;&#34;&#34;
@@ -2301,7 +2402,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L665-L677" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L703-L715" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_dto(self):
     &#34;&#34;&#34;
@@ -2327,7 +2428,7 @@ the <code>svg_html</code> attribute</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L693-L699" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L731-L737" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_from_dto(self, dto):
     &#34;&#34;&#34;
@@ -2347,7 +2448,7 @@ the <code>svg_html</code> attribute</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L701-L708" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L739-L746" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_from_data_table(self, data_table):
     &#34;&#34;&#34;
@@ -2368,9 +2469,10 @@ the <code>svg_html</code> attribute</p></section>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file">get_svg_file</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html">to_html</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2405,7 +2507,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L739-L812" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L775-L848" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ChartUpdaterWidget(UpdaterWidgetBase):
     &#34;&#34;&#34;
@@ -2445,7 +2547,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
                 dto: &#39;ChartChartDataDTO&#39; = None, 
                 data_table: typing.Sequence[typing.Sequence] = None,
                 **kwargs):
-        super().__init__(name, story_id, chart_id, OoxmlEndpointMap.chart(), dto=dto, data_table=data_table)
+        super().__init__(name, story_id, chart_id, OoxmlEndpointMap.chart(), dto=dto, data_table=data_table, **kwargs)
         self.chart_id = chart_id
 
 
@@ -2500,7 +2602,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L790-L803" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L826-L839" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_dataframe(self) -&gt; pandas.DataFrame:
     &#34;&#34;&#34;
@@ -2526,7 +2628,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L805-L812" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L841-L848" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def put_dataframe(self, df: pandas.DataFrame):
     data_dict = df.to_dict(&#39;split&#39;)
@@ -2549,9 +2651,10 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_dto" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_dto">get_dto</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_svg_file" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file">get_svg_file</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.to_html" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html">to_html</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_data_table" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_data_table">update_from_data_table</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_dto" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_dto">update_from_dto</a></code></li>
 </ul>
@@ -2588,7 +2691,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L816-L865" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L852-L901" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class TableUpdaterWidget(UpdaterWidgetBase):
     &#34;&#34;&#34;
@@ -2628,7 +2731,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
                 dto: &#39;TableTableDataDTO&#39; = None, 
                 data_table: typing.Sequence[typing.Sequence] = None,
                 **kwargs):
-        super().__init__(name, story_id, table_id, OoxmlEndpointMap.table(), dto=dto, data_table=data_table)
+        super().__init__(name, story_id, table_id, OoxmlEndpointMap.table(), dto=dto, data_table=data_table, **kwargs)
         self.table_id = table_id
 
 
@@ -2659,9 +2762,10 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_dto" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_dto">get_dto</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_svg_file" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file">get_svg_file</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.to_html" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html">to_html</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_data_table" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_data_table">update_from_data_table</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_dto" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_dto">update_from_dto</a></code></li>
 </ul>
@@ -2707,6 +2811,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <h4><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></code></h4>
 <ul class="">
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.create_container">create_container</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html">to_html</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file">get_svg_file</a></code></li>
 </ul>

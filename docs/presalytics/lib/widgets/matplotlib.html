@@ -216,7 +216,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
             &#39;style&#39;: &#39;max-height: none; max-width: none;&#39;
         })
         empty_parent_div.append(frame)
-        return lxml.html.tostring(empty_parent_div)
+        return lxml.html.tostring(empty_parent_div).decode(&#39;utf-8&#39;)
 
 
     @classmethod
@@ -546,7 +546,7 @@ Must be unique within <a title="presalytics.COMPONENTS" href="/python-client/pre
             &#39;style&#39;: &#39;max-height: none; max-width: none;&#39;
         })
         empty_parent_div.append(frame)
-        return lxml.html.tostring(empty_parent_div)
+        return lxml.html.tostring(empty_parent_div).decode(&#39;utf-8&#39;)
 
 
     @classmethod
@@ -645,7 +645,7 @@ will be rendered inside of a story and rescaled to give repsonsive effect</p></s
         &#39;style&#39;: &#39;max-height: none; max-width: none;&#39;
     })
     empty_parent_div.append(frame)
-    return lxml.html.tostring(empty_parent_div)</code></pre>
+    return lxml.html.tostring(empty_parent_div).decode(&#39;utf-8&#39;)</code></pre>
 </details>
 </dd>
 <dt id="presalytics.lib.widgets.matplotlib.MatplotlibResponsiveFigure.standalone_html"><code class="name flex">

@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L0-L211" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L0-L240" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import json
 import logging
@@ -47,7 +47,7 @@ logger = logging.getLogger(__name__)
 
 
 class TokenUtil(object):
-    def __init__(self, token=None, token_file=None, token_cache=True):
+    def __init__(self, token=None, token_file=None, token_cache=False):
         self.token_cache = token_cache
         if token_file is None:
             self.token_file = presalytics.lib.constants.TOKEN_FILE
@@ -59,54 +59,70 @@ class TokenUtil(object):
             pass
         if token is not None:
             try:
-                self.token = {
-                    &#39;access_token&#39;: token[&#39;access_token&#39;],
-                    &#39;access_token_expire_time&#39;: token[&#34;access_token_expire_time&#34;],
-                    &#39;refresh_token&#39;: token[&#34;refresh_token&#34;],
-                    &#39;refresh_token_expire_time&#39;: token[&#34;refresh_token_expire_time&#34;]
-                }
+                self.process_token(token)    
                 if self.token_cache:
                     self._put_token_file()
             except Exception:
                 raise presalytics.lib.exceptions.MisConfiguredTokenException()
+        else:
+            self.token = {}
 
     def is_api_access_token_expired(self):
         try:
-            expire_datetime = dateutil.parser.parse(self.token[&#39;access_token_expire_time&#39;]).astimezone(datetime.timezone.utc)
+            if not self.token.get(&#39;access_token_expire_time&#39;, None):
+                if self.token.get(&#39;access_token&#39;, None):
+                    return False  # If expire time unknown, instruct client to call endpoint
+                else:
+                    return True  # If no token, instruct client to acquire token
+            token_expiry = self.token[&#39;access_token_expire_time&#39;]
+            if isinstance(token_expiry, datetime.datetime):
+                expire_datetime = token_expiry.astimezone(datetime.timezone.utc)
+            elif isinstance(token_expiry, str):
+                expire_datetime = dateutil.parser.parse(self.token[&#39;access_token_expire_time&#39;]).astimezone(datetime.timezone.utc)
+            else:
+                logger.error(&#34;Token expire time not of type str (isoformat) or datetime.datetime&#34;)
+                return True  # Get a new token on type error
             if expire_datetime &lt; datetime.datetime.utcnow().astimezone(datetime.timezone.utc):
                 return True
-            return False
-        except Exception:
-            return True
-
-    def is_api_refresh_token_expired(self):
-        try:
-            expire_datetime = dateutil.parser.parse(self.token[&#39;refresh_token_expire_time&#39;]).astimezone(datetime.timezone.utc)
-            if expire_datetime &lt; datetime.datetime.utcnow().astimezone(datetime.timezone.utc):
-                return True
-            return False
-        except Exception:
-            return True
+            else:
+                return False
+        except Exception as ex:
+            logger.exception(ex)
+            return True # Get a new token on unknown errors
 
     def _load_token_file(self):
-        if self.token_cache:
-            self.token = self.load_token_from_file(self.token_file)
+        try:
+            if self.token_cache:
+                self.token = self.load_token_from_file(self.token_file)
+        except Exception:
+            logger.error(&#34;Unable to load token from cache.  If you do intend to cache tokens, use configuration CACHE_TOKENS=False&#34;)
 
     def _put_token_file(self):
-        if self.token_cache:
-            self.put_token_file(self.token, self.token_file)
+        try:
+            if self.token_cache:
+                self.put_token_file(self.token, self.token_file)
+        except Exception:
+            logger.error(&#34;Failed to cache token.  Likely a write permissions error for the filesystem.&#34;)
 
-    def process_keycloak_token(self, keycloak_token):
-        access_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=keycloak_token[&#39;expires_in&#39;])
-        refresh_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=keycloak_token[&#39;refresh_expires_in&#39;])
-
+    def process_token(self, token):
         self.token = {
-            &#39;access_token&#39;: keycloak_token[&#39;access_token&#39;],
-            &#39;refresh_token&#39;: keycloak_token[&#39;refresh_token&#39;],
-            &#39;access_token_expire_time&#39;: access_token_expire_time.isoformat(),
-            &#39;refresh_token_expire_time&#39;: refresh_token_expire_time.isoformat()
+            &#39;access_token&#39;: token[&#39;access_token&#39;]
         }
-
+        if not token.get(&#39;access_token_expire_time&#39;, None):
+            if token.get(&#39;expires_in&#39;, None):
+                access_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=token[&#39;expires_in&#39;])
+            else:
+                pass    # TODO: add logic to introspect token for expire time 
+        else:
+            access_token_expire_time = token[&#34;access_token_expire_time&#34;]
+        if access_token_expire_time:
+            self.token.update({
+                &#34;access_token_expire_time&#34;: access_token_expire_time
+            })
+        if token.get(&#39;refresh_token&#39;, None):
+            self.token.update({
+                &#34;refresh_token&#34;: token[&#34;refresh_token&#34;]
+            })
         return self.token
 
     @staticmethod
@@ -144,7 +160,7 @@ class AuthenticationMixIn(object):
             Missing reference to Client class.  Client was like garbage collected by the intepreter.\n  
             Please initialize the Client class on its own line to avoid this error.  For example:\n\n
             client = presalytics.Client()\n
-            story = client.story.story_id_get(story_id)\n\n
+            story = client.story.story_id_get(story_id)
             &#34;&#34;&#34;
             raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
         auth_header = self.parent().get_auth_header()
@@ -160,12 +176,25 @@ class AuthenticationMixIn(object):
 
             endpoint = self.configuration.host + resource_path
             logger.info(&#34;Sending {0} message to {1}. Request Id: {2}&#34;.format(method, endpoint, request_id))
-            response = super(AuthenticationMixIn, self).call_api(
-                resource_path, method, path_params,
-                query_params, header_params, body, post_params, files, response_type,
-                auth_settings, async_req, _return_http_data_only, collection_formats, _preload_content,
-                _request_timeout, _host
+            call_args = (
+                resource_path, 
+                method, 
+                path_params,
+                query_params, 
+                header_params, 
+                body, 
+                post_params, 
+                files, 
+                response_type,
+                auth_settings, 
+                async_req, 
+                _return_http_data_only, 
+                collection_formats, 
+                _preload_content,
+                _request_timeout, 
+                _host
             )
+            response = super(AuthenticationMixIn, self).call_api(*call_args)
             logger.info(&#34;{0} response received from {1}&#34;.format(method, endpoint))
             return response
         except Exception as e:
@@ -179,6 +208,10 @@ class AuthenticationMixIn(object):
                         d = e.body + addendum
                     e.body = json.dumps(d)
                     logging.error(d)
+                    if d[&#34;status&#34;] == 401:
+                        logging.debug(&#34;Refeshing token from unauathorized call and retrying&#34;)
+                        self.parent().refresh_token()
+                        return super(AuthenticationMixIn, self).call_api(*call_args)
                 except Exception:
                     pass
                 if self._ignore_api_exceptions:
@@ -188,10 +221,6 @@ class AuthenticationMixIn(object):
             else:
                 t, v, tb = sys.exc_info()
                 six.reraise(t, v, tb)
-
-    # def update_timezones(self, response)
-
-    #     return response
 
     def update_configuration(self):
         &#34;&#34;&#34;
@@ -250,17 +279,17 @@ class AuthenticationMixIn(object):
 <dl>
 <dt id="presalytics.client.auth.TokenUtil"><code class="flex name class">
 <span>class <span class="ident">TokenUtil</span></span>
-<span>(</span><span>token=None, token_file=None, token_cache=True)</span>
+<span>(</span><span>token=None, token_file=None, token_cache=False)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L22-L94" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L22-L110" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class TokenUtil(object):
-    def __init__(self, token=None, token_file=None, token_cache=True):
+    def __init__(self, token=None, token_file=None, token_cache=False):
         self.token_cache = token_cache
         if token_file is None:
             self.token_file = presalytics.lib.constants.TOKEN_FILE
@@ -272,54 +301,70 @@ class AuthenticationMixIn(object):
             pass
         if token is not None:
             try:
-                self.token = {
-                    &#39;access_token&#39;: token[&#39;access_token&#39;],
-                    &#39;access_token_expire_time&#39;: token[&#34;access_token_expire_time&#34;],
-                    &#39;refresh_token&#39;: token[&#34;refresh_token&#34;],
-                    &#39;refresh_token_expire_time&#39;: token[&#34;refresh_token_expire_time&#34;]
-                }
+                self.process_token(token)    
                 if self.token_cache:
                     self._put_token_file()
             except Exception:
                 raise presalytics.lib.exceptions.MisConfiguredTokenException()
+        else:
+            self.token = {}
 
     def is_api_access_token_expired(self):
         try:
-            expire_datetime = dateutil.parser.parse(self.token[&#39;access_token_expire_time&#39;]).astimezone(datetime.timezone.utc)
+            if not self.token.get(&#39;access_token_expire_time&#39;, None):
+                if self.token.get(&#39;access_token&#39;, None):
+                    return False  # If expire time unknown, instruct client to call endpoint
+                else:
+                    return True  # If no token, instruct client to acquire token
+            token_expiry = self.token[&#39;access_token_expire_time&#39;]
+            if isinstance(token_expiry, datetime.datetime):
+                expire_datetime = token_expiry.astimezone(datetime.timezone.utc)
+            elif isinstance(token_expiry, str):
+                expire_datetime = dateutil.parser.parse(self.token[&#39;access_token_expire_time&#39;]).astimezone(datetime.timezone.utc)
+            else:
+                logger.error(&#34;Token expire time not of type str (isoformat) or datetime.datetime&#34;)
+                return True  # Get a new token on type error
             if expire_datetime &lt; datetime.datetime.utcnow().astimezone(datetime.timezone.utc):
                 return True
-            return False
-        except Exception:
-            return True
-
-    def is_api_refresh_token_expired(self):
-        try:
-            expire_datetime = dateutil.parser.parse(self.token[&#39;refresh_token_expire_time&#39;]).astimezone(datetime.timezone.utc)
-            if expire_datetime &lt; datetime.datetime.utcnow().astimezone(datetime.timezone.utc):
-                return True
-            return False
-        except Exception:
-            return True
+            else:
+                return False
+        except Exception as ex:
+            logger.exception(ex)
+            return True # Get a new token on unknown errors
 
     def _load_token_file(self):
-        if self.token_cache:
-            self.token = self.load_token_from_file(self.token_file)
+        try:
+            if self.token_cache:
+                self.token = self.load_token_from_file(self.token_file)
+        except Exception:
+            logger.error(&#34;Unable to load token from cache.  If you do intend to cache tokens, use configuration CACHE_TOKENS=False&#34;)
 
     def _put_token_file(self):
-        if self.token_cache:
-            self.put_token_file(self.token, self.token_file)
+        try:
+            if self.token_cache:
+                self.put_token_file(self.token, self.token_file)
+        except Exception:
+            logger.error(&#34;Failed to cache token.  Likely a write permissions error for the filesystem.&#34;)
 
-    def process_keycloak_token(self, keycloak_token):
-        access_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=keycloak_token[&#39;expires_in&#39;])
-        refresh_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=keycloak_token[&#39;refresh_expires_in&#39;])
-
+    def process_token(self, token):
         self.token = {
-            &#39;access_token&#39;: keycloak_token[&#39;access_token&#39;],
-            &#39;refresh_token&#39;: keycloak_token[&#39;refresh_token&#39;],
-            &#39;access_token_expire_time&#39;: access_token_expire_time.isoformat(),
-            &#39;refresh_token_expire_time&#39;: refresh_token_expire_time.isoformat()
+            &#39;access_token&#39;: token[&#39;access_token&#39;]
         }
-
+        if not token.get(&#39;access_token_expire_time&#39;, None):
+            if token.get(&#39;expires_in&#39;, None):
+                access_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=token[&#39;expires_in&#39;])
+            else:
+                pass    # TODO: add logic to introspect token for expire time 
+        else:
+            access_token_expire_time = token[&#34;access_token_expire_time&#34;]
+        if access_token_expire_time:
+            self.token.update({
+                &#34;access_token_expire_time&#34;: access_token_expire_time
+            })
+        if token.get(&#39;refresh_token&#39;, None):
+            self.token.update({
+                &#34;refresh_token&#34;: token[&#34;refresh_token&#34;]
+            })
         return self.token
 
     @staticmethod
@@ -343,7 +388,7 @@ class AuthenticationMixIn(object):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L85-L88" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L101-L104" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@staticmethod
 def put_token_file(token, token_filepath):
@@ -359,7 +404,7 @@ def put_token_file(token, token_filepath):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L90-L94" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L106-L110" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@staticmethod
 def load_token_from_file(token_filepath):
@@ -379,59 +424,61 @@ def load_token_from_file(token_filepath):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L46-L53" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L43-L64" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def is_api_access_token_expired(self):
     try:
-        expire_datetime = dateutil.parser.parse(self.token[&#39;access_token_expire_time&#39;]).astimezone(datetime.timezone.utc)
+        if not self.token.get(&#39;access_token_expire_time&#39;, None):
+            if self.token.get(&#39;access_token&#39;, None):
+                return False  # If expire time unknown, instruct client to call endpoint
+            else:
+                return True  # If no token, instruct client to acquire token
+        token_expiry = self.token[&#39;access_token_expire_time&#39;]
+        if isinstance(token_expiry, datetime.datetime):
+            expire_datetime = token_expiry.astimezone(datetime.timezone.utc)
+        elif isinstance(token_expiry, str):
+            expire_datetime = dateutil.parser.parse(self.token[&#39;access_token_expire_time&#39;]).astimezone(datetime.timezone.utc)
+        else:
+            logger.error(&#34;Token expire time not of type str (isoformat) or datetime.datetime&#34;)
+            return True  # Get a new token on type error
         if expire_datetime &lt; datetime.datetime.utcnow().astimezone(datetime.timezone.utc):
             return True
-        return False
-    except Exception:
-        return True</code></pre>
+        else:
+            return False
+    except Exception as ex:
+        logger.exception(ex)
+        return True # Get a new token on unknown errors</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.auth.TokenUtil.is_api_refresh_token_expired"><code class="name flex">
-<span>def <span class="ident">is_api_refresh_token_expired</span></span>(<span>self)</span>
+<dt id="presalytics.client.auth.TokenUtil.process_token"><code class="name flex">
+<span>def <span class="ident">process_token</span></span>(<span>self, token)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L55-L62" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L80-L99" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">def is_api_refresh_token_expired(self):
-    try:
-        expire_datetime = dateutil.parser.parse(self.token[&#39;refresh_token_expire_time&#39;]).astimezone(datetime.timezone.utc)
-        if expire_datetime &lt; datetime.datetime.utcnow().astimezone(datetime.timezone.utc):
-            return True
-        return False
-    except Exception:
-        return True</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.auth.TokenUtil.process_keycloak_token"><code class="name flex">
-<span>def <span class="ident">process_keycloak_token</span></span>(<span>self, keycloak_token)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L72-L83" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def process_keycloak_token(self, keycloak_token):
-    access_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=keycloak_token[&#39;expires_in&#39;])
-    refresh_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=keycloak_token[&#39;refresh_expires_in&#39;])
-
+<pre><code class="python">def process_token(self, token):
     self.token = {
-        &#39;access_token&#39;: keycloak_token[&#39;access_token&#39;],
-        &#39;refresh_token&#39;: keycloak_token[&#39;refresh_token&#39;],
-        &#39;access_token_expire_time&#39;: access_token_expire_time.isoformat(),
-        &#39;refresh_token_expire_time&#39;: refresh_token_expire_time.isoformat()
+        &#39;access_token&#39;: token[&#39;access_token&#39;]
     }
-
+    if not token.get(&#39;access_token_expire_time&#39;, None):
+        if token.get(&#39;expires_in&#39;, None):
+            access_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=token[&#39;expires_in&#39;])
+        else:
+            pass    # TODO: add logic to introspect token for expire time 
+    else:
+        access_token_expire_time = token[&#34;access_token_expire_time&#34;]
+    if access_token_expire_time:
+        self.token.update({
+            &#34;access_token_expire_time&#34;: access_token_expire_time
+        })
+    if token.get(&#39;refresh_token&#39;, None):
+        self.token.update({
+            &#34;refresh_token&#34;: token[&#34;refresh_token&#34;]
+        })
     return self.token</code></pre>
 </details>
 </dd>
@@ -446,7 +493,7 @@ def load_token_from_file(token_filepath):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L97-L212" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L113-L241" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class AuthenticationMixIn(object):
     def __init__(self, parent: &#39;Client&#39;, ignore_api_exceptions=False, **kwargs):
@@ -471,7 +518,7 @@ def load_token_from_file(token_filepath):
             Missing reference to Client class.  Client was like garbage collected by the intepreter.\n  
             Please initialize the Client class on its own line to avoid this error.  For example:\n\n
             client = presalytics.Client()\n
-            story = client.story.story_id_get(story_id)\n\n
+            story = client.story.story_id_get(story_id)
             &#34;&#34;&#34;
             raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
         auth_header = self.parent().get_auth_header()
@@ -487,12 +534,25 @@ def load_token_from_file(token_filepath):
 
             endpoint = self.configuration.host + resource_path
             logger.info(&#34;Sending {0} message to {1}. Request Id: {2}&#34;.format(method, endpoint, request_id))
-            response = super(AuthenticationMixIn, self).call_api(
-                resource_path, method, path_params,
-                query_params, header_params, body, post_params, files, response_type,
-                auth_settings, async_req, _return_http_data_only, collection_formats, _preload_content,
-                _request_timeout, _host
+            call_args = (
+                resource_path, 
+                method, 
+                path_params,
+                query_params, 
+                header_params, 
+                body, 
+                post_params, 
+                files, 
+                response_type,
+                auth_settings, 
+                async_req, 
+                _return_http_data_only, 
+                collection_formats, 
+                _preload_content,
+                _request_timeout, 
+                _host
             )
+            response = super(AuthenticationMixIn, self).call_api(*call_args)
             logger.info(&#34;{0} response received from {1}&#34;.format(method, endpoint))
             return response
         except Exception as e:
@@ -506,6 +566,10 @@ def load_token_from_file(token_filepath):
                         d = e.body + addendum
                     e.body = json.dumps(d)
                     logging.error(d)
+                    if d[&#34;status&#34;] == 401:
+                        logging.debug(&#34;Refeshing token from unauathorized call and retrying&#34;)
+                        self.parent().refresh_token()
+                        return super(AuthenticationMixIn, self).call_api(*call_args)
                 except Exception:
                     pass
                 if self._ignore_api_exceptions:
@@ -515,10 +579,6 @@ def load_token_from_file(token_filepath):
             else:
                 t, v, tb = sys.exc_info()
                 six.reraise(t, v, tb)
-
-    # def update_timezones(self, response)
-
-    #     return response
 
     def update_configuration(self):
         &#34;&#34;&#34;
@@ -581,7 +641,7 @@ def load_token_from_file(token_filepath):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L182-L188" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L211-L217" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@staticmethod
 def get_user_agent():
@@ -604,7 +664,7 @@ rather than at class initialized (good for ipython notebooks)</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L104-L163" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L120-L196" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def call_api(
         self, resource_path, method,
@@ -622,7 +682,7 @@ rather than at class initialized (good for ipython notebooks)</p></section>
         Missing reference to Client class.  Client was like garbage collected by the intepreter.\n  
         Please initialize the Client class on its own line to avoid this error.  For example:\n\n
         client = presalytics.Client()\n
-        story = client.story.story_id_get(story_id)\n\n
+        story = client.story.story_id_get(story_id)
         &#34;&#34;&#34;
         raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
     auth_header = self.parent().get_auth_header()
@@ -638,12 +698,25 @@ rather than at class initialized (good for ipython notebooks)</p></section>
 
         endpoint = self.configuration.host + resource_path
         logger.info(&#34;Sending {0} message to {1}. Request Id: {2}&#34;.format(method, endpoint, request_id))
-        response = super(AuthenticationMixIn, self).call_api(
-            resource_path, method, path_params,
-            query_params, header_params, body, post_params, files, response_type,
-            auth_settings, async_req, _return_http_data_only, collection_formats, _preload_content,
-            _request_timeout, _host
+        call_args = (
+            resource_path, 
+            method, 
+            path_params,
+            query_params, 
+            header_params, 
+            body, 
+            post_params, 
+            files, 
+            response_type,
+            auth_settings, 
+            async_req, 
+            _return_http_data_only, 
+            collection_formats, 
+            _preload_content,
+            _request_timeout, 
+            _host
         )
+        response = super(AuthenticationMixIn, self).call_api(*call_args)
         logger.info(&#34;{0} response received from {1}&#34;.format(method, endpoint))
         return response
     except Exception as e:
@@ -657,6 +730,10 @@ rather than at class initialized (good for ipython notebooks)</p></section>
                     d = e.body + addendum
                 e.body = json.dumps(d)
                 logging.error(d)
+                if d[&#34;status&#34;] == 401:
+                    logging.debug(&#34;Refeshing token from unauathorized call and retrying&#34;)
+                    self.parent().refresh_token()
+                    return super(AuthenticationMixIn, self).call_api(*call_args)
             except Exception:
                 pass
             if self._ignore_api_exceptions:
@@ -679,7 +756,7 @@ Mostly used for debugging purposes, but self-hosted API endpoints may require in
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L169-L180" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L198-L209" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_configuration(self):
     &#34;&#34;&#34;
@@ -703,7 +780,7 @@ Mostly used for debugging purposes, but self-hosted API endpoints may require in
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L192-L202" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L221-L231" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def set_host(self, hosts_dict):
     for parent_cls in self.__class__.__bases__:
@@ -742,8 +819,7 @@ Mostly used for debugging purposes, but self-hosted API endpoints may require in
 <li><code><a title="presalytics.client.auth.TokenUtil.put_token_file" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.TokenUtil.put_token_file">put_token_file</a></code></li>
 <li><code><a title="presalytics.client.auth.TokenUtil.load_token_from_file" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.TokenUtil.load_token_from_file">load_token_from_file</a></code></li>
 <li><code><a title="presalytics.client.auth.TokenUtil.is_api_access_token_expired" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.TokenUtil.is_api_access_token_expired">is_api_access_token_expired</a></code></li>
-<li><code><a title="presalytics.client.auth.TokenUtil.is_api_refresh_token_expired" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.TokenUtil.is_api_refresh_token_expired">is_api_refresh_token_expired</a></code></li>
-<li><code><a title="presalytics.client.auth.TokenUtil.process_keycloak_token" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.TokenUtil.process_keycloak_token">process_keycloak_token</a></code></li>
+<li><code><a title="presalytics.client.auth.TokenUtil.process_token" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.TokenUtil.process_token">process_token</a></code></li>
 </ul>
 </li>
 <li>

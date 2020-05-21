@@ -189,7 +189,7 @@ class WidgetBase(ComponentBase):
         **kwargs:
             Optional keyword arguments can be used in subclass to modify the behavior of the `to_html` function.
             these keyword arguments should be invariant through successive updates to the chart.  For example,
-            keycloak argument should control the styling of the widget, which should not change as the data in
+            keyword arguments could control the styling of the widget, which should not change as the data in
             the object (e.g., a chart) is updated.  Keyword arguments are loaded via `additional_properties`
             parameter in in the `presalytics.story.outline.Widget` object.
 
@@ -1021,7 +1021,7 @@ that allows the widget to be serialzed into a <a title="presalytics.story.outlin
         **kwargs:
             Optional keyword arguments can be used in subclass to modify the behavior of the `to_html` function.
             these keyword arguments should be invariant through successive updates to the chart.  For example,
-            keycloak argument should control the styling of the widget, which should not change as the data in
+            keyword arguments could control the styling of the widget, which should not change as the data in
             the object (e.g., a chart) is updated.  Keyword arguments are loaded via `additional_properties`
             parameter in in the `presalytics.story.outline.Widget` object.
 
@@ -1156,7 +1156,7 @@ information changes.</dd>
 Optional keyword arguments can be used in subclass to modify the behavior of the <code>to_html</code> function.
 these keyword arguments should be invariant through successive updates to the chart.
 For example,
-keycloak argument should control the styling of the widget, which should not change as the data in
+keyword arguments could control the styling of the widget, which should not change as the data in
 the object (e.g., a chart) is updated.
 Keyword arguments are loaded via <code>additional_properties</code>
 parameter in in the <a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget"><code>Widget</code></a> object.</p>
@@ -1185,7 +1185,7 @@ def to_html(self, data: typing.Dict = None, **kwargs) -&gt; str:
     **kwargs:
         Optional keyword arguments can be used in subclass to modify the behavior of the `to_html` function.
         these keyword arguments should be invariant through successive updates to the chart.  For example,
-        keycloak argument should control the styling of the widget, which should not change as the data in
+        keyword arguments could control the styling of the widget, which should not change as the data in
         the object (e.g., a chart) is updated.  Keyword arguments are loaded via `additional_properties`
         parameter in in the `presalytics.story.outline.Widget` object.
 

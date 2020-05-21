@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/ooxml_tools.py#L0-L293" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/ooxml_tools.py#L0-L303" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import datetime
 import typing
@@ -101,6 +101,7 @@ def create_story_from_ooxml_file(filename: str, client_info={}) -&gt; &#39;Story
     story: &#39;Story&#39;
     logger.info(&#34;Starting presalytics tool: create_story_from_ooxml_file&#34;)
     logger.info(&#34;Intializing presalytics client.&#34;)
+    
     client = presalytics.Client(**client_info)
     logger.info(&#34;Sending file to presalytics server for document processing and base story creation&#34;)
     story = client.story.story_post_file(file=filename)
@@ -173,15 +174,21 @@ def create_outline_from_ooxml_document(story_api: &#39;Story&#39;,
         _description = description
     else:
         _description = &#34;&#34;
-
-    pages = create_pages_from_ooxml_document(story_api, ooxml_document, client_info=client_info)
-
-    if themes:
-        _themes = themes
-    else:
-        ooxml_id = pages[0].widgets[0].data[&#34;document_ooxml_id&#34;]
-        _themes = [create_theme_from_ooxml_document(ooxml_id, client_info=client_info)]
-
+    try:
+        pages = create_pages_from_ooxml_document(story_api, ooxml_document, client_info=client_info)
+    except Exception as ex:
+        logger.error(&#34;Error adding pages to outline&#34;, exc_info=True)
+        pages = []
+    try:
+        if themes:
+            _themes = themes
+        else:
+            ooxml_id = pages[0].widgets[0].data[&#34;document_ooxml_id&#34;]
+            _themes = [create_theme_from_ooxml_document(ooxml_id, client_info=client_info)]
+    except Exception:
+        logger.error(&#34;Unable to add theme to ooxml_story&#34;, exc_info=True)
+        _themes = []
+    
     if title:
         _title = title
     else:
@@ -229,25 +236,28 @@ def create_pages_from_ooxml_document(story: &#39;Story&#39;,
         slides_meta = [x for x in child_objects if x.object_type == &#34;Slide.Slides&#34;]
         ep_map = presalytics.OoxmlEndpointMap.slide()
         for slide in slides_meta:
-            widget = presalytics.OoxmlFileWidget(
-                filename=ooxml_document.filename,
-                name=slide.entity_name,
-                endpoint_map=ep_map,
-                object_name=slide.entity_name,
-                object_ooxml_id=slide.entity_id,
-                document_ooxml_id=ooxml_document.id,
-                story_id=story.id,
-                client_info=client_info
-            )
-            widget_kind = &#34;widget-page&#34;
-            widget_name = slide.entity_name
-            widgets = [widget.serialize()]
-            page = presalytics.story.outline.Page(
-                kind=widget_kind,
-                name=widget_name,
-                widgets=widgets
-            )
-            pages.append(page)
+            try:
+                widget = presalytics.OoxmlFileWidget(
+                    filename=ooxml_document.filename,
+                    name=slide.entity_name,
+                    endpoint_map=ep_map,
+                    object_name=slide.entity_name,
+                    object_ooxml_id=slide.entity_id,
+                    document_ooxml_id=ooxml_document.id,
+                    story_id=story.id,
+                    client_info=client_info
+                )
+                widget_kind = &#34;widget-page&#34;
+                widget_name = slide.entity_name
+                widgets = [widget.serialize()]
+                page = presalytics.story.outline.Page(
+                    kind=widget_kind,
+                    name=widget_name,
+                    widgets=widgets
+                )
+                pages.append(page)
+            except:
+                logger.error(&#34;Unable to add widget {0} to outline ooxml document {1}&#34;.format(slide.entity_name, ooxml_document.id))
     # TODO: insert excel chart handling here
     return pages
 
@@ -420,7 +430,7 @@ See <a title="presalytics.client.api.Client" href="/python-client/presalytics/cl
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/ooxml_tools.py#L55-L92" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/ooxml_tools.py#L55-L93" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def create_story_from_ooxml_file(filename: str, client_info={}) -&gt; &#39;Story&#39;:
     &#34;&#34;&#34;
@@ -444,6 +454,7 @@ See <a title="presalytics.client.api.Client" href="/python-client/presalytics/cl
     story: &#39;Story&#39;
     logger.info(&#34;Starting presalytics tool: create_story_from_ooxml_file&#34;)
     logger.info(&#34;Intializing presalytics client.&#34;)
+    
     client = presalytics.Client(**client_info)
     logger.info(&#34;Sending file to presalytics server for document processing and base story creation&#34;)
     story = client.story.story_post_file(file=filename)
@@ -497,7 +508,7 @@ See <a title="presalytics.client.api.Client" href="/python-client/presalytics/cl
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/ooxml_tools.py#L95-L171" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/ooxml_tools.py#L96-L178" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def create_outline_from_ooxml_document(story_api: &#39;Story&#39;,
                                        ooxml_document: &#39;Document&#39;,
@@ -553,15 +564,21 @@ See <a title="presalytics.client.api.Client" href="/python-client/presalytics/cl
         _description = description
     else:
         _description = &#34;&#34;
-
-    pages = create_pages_from_ooxml_document(story_api, ooxml_document, client_info=client_info)
-
-    if themes:
-        _themes = themes
-    else:
-        ooxml_id = pages[0].widgets[0].data[&#34;document_ooxml_id&#34;]
-        _themes = [create_theme_from_ooxml_document(ooxml_id, client_info=client_info)]
-
+    try:
+        pages = create_pages_from_ooxml_document(story_api, ooxml_document, client_info=client_info)
+    except Exception as ex:
+        logger.error(&#34;Error adding pages to outline&#34;, exc_info=True)
+        pages = []
+    try:
+        if themes:
+            _themes = themes
+        else:
+            ooxml_id = pages[0].widgets[0].data[&#34;document_ooxml_id&#34;]
+            _themes = [create_theme_from_ooxml_document(ooxml_id, client_info=client_info)]
+    except Exception:
+        logger.error(&#34;Unable to add theme to ooxml_story&#34;, exc_info=True)
+        _themes = []
+    
     if title:
         _title = title
     else:
@@ -599,7 +616,7 @@ See <a title="presalytics.client.api.Client" href="/python-client/presalytics/cl
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/ooxml_tools.py#L174-L225" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/ooxml_tools.py#L181-L235" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def create_pages_from_ooxml_document(story: &#39;Story&#39;, 
                                      ooxml_document: &#39;Document&#39;,
@@ -632,25 +649,28 @@ See <a title="presalytics.client.api.Client" href="/python-client/presalytics/cl
         slides_meta = [x for x in child_objects if x.object_type == &#34;Slide.Slides&#34;]
         ep_map = presalytics.OoxmlEndpointMap.slide()
         for slide in slides_meta:
-            widget = presalytics.OoxmlFileWidget(
-                filename=ooxml_document.filename,
-                name=slide.entity_name,
-                endpoint_map=ep_map,
-                object_name=slide.entity_name,
-                object_ooxml_id=slide.entity_id,
-                document_ooxml_id=ooxml_document.id,
-                story_id=story.id,
-                client_info=client_info
-            )
-            widget_kind = &#34;widget-page&#34;
-            widget_name = slide.entity_name
-            widgets = [widget.serialize()]
-            page = presalytics.story.outline.Page(
-                kind=widget_kind,
-                name=widget_name,
-                widgets=widgets
-            )
-            pages.append(page)
+            try:
+                widget = presalytics.OoxmlFileWidget(
+                    filename=ooxml_document.filename,
+                    name=slide.entity_name,
+                    endpoint_map=ep_map,
+                    object_name=slide.entity_name,
+                    object_ooxml_id=slide.entity_id,
+                    document_ooxml_id=ooxml_document.id,
+                    story_id=story.id,
+                    client_info=client_info
+                )
+                widget_kind = &#34;widget-page&#34;
+                widget_name = slide.entity_name
+                widgets = [widget.serialize()]
+                page = presalytics.story.outline.Page(
+                    kind=widget_kind,
+                    name=widget_name,
+                    widgets=widgets
+                )
+                pages.append(page)
+            except:
+                logger.error(&#34;Unable to add widget {0} to outline ooxml document {1}&#34;.format(slide.entity_name, ooxml_document.id))
     # TODO: insert excel chart handling here
     return pages</code></pre>
 </details>
@@ -672,7 +692,7 @@ See <a title="presalytics.client.api.Client" href="/python-client/presalytics/cl
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/ooxml_tools.py#L228-L269" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/ooxml_tools.py#L238-L279" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def create_theme_from_ooxml_document(document_id: str, client_info={}):
     &#34;&#34;&#34;
@@ -733,7 +753,7 @@ A filename against which the method can lookup mimetypes</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/ooxml_tools.py#L271-L293" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/ooxml_tools.py#L281-L303" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_mime_type_from_filename(client: presalytics.Client, filename) -&gt; typing.Optional[str]:
     &#34;&#34;&#34;

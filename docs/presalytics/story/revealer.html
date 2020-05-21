@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L0-L225" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L0-L262" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import os
 import shutil
@@ -44,6 +44,7 @@ import presalytics
 import presalytics.lib
 import presalytics.lib.plugins
 import presalytics.lib.plugins.base
+import presalytics.lib.plugins.reveal
 import presalytics.lib.templates
 import presalytics.lib.templates.base
 import presalytics.story.util
@@ -82,6 +83,7 @@ class Revealer(presalytics.story.components.Renderer):
 
     &#34;&#34;&#34;
     base: lxml.etree.Element
+    reveal_params: typing.Dict[str, typing.Any]
 
     __component_kind__ = &#39;revealer&#39;
 
@@ -94,10 +96,14 @@ class Revealer(presalytics.story.components.Renderer):
         self.story_outline.validate()
         self.base = self._make_base()
         logger.info(&#34;Loading plugins&#34;)
+        reveal_params = {}
+        for key, val in kwargs.items():
+            if key in presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config.keys():
+                reveal_params.update({key: val})
         reveal_plugin_config = {
             &#39;kind&#39;: &#39;script&#39;,
             &#39;name&#39;: &#39;reveal&#39;,
-            &#39;config&#39;: {}
+            &#39;config&#39;: {&#34;reveal_params&#34;: reveal_params} if len(reveal_params.keys()) &gt; 0 else {}
         }
         overrides_config = {
             &#39;kind&#39;: &#39;style&#39;,
@@ -115,9 +121,37 @@ class Revealer(presalytics.story.components.Renderer):
         logger.info(&#34;Revealer initilized.&#34;)
 
     def _make_base(self):
-        base = lxml.etree.Element(&#34;div&#34;, attrib={&#34;class&#34;: &#34;reveal&#34;})
+        base = lxml.etree.Element(&#34;div&#34;, attrib={
+            &#34;class&#34;: &#34;reveal&#34;,
+        })
         lxml.etree.SubElement(base, &#34;div&#34;, attrib={&#34;class&#34;: &#34;slides&#34;})
+        try:
+            client = self.get_client()
+            website_token = client.token_util.token[&#34;access_token&#34;]
+            base.attrib[&#39;data-jwt&#39;] = client.token_util.token[&#34;access_token&#34;]
+            base.attrib[&#39;data-jwt-refresh&#39;] = client.token_util.token[&#34;refresh_token&#34;]
+            if presalytics.CONFIG.get(&#34;BROWSER_API_HOST&#34;, None):
+                story_target = presalytics.CONFIG[&#34;BROWSER_API_HOST&#34;] + &#34;/story&#34;
+            else:
+                story_target = client.story.api_client.configuration.host
+            base.attrib[&#39;data-story-target&#39;] = story_target
+        except Exception as ex:
+            logger.exception(ex, &#34;Could not obtain access token from revealer component.&#34;)
+
+        try:
+            story_id = self.story_outline.story_id
+            base.attrib[&#39;data-story-id&#39;] = story_id
+        except Exception:
+            logger.info(&#34;Revealer could not extract story_id from outline.&#34;)
         return base
+    
+    def get_meta_tags(self):
+        tags = [
+            &#39;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;,
+            &#39;&lt;meta http-equiv=&#34;X-UA-Compatible&#34; content=&#34;IE=edge&#34;&gt;&#39;,
+            &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;
+        ]
+        return tags
 
     def package_as_standalone(self):
         &#34;&#34;&#34;
@@ -137,6 +171,9 @@ class Revealer(presalytics.story.components.Renderer):
             for item in lxml_scripts:
                 body.append(item)
         head = E.HEAD()
+        for meta in self.get_meta_tags():
+            lxml_meta = lxml.html.fragment_fromstring(meta)
+            head.append(lxml_meta)
         for link in self.plugin_mgr.get_styles():
             lxml_links = lxml.html.fragments_fromstring(link)
             for item in lxml_links:
@@ -287,7 +324,7 @@ the rendering process</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L34-L226" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L35-L263" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Revealer(presalytics.story.components.Renderer):
     &#34;&#34;&#34;
@@ -313,6 +350,7 @@ the rendering process</dd>
 
     &#34;&#34;&#34;
     base: lxml.etree.Element
+    reveal_params: typing.Dict[str, typing.Any]
 
     __component_kind__ = &#39;revealer&#39;
 
@@ -325,10 +363,14 @@ the rendering process</dd>
         self.story_outline.validate()
         self.base = self._make_base()
         logger.info(&#34;Loading plugins&#34;)
+        reveal_params = {}
+        for key, val in kwargs.items():
+            if key in presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config.keys():
+                reveal_params.update({key: val})
         reveal_plugin_config = {
             &#39;kind&#39;: &#39;script&#39;,
             &#39;name&#39;: &#39;reveal&#39;,
-            &#39;config&#39;: {}
+            &#39;config&#39;: {&#34;reveal_params&#34;: reveal_params} if len(reveal_params.keys()) &gt; 0 else {}
         }
         overrides_config = {
             &#39;kind&#39;: &#39;style&#39;,
@@ -346,9 +388,37 @@ the rendering process</dd>
         logger.info(&#34;Revealer initilized.&#34;)
 
     def _make_base(self):
-        base = lxml.etree.Element(&#34;div&#34;, attrib={&#34;class&#34;: &#34;reveal&#34;})
+        base = lxml.etree.Element(&#34;div&#34;, attrib={
+            &#34;class&#34;: &#34;reveal&#34;,
+        })
         lxml.etree.SubElement(base, &#34;div&#34;, attrib={&#34;class&#34;: &#34;slides&#34;})
+        try:
+            client = self.get_client()
+            website_token = client.token_util.token[&#34;access_token&#34;]
+            base.attrib[&#39;data-jwt&#39;] = client.token_util.token[&#34;access_token&#34;]
+            base.attrib[&#39;data-jwt-refresh&#39;] = client.token_util.token[&#34;refresh_token&#34;]
+            if presalytics.CONFIG.get(&#34;BROWSER_API_HOST&#34;, None):
+                story_target = presalytics.CONFIG[&#34;BROWSER_API_HOST&#34;] + &#34;/story&#34;
+            else:
+                story_target = client.story.api_client.configuration.host
+            base.attrib[&#39;data-story-target&#39;] = story_target
+        except Exception as ex:
+            logger.exception(ex, &#34;Could not obtain access token from revealer component.&#34;)
+
+        try:
+            story_id = self.story_outline.story_id
+            base.attrib[&#39;data-story-id&#39;] = story_id
+        except Exception:
+            logger.info(&#34;Revealer could not extract story_id from outline.&#34;)
         return base
+    
+    def get_meta_tags(self):
+        tags = [
+            &#39;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;,
+            &#39;&lt;meta http-equiv=&#34;X-UA-Compatible&#34; content=&#34;IE=edge&#34;&gt;&#39;,
+            &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;
+        ]
+        return tags
 
     def package_as_standalone(self):
         &#34;&#34;&#34;
@@ -368,6 +438,9 @@ the rendering process</dd>
             for item in lxml_scripts:
                 body.append(item)
         head = E.HEAD()
+        for meta in self.get_meta_tags():
+            lxml_meta = lxml.html.fragment_fromstring(meta)
+            head.append(lxml_meta)
         for link in self.plugin_mgr.get_styles():
             lxml_links = lxml.html.fragments_fromstring(link)
             for item in lxml_links:
@@ -491,6 +564,25 @@ the rendering process</dd>
 </ul>
 <h3>Methods</h3>
 <dl>
+<dt id="presalytics.story.revealer.Revealer.get_meta_tags"><code class="name flex">
+<span>def <span class="ident">get_meta_tags</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L121-L127" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_meta_tags(self):
+    tags = [
+        &#39;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;,
+        &#39;&lt;meta http-equiv=&#34;X-UA-Compatible&#34; content=&#34;IE=edge&#34;&gt;&#39;,
+        &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;
+    ]
+    return tags</code></pre>
+</details>
+</dd>
 <dt id="presalytics.story.revealer.Revealer.package_as_standalone"><code class="name flex">
 <span>def <span class="ident">package_as_standalone</span></span>(<span>self)</span>
 </code></dt>
@@ -502,7 +594,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L95-L122" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L129-L159" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def package_as_standalone(self):
     &#34;&#34;&#34;
@@ -522,6 +614,9 @@ reveal.js presentation as conent</p>
         for item in lxml_scripts:
             body.append(item)
     head = E.HEAD()
+    for meta in self.get_meta_tags():
+        lxml_meta = lxml.html.fragment_fromstring(meta)
+        head.append(lxml_meta)
     for link in self.plugin_mgr.get_styles():
         lxml_links = lxml.html.fragments_fromstring(link)
         for item in lxml_links:
@@ -542,7 +637,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L131-L136" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L168-L173" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_info(self):
     &#34;&#34;&#34;
@@ -562,7 +657,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L138-L153" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L175-L190" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render(self):
     &#34;&#34;&#34;
@@ -592,7 +687,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L155-L184" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L192-L221" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render_page(self, page: &#39;Page&#39;) -&gt; str:
     &#34;&#34;&#34;
@@ -656,7 +751,7 @@ Defaults to 127.0.0.1 (localhost).</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L186-L226" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L223-L263" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def present(self, files_path=None, debug=True, port=8082, host=&#39;127.0.0.1&#39;):
     &#34;&#34;&#34;
@@ -738,6 +833,7 @@ Defaults to 127.0.0.1 (localhost).</dd>
 <li>
 <h4><code><a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer">Revealer</a></code></h4>
 <ul class="">
+<li><code><a title="presalytics.story.revealer.Revealer.get_meta_tags" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.get_meta_tags">get_meta_tags</a></code></li>
 <li><code><a title="presalytics.story.revealer.Revealer.package_as_standalone" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.package_as_standalone">package_as_standalone</a></code></li>
 <li><code><a title="presalytics.story.revealer.Revealer.update_info" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.update_info">update_info</a></code></li>
 <li><code><a title="presalytics.story.revealer.Revealer.render" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.render">render</a></code></li>

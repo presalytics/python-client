@@ -23,15 +23,17 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/logger.py#L0-L58" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/logger.py#L0-L64" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import logging
 import logging.config
 import os
 import sys
+import presalytics
 
 default_log_path = os.getcwd() + os.path.sep + &#39;presalytics.log&#39;
 
+USE_LOGGER = False
 
 def configure_logger(log_path=default_log_path, log_level=&#39;DEBUG&#39;, file_logger=True):
     logging.config.dictConfig({
@@ -64,18 +66,22 @@ def configure_logger(log_path=default_log_path, log_level=&#39;DEBUG&#39;, file_
         log_file = os.path.join(log_dir, &#39;presalytics.log&#39;)
         file_handler = logging.FileHandler(log_file)
         logger.addHandler(file_handler)
-
+    
+    USE_LOGGER = file_logger
 
 def handle_exception(exc_type, exc_value, exc_traceback):
     &#34;&#34;&#34; Catches unhandled exceptions for logger &#34;&#34;&#34;
     try:
         logger = logging.getLogger(&#39;presalytics.exception_hook&#39;)
-        logger.error(&#34;--------------------------&#34;)
-        logger.error(&#34;UNHANDLED EXCEPTION: FATAL&#34;)
-        logger.error(msg=&#34;--------------------------&#34;, exc_info=(exc_type, exc_value, exc_traceback,))
-        logger.error(&#34;--------------------------&#34;)
-        logger.error(&#34;UNHANDLED EXCEPTION: FATAL&#34;)
-        logger.error(&#34;--------------------------&#34;)
+        if USE_LOGGER:
+            logger.error(&#34;--------------------------&#34;)
+            logger.error(&#34;UNHANDLED EXCEPTION: FATAL&#34;)
+            logger.error(msg=&#34;--------------------------&#34;, exc_info=(exc_type, exc_value, exc_traceback,))
+            logger.error(&#34;--------------------------&#34;)
+            logger.error(&#34;UNHANDLED EXCEPTION: FATAL&#34;)
+            logger.error(&#34;--------------------------&#34;)
+        else:
+            logger.error(msg=&#34;An unhandled exception occured.&#34;, exc_info=(exc_type, exc_value, exc_traceback,))
     except Exception:
         pass
     return
@@ -101,7 +107,7 @@ sys.excepthook = handle_exception</code></pre>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/logger.py#L9-L39" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/logger.py#L11-L43" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def configure_logger(log_path=default_log_path, log_level=&#39;DEBUG&#39;, file_logger=True):
     logging.config.dictConfig({
@@ -133,7 +139,9 @@ sys.excepthook = handle_exception</code></pre>
             os.mkdir(log_dir)
         log_file = os.path.join(log_dir, &#39;presalytics.log&#39;)
         file_handler = logging.FileHandler(log_file)
-        logger.addHandler(file_handler)</code></pre>
+        logger.addHandler(file_handler)
+    
+    USE_LOGGER = file_logger</code></pre>
 </details>
 </dd>
 <dt id="presalytics.lib.logger.handle_exception"><code class="name flex">
@@ -144,18 +152,21 @@ sys.excepthook = handle_exception</code></pre>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/logger.py#L42-L54" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/logger.py#L45-L60" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def handle_exception(exc_type, exc_value, exc_traceback):
     &#34;&#34;&#34; Catches unhandled exceptions for logger &#34;&#34;&#34;
     try:
         logger = logging.getLogger(&#39;presalytics.exception_hook&#39;)
-        logger.error(&#34;--------------------------&#34;)
-        logger.error(&#34;UNHANDLED EXCEPTION: FATAL&#34;)
-        logger.error(msg=&#34;--------------------------&#34;, exc_info=(exc_type, exc_value, exc_traceback,))
-        logger.error(&#34;--------------------------&#34;)
-        logger.error(&#34;UNHANDLED EXCEPTION: FATAL&#34;)
-        logger.error(&#34;--------------------------&#34;)
+        if USE_LOGGER:
+            logger.error(&#34;--------------------------&#34;)
+            logger.error(&#34;UNHANDLED EXCEPTION: FATAL&#34;)
+            logger.error(msg=&#34;--------------------------&#34;, exc_info=(exc_type, exc_value, exc_traceback,))
+            logger.error(&#34;--------------------------&#34;)
+            logger.error(&#34;UNHANDLED EXCEPTION: FATAL&#34;)
+            logger.error(&#34;--------------------------&#34;)
+        else:
+            logger.error(msg=&#34;An unhandled exception occured.&#34;, exc_info=(exc_type, exc_value, exc_traceback,))
     except Exception:
         pass
     return</code></pre>

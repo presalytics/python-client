@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L0-L155" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L0-L157" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import typing
 import presalytics
@@ -96,10 +96,11 @@ class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
                 &#39;solarized&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/solarized.min.css&#39;,
                 &#39;white&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css&#39;
             },
-            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css&#39;
+            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css&#39;,
+            &#39;customizations&#39;: &#39;{0}/static/css/reveal-customizations.css&#39;.format(site_host) 
         },
         &#39;preloaders&#39; : &#39;{0}/static/css/preloaders.css&#39;.format(site_host),
-        &#39;bootstrap4&#39;: &#34;https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css&#34;
+        &#39;bootstrap4&#39;: &#34;https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css&#34;
     }
     
     &#34;&#34;&#34;
@@ -149,7 +150,8 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
             &#39;math&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js&#39;,
             &#39;zoom&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js&#39;,
             &#39;notes&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js&#39;,
-            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js&#39;
+            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js&#39;,
+            &#39;customizations&#39;: &#39;{0}/static/js/revealcustomizations.js&#39;.format(site_host),
 
         },
         &#39;mpld3&#39;: &#39;{0}/static/mpld3/mpld3.min.js&#39;.format(site_host),
@@ -157,7 +159,7 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
         &#39;mpl-responsive&#39;: &#39;{0}/static/js/mpl-responsive.js&#39;.format(site_host),
         &#39;jquery&#39;: &#39;https://code.jquery.com/jquery-3.4.1.min.js&#39;,
         &#39;popper&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js&#39;,
-        &#39;bootstrap4&#39;: &#39;https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js&#39;
+        &#39;bootstrap4&#39;: &#39;https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js&#39;
     }
     &#34;&#34;&#34;
     Static nested dictionary containing links to external scripts that will be rendered alongside this plugin
@@ -294,7 +296,7 @@ config into an html <code>&lt;link&gt;</code> fragment.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L44-L99" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L44-L100" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
     &#34;&#34;&#34;
@@ -324,10 +326,11 @@ config into an html <code>&lt;link&gt;</code> fragment.</p>
                 &#39;solarized&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/solarized.min.css&#39;,
                 &#39;white&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css&#39;
             },
-            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css&#39;
+            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css&#39;,
+            &#39;customizations&#39;: &#39;{0}/static/css/reveal-customizations.css&#39;.format(site_host) 
         },
         &#39;preloaders&#39; : &#39;{0}/static/css/preloaders.css&#39;.format(site_host),
-        &#39;bootstrap4&#39;: &#34;https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css&#34;
+        &#39;bootstrap4&#39;: &#34;https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css&#34;
     }
     
     &#34;&#34;&#34;
@@ -380,7 +383,7 @@ of a <a title="presalytics.story.outline.Plugin" href="/python-client/presalytic
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L87-L99" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L88-L100" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def to_style(self, config, **kwargs):
     &#34;&#34;&#34;
@@ -422,7 +425,7 @@ config into an html <code>&lt;script&gt;</code> fragment.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L102-L156" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L103-L158" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
     &#34;&#34;&#34;
@@ -447,7 +450,8 @@ config into an html <code>&lt;script&gt;</code> fragment.</p>
             &#39;math&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js&#39;,
             &#39;zoom&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js&#39;,
             &#39;notes&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js&#39;,
-            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js&#39;
+            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js&#39;,
+            &#39;customizations&#39;: &#39;{0}/static/js/revealcustomizations.js&#39;.format(site_host),
 
         },
         &#39;mpld3&#39;: &#39;{0}/static/mpld3/mpld3.min.js&#39;.format(site_host),
@@ -455,7 +459,7 @@ config into an html <code>&lt;script&gt;</code> fragment.</p>
         &#39;mpl-responsive&#39;: &#39;{0}/static/js/mpl-responsive.js&#39;.format(site_host),
         &#39;jquery&#39;: &#39;https://code.jquery.com/jquery-3.4.1.min.js&#39;,
         &#39;popper&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js&#39;,
-        &#39;bootstrap4&#39;: &#39;https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js&#39;
+        &#39;bootstrap4&#39;: &#39;https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js&#39;
     }
     &#34;&#34;&#34;
     Static nested dictionary containing links to external scripts that will be rendered alongside this plugin
@@ -507,7 +511,7 @@ of a <a title="presalytics.story.outline.Plugin" href="/python-client/presalytic
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L144-L156" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L146-L158" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def to_script(self, config, **kwargs):
     &#34;&#34;&#34;

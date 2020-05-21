@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L0-L520" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L0-L470" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import os
 import cgi
@@ -34,13 +34,14 @@ import urllib.parse
 import importlib.util
 import logging
 import json
-import keycloak
 import environs
 import wsgi_microservice_middleware
+import functools
 import presalytics
 import presalytics.lib.exceptions
 import presalytics.lib.constants as cnst
 import presalytics.client.auth
+import presalytics.client.oidc
 import presalytics.client.presalytics_ooxml_automation.api_client
 import presalytics.client.presalytics_story.api_client
 import presalytics.client.presalytics_doc_converter.api_client
@@ -70,11 +71,11 @@ class Client(object):
 
     *A note for server-side development*:
 
-    By default, the client class automatically caches tokens in a file called 
+    The client class can automatically cache tokens in a file called 
     &#34;token.json&#34;, located in the python&#39;s current working directory.  This is done so
-    users running scripts do not have to acquire a new token every time an API call is
-    made. If building a client to operate in a multi-user environment, this behavior 
-    should be turned off so that user do not pull one another&#39;s tokens.
+    users running scripts accross multiple client instances do not have to acquire a new token 
+    every time an API call is made. If building a client to operate in a multi-user environment, 
+    this behavior should be turned off so that one user cannot not pull one another&#39;s tokens.
     To do this, ensure the following parameters are pass to the configuration either 
     via initialization or in a `presalytics.CONFIG` file: 
     
@@ -119,7 +120,7 @@ class Client(object):
         raise an `presalytics.lib.exceptions.InvalidTokenException`.
 
     cache_tokens : bool, optional
-        Defaults to True.  Toggles whether or the client should cache its acquired tokens in file called &#34;token.json&#34;
+        Defaults to False.  Toggles whether or the client should cache its acquired tokens in file called &#34;token.json&#34;
         in the current working directory.  Minimizes the number of times a user is required to login.  Set to False
         in multi-user environments.
 
@@ -207,9 +208,8 @@ class Client(object):
         Indicates whether a this client can obtain tokens from auth.presalytics.io without a user under
         OpenID Connect grant type &#34;confidential_client&#34;.  Requires a `client_secret`.  Default is False. 
 
-    oidc : `keycloak.KeycloakOpenID`
-        A middleware class for to help acquire tokens from auth.presalytics.io.  For more information, review
-        the docs at https://python-keycloak.readthedocs.io/en/latest/ .
+    oidc : `presalytics.client.oidc.OidcClient`
+        A middleware class to help acquire and validate tokens from login.presalytics.io.
 
     token_util : `presalytics.client.auth.TokenUtil`
         A handler for managing an caching tokens acquired from auth.presalytics.io.
@@ -239,7 +239,9 @@ class Client(object):
             password=None,
             delegate_login=False,
             token=None,
-            cache_tokens=True,
+            cache_tokens=False,
+            client_id=None,
+            client_secret=None,
             **kwargs):
     
         if username:
@@ -251,7 +253,8 @@ class Client(object):
                 if token:
                     self.username = None
                 else:
-                    raise presalytics.lib.exceptions.MissingConfigException(&#34;Configuration variable PRESALYTICS_USERNAME is required when client is not initalized with an API token.  Please reconfigure and retry.&#34;)
+                    if not client_secret:
+                        raise presalytics.lib.exceptions.MissingConfigException(&#34;when not passing tokens directly, a clien must have either a client_secrect or a username&#34;)
         try:
             if password:
                 self.password = password
@@ -262,22 +265,28 @@ class Client(object):
             self.password = None
             self.direct_grant = False
         try:
-            self.client_id = presalytics.CONFIG[&#39;CLIENT_ID&#39;]
+            if client_id:
+                self.client_id = client_id
+            else:
+                self.client_id = presalytics.CONFIG[&#39;CLIENT_ID&#39;]
         except KeyError:
             self.client_id = cnst.DEFAULT_CLIENT_ID
         try:
-            self.client_secret = presalytics.CONFIG[&#39;CLIENT_SECRET&#39;]
+            if client_secret:
+                self.client_secret = client_secret
+            else:
+                self.client_secret = presalytics.CONFIG[&#39;CLIENT_SECRET&#39;]
             self.confidential_client = True
         except KeyError:
             self.client_secret = None
             self.confidential_client = False
-        self.verify_https = presalytics.CONFIG.get(&#34;VERIFY_HTTPS&#34;, True)
+
         try:
             self.site_host = presalytics.CONFIG[&#34;HOSTS&#34;][&#34;SITE&#34;]
         except KeyError:
             self.site_host = cnst.SITE_HOST
-        self.login_sleep_interval = 5  # seconds
-        self.login_timeout = 60  # seconds
+
+
         try:
             self.redirect_uri = presalytics.CONFIG[&#34;REDIRECT_URI&#34;]
         except KeyError:
@@ -286,20 +295,25 @@ class Client(object):
             self._delegate_login = True
         else:
             self._delegate_login = False
-        self.oidc = keycloak.KeycloakOpenID(
-            server_url=cnst.OIDC_AUTH_HOST,
-            realm_name=cnst.OIDC_REALM,
+        self.oidc = presalytics.client.oidc.OidcClient(
             client_id=self.client_id,
-            verify=self.verify_https
+            client_secret=self.client_secret
         )
         if presalytics.CONFIG.get(&#34;CACHE_TOKENS&#34;, None):
             cache_tokens = presalytics.CONFIG.get(&#34;CACHE_TOKENS&#34;)
         self.token_util = presalytics.client.auth.TokenUtil(token_cache=cache_tokens)
         if token:
-            if token.get(&#39;access_token_expire_time&#39;, None):
+            #  Assume if token is passed as string, then it&#39;s an access token
+            if isinstance(token, str):
+                self.token_util.token = {&#34;access_token&#34;: token}
+            
+            # if token is a dictionary with an &#39;access_token_expire_time&#39; key, it&#39;s previous been processed / deserialized
+            elif token.get(&#39;access_token_expire_time&#39;, None):
                 self.token_util.token = token
+
+            # if token has an &#39;expires_in&#39; key, if has not been deserialized
             elif token.get(&#39;expires_in&#39;, None):
-                self.token_util.process_keycloak_token(token)
+                self.token_util.process_token(token)
             else:
                 raise presalytics.lib.exceptions.InvalidTokenException(message=&#34;Unknown token format.&#34;)
             if self.token_util.token_cache:
@@ -318,107 +332,13 @@ class Client(object):
         &#34;&#34;&#34;
         Triggers a an attempt to acquire an API token based on the the client configuration
         &#34;&#34;&#34;
-        try:
-            if self.direct_grant:
-                keycloak_token = self.oidc.token(username=self.username, password=self.password)
-            else:
-                keycloak_token = self._get_new_token_browser()
-        except keycloak.exceptions.KeycloakGetError as e:
-            if e.response_code == 404:
-                logger.error(&#34;Received reponse code 404 from api authentication.  Indicates username does not exist.  Please recheck config and try again.&#34;)
-            elif e.response_code == 401:
-                logger.error(&#34;Received 401 response code from api authentication.  This user&#39;s access to this resource is unauthorized&#34;)
-            elif e.response_code &gt;= 500:
-                logger.error(&#34;Server error.  Please try again later.&#34;)
-            else:
-                logger.error(e.error_message)
-            raise presalytics.lib.exceptions.MissingConfigException(e.error_message)
-        self.token_util.process_keycloak_token(keycloak_token)
+        if self.direct_grant:
+            token = self.oidc.token(username=self.username, password=self.password)
+        else:
+            token = self.oidc.token(username=self.username)
+        self.token_util.process_token(token)
         return self.token_util.token
 
-    def exchange_token(self, original_token, audience=None):
-        &#34;&#34;&#34;
-        Conduct IETF [token exchange](https://tools.ietf.org/id/draft-ietf-oauth-token-exchange-19.html).
-        Use for client applications to modify the scope of token granted by user authenication so they 
-        do not get misused by 3rd party services. 
-
-        Parameters
-        ----------
-
-        original_token : str
-            A str with JWT Bearer access token obtained from auth.presalytics.io
-
-        audience : str
-            A str naming the referrring to audience of the server that will consume the new token
-
-        Returns:
-        ---------
-        A str containing a JWT Bearer token with reduced scope
-
-        &#34;&#34;&#34;
-        self.oidc.decode_token(original_token, cnst.JWT_KEY)
-        kwargs = {
-            &#34;client_id&#34;: self.client_id,
-            &#34;client_secret&#34;: self.client_secret,
-            &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:token-exchange&#34;,
-            &#34;subject_token&#34;: original_token
-        }
-        if audience is not None:
-            kwargs.update(
-                {
-                    &#34;audience&#34;: audience
-                }
-            )
-        keycloak_token = self.oidc.token(**kwargs)
-        self.token_util.process_keycloak_token(keycloak_token)
-        return self.token_util.token[&#34;access_token&#34;]
-
-    def _get_new_token_browser(self):
-        &#34;&#34;&#34;
-        Opens browser in on presalytics.io and prompts for user login.
-        Retrieves authorization code from website and obtains api token
-        &#34;&#34;&#34;
-        api_otp = uuid4()
-        query = {
-            &#34;api_otp&#34;: api_otp,
-            &#34;client_id&#34;: self.client_id,
-            &#34;next&#34;: urllib.parse.urlparse(self.redirect_uri).path
-        }
-        query_string = &#39;?{}&#39;.format(urllib.parse.urlencode(query))
-        url = urllib.parse.urljoin(self.site_host, urllib.parse.urljoin(cnst.LOGIN_PATH, query_string))
-        logger.info(&#34;Opening new browser tab.  Please input login credentials...&#34;)
-        logger.info(&#34;Requesting login at location: &lt;{0}&gt;&#34;.format(url))
-        webbrowser.open_new_tab(url)
-        auth_code = None
-        payload = {
-            &#34;username&#34;: self.username,
-            &#34;api_otp&#34;: str(api_otp),
-            &#34;client_id&#34;: self.client_id
-        }
-
-        auth_code_url = urllib.parse.urljoin(self.site_host, cnst.API_CODE_URL)
-        interval = 0
-        while True:
-            response = requests.post(auth_code_url, json=payload, verify=self.verify_https)
-            if response.status_code != 200:
-                if interval &lt;= self.login_timeout:
-                    interval += self.login_sleep_interval
-                    time.sleep(self.login_sleep_interval)
-                else:
-                    raise presalytics.lib.exceptions.LoginTimeout()
-            else:
-                data = json.loads(response.content)
-                break
-        if data.get(&#34;token&#34;, None):
-            #  pick up otp token off presalytics backend
-            token = data.get(&#34;token&#34;) 
-        else:
-            # support oidc authorization code flow
-            auth_code = data[&#34;authorization_code&#34;]
-            token = self.oidc.token(username=self.username, grant_type=&#34;authorization_code&#34;, code=auth_code, redirect_uri=self.redirect_uri)
-        if token:
-            logger.info(&#34;Login Succeeded.  Proceeding.&#34;)
-        return token
 
     def refresh_token(self):
         &#34;&#34;&#34;
@@ -427,20 +347,21 @@ class Client(object):
         an `presalytics.lib.exceptions.InvalidTokenException` when `deletegate_login` is True.
         &#34;&#34;&#34;
         if self.token_util.is_api_access_token_expired():
-            if self.token_util.is_api_refresh_token_expired():
-                if not self._delegate_login:  # do not automatically log in at init
-                    self.login()
-                else:
-                    raise presalytics.lib.exceptions.InvalidTokenException(message=&#34;This token has expired.&#34;)
+            if self.token_util.token.get(&#39;refresh_token&#39;, None):
+                refresh_token = self.token_util.token[&#34;refresh_token&#34;]
+                token = self.oidc.refresh_token(refresh_token)
+                self.token_util.process_token(token)
+                logger.debug(&#34;Refresh token granted successfully.&#34;)
             else:
-                try:
-                    refresh_token = self.token_util.token[&#34;refresh_token&#34;]
-                    keycloak_token = self.oidc.refresh_token(refresh_token)
-                    self.token_util.process_keycloak_token(keycloak_token)
-                    logger.debug(&#34;Refresh token granted successfully.&#34;)
-                except keycloak.exceptions.KeycloakGetError:
-                    if not self._delegate_login:
-                        self.login()
+                if self.direct_grant:
+                    token = self.oidc.token(username=self.username, password=self.password)
+                elif self.confidential_client:
+                    token = self.oidc.client_credentials_token()
+                elif self._delegate_login:
+                    raise presalytics.lib.exceptions.ApiError(&#34;Unauthorized. Token has expired&#34;, status_code=401)
+                else:
+                    token = self.oidc.token(username=self.username)
+                self.token_util.process_token(token)
             if self.token_util.token_cache:
                 self.token_util._put_token_file()
         return self.token_util.token
@@ -509,6 +430,26 @@ class Client(object):
         with open(filepath, &#39;wb&#39;) as f:
             f.write(response.data)
 
+    def get_client_info(self):
+        &#34;&#34;&#34;
+        Convenience method returning information about this client to pass to downstream objects, e.g.,
+        components and new client instances
+
+        Returns
+        ----------
+        A dictionary containing instances values:
+            - token: self.token_util.token
+            - client_id: self.client_id
+            - cache_tokens: self.token_util.token_cache
+            - delegate_login: self.delegate login
+        &#34;&#34;&#34;
+        return {
+            &#34;token&#34;: self.token_util.token,
+            &#34;client_id&#34;: self.client_id,
+            &#34;cache_tokens&#34;: self.token_util.token_cache,
+            &#34;delegate_login&#34;: self._delegate_login
+        }
+
 class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_doc_converter.api_client.ApiClient):
     &#34;&#34;&#34;
     Wraps `presalytics.client.presalytics_doc_converter.api_client.ApiClient` with 
@@ -541,6 +482,15 @@ class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presal
         self.update_configuration()
 
 
+@functools.lru_cache(maxsize=None)
+def get_client():
+    &#34;&#34;&#34;
+    Caches a client instance for default parameters set in `presalytics.CONFIG`.
+
+    DO NOT use in server-side operation
+    &#34;&#34;&#34;
+    client = presalytics.Client()
+    return client
 
 
         </code></pre>
@@ -551,13 +501,38 @@ class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presal
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="presalytics.client.api.get_client"><code class="name flex">
+<span>def <span class="ident">get_client</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Caches a client instance for default parameters set in <a title="presalytics.CONFIG" href="/python-client/presalytics/index.html#presalytics.CONFIG"><code>CONFIG</code></a>.</p>
+<p>DO NOT use in server-side operation</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L458-L466" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@functools.lru_cache(maxsize=None)
+def get_client():
+    &#34;&#34;&#34;
+    Caches a client instance for default parameters set in `presalytics.CONFIG`.
+
+    DO NOT use in server-side operation
+    &#34;&#34;&#34;
+    client = presalytics.Client()
+    return client</code></pre>
+</details>
+</dd>
+</dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
 <dt id="presalytics.client.api.Client"><code class="flex name class">
 <span>class <span class="ident">Client</span></span>
-<span>(</span><span>username=None, password=None, delegate_login=False, token=None, cache_tokens=True, **kwargs)</span>
+<span>(</span><span>username=None, password=None, delegate_login=False, token=None, cache_tokens=False, client_id=None, client_secret=None, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Class for interacting with Presalytics API endpoints</p>
@@ -574,12 +549,12 @@ login page (or raise an <a title="presalytics.lib.exceptions.InvalidTokenExcepti
 <p>After authenication, users can call the methods bound to the story, ooxml_automation,
 and doc_converter attributes to make calls in into the Presalytics API.</p>
 <p><em>A note for server-side development</em>:</p>
-<p>By default, the client class automatically caches tokens in a file called
+<p>The client class can automatically cache tokens in a file called
 "token.json", located in the python's current working directory.
 This is done so
-users running scripts do not have to acquire a new token every time an API call is
-made. If building a client to operate in a multi-user environment, this behavior
-should be turned off so that user do not pull one another's tokens.
+users running scripts accross multiple client instances do not have to acquire a new token
+every time an API call is made. If building a client to operate in a multi-user environment,
+this behavior should be turned off so that one user cannot not pull one another's tokens.
 To do this, ensure the following parameters are pass to the configuration either
 via initialization or in a <a title="presalytics.CONFIG" href="/python-client/presalytics/index.html#presalytics.CONFIG"><code>CONFIG</code></a> file: </p>
 <pre><code>cache_tokens = False,
@@ -630,7 +605,7 @@ dictionary keys<code>expires_in</code> and <code>refresh_expires_in</code>.</p>
 raise an <a title="presalytics.lib.exceptions.InvalidTokenException" href="/python-client/presalytics/lib/exceptions.html#presalytics.lib.exceptions.InvalidTokenException"><code>InvalidTokenException</code></a>.</p>
 </dd>
 <dt><strong><code>cache_tokens</code></strong> :&ensp;<code>bool</code>, optional</dt>
-<dd>Defaults to True.
+<dd>Defaults to False.
 Toggles whether or the client should cache its acquired tokens in file called "token.json"
 in the current working directory.
 Minimizes the number of times a user is required to login.
@@ -730,10 +705,8 @@ Useful <code>confidential_client</code> is True.</dd>
 OpenID Connect grant type "confidential_client".
 Requires a <code>client_secret</code>.
 Default is False.</dd>
-<dt><strong><code>oidc</code></strong> :&ensp;<code>keycloak.KeycloakOpenID</code></dt>
-<dd>A middleware class for to help acquire tokens from auth.presalytics.io.
-For more information, review
-the docs at <a href="https://python-keycloak.readthedocs.io/en/latest/">https://python-keycloak.readthedocs.io/en/latest/</a> .</dd>
+<dt><strong><code>oidc</code></strong> :&ensp;<code>presalytics.client.oidc.OidcClient</code></dt>
+<dd>A middleware class to help acquire and validate tokens from login.presalytics.io.</dd>
 <dt><strong><code>token_util</code></strong> :&ensp;<code>presalytics.client.auth.TokenUtil</code></dt>
 <dd>A handler for managing an caching tokens acquired from auth.presalytics.io.</dd>
 <dt><strong><code>site_host</code></strong> :&ensp;<code>str</code></dt>
@@ -758,7 +731,7 @@ if the user has not authenticated by the time the interval has expired.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L27-L483" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L28-L424" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Client(object):
     &#34;&#34;&#34; Class for interacting with Presalytics API endpoints
@@ -779,11 +752,11 @@ if the user has not authenticated by the time the interval has expired.</dd>
 
     *A note for server-side development*:
 
-    By default, the client class automatically caches tokens in a file called 
+    The client class can automatically cache tokens in a file called 
     &#34;token.json&#34;, located in the python&#39;s current working directory.  This is done so
-    users running scripts do not have to acquire a new token every time an API call is
-    made. If building a client to operate in a multi-user environment, this behavior 
-    should be turned off so that user do not pull one another&#39;s tokens.
+    users running scripts accross multiple client instances do not have to acquire a new token 
+    every time an API call is made. If building a client to operate in a multi-user environment, 
+    this behavior should be turned off so that one user cannot not pull one another&#39;s tokens.
     To do this, ensure the following parameters are pass to the configuration either 
     via initialization or in a `presalytics.CONFIG` file: 
     
@@ -828,7 +801,7 @@ if the user has not authenticated by the time the interval has expired.</dd>
         raise an `presalytics.lib.exceptions.InvalidTokenException`.
 
     cache_tokens : bool, optional
-        Defaults to True.  Toggles whether or the client should cache its acquired tokens in file called &#34;token.json&#34;
+        Defaults to False.  Toggles whether or the client should cache its acquired tokens in file called &#34;token.json&#34;
         in the current working directory.  Minimizes the number of times a user is required to login.  Set to False
         in multi-user environments.
 
@@ -916,9 +889,8 @@ if the user has not authenticated by the time the interval has expired.</dd>
         Indicates whether a this client can obtain tokens from auth.presalytics.io without a user under
         OpenID Connect grant type &#34;confidential_client&#34;.  Requires a `client_secret`.  Default is False. 
 
-    oidc : `keycloak.KeycloakOpenID`
-        A middleware class for to help acquire tokens from auth.presalytics.io.  For more information, review
-        the docs at https://python-keycloak.readthedocs.io/en/latest/ .
+    oidc : `presalytics.client.oidc.OidcClient`
+        A middleware class to help acquire and validate tokens from login.presalytics.io.
 
     token_util : `presalytics.client.auth.TokenUtil`
         A handler for managing an caching tokens acquired from auth.presalytics.io.
@@ -948,7 +920,9 @@ if the user has not authenticated by the time the interval has expired.</dd>
             password=None,
             delegate_login=False,
             token=None,
-            cache_tokens=True,
+            cache_tokens=False,
+            client_id=None,
+            client_secret=None,
             **kwargs):
     
         if username:
@@ -960,7 +934,8 @@ if the user has not authenticated by the time the interval has expired.</dd>
                 if token:
                     self.username = None
                 else:
-                    raise presalytics.lib.exceptions.MissingConfigException(&#34;Configuration variable PRESALYTICS_USERNAME is required when client is not initalized with an API token.  Please reconfigure and retry.&#34;)
+                    if not client_secret:
+                        raise presalytics.lib.exceptions.MissingConfigException(&#34;when not passing tokens directly, a clien must have either a client_secrect or a username&#34;)
         try:
             if password:
                 self.password = password
@@ -971,22 +946,28 @@ if the user has not authenticated by the time the interval has expired.</dd>
             self.password = None
             self.direct_grant = False
         try:
-            self.client_id = presalytics.CONFIG[&#39;CLIENT_ID&#39;]
+            if client_id:
+                self.client_id = client_id
+            else:
+                self.client_id = presalytics.CONFIG[&#39;CLIENT_ID&#39;]
         except KeyError:
             self.client_id = cnst.DEFAULT_CLIENT_ID
         try:
-            self.client_secret = presalytics.CONFIG[&#39;CLIENT_SECRET&#39;]
+            if client_secret:
+                self.client_secret = client_secret
+            else:
+                self.client_secret = presalytics.CONFIG[&#39;CLIENT_SECRET&#39;]
             self.confidential_client = True
         except KeyError:
             self.client_secret = None
             self.confidential_client = False
-        self.verify_https = presalytics.CONFIG.get(&#34;VERIFY_HTTPS&#34;, True)
+
         try:
             self.site_host = presalytics.CONFIG[&#34;HOSTS&#34;][&#34;SITE&#34;]
         except KeyError:
             self.site_host = cnst.SITE_HOST
-        self.login_sleep_interval = 5  # seconds
-        self.login_timeout = 60  # seconds
+
+
         try:
             self.redirect_uri = presalytics.CONFIG[&#34;REDIRECT_URI&#34;]
         except KeyError:
@@ -995,20 +976,25 @@ if the user has not authenticated by the time the interval has expired.</dd>
             self._delegate_login = True
         else:
             self._delegate_login = False
-        self.oidc = keycloak.KeycloakOpenID(
-            server_url=cnst.OIDC_AUTH_HOST,
-            realm_name=cnst.OIDC_REALM,
+        self.oidc = presalytics.client.oidc.OidcClient(
             client_id=self.client_id,
-            verify=self.verify_https
+            client_secret=self.client_secret
         )
         if presalytics.CONFIG.get(&#34;CACHE_TOKENS&#34;, None):
             cache_tokens = presalytics.CONFIG.get(&#34;CACHE_TOKENS&#34;)
         self.token_util = presalytics.client.auth.TokenUtil(token_cache=cache_tokens)
         if token:
-            if token.get(&#39;access_token_expire_time&#39;, None):
+            #  Assume if token is passed as string, then it&#39;s an access token
+            if isinstance(token, str):
+                self.token_util.token = {&#34;access_token&#34;: token}
+            
+            # if token is a dictionary with an &#39;access_token_expire_time&#39; key, it&#39;s previous been processed / deserialized
+            elif token.get(&#39;access_token_expire_time&#39;, None):
                 self.token_util.token = token
+
+            # if token has an &#39;expires_in&#39; key, if has not been deserialized
             elif token.get(&#39;expires_in&#39;, None):
-                self.token_util.process_keycloak_token(token)
+                self.token_util.process_token(token)
             else:
                 raise presalytics.lib.exceptions.InvalidTokenException(message=&#34;Unknown token format.&#34;)
             if self.token_util.token_cache:
@@ -1027,107 +1013,13 @@ if the user has not authenticated by the time the interval has expired.</dd>
         &#34;&#34;&#34;
         Triggers a an attempt to acquire an API token based on the the client configuration
         &#34;&#34;&#34;
-        try:
-            if self.direct_grant:
-                keycloak_token = self.oidc.token(username=self.username, password=self.password)
-            else:
-                keycloak_token = self._get_new_token_browser()
-        except keycloak.exceptions.KeycloakGetError as e:
-            if e.response_code == 404:
-                logger.error(&#34;Received reponse code 404 from api authentication.  Indicates username does not exist.  Please recheck config and try again.&#34;)
-            elif e.response_code == 401:
-                logger.error(&#34;Received 401 response code from api authentication.  This user&#39;s access to this resource is unauthorized&#34;)
-            elif e.response_code &gt;= 500:
-                logger.error(&#34;Server error.  Please try again later.&#34;)
-            else:
-                logger.error(e.error_message)
-            raise presalytics.lib.exceptions.MissingConfigException(e.error_message)
-        self.token_util.process_keycloak_token(keycloak_token)
+        if self.direct_grant:
+            token = self.oidc.token(username=self.username, password=self.password)
+        else:
+            token = self.oidc.token(username=self.username)
+        self.token_util.process_token(token)
         return self.token_util.token
 
-    def exchange_token(self, original_token, audience=None):
-        &#34;&#34;&#34;
-        Conduct IETF [token exchange](https://tools.ietf.org/id/draft-ietf-oauth-token-exchange-19.html).
-        Use for client applications to modify the scope of token granted by user authenication so they 
-        do not get misused by 3rd party services. 
-
-        Parameters
-        ----------
-
-        original_token : str
-            A str with JWT Bearer access token obtained from auth.presalytics.io
-
-        audience : str
-            A str naming the referrring to audience of the server that will consume the new token
-
-        Returns:
-        ---------
-        A str containing a JWT Bearer token with reduced scope
-
-        &#34;&#34;&#34;
-        self.oidc.decode_token(original_token, cnst.JWT_KEY)
-        kwargs = {
-            &#34;client_id&#34;: self.client_id,
-            &#34;client_secret&#34;: self.client_secret,
-            &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:token-exchange&#34;,
-            &#34;subject_token&#34;: original_token
-        }
-        if audience is not None:
-            kwargs.update(
-                {
-                    &#34;audience&#34;: audience
-                }
-            )
-        keycloak_token = self.oidc.token(**kwargs)
-        self.token_util.process_keycloak_token(keycloak_token)
-        return self.token_util.token[&#34;access_token&#34;]
-
-    def _get_new_token_browser(self):
-        &#34;&#34;&#34;
-        Opens browser in on presalytics.io and prompts for user login.
-        Retrieves authorization code from website and obtains api token
-        &#34;&#34;&#34;
-        api_otp = uuid4()
-        query = {
-            &#34;api_otp&#34;: api_otp,
-            &#34;client_id&#34;: self.client_id,
-            &#34;next&#34;: urllib.parse.urlparse(self.redirect_uri).path
-        }
-        query_string = &#39;?{}&#39;.format(urllib.parse.urlencode(query))
-        url = urllib.parse.urljoin(self.site_host, urllib.parse.urljoin(cnst.LOGIN_PATH, query_string))
-        logger.info(&#34;Opening new browser tab.  Please input login credentials...&#34;)
-        logger.info(&#34;Requesting login at location: &lt;{0}&gt;&#34;.format(url))
-        webbrowser.open_new_tab(url)
-        auth_code = None
-        payload = {
-            &#34;username&#34;: self.username,
-            &#34;api_otp&#34;: str(api_otp),
-            &#34;client_id&#34;: self.client_id
-        }
-
-        auth_code_url = urllib.parse.urljoin(self.site_host, cnst.API_CODE_URL)
-        interval = 0
-        while True:
-            response = requests.post(auth_code_url, json=payload, verify=self.verify_https)
-            if response.status_code != 200:
-                if interval &lt;= self.login_timeout:
-                    interval += self.login_sleep_interval
-                    time.sleep(self.login_sleep_interval)
-                else:
-                    raise presalytics.lib.exceptions.LoginTimeout()
-            else:
-                data = json.loads(response.content)
-                break
-        if data.get(&#34;token&#34;, None):
-            #  pick up otp token off presalytics backend
-            token = data.get(&#34;token&#34;) 
-        else:
-            # support oidc authorization code flow
-            auth_code = data[&#34;authorization_code&#34;]
-            token = self.oidc.token(username=self.username, grant_type=&#34;authorization_code&#34;, code=auth_code, redirect_uri=self.redirect_uri)
-        if token:
-            logger.info(&#34;Login Succeeded.  Proceeding.&#34;)
-        return token
 
     def refresh_token(self):
         &#34;&#34;&#34;
@@ -1136,20 +1028,21 @@ if the user has not authenticated by the time the interval has expired.</dd>
         an `presalytics.lib.exceptions.InvalidTokenException` when `deletegate_login` is True.
         &#34;&#34;&#34;
         if self.token_util.is_api_access_token_expired():
-            if self.token_util.is_api_refresh_token_expired():
-                if not self._delegate_login:  # do not automatically log in at init
-                    self.login()
-                else:
-                    raise presalytics.lib.exceptions.InvalidTokenException(message=&#34;This token has expired.&#34;)
+            if self.token_util.token.get(&#39;refresh_token&#39;, None):
+                refresh_token = self.token_util.token[&#34;refresh_token&#34;]
+                token = self.oidc.refresh_token(refresh_token)
+                self.token_util.process_token(token)
+                logger.debug(&#34;Refresh token granted successfully.&#34;)
             else:
-                try:
-                    refresh_token = self.token_util.token[&#34;refresh_token&#34;]
-                    keycloak_token = self.oidc.refresh_token(refresh_token)
-                    self.token_util.process_keycloak_token(keycloak_token)
-                    logger.debug(&#34;Refresh token granted successfully.&#34;)
-                except keycloak.exceptions.KeycloakGetError:
-                    if not self._delegate_login:
-                        self.login()
+                if self.direct_grant:
+                    token = self.oidc.token(username=self.username, password=self.password)
+                elif self.confidential_client:
+                    token = self.oidc.client_credentials_token()
+                elif self._delegate_login:
+                    raise presalytics.lib.exceptions.ApiError(&#34;Unauthorized. Token has expired&#34;, status_code=401)
+                else:
+                    token = self.oidc.token(username=self.username)
+                self.token_util.process_token(token)
             if self.token_util.token_cache:
                 self.token_util._put_token_file()
         return self.token_util.token
@@ -1216,7 +1109,27 @@ if the user has not authenticated by the time the interval has expired.</dd>
             filename = params[&#34;filename&#34;]
         filepath = os.path.join(download_folder, filename)
         with open(filepath, &#39;wb&#39;) as f:
-            f.write(response.data)</code></pre>
+            f.write(response.data)
+
+    def get_client_info(self):
+        &#34;&#34;&#34;
+        Convenience method returning information about this client to pass to downstream objects, e.g.,
+        components and new client instances
+
+        Returns
+        ----------
+        A dictionary containing instances values:
+            - token: self.token_util.token
+            - client_id: self.client_id
+            - cache_tokens: self.token_util.token_cache
+            - delegate_login: self.delegate login
+        &#34;&#34;&#34;
+        return {
+            &#34;token&#34;: self.token_util.token,
+            &#34;client_id&#34;: self.client_id,
+            &#34;cache_tokens&#34;: self.token_util.token_cache,
+            &#34;delegate_login&#34;: self._delegate_login
+        }</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -1228,88 +1141,18 @@ if the user has not authenticated by the time the interval has expired.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L290-L310" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L304-L313" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def login(self):
     &#34;&#34;&#34;
     Triggers a an attempt to acquire an API token based on the the client configuration
     &#34;&#34;&#34;
-    try:
-        if self.direct_grant:
-            keycloak_token = self.oidc.token(username=self.username, password=self.password)
-        else:
-            keycloak_token = self._get_new_token_browser()
-    except keycloak.exceptions.KeycloakGetError as e:
-        if e.response_code == 404:
-            logger.error(&#34;Received reponse code 404 from api authentication.  Indicates username does not exist.  Please recheck config and try again.&#34;)
-        elif e.response_code == 401:
-            logger.error(&#34;Received 401 response code from api authentication.  This user&#39;s access to this resource is unauthorized&#34;)
-        elif e.response_code &gt;= 500:
-            logger.error(&#34;Server error.  Please try again later.&#34;)
-        else:
-            logger.error(e.error_message)
-        raise presalytics.lib.exceptions.MissingConfigException(e.error_message)
-    self.token_util.process_keycloak_token(keycloak_token)
+    if self.direct_grant:
+        token = self.oidc.token(username=self.username, password=self.password)
+    else:
+        token = self.oidc.token(username=self.username)
+    self.token_util.process_token(token)
     return self.token_util.token</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.api.Client.exchange_token"><code class="name flex">
-<span>def <span class="ident">exchange_token</span></span>(<span>self, original_token, audience=None)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Conduct IETF <a href="https://tools.ietf.org/id/draft-ietf-oauth-token-exchange-19.html">token exchange</a>.
-Use for client applications to modify the scope of token granted by user authenication so they
-do not get misused by 3rd party services. </p>
-<h2 id="parameters">Parameters</h2>
-<dl>
-<dt><strong><code>original_token</code></strong> :&ensp;<code>str</code></dt>
-<dd>A str with JWT Bearer access token obtained from auth.presalytics.io</dd>
-<dt><strong><code>audience</code></strong> :&ensp;<code>str</code></dt>
-<dd>A str naming the referrring to audience of the server that will consume the new token</dd>
-</dl>
-<h2 id="returns">Returns:</h2>
-<p>A str containing a JWT Bearer token with reduced scope</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L312-L347" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def exchange_token(self, original_token, audience=None):
-    &#34;&#34;&#34;
-    Conduct IETF [token exchange](https://tools.ietf.org/id/draft-ietf-oauth-token-exchange-19.html).
-    Use for client applications to modify the scope of token granted by user authenication so they 
-    do not get misused by 3rd party services. 
-
-    Parameters
-    ----------
-
-    original_token : str
-        A str with JWT Bearer access token obtained from auth.presalytics.io
-
-    audience : str
-        A str naming the referrring to audience of the server that will consume the new token
-
-    Returns:
-    ---------
-    A str containing a JWT Bearer token with reduced scope
-
-    &#34;&#34;&#34;
-    self.oidc.decode_token(original_token, cnst.JWT_KEY)
-    kwargs = {
-        &#34;client_id&#34;: self.client_id,
-        &#34;client_secret&#34;: self.client_secret,
-        &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:token-exchange&#34;,
-        &#34;subject_token&#34;: original_token
-    }
-    if audience is not None:
-        kwargs.update(
-            {
-                &#34;audience&#34;: audience
-            }
-        )
-    keycloak_token = self.oidc.token(**kwargs)
-    self.token_util.process_keycloak_token(keycloak_token)
-    return self.token_util.token[&#34;access_token&#34;]</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.api.Client.refresh_token"><code class="name flex">
@@ -1322,7 +1165,7 @@ an <a title="presalytics.lib.exceptions.InvalidTokenException" href="/python-cli
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L396-L419" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L316-L340" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def refresh_token(self):
     &#34;&#34;&#34;
@@ -1331,20 +1174,21 @@ an <a title="presalytics.lib.exceptions.InvalidTokenException" href="/python-cli
     an `presalytics.lib.exceptions.InvalidTokenException` when `deletegate_login` is True.
     &#34;&#34;&#34;
     if self.token_util.is_api_access_token_expired():
-        if self.token_util.is_api_refresh_token_expired():
-            if not self._delegate_login:  # do not automatically log in at init
-                self.login()
-            else:
-                raise presalytics.lib.exceptions.InvalidTokenException(message=&#34;This token has expired.&#34;)
+        if self.token_util.token.get(&#39;refresh_token&#39;, None):
+            refresh_token = self.token_util.token[&#34;refresh_token&#34;]
+            token = self.oidc.refresh_token(refresh_token)
+            self.token_util.process_token(token)
+            logger.debug(&#34;Refresh token granted successfully.&#34;)
         else:
-            try:
-                refresh_token = self.token_util.token[&#34;refresh_token&#34;]
-                keycloak_token = self.oidc.refresh_token(refresh_token)
-                self.token_util.process_keycloak_token(keycloak_token)
-                logger.debug(&#34;Refresh token granted successfully.&#34;)
-            except keycloak.exceptions.KeycloakGetError:
-                if not self._delegate_login:
-                    self.login()
+            if self.direct_grant:
+                token = self.oidc.token(username=self.username, password=self.password)
+            elif self.confidential_client:
+                token = self.oidc.client_credentials_token()
+            elif self._delegate_login:
+                raise presalytics.lib.exceptions.ApiError(&#34;Unauthorized. Token has expired&#34;, status_code=401)
+            else:
+                token = self.oidc.token(username=self.username)
+            self.token_util.process_token(token)
         if self.token_util.token_cache:
             self.token_util._put_token_file()
     return self.token_util.token</code></pre>
@@ -1360,7 +1204,7 @@ an <a title="presalytics.lib.exceptions.InvalidTokenException" href="/python-cli
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L421-L433" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L342-L354" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_auth_header(self):
     &#34;&#34;&#34;
@@ -1390,7 +1234,7 @@ package, this method will pull the request id from the call stack.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L435-L452" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L356-L373" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_request_id_header(self):
     &#34;&#34;&#34;
@@ -1432,7 +1276,7 @@ current working directory.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L454-L483" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L375-L404" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def download_file(self, story_id, ooxml_automation_id, download_folder=None, filename=None, **kwargs):
     &#34;&#34;&#34;
@@ -1466,6 +1310,50 @@ current working directory.</dd>
         f.write(response.data)</code></pre>
 </details>
 </dd>
+<dt id="presalytics.client.api.Client.get_client_info"><code class="name flex">
+<span>def <span class="ident">get_client_info</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Convenience method returning information about this client to pass to downstream objects, e.g.,
+components and new client instances</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>dictionary</code> <code>containing</code> <code>instances</code> <code>values</code>:</dt>
+<dd>
+<ul>
+<li>token: self.token_util.token</li>
+<li>client_id: self.client_id</li>
+<li>cache_tokens: self.token_util.token_cache</li>
+<li>delegate_login: self.delegate login</li>
+</ul>
+</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L406-L424" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_client_info(self):
+    &#34;&#34;&#34;
+    Convenience method returning information about this client to pass to downstream objects, e.g.,
+    components and new client instances
+
+    Returns
+    ----------
+    A dictionary containing instances values:
+        - token: self.token_util.token
+        - client_id: self.client_id
+        - cache_tokens: self.token_util.token_cache
+        - delegate_login: self.delegate login
+    &#34;&#34;&#34;
+    return {
+        &#34;token&#34;: self.token_util.token,
+        &#34;client_id&#34;: self.client_id,
+        &#34;cache_tokens&#34;: self.token_util.token_cache,
+        &#34;delegate_login&#34;: self._delegate_login
+    }</code></pre>
+</details>
+</dd>
 </dl>
 </dd>
 <dt id="presalytics.client.api.DocConverterApiClientWithAuth"><code class="flex name class">
@@ -1478,7 +1366,7 @@ current working directory.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L485-L493" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L426-L434" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_doc_converter.api_client.ApiClient):
     &#34;&#34;&#34;
@@ -1531,7 +1419,7 @@ current working directory.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L496-L504" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L437-L445" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_ooxml_automation.api_client.ApiClient):
     &#34;&#34;&#34;
@@ -1584,7 +1472,7 @@ current working directory.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L506-L514" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L447-L455" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_story.api_client.ApiClient):
     &#34;&#34;&#34;
@@ -1641,17 +1529,22 @@ current working directory.</dd>
 <li><code><a title="presalytics.client" href="/python-client/presalytics/client/index.html">presalytics.client</a></code></li>
 </ul>
 </li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="presalytics.client.api.get_client" href="/python-client/presalytics/client/api.html#presalytics.client.api.get_client">get_client</a></code></li>
+</ul>
+</li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
 <h4><code><a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client">Client</a></code></h4>
 <ul class="">
 <li><code><a title="presalytics.client.api.Client.login" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.login">login</a></code></li>
-<li><code><a title="presalytics.client.api.Client.exchange_token" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.exchange_token">exchange_token</a></code></li>
 <li><code><a title="presalytics.client.api.Client.refresh_token" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.refresh_token">refresh_token</a></code></li>
 <li><code><a title="presalytics.client.api.Client.get_auth_header" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.get_auth_header">get_auth_header</a></code></li>
 <li><code><a title="presalytics.client.api.Client.get_request_id_header" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.get_request_id_header">get_request_id_header</a></code></li>
 <li><code><a title="presalytics.client.api.Client.download_file" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.download_file">download_file</a></code></li>
+<li><code><a title="presalytics.client.api.Client.get_client_info" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.get_client_info">get_client_info</a></code></li>
 </ul>
 </li>
 <li>

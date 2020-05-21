@@ -264,7 +264,7 @@ class TextReplace(XmlTransformBase):
             match_key = &#34;{{&#34; + key + &#34;}}&#34;
             match_start_position =  info_list.get_position(match_key)
             if match_start_position &gt; -1:
-                match_end_position = match_start_position + len(match_key)
+                match_end_position = match_start_position + len(match_key) - 1
                 match_start_index = info_list.get_list_index_of_position(match_start_position)
                 match_end_index = info_list.get_list_index_of_position(match_end_position)
                 if match_start_index &lt; match_end_index:
@@ -1011,7 +1011,7 @@ The the dictionary keys should not be enclosed in handlebars.</p></section>
             match_key = &#34;{{&#34; + key + &#34;}}&#34;
             match_start_position =  info_list.get_position(match_key)
             if match_start_position &gt; -1:
-                match_end_position = match_start_position + len(match_key)
+                match_end_position = match_start_position + len(match_key) - 1
                 match_start_index = info_list.get_list_index_of_position(match_start_position)
                 match_end_index = info_list.get_list_index_of_position(match_end_position)
                 if match_start_index &lt; match_end_index:
@@ -1176,7 +1176,7 @@ The the dictionary keys should not be enclosed in handlebars.</p></section>
         match_key = &#34;{{&#34; + key + &#34;}}&#34;
         match_start_position =  info_list.get_position(match_key)
         if match_start_position &gt; -1:
-            match_end_position = match_start_position + len(match_key)
+            match_end_position = match_start_position + len(match_key) - 1
             match_start_index = info_list.get_list_index_of_position(match_start_position)
             match_end_index = info_list.get_list_index_of_position(match_end_position)
             if match_start_index &lt; match_end_index:
@@ -1676,9 +1676,10 @@ as variables to modify the underlying OpenOfficeXml</dd>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file">get_svg_file</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html">to_html</a></code></li>
 </ul>
 </li>
 </ul>

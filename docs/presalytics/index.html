@@ -59,7 +59,7 @@ information on licensing, please contact <a href="mailto:inquires@presalytics.io
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/__init__.py#L0-L247" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/__init__.py#L0-L253" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
 # Presalytics Python Library
@@ -147,8 +147,8 @@ LOG_LEVEL : str, optional
     Defaults to `DEBUG`
 
 USERNAME : str, optional
-    The user&#39;s Presalytics API username.  Will be passed to instances of the 
-    `presalytics.client.api.Client` object.
+    The user&#39;s Presalytics API email/username.  This is the email address that the user uses when logging in at 
+    https://login.presalytics.io.  Will be passed to instances of the `presalytics.client.api.Client` object.
 
 PASSWORD : str, optional
     The user&#39;s Presalytics API username.  Will be passed to instances of the 
@@ -195,6 +195,10 @@ RESERVED_NAMES: list of str, optional
 
 IGNORE_PATHS: list of str, optional
     A list of paths to not to include in registry autosdiscover
+
+BROWSER_API_HOST: str, optional
+    If present, the root url for browser-based api calls.  May be required when services are running on a cluster that
+    deletegates certificate authentication to an external service.  See for more info: https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content
 
 The object can also take on values for user-defined extensions, and please consult
 the documentation for those package for those vairables definition.
@@ -251,10 +255,11 @@ from presalytics.lib.templates.base import (
 )
 from presalytics.lib.widgets.matplotlib import MatplotlibFigure, MatplotlibResponsiveFigure
 from presalytics.lib.widgets.ooxml import (
+    OoxmlWidgetBase,
     OoxmlFileWidget, 
     OoxmlEndpointMap,
     ChartUpdaterWidget,
-    TableUpdaterWidget,
+    TableUpdaterWidget
 )
 from presalytics.story.outline import StoryOutline
 from presalytics.story.revealer import Revealer
@@ -287,6 +292,7 @@ __all__ = [
     &#39;MatplotlibResponsiveFigure&#39;,
     &#39;OoxmlFileWidget&#39;,
     &#39;OoxmlEndpointMap&#39;,
+    &#39;OoxmlWidgetBase&#39;,
     &#39;OoxmlEditorWidget&#39;,
     &#39;ChartUpdaterWidget&#39;,
     &#39;TableUpdaterWidget&#39;,
@@ -360,9 +366,10 @@ Default is True.</dd>
 <dt><strong><code>LOG_LEVEL</code></strong> :&ensp;<code>str</code>, optional</dt>
 <dd>Defaults to <code>DEBUG</code></dd>
 <dt><strong><code>USERNAME</code></strong> :&ensp;<code>str</code>, optional</dt>
-<dd>The user's Presalytics API username.
-Will be passed to instances of the
-<a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client"><code>Client</code></a> object.</dd>
+<dd>The user's Presalytics API email/username.
+This is the email address that the user uses when logging in at
+<a href="https://login.presalytics.io.">https://login.presalytics.io.</a>
+Will be passed to instances of the <a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client"><code>Client</code></a> object.</dd>
 <dt><strong><code>PASSWORD</code></strong> :&ensp;<code>str</code>, optional</dt>
 <dd>The user's Presalytics API username.
 Will be passed to instances of the
@@ -411,6 +418,11 @@ Redirect URIs must be approved by Presalytics API devops for use in client appli
 registries.</dd>
 <dt><strong><code>IGNORE_PATHS</code></strong> :&ensp;<code>list</code> of <code>str</code>, optional</dt>
 <dd>A list of paths to not to include in registry autosdiscover</dd>
+<dt><strong><code>BROWSER_API_HOST</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>If present, the root url for browser-based api calls.
+May be required when services are running on a cluster that
+deletegates certificate authentication to an external service.
+See for more info: <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content">https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content</a></dd>
 </dl>
 <p>The object can also take on values for user-defined extensions, and please consult
 the documentation for those package for those vairables definition.</p></section>
@@ -456,7 +468,7 @@ See <a title="presalytics.client.api.Client" href="/python-client/presalytics/cl
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/ooxml_tools.py#L55-L92" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/ooxml_tools.py#L55-L93" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def create_story_from_ooxml_file(filename: str, client_info={}) -&gt; &#39;Story&#39;:
     &#34;&#34;&#34;
@@ -480,6 +492,7 @@ See <a title="presalytics.client.api.Client" href="/python-client/presalytics/cl
     story: &#39;Story&#39;
     logger.info(&#34;Starting presalytics tool: create_story_from_ooxml_file&#34;)
     logger.info(&#34;Intializing presalytics client.&#34;)
+    
     client = presalytics.Client(**client_info)
     logger.info(&#34;Sending file to presalytics server for document processing and base story creation&#34;)
     story = client.story.story_post_file(file=filename)
@@ -756,7 +769,7 @@ Autopopulated if unassigned.</dd>
 <dl>
 <dt id="presalytics.Client"><code class="flex name class">
 <span>class <span class="ident">Client</span></span>
-<span>(</span><span>username=None, password=None, delegate_login=False, token=None, cache_tokens=True, **kwargs)</span>
+<span>(</span><span>username=None, password=None, delegate_login=False, token=None, cache_tokens=False, client_id=None, client_secret=None, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Class for interacting with Presalytics API endpoints</p>
@@ -773,12 +786,12 @@ login page (or raise an <a title="presalytics.lib.exceptions.InvalidTokenExcepti
 <p>After authenication, users can call the methods bound to the story, ooxml_automation,
 and doc_converter attributes to make calls in into the Presalytics API.</p>
 <p><em>A note for server-side development</em>:</p>
-<p>By default, the client class automatically caches tokens in a file called
+<p>The client class can automatically cache tokens in a file called
 "token.json", located in the python's current working directory.
 This is done so
-users running scripts do not have to acquire a new token every time an API call is
-made. If building a client to operate in a multi-user environment, this behavior
-should be turned off so that user do not pull one another's tokens.
+users running scripts accross multiple client instances do not have to acquire a new token
+every time an API call is made. If building a client to operate in a multi-user environment,
+this behavior should be turned off so that one user cannot not pull one another's tokens.
 To do this, ensure the following parameters are pass to the configuration either
 via initialization or in a <a title="presalytics.CONFIG" href="/python-client/presalytics/index.html#presalytics.CONFIG"><code>CONFIG</code></a> file: </p>
 <pre><code>cache_tokens = False,
@@ -829,7 +842,7 @@ dictionary keys<code>expires_in</code> and <code>refresh_expires_in</code>.</p>
 raise an <a title="presalytics.lib.exceptions.InvalidTokenException" href="/python-client/presalytics/lib/exceptions.html#presalytics.lib.exceptions.InvalidTokenException"><code>InvalidTokenException</code></a>.</p>
 </dd>
 <dt><strong><code>cache_tokens</code></strong> :&ensp;<code>bool</code>, optional</dt>
-<dd>Defaults to True.
+<dd>Defaults to False.
 Toggles whether or the client should cache its acquired tokens in file called "token.json"
 in the current working directory.
 Minimizes the number of times a user is required to login.
@@ -929,10 +942,8 @@ Useful <code>confidential_client</code> is True.</dd>
 OpenID Connect grant type "confidential_client".
 Requires a <code>client_secret</code>.
 Default is False.</dd>
-<dt><strong><code>oidc</code></strong> :&ensp;<code>keycloak.KeycloakOpenID</code></dt>
-<dd>A middleware class for to help acquire tokens from auth.presalytics.io.
-For more information, review
-the docs at <a href="https://python-keycloak.readthedocs.io/en/latest/">https://python-keycloak.readthedocs.io/en/latest/</a> .</dd>
+<dt><strong><code>oidc</code></strong> :&ensp;<code>presalytics.client.oidc.OidcClient</code></dt>
+<dd>A middleware class to help acquire and validate tokens from login.presalytics.io.</dd>
 <dt><strong><code>token_util</code></strong> :&ensp;<code>presalytics.client.auth.TokenUtil</code></dt>
 <dd>A handler for managing an caching tokens acquired from auth.presalytics.io.</dd>
 <dt><strong><code>site_host</code></strong> :&ensp;<code>str</code></dt>
@@ -957,7 +968,7 @@ if the user has not authenticated by the time the interval has expired.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L27-L483" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L28-L424" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Client(object):
     &#34;&#34;&#34; Class for interacting with Presalytics API endpoints
@@ -978,11 +989,11 @@ if the user has not authenticated by the time the interval has expired.</dd>
 
     *A note for server-side development*:
 
-    By default, the client class automatically caches tokens in a file called 
+    The client class can automatically cache tokens in a file called 
     &#34;token.json&#34;, located in the python&#39;s current working directory.  This is done so
-    users running scripts do not have to acquire a new token every time an API call is
-    made. If building a client to operate in a multi-user environment, this behavior 
-    should be turned off so that user do not pull one another&#39;s tokens.
+    users running scripts accross multiple client instances do not have to acquire a new token 
+    every time an API call is made. If building a client to operate in a multi-user environment, 
+    this behavior should be turned off so that one user cannot not pull one another&#39;s tokens.
     To do this, ensure the following parameters are pass to the configuration either 
     via initialization or in a `presalytics.CONFIG` file: 
     
@@ -1027,7 +1038,7 @@ if the user has not authenticated by the time the interval has expired.</dd>
         raise an `presalytics.lib.exceptions.InvalidTokenException`.
 
     cache_tokens : bool, optional
-        Defaults to True.  Toggles whether or the client should cache its acquired tokens in file called &#34;token.json&#34;
+        Defaults to False.  Toggles whether or the client should cache its acquired tokens in file called &#34;token.json&#34;
         in the current working directory.  Minimizes the number of times a user is required to login.  Set to False
         in multi-user environments.
 
@@ -1115,9 +1126,8 @@ if the user has not authenticated by the time the interval has expired.</dd>
         Indicates whether a this client can obtain tokens from auth.presalytics.io without a user under
         OpenID Connect grant type &#34;confidential_client&#34;.  Requires a `client_secret`.  Default is False. 
 
-    oidc : `keycloak.KeycloakOpenID`
-        A middleware class for to help acquire tokens from auth.presalytics.io.  For more information, review
-        the docs at https://python-keycloak.readthedocs.io/en/latest/ .
+    oidc : `presalytics.client.oidc.OidcClient`
+        A middleware class to help acquire and validate tokens from login.presalytics.io.
 
     token_util : `presalytics.client.auth.TokenUtil`
         A handler for managing an caching tokens acquired from auth.presalytics.io.
@@ -1147,7 +1157,9 @@ if the user has not authenticated by the time the interval has expired.</dd>
             password=None,
             delegate_login=False,
             token=None,
-            cache_tokens=True,
+            cache_tokens=False,
+            client_id=None,
+            client_secret=None,
             **kwargs):
     
         if username:
@@ -1159,7 +1171,8 @@ if the user has not authenticated by the time the interval has expired.</dd>
                 if token:
                     self.username = None
                 else:
-                    raise presalytics.lib.exceptions.MissingConfigException(&#34;Configuration variable PRESALYTICS_USERNAME is required when client is not initalized with an API token.  Please reconfigure and retry.&#34;)
+                    if not client_secret:
+                        raise presalytics.lib.exceptions.MissingConfigException(&#34;when not passing tokens directly, a clien must have either a client_secrect or a username&#34;)
         try:
             if password:
                 self.password = password
@@ -1170,22 +1183,28 @@ if the user has not authenticated by the time the interval has expired.</dd>
             self.password = None
             self.direct_grant = False
         try:
-            self.client_id = presalytics.CONFIG[&#39;CLIENT_ID&#39;]
+            if client_id:
+                self.client_id = client_id
+            else:
+                self.client_id = presalytics.CONFIG[&#39;CLIENT_ID&#39;]
         except KeyError:
             self.client_id = cnst.DEFAULT_CLIENT_ID
         try:
-            self.client_secret = presalytics.CONFIG[&#39;CLIENT_SECRET&#39;]
+            if client_secret:
+                self.client_secret = client_secret
+            else:
+                self.client_secret = presalytics.CONFIG[&#39;CLIENT_SECRET&#39;]
             self.confidential_client = True
         except KeyError:
             self.client_secret = None
             self.confidential_client = False
-        self.verify_https = presalytics.CONFIG.get(&#34;VERIFY_HTTPS&#34;, True)
+
         try:
             self.site_host = presalytics.CONFIG[&#34;HOSTS&#34;][&#34;SITE&#34;]
         except KeyError:
             self.site_host = cnst.SITE_HOST
-        self.login_sleep_interval = 5  # seconds
-        self.login_timeout = 60  # seconds
+
+
         try:
             self.redirect_uri = presalytics.CONFIG[&#34;REDIRECT_URI&#34;]
         except KeyError:
@@ -1194,20 +1213,25 @@ if the user has not authenticated by the time the interval has expired.</dd>
             self._delegate_login = True
         else:
             self._delegate_login = False
-        self.oidc = keycloak.KeycloakOpenID(
-            server_url=cnst.OIDC_AUTH_HOST,
-            realm_name=cnst.OIDC_REALM,
+        self.oidc = presalytics.client.oidc.OidcClient(
             client_id=self.client_id,
-            verify=self.verify_https
+            client_secret=self.client_secret
         )
         if presalytics.CONFIG.get(&#34;CACHE_TOKENS&#34;, None):
             cache_tokens = presalytics.CONFIG.get(&#34;CACHE_TOKENS&#34;)
         self.token_util = presalytics.client.auth.TokenUtil(token_cache=cache_tokens)
         if token:
-            if token.get(&#39;access_token_expire_time&#39;, None):
+            #  Assume if token is passed as string, then it&#39;s an access token
+            if isinstance(token, str):
+                self.token_util.token = {&#34;access_token&#34;: token}
+            
+            # if token is a dictionary with an &#39;access_token_expire_time&#39; key, it&#39;s previous been processed / deserialized
+            elif token.get(&#39;access_token_expire_time&#39;, None):
                 self.token_util.token = token
+
+            # if token has an &#39;expires_in&#39; key, if has not been deserialized
             elif token.get(&#39;expires_in&#39;, None):
-                self.token_util.process_keycloak_token(token)
+                self.token_util.process_token(token)
             else:
                 raise presalytics.lib.exceptions.InvalidTokenException(message=&#34;Unknown token format.&#34;)
             if self.token_util.token_cache:
@@ -1226,107 +1250,13 @@ if the user has not authenticated by the time the interval has expired.</dd>
         &#34;&#34;&#34;
         Triggers a an attempt to acquire an API token based on the the client configuration
         &#34;&#34;&#34;
-        try:
-            if self.direct_grant:
-                keycloak_token = self.oidc.token(username=self.username, password=self.password)
-            else:
-                keycloak_token = self._get_new_token_browser()
-        except keycloak.exceptions.KeycloakGetError as e:
-            if e.response_code == 404:
-                logger.error(&#34;Received reponse code 404 from api authentication.  Indicates username does not exist.  Please recheck config and try again.&#34;)
-            elif e.response_code == 401:
-                logger.error(&#34;Received 401 response code from api authentication.  This user&#39;s access to this resource is unauthorized&#34;)
-            elif e.response_code &gt;= 500:
-                logger.error(&#34;Server error.  Please try again later.&#34;)
-            else:
-                logger.error(e.error_message)
-            raise presalytics.lib.exceptions.MissingConfigException(e.error_message)
-        self.token_util.process_keycloak_token(keycloak_token)
+        if self.direct_grant:
+            token = self.oidc.token(username=self.username, password=self.password)
+        else:
+            token = self.oidc.token(username=self.username)
+        self.token_util.process_token(token)
         return self.token_util.token
 
-    def exchange_token(self, original_token, audience=None):
-        &#34;&#34;&#34;
-        Conduct IETF [token exchange](https://tools.ietf.org/id/draft-ietf-oauth-token-exchange-19.html).
-        Use for client applications to modify the scope of token granted by user authenication so they 
-        do not get misused by 3rd party services. 
-
-        Parameters
-        ----------
-
-        original_token : str
-            A str with JWT Bearer access token obtained from auth.presalytics.io
-
-        audience : str
-            A str naming the referrring to audience of the server that will consume the new token
-
-        Returns:
-        ---------
-        A str containing a JWT Bearer token with reduced scope
-
-        &#34;&#34;&#34;
-        self.oidc.decode_token(original_token, cnst.JWT_KEY)
-        kwargs = {
-            &#34;client_id&#34;: self.client_id,
-            &#34;client_secret&#34;: self.client_secret,
-            &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:token-exchange&#34;,
-            &#34;subject_token&#34;: original_token
-        }
-        if audience is not None:
-            kwargs.update(
-                {
-                    &#34;audience&#34;: audience
-                }
-            )
-        keycloak_token = self.oidc.token(**kwargs)
-        self.token_util.process_keycloak_token(keycloak_token)
-        return self.token_util.token[&#34;access_token&#34;]
-
-    def _get_new_token_browser(self):
-        &#34;&#34;&#34;
-        Opens browser in on presalytics.io and prompts for user login.
-        Retrieves authorization code from website and obtains api token
-        &#34;&#34;&#34;
-        api_otp = uuid4()
-        query = {
-            &#34;api_otp&#34;: api_otp,
-            &#34;client_id&#34;: self.client_id,
-            &#34;next&#34;: urllib.parse.urlparse(self.redirect_uri).path
-        }
-        query_string = &#39;?{}&#39;.format(urllib.parse.urlencode(query))
-        url = urllib.parse.urljoin(self.site_host, urllib.parse.urljoin(cnst.LOGIN_PATH, query_string))
-        logger.info(&#34;Opening new browser tab.  Please input login credentials...&#34;)
-        logger.info(&#34;Requesting login at location: &lt;{0}&gt;&#34;.format(url))
-        webbrowser.open_new_tab(url)
-        auth_code = None
-        payload = {
-            &#34;username&#34;: self.username,
-            &#34;api_otp&#34;: str(api_otp),
-            &#34;client_id&#34;: self.client_id
-        }
-
-        auth_code_url = urllib.parse.urljoin(self.site_host, cnst.API_CODE_URL)
-        interval = 0
-        while True:
-            response = requests.post(auth_code_url, json=payload, verify=self.verify_https)
-            if response.status_code != 200:
-                if interval &lt;= self.login_timeout:
-                    interval += self.login_sleep_interval
-                    time.sleep(self.login_sleep_interval)
-                else:
-                    raise presalytics.lib.exceptions.LoginTimeout()
-            else:
-                data = json.loads(response.content)
-                break
-        if data.get(&#34;token&#34;, None):
-            #  pick up otp token off presalytics backend
-            token = data.get(&#34;token&#34;) 
-        else:
-            # support oidc authorization code flow
-            auth_code = data[&#34;authorization_code&#34;]
-            token = self.oidc.token(username=self.username, grant_type=&#34;authorization_code&#34;, code=auth_code, redirect_uri=self.redirect_uri)
-        if token:
-            logger.info(&#34;Login Succeeded.  Proceeding.&#34;)
-        return token
 
     def refresh_token(self):
         &#34;&#34;&#34;
@@ -1335,20 +1265,21 @@ if the user has not authenticated by the time the interval has expired.</dd>
         an `presalytics.lib.exceptions.InvalidTokenException` when `deletegate_login` is True.
         &#34;&#34;&#34;
         if self.token_util.is_api_access_token_expired():
-            if self.token_util.is_api_refresh_token_expired():
-                if not self._delegate_login:  # do not automatically log in at init
-                    self.login()
-                else:
-                    raise presalytics.lib.exceptions.InvalidTokenException(message=&#34;This token has expired.&#34;)
+            if self.token_util.token.get(&#39;refresh_token&#39;, None):
+                refresh_token = self.token_util.token[&#34;refresh_token&#34;]
+                token = self.oidc.refresh_token(refresh_token)
+                self.token_util.process_token(token)
+                logger.debug(&#34;Refresh token granted successfully.&#34;)
             else:
-                try:
-                    refresh_token = self.token_util.token[&#34;refresh_token&#34;]
-                    keycloak_token = self.oidc.refresh_token(refresh_token)
-                    self.token_util.process_keycloak_token(keycloak_token)
-                    logger.debug(&#34;Refresh token granted successfully.&#34;)
-                except keycloak.exceptions.KeycloakGetError:
-                    if not self._delegate_login:
-                        self.login()
+                if self.direct_grant:
+                    token = self.oidc.token(username=self.username, password=self.password)
+                elif self.confidential_client:
+                    token = self.oidc.client_credentials_token()
+                elif self._delegate_login:
+                    raise presalytics.lib.exceptions.ApiError(&#34;Unauthorized. Token has expired&#34;, status_code=401)
+                else:
+                    token = self.oidc.token(username=self.username)
+                self.token_util.process_token(token)
             if self.token_util.token_cache:
                 self.token_util._put_token_file()
         return self.token_util.token
@@ -1415,7 +1346,27 @@ if the user has not authenticated by the time the interval has expired.</dd>
             filename = params[&#34;filename&#34;]
         filepath = os.path.join(download_folder, filename)
         with open(filepath, &#39;wb&#39;) as f:
-            f.write(response.data)</code></pre>
+            f.write(response.data)
+
+    def get_client_info(self):
+        &#34;&#34;&#34;
+        Convenience method returning information about this client to pass to downstream objects, e.g.,
+        components and new client instances
+
+        Returns
+        ----------
+        A dictionary containing instances values:
+            - token: self.token_util.token
+            - client_id: self.client_id
+            - cache_tokens: self.token_util.token_cache
+            - delegate_login: self.delegate login
+        &#34;&#34;&#34;
+        return {
+            &#34;token&#34;: self.token_util.token,
+            &#34;client_id&#34;: self.client_id,
+            &#34;cache_tokens&#34;: self.token_util.token_cache,
+            &#34;delegate_login&#34;: self._delegate_login
+        }</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -1427,88 +1378,18 @@ if the user has not authenticated by the time the interval has expired.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L290-L310" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L304-L313" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def login(self):
     &#34;&#34;&#34;
     Triggers a an attempt to acquire an API token based on the the client configuration
     &#34;&#34;&#34;
-    try:
-        if self.direct_grant:
-            keycloak_token = self.oidc.token(username=self.username, password=self.password)
-        else:
-            keycloak_token = self._get_new_token_browser()
-    except keycloak.exceptions.KeycloakGetError as e:
-        if e.response_code == 404:
-            logger.error(&#34;Received reponse code 404 from api authentication.  Indicates username does not exist.  Please recheck config and try again.&#34;)
-        elif e.response_code == 401:
-            logger.error(&#34;Received 401 response code from api authentication.  This user&#39;s access to this resource is unauthorized&#34;)
-        elif e.response_code &gt;= 500:
-            logger.error(&#34;Server error.  Please try again later.&#34;)
-        else:
-            logger.error(e.error_message)
-        raise presalytics.lib.exceptions.MissingConfigException(e.error_message)
-    self.token_util.process_keycloak_token(keycloak_token)
+    if self.direct_grant:
+        token = self.oidc.token(username=self.username, password=self.password)
+    else:
+        token = self.oidc.token(username=self.username)
+    self.token_util.process_token(token)
     return self.token_util.token</code></pre>
-</details>
-</dd>
-<dt id="presalytics.Client.exchange_token"><code class="name flex">
-<span>def <span class="ident">exchange_token</span></span>(<span>self, original_token, audience=None)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Conduct IETF <a href="https://tools.ietf.org/id/draft-ietf-oauth-token-exchange-19.html">token exchange</a>.
-Use for client applications to modify the scope of token granted by user authenication so they
-do not get misused by 3rd party services. </p>
-<h2 id="parameters">Parameters</h2>
-<dl>
-<dt><strong><code>original_token</code></strong> :&ensp;<code>str</code></dt>
-<dd>A str with JWT Bearer access token obtained from auth.presalytics.io</dd>
-<dt><strong><code>audience</code></strong> :&ensp;<code>str</code></dt>
-<dd>A str naming the referrring to audience of the server that will consume the new token</dd>
-</dl>
-<h2 id="returns">Returns:</h2>
-<p>A str containing a JWT Bearer token with reduced scope</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L312-L347" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def exchange_token(self, original_token, audience=None):
-    &#34;&#34;&#34;
-    Conduct IETF [token exchange](https://tools.ietf.org/id/draft-ietf-oauth-token-exchange-19.html).
-    Use for client applications to modify the scope of token granted by user authenication so they 
-    do not get misused by 3rd party services. 
-
-    Parameters
-    ----------
-
-    original_token : str
-        A str with JWT Bearer access token obtained from auth.presalytics.io
-
-    audience : str
-        A str naming the referrring to audience of the server that will consume the new token
-
-    Returns:
-    ---------
-    A str containing a JWT Bearer token with reduced scope
-
-    &#34;&#34;&#34;
-    self.oidc.decode_token(original_token, cnst.JWT_KEY)
-    kwargs = {
-        &#34;client_id&#34;: self.client_id,
-        &#34;client_secret&#34;: self.client_secret,
-        &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:token-exchange&#34;,
-        &#34;subject_token&#34;: original_token
-    }
-    if audience is not None:
-        kwargs.update(
-            {
-                &#34;audience&#34;: audience
-            }
-        )
-    keycloak_token = self.oidc.token(**kwargs)
-    self.token_util.process_keycloak_token(keycloak_token)
-    return self.token_util.token[&#34;access_token&#34;]</code></pre>
 </details>
 </dd>
 <dt id="presalytics.Client.refresh_token"><code class="name flex">
@@ -1521,7 +1402,7 @@ an <a title="presalytics.lib.exceptions.InvalidTokenException" href="/python-cli
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L396-L419" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L316-L340" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def refresh_token(self):
     &#34;&#34;&#34;
@@ -1530,20 +1411,21 @@ an <a title="presalytics.lib.exceptions.InvalidTokenException" href="/python-cli
     an `presalytics.lib.exceptions.InvalidTokenException` when `deletegate_login` is True.
     &#34;&#34;&#34;
     if self.token_util.is_api_access_token_expired():
-        if self.token_util.is_api_refresh_token_expired():
-            if not self._delegate_login:  # do not automatically log in at init
-                self.login()
-            else:
-                raise presalytics.lib.exceptions.InvalidTokenException(message=&#34;This token has expired.&#34;)
+        if self.token_util.token.get(&#39;refresh_token&#39;, None):
+            refresh_token = self.token_util.token[&#34;refresh_token&#34;]
+            token = self.oidc.refresh_token(refresh_token)
+            self.token_util.process_token(token)
+            logger.debug(&#34;Refresh token granted successfully.&#34;)
         else:
-            try:
-                refresh_token = self.token_util.token[&#34;refresh_token&#34;]
-                keycloak_token = self.oidc.refresh_token(refresh_token)
-                self.token_util.process_keycloak_token(keycloak_token)
-                logger.debug(&#34;Refresh token granted successfully.&#34;)
-            except keycloak.exceptions.KeycloakGetError:
-                if not self._delegate_login:
-                    self.login()
+            if self.direct_grant:
+                token = self.oidc.token(username=self.username, password=self.password)
+            elif self.confidential_client:
+                token = self.oidc.client_credentials_token()
+            elif self._delegate_login:
+                raise presalytics.lib.exceptions.ApiError(&#34;Unauthorized. Token has expired&#34;, status_code=401)
+            else:
+                token = self.oidc.token(username=self.username)
+            self.token_util.process_token(token)
         if self.token_util.token_cache:
             self.token_util._put_token_file()
     return self.token_util.token</code></pre>
@@ -1559,7 +1441,7 @@ an <a title="presalytics.lib.exceptions.InvalidTokenException" href="/python-cli
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L421-L433" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L342-L354" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_auth_header(self):
     &#34;&#34;&#34;
@@ -1589,7 +1471,7 @@ package, this method will pull the request id from the call stack.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L435-L452" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L356-L373" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_request_id_header(self):
     &#34;&#34;&#34;
@@ -1631,7 +1513,7 @@ current working directory.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L454-L483" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L375-L404" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def download_file(self, story_id, ooxml_automation_id, download_folder=None, filename=None, **kwargs):
     &#34;&#34;&#34;
@@ -1663,6 +1545,50 @@ current working directory.</dd>
     filepath = os.path.join(download_folder, filename)
     with open(filepath, &#39;wb&#39;) as f:
         f.write(response.data)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.Client.get_client_info"><code class="name flex">
+<span>def <span class="ident">get_client_info</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Convenience method returning information about this client to pass to downstream objects, e.g.,
+components and new client instances</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>dictionary</code> <code>containing</code> <code>instances</code> <code>values</code>:</dt>
+<dd>
+<ul>
+<li>token: self.token_util.token</li>
+<li>client_id: self.client_id</li>
+<li>cache_tokens: self.token_util.token_cache</li>
+<li>delegate_login: self.delegate login</li>
+</ul>
+</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L406-L424" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_client_info(self):
+    &#34;&#34;&#34;
+    Convenience method returning information about this client to pass to downstream objects, e.g.,
+    components and new client instances
+
+    Returns
+    ----------
+    A dictionary containing instances values:
+        - token: self.token_util.token
+        - client_id: self.client_id
+        - cache_tokens: self.token_util.token_cache
+        - delegate_login: self.delegate login
+    &#34;&#34;&#34;
+    return {
+        &#34;token&#34;: self.token_util.token,
+        &#34;client_id&#34;: self.client_id,
+        &#34;cache_tokens&#34;: self.token_util.token_cache,
+        &#34;delegate_login&#34;: self._delegate_login
+    }</code></pre>
 </details>
 </dd>
 </dl>
@@ -2447,7 +2373,7 @@ the rendering process</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L34-L226" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L35-L263" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Revealer(presalytics.story.components.Renderer):
     &#34;&#34;&#34;
@@ -2473,6 +2399,7 @@ the rendering process</dd>
 
     &#34;&#34;&#34;
     base: lxml.etree.Element
+    reveal_params: typing.Dict[str, typing.Any]
 
     __component_kind__ = &#39;revealer&#39;
 
@@ -2485,10 +2412,14 @@ the rendering process</dd>
         self.story_outline.validate()
         self.base = self._make_base()
         logger.info(&#34;Loading plugins&#34;)
+        reveal_params = {}
+        for key, val in kwargs.items():
+            if key in presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config.keys():
+                reveal_params.update({key: val})
         reveal_plugin_config = {
             &#39;kind&#39;: &#39;script&#39;,
             &#39;name&#39;: &#39;reveal&#39;,
-            &#39;config&#39;: {}
+            &#39;config&#39;: {&#34;reveal_params&#34;: reveal_params} if len(reveal_params.keys()) &gt; 0 else {}
         }
         overrides_config = {
             &#39;kind&#39;: &#39;style&#39;,
@@ -2506,9 +2437,37 @@ the rendering process</dd>
         logger.info(&#34;Revealer initilized.&#34;)
 
     def _make_base(self):
-        base = lxml.etree.Element(&#34;div&#34;, attrib={&#34;class&#34;: &#34;reveal&#34;})
+        base = lxml.etree.Element(&#34;div&#34;, attrib={
+            &#34;class&#34;: &#34;reveal&#34;,
+        })
         lxml.etree.SubElement(base, &#34;div&#34;, attrib={&#34;class&#34;: &#34;slides&#34;})
+        try:
+            client = self.get_client()
+            website_token = client.token_util.token[&#34;access_token&#34;]
+            base.attrib[&#39;data-jwt&#39;] = client.token_util.token[&#34;access_token&#34;]
+            base.attrib[&#39;data-jwt-refresh&#39;] = client.token_util.token[&#34;refresh_token&#34;]
+            if presalytics.CONFIG.get(&#34;BROWSER_API_HOST&#34;, None):
+                story_target = presalytics.CONFIG[&#34;BROWSER_API_HOST&#34;] + &#34;/story&#34;
+            else:
+                story_target = client.story.api_client.configuration.host
+            base.attrib[&#39;data-story-target&#39;] = story_target
+        except Exception as ex:
+            logger.exception(ex, &#34;Could not obtain access token from revealer component.&#34;)
+
+        try:
+            story_id = self.story_outline.story_id
+            base.attrib[&#39;data-story-id&#39;] = story_id
+        except Exception:
+            logger.info(&#34;Revealer could not extract story_id from outline.&#34;)
         return base
+    
+    def get_meta_tags(self):
+        tags = [
+            &#39;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;,
+            &#39;&lt;meta http-equiv=&#34;X-UA-Compatible&#34; content=&#34;IE=edge&#34;&gt;&#39;,
+            &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;
+        ]
+        return tags
 
     def package_as_standalone(self):
         &#34;&#34;&#34;
@@ -2528,6 +2487,9 @@ the rendering process</dd>
             for item in lxml_scripts:
                 body.append(item)
         head = E.HEAD()
+        for meta in self.get_meta_tags():
+            lxml_meta = lxml.html.fragment_fromstring(meta)
+            head.append(lxml_meta)
         for link in self.plugin_mgr.get_styles():
             lxml_links = lxml.html.fragments_fromstring(link)
             for item in lxml_links:
@@ -2651,6 +2613,25 @@ the rendering process</dd>
 </ul>
 <h3>Methods</h3>
 <dl>
+<dt id="presalytics.Revealer.get_meta_tags"><code class="name flex">
+<span>def <span class="ident">get_meta_tags</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L121-L127" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_meta_tags(self):
+    tags = [
+        &#39;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;,
+        &#39;&lt;meta http-equiv=&#34;X-UA-Compatible&#34; content=&#34;IE=edge&#34;&gt;&#39;,
+        &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;
+    ]
+    return tags</code></pre>
+</details>
+</dd>
 <dt id="presalytics.Revealer.package_as_standalone"><code class="name flex">
 <span>def <span class="ident">package_as_standalone</span></span>(<span>self)</span>
 </code></dt>
@@ -2662,7 +2643,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L95-L122" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L129-L159" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def package_as_standalone(self):
     &#34;&#34;&#34;
@@ -2682,6 +2663,9 @@ reveal.js presentation as conent</p>
         for item in lxml_scripts:
             body.append(item)
     head = E.HEAD()
+    for meta in self.get_meta_tags():
+        lxml_meta = lxml.html.fragment_fromstring(meta)
+        head.append(lxml_meta)
     for link in self.plugin_mgr.get_styles():
         lxml_links = lxml.html.fragments_fromstring(link)
         for item in lxml_links:
@@ -2702,7 +2686,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L131-L136" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L168-L173" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_info(self):
     &#34;&#34;&#34;
@@ -2722,7 +2706,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L138-L153" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L175-L190" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render(self):
     &#34;&#34;&#34;
@@ -2752,7 +2736,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L155-L184" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L192-L221" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render_page(self, page: &#39;Page&#39;) -&gt; str:
     &#34;&#34;&#34;
@@ -2816,7 +2800,7 @@ Defaults to 127.0.0.1 (localhost).</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L186-L226" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L223-L263" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def present(self, files_path=None, debug=True, port=8082, host=&#39;127.0.0.1&#39;):
     &#34;&#34;&#34;
@@ -3143,7 +3127,7 @@ Must be unique within <a title="presalytics.COMPONENTS" href="/python-client/pre
             &#39;style&#39;: &#39;max-height: none; max-width: none;&#39;
         })
         empty_parent_div.append(frame)
-        return lxml.html.tostring(empty_parent_div)
+        return lxml.html.tostring(empty_parent_div).decode(&#39;utf-8&#39;)
 
 
     @classmethod
@@ -3242,7 +3226,7 @@ will be rendered inside of a story and rescaled to give repsonsive effect</p></s
         &#39;style&#39;: &#39;max-height: none; max-width: none;&#39;
     })
     empty_parent_div.append(frame)
-    return lxml.html.tostring(empty_parent_div)</code></pre>
+    return lxml.html.tostring(empty_parent_div).decode(&#39;utf-8&#39;)</code></pre>
 </details>
 </dd>
 <dt id="presalytics.MatplotlibResponsiveFigure.standalone_html"><code class="name flex">
@@ -3354,7 +3338,7 @@ idenitifiable by a combinatation of <code>object_ooxml_id</code> and <code>endpo
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L355-L582" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L393-L620" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlFileWidget(OoxmlWidgetBase):
     &#34;&#34;&#34;
@@ -3603,7 +3587,7 @@ the updated rendering data to the server</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L452-L509" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L490-L547" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update(self):
     &#34;&#34;&#34;
@@ -3674,9 +3658,10 @@ the updated rendering data to the server</p></section>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file">get_svg_file</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html">to_html</a></code></li>
 </ul>
 </li>
 </ul>
@@ -4198,6 +4183,339 @@ def theme(cls, baseurl=None):
 </dd>
 </dl>
 </dd>
+<dt id="presalytics.OoxmlWidgetBase"><code class="flex name class">
+<span>class <span class="ident">OoxmlWidgetBase</span></span>
+<span>(</span><span>name, story_id=None, object_ooxml_id=None, endpoint_map=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base class for creating widgets from objects at endpoints in the
+Presalytics API Ooxml Automation service.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The widget name.
+If not provided, will be the <code>object_name</code> or <code>filename</code></dd>
+<dt><strong><code>story_id</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The the id of the story in the Presalytics API Story service.
+If not provided,
+a new story will be created.
+Do not supply if this object has not yet been created.</dd>
+<dt><strong><code>object_ooxml_id</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The identifier of the Ooxml Automation service object bound the Story. Do not supply if this
+object has not yet been created.</dd>
+<dt><strong><code>endpoint_map</code></strong> :&ensp;<a title="presalytics.lib.widgets.ooxml.OoxmlEndpointMap" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlEndpointMap"><code>OoxmlEndpointMap</code></a>, optional</dt>
+<dd>Reference to the Presalytics API Ooxml Automation service endpoint and object type
+that for the object of interest</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>svg_html</code></strong> :&ensp;<code>str</code></dt>
+<dd>An html fragment containing the svg data</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L231-L390" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
+    &#34;&#34;&#34;
+    Base class for creating widgets from objects at endpoints in the 
+    Presalytics API Ooxml Automation service.
+
+    Parameters
+    ----------
+    name : str, optional
+        The widget name.  If not provided, will be the `object_name` or `filename`
+
+    story_id : str, optional
+        The the id of the story in the Presalytics API Story service.  If not provided, 
+        a new story will be created.  Do not supply if this object has not yet been created. 
+    
+    object_ooxml_id : str, optional
+        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this 
+        object has not yet been created.
+
+    endpoint_map : presalytics.lib.widgets.ooxml.OoxmlEndpointMap, optional
+        Reference to the Presalytics API Ooxml Automation service endpoint and object type
+        that for the object of interest
+
+    Attributes
+    ----------
+    svg_html : str
+        An html fragment containing the svg data
+    &#34;&#34;&#34;
+    endpoint_map: OoxmlEndpointMap
+    data: typing.Dict
+
+    __component_kind__ = &#34;ooxml-base-widget&#34;
+
+    __plugins__ = [
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;jquery&#39;
+            }
+        },
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;ooxml&#39;
+            }
+        },
+        {
+            &#39;name&#39;: &#39;external_links&#39;,
+            &#39;kind&#39;: &#39;style&#39;,
+            &#39;config&#39;: {
+                &#39;approved_styles_key&#39;: &#39;preloaders&#39;
+            }
+        }
+    ]
+
+    def __init__(self, 
+                 name,
+                 story_id=None,
+                 object_ooxml_id=None,
+                 endpoint_map=None,
+                 **kwargs):
+        super(OoxmlWidgetBase, self).__init__(name, **kwargs)
+        if object_ooxml_id:
+            self.object_ooxml_id = object_ooxml_id
+        if story_id:
+            self.story_id = story_id
+        if endpoint_map:
+            self.endpoint_map = endpoint_map
+        self.svg_html = None
+
+    def create_container(self, **kwargs):
+        &#34;&#34;&#34;
+        Wraps the Presalytics API Ooxml Automation service SVG endpoint in an `&lt;iframe&gt;` that
+        will be rendered inside of a story
+        &#34;&#34;&#34;
+        client = self.get_client()
+        self.token = client.token_util.token[&#34;access_token&#34;]
+        svg_container_div = lxml.html.Element(&#34;div&#34;, {
+            &#39;class&#39;: &#39;svg-container&#39;,
+            &#39;data-jwt&#39;: self.token,
+            &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
+            &#39;data-object-id&#39;: self.object_ooxml_id
+        })
+        preloader_container_div = lxml.html.Element( &#34;div&#34;, {&#34;class&#34;:&#34;preloader-container&#34;})
+        preloader_row_div = lxml.etree.SubElement(preloader_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-row&#34;})
+        preloader_file = os.path.join(os.path.dirname(__file__), &#34;img&#34;, &#34;preloader.svg&#34;)
+        svg = lxml.html.parse(preloader_file)
+        preloader_row_div.append(svg.getroot())
+        empty_parent_div = lxml.html.Element(&#34;div&#34;, {
+            &#39;class&#39;: &#39;empty-parent bg-light&#39;
+        })
+        empty_parent_div.extend([svg_container_div, preloader_container_div])
+        return lxml.html.tostring(empty_parent_div)
+
+
+    def to_html(self, **kwargs):
+        &#34;&#34;&#34;
+        Returns an html string that will render the object at the endpoint
+        &#34;&#34;&#34;
+        html = self.create_container()
+        try:
+            html = html.decode(&#39;utf-8&#39;)
+        except Exception:
+            pass
+        self.svg_html = html
+        return self.svg_html
+
+    def get_svg(self, id, timeout_iterator=0) -&gt; str:
+        &#34;&#34;&#34;
+        Get an svg-formatted version of the object from the Ooxml Automation service
+        &#34;&#34;&#34;
+        svg_url = self.endpoint_map.get_svg_url(id)
+        client = self.get_client()
+        headers = client.get_auth_header()
+        headers.update(client.get_request_id_header())
+        response = requests.get(svg_url, headers=headers)
+        svg_data = response.text
+        if response.status_code != 200:
+            raise presalytics.lib.exceptions.ApiError(message=response.text, status_code=response.status_code)
+        if response.text.startswith(&#34;Temp data&#34;):
+            if timeout_iterator &gt; 5:
+                raise presalytics.lib.exceptions.ApiError(message=&#34;Unable to download svg.  Please check for upstream processing errors.&#34;)
+            else:
+                time.sleep(2)
+                svg_data = self.get_svg(id, timeout_iterator)
+        return svg_data
+
+    def get_svg_file(self, filename=None):
+        &#34;&#34;&#34;
+        Writes an svg representation of the object to current working directory.  Filname is optional.
+        &#34;&#34;&#34;
+        if not filename:
+            filename = self.endpoint_map.get_object_type() + &#34;-&#34; + self.object_ooxml_id + &#34;.pptx&#34;
+        with open(filename, &#39;w&#39;) as f:
+            f.write(self.get_svg(self.object_ooxml_id))
+
+    def serialize(self):
+        data = {
+            &#34;story_id&#34;: self.story_id,
+            &#34;object_id&#34;: self.object_ooxml_id,
+            &#34;endpoint_id&#34;: self.endpoint_map.endpoint_id
+        }
+        widget = presalytics.story.outline.Widget(
+            name=self.name,
+            kind=self.__component_kind__,
+            data=data,
+            plugins=None
+        )
+        return widget
+
+    @classmethod
+    def deserialize(cls, component, **kwargs):
+        return cls(
+            component.name, 
+            component.data[&#34;story_id&#34;], 
+            component.data[&#34;object_id&#34;],
+            OoxmlEndpointMap(component.data[&#34;endpoint_id&#34;]),
+            **kwargs
+        )</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></li>
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="presalytics.lib.widgets.ooxml.OoxmlFileWidget" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlFileWidget">OoxmlFileWidget</a></li>
+<li><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase">UpdaterWidgetBase</a></li>
+<li><a title="presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget" href="/python-client/presalytics/lib/widgets/ooxml_editors.html#presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget">OoxmlEditorWidget</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.OoxmlWidgetBase.create_container"><code class="name flex">
+<span>def <span class="ident">create_container</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Wraps the Presalytics API Ooxml Automation service SVG endpoint in an <code>&lt;iframe&gt;</code> that
+will be rendered inside of a story</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L302-L324" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def create_container(self, **kwargs):
+    &#34;&#34;&#34;
+    Wraps the Presalytics API Ooxml Automation service SVG endpoint in an `&lt;iframe&gt;` that
+    will be rendered inside of a story
+    &#34;&#34;&#34;
+    client = self.get_client()
+    self.token = client.token_util.token[&#34;access_token&#34;]
+    svg_container_div = lxml.html.Element(&#34;div&#34;, {
+        &#39;class&#39;: &#39;svg-container&#39;,
+        &#39;data-jwt&#39;: self.token,
+        &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
+        &#39;data-object-id&#39;: self.object_ooxml_id
+    })
+    preloader_container_div = lxml.html.Element( &#34;div&#34;, {&#34;class&#34;:&#34;preloader-container&#34;})
+    preloader_row_div = lxml.etree.SubElement(preloader_container_div, &#34;div&#34;, attrib={&#34;class&#34;:&#34;preloader-row&#34;})
+    preloader_file = os.path.join(os.path.dirname(__file__), &#34;img&#34;, &#34;preloader.svg&#34;)
+    svg = lxml.html.parse(preloader_file)
+    preloader_row_div.append(svg.getroot())
+    empty_parent_div = lxml.html.Element(&#34;div&#34;, {
+        &#39;class&#39;: &#39;empty-parent bg-light&#39;
+    })
+    empty_parent_div.extend([svg_container_div, preloader_container_div])
+    return lxml.html.tostring(empty_parent_div)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.OoxmlWidgetBase.to_html"><code class="name flex">
+<span>def <span class="ident">to_html</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns an html string that will render the object at the endpoint</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L327-L337" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_html(self, **kwargs):
+    &#34;&#34;&#34;
+    Returns an html string that will render the object at the endpoint
+    &#34;&#34;&#34;
+    html = self.create_container()
+    try:
+        html = html.decode(&#39;utf-8&#39;)
+    except Exception:
+        pass
+    self.svg_html = html
+    return self.svg_html</code></pre>
+</details>
+</dd>
+<dt id="presalytics.OoxmlWidgetBase.get_svg"><code class="name flex">
+<span>def <span class="ident">get_svg</span></span>(<span>self, id, timeout_iterator=0)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get an svg-formatted version of the object from the Ooxml Automation service</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L339-L357" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_svg(self, id, timeout_iterator=0) -&gt; str:
+    &#34;&#34;&#34;
+    Get an svg-formatted version of the object from the Ooxml Automation service
+    &#34;&#34;&#34;
+    svg_url = self.endpoint_map.get_svg_url(id)
+    client = self.get_client()
+    headers = client.get_auth_header()
+    headers.update(client.get_request_id_header())
+    response = requests.get(svg_url, headers=headers)
+    svg_data = response.text
+    if response.status_code != 200:
+        raise presalytics.lib.exceptions.ApiError(message=response.text, status_code=response.status_code)
+    if response.text.startswith(&#34;Temp data&#34;):
+        if timeout_iterator &gt; 5:
+            raise presalytics.lib.exceptions.ApiError(message=&#34;Unable to download svg.  Please check for upstream processing errors.&#34;)
+        else:
+            time.sleep(2)
+            svg_data = self.get_svg(id, timeout_iterator)
+    return svg_data</code></pre>
+</details>
+</dd>
+<dt id="presalytics.OoxmlWidgetBase.get_svg_file"><code class="name flex">
+<span>def <span class="ident">get_svg_file</span></span>(<span>self, filename=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Writes an svg representation of the object to current working directory.
+Filname is optional.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L359-L366" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_svg_file(self, filename=None):
+    &#34;&#34;&#34;
+    Writes an svg representation of the object to current working directory.  Filname is optional.
+    &#34;&#34;&#34;
+    if not filename:
+        filename = self.endpoint_map.get_object_type() + &#34;-&#34; + self.object_ooxml_id + &#34;.pptx&#34;
+    with open(filename, &#39;w&#39;) as f:
+        f.write(self.get_svg(self.object_ooxml_id))</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.story.components.WidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="presalytics.OoxmlEditorWidget"><code class="flex name class">
 <span>class <span class="ident">OoxmlEditorWidget</span></span>
 <span>(</span><span>name, story_id, object_ooxml_id, endpoint_map, transform_class, transform_params={}, **kwargs)</span>
@@ -4431,9 +4749,10 @@ as variables to modify the underlying OpenOfficeXml</dd>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file">get_svg_file</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html">to_html</a></code></li>
 </ul>
 </li>
 </ul>
@@ -4468,7 +4787,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L739-L812" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L775-L848" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ChartUpdaterWidget(UpdaterWidgetBase):
     &#34;&#34;&#34;
@@ -4508,7 +4827,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
                 dto: &#39;ChartChartDataDTO&#39; = None, 
                 data_table: typing.Sequence[typing.Sequence] = None,
                 **kwargs):
-        super().__init__(name, story_id, chart_id, OoxmlEndpointMap.chart(), dto=dto, data_table=data_table)
+        super().__init__(name, story_id, chart_id, OoxmlEndpointMap.chart(), dto=dto, data_table=data_table, **kwargs)
         self.chart_id = chart_id
 
 
@@ -4563,7 +4882,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L790-L803" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L826-L839" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_dataframe(self) -&gt; pandas.DataFrame:
     &#34;&#34;&#34;
@@ -4589,7 +4908,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L805-L812" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L841-L848" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def put_dataframe(self, df: pandas.DataFrame):
     data_dict = df.to_dict(&#39;split&#39;)
@@ -4612,9 +4931,10 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_dto" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_dto">get_dto</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_svg_file" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file">get_svg_file</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.to_html" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html">to_html</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_data_table" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_data_table">update_from_data_table</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_dto" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_dto">update_from_dto</a></code></li>
 </ul>
@@ -4651,7 +4971,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L816-L865" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L852-L901" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class TableUpdaterWidget(UpdaterWidgetBase):
     &#34;&#34;&#34;
@@ -4691,7 +5011,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
                 dto: &#39;TableTableDataDTO&#39; = None, 
                 data_table: typing.Sequence[typing.Sequence] = None,
                 **kwargs):
-        super().__init__(name, story_id, table_id, OoxmlEndpointMap.table(), dto=dto, data_table=data_table)
+        super().__init__(name, story_id, table_id, OoxmlEndpointMap.table(), dto=dto, data_table=data_table, **kwargs)
         self.table_id = table_id
 
 
@@ -4722,9 +5042,10 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_dto" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_dto">get_dto</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_svg" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.get_svg_file" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.get_svg_file">get_svg_file</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
-<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
+<li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.to_html" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase.to_html">to_html</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_data_table" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_data_table">update_from_data_table</a></code></li>
 <li><code><a title="presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_dto" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.UpdaterWidgetBase.update_from_dto">update_from_dto</a></code></li>
 </ul>
@@ -5175,7 +5496,7 @@ The the dictionary keys should not be enclosed in handlebars.</p></section>
             match_key = &#34;{{&#34; + key + &#34;}}&#34;
             match_start_position =  info_list.get_position(match_key)
             if match_start_position &gt; -1:
-                match_end_position = match_start_position + len(match_key)
+                match_end_position = match_start_position + len(match_key) - 1
                 match_start_index = info_list.get_list_index_of_position(match_start_position)
                 match_end_index = info_list.get_list_index_of_position(match_end_position)
                 if match_start_index &lt; match_end_index:
@@ -5340,7 +5661,7 @@ The the dictionary keys should not be enclosed in handlebars.</p></section>
         match_key = &#34;{{&#34; + key + &#34;}}&#34;
         match_start_position =  info_list.get_position(match_key)
         if match_start_position &gt; -1:
-            match_end_position = match_start_position + len(match_key)
+            match_end_position = match_start_position + len(match_key) - 1
             match_start_index = info_list.get_list_index_of_position(match_start_position)
             match_end_index = info_list.get_list_index_of_position(match_end_position)
             if match_start_index &lt; match_end_index:
@@ -5545,7 +5866,7 @@ config into an html <code>&lt;link&gt;</code> fragment.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L44-L99" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L44-L100" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
     &#34;&#34;&#34;
@@ -5575,10 +5896,11 @@ config into an html <code>&lt;link&gt;</code> fragment.</p>
                 &#39;solarized&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/solarized.min.css&#39;,
                 &#39;white&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css&#39;
             },
-            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css&#39;
+            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css&#39;,
+            &#39;customizations&#39;: &#39;{0}/static/css/reveal-customizations.css&#39;.format(site_host) 
         },
         &#39;preloaders&#39; : &#39;{0}/static/css/preloaders.css&#39;.format(site_host),
-        &#39;bootstrap4&#39;: &#34;https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css&#34;
+        &#39;bootstrap4&#39;: &#34;https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css&#34;
     }
     
     &#34;&#34;&#34;
@@ -5631,7 +5953,7 @@ of a <a title="presalytics.story.outline.Plugin" href="/python-client/presalytic
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L87-L99" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L88-L100" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def to_style(self, config, **kwargs):
     &#34;&#34;&#34;
@@ -5673,7 +5995,7 @@ config into an html <code>&lt;script&gt;</code> fragment.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L102-L156" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L103-L158" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
     &#34;&#34;&#34;
@@ -5698,7 +6020,8 @@ config into an html <code>&lt;script&gt;</code> fragment.</p>
             &#39;math&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js&#39;,
             &#39;zoom&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js&#39;,
             &#39;notes&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js&#39;,
-            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js&#39;
+            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js&#39;,
+            &#39;customizations&#39;: &#39;{0}/static/js/revealcustomizations.js&#39;.format(site_host),
 
         },
         &#39;mpld3&#39;: &#39;{0}/static/mpld3/mpld3.min.js&#39;.format(site_host),
@@ -5706,7 +6029,7 @@ config into an html <code>&lt;script&gt;</code> fragment.</p>
         &#39;mpl-responsive&#39;: &#39;{0}/static/js/mpl-responsive.js&#39;.format(site_host),
         &#39;jquery&#39;: &#39;https://code.jquery.com/jquery-3.4.1.min.js&#39;,
         &#39;popper&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js&#39;,
-        &#39;bootstrap4&#39;: &#39;https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js&#39;
+        &#39;bootstrap4&#39;: &#39;https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js&#39;
     }
     &#34;&#34;&#34;
     Static nested dictionary containing links to external scripts that will be rendered alongside this plugin
@@ -5758,7 +6081,7 @@ of a <a title="presalytics.story.outline.Plugin" href="/python-client/presalytic
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L144-L156" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L146-L158" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def to_script(self, config, **kwargs):
     &#34;&#34;&#34;
@@ -5982,7 +6305,7 @@ refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://g
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal.py#L5-L210" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal.py#L5-L226" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
     &#34;&#34;&#34;
@@ -6016,6 +6339,22 @@ refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://g
                 &#39;approved_styles_key&#39;: &#39;reveal.themes.white&#39;
             }
         },
+        {
+            &#39;kind&#39;: &#39;style&#39;,
+            &#39;name&#39;: &#39;external_links&#39;,
+            &#39;config&#39;: {
+                &#39;approved_styles_key&#39;: &#39;reveal.customizations&#39;
+            }
+        },
+        {
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;reveal.customizations&#39;
+            }
+        },
+        
+        
     ]
 
     def to_script(self, config, **kwargs):
@@ -6078,7 +6417,7 @@ refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://g
         &#39;touch&#39;: True,
 
         # Loop the presentation
-        &#39;loop&#39;: False,
+        &#39;loop&#39;: True,
 
         # Change the presentation direction to be RTL
         &#39;rtl&#39;: False,
@@ -6524,7 +6863,7 @@ in order to generate valid html for the page.
 integer (initialized at 0) as part of the context during rendering,. To render
 multiple widgets on a page, the following pattern can be used inside of templates to
 increment through the widgets as the jinja2 rendering engine moves through the template:</p>
-<pre><code>{{ widgets[widget_index.next()].to_html().decode('utf-8') }}  // renders widget and increments widget_index
+<pre><code>{{ widgets[widget_index.next()].to_html() }}  // renders widget and increments widget_index
 </code></pre>
 <p>Please also note that if <code>&lt;script&gt;</code> tags are included in the template, they will be
 stripped out downstream by a <a title="presalytics.story.components.Renderer" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer"><code>Renderer</code></a> for security
@@ -6573,7 +6912,7 @@ appending with the files in the <code>__template_paths__</code></dd>
     multiple widgets on a page, the following pattern can be used inside of templates to 
     increment through the widgets as the jinja2 rendering engine moves through the template:
         
-        {{ widgets[widget_index.next()].to_html().decode(&#39;utf-8&#39;) }}  // renders widget and increments widget_index
+        {{ widgets[widget_index.next()].to_html() }}  // renders widget and increments widget_index
 
     Please also note that if `&lt;script&gt;` tags are included in the template, they will be 
     stripped out downstream by a `presalytics.story.components.Renderer` for security
@@ -7036,7 +7375,7 @@ that allows the widget to be serialzed into a <a title="presalytics.story.outlin
         **kwargs:
             Optional keyword arguments can be used in subclass to modify the behavior of the `to_html` function.
             these keyword arguments should be invariant through successive updates to the chart.  For example,
-            keycloak argument should control the styling of the widget, which should not change as the data in
+            keyword arguments could control the styling of the widget, which should not change as the data in
             the object (e.g., a chart) is updated.  Keyword arguments are loaded via `additional_properties`
             parameter in in the `presalytics.story.outline.Widget` object.
 
@@ -7171,7 +7510,7 @@ information changes.</dd>
 Optional keyword arguments can be used in subclass to modify the behavior of the <code>to_html</code> function.
 these keyword arguments should be invariant through successive updates to the chart.
 For example,
-keycloak argument should control the styling of the widget, which should not change as the data in
+keyword arguments could control the styling of the widget, which should not change as the data in
 the object (e.g., a chart) is updated.
 Keyword arguments are loaded via <code>additional_properties</code>
 parameter in in the <a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget"><code>Widget</code></a> object.</p>
@@ -7200,7 +7539,7 @@ def to_html(self, data: typing.Dict = None, **kwargs) -&gt; str:
     **kwargs:
         Optional keyword arguments can be used in subclass to modify the behavior of the `to_html` function.
         these keyword arguments should be invariant through successive updates to the chart.  For example,
-        keycloak argument should control the styling of the widget, which should not change as the data in
+        keyword arguments could control the styling of the widget, which should not change as the data in
         the object (e.g., a chart) is updated.  Keyword arguments are loaded via `additional_properties`
         parameter in in the `presalytics.story.outline.Widget` object.
 
@@ -7777,11 +8116,11 @@ def configure(cls, filenames: typing.List[str], variables: typing.Dict = {}, old
 <h4><code><a title="presalytics.Client" href="/python-client/presalytics/index.html#presalytics.Client">Client</a></code></h4>
 <ul class="">
 <li><code><a title="presalytics.Client.login" href="/python-client/presalytics/index.html#presalytics.Client.login">login</a></code></li>
-<li><code><a title="presalytics.Client.exchange_token" href="/python-client/presalytics/index.html#presalytics.Client.exchange_token">exchange_token</a></code></li>
 <li><code><a title="presalytics.Client.refresh_token" href="/python-client/presalytics/index.html#presalytics.Client.refresh_token">refresh_token</a></code></li>
 <li><code><a title="presalytics.Client.get_auth_header" href="/python-client/presalytics/index.html#presalytics.Client.get_auth_header">get_auth_header</a></code></li>
 <li><code><a title="presalytics.Client.get_request_id_header" href="/python-client/presalytics/index.html#presalytics.Client.get_request_id_header">get_request_id_header</a></code></li>
 <li><code><a title="presalytics.Client.download_file" href="/python-client/presalytics/index.html#presalytics.Client.download_file">download_file</a></code></li>
+<li><code><a title="presalytics.Client.get_client_info" href="/python-client/presalytics/index.html#presalytics.Client.get_client_info">get_client_info</a></code></li>
 </ul>
 </li>
 <li>
@@ -7804,6 +8143,7 @@ def configure(cls, filenames: typing.List[str], variables: typing.Dict = {}, old
 <li>
 <h4><code><a title="presalytics.Revealer" href="/python-client/presalytics/index.html#presalytics.Revealer">Revealer</a></code></h4>
 <ul class="">
+<li><code><a title="presalytics.Revealer.get_meta_tags" href="/python-client/presalytics/index.html#presalytics.Revealer.get_meta_tags">get_meta_tags</a></code></li>
 <li><code><a title="presalytics.Revealer.package_as_standalone" href="/python-client/presalytics/index.html#presalytics.Revealer.package_as_standalone">package_as_standalone</a></code></li>
 <li><code><a title="presalytics.Revealer.update_info" href="/python-client/presalytics/index.html#presalytics.Revealer.update_info">update_info</a></code></li>
 <li><code><a title="presalytics.Revealer.render" href="/python-client/presalytics/index.html#presalytics.Revealer.render">render</a></code></li>
@@ -7844,6 +8184,15 @@ def configure(cls, filenames: typing.List[str], variables: typing.Dict = {}, old
 <li><code><a title="presalytics.OoxmlEndpointMap.get_id_url" href="/python-client/presalytics/index.html#presalytics.OoxmlEndpointMap.get_id_url">get_id_url</a></code></li>
 <li><code><a title="presalytics.OoxmlEndpointMap.get_svg_url" href="/python-client/presalytics/index.html#presalytics.OoxmlEndpointMap.get_svg_url">get_svg_url</a></code></li>
 <li><code><a title="presalytics.OoxmlEndpointMap.get_xml_url" href="/python-client/presalytics/index.html#presalytics.OoxmlEndpointMap.get_xml_url">get_xml_url</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="presalytics.OoxmlWidgetBase" href="/python-client/presalytics/index.html#presalytics.OoxmlWidgetBase">OoxmlWidgetBase</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.OoxmlWidgetBase.create_container" href="/python-client/presalytics/index.html#presalytics.OoxmlWidgetBase.create_container">create_container</a></code></li>
+<li><code><a title="presalytics.OoxmlWidgetBase.to_html" href="/python-client/presalytics/index.html#presalytics.OoxmlWidgetBase.to_html">to_html</a></code></li>
+<li><code><a title="presalytics.OoxmlWidgetBase.get_svg" href="/python-client/presalytics/index.html#presalytics.OoxmlWidgetBase.get_svg">get_svg</a></code></li>
+<li><code><a title="presalytics.OoxmlWidgetBase.get_svg_file" href="/python-client/presalytics/index.html#presalytics.OoxmlWidgetBase.get_svg_file">get_svg_file</a></code></li>
 </ul>
 </li>
 <li>

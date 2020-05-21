@@ -66,10 +66,10 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
         client = presalytics.Client(**self.client_kwargs)
         theme = client.ooxml_automation.theme_themes_details_get_id(self.ooxml_id)
         extra_params = [&#39;dateCreated&#39;, &#39;dateModified&#39;, &#39;userCreated&#39;, &#39;userModified&#39;, &#39;id&#39;, &#39;themeId&#39;]
-        colors = {k: v for k, v in theme.colors.items() if k not in extra_params}
-        fonts = {k: v for k, v in theme.fonts.items() if k not in extra_params}
+        colors = {k: v for k, v in theme.colors.to_dict().items() if k not in extra_params}
+        fonts = {k: v for k, v in theme.fonts.to_dict().items() if k not in extra_params}
         slide_details = client.ooxml_automation.slides_slides_details_get_id(theme.slide_id)
-        color_map_dict = slide_details.slide_master[&#34;colorMap&#34;]
+        color_map_dict = slide_details.slide_master.to_dict()[&#34;color_map&#34;]
         color_types = client.ooxml_automation.shared_colortypes_get()
 
         mapped_colors = {
@@ -80,7 +80,7 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
         }
         color_params = {k: v for k, v in colors.items() if k not in extra_params}
         color_params.update(mapped_colors)
-        params = {k: v[2:] for k, v in color_params.items()}
+        params = {k: v for k, v in color_params.items() if k not in extra_params}
         params.update(fonts)
 
         self.plugin_config = params
@@ -183,10 +183,10 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
         client = presalytics.Client(**self.client_kwargs)
         theme = client.ooxml_automation.theme_themes_details_get_id(self.ooxml_id)
         extra_params = [&#39;dateCreated&#39;, &#39;dateModified&#39;, &#39;userCreated&#39;, &#39;userModified&#39;, &#39;id&#39;, &#39;themeId&#39;]
-        colors = {k: v for k, v in theme.colors.items() if k not in extra_params}
-        fonts = {k: v for k, v in theme.fonts.items() if k not in extra_params}
+        colors = {k: v for k, v in theme.colors.to_dict().items() if k not in extra_params}
+        fonts = {k: v for k, v in theme.fonts.to_dict().items() if k not in extra_params}
         slide_details = client.ooxml_automation.slides_slides_details_get_id(theme.slide_id)
-        color_map_dict = slide_details.slide_master[&#34;colorMap&#34;]
+        color_map_dict = slide_details.slide_master.to_dict()[&#34;color_map&#34;]
         color_types = client.ooxml_automation.shared_colortypes_get()
 
         mapped_colors = {
@@ -197,7 +197,7 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
         }
         color_params = {k: v for k, v in colors.items() if k not in extra_params}
         color_params.update(mapped_colors)
-        params = {k: v[2:] for k, v in color_params.items()}
+        params = {k: v for k, v in color_params.items() if k not in extra_params}
         params.update(fonts)
 
         self.plugin_config = params
@@ -294,10 +294,10 @@ def deseriailize(cls, component, **kwargs):
     client = presalytics.Client(**self.client_kwargs)
     theme = client.ooxml_automation.theme_themes_details_get_id(self.ooxml_id)
     extra_params = [&#39;dateCreated&#39;, &#39;dateModified&#39;, &#39;userCreated&#39;, &#39;userModified&#39;, &#39;id&#39;, &#39;themeId&#39;]
-    colors = {k: v for k, v in theme.colors.items() if k not in extra_params}
-    fonts = {k: v for k, v in theme.fonts.items() if k not in extra_params}
+    colors = {k: v for k, v in theme.colors.to_dict().items() if k not in extra_params}
+    fonts = {k: v for k, v in theme.fonts.to_dict().items() if k not in extra_params}
     slide_details = client.ooxml_automation.slides_slides_details_get_id(theme.slide_id)
-    color_map_dict = slide_details.slide_master[&#34;colorMap&#34;]
+    color_map_dict = slide_details.slide_master.to_dict()[&#34;color_map&#34;]
     color_types = client.ooxml_automation.shared_colortypes_get()
 
     mapped_colors = {
@@ -308,7 +308,7 @@ def deseriailize(cls, component, **kwargs):
     }
     color_params = {k: v for k, v in colors.items() if k not in extra_params}
     color_params.update(mapped_colors)
-    params = {k: v[2:] for k, v in color_params.items()}
+    params = {k: v for k, v in color_params.items() if k not in extra_params}
     params.update(fonts)
 
     self.plugin_config = params</code></pre>

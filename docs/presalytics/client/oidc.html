@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>presalytics.client.oidc API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>presalytics.client.oidc</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L0-L276" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">import urllib.parse
+import requests
+import posixpath
+import logging
+import typing
+import webbrowser
+import json
+import time
+import jose
+import os
+import jose.jwt
+import cachetools
+import presalytics.lib
+import presalytics.lib.exceptions
+import presalytics.lib.constants as cnst
+
+
+logger = logging.getLogger(__name__)
+
+
+@cachetools.cached(cache=cachetools.TTLCache(maxsize=4096, ttl=300))  # Cache result for 5 minutes
+def get_jwks():
+    auth_host = os.environ.get(&#34;OIDC_AUTH_HOST&#34;, cnst.OIDC_AUTH_HOST)
+    jwks_path = os.environ.get(&#34;jwks_path&#34;, &#34;.well-known/jwks.json&#34;)
+    jwks_endpoint = posixpath.join(auth_host, jwks_path)
+    r = requests.get(jwks_endpoint)
+    if r.status_code == 200:
+        jwks = r.json()
+        logger.debug(&#39;Updated Json Web Key Set from {}&#39;.format(jwks_endpoint))
+        return jwks
+    else:
+        raise presalytics.lib.exceptions.ApiError(message=&#34;Could not get jwks from Uri&#34;, status_code=r.status_code)
+
+
+
+class OidcClient(object):
+    &#34;&#34;&#34;
+    A helper class for negotiating tokens from an oidc provider, defalting to https://login.presalytics.io
+
+    Parameters
+    ----------
+
+    client_id: str, optional
+        The client id for the application requesting a token. Defaults to python-client
+
+    client_secret: str, optional
+        The client secret for the application requesting a token.  Defaults to None (python-client
+        is a public facing client with lower priviledge on the Presalytics API). Contact presalytics
+        if need a higher-privleged client to access the Presalytics API
+
+    audience: str, optional
+        The default audience for client request.  Defaults to https://api.presalytics.io/
+
+    validate_tokens: bool
+        Whether to validate tokens when recieved from the token endpoint.  Defaults to True.
+
+
+    &#34;&#34;&#34;
+    def __init__(self, client_id=None, client_secret=None, validate_tokens=True, *args, **kwargs):
+        self.auth_host = kwargs.get(&#34;auth_host&#34;, cnst.OIDC_AUTH_HOST)
+        self.well_known_endpoint = posixpath.join(self.auth_host, kwargs.get(&#34;well_known_path&#34;, &#34;.well-known/openid-configuration&#34;))
+        self.token_endpoint = posixpath.join(self.auth_host, kwargs.get(&#34;token_path&#34;, &#34;oauth/token&#34;))
+        self.authorization_endpoint = posixpath.join(self.auth_host, kwargs.get(&#34;authorization_path&#34;, &#34;authorization&#34;))
+        self.device_endpoint = posixpath.join(self.auth_host, kwargs.get(&#34;device_path&#34;, &#34;oauth/device/code&#34;))
+        self.jwks_endpoint = posixpath.join(self.auth_host, kwargs.get(&#34;jwks_path&#34;, &#34;.well-known/jwks.json&#34;))
+        self.userinfo_endpoint = posixpath.join(self.auth_host, kwargs.get(&#34;userinfo_path&#34;, &#34;userinfo&#34;))
+        self.client_id = client_id if client_id else cnst.DEFAULT_CLIENT_ID
+        self.audience = kwargs.get(&#34;audience&#34;, cnst.DEFAULT_AUDIENCE)
+        self.client_secret = client_secret
+        self.default_scopes = &#34;openid email profile offline_access&#34;
+        self.validate_tokens = validate_tokens
+        self.repoll_errors = [
+            &#34;authorization_pending&#34;,
+            &#34;slow_down&#34;
+        ]
+
+    def token(self, username, password=None, audience=None, scope=None, **kwargs) -&gt; typing.Dict:
+        &#34;&#34;&#34;
+        Get an access token
+        &#34;&#34;&#34;
+        if not scope:
+            scope = self.default_scopes
+        if not audience:
+            audience = self.audience
+        if password and self.client_secret:
+            #use password grant if present (not recommended)
+            data = {
+                &#34;grant_type&#34;: &#34;password&#34;,
+                &#34;username&#34;: username,
+                &#34;password&#34;: password,
+                &#34;audience&#34;: audience,
+                &#34;client_id&#34;: self.client_id,
+                &#34;client_secret&#34;: self.client_secret,
+                &#34;scope&#34;: scope
+            }
+            token_data = self._post(self.token_endpoint, data)
+            
+        else:
+            # Use device grant as default
+            device_data = {
+                &#39;client_id&#39;: self.client_id,
+                &#39;audience&#39;: self.audience,
+                &#39;scope&#39;: scope
+            }
+
+            device_code_response = self._post(self.device_endpoint, device_data)
+            user_code_message = &#34;This device&#39;s user code is: {}.  Please verify this code when logging in.&#34;.format(device_code_response[&#34;user_code&#34;])
+            print(user_code_message)
+            cli_message = &#34;Please open a webrowser to {0} and login.&#34;.format(device_code_response[&#34;verification_uri_complete&#34;])
+            print(cli_message)
+            try:
+                webbrowser.open_new_tab(device_code_response[&#34;verification_uri_complete&#34;])
+            except:
+                pass
+            sleep_interval = device_code_response[&#34;interval&#34;]
+            auth_data = {
+                &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:device_code&#34;,
+                &#34;device_code&#34;: device_code_response[&#34;device_code&#34;],
+                &#34;client_id&#34;: self.client_id
+            }
+            headers = {
+                &#39;content-type&#39;: &#39;application/x-www-form-urlencoded&#39;
+            }
+            repoll = True
+            while repoll:
+                token_response = requests.post(self.token_endpoint, auth_data, headers=headers)
+                if token_response.status_code != 200:
+                    err_resp = token_response.json()
+                    err_msg = err_resp[&#34;error&#34;]
+                    if err_msg in self.repoll_errors:
+                        time.sleep(sleep_interval)
+                        if err_msg == &#34;slow_down&#34;:
+                            time.sleep(sleep_interval)
+                        logger.debug(&#34;User has not yet logged in.  Repolling...&#34;)                     
+                    else:
+                        message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
+                        raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
+                else:
+                    repoll = False
+            token_data = token_response.json()
+            if token_data.get(&#39;access_token&#39;, None):
+                print(&#34;Login Success! Please continue with your work.&#34;)
+                logger.debug(&#34;User logged in successfully.&#34;)
+            else:
+                message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
+                raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
+        if self.validate_tokens:
+            self.validate_token(token_data[&#34;access_token&#34;])
+        return token_data
+
+    def validate_token(self, token):
+        &#34;&#34;&#34;
+        Validate a token
+        &#34;&#34;&#34;
+        unverified_header = jose.jwt.get_unverified_header(token)
+        rsa_key = {}
+        jwks = get_jwks()
+        for key in jwks[&#34;keys&#34;]:
+            if key[&#34;kid&#34;] == unverified_header[&#34;kid&#34;]:
+                rsa_key = {
+                    &#34;kty&#34;: key[&#34;kty&#34;],
+                    &#34;kid&#34;: key[&#34;kid&#34;],
+                    &#34;use&#34;: key[&#34;use&#34;],
+                    &#34;n&#34;: key[&#34;n&#34;],
+                    &#34;e&#34;: key[&#34;e&#34;]
+                }
+        if rsa_key:
+            try:
+                payload = jose.jwt.decode(
+                    token,
+                    rsa_key,
+                    algorithms=[&#34;RS256&#34;],
+                    audience=self.audience,
+                    issuer=self.auth_host
+                )
+            except jose.jwt.ExpiredSignatureError:
+                raise presalytics.lib.exceptions.ApiError(message=&#34;token_expired&#34;, status_code=401)
+            except jose.jwt.JWTClaimsError:
+                raise presalytics.lib.exceptions.ApiError(message=&#34;invalid_claims: check audience and issuer&#34;, status_code=401)
+            except Exception:
+                raise presalytics.lib.exceptions.ApiError(message=&#34;invalid token (likely malformed)&#34;, status_code=401)
+            logger.debug(&#34;Access token validated.&#34;)
+            return payload
+        
+        raise presalytics.lib.exceptions.ApiError(message=&#34;invalid_header: could not find key in jwks&#34;,status_code=401)
+        
+
+
+    def refresh_token(self, refresh_token, scope=None):
+        &#34;&#34;&#34;
+        Exchange a refresh token for an access token
+        &#34;&#34;&#34;
+        if not scope:
+            scope = self.default_scopes
+        if not self.client_secret:
+            raise presalytics.lib.ApiError(message=&#34;Cannot refresh token without client secret&#34;, status_code=401)
+        data = {
+            &#34;grant_type&#34;: &#34;refresh_token&#34;,
+            &#34;client_id&#34;: self.client_id,
+            &#34;refresh_token&#34;: refresh_token,
+            &#34;scope&#34;: scope,
+            &#34;audience&#34;: self.audience,
+            &#34;client_secret&#34;: self.client_secret
+        }
+
+        token_data = self._post(self.token_endpoint, data)
+        
+        if self.validate_tokens:
+            self.validate_token(token_data[&#34;access_token&#34;])
+        return token_data
+
+    def _post(self, endpoint, data, headers={}):
+        try:
+            if &#39;content-type&#39; not in [x.lower() for x in headers.keys()]:
+                headers.update({&#39;content-type&#39;: &#39;application/x-www-form-urlencoded&#39;})
+            response = requests.post(endpoint, data, headers=headers)
+        except Exception as ex:
+            logger.exception(ex)
+            raise ex
+
+        return self._handle_response(response)
+
+
+    def _handle_response(self, response):
+        if response.status_code == 401:
+            raise presalytics.lib.exceptions.ApiError(message=&#34;Unauthorized&#34;, status_code=401)
+        elif response.status_code == 403:
+            raise presalytics.lib.exceptions.ApiError(message=&#34;Forbidden&#34;, status_code=403)
+        elif response.status_code == 409:
+            logger.error(&#34;Value already exists&#34;)
+            data = None
+        elif response.status_code &gt; 299:
+            try:
+                message = response.json()[&#39;message&#39;]
+            except (KeyError, ValueError):
+                message = response.content
+            raise presalytics.lib.exceptions.ApiError(message=message, status_code=response.status_code)
+        elif response.status_code == 204:
+            data = None
+        elif response.status_code == 200:
+            try:
+                data = response.json()
+            except ValueError:
+                try:
+                    data = response.content.decode(&#39;utf-8&#39;)
+                except Exception:
+                    data = response.content
+                try:
+                    data = json.loads(data)
+                except Exception:
+                    pass
+        return data
+    
+    def client_credentials_token(self, audience=None, scope=None):
+        if not self.client_secret:
+            raise presalytics.lib.exceptions.ApiError(message=&#34;Must have client secret for client credentials grant&#34;, status_code=400)
+        if not audience:
+            audience = self.audience
+        if not scope:
+            scope = self.default_scopes
+        post_data = {
+            &#34;client_id&#34;: self.client_id,
+            &#34;client_secret&#34;: self.client_secret,
+            &#34;grant_type&#34;: &#34;client_credentials&#34;,
+            &#34;audience&#34;: audience
+        }
+        return self._post(self.token_endpoint, post_data)
+    
+        
+
+
+        
+
+
+
+        </code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="presalytics.client.oidc.get_jwks"><code class="name flex">
+<span>def <span class="ident">get_jwks</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L22-L33" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@cachetools.cached(cache=cachetools.TTLCache(maxsize=4096, ttl=300))  # Cache result for 5 minutes
+def get_jwks():
+    auth_host = os.environ.get(&#34;OIDC_AUTH_HOST&#34;, cnst.OIDC_AUTH_HOST)
+    jwks_path = os.environ.get(&#34;jwks_path&#34;, &#34;.well-known/jwks.json&#34;)
+    jwks_endpoint = posixpath.join(auth_host, jwks_path)
+    r = requests.get(jwks_endpoint)
+    if r.status_code == 200:
+        jwks = r.json()
+        logger.debug(&#39;Updated Json Web Key Set from {}&#39;.format(jwks_endpoint))
+        return jwks
+    else:
+        raise presalytics.lib.exceptions.ApiError(message=&#34;Could not get jwks from Uri&#34;, status_code=r.status_code)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="presalytics.client.oidc.OidcClient"><code class="flex name class">
+<span>class <span class="ident">OidcClient</span></span>
+<span>(</span><span>client_id=None, client_secret=None, validate_tokens=True, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A helper class for negotiating tokens from an oidc provider, defalting to <a href="https://login.presalytics.io">https://login.presalytics.io</a></p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>client_id</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The client id for the application requesting a token. Defaults to python-client</dd>
+<dt><strong><code>client_secret</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The client secret for the application requesting a token.
+Defaults to None (python-client
+is a public facing client with lower priviledge on the Presalytics API). Contact presalytics
+if need a higher-privleged client to access the Presalytics API</dd>
+<dt><strong><code>audience</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The default audience for client request.
+Defaults to <a href="https://api.presalytics.io/">https://api.presalytics.io/</a></dd>
+<dt><strong><code>validate_tokens</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether to validate tokens when recieved from the token endpoint.
+Defaults to True.</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L37-L268" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class OidcClient(object):
+    &#34;&#34;&#34;
+    A helper class for negotiating tokens from an oidc provider, defalting to https://login.presalytics.io
+
+    Parameters
+    ----------
+
+    client_id: str, optional
+        The client id for the application requesting a token. Defaults to python-client
+
+    client_secret: str, optional
+        The client secret for the application requesting a token.  Defaults to None (python-client
+        is a public facing client with lower priviledge on the Presalytics API). Contact presalytics
+        if need a higher-privleged client to access the Presalytics API
+
+    audience: str, optional
+        The default audience for client request.  Defaults to https://api.presalytics.io/
+
+    validate_tokens: bool
+        Whether to validate tokens when recieved from the token endpoint.  Defaults to True.
+
+
+    &#34;&#34;&#34;
+    def __init__(self, client_id=None, client_secret=None, validate_tokens=True, *args, **kwargs):
+        self.auth_host = kwargs.get(&#34;auth_host&#34;, cnst.OIDC_AUTH_HOST)
+        self.well_known_endpoint = posixpath.join(self.auth_host, kwargs.get(&#34;well_known_path&#34;, &#34;.well-known/openid-configuration&#34;))
+        self.token_endpoint = posixpath.join(self.auth_host, kwargs.get(&#34;token_path&#34;, &#34;oauth/token&#34;))
+        self.authorization_endpoint = posixpath.join(self.auth_host, kwargs.get(&#34;authorization_path&#34;, &#34;authorization&#34;))
+        self.device_endpoint = posixpath.join(self.auth_host, kwargs.get(&#34;device_path&#34;, &#34;oauth/device/code&#34;))
+        self.jwks_endpoint = posixpath.join(self.auth_host, kwargs.get(&#34;jwks_path&#34;, &#34;.well-known/jwks.json&#34;))
+        self.userinfo_endpoint = posixpath.join(self.auth_host, kwargs.get(&#34;userinfo_path&#34;, &#34;userinfo&#34;))
+        self.client_id = client_id if client_id else cnst.DEFAULT_CLIENT_ID
+        self.audience = kwargs.get(&#34;audience&#34;, cnst.DEFAULT_AUDIENCE)
+        self.client_secret = client_secret
+        self.default_scopes = &#34;openid email profile offline_access&#34;
+        self.validate_tokens = validate_tokens
+        self.repoll_errors = [
+            &#34;authorization_pending&#34;,
+            &#34;slow_down&#34;
+        ]
+
+    def token(self, username, password=None, audience=None, scope=None, **kwargs) -&gt; typing.Dict:
+        &#34;&#34;&#34;
+        Get an access token
+        &#34;&#34;&#34;
+        if not scope:
+            scope = self.default_scopes
+        if not audience:
+            audience = self.audience
+        if password and self.client_secret:
+            #use password grant if present (not recommended)
+            data = {
+                &#34;grant_type&#34;: &#34;password&#34;,
+                &#34;username&#34;: username,
+                &#34;password&#34;: password,
+                &#34;audience&#34;: audience,
+                &#34;client_id&#34;: self.client_id,
+                &#34;client_secret&#34;: self.client_secret,
+                &#34;scope&#34;: scope
+            }
+            token_data = self._post(self.token_endpoint, data)
+            
+        else:
+            # Use device grant as default
+            device_data = {
+                &#39;client_id&#39;: self.client_id,
+                &#39;audience&#39;: self.audience,
+                &#39;scope&#39;: scope
+            }
+
+            device_code_response = self._post(self.device_endpoint, device_data)
+            user_code_message = &#34;This device&#39;s user code is: {}.  Please verify this code when logging in.&#34;.format(device_code_response[&#34;user_code&#34;])
+            print(user_code_message)
+            cli_message = &#34;Please open a webrowser to {0} and login.&#34;.format(device_code_response[&#34;verification_uri_complete&#34;])
+            print(cli_message)
+            try:
+                webbrowser.open_new_tab(device_code_response[&#34;verification_uri_complete&#34;])
+            except:
+                pass
+            sleep_interval = device_code_response[&#34;interval&#34;]
+            auth_data = {
+                &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:device_code&#34;,
+                &#34;device_code&#34;: device_code_response[&#34;device_code&#34;],
+                &#34;client_id&#34;: self.client_id
+            }
+            headers = {
+                &#39;content-type&#39;: &#39;application/x-www-form-urlencoded&#39;
+            }
+            repoll = True
+            while repoll:
+                token_response = requests.post(self.token_endpoint, auth_data, headers=headers)
+                if token_response.status_code != 200:
+                    err_resp = token_response.json()
+                    err_msg = err_resp[&#34;error&#34;]
+                    if err_msg in self.repoll_errors:
+                        time.sleep(sleep_interval)
+                        if err_msg == &#34;slow_down&#34;:
+                            time.sleep(sleep_interval)
+                        logger.debug(&#34;User has not yet logged in.  Repolling...&#34;)                     
+                    else:
+                        message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
+                        raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
+                else:
+                    repoll = False
+            token_data = token_response.json()
+            if token_data.get(&#39;access_token&#39;, None):
+                print(&#34;Login Success! Please continue with your work.&#34;)
+                logger.debug(&#34;User logged in successfully.&#34;)
+            else:
+                message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
+                raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
+        if self.validate_tokens:
+            self.validate_token(token_data[&#34;access_token&#34;])
+        return token_data
+
+    def validate_token(self, token):
+        &#34;&#34;&#34;
+        Validate a token
+        &#34;&#34;&#34;
+        unverified_header = jose.jwt.get_unverified_header(token)
+        rsa_key = {}
+        jwks = get_jwks()
+        for key in jwks[&#34;keys&#34;]:
+            if key[&#34;kid&#34;] == unverified_header[&#34;kid&#34;]:
+                rsa_key = {
+                    &#34;kty&#34;: key[&#34;kty&#34;],
+                    &#34;kid&#34;: key[&#34;kid&#34;],
+                    &#34;use&#34;: key[&#34;use&#34;],
+                    &#34;n&#34;: key[&#34;n&#34;],
+                    &#34;e&#34;: key[&#34;e&#34;]
+                }
+        if rsa_key:
+            try:
+                payload = jose.jwt.decode(
+                    token,
+                    rsa_key,
+                    algorithms=[&#34;RS256&#34;],
+                    audience=self.audience,
+                    issuer=self.auth_host
+                )
+            except jose.jwt.ExpiredSignatureError:
+                raise presalytics.lib.exceptions.ApiError(message=&#34;token_expired&#34;, status_code=401)
+            except jose.jwt.JWTClaimsError:
+                raise presalytics.lib.exceptions.ApiError(message=&#34;invalid_claims: check audience and issuer&#34;, status_code=401)
+            except Exception:
+                raise presalytics.lib.exceptions.ApiError(message=&#34;invalid token (likely malformed)&#34;, status_code=401)
+            logger.debug(&#34;Access token validated.&#34;)
+            return payload
+        
+        raise presalytics.lib.exceptions.ApiError(message=&#34;invalid_header: could not find key in jwks&#34;,status_code=401)
+        
+
+
+    def refresh_token(self, refresh_token, scope=None):
+        &#34;&#34;&#34;
+        Exchange a refresh token for an access token
+        &#34;&#34;&#34;
+        if not scope:
+            scope = self.default_scopes
+        if not self.client_secret:
+            raise presalytics.lib.ApiError(message=&#34;Cannot refresh token without client secret&#34;, status_code=401)
+        data = {
+            &#34;grant_type&#34;: &#34;refresh_token&#34;,
+            &#34;client_id&#34;: self.client_id,
+            &#34;refresh_token&#34;: refresh_token,
+            &#34;scope&#34;: scope,
+            &#34;audience&#34;: self.audience,
+            &#34;client_secret&#34;: self.client_secret
+        }
+
+        token_data = self._post(self.token_endpoint, data)
+        
+        if self.validate_tokens:
+            self.validate_token(token_data[&#34;access_token&#34;])
+        return token_data
+
+    def _post(self, endpoint, data, headers={}):
+        try:
+            if &#39;content-type&#39; not in [x.lower() for x in headers.keys()]:
+                headers.update({&#39;content-type&#39;: &#39;application/x-www-form-urlencoded&#39;})
+            response = requests.post(endpoint, data, headers=headers)
+        except Exception as ex:
+            logger.exception(ex)
+            raise ex
+
+        return self._handle_response(response)
+
+
+    def _handle_response(self, response):
+        if response.status_code == 401:
+            raise presalytics.lib.exceptions.ApiError(message=&#34;Unauthorized&#34;, status_code=401)
+        elif response.status_code == 403:
+            raise presalytics.lib.exceptions.ApiError(message=&#34;Forbidden&#34;, status_code=403)
+        elif response.status_code == 409:
+            logger.error(&#34;Value already exists&#34;)
+            data = None
+        elif response.status_code &gt; 299:
+            try:
+                message = response.json()[&#39;message&#39;]
+            except (KeyError, ValueError):
+                message = response.content
+            raise presalytics.lib.exceptions.ApiError(message=message, status_code=response.status_code)
+        elif response.status_code == 204:
+            data = None
+        elif response.status_code == 200:
+            try:
+                data = response.json()
+            except ValueError:
+                try:
+                    data = response.content.decode(&#39;utf-8&#39;)
+                except Exception:
+                    data = response.content
+                try:
+                    data = json.loads(data)
+                except Exception:
+                    pass
+        return data
+    
+    def client_credentials_token(self, audience=None, scope=None):
+        if not self.client_secret:
+            raise presalytics.lib.exceptions.ApiError(message=&#34;Must have client secret for client credentials grant&#34;, status_code=400)
+        if not audience:
+            audience = self.audience
+        if not scope:
+            scope = self.default_scopes
+        post_data = {
+            &#34;client_id&#34;: self.client_id,
+            &#34;client_secret&#34;: self.client_secret,
+            &#34;grant_type&#34;: &#34;client_credentials&#34;,
+            &#34;audience&#34;: audience
+        }
+        return self._post(self.token_endpoint, post_data)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.client.oidc.OidcClient.token"><code class="name flex">
+<span>def <span class="ident">token</span></span>(<span>self, username, password=None, audience=None, scope=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get an access token</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L78-L150" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def token(self, username, password=None, audience=None, scope=None, **kwargs) -&gt; typing.Dict:
+    &#34;&#34;&#34;
+    Get an access token
+    &#34;&#34;&#34;
+    if not scope:
+        scope = self.default_scopes
+    if not audience:
+        audience = self.audience
+    if password and self.client_secret:
+        #use password grant if present (not recommended)
+        data = {
+            &#34;grant_type&#34;: &#34;password&#34;,
+            &#34;username&#34;: username,
+            &#34;password&#34;: password,
+            &#34;audience&#34;: audience,
+            &#34;client_id&#34;: self.client_id,
+            &#34;client_secret&#34;: self.client_secret,
+            &#34;scope&#34;: scope
+        }
+        token_data = self._post(self.token_endpoint, data)
+        
+    else:
+        # Use device grant as default
+        device_data = {
+            &#39;client_id&#39;: self.client_id,
+            &#39;audience&#39;: self.audience,
+            &#39;scope&#39;: scope
+        }
+
+        device_code_response = self._post(self.device_endpoint, device_data)
+        user_code_message = &#34;This device&#39;s user code is: {}.  Please verify this code when logging in.&#34;.format(device_code_response[&#34;user_code&#34;])
+        print(user_code_message)
+        cli_message = &#34;Please open a webrowser to {0} and login.&#34;.format(device_code_response[&#34;verification_uri_complete&#34;])
+        print(cli_message)
+        try:
+            webbrowser.open_new_tab(device_code_response[&#34;verification_uri_complete&#34;])
+        except:
+            pass
+        sleep_interval = device_code_response[&#34;interval&#34;]
+        auth_data = {
+            &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:device_code&#34;,
+            &#34;device_code&#34;: device_code_response[&#34;device_code&#34;],
+            &#34;client_id&#34;: self.client_id
+        }
+        headers = {
+            &#39;content-type&#39;: &#39;application/x-www-form-urlencoded&#39;
+        }
+        repoll = True
+        while repoll:
+            token_response = requests.post(self.token_endpoint, auth_data, headers=headers)
+            if token_response.status_code != 200:
+                err_resp = token_response.json()
+                err_msg = err_resp[&#34;error&#34;]
+                if err_msg in self.repoll_errors:
+                    time.sleep(sleep_interval)
+                    if err_msg == &#34;slow_down&#34;:
+                        time.sleep(sleep_interval)
+                    logger.debug(&#34;User has not yet logged in.  Repolling...&#34;)                     
+                else:
+                    message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
+                    raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
+            else:
+                repoll = False
+        token_data = token_response.json()
+        if token_data.get(&#39;access_token&#39;, None):
+            print(&#34;Login Success! Please continue with your work.&#34;)
+            logger.debug(&#34;User logged in successfully.&#34;)
+        else:
+            message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
+            raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
+    if self.validate_tokens:
+        self.validate_token(token_data[&#34;access_token&#34;])
+    return token_data</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.oidc.OidcClient.validate_token"><code class="name flex">
+<span>def <span class="ident">validate_token</span></span>(<span>self, token)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Validate a token</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L152-L186" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def validate_token(self, token):
+    &#34;&#34;&#34;
+    Validate a token
+    &#34;&#34;&#34;
+    unverified_header = jose.jwt.get_unverified_header(token)
+    rsa_key = {}
+    jwks = get_jwks()
+    for key in jwks[&#34;keys&#34;]:
+        if key[&#34;kid&#34;] == unverified_header[&#34;kid&#34;]:
+            rsa_key = {
+                &#34;kty&#34;: key[&#34;kty&#34;],
+                &#34;kid&#34;: key[&#34;kid&#34;],
+                &#34;use&#34;: key[&#34;use&#34;],
+                &#34;n&#34;: key[&#34;n&#34;],
+                &#34;e&#34;: key[&#34;e&#34;]
+            }
+    if rsa_key:
+        try:
+            payload = jose.jwt.decode(
+                token,
+                rsa_key,
+                algorithms=[&#34;RS256&#34;],
+                audience=self.audience,
+                issuer=self.auth_host
+            )
+        except jose.jwt.ExpiredSignatureError:
+            raise presalytics.lib.exceptions.ApiError(message=&#34;token_expired&#34;, status_code=401)
+        except jose.jwt.JWTClaimsError:
+            raise presalytics.lib.exceptions.ApiError(message=&#34;invalid_claims: check audience and issuer&#34;, status_code=401)
+        except Exception:
+            raise presalytics.lib.exceptions.ApiError(message=&#34;invalid token (likely malformed)&#34;, status_code=401)
+        logger.debug(&#34;Access token validated.&#34;)
+        return payload
+    
+    raise presalytics.lib.exceptions.ApiError(message=&#34;invalid_header: could not find key in jwks&#34;,status_code=401)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.oidc.OidcClient.refresh_token"><code class="name flex">
+<span>def <span class="ident">refresh_token</span></span>(<span>self, refresh_token, scope=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Exchange a refresh token for an access token</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L190-L211" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def refresh_token(self, refresh_token, scope=None):
+    &#34;&#34;&#34;
+    Exchange a refresh token for an access token
+    &#34;&#34;&#34;
+    if not scope:
+        scope = self.default_scopes
+    if not self.client_secret:
+        raise presalytics.lib.ApiError(message=&#34;Cannot refresh token without client secret&#34;, status_code=401)
+    data = {
+        &#34;grant_type&#34;: &#34;refresh_token&#34;,
+        &#34;client_id&#34;: self.client_id,
+        &#34;refresh_token&#34;: refresh_token,
+        &#34;scope&#34;: scope,
+        &#34;audience&#34;: self.audience,
+        &#34;client_secret&#34;: self.client_secret
+    }
+
+    token_data = self._post(self.token_endpoint, data)
+    
+    if self.validate_tokens:
+        self.validate_token(token_data[&#34;access_token&#34;])
+    return token_data</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.oidc.OidcClient.client_credentials_token"><code class="name flex">
+<span>def <span class="ident">client_credentials_token</span></span>(<span>self, audience=None, scope=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L255-L268" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def client_credentials_token(self, audience=None, scope=None):
+    if not self.client_secret:
+        raise presalytics.lib.exceptions.ApiError(message=&#34;Must have client secret for client credentials grant&#34;, status_code=400)
+    if not audience:
+        audience = self.audience
+    if not scope:
+        scope = self.default_scopes
+    post_data = {
+        &#34;client_id&#34;: self.client_id,
+        &#34;client_secret&#34;: self.client_secret,
+        &#34;grant_type&#34;: &#34;client_credentials&#34;,
+        &#34;audience&#34;: audience
+    }
+    return self._post(self.token_endpoint, post_data)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="presalytics.client" href="/python-client/presalytics/client/index.html">presalytics.client</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="presalytics.client.oidc.get_jwks" href="/python-client/presalytics/client/oidc.html#presalytics.client.oidc.get_jwks">get_jwks</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="presalytics.client.oidc.OidcClient" href="/python-client/presalytics/client/oidc.html#presalytics.client.oidc.OidcClient">OidcClient</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.client.oidc.OidcClient.token" href="/python-client/presalytics/client/oidc.html#presalytics.client.oidc.OidcClient.token">token</a></code></li>
+<li><code><a title="presalytics.client.oidc.OidcClient.validate_token" href="/python-client/presalytics/client/oidc.html#presalytics.client.oidc.OidcClient.validate_token">validate_token</a></code></li>
+<li><code><a title="presalytics.client.oidc.OidcClient.refresh_token" href="/python-client/presalytics/client/oidc.html#presalytics.client.oidc.OidcClient.refresh_token">refresh_token</a></code></li>
+<li><code><a title="presalytics.client.oidc.OidcClient.client_credentials_token" href="/python-client/presalytics/client/oidc.html#presalytics.client.oidc.OidcClient.client_credentials_token">client_credentials_token</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

@@ -55,7 +55,7 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
     multiple widgets on a page, the following pattern can be used inside of templates to 
     increment through the widgets as the jinja2 rendering engine moves through the template:
         
-        {{ widgets[widget_index.next()].to_html().decode('utf-8') }}  // renders widget and increments widget_index
+        {{ widgets[widget_index.next()].to_html() }}  // renders widget and increments widget_index
 
     Please also note that if `<script>` tags are included in the template, they will be 
     stripped out downstream by a `presalytics.story.components.Renderer` for security

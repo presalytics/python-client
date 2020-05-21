@@ -328,7 +328,12 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         """
         Returns an html string that will render the object at the endpoint
         """
-        self.svg_html = self.create_container()
+        html = self.create_container()
+        try:
+            html = html.decode('utf-8')
+        except Exception:
+            pass
+        self.svg_html = html
         return self.svg_html
 
     def get_svg(self, id, timeout_iterator=0) -> str:

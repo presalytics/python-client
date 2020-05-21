@@ -189,7 +189,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
             'style': 'max-height: none; max-width: none;'
         })
         empty_parent_div.append(frame)
-        return lxml.html.tostring(empty_parent_div)
+        return lxml.html.tostring(empty_parent_div).decode('utf-8')
 
 
     @classmethod

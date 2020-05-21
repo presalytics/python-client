@@ -275,8 +275,15 @@ class Client(object):
             cache_tokens = presalytics.CONFIG.get("CACHE_TOKENS")
         self.token_util = presalytics.client.auth.TokenUtil(token_cache=cache_tokens)
         if token:
+            #  Assume if token is passed as string, then it's an access token
+            if isinstance(token, str):
+                self.token_util.token = {"access_token": token}
+            
+            # if token is a dictionary with an 'access_token_expire_time' key, it's previous been processed / deserialized
             if token.get('access_token_expire_time', None):
                 self.token_util.token = token
+
+            # if token has an 'expires_in' key, if has not been deserialized
             elif token.get('expires_in', None):
                 self.token_util.process_token(token)
             else:
@@ -394,6 +401,26 @@ class Client(object):
         filepath = os.path.join(download_folder, filename)
         with open(filepath, 'wb') as f:
             f.write(response.data)
+
+    def get_client_info(self):
+        """
+        Convenience method returning information about this client to pass to downstream objects, e.g.,
+        components and new client instances
+
+        Returns
+        ----------
+        A dictionary containing instances values:
+            - token: self.token_util.token
+            - client_id: self.client_id
+            - cache_tokens: self.token_util.token_cache
+            - delegate_login: self.delegate login
+        """
+        return {
+            "token": self.token_util.token,
+            "client_id": self.client_id,
+            "cache_tokens": self.token_util.token_cache,
+            "delegate_login": self._delegate_login
+        }
 
 class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_doc_converter.api_client.ApiClient):
     """

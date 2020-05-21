@@ -17,25 +17,30 @@ class TestClient(unittest.TestCase):
 
     def test_client(self):
         """
-        Tests for client configuration into presalytics api
+        Tests for client configuration into presalytics api via device grant
         """
-        client = presalytics.client.api.Client(config_file=self.config_file)
-        username = os.environ["PRESALYTICS_USERNAME"]
-        self.assertEqual(client.username, username)
-        self.assertEqual(client.ooxml_automation.api_client.configuration.host, os.environ["OOXML_AUTOMATION_HOST"])
-        self.assertNotEqual(client.token_util.token.get("access_token", None), None)
+        if not presalytics.CONFIG.get("PASSWORD", None):
+            client = presalytics.client.api.Client(config_file=self.config_file)
+            username = os.environ["PRESALYTICS_USERNAME"]
+            self.assertEqual(client.username, username)
+            self.assertEqual(client.ooxml_automation.api_client.configuration.host, os.environ["OOXML_AUTOMATION_HOST"])
+            self.assertNotEqual(client.token_util.token.get("access_token", None), None)
        
     def test_password_grant(self):
-        username = presalytics.CONFIG.get("USERNAME")
-        password = presalytics.CONFIG.get("PASSWORD")
-        client_id = os.environ.get("CLIENT_ID")
-        client_secret = os.environ.get("CLIENT_SECRET")
-        client = presalytics.client.api.Client(
-            username=username, 
-            password=password, 
-            client_id=client_id, 
-            client_secret=client_secret
-        )
+        """
+        tests if password grant works
+        """
+        if presalytics.CONFIG.get("PASSWORD", None):
+            username = presalytics.CONFIG.get("USERNAME")
+            password = presalytics.CONFIG.get("PASSWORD")
+            client_id = os.environ.get("CLIENT_ID")
+            client_secret = os.environ.get("CLIENT_SECRET")
+            client = presalytics.client.api.Client(
+                username=username, 
+                password=password, 
+                client_id=client_id, 
+                client_secret=client_secret
+            )
 
     def test_module_config(self):
         from test.files.config import PRESALYTICS
@@ -54,9 +59,8 @@ class TestClient(unittest.TestCase):
         self.assertEqual(status, 404)
 
     def test_file_download(self):
-        from test.files.config import PRESALYTICS
         test_upload_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'files', 'star.pptx')
-        client = presalytics.client.api.Client(config=PRESALYTICS)
+        client = presalytics.client.api.get_client()
         try:
             test_story = client.story.story_post_file(file=test_upload_file)
             download_folder = os.path.dirname(os.path.abspath(__file__))

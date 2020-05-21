@@ -53,7 +53,7 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
         }
         color_params = {k: v for k, v in colors.items() if k not in extra_params}
         color_params.update(mapped_colors)
-        params = {k: v[2:] for k, v in color_params.items()}
+        params = {k: v for k, v in color_params.items() if k not in extra_params}
         params.update(fonts)
 
         self.plugin_config = params

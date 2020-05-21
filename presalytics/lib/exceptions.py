@@ -63,7 +63,11 @@ class ApiError(PresalyticsBaseException):
                 message = "Status Code: {0}".format(status_code)
         else:
             if status_code:
-                message = message + ".  Status Code: {0}".format(status_code)
+                try:
+                    message = message.decode('utf-8')
+                except Exception:
+                    pass
+                message = str(message) + ".  Status Code: {0}".format(status_code)
         super().__init__(message)
 
 

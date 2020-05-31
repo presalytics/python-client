@@ -31,41 +31,62 @@ class SessionAllOf(object):
                             and the value is json key in definition.
     """
     openapi_types = {
+        'collaborator': 'StoryCollaborator',
         'collaborator_id': 'str',
-        'outline_revision': 'int',
         'host': 'str',
-        'views': 'list[View]',
-        'collaborator': 'StoryCollaborator'
+        'outline_revision': 'int',
+        'views': 'list[View]'
     }
 
     attribute_map = {
+        'collaborator': 'collaborator',
         'collaborator_id': 'collaborator_id',
-        'outline_revision': 'outline_revision',
         'host': 'host',
-        'views': 'views',
-        'collaborator': 'collaborator'
+        'outline_revision': 'outline_revision',
+        'views': 'views'
     }
 
-    def __init__(self, collaborator_id=None, outline_revision=None, host=None, views=None, collaborator=None):  # noqa: E501
+    def __init__(self, collaborator=None, collaborator_id=None, host=None, outline_revision=None, views=None):  # noqa: E501
         """SessionAllOf - a model defined in OpenAPI"""  # noqa: E501
 
-        self._collaborator_id = None
-        self._outline_revision = None
-        self._host = None
-        self._views = None
         self._collaborator = None
+        self._collaborator_id = None
+        self._host = None
+        self._outline_revision = None
+        self._views = None
         self.discriminator = None
 
-        if collaborator_id is not None:
-            self.collaborator_id = collaborator_id
-        if outline_revision is not None:
-            self.outline_revision = outline_revision
-        if host is not None:
-            self.host = host
-        if views is not None:
-            self.views = views
         if collaborator is not None:
             self.collaborator = collaborator
+        if collaborator_id is not None:
+            self.collaborator_id = collaborator_id
+        if host is not None:
+            self.host = host
+        if outline_revision is not None:
+            self.outline_revision = outline_revision
+        if views is not None:
+            self.views = views
+
+    @property
+    def collaborator(self):
+        """Gets the collaborator of this SessionAllOf.  # noqa: E501
+
+
+        :return: The collaborator of this SessionAllOf.  # noqa: E501
+        :rtype: StoryCollaborator
+        """
+        return self._collaborator
+
+    @collaborator.setter
+    def collaborator(self, collaborator):
+        """Sets the collaborator of this SessionAllOf.
+
+
+        :param collaborator: The collaborator of this SessionAllOf.  # noqa: E501
+        :type: StoryCollaborator
+        """
+
+        self._collaborator = collaborator
 
     @property
     def collaborator_id(self):
@@ -89,27 +110,6 @@ class SessionAllOf(object):
         self._collaborator_id = collaborator_id
 
     @property
-    def outline_revision(self):
-        """Gets the outline_revision of this SessionAllOf.  # noqa: E501
-
-
-        :return: The outline_revision of this SessionAllOf.  # noqa: E501
-        :rtype: int
-        """
-        return self._outline_revision
-
-    @outline_revision.setter
-    def outline_revision(self, outline_revision):
-        """Sets the outline_revision of this SessionAllOf.
-
-
-        :param outline_revision: The outline_revision of this SessionAllOf.  # noqa: E501
-        :type: int
-        """
-
-        self._outline_revision = outline_revision
-
-    @property
     def host(self):
         """Gets the host of this SessionAllOf.  # noqa: E501
 
@@ -131,6 +131,27 @@ class SessionAllOf(object):
         self._host = host
 
     @property
+    def outline_revision(self):
+        """Gets the outline_revision of this SessionAllOf.  # noqa: E501
+
+
+        :return: The outline_revision of this SessionAllOf.  # noqa: E501
+        :rtype: int
+        """
+        return self._outline_revision
+
+    @outline_revision.setter
+    def outline_revision(self, outline_revision):
+        """Sets the outline_revision of this SessionAllOf.
+
+
+        :param outline_revision: The outline_revision of this SessionAllOf.  # noqa: E501
+        :type: int
+        """
+
+        self._outline_revision = outline_revision
+
+    @property
     def views(self):
         """Gets the views of this SessionAllOf.  # noqa: E501
 
@@ -150,27 +171,6 @@ class SessionAllOf(object):
         """
 
         self._views = views
-
-    @property
-    def collaborator(self):
-        """Gets the collaborator of this SessionAllOf.  # noqa: E501
-
-
-        :return: The collaborator of this SessionAllOf.  # noqa: E501
-        :rtype: StoryCollaborator
-        """
-        return self._collaborator
-
-    @collaborator.setter
-    def collaborator(self, collaborator):
-        """Sets the collaborator of this SessionAllOf.
-
-
-        :param collaborator: The collaborator of this SessionAllOf.  # noqa: E501
-        :type: StoryCollaborator
-        """
-
-        self._collaborator = collaborator
 
     def to_dict(self):
         """Returns the model properties as a dict"""

@@ -31,87 +31,66 @@ class PermissionType(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'id': 'str',
         'created_at': 'datetime',
         'created_by': 'str',
+        'id': 'str',
         'updated_at': 'datetime',
         'updated_by': 'str',
-        'name': 'str',
+        'can_add_collaborators': 'bool',
+        'can_delete': 'bool',
         'can_edit': 'bool',
         'can_view': 'bool',
-        'can_add_collaborators': 'bool',
-        'can_delete': 'bool'
+        'name': 'str'
     }
 
     attribute_map = {
-        'id': 'id',
         'created_at': 'created_at',
         'created_by': 'created_by',
+        'id': 'id',
         'updated_at': 'updated_at',
         'updated_by': 'updated_by',
-        'name': 'name',
+        'can_add_collaborators': 'can_add_collaborators',
+        'can_delete': 'can_delete',
         'can_edit': 'can_edit',
         'can_view': 'can_view',
-        'can_add_collaborators': 'can_add_collaborators',
-        'can_delete': 'can_delete'
+        'name': 'name'
     }
 
-    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, name=None, can_edit=None, can_view=None, can_add_collaborators=None, can_delete=None):  # noqa: E501
+    def __init__(self, created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, can_add_collaborators=None, can_delete=None, can_edit=None, can_view=None, name=None):  # noqa: E501
         """PermissionType - a model defined in OpenAPI"""  # noqa: E501
 
-        self._id = None
         self._created_at = None
         self._created_by = None
+        self._id = None
         self._updated_at = None
         self._updated_by = None
-        self._name = None
-        self._can_edit = None
-        self._can_view = None
         self._can_add_collaborators = None
         self._can_delete = None
+        self._can_edit = None
+        self._can_view = None
+        self._name = None
         self.discriminator = None
 
-        if id is not None:
-            self.id = id
         if created_at is not None:
             self.created_at = created_at
         if created_by is not None:
             self.created_by = created_by
+        if id is not None:
+            self.id = id
         if updated_at is not None:
             self.updated_at = updated_at
         if updated_by is not None:
             self.updated_by = updated_by
-        if name is not None:
-            self.name = name
-        if can_edit is not None:
-            self.can_edit = can_edit
-        if can_view is not None:
-            self.can_view = can_view
         if can_add_collaborators is not None:
             self.can_add_collaborators = can_add_collaborators
         if can_delete is not None:
             self.can_delete = can_delete
-
-    @property
-    def id(self):
-        """Gets the id of this PermissionType.  # noqa: E501
-
-
-        :return: The id of this PermissionType.  # noqa: E501
-        :rtype: str
-        """
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        """Sets the id of this PermissionType.
-
-
-        :param id: The id of this PermissionType.  # noqa: E501
-        :type: str
-        """
-
-        self._id = id
+        if can_edit is not None:
+            self.can_edit = can_edit
+        if can_view is not None:
+            self.can_view = can_view
+        if name is not None:
+            self.name = name
 
     @property
     def created_at(self):
@@ -156,6 +135,27 @@ class PermissionType(object):
         self._created_by = created_by
 
     @property
+    def id(self):
+        """Gets the id of this PermissionType.  # noqa: E501
+
+
+        :return: The id of this PermissionType.  # noqa: E501
+        :rtype: str
+        """
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        """Sets the id of this PermissionType.
+
+
+        :param id: The id of this PermissionType.  # noqa: E501
+        :type: str
+        """
+
+        self._id = id
+
+    @property
     def updated_at(self):
         """Gets the updated_at of this PermissionType.  # noqa: E501
 
@@ -198,25 +198,46 @@ class PermissionType(object):
         self._updated_by = updated_by
 
     @property
-    def name(self):
-        """Gets the name of this PermissionType.  # noqa: E501
+    def can_add_collaborators(self):
+        """Gets the can_add_collaborators of this PermissionType.  # noqa: E501
 
 
-        :return: The name of this PermissionType.  # noqa: E501
-        :rtype: str
+        :return: The can_add_collaborators of this PermissionType.  # noqa: E501
+        :rtype: bool
         """
-        return self._name
+        return self._can_add_collaborators
 
-    @name.setter
-    def name(self, name):
-        """Sets the name of this PermissionType.
+    @can_add_collaborators.setter
+    def can_add_collaborators(self, can_add_collaborators):
+        """Sets the can_add_collaborators of this PermissionType.
 
 
-        :param name: The name of this PermissionType.  # noqa: E501
-        :type: str
+        :param can_add_collaborators: The can_add_collaborators of this PermissionType.  # noqa: E501
+        :type: bool
         """
 
-        self._name = name
+        self._can_add_collaborators = can_add_collaborators
+
+    @property
+    def can_delete(self):
+        """Gets the can_delete of this PermissionType.  # noqa: E501
+
+
+        :return: The can_delete of this PermissionType.  # noqa: E501
+        :rtype: bool
+        """
+        return self._can_delete
+
+    @can_delete.setter
+    def can_delete(self, can_delete):
+        """Sets the can_delete of this PermissionType.
+
+
+        :param can_delete: The can_delete of this PermissionType.  # noqa: E501
+        :type: bool
+        """
+
+        self._can_delete = can_delete
 
     @property
     def can_edit(self):
@@ -261,46 +282,25 @@ class PermissionType(object):
         self._can_view = can_view
 
     @property
-    def can_add_collaborators(self):
-        """Gets the can_add_collaborators of this PermissionType.  # noqa: E501
+    def name(self):
+        """Gets the name of this PermissionType.  # noqa: E501
 
 
-        :return: The can_add_collaborators of this PermissionType.  # noqa: E501
-        :rtype: bool
+        :return: The name of this PermissionType.  # noqa: E501
+        :rtype: str
         """
-        return self._can_add_collaborators
+        return self._name
 
-    @can_add_collaborators.setter
-    def can_add_collaborators(self, can_add_collaborators):
-        """Sets the can_add_collaborators of this PermissionType.
-
-
-        :param can_add_collaborators: The can_add_collaborators of this PermissionType.  # noqa: E501
-        :type: bool
-        """
-
-        self._can_add_collaborators = can_add_collaborators
-
-    @property
-    def can_delete(self):
-        """Gets the can_delete of this PermissionType.  # noqa: E501
+    @name.setter
+    def name(self, name):
+        """Sets the name of this PermissionType.
 
 
-        :return: The can_delete of this PermissionType.  # noqa: E501
-        :rtype: bool
-        """
-        return self._can_delete
-
-    @can_delete.setter
-    def can_delete(self, can_delete):
-        """Sets the can_delete of this PermissionType.
-
-
-        :param can_delete: The can_delete of this PermissionType.  # noqa: E501
-        :type: bool
+        :param name: The name of this PermissionType.  # noqa: E501
+        :type: str
         """
 
-        self._can_delete = can_delete
+        self._name = name
 
     def to_dict(self):
         """Returns the model properties as a dict"""

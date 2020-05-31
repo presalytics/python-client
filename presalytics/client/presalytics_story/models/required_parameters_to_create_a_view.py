@@ -31,38 +31,103 @@ class RequiredParametersToCreateAView(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'page_number': 'int',
-        'start_time': 'datetime',
-        'end_time': 'datetime',
         'active_m_secs': 'int',
-        'additional': 'str'
+        'additional': 'str',
+        'end_time': 'datetime',
+        'page_number': 'int',
+        'start_time': 'datetime'
     }
 
     attribute_map = {
-        'page_number': 'pageNumber',
-        'start_time': 'startTime',
-        'end_time': 'endTime',
         'active_m_secs': 'activeMSecs',
-        'additional': 'additional'
+        'additional': 'additional',
+        'end_time': 'endTime',
+        'page_number': 'pageNumber',
+        'start_time': 'startTime'
     }
 
-    def __init__(self, page_number=None, start_time=None, end_time=None, active_m_secs=None, additional=None):  # noqa: E501
+    def __init__(self, active_m_secs=None, additional=None, end_time=None, page_number=None, start_time=None):  # noqa: E501
         """RequiredParametersToCreateAView - a model defined in OpenAPI"""  # noqa: E501
 
-        self._page_number = None
-        self._start_time = None
-        self._end_time = None
         self._active_m_secs = None
         self._additional = None
+        self._end_time = None
+        self._page_number = None
+        self._start_time = None
         self.discriminator = None
 
-        self.page_number = page_number
-        self.start_time = start_time
-        self.end_time = end_time
         if active_m_secs is not None:
             self.active_m_secs = active_m_secs
         if additional is not None:
             self.additional = additional
+        self.end_time = end_time
+        self.page_number = page_number
+        self.start_time = start_time
+
+    @property
+    def active_m_secs(self):
+        """Gets the active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
+
+
+        :return: The active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
+        :rtype: int
+        """
+        return self._active_m_secs
+
+    @active_m_secs.setter
+    def active_m_secs(self, active_m_secs):
+        """Sets the active_m_secs of this RequiredParametersToCreateAView.
+
+
+        :param active_m_secs: The active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
+        :type: int
+        """
+
+        self._active_m_secs = active_m_secs
+
+    @property
+    def additional(self):
+        """Gets the additional of this RequiredParametersToCreateAView.  # noqa: E501
+
+
+        :return: The additional of this RequiredParametersToCreateAView.  # noqa: E501
+        :rtype: str
+        """
+        return self._additional
+
+    @additional.setter
+    def additional(self, additional):
+        """Sets the additional of this RequiredParametersToCreateAView.
+
+
+        :param additional: The additional of this RequiredParametersToCreateAView.  # noqa: E501
+        :type: str
+        """
+
+        self._additional = additional
+
+    @property
+    def end_time(self):
+        """Gets the end_time of this RequiredParametersToCreateAView.  # noqa: E501
+
+
+        :return: The end_time of this RequiredParametersToCreateAView.  # noqa: E501
+        :rtype: datetime
+        """
+        return self._end_time
+
+    @end_time.setter
+    def end_time(self, end_time):
+        """Sets the end_time of this RequiredParametersToCreateAView.
+
+
+        :param end_time: The end_time of this RequiredParametersToCreateAView.  # noqa: E501
+        :type: datetime
+        """
+        if end_time is None:
+            raise ValueError("Invalid value for `end_time`, must not be `None`")  # noqa: E501
+
+        self._end_time = end_time
 
     @property
     def page_number(self):
@@ -109,71 +174,6 @@ class RequiredParametersToCreateAView(object):
             raise ValueError("Invalid value for `start_time`, must not be `None`")  # noqa: E501
 
         self._start_time = start_time
-
-    @property
-    def end_time(self):
-        """Gets the end_time of this RequiredParametersToCreateAView.  # noqa: E501
-
-
-        :return: The end_time of this RequiredParametersToCreateAView.  # noqa: E501
-        :rtype: datetime
-        """
-        return self._end_time
-
-    @end_time.setter
-    def end_time(self, end_time):
-        """Sets the end_time of this RequiredParametersToCreateAView.
-
-
-        :param end_time: The end_time of this RequiredParametersToCreateAView.  # noqa: E501
-        :type: datetime
-        """
-        if end_time is None:
-            raise ValueError("Invalid value for `end_time`, must not be `None`")  # noqa: E501
-
-        self._end_time = end_time
-
-    @property
-    def active_m_secs(self):
-        """Gets the active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
-
-
-        :return: The active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
-        :rtype: int
-        """
-        return self._active_m_secs
-
-    @active_m_secs.setter
-    def active_m_secs(self, active_m_secs):
-        """Sets the active_m_secs of this RequiredParametersToCreateAView.
-
-
-        :param active_m_secs: The active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
-        :type: int
-        """
-
-        self._active_m_secs = active_m_secs
-
-    @property
-    def additional(self):
-        """Gets the additional of this RequiredParametersToCreateAView.  # noqa: E501
-
-
-        :return: The additional of this RequiredParametersToCreateAView.  # noqa: E501
-        :rtype: str
-        """
-        return self._additional
-
-    @additional.setter
-    def additional(self, additional):
-        """Sets the additional of this RequiredParametersToCreateAView.
-
-
-        :param additional: The additional of this RequiredParametersToCreateAView.  # noqa: E501
-        :type: str
-        """
-
-        self._additional = additional
 
     def to_dict(self):
         """Returns the model properties as a dict"""

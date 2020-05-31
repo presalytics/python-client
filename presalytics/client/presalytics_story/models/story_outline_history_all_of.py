@@ -31,78 +31,57 @@ class StoryOutlineHistoryAllOf(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'story_id': 'str',
-        'revision_number': 'int',
+        'collaborator_user_id': 'str',
         'outline': 'str',
-        'collaborator_user_id': 'str'
+        'revision_number': 'int',
+        'story_id': 'str'
     }
 
     attribute_map = {
-        'story_id': 'story_id',
-        'revision_number': 'revision_number',
+        'collaborator_user_id': 'collaborator_user_id',
         'outline': 'outline',
-        'collaborator_user_id': 'collaborator_user_id'
+        'revision_number': 'revision_number',
+        'story_id': 'story_id'
     }
 
-    def __init__(self, story_id=None, revision_number=None, outline=None, collaborator_user_id=None):  # noqa: E501
+    def __init__(self, collaborator_user_id=None, outline=None, revision_number=None, story_id=None):  # noqa: E501
         """StoryOutlineHistoryAllOf - a model defined in OpenAPI"""  # noqa: E501
 
-        self._story_id = None
-        self._revision_number = None
-        self._outline = None
         self._collaborator_user_id = None
+        self._outline = None
+        self._revision_number = None
+        self._story_id = None
         self.discriminator = None
 
-        if story_id is not None:
-            self.story_id = story_id
-        if revision_number is not None:
-            self.revision_number = revision_number
-        if outline is not None:
-            self.outline = outline
         if collaborator_user_id is not None:
             self.collaborator_user_id = collaborator_user_id
+        if outline is not None:
+            self.outline = outline
+        if revision_number is not None:
+            self.revision_number = revision_number
+        if story_id is not None:
+            self.story_id = story_id
 
     @property
-    def story_id(self):
-        """Gets the story_id of this StoryOutlineHistoryAllOf.  # noqa: E501
+    def collaborator_user_id(self):
+        """Gets the collaborator_user_id of this StoryOutlineHistoryAllOf.  # noqa: E501
 
 
-        :return: The story_id of this StoryOutlineHistoryAllOf.  # noqa: E501
+        :return: The collaborator_user_id of this StoryOutlineHistoryAllOf.  # noqa: E501
         :rtype: str
         """
-        return self._story_id
+        return self._collaborator_user_id
 
-    @story_id.setter
-    def story_id(self, story_id):
-        """Sets the story_id of this StoryOutlineHistoryAllOf.
+    @collaborator_user_id.setter
+    def collaborator_user_id(self, collaborator_user_id):
+        """Sets the collaborator_user_id of this StoryOutlineHistoryAllOf.
 
 
-        :param story_id: The story_id of this StoryOutlineHistoryAllOf.  # noqa: E501
+        :param collaborator_user_id: The collaborator_user_id of this StoryOutlineHistoryAllOf.  # noqa: E501
         :type: str
         """
 
-        self._story_id = story_id
-
-    @property
-    def revision_number(self):
-        """Gets the revision_number of this StoryOutlineHistoryAllOf.  # noqa: E501
-
-
-        :return: The revision_number of this StoryOutlineHistoryAllOf.  # noqa: E501
-        :rtype: int
-        """
-        return self._revision_number
-
-    @revision_number.setter
-    def revision_number(self, revision_number):
-        """Sets the revision_number of this StoryOutlineHistoryAllOf.
-
-
-        :param revision_number: The revision_number of this StoryOutlineHistoryAllOf.  # noqa: E501
-        :type: int
-        """
-
-        self._revision_number = revision_number
+        self._collaborator_user_id = collaborator_user_id
 
     @property
     def outline(self):
@@ -126,25 +105,46 @@ class StoryOutlineHistoryAllOf(object):
         self._outline = outline
 
     @property
-    def collaborator_user_id(self):
-        """Gets the collaborator_user_id of this StoryOutlineHistoryAllOf.  # noqa: E501
+    def revision_number(self):
+        """Gets the revision_number of this StoryOutlineHistoryAllOf.  # noqa: E501
 
 
-        :return: The collaborator_user_id of this StoryOutlineHistoryAllOf.  # noqa: E501
+        :return: The revision_number of this StoryOutlineHistoryAllOf.  # noqa: E501
+        :rtype: int
+        """
+        return self._revision_number
+
+    @revision_number.setter
+    def revision_number(self, revision_number):
+        """Sets the revision_number of this StoryOutlineHistoryAllOf.
+
+
+        :param revision_number: The revision_number of this StoryOutlineHistoryAllOf.  # noqa: E501
+        :type: int
+        """
+
+        self._revision_number = revision_number
+
+    @property
+    def story_id(self):
+        """Gets the story_id of this StoryOutlineHistoryAllOf.  # noqa: E501
+
+
+        :return: The story_id of this StoryOutlineHistoryAllOf.  # noqa: E501
         :rtype: str
         """
-        return self._collaborator_user_id
+        return self._story_id
 
-    @collaborator_user_id.setter
-    def collaborator_user_id(self, collaborator_user_id):
-        """Sets the collaborator_user_id of this StoryOutlineHistoryAllOf.
+    @story_id.setter
+    def story_id(self, story_id):
+        """Sets the story_id of this StoryOutlineHistoryAllOf.
 
 
-        :param collaborator_user_id: The collaborator_user_id of this StoryOutlineHistoryAllOf.  # noqa: E501
+        :param story_id: The story_id of this StoryOutlineHistoryAllOf.  # noqa: E501
         :type: str
         """
 
-        self._collaborator_user_id = collaborator_user_id
+        self._story_id = story_id
 
     def to_dict(self):
         """Returns the model properties as a dict"""

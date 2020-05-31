@@ -31,87 +31,66 @@ class Session(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'id': 'str',
         'created_at': 'datetime',
         'created_by': 'str',
+        'id': 'str',
         'updated_at': 'datetime',
         'updated_by': 'str',
+        'collaborator': 'StoryCollaborator',
         'collaborator_id': 'str',
-        'outline_revision': 'int',
         'host': 'str',
-        'views': 'list[View]',
-        'collaborator': 'StoryCollaborator'
+        'outline_revision': 'int',
+        'views': 'list[View]'
     }
 
     attribute_map = {
-        'id': 'id',
         'created_at': 'created_at',
         'created_by': 'created_by',
+        'id': 'id',
         'updated_at': 'updated_at',
         'updated_by': 'updated_by',
+        'collaborator': 'collaborator',
         'collaborator_id': 'collaborator_id',
-        'outline_revision': 'outline_revision',
         'host': 'host',
-        'views': 'views',
-        'collaborator': 'collaborator'
+        'outline_revision': 'outline_revision',
+        'views': 'views'
     }
 
-    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, collaborator_id=None, outline_revision=None, host=None, views=None, collaborator=None):  # noqa: E501
+    def __init__(self, created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, collaborator=None, collaborator_id=None, host=None, outline_revision=None, views=None):  # noqa: E501
         """Session - a model defined in OpenAPI"""  # noqa: E501
 
-        self._id = None
         self._created_at = None
         self._created_by = None
+        self._id = None
         self._updated_at = None
         self._updated_by = None
-        self._collaborator_id = None
-        self._outline_revision = None
-        self._host = None
-        self._views = None
         self._collaborator = None
+        self._collaborator_id = None
+        self._host = None
+        self._outline_revision = None
+        self._views = None
         self.discriminator = None
 
-        if id is not None:
-            self.id = id
         if created_at is not None:
             self.created_at = created_at
         if created_by is not None:
             self.created_by = created_by
+        if id is not None:
+            self.id = id
         if updated_at is not None:
             self.updated_at = updated_at
         if updated_by is not None:
             self.updated_by = updated_by
-        if collaborator_id is not None:
-            self.collaborator_id = collaborator_id
-        if outline_revision is not None:
-            self.outline_revision = outline_revision
-        if host is not None:
-            self.host = host
-        if views is not None:
-            self.views = views
         if collaborator is not None:
             self.collaborator = collaborator
-
-    @property
-    def id(self):
-        """Gets the id of this Session.  # noqa: E501
-
-
-        :return: The id of this Session.  # noqa: E501
-        :rtype: str
-        """
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        """Sets the id of this Session.
-
-
-        :param id: The id of this Session.  # noqa: E501
-        :type: str
-        """
-
-        self._id = id
+        if collaborator_id is not None:
+            self.collaborator_id = collaborator_id
+        if host is not None:
+            self.host = host
+        if outline_revision is not None:
+            self.outline_revision = outline_revision
+        if views is not None:
+            self.views = views
 
     @property
     def created_at(self):
@@ -156,6 +135,27 @@ class Session(object):
         self._created_by = created_by
 
     @property
+    def id(self):
+        """Gets the id of this Session.  # noqa: E501
+
+
+        :return: The id of this Session.  # noqa: E501
+        :rtype: str
+        """
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        """Sets the id of this Session.
+
+
+        :param id: The id of this Session.  # noqa: E501
+        :type: str
+        """
+
+        self._id = id
+
+    @property
     def updated_at(self):
         """Gets the updated_at of this Session.  # noqa: E501
 
@@ -198,6 +198,27 @@ class Session(object):
         self._updated_by = updated_by
 
     @property
+    def collaborator(self):
+        """Gets the collaborator of this Session.  # noqa: E501
+
+
+        :return: The collaborator of this Session.  # noqa: E501
+        :rtype: StoryCollaborator
+        """
+        return self._collaborator
+
+    @collaborator.setter
+    def collaborator(self, collaborator):
+        """Sets the collaborator of this Session.
+
+
+        :param collaborator: The collaborator of this Session.  # noqa: E501
+        :type: StoryCollaborator
+        """
+
+        self._collaborator = collaborator
+
+    @property
     def collaborator_id(self):
         """Gets the collaborator_id of this Session.  # noqa: E501
 
@@ -217,27 +238,6 @@ class Session(object):
         """
 
         self._collaborator_id = collaborator_id
-
-    @property
-    def outline_revision(self):
-        """Gets the outline_revision of this Session.  # noqa: E501
-
-
-        :return: The outline_revision of this Session.  # noqa: E501
-        :rtype: int
-        """
-        return self._outline_revision
-
-    @outline_revision.setter
-    def outline_revision(self, outline_revision):
-        """Sets the outline_revision of this Session.
-
-
-        :param outline_revision: The outline_revision of this Session.  # noqa: E501
-        :type: int
-        """
-
-        self._outline_revision = outline_revision
 
     @property
     def host(self):
@@ -261,6 +261,27 @@ class Session(object):
         self._host = host
 
     @property
+    def outline_revision(self):
+        """Gets the outline_revision of this Session.  # noqa: E501
+
+
+        :return: The outline_revision of this Session.  # noqa: E501
+        :rtype: int
+        """
+        return self._outline_revision
+
+    @outline_revision.setter
+    def outline_revision(self, outline_revision):
+        """Sets the outline_revision of this Session.
+
+
+        :param outline_revision: The outline_revision of this Session.  # noqa: E501
+        :type: int
+        """
+
+        self._outline_revision = outline_revision
+
+    @property
     def views(self):
         """Gets the views of this Session.  # noqa: E501
 
@@ -280,27 +301,6 @@ class Session(object):
         """
 
         self._views = views
-
-    @property
-    def collaborator(self):
-        """Gets the collaborator of this Session.  # noqa: E501
-
-
-        :return: The collaborator of this Session.  # noqa: E501
-        :rtype: StoryCollaborator
-        """
-        return self._collaborator
-
-    @collaborator.setter
-    def collaborator(self, collaborator):
-        """Sets the collaborator of this Session.
-
-
-        :param collaborator: The collaborator of this Session.  # noqa: E501
-        :type: StoryCollaborator
-        """
-
-        self._collaborator = collaborator
 
     def to_dict(self):
         """Returns the model properties as a dict"""

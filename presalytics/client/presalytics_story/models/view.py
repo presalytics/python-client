@@ -31,97 +31,76 @@ class View(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'id': 'str',
         'created_at': 'datetime',
         'created_by': 'str',
+        'id': 'str',
         'updated_at': 'datetime',
         'updated_by': 'str',
+        'active_msecs': 'int',
+        'additional': 'str',
+        'end_time': 'datetime',
         'page_number': 'int',
         'session_id': 'str',
         'start_time': 'datetime',
-        'end_time': 'datetime',
-        'active_msecs': 'int',
-        'total_msecs': 'int',
-        'additional': 'str'
+        'total_msecs': 'int'
     }
 
     attribute_map = {
-        'id': 'id',
         'created_at': 'created_at',
         'created_by': 'created_by',
+        'id': 'id',
         'updated_at': 'updated_at',
         'updated_by': 'updated_by',
+        'active_msecs': 'active_msecs',
+        'additional': 'additional',
+        'end_time': 'end_time',
         'page_number': 'page_number',
         'session_id': 'session_id',
         'start_time': 'start_time',
-        'end_time': 'end_time',
-        'active_msecs': 'active_msecs',
-        'total_msecs': 'total_msecs',
-        'additional': 'additional'
+        'total_msecs': 'total_msecs'
     }
 
-    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, page_number=None, session_id=None, start_time=None, end_time=None, active_msecs=None, total_msecs=None, additional=None):  # noqa: E501
+    def __init__(self, created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, active_msecs=None, additional=None, end_time=None, page_number=None, session_id=None, start_time=None, total_msecs=None):  # noqa: E501
         """View - a model defined in OpenAPI"""  # noqa: E501
 
-        self._id = None
         self._created_at = None
         self._created_by = None
+        self._id = None
         self._updated_at = None
         self._updated_by = None
+        self._active_msecs = None
+        self._additional = None
+        self._end_time = None
         self._page_number = None
         self._session_id = None
         self._start_time = None
-        self._end_time = None
-        self._active_msecs = None
         self._total_msecs = None
-        self._additional = None
         self.discriminator = None
 
-        if id is not None:
-            self.id = id
         if created_at is not None:
             self.created_at = created_at
         if created_by is not None:
             self.created_by = created_by
+        if id is not None:
+            self.id = id
         if updated_at is not None:
             self.updated_at = updated_at
         if updated_by is not None:
             self.updated_by = updated_by
+        if active_msecs is not None:
+            self.active_msecs = active_msecs
+        if additional is not None:
+            self.additional = additional
+        if end_time is not None:
+            self.end_time = end_time
         if page_number is not None:
             self.page_number = page_number
         if session_id is not None:
             self.session_id = session_id
         if start_time is not None:
             self.start_time = start_time
-        if end_time is not None:
-            self.end_time = end_time
-        if active_msecs is not None:
-            self.active_msecs = active_msecs
         if total_msecs is not None:
             self.total_msecs = total_msecs
-        if additional is not None:
-            self.additional = additional
-
-    @property
-    def id(self):
-        """Gets the id of this View.  # noqa: E501
-
-
-        :return: The id of this View.  # noqa: E501
-        :rtype: str
-        """
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        """Sets the id of this View.
-
-
-        :param id: The id of this View.  # noqa: E501
-        :type: str
-        """
-
-        self._id = id
 
     @property
     def created_at(self):
@@ -166,6 +145,27 @@ class View(object):
         self._created_by = created_by
 
     @property
+    def id(self):
+        """Gets the id of this View.  # noqa: E501
+
+
+        :return: The id of this View.  # noqa: E501
+        :rtype: str
+        """
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        """Sets the id of this View.
+
+
+        :param id: The id of this View.  # noqa: E501
+        :type: str
+        """
+
+        self._id = id
+
+    @property
     def updated_at(self):
         """Gets the updated_at of this View.  # noqa: E501
 
@@ -206,6 +206,69 @@ class View(object):
         """
 
         self._updated_by = updated_by
+
+    @property
+    def active_msecs(self):
+        """Gets the active_msecs of this View.  # noqa: E501
+
+
+        :return: The active_msecs of this View.  # noqa: E501
+        :rtype: int
+        """
+        return self._active_msecs
+
+    @active_msecs.setter
+    def active_msecs(self, active_msecs):
+        """Sets the active_msecs of this View.
+
+
+        :param active_msecs: The active_msecs of this View.  # noqa: E501
+        :type: int
+        """
+
+        self._active_msecs = active_msecs
+
+    @property
+    def additional(self):
+        """Gets the additional of this View.  # noqa: E501
+
+
+        :return: The additional of this View.  # noqa: E501
+        :rtype: str
+        """
+        return self._additional
+
+    @additional.setter
+    def additional(self, additional):
+        """Sets the additional of this View.
+
+
+        :param additional: The additional of this View.  # noqa: E501
+        :type: str
+        """
+
+        self._additional = additional
+
+    @property
+    def end_time(self):
+        """Gets the end_time of this View.  # noqa: E501
+
+
+        :return: The end_time of this View.  # noqa: E501
+        :rtype: datetime
+        """
+        return self._end_time
+
+    @end_time.setter
+    def end_time(self, end_time):
+        """Sets the end_time of this View.
+
+
+        :param end_time: The end_time of this View.  # noqa: E501
+        :type: datetime
+        """
+
+        self._end_time = end_time
 
     @property
     def page_number(self):
@@ -271,48 +334,6 @@ class View(object):
         self._start_time = start_time
 
     @property
-    def end_time(self):
-        """Gets the end_time of this View.  # noqa: E501
-
-
-        :return: The end_time of this View.  # noqa: E501
-        :rtype: datetime
-        """
-        return self._end_time
-
-    @end_time.setter
-    def end_time(self, end_time):
-        """Sets the end_time of this View.
-
-
-        :param end_time: The end_time of this View.  # noqa: E501
-        :type: datetime
-        """
-
-        self._end_time = end_time
-
-    @property
-    def active_msecs(self):
-        """Gets the active_msecs of this View.  # noqa: E501
-
-
-        :return: The active_msecs of this View.  # noqa: E501
-        :rtype: int
-        """
-        return self._active_msecs
-
-    @active_msecs.setter
-    def active_msecs(self, active_msecs):
-        """Sets the active_msecs of this View.
-
-
-        :param active_msecs: The active_msecs of this View.  # noqa: E501
-        :type: int
-        """
-
-        self._active_msecs = active_msecs
-
-    @property
     def total_msecs(self):
         """Gets the total_msecs of this View.  # noqa: E501
 
@@ -332,27 +353,6 @@ class View(object):
         """
 
         self._total_msecs = total_msecs
-
-    @property
-    def additional(self):
-        """Gets the additional of this View.  # noqa: E501
-
-
-        :return: The additional of this View.  # noqa: E501
-        :rtype: str
-        """
-        return self._additional
-
-    @additional.setter
-    def additional(self, additional):
-        """Sets the additional of this View.
-
-
-        :param additional: The additional of this View.  # noqa: E501
-        :type: str
-        """
-
-        self._additional = additional
 
     def to_dict(self):
         """Returns the model properties as a dict"""

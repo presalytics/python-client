@@ -31,72 +31,114 @@ class StoryAllOf(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'title': 'str',
+        'collaborators': 'list[StoryCollaborator]',
+        'is_public': 'bool',
+        'ooxml_documents': 'list[OoxmlDocument]',
         'outline': 'str',
         'outline_history': 'list[StoryOutlineHistory]',
-        'collaborators': 'list[StoryCollaborator]',
         'revision': 'int',
-        'ooxml_documents': 'list[OoxmlDocument]',
-        'is_public': 'bool'
+        'title': 'str'
     }
 
     attribute_map = {
-        'title': 'title',
+        'collaborators': 'collaborators',
+        'is_public': 'is_public',
+        'ooxml_documents': 'ooxml_documents',
         'outline': 'outline',
         'outline_history': 'outline_history',
-        'collaborators': 'collaborators',
         'revision': 'revision',
-        'ooxml_documents': 'ooxml_documents',
-        'is_public': 'is_public'
+        'title': 'title'
     }
 
-    def __init__(self, title=None, outline=None, outline_history=None, collaborators=None, revision=None, ooxml_documents=None, is_public=None):  # noqa: E501
+    def __init__(self, collaborators=None, is_public=None, ooxml_documents=None, outline=None, outline_history=None, revision=None, title=None):  # noqa: E501
         """StoryAllOf - a model defined in OpenAPI"""  # noqa: E501
 
-        self._title = None
+        self._collaborators = None
+        self._is_public = None
+        self._ooxml_documents = None
         self._outline = None
         self._outline_history = None
-        self._collaborators = None
         self._revision = None
-        self._ooxml_documents = None
-        self._is_public = None
+        self._title = None
         self.discriminator = None
 
-        if title is not None:
-            self.title = title
+        if collaborators is not None:
+            self.collaborators = collaborators
+        if is_public is not None:
+            self.is_public = is_public
+        if ooxml_documents is not None:
+            self.ooxml_documents = ooxml_documents
         if outline is not None:
             self.outline = outline
         if outline_history is not None:
             self.outline_history = outline_history
-        if collaborators is not None:
-            self.collaborators = collaborators
         if revision is not None:
             self.revision = revision
-        if ooxml_documents is not None:
-            self.ooxml_documents = ooxml_documents
-        if is_public is not None:
-            self.is_public = is_public
+        if title is not None:
+            self.title = title
 
     @property
-    def title(self):
-        """Gets the title of this StoryAllOf.  # noqa: E501
+    def collaborators(self):
+        """Gets the collaborators of this StoryAllOf.  # noqa: E501
 
 
-        :return: The title of this StoryAllOf.  # noqa: E501
-        :rtype: str
+        :return: The collaborators of this StoryAllOf.  # noqa: E501
+        :rtype: list[StoryCollaborator]
         """
-        return self._title
+        return self._collaborators
 
-    @title.setter
-    def title(self, title):
-        """Sets the title of this StoryAllOf.
+    @collaborators.setter
+    def collaborators(self, collaborators):
+        """Sets the collaborators of this StoryAllOf.
 
 
-        :param title: The title of this StoryAllOf.  # noqa: E501
-        :type: str
+        :param collaborators: The collaborators of this StoryAllOf.  # noqa: E501
+        :type: list[StoryCollaborator]
         """
 
-        self._title = title
+        self._collaborators = collaborators
+
+    @property
+    def is_public(self):
+        """Gets the is_public of this StoryAllOf.  # noqa: E501
+
+
+        :return: The is_public of this StoryAllOf.  # noqa: E501
+        :rtype: bool
+        """
+        return self._is_public
+
+    @is_public.setter
+    def is_public(self, is_public):
+        """Sets the is_public of this StoryAllOf.
+
+
+        :param is_public: The is_public of this StoryAllOf.  # noqa: E501
+        :type: bool
+        """
+
+        self._is_public = is_public
+
+    @property
+    def ooxml_documents(self):
+        """Gets the ooxml_documents of this StoryAllOf.  # noqa: E501
+
+
+        :return: The ooxml_documents of this StoryAllOf.  # noqa: E501
+        :rtype: list[OoxmlDocument]
+        """
+        return self._ooxml_documents
+
+    @ooxml_documents.setter
+    def ooxml_documents(self, ooxml_documents):
+        """Sets the ooxml_documents of this StoryAllOf.
+
+
+        :param ooxml_documents: The ooxml_documents of this StoryAllOf.  # noqa: E501
+        :type: list[OoxmlDocument]
+        """
+
+        self._ooxml_documents = ooxml_documents
 
     @property
     def outline(self):
@@ -141,27 +183,6 @@ class StoryAllOf(object):
         self._outline_history = outline_history
 
     @property
-    def collaborators(self):
-        """Gets the collaborators of this StoryAllOf.  # noqa: E501
-
-
-        :return: The collaborators of this StoryAllOf.  # noqa: E501
-        :rtype: list[StoryCollaborator]
-        """
-        return self._collaborators
-
-    @collaborators.setter
-    def collaborators(self, collaborators):
-        """Sets the collaborators of this StoryAllOf.
-
-
-        :param collaborators: The collaborators of this StoryAllOf.  # noqa: E501
-        :type: list[StoryCollaborator]
-        """
-
-        self._collaborators = collaborators
-
-    @property
     def revision(self):
         """Gets the revision of this StoryAllOf.  # noqa: E501
 
@@ -183,46 +204,25 @@ class StoryAllOf(object):
         self._revision = revision
 
     @property
-    def ooxml_documents(self):
-        """Gets the ooxml_documents of this StoryAllOf.  # noqa: E501
+    def title(self):
+        """Gets the title of this StoryAllOf.  # noqa: E501
 
 
-        :return: The ooxml_documents of this StoryAllOf.  # noqa: E501
-        :rtype: list[OoxmlDocument]
+        :return: The title of this StoryAllOf.  # noqa: E501
+        :rtype: str
         """
-        return self._ooxml_documents
+        return self._title
 
-    @ooxml_documents.setter
-    def ooxml_documents(self, ooxml_documents):
-        """Sets the ooxml_documents of this StoryAllOf.
-
-
-        :param ooxml_documents: The ooxml_documents of this StoryAllOf.  # noqa: E501
-        :type: list[OoxmlDocument]
-        """
-
-        self._ooxml_documents = ooxml_documents
-
-    @property
-    def is_public(self):
-        """Gets the is_public of this StoryAllOf.  # noqa: E501
+    @title.setter
+    def title(self, title):
+        """Sets the title of this StoryAllOf.
 
 
-        :return: The is_public of this StoryAllOf.  # noqa: E501
-        :rtype: bool
-        """
-        return self._is_public
-
-    @is_public.setter
-    def is_public(self, is_public):
-        """Sets the is_public of this StoryAllOf.
-
-
-        :param is_public: The is_public of this StoryAllOf.  # noqa: E501
-        :type: bool
+        :param title: The title of this StoryAllOf.  # noqa: E501
+        :type: str
         """
 
-        self._is_public = is_public
+        self._title = title
 
     def to_dict(self):
         """Returns the model properties as a dict"""

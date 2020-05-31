@@ -31,97 +31,76 @@ class Story(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'id': 'str',
         'created_at': 'datetime',
         'created_by': 'str',
+        'id': 'str',
         'updated_at': 'datetime',
         'updated_by': 'str',
-        'title': 'str',
+        'collaborators': 'list[StoryCollaborator]',
+        'is_public': 'bool',
+        'ooxml_documents': 'list[OoxmlDocument]',
         'outline': 'str',
         'outline_history': 'list[StoryOutlineHistory]',
-        'collaborators': 'list[StoryCollaborator]',
         'revision': 'int',
-        'ooxml_documents': 'list[OoxmlDocument]',
-        'is_public': 'bool'
+        'title': 'str'
     }
 
     attribute_map = {
-        'id': 'id',
         'created_at': 'created_at',
         'created_by': 'created_by',
+        'id': 'id',
         'updated_at': 'updated_at',
         'updated_by': 'updated_by',
-        'title': 'title',
+        'collaborators': 'collaborators',
+        'is_public': 'is_public',
+        'ooxml_documents': 'ooxml_documents',
         'outline': 'outline',
         'outline_history': 'outline_history',
-        'collaborators': 'collaborators',
         'revision': 'revision',
-        'ooxml_documents': 'ooxml_documents',
-        'is_public': 'is_public'
+        'title': 'title'
     }
 
-    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, title=None, outline=None, outline_history=None, collaborators=None, revision=None, ooxml_documents=None, is_public=None):  # noqa: E501
+    def __init__(self, created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, collaborators=None, is_public=None, ooxml_documents=None, outline=None, outline_history=None, revision=None, title=None):  # noqa: E501
         """Story - a model defined in OpenAPI"""  # noqa: E501
 
-        self._id = None
         self._created_at = None
         self._created_by = None
+        self._id = None
         self._updated_at = None
         self._updated_by = None
-        self._title = None
+        self._collaborators = None
+        self._is_public = None
+        self._ooxml_documents = None
         self._outline = None
         self._outline_history = None
-        self._collaborators = None
         self._revision = None
-        self._ooxml_documents = None
-        self._is_public = None
+        self._title = None
         self.discriminator = None
 
-        if id is not None:
-            self.id = id
         if created_at is not None:
             self.created_at = created_at
         if created_by is not None:
             self.created_by = created_by
+        if id is not None:
+            self.id = id
         if updated_at is not None:
             self.updated_at = updated_at
         if updated_by is not None:
             self.updated_by = updated_by
-        if title is not None:
-            self.title = title
+        if collaborators is not None:
+            self.collaborators = collaborators
+        if is_public is not None:
+            self.is_public = is_public
+        if ooxml_documents is not None:
+            self.ooxml_documents = ooxml_documents
         if outline is not None:
             self.outline = outline
         if outline_history is not None:
             self.outline_history = outline_history
-        if collaborators is not None:
-            self.collaborators = collaborators
         if revision is not None:
             self.revision = revision
-        if ooxml_documents is not None:
-            self.ooxml_documents = ooxml_documents
-        if is_public is not None:
-            self.is_public = is_public
-
-    @property
-    def id(self):
-        """Gets the id of this Story.  # noqa: E501
-
-
-        :return: The id of this Story.  # noqa: E501
-        :rtype: str
-        """
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        """Sets the id of this Story.
-
-
-        :param id: The id of this Story.  # noqa: E501
-        :type: str
-        """
-
-        self._id = id
+        if title is not None:
+            self.title = title
 
     @property
     def created_at(self):
@@ -166,6 +145,27 @@ class Story(object):
         self._created_by = created_by
 
     @property
+    def id(self):
+        """Gets the id of this Story.  # noqa: E501
+
+
+        :return: The id of this Story.  # noqa: E501
+        :rtype: str
+        """
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        """Sets the id of this Story.
+
+
+        :param id: The id of this Story.  # noqa: E501
+        :type: str
+        """
+
+        self._id = id
+
+    @property
     def updated_at(self):
         """Gets the updated_at of this Story.  # noqa: E501
 
@@ -208,25 +208,67 @@ class Story(object):
         self._updated_by = updated_by
 
     @property
-    def title(self):
-        """Gets the title of this Story.  # noqa: E501
+    def collaborators(self):
+        """Gets the collaborators of this Story.  # noqa: E501
 
 
-        :return: The title of this Story.  # noqa: E501
-        :rtype: str
+        :return: The collaborators of this Story.  # noqa: E501
+        :rtype: list[StoryCollaborator]
         """
-        return self._title
+        return self._collaborators
 
-    @title.setter
-    def title(self, title):
-        """Sets the title of this Story.
+    @collaborators.setter
+    def collaborators(self, collaborators):
+        """Sets the collaborators of this Story.
 
 
-        :param title: The title of this Story.  # noqa: E501
-        :type: str
+        :param collaborators: The collaborators of this Story.  # noqa: E501
+        :type: list[StoryCollaborator]
         """
 
-        self._title = title
+        self._collaborators = collaborators
+
+    @property
+    def is_public(self):
+        """Gets the is_public of this Story.  # noqa: E501
+
+
+        :return: The is_public of this Story.  # noqa: E501
+        :rtype: bool
+        """
+        return self._is_public
+
+    @is_public.setter
+    def is_public(self, is_public):
+        """Sets the is_public of this Story.
+
+
+        :param is_public: The is_public of this Story.  # noqa: E501
+        :type: bool
+        """
+
+        self._is_public = is_public
+
+    @property
+    def ooxml_documents(self):
+        """Gets the ooxml_documents of this Story.  # noqa: E501
+
+
+        :return: The ooxml_documents of this Story.  # noqa: E501
+        :rtype: list[OoxmlDocument]
+        """
+        return self._ooxml_documents
+
+    @ooxml_documents.setter
+    def ooxml_documents(self, ooxml_documents):
+        """Sets the ooxml_documents of this Story.
+
+
+        :param ooxml_documents: The ooxml_documents of this Story.  # noqa: E501
+        :type: list[OoxmlDocument]
+        """
+
+        self._ooxml_documents = ooxml_documents
 
     @property
     def outline(self):
@@ -271,27 +313,6 @@ class Story(object):
         self._outline_history = outline_history
 
     @property
-    def collaborators(self):
-        """Gets the collaborators of this Story.  # noqa: E501
-
-
-        :return: The collaborators of this Story.  # noqa: E501
-        :rtype: list[StoryCollaborator]
-        """
-        return self._collaborators
-
-    @collaborators.setter
-    def collaborators(self, collaborators):
-        """Sets the collaborators of this Story.
-
-
-        :param collaborators: The collaborators of this Story.  # noqa: E501
-        :type: list[StoryCollaborator]
-        """
-
-        self._collaborators = collaborators
-
-    @property
     def revision(self):
         """Gets the revision of this Story.  # noqa: E501
 
@@ -313,46 +334,25 @@ class Story(object):
         self._revision = revision
 
     @property
-    def ooxml_documents(self):
-        """Gets the ooxml_documents of this Story.  # noqa: E501
+    def title(self):
+        """Gets the title of this Story.  # noqa: E501
 
 
-        :return: The ooxml_documents of this Story.  # noqa: E501
-        :rtype: list[OoxmlDocument]
+        :return: The title of this Story.  # noqa: E501
+        :rtype: str
         """
-        return self._ooxml_documents
+        return self._title
 
-    @ooxml_documents.setter
-    def ooxml_documents(self, ooxml_documents):
-        """Sets the ooxml_documents of this Story.
-
-
-        :param ooxml_documents: The ooxml_documents of this Story.  # noqa: E501
-        :type: list[OoxmlDocument]
-        """
-
-        self._ooxml_documents = ooxml_documents
-
-    @property
-    def is_public(self):
-        """Gets the is_public of this Story.  # noqa: E501
+    @title.setter
+    def title(self, title):
+        """Sets the title of this Story.
 
 
-        :return: The is_public of this Story.  # noqa: E501
-        :rtype: bool
-        """
-        return self._is_public
-
-    @is_public.setter
-    def is_public(self, is_public):
-        """Sets the is_public of this Story.
-
-
-        :param is_public: The is_public of this Story.  # noqa: E501
-        :type: bool
+        :param title: The title of this Story.  # noqa: E501
+        :type: str
         """
 
-        self._is_public = is_public
+        self._title = title
 
     def to_dict(self):
         """Returns the model properties as a dict"""

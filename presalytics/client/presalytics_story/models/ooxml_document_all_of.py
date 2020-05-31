@@ -31,52 +31,31 @@ class OoxmlDocumentAllOf(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'story_id': 'str',
         'delete_target_on_story_delete': 'bool',
-        'ooxml_automation_id': 'str'
+        'ooxml_automation_id': 'str',
+        'story_id': 'str'
     }
 
     attribute_map = {
-        'story_id': 'story_id',
         'delete_target_on_story_delete': 'delete_target_on_story_delete',
-        'ooxml_automation_id': 'ooxml_automation_id'
+        'ooxml_automation_id': 'ooxml_automation_id',
+        'story_id': 'story_id'
     }
 
-    def __init__(self, story_id=None, delete_target_on_story_delete=None, ooxml_automation_id=None):  # noqa: E501
+    def __init__(self, delete_target_on_story_delete=None, ooxml_automation_id=None, story_id=None):  # noqa: E501
         """OoxmlDocumentAllOf - a model defined in OpenAPI"""  # noqa: E501
 
-        self._story_id = None
         self._delete_target_on_story_delete = None
         self._ooxml_automation_id = None
+        self._story_id = None
         self.discriminator = None
 
-        if story_id is not None:
-            self.story_id = story_id
         if delete_target_on_story_delete is not None:
             self.delete_target_on_story_delete = delete_target_on_story_delete
         if ooxml_automation_id is not None:
             self.ooxml_automation_id = ooxml_automation_id
-
-    @property
-    def story_id(self):
-        """Gets the story_id of this OoxmlDocumentAllOf.  # noqa: E501
-
-
-        :return: The story_id of this OoxmlDocumentAllOf.  # noqa: E501
-        :rtype: str
-        """
-        return self._story_id
-
-    @story_id.setter
-    def story_id(self, story_id):
-        """Sets the story_id of this OoxmlDocumentAllOf.
-
-
-        :param story_id: The story_id of this OoxmlDocumentAllOf.  # noqa: E501
-        :type: str
-        """
-
-        self._story_id = story_id
+        if story_id is not None:
+            self.story_id = story_id
 
     @property
     def delete_target_on_story_delete(self):
@@ -119,6 +98,27 @@ class OoxmlDocumentAllOf(object):
         """
 
         self._ooxml_automation_id = ooxml_automation_id
+
+    @property
+    def story_id(self):
+        """Gets the story_id of this OoxmlDocumentAllOf.  # noqa: E501
+
+
+        :return: The story_id of this OoxmlDocumentAllOf.  # noqa: E501
+        :rtype: str
+        """
+        return self._story_id
+
+    @story_id.setter
+    def story_id(self, story_id):
+        """Sets the story_id of this OoxmlDocumentAllOf.
+
+
+        :param story_id: The story_id of this OoxmlDocumentAllOf.  # noqa: E501
+        :type: str
+        """
+
+        self._story_id = story_id
 
     def to_dict(self):
         """Returns the model properties as a dict"""

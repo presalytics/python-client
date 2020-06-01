@@ -56,6 +56,7 @@ class ValidationError(PresalyticsBaseException):
 
 class ApiError(PresalyticsBaseException):
     def __init__(self, message=None, status_code=None):
+        self.status_code = status_code
         if not message:
             if not status_code:
                 message = "A error occured while commuicating with the presalytics API.  Please Check your configuration values and try again."

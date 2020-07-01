@@ -2,10 +2,13 @@ import unittest
 import os
 import json
 import lxml
+import base64
+import io
 import presalytics.story.revealer
 import presalytics.story.outline
 import presalytics.lib.tools.component_tools
 import presalytics.lib.widgets.ooxml_editors
+
 
 class TestStory(unittest.TestCase):
     """
@@ -97,6 +100,53 @@ class TestStory(unittest.TestCase):
 
         for _, val in params.items():
             self.assertTrue(val in updates)
+
+    def upload_from_json(self):
+        from presalytics.client.presalytics_story import FileUpload
+
+        test_file = os.path.join(os.path.dirname(__file__), 'files', 'bubblechart.pptx')
+        with open(test_file, 'rb') as f:
+            bin = f.read()
+            content_length = len(bin)
+            data = base64.b64encode(bin)
+
+        client = presalytics.Client()
+        file = FileUpload(
+            content_length=content_length,
+            file_name="test.pptx",
+            mimetype='application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            file=str(data)
+        )
+        r = client.story.story_post_file(file_upload=file)
+        self.assertEqual(r.status_code, 200)
+
+    def test_encoder(self):
+        from werkzeug.datastructures import FileStorage
+        test_file = os.path.join(os.path.dirname(__file__), 'files', 'bubblechart.pptx')
+        with open(test_file, 'rb') as f:
+            bin = f.read()
+            content_length = len(bin)
+            data = base64.b64encode(bin)
+        print(bin)
+        test_out = os.path.join(os.path.dirname(__file__), 'files', 'test-out.pptx')
+        try:
+            os.remove(test_out)
+        except:
+            pass
+        
+        by = io.BytesIO(base64.b64decode(data))
+
+        print(by.read())
+        file = FileStorage(
+            stream=io.BytesIO(data),
+            filename='test-out.pptx',
+            content_type='application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            content_length=content_length
+        )
+
+        file.save(test_out)
+
+                
 
 
 

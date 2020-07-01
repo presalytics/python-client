@@ -10,6 +10,8 @@ import json
 import environs
 import wsgi_microservice_middleware
 import functools
+import six
+import mimetypes
 import presalytics
 import presalytics.lib.exceptions
 import presalytics.lib.constants as cnst
@@ -18,7 +20,7 @@ import presalytics.client.oidc
 import presalytics.client.presalytics_ooxml_automation.api_client
 import presalytics.client.presalytics_story.api_client
 import presalytics.client.presalytics_doc_converter.api_client
-import six
+
 from uuid import uuid4
 from werkzeug.datastructures import FileStorage
 

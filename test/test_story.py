@@ -108,8 +108,8 @@ class TestStory(unittest.TestCase):
         with open(test_file, 'rb') as f:
             bin = f.read()
             content_length = len(bin)
-            data = base64.b64encode(bin)
-
+            data = base64.b64encode(bin).decode('UTF-8')
+            
         client = presalytics.Client()
         file = FileUpload(
             content_length=content_length,
@@ -117,8 +117,9 @@ class TestStory(unittest.TestCase):
             mimetype='application/vnd.openxmlformats-officedocument.presentationml.presentation',
             file=str(data)
         )
-        r = client.story.story_post_file(file_upload=file)
-        self.assertEqual(r.status_code, 200)
+        story = client.story.story_post_file_json(file_upload=file)
+        from presalytics.client.presalytics_story import Story
+        self.assertTrue(type(story) is Story)
 
     def test_encoder(self):
         from werkzeug.datastructures import FileStorage
@@ -127,7 +128,6 @@ class TestStory(unittest.TestCase):
             bin = f.read()
             content_length = len(bin)
             data = base64.b64encode(bin)
-        print(bin)
         test_out = os.path.join(os.path.dirname(__file__), 'files', 'test-out.pptx')
         try:
             os.remove(test_out)
@@ -135,8 +135,6 @@ class TestStory(unittest.TestCase):
             pass
         
         by = io.BytesIO(base64.b64decode(data))
-
-        print(by.read())
         file = FileStorage(
             stream=io.BytesIO(data),
             filename='test-out.pptx',

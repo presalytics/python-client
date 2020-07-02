@@ -479,7 +479,6 @@ def main():
                     _open_page(story_id, "manage")
                 if args.show_story:
                     story = presalytics.lib.tools.workflows.get_story(story_id)
-                    print(yaml.dump(story))
         
             except webbrowser.Error:
                 logger.error("This environment does not have a webrowser loaded for use with python.")

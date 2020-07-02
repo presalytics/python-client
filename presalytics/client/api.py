@@ -473,6 +473,7 @@ class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMix
                 else:
                     if type(v) is FileStorage:
                         filename = v.filename
+                        v.stream.seek(0)
                         filedata = v.stream.read()
                     else:
                         raise AttributeError("Invalid File Object")

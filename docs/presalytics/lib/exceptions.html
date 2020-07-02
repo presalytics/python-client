@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L0-L167" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L0-L168" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import typing
 import logging
@@ -83,6 +83,7 @@ class ValidationError(PresalyticsBaseException):
 
 class ApiError(PresalyticsBaseException):
     def __init__(self, message=None, status_code=None):
+        self.status_code = status_code
         if not message:
             if not status_code:
                 message = &#34;A error occured while commuicating with the presalytics API.  Please Check your configuration values and try again.&#34;
@@ -374,10 +375,11 @@ class RenderExceptionHandler(object):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L57-L71" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L57-L72" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ApiError(PresalyticsBaseException):
     def __init__(self, message=None, status_code=None):
+        self.status_code = status_code
         if not message:
             if not status_code:
                 message = &#34;A error occured while commuicating with the presalytics API.  Please Check your configuration values and try again.&#34;
@@ -408,7 +410,7 @@ class RenderExceptionHandler(object):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L74-L78" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L75-L79" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class InvalidConfigurationError(PresalyticsBaseException):
     def __init__(self, message=None):
@@ -432,7 +434,7 @@ class RenderExceptionHandler(object):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L81-L86" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L82-L87" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class RegistryError(PresalyticsBaseException):
      def __init__(self, registry, message=None):
@@ -457,7 +459,7 @@ class RenderExceptionHandler(object):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L89-L93" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L90-L94" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class InvalidArgumentException(PresalyticsBaseException):
     def __init__(self, message=None):
@@ -481,7 +483,7 @@ class RenderExceptionHandler(object):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L95-L112" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L96-L113" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ApiException(PresalyticsBaseException):
     def __init__(self, default_exception=None):
@@ -518,7 +520,7 @@ class RenderExceptionHandler(object):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L115-L167" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L116-L168" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class RenderExceptionHandler(object):
     def __init__(self, exception: Exception, target_type=&#34;widget&#34;, traceback=None):
@@ -584,7 +586,7 @@ class RenderExceptionHandler(object):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L135-L140" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L136-L141" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_source_frame(self, tb):
     next = tb.tb_next
@@ -602,7 +604,7 @@ class RenderExceptionHandler(object):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L143-L164" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L144-L165" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render_exception(self):
     container = lxml.html.Element(&#34;div&#34;, {
@@ -636,7 +638,7 @@ class RenderExceptionHandler(object):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L166-L167" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L167-L168" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def to_html(self):
     return self.render_exception()</code></pre>

@@ -63,82 +63,61 @@ class StoryOutlineHistory(object):
                             and the value is json key in definition.
     &#34;&#34;&#34;
     openapi_types = {
-        &#39;id&#39;: &#39;str&#39;,
         &#39;created_at&#39;: &#39;datetime&#39;,
         &#39;created_by&#39;: &#39;str&#39;,
+        &#39;id&#39;: &#39;str&#39;,
         &#39;updated_at&#39;: &#39;datetime&#39;,
         &#39;updated_by&#39;: &#39;str&#39;,
-        &#39;story_id&#39;: &#39;str&#39;,
-        &#39;revision_number&#39;: &#39;int&#39;,
+        &#39;collaborator_user_id&#39;: &#39;str&#39;,
         &#39;outline&#39;: &#39;str&#39;,
-        &#39;collaborator_user_id&#39;: &#39;str&#39;
+        &#39;revision_number&#39;: &#39;int&#39;,
+        &#39;story_id&#39;: &#39;str&#39;
     }
 
     attribute_map = {
-        &#39;id&#39;: &#39;id&#39;,
         &#39;created_at&#39;: &#39;created_at&#39;,
         &#39;created_by&#39;: &#39;created_by&#39;,
+        &#39;id&#39;: &#39;id&#39;,
         &#39;updated_at&#39;: &#39;updated_at&#39;,
         &#39;updated_by&#39;: &#39;updated_by&#39;,
-        &#39;story_id&#39;: &#39;story_id&#39;,
-        &#39;revision_number&#39;: &#39;revision_number&#39;,
+        &#39;collaborator_user_id&#39;: &#39;collaborator_user_id&#39;,
         &#39;outline&#39;: &#39;outline&#39;,
-        &#39;collaborator_user_id&#39;: &#39;collaborator_user_id&#39;
+        &#39;revision_number&#39;: &#39;revision_number&#39;,
+        &#39;story_id&#39;: &#39;story_id&#39;
     }
 
-    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, story_id=None, revision_number=None, outline=None, collaborator_user_id=None):  # noqa: E501
+    def __init__(self, created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, collaborator_user_id=None, outline=None, revision_number=None, story_id=None):  # noqa: E501
         &#34;&#34;&#34;StoryOutlineHistory - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
 
-        self._id = None
         self._created_at = None
         self._created_by = None
+        self._id = None
         self._updated_at = None
         self._updated_by = None
-        self._story_id = None
-        self._revision_number = None
-        self._outline = None
         self._collaborator_user_id = None
+        self._outline = None
+        self._revision_number = None
+        self._story_id = None
         self.discriminator = None
 
-        if id is not None:
-            self.id = id
         if created_at is not None:
             self.created_at = created_at
         if created_by is not None:
             self.created_by = created_by
+        if id is not None:
+            self.id = id
         if updated_at is not None:
             self.updated_at = updated_at
         if updated_by is not None:
             self.updated_by = updated_by
-        if story_id is not None:
-            self.story_id = story_id
-        if revision_number is not None:
-            self.revision_number = revision_number
-        if outline is not None:
-            self.outline = outline
         if collaborator_user_id is not None:
             self.collaborator_user_id = collaborator_user_id
-
-    @property
-    def id(self):
-        &#34;&#34;&#34;Gets the id of this StoryOutlineHistory.  # noqa: E501
-
-
-        :return: The id of this StoryOutlineHistory.  # noqa: E501
-        :rtype: str
-        &#34;&#34;&#34;
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        &#34;&#34;&#34;Sets the id of this StoryOutlineHistory.
-
-
-        :param id: The id of this StoryOutlineHistory.  # noqa: E501
-        :type: str
-        &#34;&#34;&#34;
-
-        self._id = id
+        if outline is not None:
+            self.outline = outline
+        if revision_number is not None:
+            self.revision_number = revision_number
+        if story_id is not None:
+            self.story_id = story_id
 
     @property
     def created_at(self):
@@ -183,6 +162,27 @@ class StoryOutlineHistory(object):
         self._created_by = created_by
 
     @property
+    def id(self):
+        &#34;&#34;&#34;Gets the id of this StoryOutlineHistory.  # noqa: E501
+
+
+        :return: The id of this StoryOutlineHistory.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        &#34;&#34;&#34;Sets the id of this StoryOutlineHistory.
+
+
+        :param id: The id of this StoryOutlineHistory.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._id = id
+
+    @property
     def updated_at(self):
         &#34;&#34;&#34;Gets the updated_at of this StoryOutlineHistory.  # noqa: E501
 
@@ -225,46 +225,25 @@ class StoryOutlineHistory(object):
         self._updated_by = updated_by
 
     @property
-    def story_id(self):
-        &#34;&#34;&#34;Gets the story_id of this StoryOutlineHistory.  # noqa: E501
+    def collaborator_user_id(self):
+        &#34;&#34;&#34;Gets the collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
 
 
-        :return: The story_id of this StoryOutlineHistory.  # noqa: E501
+        :return: The collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
         :rtype: str
         &#34;&#34;&#34;
-        return self._story_id
+        return self._collaborator_user_id
 
-    @story_id.setter
-    def story_id(self, story_id):
-        &#34;&#34;&#34;Sets the story_id of this StoryOutlineHistory.
+    @collaborator_user_id.setter
+    def collaborator_user_id(self, collaborator_user_id):
+        &#34;&#34;&#34;Sets the collaborator_user_id of this StoryOutlineHistory.
 
 
-        :param story_id: The story_id of this StoryOutlineHistory.  # noqa: E501
+        :param collaborator_user_id: The collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
         :type: str
         &#34;&#34;&#34;
 
-        self._story_id = story_id
-
-    @property
-    def revision_number(self):
-        &#34;&#34;&#34;Gets the revision_number of this StoryOutlineHistory.  # noqa: E501
-
-
-        :return: The revision_number of this StoryOutlineHistory.  # noqa: E501
-        :rtype: int
-        &#34;&#34;&#34;
-        return self._revision_number
-
-    @revision_number.setter
-    def revision_number(self, revision_number):
-        &#34;&#34;&#34;Sets the revision_number of this StoryOutlineHistory.
-
-
-        :param revision_number: The revision_number of this StoryOutlineHistory.  # noqa: E501
-        :type: int
-        &#34;&#34;&#34;
-
-        self._revision_number = revision_number
+        self._collaborator_user_id = collaborator_user_id
 
     @property
     def outline(self):
@@ -288,25 +267,46 @@ class StoryOutlineHistory(object):
         self._outline = outline
 
     @property
-    def collaborator_user_id(self):
-        &#34;&#34;&#34;Gets the collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
+    def revision_number(self):
+        &#34;&#34;&#34;Gets the revision_number of this StoryOutlineHistory.  # noqa: E501
 
 
-        :return: The collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
+        :return: The revision_number of this StoryOutlineHistory.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._revision_number
+
+    @revision_number.setter
+    def revision_number(self, revision_number):
+        &#34;&#34;&#34;Sets the revision_number of this StoryOutlineHistory.
+
+
+        :param revision_number: The revision_number of this StoryOutlineHistory.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._revision_number = revision_number
+
+    @property
+    def story_id(self):
+        &#34;&#34;&#34;Gets the story_id of this StoryOutlineHistory.  # noqa: E501
+
+
+        :return: The story_id of this StoryOutlineHistory.  # noqa: E501
         :rtype: str
         &#34;&#34;&#34;
-        return self._collaborator_user_id
+        return self._story_id
 
-    @collaborator_user_id.setter
-    def collaborator_user_id(self, collaborator_user_id):
-        &#34;&#34;&#34;Sets the collaborator_user_id of this StoryOutlineHistory.
+    @story_id.setter
+    def story_id(self, story_id):
+        &#34;&#34;&#34;Sets the story_id of this StoryOutlineHistory.
 
 
-        :param collaborator_user_id: The collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
+        :param story_id: The story_id of this StoryOutlineHistory.  # noqa: E501
         :type: str
         &#34;&#34;&#34;
 
-        self._collaborator_user_id = collaborator_user_id
+        self._story_id = story_id
 
     def to_dict(self):
         &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
@@ -363,7 +363,7 @@ class StoryOutlineHistory(object):
 <dl>
 <dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory"><code class="flex name class">
 <span>class <span class="ident">StoryOutlineHistory</span></span>
-<span>(</span><span>id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, story_id=None, revision_number=None, outline=None, collaborator_user_id=None)</span>
+<span>(</span><span>created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, collaborator_user_id=None, outline=None, revision_number=None, story_id=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>NOTE: This class is auto generated by OpenAPI Generator.
@@ -390,82 +390,61 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
                             and the value is json key in definition.
     &#34;&#34;&#34;
     openapi_types = {
-        &#39;id&#39;: &#39;str&#39;,
         &#39;created_at&#39;: &#39;datetime&#39;,
         &#39;created_by&#39;: &#39;str&#39;,
+        &#39;id&#39;: &#39;str&#39;,
         &#39;updated_at&#39;: &#39;datetime&#39;,
         &#39;updated_by&#39;: &#39;str&#39;,
-        &#39;story_id&#39;: &#39;str&#39;,
-        &#39;revision_number&#39;: &#39;int&#39;,
+        &#39;collaborator_user_id&#39;: &#39;str&#39;,
         &#39;outline&#39;: &#39;str&#39;,
-        &#39;collaborator_user_id&#39;: &#39;str&#39;
+        &#39;revision_number&#39;: &#39;int&#39;,
+        &#39;story_id&#39;: &#39;str&#39;
     }
 
     attribute_map = {
-        &#39;id&#39;: &#39;id&#39;,
         &#39;created_at&#39;: &#39;created_at&#39;,
         &#39;created_by&#39;: &#39;created_by&#39;,
+        &#39;id&#39;: &#39;id&#39;,
         &#39;updated_at&#39;: &#39;updated_at&#39;,
         &#39;updated_by&#39;: &#39;updated_by&#39;,
-        &#39;story_id&#39;: &#39;story_id&#39;,
-        &#39;revision_number&#39;: &#39;revision_number&#39;,
+        &#39;collaborator_user_id&#39;: &#39;collaborator_user_id&#39;,
         &#39;outline&#39;: &#39;outline&#39;,
-        &#39;collaborator_user_id&#39;: &#39;collaborator_user_id&#39;
+        &#39;revision_number&#39;: &#39;revision_number&#39;,
+        &#39;story_id&#39;: &#39;story_id&#39;
     }
 
-    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, story_id=None, revision_number=None, outline=None, collaborator_user_id=None):  # noqa: E501
+    def __init__(self, created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, collaborator_user_id=None, outline=None, revision_number=None, story_id=None):  # noqa: E501
         &#34;&#34;&#34;StoryOutlineHistory - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
 
-        self._id = None
         self._created_at = None
         self._created_by = None
+        self._id = None
         self._updated_at = None
         self._updated_by = None
-        self._story_id = None
-        self._revision_number = None
-        self._outline = None
         self._collaborator_user_id = None
+        self._outline = None
+        self._revision_number = None
+        self._story_id = None
         self.discriminator = None
 
-        if id is not None:
-            self.id = id
         if created_at is not None:
             self.created_at = created_at
         if created_by is not None:
             self.created_by = created_by
+        if id is not None:
+            self.id = id
         if updated_at is not None:
             self.updated_at = updated_at
         if updated_by is not None:
             self.updated_by = updated_by
-        if story_id is not None:
-            self.story_id = story_id
-        if revision_number is not None:
-            self.revision_number = revision_number
-        if outline is not None:
-            self.outline = outline
         if collaborator_user_id is not None:
             self.collaborator_user_id = collaborator_user_id
-
-    @property
-    def id(self):
-        &#34;&#34;&#34;Gets the id of this StoryOutlineHistory.  # noqa: E501
-
-
-        :return: The id of this StoryOutlineHistory.  # noqa: E501
-        :rtype: str
-        &#34;&#34;&#34;
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        &#34;&#34;&#34;Sets the id of this StoryOutlineHistory.
-
-
-        :param id: The id of this StoryOutlineHistory.  # noqa: E501
-        :type: str
-        &#34;&#34;&#34;
-
-        self._id = id
+        if outline is not None:
+            self.outline = outline
+        if revision_number is not None:
+            self.revision_number = revision_number
+        if story_id is not None:
+            self.story_id = story_id
 
     @property
     def created_at(self):
@@ -510,6 +489,27 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._created_by = created_by
 
     @property
+    def id(self):
+        &#34;&#34;&#34;Gets the id of this StoryOutlineHistory.  # noqa: E501
+
+
+        :return: The id of this StoryOutlineHistory.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        &#34;&#34;&#34;Sets the id of this StoryOutlineHistory.
+
+
+        :param id: The id of this StoryOutlineHistory.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._id = id
+
+    @property
     def updated_at(self):
         &#34;&#34;&#34;Gets the updated_at of this StoryOutlineHistory.  # noqa: E501
 
@@ -552,46 +552,25 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._updated_by = updated_by
 
     @property
-    def story_id(self):
-        &#34;&#34;&#34;Gets the story_id of this StoryOutlineHistory.  # noqa: E501
+    def collaborator_user_id(self):
+        &#34;&#34;&#34;Gets the collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
 
 
-        :return: The story_id of this StoryOutlineHistory.  # noqa: E501
+        :return: The collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
         :rtype: str
         &#34;&#34;&#34;
-        return self._story_id
+        return self._collaborator_user_id
 
-    @story_id.setter
-    def story_id(self, story_id):
-        &#34;&#34;&#34;Sets the story_id of this StoryOutlineHistory.
+    @collaborator_user_id.setter
+    def collaborator_user_id(self, collaborator_user_id):
+        &#34;&#34;&#34;Sets the collaborator_user_id of this StoryOutlineHistory.
 
 
-        :param story_id: The story_id of this StoryOutlineHistory.  # noqa: E501
+        :param collaborator_user_id: The collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
         :type: str
         &#34;&#34;&#34;
 
-        self._story_id = story_id
-
-    @property
-    def revision_number(self):
-        &#34;&#34;&#34;Gets the revision_number of this StoryOutlineHistory.  # noqa: E501
-
-
-        :return: The revision_number of this StoryOutlineHistory.  # noqa: E501
-        :rtype: int
-        &#34;&#34;&#34;
-        return self._revision_number
-
-    @revision_number.setter
-    def revision_number(self, revision_number):
-        &#34;&#34;&#34;Sets the revision_number of this StoryOutlineHistory.
-
-
-        :param revision_number: The revision_number of this StoryOutlineHistory.  # noqa: E501
-        :type: int
-        &#34;&#34;&#34;
-
-        self._revision_number = revision_number
+        self._collaborator_user_id = collaborator_user_id
 
     @property
     def outline(self):
@@ -615,25 +594,46 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._outline = outline
 
     @property
-    def collaborator_user_id(self):
-        &#34;&#34;&#34;Gets the collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
+    def revision_number(self):
+        &#34;&#34;&#34;Gets the revision_number of this StoryOutlineHistory.  # noqa: E501
 
 
-        :return: The collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
+        :return: The revision_number of this StoryOutlineHistory.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._revision_number
+
+    @revision_number.setter
+    def revision_number(self, revision_number):
+        &#34;&#34;&#34;Sets the revision_number of this StoryOutlineHistory.
+
+
+        :param revision_number: The revision_number of this StoryOutlineHistory.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._revision_number = revision_number
+
+    @property
+    def story_id(self):
+        &#34;&#34;&#34;Gets the story_id of this StoryOutlineHistory.  # noqa: E501
+
+
+        :return: The story_id of this StoryOutlineHistory.  # noqa: E501
         :rtype: str
         &#34;&#34;&#34;
-        return self._collaborator_user_id
+        return self._story_id
 
-    @collaborator_user_id.setter
-    def collaborator_user_id(self, collaborator_user_id):
-        &#34;&#34;&#34;Sets the collaborator_user_id of this StoryOutlineHistory.
+    @story_id.setter
+    def story_id(self, story_id):
+        &#34;&#34;&#34;Sets the story_id of this StoryOutlineHistory.
 
 
-        :param collaborator_user_id: The collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
+        :param story_id: The story_id of this StoryOutlineHistory.  # noqa: E501
         :type: str
         &#34;&#34;&#34;
 
-        self._collaborator_user_id = collaborator_user_id
+        self._story_id = story_id
 
     def to_dict(self):
         &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
@@ -711,29 +711,6 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.id"><code class="name">var <span class="ident">id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the id of this StoryOutlineHistory.
-# noqa: E501</p>
-<p>:return: The id of this StoryOutlineHistory.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L90-L98" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def id(self):
-    &#34;&#34;&#34;Gets the id of this StoryOutlineHistory.  # noqa: E501
-
-
-    :return: The id of this StoryOutlineHistory.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._id</code></pre>
-</details>
-</dd>
 <dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.created_at"><code class="name">var <span class="ident">created_at</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the created_at of this StoryOutlineHistory.
@@ -744,7 +721,7 @@ def id(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L111-L119" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L90-L98" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def created_at(self):
@@ -767,7 +744,7 @@ def created_at(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L132-L140" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L111-L119" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def created_by(self):
@@ -778,6 +755,29 @@ def created_by(self):
     :rtype: str
     &#34;&#34;&#34;
     return self._created_by</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the id of this StoryOutlineHistory.
+# noqa: E501</p>
+<p>:return: The id of this StoryOutlineHistory.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L132-L140" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def id(self):
+    &#34;&#34;&#34;Gets the id of this StoryOutlineHistory.  # noqa: E501
+
+
+    :return: The id of this StoryOutlineHistory.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._id</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.updated_at"><code class="name">var <span class="ident">updated_at</span></code></dt>
@@ -826,11 +826,11 @@ def updated_by(self):
     return self._updated_by</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.story_id"><code class="name">var <span class="ident">story_id</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.collaborator_user_id"><code class="name">var <span class="ident">collaborator_user_id</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the story_id of this StoryOutlineHistory.
+<section class="desc"><p>Gets the collaborator_user_id of this StoryOutlineHistory.
 # noqa: E501</p>
-<p>:return: The story_id of this StoryOutlineHistory.
+<p>:return: The collaborator_user_id of this StoryOutlineHistory.
 # noqa: E501
 :rtype: str</p></section>
 <details class="source">
@@ -839,37 +839,14 @@ def updated_by(self):
 <a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L195-L203" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def story_id(self):
-    &#34;&#34;&#34;Gets the story_id of this StoryOutlineHistory.  # noqa: E501
+def collaborator_user_id(self):
+    &#34;&#34;&#34;Gets the collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
 
 
-    :return: The story_id of this StoryOutlineHistory.  # noqa: E501
+    :return: The collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
     :rtype: str
     &#34;&#34;&#34;
-    return self._story_id</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.revision_number"><code class="name">var <span class="ident">revision_number</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the revision_number of this StoryOutlineHistory.
-# noqa: E501</p>
-<p>:return: The revision_number of this StoryOutlineHistory.
-# noqa: E501
-:rtype: int</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L216-L224" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def revision_number(self):
-    &#34;&#34;&#34;Gets the revision_number of this StoryOutlineHistory.  # noqa: E501
-
-
-    :return: The revision_number of this StoryOutlineHistory.  # noqa: E501
-    :rtype: int
-    &#34;&#34;&#34;
-    return self._revision_number</code></pre>
+    return self._collaborator_user_id</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.outline"><code class="name">var <span class="ident">outline</span></code></dt>
@@ -882,7 +859,7 @@ def revision_number(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L237-L245" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L216-L224" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def outline(self):
@@ -895,11 +872,34 @@ def outline(self):
     return self._outline</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.collaborator_user_id"><code class="name">var <span class="ident">collaborator_user_id</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.revision_number"><code class="name">var <span class="ident">revision_number</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the collaborator_user_id of this StoryOutlineHistory.
+<section class="desc"><p>Gets the revision_number of this StoryOutlineHistory.
 # noqa: E501</p>
-<p>:return: The collaborator_user_id of this StoryOutlineHistory.
+<p>:return: The revision_number of this StoryOutlineHistory.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L237-L245" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def revision_number(self):
+    &#34;&#34;&#34;Gets the revision_number of this StoryOutlineHistory.  # noqa: E501
+
+
+    :return: The revision_number of this StoryOutlineHistory.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._revision_number</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.story_id"><code class="name">var <span class="ident">story_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the story_id of this StoryOutlineHistory.
+# noqa: E501</p>
+<p>:return: The story_id of this StoryOutlineHistory.
 # noqa: E501
 :rtype: str</p></section>
 <details class="source">
@@ -908,14 +908,14 @@ def outline(self):
 <a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_outline_history.py#L258-L266" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def collaborator_user_id(self):
-    &#34;&#34;&#34;Gets the collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
+def story_id(self):
+    &#34;&#34;&#34;Gets the story_id of this StoryOutlineHistory.  # noqa: E501
 
 
-    :return: The collaborator_user_id of this StoryOutlineHistory.  # noqa: E501
+    :return: The story_id of this StoryOutlineHistory.  # noqa: E501
     :rtype: str
     &#34;&#34;&#34;
-    return self._collaborator_user_id</code></pre>
+    return self._story_id</code></pre>
 </details>
 </dd>
 </dl>
@@ -994,15 +994,15 @@ def collaborator_user_id(self):
 <ul class="">
 <li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.to_dict" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.to_str" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.to_str">to_str</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.id" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.id">id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.created_at" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.created_at">created_at</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.created_by" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.created_by">created_by</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.id" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.id">id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.updated_at" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.updated_at">updated_at</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.updated_by" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.updated_by">updated_by</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.story_id" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.story_id">story_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.revision_number" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.revision_number">revision_number</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.outline" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.outline">outline</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.collaborator_user_id" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.collaborator_user_id">collaborator_user_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.outline" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.outline">outline</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.revision_number" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.revision_number">revision_number</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.story_id" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.story_id">story_id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.openapi_types" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.openapi_types">openapi_types</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.attribute_map" href="/python-client/presalytics/client/presalytics_story/models/story_outline_history.html#presalytics.client.presalytics_story.models.story_outline_history.StoryOutlineHistory.attribute_map">attribute_map</a></code></li>
 </ul>

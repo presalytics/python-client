@@ -63,72 +63,114 @@ class StoryAllOf(object):
                             and the value is json key in definition.
     &#34;&#34;&#34;
     openapi_types = {
-        &#39;title&#39;: &#39;str&#39;,
+        &#39;collaborators&#39;: &#39;list[StoryCollaborator]&#39;,
+        &#39;is_public&#39;: &#39;bool&#39;,
+        &#39;ooxml_documents&#39;: &#39;list[OoxmlDocument]&#39;,
         &#39;outline&#39;: &#39;str&#39;,
         &#39;outline_history&#39;: &#39;list[StoryOutlineHistory]&#39;,
-        &#39;collaborators&#39;: &#39;list[StoryCollaborator]&#39;,
         &#39;revision&#39;: &#39;int&#39;,
-        &#39;ooxml_documents&#39;: &#39;list[OoxmlDocument]&#39;,
-        &#39;is_public&#39;: &#39;bool&#39;
+        &#39;title&#39;: &#39;str&#39;
     }
 
     attribute_map = {
-        &#39;title&#39;: &#39;title&#39;,
+        &#39;collaborators&#39;: &#39;collaborators&#39;,
+        &#39;is_public&#39;: &#39;is_public&#39;,
+        &#39;ooxml_documents&#39;: &#39;ooxml_documents&#39;,
         &#39;outline&#39;: &#39;outline&#39;,
         &#39;outline_history&#39;: &#39;outline_history&#39;,
-        &#39;collaborators&#39;: &#39;collaborators&#39;,
         &#39;revision&#39;: &#39;revision&#39;,
-        &#39;ooxml_documents&#39;: &#39;ooxml_documents&#39;,
-        &#39;is_public&#39;: &#39;is_public&#39;
+        &#39;title&#39;: &#39;title&#39;
     }
 
-    def __init__(self, title=None, outline=None, outline_history=None, collaborators=None, revision=None, ooxml_documents=None, is_public=None):  # noqa: E501
+    def __init__(self, collaborators=None, is_public=None, ooxml_documents=None, outline=None, outline_history=None, revision=None, title=None):  # noqa: E501
         &#34;&#34;&#34;StoryAllOf - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
 
-        self._title = None
+        self._collaborators = None
+        self._is_public = None
+        self._ooxml_documents = None
         self._outline = None
         self._outline_history = None
-        self._collaborators = None
         self._revision = None
-        self._ooxml_documents = None
-        self._is_public = None
+        self._title = None
         self.discriminator = None
 
-        if title is not None:
-            self.title = title
+        if collaborators is not None:
+            self.collaborators = collaborators
+        if is_public is not None:
+            self.is_public = is_public
+        if ooxml_documents is not None:
+            self.ooxml_documents = ooxml_documents
         if outline is not None:
             self.outline = outline
         if outline_history is not None:
             self.outline_history = outline_history
-        if collaborators is not None:
-            self.collaborators = collaborators
         if revision is not None:
             self.revision = revision
-        if ooxml_documents is not None:
-            self.ooxml_documents = ooxml_documents
-        if is_public is not None:
-            self.is_public = is_public
+        if title is not None:
+            self.title = title
 
     @property
-    def title(self):
-        &#34;&#34;&#34;Gets the title of this StoryAllOf.  # noqa: E501
+    def collaborators(self):
+        &#34;&#34;&#34;Gets the collaborators of this StoryAllOf.  # noqa: E501
 
 
-        :return: The title of this StoryAllOf.  # noqa: E501
-        :rtype: str
+        :return: The collaborators of this StoryAllOf.  # noqa: E501
+        :rtype: list[StoryCollaborator]
         &#34;&#34;&#34;
-        return self._title
+        return self._collaborators
 
-    @title.setter
-    def title(self, title):
-        &#34;&#34;&#34;Sets the title of this StoryAllOf.
+    @collaborators.setter
+    def collaborators(self, collaborators):
+        &#34;&#34;&#34;Sets the collaborators of this StoryAllOf.
 
 
-        :param title: The title of this StoryAllOf.  # noqa: E501
-        :type: str
+        :param collaborators: The collaborators of this StoryAllOf.  # noqa: E501
+        :type: list[StoryCollaborator]
         &#34;&#34;&#34;
 
-        self._title = title
+        self._collaborators = collaborators
+
+    @property
+    def is_public(self):
+        &#34;&#34;&#34;Gets the is_public of this StoryAllOf.  # noqa: E501
+
+
+        :return: The is_public of this StoryAllOf.  # noqa: E501
+        :rtype: bool
+        &#34;&#34;&#34;
+        return self._is_public
+
+    @is_public.setter
+    def is_public(self, is_public):
+        &#34;&#34;&#34;Sets the is_public of this StoryAllOf.
+
+
+        :param is_public: The is_public of this StoryAllOf.  # noqa: E501
+        :type: bool
+        &#34;&#34;&#34;
+
+        self._is_public = is_public
+
+    @property
+    def ooxml_documents(self):
+        &#34;&#34;&#34;Gets the ooxml_documents of this StoryAllOf.  # noqa: E501
+
+
+        :return: The ooxml_documents of this StoryAllOf.  # noqa: E501
+        :rtype: list[OoxmlDocument]
+        &#34;&#34;&#34;
+        return self._ooxml_documents
+
+    @ooxml_documents.setter
+    def ooxml_documents(self, ooxml_documents):
+        &#34;&#34;&#34;Sets the ooxml_documents of this StoryAllOf.
+
+
+        :param ooxml_documents: The ooxml_documents of this StoryAllOf.  # noqa: E501
+        :type: list[OoxmlDocument]
+        &#34;&#34;&#34;
+
+        self._ooxml_documents = ooxml_documents
 
     @property
     def outline(self):
@@ -173,27 +215,6 @@ class StoryAllOf(object):
         self._outline_history = outline_history
 
     @property
-    def collaborators(self):
-        &#34;&#34;&#34;Gets the collaborators of this StoryAllOf.  # noqa: E501
-
-
-        :return: The collaborators of this StoryAllOf.  # noqa: E501
-        :rtype: list[StoryCollaborator]
-        &#34;&#34;&#34;
-        return self._collaborators
-
-    @collaborators.setter
-    def collaborators(self, collaborators):
-        &#34;&#34;&#34;Sets the collaborators of this StoryAllOf.
-
-
-        :param collaborators: The collaborators of this StoryAllOf.  # noqa: E501
-        :type: list[StoryCollaborator]
-        &#34;&#34;&#34;
-
-        self._collaborators = collaborators
-
-    @property
     def revision(self):
         &#34;&#34;&#34;Gets the revision of this StoryAllOf.  # noqa: E501
 
@@ -215,46 +236,25 @@ class StoryAllOf(object):
         self._revision = revision
 
     @property
-    def ooxml_documents(self):
-        &#34;&#34;&#34;Gets the ooxml_documents of this StoryAllOf.  # noqa: E501
+    def title(self):
+        &#34;&#34;&#34;Gets the title of this StoryAllOf.  # noqa: E501
 
 
-        :return: The ooxml_documents of this StoryAllOf.  # noqa: E501
-        :rtype: list[OoxmlDocument]
+        :return: The title of this StoryAllOf.  # noqa: E501
+        :rtype: str
         &#34;&#34;&#34;
-        return self._ooxml_documents
+        return self._title
 
-    @ooxml_documents.setter
-    def ooxml_documents(self, ooxml_documents):
-        &#34;&#34;&#34;Sets the ooxml_documents of this StoryAllOf.
-
-
-        :param ooxml_documents: The ooxml_documents of this StoryAllOf.  # noqa: E501
-        :type: list[OoxmlDocument]
-        &#34;&#34;&#34;
-
-        self._ooxml_documents = ooxml_documents
-
-    @property
-    def is_public(self):
-        &#34;&#34;&#34;Gets the is_public of this StoryAllOf.  # noqa: E501
+    @title.setter
+    def title(self, title):
+        &#34;&#34;&#34;Sets the title of this StoryAllOf.
 
 
-        :return: The is_public of this StoryAllOf.  # noqa: E501
-        :rtype: bool
-        &#34;&#34;&#34;
-        return self._is_public
-
-    @is_public.setter
-    def is_public(self, is_public):
-        &#34;&#34;&#34;Sets the is_public of this StoryAllOf.
-
-
-        :param is_public: The is_public of this StoryAllOf.  # noqa: E501
-        :type: bool
+        :param title: The title of this StoryAllOf.  # noqa: E501
+        :type: str
         &#34;&#34;&#34;
 
-        self._is_public = is_public
+        self._title = title
 
     def to_dict(self):
         &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
@@ -311,7 +311,7 @@ class StoryAllOf(object):
 <dl>
 <dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf"><code class="flex name class">
 <span>class <span class="ident">StoryAllOf</span></span>
-<span>(</span><span>title=None, outline=None, outline_history=None, collaborators=None, revision=None, ooxml_documents=None, is_public=None)</span>
+<span>(</span><span>collaborators=None, is_public=None, ooxml_documents=None, outline=None, outline_history=None, revision=None, title=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>NOTE: This class is auto generated by OpenAPI Generator.
@@ -338,72 +338,114 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
                             and the value is json key in definition.
     &#34;&#34;&#34;
     openapi_types = {
-        &#39;title&#39;: &#39;str&#39;,
+        &#39;collaborators&#39;: &#39;list[StoryCollaborator]&#39;,
+        &#39;is_public&#39;: &#39;bool&#39;,
+        &#39;ooxml_documents&#39;: &#39;list[OoxmlDocument]&#39;,
         &#39;outline&#39;: &#39;str&#39;,
         &#39;outline_history&#39;: &#39;list[StoryOutlineHistory]&#39;,
-        &#39;collaborators&#39;: &#39;list[StoryCollaborator]&#39;,
         &#39;revision&#39;: &#39;int&#39;,
-        &#39;ooxml_documents&#39;: &#39;list[OoxmlDocument]&#39;,
-        &#39;is_public&#39;: &#39;bool&#39;
+        &#39;title&#39;: &#39;str&#39;
     }
 
     attribute_map = {
-        &#39;title&#39;: &#39;title&#39;,
+        &#39;collaborators&#39;: &#39;collaborators&#39;,
+        &#39;is_public&#39;: &#39;is_public&#39;,
+        &#39;ooxml_documents&#39;: &#39;ooxml_documents&#39;,
         &#39;outline&#39;: &#39;outline&#39;,
         &#39;outline_history&#39;: &#39;outline_history&#39;,
-        &#39;collaborators&#39;: &#39;collaborators&#39;,
         &#39;revision&#39;: &#39;revision&#39;,
-        &#39;ooxml_documents&#39;: &#39;ooxml_documents&#39;,
-        &#39;is_public&#39;: &#39;is_public&#39;
+        &#39;title&#39;: &#39;title&#39;
     }
 
-    def __init__(self, title=None, outline=None, outline_history=None, collaborators=None, revision=None, ooxml_documents=None, is_public=None):  # noqa: E501
+    def __init__(self, collaborators=None, is_public=None, ooxml_documents=None, outline=None, outline_history=None, revision=None, title=None):  # noqa: E501
         &#34;&#34;&#34;StoryAllOf - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
 
-        self._title = None
+        self._collaborators = None
+        self._is_public = None
+        self._ooxml_documents = None
         self._outline = None
         self._outline_history = None
-        self._collaborators = None
         self._revision = None
-        self._ooxml_documents = None
-        self._is_public = None
+        self._title = None
         self.discriminator = None
 
-        if title is not None:
-            self.title = title
+        if collaborators is not None:
+            self.collaborators = collaborators
+        if is_public is not None:
+            self.is_public = is_public
+        if ooxml_documents is not None:
+            self.ooxml_documents = ooxml_documents
         if outline is not None:
             self.outline = outline
         if outline_history is not None:
             self.outline_history = outline_history
-        if collaborators is not None:
-            self.collaborators = collaborators
         if revision is not None:
             self.revision = revision
-        if ooxml_documents is not None:
-            self.ooxml_documents = ooxml_documents
-        if is_public is not None:
-            self.is_public = is_public
+        if title is not None:
+            self.title = title
 
     @property
-    def title(self):
-        &#34;&#34;&#34;Gets the title of this StoryAllOf.  # noqa: E501
+    def collaborators(self):
+        &#34;&#34;&#34;Gets the collaborators of this StoryAllOf.  # noqa: E501
 
 
-        :return: The title of this StoryAllOf.  # noqa: E501
-        :rtype: str
+        :return: The collaborators of this StoryAllOf.  # noqa: E501
+        :rtype: list[StoryCollaborator]
         &#34;&#34;&#34;
-        return self._title
+        return self._collaborators
 
-    @title.setter
-    def title(self, title):
-        &#34;&#34;&#34;Sets the title of this StoryAllOf.
+    @collaborators.setter
+    def collaborators(self, collaborators):
+        &#34;&#34;&#34;Sets the collaborators of this StoryAllOf.
 
 
-        :param title: The title of this StoryAllOf.  # noqa: E501
-        :type: str
+        :param collaborators: The collaborators of this StoryAllOf.  # noqa: E501
+        :type: list[StoryCollaborator]
         &#34;&#34;&#34;
 
-        self._title = title
+        self._collaborators = collaborators
+
+    @property
+    def is_public(self):
+        &#34;&#34;&#34;Gets the is_public of this StoryAllOf.  # noqa: E501
+
+
+        :return: The is_public of this StoryAllOf.  # noqa: E501
+        :rtype: bool
+        &#34;&#34;&#34;
+        return self._is_public
+
+    @is_public.setter
+    def is_public(self, is_public):
+        &#34;&#34;&#34;Sets the is_public of this StoryAllOf.
+
+
+        :param is_public: The is_public of this StoryAllOf.  # noqa: E501
+        :type: bool
+        &#34;&#34;&#34;
+
+        self._is_public = is_public
+
+    @property
+    def ooxml_documents(self):
+        &#34;&#34;&#34;Gets the ooxml_documents of this StoryAllOf.  # noqa: E501
+
+
+        :return: The ooxml_documents of this StoryAllOf.  # noqa: E501
+        :rtype: list[OoxmlDocument]
+        &#34;&#34;&#34;
+        return self._ooxml_documents
+
+    @ooxml_documents.setter
+    def ooxml_documents(self, ooxml_documents):
+        &#34;&#34;&#34;Sets the ooxml_documents of this StoryAllOf.
+
+
+        :param ooxml_documents: The ooxml_documents of this StoryAllOf.  # noqa: E501
+        :type: list[OoxmlDocument]
+        &#34;&#34;&#34;
+
+        self._ooxml_documents = ooxml_documents
 
     @property
     def outline(self):
@@ -448,27 +490,6 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._outline_history = outline_history
 
     @property
-    def collaborators(self):
-        &#34;&#34;&#34;Gets the collaborators of this StoryAllOf.  # noqa: E501
-
-
-        :return: The collaborators of this StoryAllOf.  # noqa: E501
-        :rtype: list[StoryCollaborator]
-        &#34;&#34;&#34;
-        return self._collaborators
-
-    @collaborators.setter
-    def collaborators(self, collaborators):
-        &#34;&#34;&#34;Sets the collaborators of this StoryAllOf.
-
-
-        :param collaborators: The collaborators of this StoryAllOf.  # noqa: E501
-        :type: list[StoryCollaborator]
-        &#34;&#34;&#34;
-
-        self._collaborators = collaborators
-
-    @property
     def revision(self):
         &#34;&#34;&#34;Gets the revision of this StoryAllOf.  # noqa: E501
 
@@ -490,46 +511,25 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._revision = revision
 
     @property
-    def ooxml_documents(self):
-        &#34;&#34;&#34;Gets the ooxml_documents of this StoryAllOf.  # noqa: E501
+    def title(self):
+        &#34;&#34;&#34;Gets the title of this StoryAllOf.  # noqa: E501
 
 
-        :return: The ooxml_documents of this StoryAllOf.  # noqa: E501
-        :rtype: list[OoxmlDocument]
+        :return: The title of this StoryAllOf.  # noqa: E501
+        :rtype: str
         &#34;&#34;&#34;
-        return self._ooxml_documents
+        return self._title
 
-    @ooxml_documents.setter
-    def ooxml_documents(self, ooxml_documents):
-        &#34;&#34;&#34;Sets the ooxml_documents of this StoryAllOf.
-
-
-        :param ooxml_documents: The ooxml_documents of this StoryAllOf.  # noqa: E501
-        :type: list[OoxmlDocument]
-        &#34;&#34;&#34;
-
-        self._ooxml_documents = ooxml_documents
-
-    @property
-    def is_public(self):
-        &#34;&#34;&#34;Gets the is_public of this StoryAllOf.  # noqa: E501
+    @title.setter
+    def title(self, title):
+        &#34;&#34;&#34;Sets the title of this StoryAllOf.
 
 
-        :return: The is_public of this StoryAllOf.  # noqa: E501
-        :rtype: bool
-        &#34;&#34;&#34;
-        return self._is_public
-
-    @is_public.setter
-    def is_public(self, is_public):
-        &#34;&#34;&#34;Sets the is_public of this StoryAllOf.
-
-
-        :param is_public: The is_public of this StoryAllOf.  # noqa: E501
-        :type: bool
+        :param title: The title of this StoryAllOf.  # noqa: E501
+        :type: str
         &#34;&#34;&#34;
 
-        self._is_public = is_public
+        self._title = title
 
     def to_dict(self):
         &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
@@ -607,27 +607,73 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.title"><code class="name">var <span class="ident">title</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.collaborators"><code class="name">var <span class="ident">collaborators</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the title of this StoryAllOf.
+<section class="desc"><p>Gets the collaborators of this StoryAllOf.
 # noqa: E501</p>
-<p>:return: The title of this StoryAllOf.
+<p>:return: The collaborators of this StoryAllOf.
 # noqa: E501
-:rtype: str</p></section>
+:rtype: list[StoryCollaborator]</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 <a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L80-L88" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def title(self):
-    &#34;&#34;&#34;Gets the title of this StoryAllOf.  # noqa: E501
+def collaborators(self):
+    &#34;&#34;&#34;Gets the collaborators of this StoryAllOf.  # noqa: E501
 
 
-    :return: The title of this StoryAllOf.  # noqa: E501
-    :rtype: str
+    :return: The collaborators of this StoryAllOf.  # noqa: E501
+    :rtype: list[StoryCollaborator]
     &#34;&#34;&#34;
-    return self._title</code></pre>
+    return self._collaborators</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.is_public"><code class="name">var <span class="ident">is_public</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the is_public of this StoryAllOf.
+# noqa: E501</p>
+<p>:return: The is_public of this StoryAllOf.
+# noqa: E501
+:rtype: bool</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L101-L109" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def is_public(self):
+    &#34;&#34;&#34;Gets the is_public of this StoryAllOf.  # noqa: E501
+
+
+    :return: The is_public of this StoryAllOf.  # noqa: E501
+    :rtype: bool
+    &#34;&#34;&#34;
+    return self._is_public</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.ooxml_documents"><code class="name">var <span class="ident">ooxml_documents</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the ooxml_documents of this StoryAllOf.
+# noqa: E501</p>
+<p>:return: The ooxml_documents of this StoryAllOf.
+# noqa: E501
+:rtype: list[OoxmlDocument]</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L122-L130" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def ooxml_documents(self):
+    &#34;&#34;&#34;Gets the ooxml_documents of this StoryAllOf.  # noqa: E501
+
+
+    :return: The ooxml_documents of this StoryAllOf.  # noqa: E501
+    :rtype: list[OoxmlDocument]
+    &#34;&#34;&#34;
+    return self._ooxml_documents</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.outline"><code class="name">var <span class="ident">outline</span></code></dt>
@@ -640,7 +686,7 @@ def title(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L101-L109" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L143-L151" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def outline(self):
@@ -663,7 +709,7 @@ def outline(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L122-L130" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L164-L172" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def outline_history(self):
@@ -676,29 +722,6 @@ def outline_history(self):
     return self._outline_history</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.collaborators"><code class="name">var <span class="ident">collaborators</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the collaborators of this StoryAllOf.
-# noqa: E501</p>
-<p>:return: The collaborators of this StoryAllOf.
-# noqa: E501
-:rtype: list[StoryCollaborator]</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L143-L151" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def collaborators(self):
-    &#34;&#34;&#34;Gets the collaborators of this StoryAllOf.  # noqa: E501
-
-
-    :return: The collaborators of this StoryAllOf.  # noqa: E501
-    :rtype: list[StoryCollaborator]
-    &#34;&#34;&#34;
-    return self._collaborators</code></pre>
-</details>
-</dd>
 <dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.revision"><code class="name">var <span class="ident">revision</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the revision of this StoryAllOf.
@@ -709,7 +732,7 @@ def collaborators(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L164-L172" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L185-L193" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def revision(self):
@@ -722,50 +745,27 @@ def revision(self):
     return self._revision</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.ooxml_documents"><code class="name">var <span class="ident">ooxml_documents</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.title"><code class="name">var <span class="ident">title</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the ooxml_documents of this StoryAllOf.
+<section class="desc"><p>Gets the title of this StoryAllOf.
 # noqa: E501</p>
-<p>:return: The ooxml_documents of this StoryAllOf.
+<p>:return: The title of this StoryAllOf.
 # noqa: E501
-:rtype: list[OoxmlDocument]</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L185-L193" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def ooxml_documents(self):
-    &#34;&#34;&#34;Gets the ooxml_documents of this StoryAllOf.  # noqa: E501
-
-
-    :return: The ooxml_documents of this StoryAllOf.  # noqa: E501
-    :rtype: list[OoxmlDocument]
-    &#34;&#34;&#34;
-    return self._ooxml_documents</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.is_public"><code class="name">var <span class="ident">is_public</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the is_public of this StoryAllOf.
-# noqa: E501</p>
-<p>:return: The is_public of this StoryAllOf.
-# noqa: E501
-:rtype: bool</p></section>
+:rtype: str</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 <a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_all_of.py#L206-L214" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def is_public(self):
-    &#34;&#34;&#34;Gets the is_public of this StoryAllOf.  # noqa: E501
+def title(self):
+    &#34;&#34;&#34;Gets the title of this StoryAllOf.  # noqa: E501
 
 
-    :return: The is_public of this StoryAllOf.  # noqa: E501
-    :rtype: bool
+    :return: The title of this StoryAllOf.  # noqa: E501
+    :rtype: str
     &#34;&#34;&#34;
-    return self._is_public</code></pre>
+    return self._title</code></pre>
 </details>
 </dd>
 </dl>
@@ -844,13 +844,13 @@ def is_public(self):
 <ul class="two-column">
 <li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.to_dict" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.to_str" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.to_str">to_str</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.title" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.title">title</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.collaborators" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.collaborators">collaborators</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.is_public" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.is_public">is_public</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.ooxml_documents" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.ooxml_documents">ooxml_documents</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.outline" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.outline">outline</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.outline_history" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.outline_history">outline_history</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.collaborators" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.collaborators">collaborators</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.revision" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.revision">revision</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.ooxml_documents" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.ooxml_documents">ooxml_documents</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.is_public" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.is_public">is_public</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.title" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.title">title</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.openapi_types" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.openapi_types">openapi_types</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.attribute_map" href="/python-client/presalytics/client/presalytics_story/models/story_all_of.html#presalytics.client.presalytics_story.models.story_all_of.StoryAllOf.attribute_map">attribute_map</a></code></li>
 </ul>

@@ -63,98 +63,77 @@ class StoryCollaboratorAllOf(object):
                             and the value is json key in definition.
     &#34;&#34;&#34;
     openapi_types = {
-        &#39;user_id&#39;: &#39;str&#39;,
-        &#39;name&#39;: &#39;str&#39;,
+        &#39;active&#39;: &#39;bool&#39;,
         &#39;email&#39;: &#39;str&#39;,
-        &#39;story_id&#39;: &#39;str&#39;,
+        &#39;lead_id&#39;: &#39;int&#39;,
+        &#39;name&#39;: &#39;str&#39;,
         &#39;permission_type&#39;: &#39;PermissionType&#39;,
         &#39;permission_type_id&#39;: &#39;str&#39;,
-        &#39;lead_id&#39;: &#39;int&#39;,
-        &#39;active&#39;: &#39;bool&#39;
+        &#39;story_id&#39;: &#39;str&#39;,
+        &#39;user_id&#39;: &#39;str&#39;
     }
 
     attribute_map = {
-        &#39;user_id&#39;: &#39;user_id&#39;,
-        &#39;name&#39;: &#39;name&#39;,
+        &#39;active&#39;: &#39;active&#39;,
         &#39;email&#39;: &#39;email&#39;,
-        &#39;story_id&#39;: &#39;story_id&#39;,
+        &#39;lead_id&#39;: &#39;lead_id&#39;,
+        &#39;name&#39;: &#39;name&#39;,
         &#39;permission_type&#39;: &#39;permission_type&#39;,
         &#39;permission_type_id&#39;: &#39;permission_type_id&#39;,
-        &#39;lead_id&#39;: &#39;lead_id&#39;,
-        &#39;active&#39;: &#39;active&#39;
+        &#39;story_id&#39;: &#39;story_id&#39;,
+        &#39;user_id&#39;: &#39;user_id&#39;
     }
 
-    def __init__(self, user_id=None, name=None, email=None, story_id=None, permission_type=None, permission_type_id=None, lead_id=None, active=None):  # noqa: E501
+    def __init__(self, active=None, email=None, lead_id=None, name=None, permission_type=None, permission_type_id=None, story_id=None, user_id=None):  # noqa: E501
         &#34;&#34;&#34;StoryCollaboratorAllOf - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
 
-        self._user_id = None
-        self._name = None
+        self._active = None
         self._email = None
-        self._story_id = None
+        self._lead_id = None
+        self._name = None
         self._permission_type = None
         self._permission_type_id = None
-        self._lead_id = None
-        self._active = None
+        self._story_id = None
+        self._user_id = None
         self.discriminator = None
 
-        if user_id is not None:
-            self.user_id = user_id
-        if name is not None:
-            self.name = name
+        if active is not None:
+            self.active = active
         if email is not None:
             self.email = email
-        if story_id is not None:
-            self.story_id = story_id
+        if lead_id is not None:
+            self.lead_id = lead_id
+        if name is not None:
+            self.name = name
         if permission_type is not None:
             self.permission_type = permission_type
         if permission_type_id is not None:
             self.permission_type_id = permission_type_id
-        if lead_id is not None:
-            self.lead_id = lead_id
-        if active is not None:
-            self.active = active
+        if story_id is not None:
+            self.story_id = story_id
+        if user_id is not None:
+            self.user_id = user_id
 
     @property
-    def user_id(self):
-        &#34;&#34;&#34;Gets the user_id of this StoryCollaboratorAllOf.  # noqa: E501
+    def active(self):
+        &#34;&#34;&#34;Gets the active of this StoryCollaboratorAllOf.  # noqa: E501
 
 
-        :return: The user_id of this StoryCollaboratorAllOf.  # noqa: E501
-        :rtype: str
+        :return: The active of this StoryCollaboratorAllOf.  # noqa: E501
+        :rtype: bool
         &#34;&#34;&#34;
-        return self._user_id
+        return self._active
 
-    @user_id.setter
-    def user_id(self, user_id):
-        &#34;&#34;&#34;Sets the user_id of this StoryCollaboratorAllOf.
-
-
-        :param user_id: The user_id of this StoryCollaboratorAllOf.  # noqa: E501
-        :type: str
-        &#34;&#34;&#34;
-
-        self._user_id = user_id
-
-    @property
-    def name(self):
-        &#34;&#34;&#34;Gets the name of this StoryCollaboratorAllOf.  # noqa: E501
+    @active.setter
+    def active(self, active):
+        &#34;&#34;&#34;Sets the active of this StoryCollaboratorAllOf.
 
 
-        :return: The name of this StoryCollaboratorAllOf.  # noqa: E501
-        :rtype: str
-        &#34;&#34;&#34;
-        return self._name
-
-    @name.setter
-    def name(self, name):
-        &#34;&#34;&#34;Sets the name of this StoryCollaboratorAllOf.
-
-
-        :param name: The name of this StoryCollaboratorAllOf.  # noqa: E501
-        :type: str
+        :param active: The active of this StoryCollaboratorAllOf.  # noqa: E501
+        :type: bool
         &#34;&#34;&#34;
 
-        self._name = name
+        self._active = active
 
     @property
     def email(self):
@@ -178,25 +157,46 @@ class StoryCollaboratorAllOf(object):
         self._email = email
 
     @property
-    def story_id(self):
-        &#34;&#34;&#34;Gets the story_id of this StoryCollaboratorAllOf.  # noqa: E501
+    def lead_id(self):
+        &#34;&#34;&#34;Gets the lead_id of this StoryCollaboratorAllOf.  # noqa: E501
 
 
-        :return: The story_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :return: The lead_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._lead_id
+
+    @lead_id.setter
+    def lead_id(self, lead_id):
+        &#34;&#34;&#34;Sets the lead_id of this StoryCollaboratorAllOf.
+
+
+        :param lead_id: The lead_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._lead_id = lead_id
+
+    @property
+    def name(self):
+        &#34;&#34;&#34;Gets the name of this StoryCollaboratorAllOf.  # noqa: E501
+
+
+        :return: The name of this StoryCollaboratorAllOf.  # noqa: E501
         :rtype: str
         &#34;&#34;&#34;
-        return self._story_id
+        return self._name
 
-    @story_id.setter
-    def story_id(self, story_id):
-        &#34;&#34;&#34;Sets the story_id of this StoryCollaboratorAllOf.
+    @name.setter
+    def name(self, name):
+        &#34;&#34;&#34;Sets the name of this StoryCollaboratorAllOf.
 
 
-        :param story_id: The story_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :param name: The name of this StoryCollaboratorAllOf.  # noqa: E501
         :type: str
         &#34;&#34;&#34;
 
-        self._story_id = story_id
+        self._name = name
 
     @property
     def permission_type(self):
@@ -241,46 +241,46 @@ class StoryCollaboratorAllOf(object):
         self._permission_type_id = permission_type_id
 
     @property
-    def lead_id(self):
-        &#34;&#34;&#34;Gets the lead_id of this StoryCollaboratorAllOf.  # noqa: E501
+    def story_id(self):
+        &#34;&#34;&#34;Gets the story_id of this StoryCollaboratorAllOf.  # noqa: E501
 
 
-        :return: The lead_id of this StoryCollaboratorAllOf.  # noqa: E501
-        :rtype: int
+        :return: The story_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :rtype: str
         &#34;&#34;&#34;
-        return self._lead_id
+        return self._story_id
 
-    @lead_id.setter
-    def lead_id(self, lead_id):
-        &#34;&#34;&#34;Sets the lead_id of this StoryCollaboratorAllOf.
+    @story_id.setter
+    def story_id(self, story_id):
+        &#34;&#34;&#34;Sets the story_id of this StoryCollaboratorAllOf.
 
 
-        :param lead_id: The lead_id of this StoryCollaboratorAllOf.  # noqa: E501
-        :type: int
+        :param story_id: The story_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :type: str
         &#34;&#34;&#34;
 
-        self._lead_id = lead_id
+        self._story_id = story_id
 
     @property
-    def active(self):
-        &#34;&#34;&#34;Gets the active of this StoryCollaboratorAllOf.  # noqa: E501
+    def user_id(self):
+        &#34;&#34;&#34;Gets the user_id of this StoryCollaboratorAllOf.  # noqa: E501
 
 
-        :return: The active of this StoryCollaboratorAllOf.  # noqa: E501
-        :rtype: bool
+        :return: The user_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :rtype: str
         &#34;&#34;&#34;
-        return self._active
+        return self._user_id
 
-    @active.setter
-    def active(self, active):
-        &#34;&#34;&#34;Sets the active of this StoryCollaboratorAllOf.
+    @user_id.setter
+    def user_id(self, user_id):
+        &#34;&#34;&#34;Sets the user_id of this StoryCollaboratorAllOf.
 
 
-        :param active: The active of this StoryCollaboratorAllOf.  # noqa: E501
-        :type: bool
+        :param user_id: The user_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :type: str
         &#34;&#34;&#34;
 
-        self._active = active
+        self._user_id = user_id
 
     def to_dict(self):
         &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
@@ -337,7 +337,7 @@ class StoryCollaboratorAllOf(object):
 <dl>
 <dt id="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf"><code class="flex name class">
 <span>class <span class="ident">StoryCollaboratorAllOf</span></span>
-<span>(</span><span>user_id=None, name=None, email=None, story_id=None, permission_type=None, permission_type_id=None, lead_id=None, active=None)</span>
+<span>(</span><span>active=None, email=None, lead_id=None, name=None, permission_type=None, permission_type_id=None, story_id=None, user_id=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>NOTE: This class is auto generated by OpenAPI Generator.
@@ -364,98 +364,77 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
                             and the value is json key in definition.
     &#34;&#34;&#34;
     openapi_types = {
-        &#39;user_id&#39;: &#39;str&#39;,
-        &#39;name&#39;: &#39;str&#39;,
+        &#39;active&#39;: &#39;bool&#39;,
         &#39;email&#39;: &#39;str&#39;,
-        &#39;story_id&#39;: &#39;str&#39;,
+        &#39;lead_id&#39;: &#39;int&#39;,
+        &#39;name&#39;: &#39;str&#39;,
         &#39;permission_type&#39;: &#39;PermissionType&#39;,
         &#39;permission_type_id&#39;: &#39;str&#39;,
-        &#39;lead_id&#39;: &#39;int&#39;,
-        &#39;active&#39;: &#39;bool&#39;
+        &#39;story_id&#39;: &#39;str&#39;,
+        &#39;user_id&#39;: &#39;str&#39;
     }
 
     attribute_map = {
-        &#39;user_id&#39;: &#39;user_id&#39;,
-        &#39;name&#39;: &#39;name&#39;,
+        &#39;active&#39;: &#39;active&#39;,
         &#39;email&#39;: &#39;email&#39;,
-        &#39;story_id&#39;: &#39;story_id&#39;,
+        &#39;lead_id&#39;: &#39;lead_id&#39;,
+        &#39;name&#39;: &#39;name&#39;,
         &#39;permission_type&#39;: &#39;permission_type&#39;,
         &#39;permission_type_id&#39;: &#39;permission_type_id&#39;,
-        &#39;lead_id&#39;: &#39;lead_id&#39;,
-        &#39;active&#39;: &#39;active&#39;
+        &#39;story_id&#39;: &#39;story_id&#39;,
+        &#39;user_id&#39;: &#39;user_id&#39;
     }
 
-    def __init__(self, user_id=None, name=None, email=None, story_id=None, permission_type=None, permission_type_id=None, lead_id=None, active=None):  # noqa: E501
+    def __init__(self, active=None, email=None, lead_id=None, name=None, permission_type=None, permission_type_id=None, story_id=None, user_id=None):  # noqa: E501
         &#34;&#34;&#34;StoryCollaboratorAllOf - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
 
-        self._user_id = None
-        self._name = None
+        self._active = None
         self._email = None
-        self._story_id = None
+        self._lead_id = None
+        self._name = None
         self._permission_type = None
         self._permission_type_id = None
-        self._lead_id = None
-        self._active = None
+        self._story_id = None
+        self._user_id = None
         self.discriminator = None
 
-        if user_id is not None:
-            self.user_id = user_id
-        if name is not None:
-            self.name = name
+        if active is not None:
+            self.active = active
         if email is not None:
             self.email = email
-        if story_id is not None:
-            self.story_id = story_id
+        if lead_id is not None:
+            self.lead_id = lead_id
+        if name is not None:
+            self.name = name
         if permission_type is not None:
             self.permission_type = permission_type
         if permission_type_id is not None:
             self.permission_type_id = permission_type_id
-        if lead_id is not None:
-            self.lead_id = lead_id
-        if active is not None:
-            self.active = active
+        if story_id is not None:
+            self.story_id = story_id
+        if user_id is not None:
+            self.user_id = user_id
 
     @property
-    def user_id(self):
-        &#34;&#34;&#34;Gets the user_id of this StoryCollaboratorAllOf.  # noqa: E501
+    def active(self):
+        &#34;&#34;&#34;Gets the active of this StoryCollaboratorAllOf.  # noqa: E501
 
 
-        :return: The user_id of this StoryCollaboratorAllOf.  # noqa: E501
-        :rtype: str
+        :return: The active of this StoryCollaboratorAllOf.  # noqa: E501
+        :rtype: bool
         &#34;&#34;&#34;
-        return self._user_id
+        return self._active
 
-    @user_id.setter
-    def user_id(self, user_id):
-        &#34;&#34;&#34;Sets the user_id of this StoryCollaboratorAllOf.
-
-
-        :param user_id: The user_id of this StoryCollaboratorAllOf.  # noqa: E501
-        :type: str
-        &#34;&#34;&#34;
-
-        self._user_id = user_id
-
-    @property
-    def name(self):
-        &#34;&#34;&#34;Gets the name of this StoryCollaboratorAllOf.  # noqa: E501
+    @active.setter
+    def active(self, active):
+        &#34;&#34;&#34;Sets the active of this StoryCollaboratorAllOf.
 
 
-        :return: The name of this StoryCollaboratorAllOf.  # noqa: E501
-        :rtype: str
-        &#34;&#34;&#34;
-        return self._name
-
-    @name.setter
-    def name(self, name):
-        &#34;&#34;&#34;Sets the name of this StoryCollaboratorAllOf.
-
-
-        :param name: The name of this StoryCollaboratorAllOf.  # noqa: E501
-        :type: str
+        :param active: The active of this StoryCollaboratorAllOf.  # noqa: E501
+        :type: bool
         &#34;&#34;&#34;
 
-        self._name = name
+        self._active = active
 
     @property
     def email(self):
@@ -479,25 +458,46 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._email = email
 
     @property
-    def story_id(self):
-        &#34;&#34;&#34;Gets the story_id of this StoryCollaboratorAllOf.  # noqa: E501
+    def lead_id(self):
+        &#34;&#34;&#34;Gets the lead_id of this StoryCollaboratorAllOf.  # noqa: E501
 
 
-        :return: The story_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :return: The lead_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._lead_id
+
+    @lead_id.setter
+    def lead_id(self, lead_id):
+        &#34;&#34;&#34;Sets the lead_id of this StoryCollaboratorAllOf.
+
+
+        :param lead_id: The lead_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._lead_id = lead_id
+
+    @property
+    def name(self):
+        &#34;&#34;&#34;Gets the name of this StoryCollaboratorAllOf.  # noqa: E501
+
+
+        :return: The name of this StoryCollaboratorAllOf.  # noqa: E501
         :rtype: str
         &#34;&#34;&#34;
-        return self._story_id
+        return self._name
 
-    @story_id.setter
-    def story_id(self, story_id):
-        &#34;&#34;&#34;Sets the story_id of this StoryCollaboratorAllOf.
+    @name.setter
+    def name(self, name):
+        &#34;&#34;&#34;Sets the name of this StoryCollaboratorAllOf.
 
 
-        :param story_id: The story_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :param name: The name of this StoryCollaboratorAllOf.  # noqa: E501
         :type: str
         &#34;&#34;&#34;
 
-        self._story_id = story_id
+        self._name = name
 
     @property
     def permission_type(self):
@@ -542,46 +542,46 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._permission_type_id = permission_type_id
 
     @property
-    def lead_id(self):
-        &#34;&#34;&#34;Gets the lead_id of this StoryCollaboratorAllOf.  # noqa: E501
+    def story_id(self):
+        &#34;&#34;&#34;Gets the story_id of this StoryCollaboratorAllOf.  # noqa: E501
 
 
-        :return: The lead_id of this StoryCollaboratorAllOf.  # noqa: E501
-        :rtype: int
+        :return: The story_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :rtype: str
         &#34;&#34;&#34;
-        return self._lead_id
+        return self._story_id
 
-    @lead_id.setter
-    def lead_id(self, lead_id):
-        &#34;&#34;&#34;Sets the lead_id of this StoryCollaboratorAllOf.
+    @story_id.setter
+    def story_id(self, story_id):
+        &#34;&#34;&#34;Sets the story_id of this StoryCollaboratorAllOf.
 
 
-        :param lead_id: The lead_id of this StoryCollaboratorAllOf.  # noqa: E501
-        :type: int
+        :param story_id: The story_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :type: str
         &#34;&#34;&#34;
 
-        self._lead_id = lead_id
+        self._story_id = story_id
 
     @property
-    def active(self):
-        &#34;&#34;&#34;Gets the active of this StoryCollaboratorAllOf.  # noqa: E501
+    def user_id(self):
+        &#34;&#34;&#34;Gets the user_id of this StoryCollaboratorAllOf.  # noqa: E501
 
 
-        :return: The active of this StoryCollaboratorAllOf.  # noqa: E501
-        :rtype: bool
+        :return: The user_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :rtype: str
         &#34;&#34;&#34;
-        return self._active
+        return self._user_id
 
-    @active.setter
-    def active(self, active):
-        &#34;&#34;&#34;Sets the active of this StoryCollaboratorAllOf.
+    @user_id.setter
+    def user_id(self, user_id):
+        &#34;&#34;&#34;Sets the user_id of this StoryCollaboratorAllOf.
 
 
-        :param active: The active of this StoryCollaboratorAllOf.  # noqa: E501
-        :type: bool
+        :param user_id: The user_id of this StoryCollaboratorAllOf.  # noqa: E501
+        :type: str
         &#34;&#34;&#34;
 
-        self._active = active
+        self._user_id = user_id
 
     def to_dict(self):
         &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
@@ -659,50 +659,27 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.user_id"><code class="name">var <span class="ident">user_id</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.active"><code class="name">var <span class="ident">active</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the user_id of this StoryCollaboratorAllOf.
+<section class="desc"><p>Gets the active of this StoryCollaboratorAllOf.
 # noqa: E501</p>
-<p>:return: The user_id of this StoryCollaboratorAllOf.
+<p>:return: The active of this StoryCollaboratorAllOf.
 # noqa: E501
-:rtype: str</p></section>
+:rtype: bool</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 <a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_collaborator_all_of.py#L85-L93" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def user_id(self):
-    &#34;&#34;&#34;Gets the user_id of this StoryCollaboratorAllOf.  # noqa: E501
+def active(self):
+    &#34;&#34;&#34;Gets the active of this StoryCollaboratorAllOf.  # noqa: E501
 
 
-    :return: The user_id of this StoryCollaboratorAllOf.  # noqa: E501
-    :rtype: str
+    :return: The active of this StoryCollaboratorAllOf.  # noqa: E501
+    :rtype: bool
     &#34;&#34;&#34;
-    return self._user_id</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.name"><code class="name">var <span class="ident">name</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the name of this StoryCollaboratorAllOf.
-# noqa: E501</p>
-<p>:return: The name of this StoryCollaboratorAllOf.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_collaborator_all_of.py#L106-L114" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def name(self):
-    &#34;&#34;&#34;Gets the name of this StoryCollaboratorAllOf.  # noqa: E501
-
-
-    :return: The name of this StoryCollaboratorAllOf.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._name</code></pre>
+    return self._active</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.email"><code class="name">var <span class="ident">email</span></code></dt>
@@ -715,7 +692,7 @@ def name(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_collaborator_all_of.py#L127-L135" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_collaborator_all_of.py#L106-L114" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def email(self):
@@ -728,11 +705,34 @@ def email(self):
     return self._email</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.story_id"><code class="name">var <span class="ident">story_id</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.lead_id"><code class="name">var <span class="ident">lead_id</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the story_id of this StoryCollaboratorAllOf.
+<section class="desc"><p>Gets the lead_id of this StoryCollaboratorAllOf.
 # noqa: E501</p>
-<p>:return: The story_id of this StoryCollaboratorAllOf.
+<p>:return: The lead_id of this StoryCollaboratorAllOf.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_collaborator_all_of.py#L127-L135" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def lead_id(self):
+    &#34;&#34;&#34;Gets the lead_id of this StoryCollaboratorAllOf.  # noqa: E501
+
+
+    :return: The lead_id of this StoryCollaboratorAllOf.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._lead_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the name of this StoryCollaboratorAllOf.
+# noqa: E501</p>
+<p>:return: The name of this StoryCollaboratorAllOf.
 # noqa: E501
 :rtype: str</p></section>
 <details class="source">
@@ -741,14 +741,14 @@ def email(self):
 <a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_collaborator_all_of.py#L148-L156" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def story_id(self):
-    &#34;&#34;&#34;Gets the story_id of this StoryCollaboratorAllOf.  # noqa: E501
+def name(self):
+    &#34;&#34;&#34;Gets the name of this StoryCollaboratorAllOf.  # noqa: E501
 
 
-    :return: The story_id of this StoryCollaboratorAllOf.  # noqa: E501
+    :return: The name of this StoryCollaboratorAllOf.  # noqa: E501
     :rtype: str
     &#34;&#34;&#34;
-    return self._story_id</code></pre>
+    return self._name</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.permission_type"><code class="name">var <span class="ident">permission_type</span></code></dt>
@@ -797,50 +797,50 @@ def permission_type_id(self):
     return self._permission_type_id</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.lead_id"><code class="name">var <span class="ident">lead_id</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.story_id"><code class="name">var <span class="ident">story_id</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the lead_id of this StoryCollaboratorAllOf.
+<section class="desc"><p>Gets the story_id of this StoryCollaboratorAllOf.
 # noqa: E501</p>
-<p>:return: The lead_id of this StoryCollaboratorAllOf.
+<p>:return: The story_id of this StoryCollaboratorAllOf.
 # noqa: E501
-:rtype: int</p></section>
+:rtype: str</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 <a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_collaborator_all_of.py#L211-L219" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def lead_id(self):
-    &#34;&#34;&#34;Gets the lead_id of this StoryCollaboratorAllOf.  # noqa: E501
+def story_id(self):
+    &#34;&#34;&#34;Gets the story_id of this StoryCollaboratorAllOf.  # noqa: E501
 
 
-    :return: The lead_id of this StoryCollaboratorAllOf.  # noqa: E501
-    :rtype: int
+    :return: The story_id of this StoryCollaboratorAllOf.  # noqa: E501
+    :rtype: str
     &#34;&#34;&#34;
-    return self._lead_id</code></pre>
+    return self._story_id</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.active"><code class="name">var <span class="ident">active</span></code></dt>
+<dt id="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.user_id"><code class="name">var <span class="ident">user_id</span></code></dt>
 <dd>
-<section class="desc"><p>Gets the active of this StoryCollaboratorAllOf.
+<section class="desc"><p>Gets the user_id of this StoryCollaboratorAllOf.
 # noqa: E501</p>
-<p>:return: The active of this StoryCollaboratorAllOf.
+<p>:return: The user_id of this StoryCollaboratorAllOf.
 # noqa: E501
-:rtype: bool</p></section>
+:rtype: str</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 <a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/story_collaborator_all_of.py#L232-L240" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
-def active(self):
-    &#34;&#34;&#34;Gets the active of this StoryCollaboratorAllOf.  # noqa: E501
+def user_id(self):
+    &#34;&#34;&#34;Gets the user_id of this StoryCollaboratorAllOf.  # noqa: E501
 
 
-    :return: The active of this StoryCollaboratorAllOf.  # noqa: E501
-    :rtype: bool
+    :return: The user_id of this StoryCollaboratorAllOf.  # noqa: E501
+    :rtype: str
     &#34;&#34;&#34;
-    return self._active</code></pre>
+    return self._user_id</code></pre>
 </details>
 </dd>
 </dl>
@@ -919,14 +919,14 @@ def active(self):
 <ul class="two-column">
 <li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.to_dict" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.to_str" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.to_str">to_str</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.user_id" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.user_id">user_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.name" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.name">name</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.active" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.active">active</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.email" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.email">email</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.story_id" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.story_id">story_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.lead_id" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.lead_id">lead_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.name" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.name">name</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.permission_type" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.permission_type">permission_type</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.permission_type_id" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.permission_type_id">permission_type_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.lead_id" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.lead_id">lead_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.active" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.active">active</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.story_id" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.story_id">story_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.user_id" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.user_id">user_id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.openapi_types" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.openapi_types">openapi_types</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.attribute_map" href="/python-client/presalytics/client/presalytics_story/models/story_collaborator_all_of.html#presalytics.client.presalytics_story.models.story_collaborator_all_of.StoryCollaboratorAllOf.attribute_map">attribute_map</a></code></li>
 </ul>

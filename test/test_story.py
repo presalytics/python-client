@@ -121,32 +121,5 @@ class TestStory(unittest.TestCase):
         from presalytics.client.presalytics_story import Story
         self.assertTrue(type(story) is Story)
 
-    def test_encoder(self):
-        from werkzeug.datastructures import FileStorage
-        test_file = os.path.join(os.path.dirname(__file__), 'files', 'bubblechart.pptx')
-        with open(test_file, 'rb') as f:
-            bin = f.read()
-            content_length = len(bin)
-            data = base64.b64encode(bin)
-        test_out = os.path.join(os.path.dirname(__file__), 'files', 'test-out.pptx')
-        try:
-            os.remove(test_out)
-        except:
-            pass
-        
-        by = io.BytesIO(base64.b64decode(data))
-        file = FileStorage(
-            stream=io.BytesIO(data),
-            filename='test-out.pptx',
-            content_type='application/vnd.openxmlformats-officedocument.presentationml.presentation',
-            content_length=content_length
-        )
-
-        file.save(test_out)
-
-                
-
-
-
     def tearDown(self):
         pass

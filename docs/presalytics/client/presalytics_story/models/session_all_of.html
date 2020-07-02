@@ -63,41 +63,62 @@ class SessionAllOf(object):
                             and the value is json key in definition.
     &#34;&#34;&#34;
     openapi_types = {
+        &#39;collaborator&#39;: &#39;StoryCollaborator&#39;,
         &#39;collaborator_id&#39;: &#39;str&#39;,
-        &#39;outline_revision&#39;: &#39;int&#39;,
         &#39;host&#39;: &#39;str&#39;,
-        &#39;views&#39;: &#39;list[View]&#39;,
-        &#39;collaborator&#39;: &#39;StoryCollaborator&#39;
+        &#39;outline_revision&#39;: &#39;int&#39;,
+        &#39;views&#39;: &#39;list[View]&#39;
     }
 
     attribute_map = {
+        &#39;collaborator&#39;: &#39;collaborator&#39;,
         &#39;collaborator_id&#39;: &#39;collaborator_id&#39;,
-        &#39;outline_revision&#39;: &#39;outline_revision&#39;,
         &#39;host&#39;: &#39;host&#39;,
-        &#39;views&#39;: &#39;views&#39;,
-        &#39;collaborator&#39;: &#39;collaborator&#39;
+        &#39;outline_revision&#39;: &#39;outline_revision&#39;,
+        &#39;views&#39;: &#39;views&#39;
     }
 
-    def __init__(self, collaborator_id=None, outline_revision=None, host=None, views=None, collaborator=None):  # noqa: E501
+    def __init__(self, collaborator=None, collaborator_id=None, host=None, outline_revision=None, views=None):  # noqa: E501
         &#34;&#34;&#34;SessionAllOf - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
 
-        self._collaborator_id = None
-        self._outline_revision = None
-        self._host = None
-        self._views = None
         self._collaborator = None
+        self._collaborator_id = None
+        self._host = None
+        self._outline_revision = None
+        self._views = None
         self.discriminator = None
 
-        if collaborator_id is not None:
-            self.collaborator_id = collaborator_id
-        if outline_revision is not None:
-            self.outline_revision = outline_revision
-        if host is not None:
-            self.host = host
-        if views is not None:
-            self.views = views
         if collaborator is not None:
             self.collaborator = collaborator
+        if collaborator_id is not None:
+            self.collaborator_id = collaborator_id
+        if host is not None:
+            self.host = host
+        if outline_revision is not None:
+            self.outline_revision = outline_revision
+        if views is not None:
+            self.views = views
+
+    @property
+    def collaborator(self):
+        &#34;&#34;&#34;Gets the collaborator of this SessionAllOf.  # noqa: E501
+
+
+        :return: The collaborator of this SessionAllOf.  # noqa: E501
+        :rtype: StoryCollaborator
+        &#34;&#34;&#34;
+        return self._collaborator
+
+    @collaborator.setter
+    def collaborator(self, collaborator):
+        &#34;&#34;&#34;Sets the collaborator of this SessionAllOf.
+
+
+        :param collaborator: The collaborator of this SessionAllOf.  # noqa: E501
+        :type: StoryCollaborator
+        &#34;&#34;&#34;
+
+        self._collaborator = collaborator
 
     @property
     def collaborator_id(self):
@@ -121,27 +142,6 @@ class SessionAllOf(object):
         self._collaborator_id = collaborator_id
 
     @property
-    def outline_revision(self):
-        &#34;&#34;&#34;Gets the outline_revision of this SessionAllOf.  # noqa: E501
-
-
-        :return: The outline_revision of this SessionAllOf.  # noqa: E501
-        :rtype: int
-        &#34;&#34;&#34;
-        return self._outline_revision
-
-    @outline_revision.setter
-    def outline_revision(self, outline_revision):
-        &#34;&#34;&#34;Sets the outline_revision of this SessionAllOf.
-
-
-        :param outline_revision: The outline_revision of this SessionAllOf.  # noqa: E501
-        :type: int
-        &#34;&#34;&#34;
-
-        self._outline_revision = outline_revision
-
-    @property
     def host(self):
         &#34;&#34;&#34;Gets the host of this SessionAllOf.  # noqa: E501
 
@@ -163,6 +163,27 @@ class SessionAllOf(object):
         self._host = host
 
     @property
+    def outline_revision(self):
+        &#34;&#34;&#34;Gets the outline_revision of this SessionAllOf.  # noqa: E501
+
+
+        :return: The outline_revision of this SessionAllOf.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._outline_revision
+
+    @outline_revision.setter
+    def outline_revision(self, outline_revision):
+        &#34;&#34;&#34;Sets the outline_revision of this SessionAllOf.
+
+
+        :param outline_revision: The outline_revision of this SessionAllOf.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._outline_revision = outline_revision
+
+    @property
     def views(self):
         &#34;&#34;&#34;Gets the views of this SessionAllOf.  # noqa: E501
 
@@ -182,27 +203,6 @@ class SessionAllOf(object):
         &#34;&#34;&#34;
 
         self._views = views
-
-    @property
-    def collaborator(self):
-        &#34;&#34;&#34;Gets the collaborator of this SessionAllOf.  # noqa: E501
-
-
-        :return: The collaborator of this SessionAllOf.  # noqa: E501
-        :rtype: StoryCollaborator
-        &#34;&#34;&#34;
-        return self._collaborator
-
-    @collaborator.setter
-    def collaborator(self, collaborator):
-        &#34;&#34;&#34;Sets the collaborator of this SessionAllOf.
-
-
-        :param collaborator: The collaborator of this SessionAllOf.  # noqa: E501
-        :type: StoryCollaborator
-        &#34;&#34;&#34;
-
-        self._collaborator = collaborator
 
     def to_dict(self):
         &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
@@ -259,7 +259,7 @@ class SessionAllOf(object):
 <dl>
 <dt id="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf"><code class="flex name class">
 <span>class <span class="ident">SessionAllOf</span></span>
-<span>(</span><span>collaborator_id=None, outline_revision=None, host=None, views=None, collaborator=None)</span>
+<span>(</span><span>collaborator=None, collaborator_id=None, host=None, outline_revision=None, views=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>NOTE: This class is auto generated by OpenAPI Generator.
@@ -286,41 +286,62 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
                             and the value is json key in definition.
     &#34;&#34;&#34;
     openapi_types = {
+        &#39;collaborator&#39;: &#39;StoryCollaborator&#39;,
         &#39;collaborator_id&#39;: &#39;str&#39;,
-        &#39;outline_revision&#39;: &#39;int&#39;,
         &#39;host&#39;: &#39;str&#39;,
-        &#39;views&#39;: &#39;list[View]&#39;,
-        &#39;collaborator&#39;: &#39;StoryCollaborator&#39;
+        &#39;outline_revision&#39;: &#39;int&#39;,
+        &#39;views&#39;: &#39;list[View]&#39;
     }
 
     attribute_map = {
+        &#39;collaborator&#39;: &#39;collaborator&#39;,
         &#39;collaborator_id&#39;: &#39;collaborator_id&#39;,
-        &#39;outline_revision&#39;: &#39;outline_revision&#39;,
         &#39;host&#39;: &#39;host&#39;,
-        &#39;views&#39;: &#39;views&#39;,
-        &#39;collaborator&#39;: &#39;collaborator&#39;
+        &#39;outline_revision&#39;: &#39;outline_revision&#39;,
+        &#39;views&#39;: &#39;views&#39;
     }
 
-    def __init__(self, collaborator_id=None, outline_revision=None, host=None, views=None, collaborator=None):  # noqa: E501
+    def __init__(self, collaborator=None, collaborator_id=None, host=None, outline_revision=None, views=None):  # noqa: E501
         &#34;&#34;&#34;SessionAllOf - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
 
-        self._collaborator_id = None
-        self._outline_revision = None
-        self._host = None
-        self._views = None
         self._collaborator = None
+        self._collaborator_id = None
+        self._host = None
+        self._outline_revision = None
+        self._views = None
         self.discriminator = None
 
-        if collaborator_id is not None:
-            self.collaborator_id = collaborator_id
-        if outline_revision is not None:
-            self.outline_revision = outline_revision
-        if host is not None:
-            self.host = host
-        if views is not None:
-            self.views = views
         if collaborator is not None:
             self.collaborator = collaborator
+        if collaborator_id is not None:
+            self.collaborator_id = collaborator_id
+        if host is not None:
+            self.host = host
+        if outline_revision is not None:
+            self.outline_revision = outline_revision
+        if views is not None:
+            self.views = views
+
+    @property
+    def collaborator(self):
+        &#34;&#34;&#34;Gets the collaborator of this SessionAllOf.  # noqa: E501
+
+
+        :return: The collaborator of this SessionAllOf.  # noqa: E501
+        :rtype: StoryCollaborator
+        &#34;&#34;&#34;
+        return self._collaborator
+
+    @collaborator.setter
+    def collaborator(self, collaborator):
+        &#34;&#34;&#34;Sets the collaborator of this SessionAllOf.
+
+
+        :param collaborator: The collaborator of this SessionAllOf.  # noqa: E501
+        :type: StoryCollaborator
+        &#34;&#34;&#34;
+
+        self._collaborator = collaborator
 
     @property
     def collaborator_id(self):
@@ -344,27 +365,6 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._collaborator_id = collaborator_id
 
     @property
-    def outline_revision(self):
-        &#34;&#34;&#34;Gets the outline_revision of this SessionAllOf.  # noqa: E501
-
-
-        :return: The outline_revision of this SessionAllOf.  # noqa: E501
-        :rtype: int
-        &#34;&#34;&#34;
-        return self._outline_revision
-
-    @outline_revision.setter
-    def outline_revision(self, outline_revision):
-        &#34;&#34;&#34;Sets the outline_revision of this SessionAllOf.
-
-
-        :param outline_revision: The outline_revision of this SessionAllOf.  # noqa: E501
-        :type: int
-        &#34;&#34;&#34;
-
-        self._outline_revision = outline_revision
-
-    @property
     def host(self):
         &#34;&#34;&#34;Gets the host of this SessionAllOf.  # noqa: E501
 
@@ -386,6 +386,27 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._host = host
 
     @property
+    def outline_revision(self):
+        &#34;&#34;&#34;Gets the outline_revision of this SessionAllOf.  # noqa: E501
+
+
+        :return: The outline_revision of this SessionAllOf.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._outline_revision
+
+    @outline_revision.setter
+    def outline_revision(self, outline_revision):
+        &#34;&#34;&#34;Sets the outline_revision of this SessionAllOf.
+
+
+        :param outline_revision: The outline_revision of this SessionAllOf.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._outline_revision = outline_revision
+
+    @property
     def views(self):
         &#34;&#34;&#34;Gets the views of this SessionAllOf.  # noqa: E501
 
@@ -405,27 +426,6 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         &#34;&#34;&#34;
 
         self._views = views
-
-    @property
-    def collaborator(self):
-        &#34;&#34;&#34;Gets the collaborator of this SessionAllOf.  # noqa: E501
-
-
-        :return: The collaborator of this SessionAllOf.  # noqa: E501
-        :rtype: StoryCollaborator
-        &#34;&#34;&#34;
-        return self._collaborator
-
-    @collaborator.setter
-    def collaborator(self, collaborator):
-        &#34;&#34;&#34;Sets the collaborator of this SessionAllOf.
-
-
-        :param collaborator: The collaborator of this SessionAllOf.  # noqa: E501
-        :type: StoryCollaborator
-        &#34;&#34;&#34;
-
-        self._collaborator = collaborator
 
     def to_dict(self):
         &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
@@ -503,6 +503,29 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
+<dt id="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.collaborator"><code class="name">var <span class="ident">collaborator</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the collaborator of this SessionAllOf.
+# noqa: E501</p>
+<p>:return: The collaborator of this SessionAllOf.
+# noqa: E501
+:rtype: StoryCollaborator</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session_all_of.py#L70-L78" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def collaborator(self):
+    &#34;&#34;&#34;Gets the collaborator of this SessionAllOf.  # noqa: E501
+
+
+    :return: The collaborator of this SessionAllOf.  # noqa: E501
+    :rtype: StoryCollaborator
+    &#34;&#34;&#34;
+    return self._collaborator</code></pre>
+</details>
+</dd>
 <dt id="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.collaborator_id"><code class="name">var <span class="ident">collaborator_id</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the collaborator_id of this SessionAllOf.
@@ -513,7 +536,7 @@ dict(one=1, two=2)</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session_all_of.py#L70-L78" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session_all_of.py#L91-L99" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def collaborator_id(self):
@@ -524,29 +547,6 @@ def collaborator_id(self):
     :rtype: str
     &#34;&#34;&#34;
     return self._collaborator_id</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.outline_revision"><code class="name">var <span class="ident">outline_revision</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the outline_revision of this SessionAllOf.
-# noqa: E501</p>
-<p>:return: The outline_revision of this SessionAllOf.
-# noqa: E501
-:rtype: int</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session_all_of.py#L91-L99" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def outline_revision(self):
-    &#34;&#34;&#34;Gets the outline_revision of this SessionAllOf.  # noqa: E501
-
-
-    :return: The outline_revision of this SessionAllOf.  # noqa: E501
-    :rtype: int
-    &#34;&#34;&#34;
-    return self._outline_revision</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.host"><code class="name">var <span class="ident">host</span></code></dt>
@@ -572,6 +572,29 @@ def host(self):
     return self._host</code></pre>
 </details>
 </dd>
+<dt id="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.outline_revision"><code class="name">var <span class="ident">outline_revision</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the outline_revision of this SessionAllOf.
+# noqa: E501</p>
+<p>:return: The outline_revision of this SessionAllOf.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session_all_of.py#L133-L141" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def outline_revision(self):
+    &#34;&#34;&#34;Gets the outline_revision of this SessionAllOf.  # noqa: E501
+
+
+    :return: The outline_revision of this SessionAllOf.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._outline_revision</code></pre>
+</details>
+</dd>
 <dt id="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.views"><code class="name">var <span class="ident">views</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the views of this SessionAllOf.
@@ -582,7 +605,7 @@ def host(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session_all_of.py#L133-L141" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session_all_of.py#L154-L162" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def views(self):
@@ -593,29 +616,6 @@ def views(self):
     :rtype: list[View]
     &#34;&#34;&#34;
     return self._views</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.collaborator"><code class="name">var <span class="ident">collaborator</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the collaborator of this SessionAllOf.
-# noqa: E501</p>
-<p>:return: The collaborator of this SessionAllOf.
-# noqa: E501
-:rtype: StoryCollaborator</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session_all_of.py#L154-L162" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def collaborator(self):
-    &#34;&#34;&#34;Gets the collaborator of this SessionAllOf.  # noqa: E501
-
-
-    :return: The collaborator of this SessionAllOf.  # noqa: E501
-    :rtype: StoryCollaborator
-    &#34;&#34;&#34;
-    return self._collaborator</code></pre>
 </details>
 </dd>
 </dl>
@@ -694,11 +694,11 @@ def collaborator(self):
 <ul class="two-column">
 <li><code><a title="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.to_dict" href="/python-client/presalytics/client/presalytics_story/models/session_all_of.html#presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.to_str" href="/python-client/presalytics/client/presalytics_story/models/session_all_of.html#presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.to_str">to_str</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.collaborator_id" href="/python-client/presalytics/client/presalytics_story/models/session_all_of.html#presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.collaborator_id">collaborator_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.outline_revision" href="/python-client/presalytics/client/presalytics_story/models/session_all_of.html#presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.outline_revision">outline_revision</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.host" href="/python-client/presalytics/client/presalytics_story/models/session_all_of.html#presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.host">host</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.views" href="/python-client/presalytics/client/presalytics_story/models/session_all_of.html#presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.views">views</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.collaborator" href="/python-client/presalytics/client/presalytics_story/models/session_all_of.html#presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.collaborator">collaborator</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.collaborator_id" href="/python-client/presalytics/client/presalytics_story/models/session_all_of.html#presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.collaborator_id">collaborator_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.host" href="/python-client/presalytics/client/presalytics_story/models/session_all_of.html#presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.host">host</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.outline_revision" href="/python-client/presalytics/client/presalytics_story/models/session_all_of.html#presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.outline_revision">outline_revision</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.views" href="/python-client/presalytics/client/presalytics_story/models/session_all_of.html#presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.views">views</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.openapi_types" href="/python-client/presalytics/client/presalytics_story/models/session_all_of.html#presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.openapi_types">openapi_types</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.attribute_map" href="/python-client/presalytics/client/presalytics_story/models/session_all_of.html#presalytics.client.presalytics_story.models.session_all_of.SessionAllOf.attribute_map">attribute_map</a></code></li>
 </ul>

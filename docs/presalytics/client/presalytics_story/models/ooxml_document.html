@@ -63,77 +63,56 @@ class OoxmlDocument(object):
                             and the value is json key in definition.
     &#34;&#34;&#34;
     openapi_types = {
-        &#39;id&#39;: &#39;str&#39;,
         &#39;created_at&#39;: &#39;datetime&#39;,
         &#39;created_by&#39;: &#39;str&#39;,
+        &#39;id&#39;: &#39;str&#39;,
         &#39;updated_at&#39;: &#39;datetime&#39;,
         &#39;updated_by&#39;: &#39;str&#39;,
-        &#39;story_id&#39;: &#39;str&#39;,
         &#39;delete_target_on_story_delete&#39;: &#39;bool&#39;,
-        &#39;ooxml_automation_id&#39;: &#39;str&#39;
+        &#39;ooxml_automation_id&#39;: &#39;str&#39;,
+        &#39;story_id&#39;: &#39;str&#39;
     }
 
     attribute_map = {
-        &#39;id&#39;: &#39;id&#39;,
         &#39;created_at&#39;: &#39;created_at&#39;,
         &#39;created_by&#39;: &#39;created_by&#39;,
+        &#39;id&#39;: &#39;id&#39;,
         &#39;updated_at&#39;: &#39;updated_at&#39;,
         &#39;updated_by&#39;: &#39;updated_by&#39;,
-        &#39;story_id&#39;: &#39;story_id&#39;,
         &#39;delete_target_on_story_delete&#39;: &#39;delete_target_on_story_delete&#39;,
-        &#39;ooxml_automation_id&#39;: &#39;ooxml_automation_id&#39;
+        &#39;ooxml_automation_id&#39;: &#39;ooxml_automation_id&#39;,
+        &#39;story_id&#39;: &#39;story_id&#39;
     }
 
-    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, story_id=None, delete_target_on_story_delete=None, ooxml_automation_id=None):  # noqa: E501
+    def __init__(self, created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, delete_target_on_story_delete=None, ooxml_automation_id=None, story_id=None):  # noqa: E501
         &#34;&#34;&#34;OoxmlDocument - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
 
-        self._id = None
         self._created_at = None
         self._created_by = None
+        self._id = None
         self._updated_at = None
         self._updated_by = None
-        self._story_id = None
         self._delete_target_on_story_delete = None
         self._ooxml_automation_id = None
+        self._story_id = None
         self.discriminator = None
 
-        if id is not None:
-            self.id = id
         if created_at is not None:
             self.created_at = created_at
         if created_by is not None:
             self.created_by = created_by
+        if id is not None:
+            self.id = id
         if updated_at is not None:
             self.updated_at = updated_at
         if updated_by is not None:
             self.updated_by = updated_by
-        if story_id is not None:
-            self.story_id = story_id
         if delete_target_on_story_delete is not None:
             self.delete_target_on_story_delete = delete_target_on_story_delete
         if ooxml_automation_id is not None:
             self.ooxml_automation_id = ooxml_automation_id
-
-    @property
-    def id(self):
-        &#34;&#34;&#34;Gets the id of this OoxmlDocument.  # noqa: E501
-
-
-        :return: The id of this OoxmlDocument.  # noqa: E501
-        :rtype: str
-        &#34;&#34;&#34;
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        &#34;&#34;&#34;Sets the id of this OoxmlDocument.
-
-
-        :param id: The id of this OoxmlDocument.  # noqa: E501
-        :type: str
-        &#34;&#34;&#34;
-
-        self._id = id
+        if story_id is not None:
+            self.story_id = story_id
 
     @property
     def created_at(self):
@@ -178,6 +157,27 @@ class OoxmlDocument(object):
         self._created_by = created_by
 
     @property
+    def id(self):
+        &#34;&#34;&#34;Gets the id of this OoxmlDocument.  # noqa: E501
+
+
+        :return: The id of this OoxmlDocument.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        &#34;&#34;&#34;Sets the id of this OoxmlDocument.
+
+
+        :param id: The id of this OoxmlDocument.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._id = id
+
+    @property
     def updated_at(self):
         &#34;&#34;&#34;Gets the updated_at of this OoxmlDocument.  # noqa: E501
 
@@ -220,27 +220,6 @@ class OoxmlDocument(object):
         self._updated_by = updated_by
 
     @property
-    def story_id(self):
-        &#34;&#34;&#34;Gets the story_id of this OoxmlDocument.  # noqa: E501
-
-
-        :return: The story_id of this OoxmlDocument.  # noqa: E501
-        :rtype: str
-        &#34;&#34;&#34;
-        return self._story_id
-
-    @story_id.setter
-    def story_id(self, story_id):
-        &#34;&#34;&#34;Sets the story_id of this OoxmlDocument.
-
-
-        :param story_id: The story_id of this OoxmlDocument.  # noqa: E501
-        :type: str
-        &#34;&#34;&#34;
-
-        self._story_id = story_id
-
-    @property
     def delete_target_on_story_delete(self):
         &#34;&#34;&#34;Gets the delete_target_on_story_delete of this OoxmlDocument.  # noqa: E501
 
@@ -281,6 +260,27 @@ class OoxmlDocument(object):
         &#34;&#34;&#34;
 
         self._ooxml_automation_id = ooxml_automation_id
+
+    @property
+    def story_id(self):
+        &#34;&#34;&#34;Gets the story_id of this OoxmlDocument.  # noqa: E501
+
+
+        :return: The story_id of this OoxmlDocument.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._story_id
+
+    @story_id.setter
+    def story_id(self, story_id):
+        &#34;&#34;&#34;Sets the story_id of this OoxmlDocument.
+
+
+        :param story_id: The story_id of this OoxmlDocument.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._story_id = story_id
 
     def to_dict(self):
         &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
@@ -337,7 +337,7 @@ class OoxmlDocument(object):
 <dl>
 <dt id="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument"><code class="flex name class">
 <span>class <span class="ident">OoxmlDocument</span></span>
-<span>(</span><span>id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, story_id=None, delete_target_on_story_delete=None, ooxml_automation_id=None)</span>
+<span>(</span><span>created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, delete_target_on_story_delete=None, ooxml_automation_id=None, story_id=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>NOTE: This class is auto generated by OpenAPI Generator.
@@ -364,77 +364,56 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
                             and the value is json key in definition.
     &#34;&#34;&#34;
     openapi_types = {
-        &#39;id&#39;: &#39;str&#39;,
         &#39;created_at&#39;: &#39;datetime&#39;,
         &#39;created_by&#39;: &#39;str&#39;,
+        &#39;id&#39;: &#39;str&#39;,
         &#39;updated_at&#39;: &#39;datetime&#39;,
         &#39;updated_by&#39;: &#39;str&#39;,
-        &#39;story_id&#39;: &#39;str&#39;,
         &#39;delete_target_on_story_delete&#39;: &#39;bool&#39;,
-        &#39;ooxml_automation_id&#39;: &#39;str&#39;
+        &#39;ooxml_automation_id&#39;: &#39;str&#39;,
+        &#39;story_id&#39;: &#39;str&#39;
     }
 
     attribute_map = {
-        &#39;id&#39;: &#39;id&#39;,
         &#39;created_at&#39;: &#39;created_at&#39;,
         &#39;created_by&#39;: &#39;created_by&#39;,
+        &#39;id&#39;: &#39;id&#39;,
         &#39;updated_at&#39;: &#39;updated_at&#39;,
         &#39;updated_by&#39;: &#39;updated_by&#39;,
-        &#39;story_id&#39;: &#39;story_id&#39;,
         &#39;delete_target_on_story_delete&#39;: &#39;delete_target_on_story_delete&#39;,
-        &#39;ooxml_automation_id&#39;: &#39;ooxml_automation_id&#39;
+        &#39;ooxml_automation_id&#39;: &#39;ooxml_automation_id&#39;,
+        &#39;story_id&#39;: &#39;story_id&#39;
     }
 
-    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, story_id=None, delete_target_on_story_delete=None, ooxml_automation_id=None):  # noqa: E501
+    def __init__(self, created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, delete_target_on_story_delete=None, ooxml_automation_id=None, story_id=None):  # noqa: E501
         &#34;&#34;&#34;OoxmlDocument - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
 
-        self._id = None
         self._created_at = None
         self._created_by = None
+        self._id = None
         self._updated_at = None
         self._updated_by = None
-        self._story_id = None
         self._delete_target_on_story_delete = None
         self._ooxml_automation_id = None
+        self._story_id = None
         self.discriminator = None
 
-        if id is not None:
-            self.id = id
         if created_at is not None:
             self.created_at = created_at
         if created_by is not None:
             self.created_by = created_by
+        if id is not None:
+            self.id = id
         if updated_at is not None:
             self.updated_at = updated_at
         if updated_by is not None:
             self.updated_by = updated_by
-        if story_id is not None:
-            self.story_id = story_id
         if delete_target_on_story_delete is not None:
             self.delete_target_on_story_delete = delete_target_on_story_delete
         if ooxml_automation_id is not None:
             self.ooxml_automation_id = ooxml_automation_id
-
-    @property
-    def id(self):
-        &#34;&#34;&#34;Gets the id of this OoxmlDocument.  # noqa: E501
-
-
-        :return: The id of this OoxmlDocument.  # noqa: E501
-        :rtype: str
-        &#34;&#34;&#34;
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        &#34;&#34;&#34;Sets the id of this OoxmlDocument.
-
-
-        :param id: The id of this OoxmlDocument.  # noqa: E501
-        :type: str
-        &#34;&#34;&#34;
-
-        self._id = id
+        if story_id is not None:
+            self.story_id = story_id
 
     @property
     def created_at(self):
@@ -479,6 +458,27 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._created_by = created_by
 
     @property
+    def id(self):
+        &#34;&#34;&#34;Gets the id of this OoxmlDocument.  # noqa: E501
+
+
+        :return: The id of this OoxmlDocument.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        &#34;&#34;&#34;Sets the id of this OoxmlDocument.
+
+
+        :param id: The id of this OoxmlDocument.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._id = id
+
+    @property
     def updated_at(self):
         &#34;&#34;&#34;Gets the updated_at of this OoxmlDocument.  # noqa: E501
 
@@ -521,27 +521,6 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._updated_by = updated_by
 
     @property
-    def story_id(self):
-        &#34;&#34;&#34;Gets the story_id of this OoxmlDocument.  # noqa: E501
-
-
-        :return: The story_id of this OoxmlDocument.  # noqa: E501
-        :rtype: str
-        &#34;&#34;&#34;
-        return self._story_id
-
-    @story_id.setter
-    def story_id(self, story_id):
-        &#34;&#34;&#34;Sets the story_id of this OoxmlDocument.
-
-
-        :param story_id: The story_id of this OoxmlDocument.  # noqa: E501
-        :type: str
-        &#34;&#34;&#34;
-
-        self._story_id = story_id
-
-    @property
     def delete_target_on_story_delete(self):
         &#34;&#34;&#34;Gets the delete_target_on_story_delete of this OoxmlDocument.  # noqa: E501
 
@@ -582,6 +561,27 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         &#34;&#34;&#34;
 
         self._ooxml_automation_id = ooxml_automation_id
+
+    @property
+    def story_id(self):
+        &#34;&#34;&#34;Gets the story_id of this OoxmlDocument.  # noqa: E501
+
+
+        :return: The story_id of this OoxmlDocument.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._story_id
+
+    @story_id.setter
+    def story_id(self, story_id):
+        &#34;&#34;&#34;Sets the story_id of this OoxmlDocument.
+
+
+        :param story_id: The story_id of this OoxmlDocument.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._story_id = story_id
 
     def to_dict(self):
         &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
@@ -659,29 +659,6 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.id"><code class="name">var <span class="ident">id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the id of this OoxmlDocument.
-# noqa: E501</p>
-<p>:return: The id of this OoxmlDocument.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/ooxml_document.py#L85-L93" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def id(self):
-    &#34;&#34;&#34;Gets the id of this OoxmlDocument.  # noqa: E501
-
-
-    :return: The id of this OoxmlDocument.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._id</code></pre>
-</details>
-</dd>
 <dt id="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.created_at"><code class="name">var <span class="ident">created_at</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the created_at of this OoxmlDocument.
@@ -692,7 +669,7 @@ def id(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/ooxml_document.py#L106-L114" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/ooxml_document.py#L85-L93" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def created_at(self):
@@ -715,7 +692,7 @@ def created_at(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/ooxml_document.py#L127-L135" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/ooxml_document.py#L106-L114" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def created_by(self):
@@ -726,6 +703,29 @@ def created_by(self):
     :rtype: str
     &#34;&#34;&#34;
     return self._created_by</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the id of this OoxmlDocument.
+# noqa: E501</p>
+<p>:return: The id of this OoxmlDocument.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/ooxml_document.py#L127-L135" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def id(self):
+    &#34;&#34;&#34;Gets the id of this OoxmlDocument.  # noqa: E501
+
+
+    :return: The id of this OoxmlDocument.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._id</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.updated_at"><code class="name">var <span class="ident">updated_at</span></code></dt>
@@ -774,29 +774,6 @@ def updated_by(self):
     return self._updated_by</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.story_id"><code class="name">var <span class="ident">story_id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the story_id of this OoxmlDocument.
-# noqa: E501</p>
-<p>:return: The story_id of this OoxmlDocument.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/ooxml_document.py#L190-L198" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def story_id(self):
-    &#34;&#34;&#34;Gets the story_id of this OoxmlDocument.  # noqa: E501
-
-
-    :return: The story_id of this OoxmlDocument.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._story_id</code></pre>
-</details>
-</dd>
 <dt id="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.delete_target_on_story_delete"><code class="name">var <span class="ident">delete_target_on_story_delete</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the delete_target_on_story_delete of this OoxmlDocument.
@@ -807,7 +784,7 @@ def story_id(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/ooxml_document.py#L211-L219" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/ooxml_document.py#L190-L198" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def delete_target_on_story_delete(self):
@@ -830,7 +807,7 @@ def delete_target_on_story_delete(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/ooxml_document.py#L232-L240" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/ooxml_document.py#L211-L219" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def ooxml_automation_id(self):
@@ -841,6 +818,29 @@ def ooxml_automation_id(self):
     :rtype: str
     &#34;&#34;&#34;
     return self._ooxml_automation_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.story_id"><code class="name">var <span class="ident">story_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the story_id of this OoxmlDocument.
+# noqa: E501</p>
+<p>:return: The story_id of this OoxmlDocument.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/ooxml_document.py#L232-L240" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def story_id(self):
+    &#34;&#34;&#34;Gets the story_id of this OoxmlDocument.  # noqa: E501
+
+
+    :return: The story_id of this OoxmlDocument.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._story_id</code></pre>
 </details>
 </dd>
 </dl>
@@ -919,14 +919,14 @@ def ooxml_automation_id(self):
 <ul class="">
 <li><code><a title="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.to_dict" href="/python-client/presalytics/client/presalytics_story/models/ooxml_document.html#presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.to_str" href="/python-client/presalytics/client/presalytics_story/models/ooxml_document.html#presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.to_str">to_str</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.id" href="/python-client/presalytics/client/presalytics_story/models/ooxml_document.html#presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.id">id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.created_at" href="/python-client/presalytics/client/presalytics_story/models/ooxml_document.html#presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.created_at">created_at</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.created_by" href="/python-client/presalytics/client/presalytics_story/models/ooxml_document.html#presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.created_by">created_by</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.id" href="/python-client/presalytics/client/presalytics_story/models/ooxml_document.html#presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.id">id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.updated_at" href="/python-client/presalytics/client/presalytics_story/models/ooxml_document.html#presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.updated_at">updated_at</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.updated_by" href="/python-client/presalytics/client/presalytics_story/models/ooxml_document.html#presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.updated_by">updated_by</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.story_id" href="/python-client/presalytics/client/presalytics_story/models/ooxml_document.html#presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.story_id">story_id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.delete_target_on_story_delete" href="/python-client/presalytics/client/presalytics_story/models/ooxml_document.html#presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.delete_target_on_story_delete">delete_target_on_story_delete</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.ooxml_automation_id" href="/python-client/presalytics/client/presalytics_story/models/ooxml_document.html#presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.ooxml_automation_id">ooxml_automation_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.story_id" href="/python-client/presalytics/client/presalytics_story/models/ooxml_document.html#presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.story_id">story_id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.openapi_types" href="/python-client/presalytics/client/presalytics_story/models/ooxml_document.html#presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.openapi_types">openapi_types</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.attribute_map" href="/python-client/presalytics/client/presalytics_story/models/ooxml_document.html#presalytics.client.presalytics_story.models.ooxml_document.OoxmlDocument.attribute_map">attribute_map</a></code></li>
 </ul>

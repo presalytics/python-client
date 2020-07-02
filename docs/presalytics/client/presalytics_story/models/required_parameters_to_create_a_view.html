@@ -63,38 +63,103 @@ class RequiredParametersToCreateAView(object):
                             and the value is json key in definition.
     &#34;&#34;&#34;
     openapi_types = {
-        &#39;page_number&#39;: &#39;int&#39;,
-        &#39;start_time&#39;: &#39;datetime&#39;,
-        &#39;end_time&#39;: &#39;datetime&#39;,
         &#39;active_m_secs&#39;: &#39;int&#39;,
-        &#39;additional&#39;: &#39;str&#39;
+        &#39;additional&#39;: &#39;str&#39;,
+        &#39;end_time&#39;: &#39;datetime&#39;,
+        &#39;page_number&#39;: &#39;int&#39;,
+        &#39;start_time&#39;: &#39;datetime&#39;
     }
 
     attribute_map = {
-        &#39;page_number&#39;: &#39;pageNumber&#39;,
-        &#39;start_time&#39;: &#39;startTime&#39;,
-        &#39;end_time&#39;: &#39;endTime&#39;,
         &#39;active_m_secs&#39;: &#39;activeMSecs&#39;,
-        &#39;additional&#39;: &#39;additional&#39;
+        &#39;additional&#39;: &#39;additional&#39;,
+        &#39;end_time&#39;: &#39;endTime&#39;,
+        &#39;page_number&#39;: &#39;pageNumber&#39;,
+        &#39;start_time&#39;: &#39;startTime&#39;
     }
 
-    def __init__(self, page_number=None, start_time=None, end_time=None, active_m_secs=None, additional=None):  # noqa: E501
+    def __init__(self, active_m_secs=None, additional=None, end_time=None, page_number=None, start_time=None):  # noqa: E501
         &#34;&#34;&#34;RequiredParametersToCreateAView - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
 
-        self._page_number = None
-        self._start_time = None
-        self._end_time = None
         self._active_m_secs = None
         self._additional = None
+        self._end_time = None
+        self._page_number = None
+        self._start_time = None
         self.discriminator = None
 
-        self.page_number = page_number
-        self.start_time = start_time
-        self.end_time = end_time
         if active_m_secs is not None:
             self.active_m_secs = active_m_secs
         if additional is not None:
             self.additional = additional
+        self.end_time = end_time
+        self.page_number = page_number
+        self.start_time = start_time
+
+    @property
+    def active_m_secs(self):
+        &#34;&#34;&#34;Gets the active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
+
+
+        :return: The active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._active_m_secs
+
+    @active_m_secs.setter
+    def active_m_secs(self, active_m_secs):
+        &#34;&#34;&#34;Sets the active_m_secs of this RequiredParametersToCreateAView.
+
+
+        :param active_m_secs: The active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._active_m_secs = active_m_secs
+
+    @property
+    def additional(self):
+        &#34;&#34;&#34;Gets the additional of this RequiredParametersToCreateAView.  # noqa: E501
+
+
+        :return: The additional of this RequiredParametersToCreateAView.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._additional
+
+    @additional.setter
+    def additional(self, additional):
+        &#34;&#34;&#34;Sets the additional of this RequiredParametersToCreateAView.
+
+
+        :param additional: The additional of this RequiredParametersToCreateAView.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._additional = additional
+
+    @property
+    def end_time(self):
+        &#34;&#34;&#34;Gets the end_time of this RequiredParametersToCreateAView.  # noqa: E501
+
+
+        :return: The end_time of this RequiredParametersToCreateAView.  # noqa: E501
+        :rtype: datetime
+        &#34;&#34;&#34;
+        return self._end_time
+
+    @end_time.setter
+    def end_time(self, end_time):
+        &#34;&#34;&#34;Sets the end_time of this RequiredParametersToCreateAView.
+
+
+        :param end_time: The end_time of this RequiredParametersToCreateAView.  # noqa: E501
+        :type: datetime
+        &#34;&#34;&#34;
+        if end_time is None:
+            raise ValueError(&#34;Invalid value for `end_time`, must not be `None`&#34;)  # noqa: E501
+
+        self._end_time = end_time
 
     @property
     def page_number(self):
@@ -141,71 +206,6 @@ class RequiredParametersToCreateAView(object):
             raise ValueError(&#34;Invalid value for `start_time`, must not be `None`&#34;)  # noqa: E501
 
         self._start_time = start_time
-
-    @property
-    def end_time(self):
-        &#34;&#34;&#34;Gets the end_time of this RequiredParametersToCreateAView.  # noqa: E501
-
-
-        :return: The end_time of this RequiredParametersToCreateAView.  # noqa: E501
-        :rtype: datetime
-        &#34;&#34;&#34;
-        return self._end_time
-
-    @end_time.setter
-    def end_time(self, end_time):
-        &#34;&#34;&#34;Sets the end_time of this RequiredParametersToCreateAView.
-
-
-        :param end_time: The end_time of this RequiredParametersToCreateAView.  # noqa: E501
-        :type: datetime
-        &#34;&#34;&#34;
-        if end_time is None:
-            raise ValueError(&#34;Invalid value for `end_time`, must not be `None`&#34;)  # noqa: E501
-
-        self._end_time = end_time
-
-    @property
-    def active_m_secs(self):
-        &#34;&#34;&#34;Gets the active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
-
-
-        :return: The active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
-        :rtype: int
-        &#34;&#34;&#34;
-        return self._active_m_secs
-
-    @active_m_secs.setter
-    def active_m_secs(self, active_m_secs):
-        &#34;&#34;&#34;Sets the active_m_secs of this RequiredParametersToCreateAView.
-
-
-        :param active_m_secs: The active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
-        :type: int
-        &#34;&#34;&#34;
-
-        self._active_m_secs = active_m_secs
-
-    @property
-    def additional(self):
-        &#34;&#34;&#34;Gets the additional of this RequiredParametersToCreateAView.  # noqa: E501
-
-
-        :return: The additional of this RequiredParametersToCreateAView.  # noqa: E501
-        :rtype: str
-        &#34;&#34;&#34;
-        return self._additional
-
-    @additional.setter
-    def additional(self, additional):
-        &#34;&#34;&#34;Sets the additional of this RequiredParametersToCreateAView.
-
-
-        :param additional: The additional of this RequiredParametersToCreateAView.  # noqa: E501
-        :type: str
-        &#34;&#34;&#34;
-
-        self._additional = additional
 
     def to_dict(self):
         &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
@@ -262,7 +262,7 @@ class RequiredParametersToCreateAView(object):
 <dl>
 <dt id="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView"><code class="flex name class">
 <span>class <span class="ident">RequiredParametersToCreateAView</span></span>
-<span>(</span><span>page_number=None, start_time=None, end_time=None, active_m_secs=None, additional=None)</span>
+<span>(</span><span>active_m_secs=None, additional=None, end_time=None, page_number=None, start_time=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>NOTE: This class is auto generated by OpenAPI Generator.
@@ -289,38 +289,103 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
                             and the value is json key in definition.
     &#34;&#34;&#34;
     openapi_types = {
-        &#39;page_number&#39;: &#39;int&#39;,
-        &#39;start_time&#39;: &#39;datetime&#39;,
-        &#39;end_time&#39;: &#39;datetime&#39;,
         &#39;active_m_secs&#39;: &#39;int&#39;,
-        &#39;additional&#39;: &#39;str&#39;
+        &#39;additional&#39;: &#39;str&#39;,
+        &#39;end_time&#39;: &#39;datetime&#39;,
+        &#39;page_number&#39;: &#39;int&#39;,
+        &#39;start_time&#39;: &#39;datetime&#39;
     }
 
     attribute_map = {
-        &#39;page_number&#39;: &#39;pageNumber&#39;,
-        &#39;start_time&#39;: &#39;startTime&#39;,
-        &#39;end_time&#39;: &#39;endTime&#39;,
         &#39;active_m_secs&#39;: &#39;activeMSecs&#39;,
-        &#39;additional&#39;: &#39;additional&#39;
+        &#39;additional&#39;: &#39;additional&#39;,
+        &#39;end_time&#39;: &#39;endTime&#39;,
+        &#39;page_number&#39;: &#39;pageNumber&#39;,
+        &#39;start_time&#39;: &#39;startTime&#39;
     }
 
-    def __init__(self, page_number=None, start_time=None, end_time=None, active_m_secs=None, additional=None):  # noqa: E501
+    def __init__(self, active_m_secs=None, additional=None, end_time=None, page_number=None, start_time=None):  # noqa: E501
         &#34;&#34;&#34;RequiredParametersToCreateAView - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
 
-        self._page_number = None
-        self._start_time = None
-        self._end_time = None
         self._active_m_secs = None
         self._additional = None
+        self._end_time = None
+        self._page_number = None
+        self._start_time = None
         self.discriminator = None
 
-        self.page_number = page_number
-        self.start_time = start_time
-        self.end_time = end_time
         if active_m_secs is not None:
             self.active_m_secs = active_m_secs
         if additional is not None:
             self.additional = additional
+        self.end_time = end_time
+        self.page_number = page_number
+        self.start_time = start_time
+
+    @property
+    def active_m_secs(self):
+        &#34;&#34;&#34;Gets the active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
+
+
+        :return: The active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._active_m_secs
+
+    @active_m_secs.setter
+    def active_m_secs(self, active_m_secs):
+        &#34;&#34;&#34;Sets the active_m_secs of this RequiredParametersToCreateAView.
+
+
+        :param active_m_secs: The active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._active_m_secs = active_m_secs
+
+    @property
+    def additional(self):
+        &#34;&#34;&#34;Gets the additional of this RequiredParametersToCreateAView.  # noqa: E501
+
+
+        :return: The additional of this RequiredParametersToCreateAView.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._additional
+
+    @additional.setter
+    def additional(self, additional):
+        &#34;&#34;&#34;Sets the additional of this RequiredParametersToCreateAView.
+
+
+        :param additional: The additional of this RequiredParametersToCreateAView.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._additional = additional
+
+    @property
+    def end_time(self):
+        &#34;&#34;&#34;Gets the end_time of this RequiredParametersToCreateAView.  # noqa: E501
+
+
+        :return: The end_time of this RequiredParametersToCreateAView.  # noqa: E501
+        :rtype: datetime
+        &#34;&#34;&#34;
+        return self._end_time
+
+    @end_time.setter
+    def end_time(self, end_time):
+        &#34;&#34;&#34;Sets the end_time of this RequiredParametersToCreateAView.
+
+
+        :param end_time: The end_time of this RequiredParametersToCreateAView.  # noqa: E501
+        :type: datetime
+        &#34;&#34;&#34;
+        if end_time is None:
+            raise ValueError(&#34;Invalid value for `end_time`, must not be `None`&#34;)  # noqa: E501
+
+        self._end_time = end_time
 
     @property
     def page_number(self):
@@ -367,71 +432,6 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
             raise ValueError(&#34;Invalid value for `start_time`, must not be `None`&#34;)  # noqa: E501
 
         self._start_time = start_time
-
-    @property
-    def end_time(self):
-        &#34;&#34;&#34;Gets the end_time of this RequiredParametersToCreateAView.  # noqa: E501
-
-
-        :return: The end_time of this RequiredParametersToCreateAView.  # noqa: E501
-        :rtype: datetime
-        &#34;&#34;&#34;
-        return self._end_time
-
-    @end_time.setter
-    def end_time(self, end_time):
-        &#34;&#34;&#34;Sets the end_time of this RequiredParametersToCreateAView.
-
-
-        :param end_time: The end_time of this RequiredParametersToCreateAView.  # noqa: E501
-        :type: datetime
-        &#34;&#34;&#34;
-        if end_time is None:
-            raise ValueError(&#34;Invalid value for `end_time`, must not be `None`&#34;)  # noqa: E501
-
-        self._end_time = end_time
-
-    @property
-    def active_m_secs(self):
-        &#34;&#34;&#34;Gets the active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
-
-
-        :return: The active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
-        :rtype: int
-        &#34;&#34;&#34;
-        return self._active_m_secs
-
-    @active_m_secs.setter
-    def active_m_secs(self, active_m_secs):
-        &#34;&#34;&#34;Sets the active_m_secs of this RequiredParametersToCreateAView.
-
-
-        :param active_m_secs: The active_m_secs of this RequiredParametersToCreateAView.  # noqa: E501
-        :type: int
-        &#34;&#34;&#34;
-
-        self._active_m_secs = active_m_secs
-
-    @property
-    def additional(self):
-        &#34;&#34;&#34;Gets the additional of this RequiredParametersToCreateAView.  # noqa: E501
-
-
-        :return: The additional of this RequiredParametersToCreateAView.  # noqa: E501
-        :rtype: str
-        &#34;&#34;&#34;
-        return self._additional
-
-    @additional.setter
-    def additional(self, additional):
-        &#34;&#34;&#34;Sets the additional of this RequiredParametersToCreateAView.
-
-
-        :param additional: The additional of this RequiredParametersToCreateAView.  # noqa: E501
-        :type: str
-        &#34;&#34;&#34;
-
-        self._additional = additional
 
     def to_dict(self):
         &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
@@ -509,75 +509,6 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.page_number"><code class="name">var <span class="ident">page_number</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the page_number of this RequiredParametersToCreateAView.
-# noqa: E501</p>
-<p>:return: The page_number of this RequiredParametersToCreateAView.
-# noqa: E501
-:rtype: int</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.py#L67-L75" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def page_number(self):
-    &#34;&#34;&#34;Gets the page_number of this RequiredParametersToCreateAView.  # noqa: E501
-
-
-    :return: The page_number of this RequiredParametersToCreateAView.  # noqa: E501
-    :rtype: int
-    &#34;&#34;&#34;
-    return self._page_number</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.start_time"><code class="name">var <span class="ident">start_time</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the start_time of this RequiredParametersToCreateAView.
-# noqa: E501</p>
-<p>:return: The start_time of this RequiredParametersToCreateAView.
-# noqa: E501
-:rtype: datetime</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.py#L90-L98" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def start_time(self):
-    &#34;&#34;&#34;Gets the start_time of this RequiredParametersToCreateAView.  # noqa: E501
-
-
-    :return: The start_time of this RequiredParametersToCreateAView.  # noqa: E501
-    :rtype: datetime
-    &#34;&#34;&#34;
-    return self._start_time</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.end_time"><code class="name">var <span class="ident">end_time</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the end_time of this RequiredParametersToCreateAView.
-# noqa: E501</p>
-<p>:return: The end_time of this RequiredParametersToCreateAView.
-# noqa: E501
-:rtype: datetime</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.py#L113-L121" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def end_time(self):
-    &#34;&#34;&#34;Gets the end_time of this RequiredParametersToCreateAView.  # noqa: E501
-
-
-    :return: The end_time of this RequiredParametersToCreateAView.  # noqa: E501
-    :rtype: datetime
-    &#34;&#34;&#34;
-    return self._end_time</code></pre>
-</details>
-</dd>
 <dt id="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.active_m_secs"><code class="name">var <span class="ident">active_m_secs</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the active_m_secs of this RequiredParametersToCreateAView.
@@ -588,7 +519,7 @@ def end_time(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.py#L136-L144" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.py#L67-L75" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def active_m_secs(self):
@@ -611,7 +542,7 @@ def active_m_secs(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.py#L157-L165" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.py#L88-L96" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def additional(self):
@@ -622,6 +553,75 @@ def additional(self):
     :rtype: str
     &#34;&#34;&#34;
     return self._additional</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.end_time"><code class="name">var <span class="ident">end_time</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the end_time of this RequiredParametersToCreateAView.
+# noqa: E501</p>
+<p>:return: The end_time of this RequiredParametersToCreateAView.
+# noqa: E501
+:rtype: datetime</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.py#L109-L117" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def end_time(self):
+    &#34;&#34;&#34;Gets the end_time of this RequiredParametersToCreateAView.  # noqa: E501
+
+
+    :return: The end_time of this RequiredParametersToCreateAView.  # noqa: E501
+    :rtype: datetime
+    &#34;&#34;&#34;
+    return self._end_time</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.page_number"><code class="name">var <span class="ident">page_number</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the page_number of this RequiredParametersToCreateAView.
+# noqa: E501</p>
+<p>:return: The page_number of this RequiredParametersToCreateAView.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.py#L132-L140" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def page_number(self):
+    &#34;&#34;&#34;Gets the page_number of this RequiredParametersToCreateAView.  # noqa: E501
+
+
+    :return: The page_number of this RequiredParametersToCreateAView.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._page_number</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.start_time"><code class="name">var <span class="ident">start_time</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the start_time of this RequiredParametersToCreateAView.
+# noqa: E501</p>
+<p>:return: The start_time of this RequiredParametersToCreateAView.
+# noqa: E501
+:rtype: datetime</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.py#L155-L163" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def start_time(self):
+    &#34;&#34;&#34;Gets the start_time of this RequiredParametersToCreateAView.  # noqa: E501
+
+
+    :return: The start_time of this RequiredParametersToCreateAView.  # noqa: E501
+    :rtype: datetime
+    &#34;&#34;&#34;
+    return self._start_time</code></pre>
 </details>
 </dd>
 </dl>
@@ -700,11 +700,11 @@ def additional(self):
 <ul class="two-column">
 <li><code><a title="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.to_dict" href="/python-client/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.html#presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.to_str" href="/python-client/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.html#presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.to_str">to_str</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.page_number" href="/python-client/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.html#presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.page_number">page_number</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.start_time" href="/python-client/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.html#presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.start_time">start_time</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.end_time" href="/python-client/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.html#presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.end_time">end_time</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.active_m_secs" href="/python-client/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.html#presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.active_m_secs">active_m_secs</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.additional" href="/python-client/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.html#presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.additional">additional</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.end_time" href="/python-client/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.html#presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.end_time">end_time</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.page_number" href="/python-client/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.html#presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.page_number">page_number</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.start_time" href="/python-client/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.html#presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.start_time">start_time</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.openapi_types" href="/python-client/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.html#presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.openapi_types">openapi_types</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.attribute_map" href="/python-client/presalytics/client/presalytics_story/models/required_parameters_to_create_a_view.html#presalytics.client.presalytics_story.models.required_parameters_to_create_a_view.RequiredParametersToCreateAView.attribute_map">attribute_map</a></code></li>
 </ul>

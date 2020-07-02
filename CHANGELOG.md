@@ -1,3 +1,7 @@
+## v0.5.1 (2020-05-21)
+
+* Add json endpoint to presaltyics story 
+
 ## v0.5.0 (2020-05-21)
 
 * Refactor authentication / authorization for 3rd Party Provider (Auth0)

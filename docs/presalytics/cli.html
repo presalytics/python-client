@@ -25,7 +25,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/cli.py#L0-L502" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/cli.py#L0-L501" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
 Command Line Interface for Presalytics Python Library
@@ -508,7 +508,6 @@ def main():
                     _open_page(story_id, &#34;manage&#34;)
                 if args.show_story:
                     story = presalytics.lib.tools.workflows.get_story(story_id)
-                    print(yaml.dump(story))
         
             except webbrowser.Error:
                 logger.error(&#34;This environment does not have a webrowser loaded for use with python.&#34;)
@@ -613,7 +612,7 @@ foo="hello world"</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/cli.py#L282-L499" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/cli.py#L282-L498" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def main():
     &#34;&#34;&#34; Command-line entry point 
@@ -815,7 +814,6 @@ foo="hello world"</p></section>
                     _open_page(story_id, &#34;manage&#34;)
                 if args.show_story:
                     story = presalytics.lib.tools.workflows.get_story(story_id)
-                    print(yaml.dump(story))
         
             except webbrowser.Error:
                 logger.error(&#34;This environment does not have a webrowser loaded for use with python.&#34;)

@@ -63,87 +63,66 @@ class Session(object):
                             and the value is json key in definition.
     &#34;&#34;&#34;
     openapi_types = {
-        &#39;id&#39;: &#39;str&#39;,
         &#39;created_at&#39;: &#39;datetime&#39;,
         &#39;created_by&#39;: &#39;str&#39;,
+        &#39;id&#39;: &#39;str&#39;,
         &#39;updated_at&#39;: &#39;datetime&#39;,
         &#39;updated_by&#39;: &#39;str&#39;,
+        &#39;collaborator&#39;: &#39;StoryCollaborator&#39;,
         &#39;collaborator_id&#39;: &#39;str&#39;,
-        &#39;outline_revision&#39;: &#39;int&#39;,
         &#39;host&#39;: &#39;str&#39;,
-        &#39;views&#39;: &#39;list[View]&#39;,
-        &#39;collaborator&#39;: &#39;StoryCollaborator&#39;
+        &#39;outline_revision&#39;: &#39;int&#39;,
+        &#39;views&#39;: &#39;list[View]&#39;
     }
 
     attribute_map = {
-        &#39;id&#39;: &#39;id&#39;,
         &#39;created_at&#39;: &#39;created_at&#39;,
         &#39;created_by&#39;: &#39;created_by&#39;,
+        &#39;id&#39;: &#39;id&#39;,
         &#39;updated_at&#39;: &#39;updated_at&#39;,
         &#39;updated_by&#39;: &#39;updated_by&#39;,
+        &#39;collaborator&#39;: &#39;collaborator&#39;,
         &#39;collaborator_id&#39;: &#39;collaborator_id&#39;,
-        &#39;outline_revision&#39;: &#39;outline_revision&#39;,
         &#39;host&#39;: &#39;host&#39;,
-        &#39;views&#39;: &#39;views&#39;,
-        &#39;collaborator&#39;: &#39;collaborator&#39;
+        &#39;outline_revision&#39;: &#39;outline_revision&#39;,
+        &#39;views&#39;: &#39;views&#39;
     }
 
-    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, collaborator_id=None, outline_revision=None, host=None, views=None, collaborator=None):  # noqa: E501
+    def __init__(self, created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, collaborator=None, collaborator_id=None, host=None, outline_revision=None, views=None):  # noqa: E501
         &#34;&#34;&#34;Session - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
 
-        self._id = None
         self._created_at = None
         self._created_by = None
+        self._id = None
         self._updated_at = None
         self._updated_by = None
-        self._collaborator_id = None
-        self._outline_revision = None
-        self._host = None
-        self._views = None
         self._collaborator = None
+        self._collaborator_id = None
+        self._host = None
+        self._outline_revision = None
+        self._views = None
         self.discriminator = None
 
-        if id is not None:
-            self.id = id
         if created_at is not None:
             self.created_at = created_at
         if created_by is not None:
             self.created_by = created_by
+        if id is not None:
+            self.id = id
         if updated_at is not None:
             self.updated_at = updated_at
         if updated_by is not None:
             self.updated_by = updated_by
-        if collaborator_id is not None:
-            self.collaborator_id = collaborator_id
-        if outline_revision is not None:
-            self.outline_revision = outline_revision
-        if host is not None:
-            self.host = host
-        if views is not None:
-            self.views = views
         if collaborator is not None:
             self.collaborator = collaborator
-
-    @property
-    def id(self):
-        &#34;&#34;&#34;Gets the id of this Session.  # noqa: E501
-
-
-        :return: The id of this Session.  # noqa: E501
-        :rtype: str
-        &#34;&#34;&#34;
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        &#34;&#34;&#34;Sets the id of this Session.
-
-
-        :param id: The id of this Session.  # noqa: E501
-        :type: str
-        &#34;&#34;&#34;
-
-        self._id = id
+        if collaborator_id is not None:
+            self.collaborator_id = collaborator_id
+        if host is not None:
+            self.host = host
+        if outline_revision is not None:
+            self.outline_revision = outline_revision
+        if views is not None:
+            self.views = views
 
     @property
     def created_at(self):
@@ -188,6 +167,27 @@ class Session(object):
         self._created_by = created_by
 
     @property
+    def id(self):
+        &#34;&#34;&#34;Gets the id of this Session.  # noqa: E501
+
+
+        :return: The id of this Session.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        &#34;&#34;&#34;Sets the id of this Session.
+
+
+        :param id: The id of this Session.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._id = id
+
+    @property
     def updated_at(self):
         &#34;&#34;&#34;Gets the updated_at of this Session.  # noqa: E501
 
@@ -230,6 +230,27 @@ class Session(object):
         self._updated_by = updated_by
 
     @property
+    def collaborator(self):
+        &#34;&#34;&#34;Gets the collaborator of this Session.  # noqa: E501
+
+
+        :return: The collaborator of this Session.  # noqa: E501
+        :rtype: StoryCollaborator
+        &#34;&#34;&#34;
+        return self._collaborator
+
+    @collaborator.setter
+    def collaborator(self, collaborator):
+        &#34;&#34;&#34;Sets the collaborator of this Session.
+
+
+        :param collaborator: The collaborator of this Session.  # noqa: E501
+        :type: StoryCollaborator
+        &#34;&#34;&#34;
+
+        self._collaborator = collaborator
+
+    @property
     def collaborator_id(self):
         &#34;&#34;&#34;Gets the collaborator_id of this Session.  # noqa: E501
 
@@ -249,27 +270,6 @@ class Session(object):
         &#34;&#34;&#34;
 
         self._collaborator_id = collaborator_id
-
-    @property
-    def outline_revision(self):
-        &#34;&#34;&#34;Gets the outline_revision of this Session.  # noqa: E501
-
-
-        :return: The outline_revision of this Session.  # noqa: E501
-        :rtype: int
-        &#34;&#34;&#34;
-        return self._outline_revision
-
-    @outline_revision.setter
-    def outline_revision(self, outline_revision):
-        &#34;&#34;&#34;Sets the outline_revision of this Session.
-
-
-        :param outline_revision: The outline_revision of this Session.  # noqa: E501
-        :type: int
-        &#34;&#34;&#34;
-
-        self._outline_revision = outline_revision
 
     @property
     def host(self):
@@ -293,6 +293,27 @@ class Session(object):
         self._host = host
 
     @property
+    def outline_revision(self):
+        &#34;&#34;&#34;Gets the outline_revision of this Session.  # noqa: E501
+
+
+        :return: The outline_revision of this Session.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._outline_revision
+
+    @outline_revision.setter
+    def outline_revision(self, outline_revision):
+        &#34;&#34;&#34;Sets the outline_revision of this Session.
+
+
+        :param outline_revision: The outline_revision of this Session.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._outline_revision = outline_revision
+
+    @property
     def views(self):
         &#34;&#34;&#34;Gets the views of this Session.  # noqa: E501
 
@@ -312,27 +333,6 @@ class Session(object):
         &#34;&#34;&#34;
 
         self._views = views
-
-    @property
-    def collaborator(self):
-        &#34;&#34;&#34;Gets the collaborator of this Session.  # noqa: E501
-
-
-        :return: The collaborator of this Session.  # noqa: E501
-        :rtype: StoryCollaborator
-        &#34;&#34;&#34;
-        return self._collaborator
-
-    @collaborator.setter
-    def collaborator(self, collaborator):
-        &#34;&#34;&#34;Sets the collaborator of this Session.
-
-
-        :param collaborator: The collaborator of this Session.  # noqa: E501
-        :type: StoryCollaborator
-        &#34;&#34;&#34;
-
-        self._collaborator = collaborator
 
     def to_dict(self):
         &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
@@ -389,7 +389,7 @@ class Session(object):
 <dl>
 <dt id="presalytics.client.presalytics_story.models.session.Session"><code class="flex name class">
 <span>class <span class="ident">Session</span></span>
-<span>(</span><span>id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, collaborator_id=None, outline_revision=None, host=None, views=None, collaborator=None)</span>
+<span>(</span><span>created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, collaborator=None, collaborator_id=None, host=None, outline_revision=None, views=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>NOTE: This class is auto generated by OpenAPI Generator.
@@ -416,87 +416,66 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
                             and the value is json key in definition.
     &#34;&#34;&#34;
     openapi_types = {
-        &#39;id&#39;: &#39;str&#39;,
         &#39;created_at&#39;: &#39;datetime&#39;,
         &#39;created_by&#39;: &#39;str&#39;,
+        &#39;id&#39;: &#39;str&#39;,
         &#39;updated_at&#39;: &#39;datetime&#39;,
         &#39;updated_by&#39;: &#39;str&#39;,
+        &#39;collaborator&#39;: &#39;StoryCollaborator&#39;,
         &#39;collaborator_id&#39;: &#39;str&#39;,
-        &#39;outline_revision&#39;: &#39;int&#39;,
         &#39;host&#39;: &#39;str&#39;,
-        &#39;views&#39;: &#39;list[View]&#39;,
-        &#39;collaborator&#39;: &#39;StoryCollaborator&#39;
+        &#39;outline_revision&#39;: &#39;int&#39;,
+        &#39;views&#39;: &#39;list[View]&#39;
     }
 
     attribute_map = {
-        &#39;id&#39;: &#39;id&#39;,
         &#39;created_at&#39;: &#39;created_at&#39;,
         &#39;created_by&#39;: &#39;created_by&#39;,
+        &#39;id&#39;: &#39;id&#39;,
         &#39;updated_at&#39;: &#39;updated_at&#39;,
         &#39;updated_by&#39;: &#39;updated_by&#39;,
+        &#39;collaborator&#39;: &#39;collaborator&#39;,
         &#39;collaborator_id&#39;: &#39;collaborator_id&#39;,
-        &#39;outline_revision&#39;: &#39;outline_revision&#39;,
         &#39;host&#39;: &#39;host&#39;,
-        &#39;views&#39;: &#39;views&#39;,
-        &#39;collaborator&#39;: &#39;collaborator&#39;
+        &#39;outline_revision&#39;: &#39;outline_revision&#39;,
+        &#39;views&#39;: &#39;views&#39;
     }
 
-    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, collaborator_id=None, outline_revision=None, host=None, views=None, collaborator=None):  # noqa: E501
+    def __init__(self, created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, collaborator=None, collaborator_id=None, host=None, outline_revision=None, views=None):  # noqa: E501
         &#34;&#34;&#34;Session - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
 
-        self._id = None
         self._created_at = None
         self._created_by = None
+        self._id = None
         self._updated_at = None
         self._updated_by = None
-        self._collaborator_id = None
-        self._outline_revision = None
-        self._host = None
-        self._views = None
         self._collaborator = None
+        self._collaborator_id = None
+        self._host = None
+        self._outline_revision = None
+        self._views = None
         self.discriminator = None
 
-        if id is not None:
-            self.id = id
         if created_at is not None:
             self.created_at = created_at
         if created_by is not None:
             self.created_by = created_by
+        if id is not None:
+            self.id = id
         if updated_at is not None:
             self.updated_at = updated_at
         if updated_by is not None:
             self.updated_by = updated_by
-        if collaborator_id is not None:
-            self.collaborator_id = collaborator_id
-        if outline_revision is not None:
-            self.outline_revision = outline_revision
-        if host is not None:
-            self.host = host
-        if views is not None:
-            self.views = views
         if collaborator is not None:
             self.collaborator = collaborator
-
-    @property
-    def id(self):
-        &#34;&#34;&#34;Gets the id of this Session.  # noqa: E501
-
-
-        :return: The id of this Session.  # noqa: E501
-        :rtype: str
-        &#34;&#34;&#34;
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        &#34;&#34;&#34;Sets the id of this Session.
-
-
-        :param id: The id of this Session.  # noqa: E501
-        :type: str
-        &#34;&#34;&#34;
-
-        self._id = id
+        if collaborator_id is not None:
+            self.collaborator_id = collaborator_id
+        if host is not None:
+            self.host = host
+        if outline_revision is not None:
+            self.outline_revision = outline_revision
+        if views is not None:
+            self.views = views
 
     @property
     def created_at(self):
@@ -541,6 +520,27 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._created_by = created_by
 
     @property
+    def id(self):
+        &#34;&#34;&#34;Gets the id of this Session.  # noqa: E501
+
+
+        :return: The id of this Session.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        &#34;&#34;&#34;Sets the id of this Session.
+
+
+        :param id: The id of this Session.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._id = id
+
+    @property
     def updated_at(self):
         &#34;&#34;&#34;Gets the updated_at of this Session.  # noqa: E501
 
@@ -583,6 +583,27 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._updated_by = updated_by
 
     @property
+    def collaborator(self):
+        &#34;&#34;&#34;Gets the collaborator of this Session.  # noqa: E501
+
+
+        :return: The collaborator of this Session.  # noqa: E501
+        :rtype: StoryCollaborator
+        &#34;&#34;&#34;
+        return self._collaborator
+
+    @collaborator.setter
+    def collaborator(self, collaborator):
+        &#34;&#34;&#34;Sets the collaborator of this Session.
+
+
+        :param collaborator: The collaborator of this Session.  # noqa: E501
+        :type: StoryCollaborator
+        &#34;&#34;&#34;
+
+        self._collaborator = collaborator
+
+    @property
     def collaborator_id(self):
         &#34;&#34;&#34;Gets the collaborator_id of this Session.  # noqa: E501
 
@@ -602,27 +623,6 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         &#34;&#34;&#34;
 
         self._collaborator_id = collaborator_id
-
-    @property
-    def outline_revision(self):
-        &#34;&#34;&#34;Gets the outline_revision of this Session.  # noqa: E501
-
-
-        :return: The outline_revision of this Session.  # noqa: E501
-        :rtype: int
-        &#34;&#34;&#34;
-        return self._outline_revision
-
-    @outline_revision.setter
-    def outline_revision(self, outline_revision):
-        &#34;&#34;&#34;Sets the outline_revision of this Session.
-
-
-        :param outline_revision: The outline_revision of this Session.  # noqa: E501
-        :type: int
-        &#34;&#34;&#34;
-
-        self._outline_revision = outline_revision
 
     @property
     def host(self):
@@ -646,6 +646,27 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._host = host
 
     @property
+    def outline_revision(self):
+        &#34;&#34;&#34;Gets the outline_revision of this Session.  # noqa: E501
+
+
+        :return: The outline_revision of this Session.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._outline_revision
+
+    @outline_revision.setter
+    def outline_revision(self, outline_revision):
+        &#34;&#34;&#34;Sets the outline_revision of this Session.
+
+
+        :param outline_revision: The outline_revision of this Session.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._outline_revision = outline_revision
+
+    @property
     def views(self):
         &#34;&#34;&#34;Gets the views of this Session.  # noqa: E501
 
@@ -665,27 +686,6 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         &#34;&#34;&#34;
 
         self._views = views
-
-    @property
-    def collaborator(self):
-        &#34;&#34;&#34;Gets the collaborator of this Session.  # noqa: E501
-
-
-        :return: The collaborator of this Session.  # noqa: E501
-        :rtype: StoryCollaborator
-        &#34;&#34;&#34;
-        return self._collaborator
-
-    @collaborator.setter
-    def collaborator(self, collaborator):
-        &#34;&#34;&#34;Sets the collaborator of this Session.
-
-
-        :param collaborator: The collaborator of this Session.  # noqa: E501
-        :type: StoryCollaborator
-        &#34;&#34;&#34;
-
-        self._collaborator = collaborator
 
     def to_dict(self):
         &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
@@ -763,29 +763,6 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_story.models.session.Session.id"><code class="name">var <span class="ident">id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the id of this Session.
-# noqa: E501</p>
-<p>:return: The id of this Session.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session.py#L95-L103" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def id(self):
-    &#34;&#34;&#34;Gets the id of this Session.  # noqa: E501
-
-
-    :return: The id of this Session.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._id</code></pre>
-</details>
-</dd>
 <dt id="presalytics.client.presalytics_story.models.session.Session.created_at"><code class="name">var <span class="ident">created_at</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the created_at of this Session.
@@ -796,7 +773,7 @@ def id(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session.py#L116-L124" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session.py#L95-L103" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def created_at(self):
@@ -819,7 +796,7 @@ def created_at(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session.py#L137-L145" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session.py#L116-L124" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def created_by(self):
@@ -830,6 +807,29 @@ def created_by(self):
     :rtype: str
     &#34;&#34;&#34;
     return self._created_by</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.session.Session.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the id of this Session.
+# noqa: E501</p>
+<p>:return: The id of this Session.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session.py#L137-L145" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def id(self):
+    &#34;&#34;&#34;Gets the id of this Session.  # noqa: E501
+
+
+    :return: The id of this Session.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._id</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_story.models.session.Session.updated_at"><code class="name">var <span class="ident">updated_at</span></code></dt>
@@ -878,6 +878,29 @@ def updated_by(self):
     return self._updated_by</code></pre>
 </details>
 </dd>
+<dt id="presalytics.client.presalytics_story.models.session.Session.collaborator"><code class="name">var <span class="ident">collaborator</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the collaborator of this Session.
+# noqa: E501</p>
+<p>:return: The collaborator of this Session.
+# noqa: E501
+:rtype: StoryCollaborator</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session.py#L200-L208" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def collaborator(self):
+    &#34;&#34;&#34;Gets the collaborator of this Session.  # noqa: E501
+
+
+    :return: The collaborator of this Session.  # noqa: E501
+    :rtype: StoryCollaborator
+    &#34;&#34;&#34;
+    return self._collaborator</code></pre>
+</details>
+</dd>
 <dt id="presalytics.client.presalytics_story.models.session.Session.collaborator_id"><code class="name">var <span class="ident">collaborator_id</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the collaborator_id of this Session.
@@ -888,7 +911,7 @@ def updated_by(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session.py#L200-L208" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session.py#L221-L229" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def collaborator_id(self):
@@ -899,29 +922,6 @@ def collaborator_id(self):
     :rtype: str
     &#34;&#34;&#34;
     return self._collaborator_id</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.session.Session.outline_revision"><code class="name">var <span class="ident">outline_revision</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the outline_revision of this Session.
-# noqa: E501</p>
-<p>:return: The outline_revision of this Session.
-# noqa: E501
-:rtype: int</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session.py#L221-L229" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def outline_revision(self):
-    &#34;&#34;&#34;Gets the outline_revision of this Session.  # noqa: E501
-
-
-    :return: The outline_revision of this Session.  # noqa: E501
-    :rtype: int
-    &#34;&#34;&#34;
-    return self._outline_revision</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_story.models.session.Session.host"><code class="name">var <span class="ident">host</span></code></dt>
@@ -947,6 +947,29 @@ def host(self):
     return self._host</code></pre>
 </details>
 </dd>
+<dt id="presalytics.client.presalytics_story.models.session.Session.outline_revision"><code class="name">var <span class="ident">outline_revision</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the outline_revision of this Session.
+# noqa: E501</p>
+<p>:return: The outline_revision of this Session.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session.py#L263-L271" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def outline_revision(self):
+    &#34;&#34;&#34;Gets the outline_revision of this Session.  # noqa: E501
+
+
+    :return: The outline_revision of this Session.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._outline_revision</code></pre>
+</details>
+</dd>
 <dt id="presalytics.client.presalytics_story.models.session.Session.views"><code class="name">var <span class="ident">views</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the views of this Session.
@@ -957,7 +980,7 @@ def host(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session.py#L263-L271" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session.py#L284-L292" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def views(self):
@@ -968,29 +991,6 @@ def views(self):
     :rtype: list[View]
     &#34;&#34;&#34;
     return self._views</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.session.Session.collaborator"><code class="name">var <span class="ident">collaborator</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the collaborator of this Session.
-# noqa: E501</p>
-<p>:return: The collaborator of this Session.
-# noqa: E501
-:rtype: StoryCollaborator</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/session.py#L284-L292" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def collaborator(self):
-    &#34;&#34;&#34;Gets the collaborator of this Session.  # noqa: E501
-
-
-    :return: The collaborator of this Session.  # noqa: E501
-    :rtype: StoryCollaborator
-    &#34;&#34;&#34;
-    return self._collaborator</code></pre>
 </details>
 </dd>
 </dl>
@@ -1069,16 +1069,16 @@ def collaborator(self):
 <ul class="two-column">
 <li><code><a title="presalytics.client.presalytics_story.models.session.Session.to_dict" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.session.Session.to_str" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.to_str">to_str</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.session.Session.id" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.id">id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.session.Session.created_at" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.created_at">created_at</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.session.Session.created_by" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.created_by">created_by</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.session.Session.id" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.id">id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.session.Session.updated_at" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.updated_at">updated_at</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.session.Session.updated_by" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.updated_by">updated_by</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.session.Session.collaborator_id" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.collaborator_id">collaborator_id</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.session.Session.outline_revision" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.outline_revision">outline_revision</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.session.Session.host" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.host">host</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.session.Session.views" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.views">views</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.session.Session.collaborator" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.collaborator">collaborator</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.session.Session.collaborator_id" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.collaborator_id">collaborator_id</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.session.Session.host" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.host">host</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.session.Session.outline_revision" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.outline_revision">outline_revision</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.session.Session.views" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.views">views</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.session.Session.openapi_types" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.openapi_types">openapi_types</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.session.Session.attribute_map" href="/python-client/presalytics/client/presalytics_story/models/session.html#presalytics.client.presalytics_story.models.session.Session.attribute_map">attribute_map</a></code></li>
 </ul>

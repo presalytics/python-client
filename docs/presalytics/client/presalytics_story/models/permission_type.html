@@ -63,87 +63,66 @@ class PermissionType(object):
                             and the value is json key in definition.
     &#34;&#34;&#34;
     openapi_types = {
-        &#39;id&#39;: &#39;str&#39;,
         &#39;created_at&#39;: &#39;datetime&#39;,
         &#39;created_by&#39;: &#39;str&#39;,
+        &#39;id&#39;: &#39;str&#39;,
         &#39;updated_at&#39;: &#39;datetime&#39;,
         &#39;updated_by&#39;: &#39;str&#39;,
-        &#39;name&#39;: &#39;str&#39;,
+        &#39;can_add_collaborators&#39;: &#39;bool&#39;,
+        &#39;can_delete&#39;: &#39;bool&#39;,
         &#39;can_edit&#39;: &#39;bool&#39;,
         &#39;can_view&#39;: &#39;bool&#39;,
-        &#39;can_add_collaborators&#39;: &#39;bool&#39;,
-        &#39;can_delete&#39;: &#39;bool&#39;
+        &#39;name&#39;: &#39;str&#39;
     }
 
     attribute_map = {
-        &#39;id&#39;: &#39;id&#39;,
         &#39;created_at&#39;: &#39;created_at&#39;,
         &#39;created_by&#39;: &#39;created_by&#39;,
+        &#39;id&#39;: &#39;id&#39;,
         &#39;updated_at&#39;: &#39;updated_at&#39;,
         &#39;updated_by&#39;: &#39;updated_by&#39;,
-        &#39;name&#39;: &#39;name&#39;,
+        &#39;can_add_collaborators&#39;: &#39;can_add_collaborators&#39;,
+        &#39;can_delete&#39;: &#39;can_delete&#39;,
         &#39;can_edit&#39;: &#39;can_edit&#39;,
         &#39;can_view&#39;: &#39;can_view&#39;,
-        &#39;can_add_collaborators&#39;: &#39;can_add_collaborators&#39;,
-        &#39;can_delete&#39;: &#39;can_delete&#39;
+        &#39;name&#39;: &#39;name&#39;
     }
 
-    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, name=None, can_edit=None, can_view=None, can_add_collaborators=None, can_delete=None):  # noqa: E501
+    def __init__(self, created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, can_add_collaborators=None, can_delete=None, can_edit=None, can_view=None, name=None):  # noqa: E501
         &#34;&#34;&#34;PermissionType - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
 
-        self._id = None
         self._created_at = None
         self._created_by = None
+        self._id = None
         self._updated_at = None
         self._updated_by = None
-        self._name = None
-        self._can_edit = None
-        self._can_view = None
         self._can_add_collaborators = None
         self._can_delete = None
+        self._can_edit = None
+        self._can_view = None
+        self._name = None
         self.discriminator = None
 
-        if id is not None:
-            self.id = id
         if created_at is not None:
             self.created_at = created_at
         if created_by is not None:
             self.created_by = created_by
+        if id is not None:
+            self.id = id
         if updated_at is not None:
             self.updated_at = updated_at
         if updated_by is not None:
             self.updated_by = updated_by
-        if name is not None:
-            self.name = name
-        if can_edit is not None:
-            self.can_edit = can_edit
-        if can_view is not None:
-            self.can_view = can_view
         if can_add_collaborators is not None:
             self.can_add_collaborators = can_add_collaborators
         if can_delete is not None:
             self.can_delete = can_delete
-
-    @property
-    def id(self):
-        &#34;&#34;&#34;Gets the id of this PermissionType.  # noqa: E501
-
-
-        :return: The id of this PermissionType.  # noqa: E501
-        :rtype: str
-        &#34;&#34;&#34;
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        &#34;&#34;&#34;Sets the id of this PermissionType.
-
-
-        :param id: The id of this PermissionType.  # noqa: E501
-        :type: str
-        &#34;&#34;&#34;
-
-        self._id = id
+        if can_edit is not None:
+            self.can_edit = can_edit
+        if can_view is not None:
+            self.can_view = can_view
+        if name is not None:
+            self.name = name
 
     @property
     def created_at(self):
@@ -188,6 +167,27 @@ class PermissionType(object):
         self._created_by = created_by
 
     @property
+    def id(self):
+        &#34;&#34;&#34;Gets the id of this PermissionType.  # noqa: E501
+
+
+        :return: The id of this PermissionType.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        &#34;&#34;&#34;Sets the id of this PermissionType.
+
+
+        :param id: The id of this PermissionType.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._id = id
+
+    @property
     def updated_at(self):
         &#34;&#34;&#34;Gets the updated_at of this PermissionType.  # noqa: E501
 
@@ -230,25 +230,46 @@ class PermissionType(object):
         self._updated_by = updated_by
 
     @property
-    def name(self):
-        &#34;&#34;&#34;Gets the name of this PermissionType.  # noqa: E501
+    def can_add_collaborators(self):
+        &#34;&#34;&#34;Gets the can_add_collaborators of this PermissionType.  # noqa: E501
 
 
-        :return: The name of this PermissionType.  # noqa: E501
-        :rtype: str
+        :return: The can_add_collaborators of this PermissionType.  # noqa: E501
+        :rtype: bool
         &#34;&#34;&#34;
-        return self._name
+        return self._can_add_collaborators
 
-    @name.setter
-    def name(self, name):
-        &#34;&#34;&#34;Sets the name of this PermissionType.
+    @can_add_collaborators.setter
+    def can_add_collaborators(self, can_add_collaborators):
+        &#34;&#34;&#34;Sets the can_add_collaborators of this PermissionType.
 
 
-        :param name: The name of this PermissionType.  # noqa: E501
-        :type: str
+        :param can_add_collaborators: The can_add_collaborators of this PermissionType.  # noqa: E501
+        :type: bool
         &#34;&#34;&#34;
 
-        self._name = name
+        self._can_add_collaborators = can_add_collaborators
+
+    @property
+    def can_delete(self):
+        &#34;&#34;&#34;Gets the can_delete of this PermissionType.  # noqa: E501
+
+
+        :return: The can_delete of this PermissionType.  # noqa: E501
+        :rtype: bool
+        &#34;&#34;&#34;
+        return self._can_delete
+
+    @can_delete.setter
+    def can_delete(self, can_delete):
+        &#34;&#34;&#34;Sets the can_delete of this PermissionType.
+
+
+        :param can_delete: The can_delete of this PermissionType.  # noqa: E501
+        :type: bool
+        &#34;&#34;&#34;
+
+        self._can_delete = can_delete
 
     @property
     def can_edit(self):
@@ -293,46 +314,25 @@ class PermissionType(object):
         self._can_view = can_view
 
     @property
-    def can_add_collaborators(self):
-        &#34;&#34;&#34;Gets the can_add_collaborators of this PermissionType.  # noqa: E501
+    def name(self):
+        &#34;&#34;&#34;Gets the name of this PermissionType.  # noqa: E501
 
 
-        :return: The can_add_collaborators of this PermissionType.  # noqa: E501
-        :rtype: bool
+        :return: The name of this PermissionType.  # noqa: E501
+        :rtype: str
         &#34;&#34;&#34;
-        return self._can_add_collaborators
+        return self._name
 
-    @can_add_collaborators.setter
-    def can_add_collaborators(self, can_add_collaborators):
-        &#34;&#34;&#34;Sets the can_add_collaborators of this PermissionType.
-
-
-        :param can_add_collaborators: The can_add_collaborators of this PermissionType.  # noqa: E501
-        :type: bool
-        &#34;&#34;&#34;
-
-        self._can_add_collaborators = can_add_collaborators
-
-    @property
-    def can_delete(self):
-        &#34;&#34;&#34;Gets the can_delete of this PermissionType.  # noqa: E501
+    @name.setter
+    def name(self, name):
+        &#34;&#34;&#34;Sets the name of this PermissionType.
 
 
-        :return: The can_delete of this PermissionType.  # noqa: E501
-        :rtype: bool
-        &#34;&#34;&#34;
-        return self._can_delete
-
-    @can_delete.setter
-    def can_delete(self, can_delete):
-        &#34;&#34;&#34;Sets the can_delete of this PermissionType.
-
-
-        :param can_delete: The can_delete of this PermissionType.  # noqa: E501
-        :type: bool
+        :param name: The name of this PermissionType.  # noqa: E501
+        :type: str
         &#34;&#34;&#34;
 
-        self._can_delete = can_delete
+        self._name = name
 
     def to_dict(self):
         &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
@@ -389,7 +389,7 @@ class PermissionType(object):
 <dl>
 <dt id="presalytics.client.presalytics_story.models.permission_type.PermissionType"><code class="flex name class">
 <span>class <span class="ident">PermissionType</span></span>
-<span>(</span><span>id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, name=None, can_edit=None, can_view=None, can_add_collaborators=None, can_delete=None)</span>
+<span>(</span><span>created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, can_add_collaborators=None, can_delete=None, can_edit=None, can_view=None, name=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>NOTE: This class is auto generated by OpenAPI Generator.
@@ -416,87 +416,66 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
                             and the value is json key in definition.
     &#34;&#34;&#34;
     openapi_types = {
-        &#39;id&#39;: &#39;str&#39;,
         &#39;created_at&#39;: &#39;datetime&#39;,
         &#39;created_by&#39;: &#39;str&#39;,
+        &#39;id&#39;: &#39;str&#39;,
         &#39;updated_at&#39;: &#39;datetime&#39;,
         &#39;updated_by&#39;: &#39;str&#39;,
-        &#39;name&#39;: &#39;str&#39;,
+        &#39;can_add_collaborators&#39;: &#39;bool&#39;,
+        &#39;can_delete&#39;: &#39;bool&#39;,
         &#39;can_edit&#39;: &#39;bool&#39;,
         &#39;can_view&#39;: &#39;bool&#39;,
-        &#39;can_add_collaborators&#39;: &#39;bool&#39;,
-        &#39;can_delete&#39;: &#39;bool&#39;
+        &#39;name&#39;: &#39;str&#39;
     }
 
     attribute_map = {
-        &#39;id&#39;: &#39;id&#39;,
         &#39;created_at&#39;: &#39;created_at&#39;,
         &#39;created_by&#39;: &#39;created_by&#39;,
+        &#39;id&#39;: &#39;id&#39;,
         &#39;updated_at&#39;: &#39;updated_at&#39;,
         &#39;updated_by&#39;: &#39;updated_by&#39;,
-        &#39;name&#39;: &#39;name&#39;,
+        &#39;can_add_collaborators&#39;: &#39;can_add_collaborators&#39;,
+        &#39;can_delete&#39;: &#39;can_delete&#39;,
         &#39;can_edit&#39;: &#39;can_edit&#39;,
         &#39;can_view&#39;: &#39;can_view&#39;,
-        &#39;can_add_collaborators&#39;: &#39;can_add_collaborators&#39;,
-        &#39;can_delete&#39;: &#39;can_delete&#39;
+        &#39;name&#39;: &#39;name&#39;
     }
 
-    def __init__(self, id=None, created_at=None, created_by=None, updated_at=None, updated_by=None, name=None, can_edit=None, can_view=None, can_add_collaborators=None, can_delete=None):  # noqa: E501
+    def __init__(self, created_at=None, created_by=None, id=None, updated_at=None, updated_by=None, can_add_collaborators=None, can_delete=None, can_edit=None, can_view=None, name=None):  # noqa: E501
         &#34;&#34;&#34;PermissionType - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
 
-        self._id = None
         self._created_at = None
         self._created_by = None
+        self._id = None
         self._updated_at = None
         self._updated_by = None
-        self._name = None
-        self._can_edit = None
-        self._can_view = None
         self._can_add_collaborators = None
         self._can_delete = None
+        self._can_edit = None
+        self._can_view = None
+        self._name = None
         self.discriminator = None
 
-        if id is not None:
-            self.id = id
         if created_at is not None:
             self.created_at = created_at
         if created_by is not None:
             self.created_by = created_by
+        if id is not None:
+            self.id = id
         if updated_at is not None:
             self.updated_at = updated_at
         if updated_by is not None:
             self.updated_by = updated_by
-        if name is not None:
-            self.name = name
-        if can_edit is not None:
-            self.can_edit = can_edit
-        if can_view is not None:
-            self.can_view = can_view
         if can_add_collaborators is not None:
             self.can_add_collaborators = can_add_collaborators
         if can_delete is not None:
             self.can_delete = can_delete
-
-    @property
-    def id(self):
-        &#34;&#34;&#34;Gets the id of this PermissionType.  # noqa: E501
-
-
-        :return: The id of this PermissionType.  # noqa: E501
-        :rtype: str
-        &#34;&#34;&#34;
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        &#34;&#34;&#34;Sets the id of this PermissionType.
-
-
-        :param id: The id of this PermissionType.  # noqa: E501
-        :type: str
-        &#34;&#34;&#34;
-
-        self._id = id
+        if can_edit is not None:
+            self.can_edit = can_edit
+        if can_view is not None:
+            self.can_view = can_view
+        if name is not None:
+            self.name = name
 
     @property
     def created_at(self):
@@ -541,6 +520,27 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._created_by = created_by
 
     @property
+    def id(self):
+        &#34;&#34;&#34;Gets the id of this PermissionType.  # noqa: E501
+
+
+        :return: The id of this PermissionType.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        &#34;&#34;&#34;Sets the id of this PermissionType.
+
+
+        :param id: The id of this PermissionType.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._id = id
+
+    @property
     def updated_at(self):
         &#34;&#34;&#34;Gets the updated_at of this PermissionType.  # noqa: E501
 
@@ -583,25 +583,46 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._updated_by = updated_by
 
     @property
-    def name(self):
-        &#34;&#34;&#34;Gets the name of this PermissionType.  # noqa: E501
+    def can_add_collaborators(self):
+        &#34;&#34;&#34;Gets the can_add_collaborators of this PermissionType.  # noqa: E501
 
 
-        :return: The name of this PermissionType.  # noqa: E501
-        :rtype: str
+        :return: The can_add_collaborators of this PermissionType.  # noqa: E501
+        :rtype: bool
         &#34;&#34;&#34;
-        return self._name
+        return self._can_add_collaborators
 
-    @name.setter
-    def name(self, name):
-        &#34;&#34;&#34;Sets the name of this PermissionType.
+    @can_add_collaborators.setter
+    def can_add_collaborators(self, can_add_collaborators):
+        &#34;&#34;&#34;Sets the can_add_collaborators of this PermissionType.
 
 
-        :param name: The name of this PermissionType.  # noqa: E501
-        :type: str
+        :param can_add_collaborators: The can_add_collaborators of this PermissionType.  # noqa: E501
+        :type: bool
         &#34;&#34;&#34;
 
-        self._name = name
+        self._can_add_collaborators = can_add_collaborators
+
+    @property
+    def can_delete(self):
+        &#34;&#34;&#34;Gets the can_delete of this PermissionType.  # noqa: E501
+
+
+        :return: The can_delete of this PermissionType.  # noqa: E501
+        :rtype: bool
+        &#34;&#34;&#34;
+        return self._can_delete
+
+    @can_delete.setter
+    def can_delete(self, can_delete):
+        &#34;&#34;&#34;Sets the can_delete of this PermissionType.
+
+
+        :param can_delete: The can_delete of this PermissionType.  # noqa: E501
+        :type: bool
+        &#34;&#34;&#34;
+
+        self._can_delete = can_delete
 
     @property
     def can_edit(self):
@@ -646,46 +667,25 @@ Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
         self._can_view = can_view
 
     @property
-    def can_add_collaborators(self):
-        &#34;&#34;&#34;Gets the can_add_collaborators of this PermissionType.  # noqa: E501
+    def name(self):
+        &#34;&#34;&#34;Gets the name of this PermissionType.  # noqa: E501
 
 
-        :return: The can_add_collaborators of this PermissionType.  # noqa: E501
-        :rtype: bool
+        :return: The name of this PermissionType.  # noqa: E501
+        :rtype: str
         &#34;&#34;&#34;
-        return self._can_add_collaborators
+        return self._name
 
-    @can_add_collaborators.setter
-    def can_add_collaborators(self, can_add_collaborators):
-        &#34;&#34;&#34;Sets the can_add_collaborators of this PermissionType.
-
-
-        :param can_add_collaborators: The can_add_collaborators of this PermissionType.  # noqa: E501
-        :type: bool
-        &#34;&#34;&#34;
-
-        self._can_add_collaborators = can_add_collaborators
-
-    @property
-    def can_delete(self):
-        &#34;&#34;&#34;Gets the can_delete of this PermissionType.  # noqa: E501
+    @name.setter
+    def name(self, name):
+        &#34;&#34;&#34;Sets the name of this PermissionType.
 
 
-        :return: The can_delete of this PermissionType.  # noqa: E501
-        :rtype: bool
-        &#34;&#34;&#34;
-        return self._can_delete
-
-    @can_delete.setter
-    def can_delete(self, can_delete):
-        &#34;&#34;&#34;Sets the can_delete of this PermissionType.
-
-
-        :param can_delete: The can_delete of this PermissionType.  # noqa: E501
-        :type: bool
+        :param name: The name of this PermissionType.  # noqa: E501
+        :type: str
         &#34;&#34;&#34;
 
-        self._can_delete = can_delete
+        self._name = name
 
     def to_dict(self):
         &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
@@ -763,29 +763,6 @@ dict(one=1, two=2)</p></section>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="presalytics.client.presalytics_story.models.permission_type.PermissionType.id"><code class="name">var <span class="ident">id</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the id of this PermissionType.
-# noqa: E501</p>
-<p>:return: The id of this PermissionType.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/permission_type.py#L95-L103" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def id(self):
-    &#34;&#34;&#34;Gets the id of this PermissionType.  # noqa: E501
-
-
-    :return: The id of this PermissionType.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._id</code></pre>
-</details>
-</dd>
 <dt id="presalytics.client.presalytics_story.models.permission_type.PermissionType.created_at"><code class="name">var <span class="ident">created_at</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the created_at of this PermissionType.
@@ -796,7 +773,7 @@ def id(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/permission_type.py#L116-L124" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/permission_type.py#L95-L103" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def created_at(self):
@@ -819,7 +796,7 @@ def created_at(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/permission_type.py#L137-L145" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/permission_type.py#L116-L124" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def created_by(self):
@@ -830,6 +807,29 @@ def created_by(self):
     :rtype: str
     &#34;&#34;&#34;
     return self._created_by</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.permission_type.PermissionType.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the id of this PermissionType.
+# noqa: E501</p>
+<p>:return: The id of this PermissionType.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/permission_type.py#L137-L145" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def id(self):
+    &#34;&#34;&#34;Gets the id of this PermissionType.  # noqa: E501
+
+
+    :return: The id of this PermissionType.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._id</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.presalytics_story.models.permission_type.PermissionType.updated_at"><code class="name">var <span class="ident">updated_at</span></code></dt>
@@ -878,75 +878,6 @@ def updated_by(self):
     return self._updated_by</code></pre>
 </details>
 </dd>
-<dt id="presalytics.client.presalytics_story.models.permission_type.PermissionType.name"><code class="name">var <span class="ident">name</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the name of this PermissionType.
-# noqa: E501</p>
-<p>:return: The name of this PermissionType.
-# noqa: E501
-:rtype: str</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/permission_type.py#L200-L208" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def name(self):
-    &#34;&#34;&#34;Gets the name of this PermissionType.  # noqa: E501
-
-
-    :return: The name of this PermissionType.  # noqa: E501
-    :rtype: str
-    &#34;&#34;&#34;
-    return self._name</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.permission_type.PermissionType.can_edit"><code class="name">var <span class="ident">can_edit</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the can_edit of this PermissionType.
-# noqa: E501</p>
-<p>:return: The can_edit of this PermissionType.
-# noqa: E501
-:rtype: bool</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/permission_type.py#L221-L229" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def can_edit(self):
-    &#34;&#34;&#34;Gets the can_edit of this PermissionType.  # noqa: E501
-
-
-    :return: The can_edit of this PermissionType.  # noqa: E501
-    :rtype: bool
-    &#34;&#34;&#34;
-    return self._can_edit</code></pre>
-</details>
-</dd>
-<dt id="presalytics.client.presalytics_story.models.permission_type.PermissionType.can_view"><code class="name">var <span class="ident">can_view</span></code></dt>
-<dd>
-<section class="desc"><p>Gets the can_view of this PermissionType.
-# noqa: E501</p>
-<p>:return: The can_view of this PermissionType.
-# noqa: E501
-:rtype: bool</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/permission_type.py#L242-L250" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">@property
-def can_view(self):
-    &#34;&#34;&#34;Gets the can_view of this PermissionType.  # noqa: E501
-
-
-    :return: The can_view of this PermissionType.  # noqa: E501
-    :rtype: bool
-    &#34;&#34;&#34;
-    return self._can_view</code></pre>
-</details>
-</dd>
 <dt id="presalytics.client.presalytics_story.models.permission_type.PermissionType.can_add_collaborators"><code class="name">var <span class="ident">can_add_collaborators</span></code></dt>
 <dd>
 <section class="desc"><p>Gets the can_add_collaborators of this PermissionType.
@@ -957,7 +888,7 @@ def can_view(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/permission_type.py#L263-L271" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/permission_type.py#L200-L208" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def can_add_collaborators(self):
@@ -980,7 +911,7 @@ def can_add_collaborators(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/permission_type.py#L284-L292" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/permission_type.py#L221-L229" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def can_delete(self):
@@ -991,6 +922,75 @@ def can_delete(self):
     :rtype: bool
     &#34;&#34;&#34;
     return self._can_delete</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.permission_type.PermissionType.can_edit"><code class="name">var <span class="ident">can_edit</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the can_edit of this PermissionType.
+# noqa: E501</p>
+<p>:return: The can_edit of this PermissionType.
+# noqa: E501
+:rtype: bool</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/permission_type.py#L242-L250" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def can_edit(self):
+    &#34;&#34;&#34;Gets the can_edit of this PermissionType.  # noqa: E501
+
+
+    :return: The can_edit of this PermissionType.  # noqa: E501
+    :rtype: bool
+    &#34;&#34;&#34;
+    return self._can_edit</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.permission_type.PermissionType.can_view"><code class="name">var <span class="ident">can_view</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the can_view of this PermissionType.
+# noqa: E501</p>
+<p>:return: The can_view of this PermissionType.
+# noqa: E501
+:rtype: bool</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/permission_type.py#L263-L271" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def can_view(self):
+    &#34;&#34;&#34;Gets the can_view of this PermissionType.  # noqa: E501
+
+
+    :return: The can_view of this PermissionType.  # noqa: E501
+    :rtype: bool
+    &#34;&#34;&#34;
+    return self._can_view</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.presalytics_story.models.permission_type.PermissionType.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the name of this PermissionType.
+# noqa: E501</p>
+<p>:return: The name of this PermissionType.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/presalytics_story/models/permission_type.py#L284-L292" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def name(self):
+    &#34;&#34;&#34;Gets the name of this PermissionType.  # noqa: E501
+
+
+    :return: The name of this PermissionType.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._name</code></pre>
 </details>
 </dd>
 </dl>
@@ -1069,16 +1069,16 @@ def can_delete(self):
 <ul class="">
 <li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.to_dict" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.to_dict">to_dict</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.to_str" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.to_str">to_str</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.id" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.id">id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.created_at" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.created_at">created_at</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.created_by" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.created_by">created_by</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.id" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.id">id</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.updated_at" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.updated_at">updated_at</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.updated_by" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.updated_by">updated_by</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.name" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.name">name</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.can_edit" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.can_edit">can_edit</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.can_view" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.can_view">can_view</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.can_add_collaborators" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.can_add_collaborators">can_add_collaborators</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.can_delete" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.can_delete">can_delete</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.can_edit" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.can_edit">can_edit</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.can_view" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.can_view">can_view</a></code></li>
+<li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.name" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.name">name</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.openapi_types" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.openapi_types">openapi_types</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.models.permission_type.PermissionType.attribute_map" href="/python-client/presalytics/client/presalytics_story/models/permission_type.html#presalytics.client.presalytics_story.models.permission_type.PermissionType.attribute_map">attribute_map</a></code></li>
 </ul>

@@ -202,6 +202,8 @@ def create_pages_from_ooxml_document(story: 'Story',
 
     """
     pages = []
+    order = []
+    pages_unordered = []
     client = presalytics.Client(**client_info)
     child_objects = client.ooxml_automation.documents_childobjects_get_id(ooxml_document.id)
     document_type = client.ooxml_automation.documents_documenttype_typeid_get_type_id(ooxml_document.document_type_id)
@@ -228,12 +230,17 @@ def create_pages_from_ooxml_document(story: 'Story',
                     name=widget_name,
                     widgets=widgets
                 )
-                pages.append(page)
+
+                this_slide_meta = client.ooxml_automation.slides_slides_get_id(slide.entity_id)
+                order.append(this_slide_meta.number -1)
+                pages_unordered.append(page)
             except:
                 logger.error("Unable to add widget {0} to outline ooxml document {1}".format(slide.entity_name, ooxml_document.id))
     # TODO: insert excel chart handling here
+    for j in range(0, len(order)):
+        idx = order.index(j)
+        pages.append(pages_unordered[idx])    
     return pages
-
 
 def create_theme_from_ooxml_document(document_id: str, client_info={}):
     """

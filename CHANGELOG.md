@@ -1,3 +1,7 @@
+## v0.5.2 (2020-07-14)
+
+* Fix page order bug in `presalytics.lib.tools.ooxml_tools.create_pages_from_ooxml_document`
+
 ## v0.5.1 (2020-05-21)
 
 * Add json endpoint to presaltyics story 

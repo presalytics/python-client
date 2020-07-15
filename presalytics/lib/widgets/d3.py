@@ -80,11 +80,11 @@ class D3Widget(presalytics.story.components.WidgetBase):
         will be rendered inside of a story and rescaled to give repsonsive effect
         """
         params = {
-            "site_host": self.get_client(delegate_login=True).story.api_client.configuration.host,
+            "story_host": self.get_client(delegate_login=True).story.api_client.configuration.host,
             "id": self.id,
             "story_id": self.story_id,
         }
-        source_url = "{site_host}/story/{story_id}/d3/{id}".format(**params)
+        source_url = "{story_host}/{story_id}/d3/{id}".format(**params)
         empty_parent_div = lxml.html.Element("div", {
             'class': 'empty-parent bg-light',
             'style': 'height: 100%; width: 100%, display: block; text-align: left;'

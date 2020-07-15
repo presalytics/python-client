@@ -79,8 +79,8 @@ class D3Widget(presalytics.story.components.WidgetBase):
         """
         params = {
             "site_host": self.get_client(delegate_login=True).story.api_client.configuration.host,
-            "figure_id": self.id,
-            "story_id": self.story_id
+            "id": self.id,
+            "story_id": self.story_id,
         }
         source_url = "{site_host}/story/{story_id}/d3/{id}".format(**params)
         empty_parent_div = lxml.html.Element("div", {

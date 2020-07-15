@@ -118,13 +118,16 @@ class RenderExceptionHandler(object):
         self.exception = exception
         self.target_type = target_type
         self.exception_type = self.exception.__class__.__name__
+        self.line_no = None
+
         try: 
             first_frame = self.get_source_frame(traceback)
             self.source_module = first_frame.tb_frame.f_globals['__name__']
+            self.line_no = first_frame.tb_lineno
         except Exception:
-            self.source_module = "unidentitied"
-        
-        self.line_no = first_frame.tb_lineno
+            self.source_module = "unidentified"
+            self.line_no = "unknown"
+    
         if isinstance(self.exception, PresalyticsBaseException):
             self.message = self.exception.message
         else:

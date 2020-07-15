@@ -139,7 +139,7 @@ class TestStory(unittest.TestCase):
 
         client = presalytics.Client()
 
-        story = client.story.story_post(outline.dump())
+        story = client.story.story_post({"outline": outline.dump()})
 
         print(story.id)
 

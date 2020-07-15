@@ -42,15 +42,13 @@ class D3Widget(presalytics.story.components.WidgetBase):
         self.story_id = story_id
         super(D3Widget, self).__init__(name, *args, **kwargs)
         self.script_filename = script_filename
-        if script_filename:
-            self.script64 = self.read_file(script_filename)
+        self.script64 = self.read_file(script_filename)
+        if not self.script64:
+            self.script64 = script64
         else:
-            if script64:
-                self.script64 = script64
-            else:
-                raise presalytics.lib.exceptions.InvalidConfigurationError("D3 Widget must be supplied either a script64 or script_filename keyword argument.")
+            raise presalytics.lib.exceptions.InvalidConfigurationError("D3 Widget must be supplied either a script64 or script_filename keyword argument.")
         
-    def read_file(self, filename) -> str:
+    def read_file(self, filename) -> typing.Optional[str]:
 
         search_paths = list(set(presalytics.autodiscover_paths))
         data64 = None
@@ -61,11 +59,11 @@ class D3Widget(presalytics.story.components.WidgetBase):
             if os.path.exists(fpath):
                 with open(fpath, 'rb') as f:
                     data = f.read()
-                    data64 = base64.b64encode(data)
+                    data64 = base64.b64encode(data).decode('utf-8')  #type: ignore
                 break
         if not data64:
-            logger.info("File {0} could not be found".format(filename))
-        return data64.decode('utf-8')  #type: ignore
+            logger.debug("File {0} could not be found".format(filename))
+        return data64 
 
     def to_html(self, data=None, **kwargs) -> str:
         if not self.story_id:
@@ -155,7 +153,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
             </body>
         </html>""")
         data = json.dumps(self.d3_data)
-        script = base64.b64decode(self.script64).decode('utf-8')
+        script = base64.b64decode(self.script64)  #type: ignore
         context = {
             "id": self.id,
             "d3_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('d3'),

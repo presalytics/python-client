@@ -124,7 +124,7 @@ class Revealer(presalytics.story.components.Renderer):
         Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts. 
         """
 
-        scripts = body.find('//script')
+        scripts = body.findall(".//script")
 
         srcs = []
         for script in scripts:

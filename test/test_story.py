@@ -141,7 +141,7 @@ class TestStory(unittest.TestCase):
 
         story = client.story.story_post(outline.dump())
 
-        
+        print(story.id)
 
 
     def tearDown(self):

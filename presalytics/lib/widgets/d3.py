@@ -80,7 +80,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
         will be rendered inside of a story and rescaled to give repsonsive effect
         """
         params = {
-            "site_host": self.get_client(delegate_login=True).site_host,
+            "site_host": self.get_client(delegate_login=True).story.api_client.configuration.host,
             "figure_id": self.id,
             "story_id": self.story_id
         }

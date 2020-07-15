@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L0-L262" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L0-L279" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import os
 import shutil
@@ -40,6 +40,7 @@ import lxml.html.builder as E
 import datetime
 import six
 import sys
+import urllib.parse
 import presalytics
 import presalytics.lib
 import presalytics.lib.plugins
@@ -145,11 +146,27 @@ class Revealer(presalytics.story.components.Renderer):
             logger.info(&#34;Revealer could not extract story_id from outline.&#34;)
         return base
     
-    def get_meta_tags(self):
+    def get_meta_tags(self, body=tuple()):
+        &#34;&#34;&#34;
+        Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts. 
+        &#34;&#34;&#34;
+
+        scripts = body.findall(&#34;.//script&#34;)
+
+        srcs = []
+        for script in scripts:
+            src = script.get(&#34;src&#34;)
+            if src:
+                root = urllib.parse.urlparse(src).netloc
+                if root:
+                    srcs.append(root)
+        allowed = &#39; &#39;.join(set(srcs))
+
         tags = [
             &#39;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;,
             &#39;&lt;meta http-equiv=&#34;X-UA-Compatible&#34; content=&#34;IE=edge&#34;&gt;&#39;,
-            &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;
+            &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;,
+        #    &#34;&#34;&#34;&lt;meta http-equiv=&#34;Content-Security-Policy&#34; content=&#34;default-src &#39;self&#39; https://*.presalytics.io; script-src &#39;self&#39; https://*.presalytics.io {0};&#34;&gt;&#34;&#34;&#34;.format(allowed)
         ]
         return tags
 
@@ -171,7 +188,7 @@ class Revealer(presalytics.story.components.Renderer):
             for item in lxml_scripts:
                 body.append(item)
         head = E.HEAD()
-        for meta in self.get_meta_tags():
+        for meta in self.get_meta_tags(body):
             lxml_meta = lxml.html.fragment_fromstring(meta)
             head.append(lxml_meta)
         for link in self.plugin_mgr.get_styles():
@@ -324,7 +341,7 @@ the rendering process</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L35-L263" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L36-L280" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Revealer(presalytics.story.components.Renderer):
     &#34;&#34;&#34;
@@ -412,11 +429,27 @@ the rendering process</dd>
             logger.info(&#34;Revealer could not extract story_id from outline.&#34;)
         return base
     
-    def get_meta_tags(self):
+    def get_meta_tags(self, body=tuple()):
+        &#34;&#34;&#34;
+        Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts. 
+        &#34;&#34;&#34;
+
+        scripts = body.findall(&#34;.//script&#34;)
+
+        srcs = []
+        for script in scripts:
+            src = script.get(&#34;src&#34;)
+            if src:
+                root = urllib.parse.urlparse(src).netloc
+                if root:
+                    srcs.append(root)
+        allowed = &#39; &#39;.join(set(srcs))
+
         tags = [
             &#39;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;,
             &#39;&lt;meta http-equiv=&#34;X-UA-Compatible&#34; content=&#34;IE=edge&#34;&gt;&#39;,
-            &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;
+            &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;,
+        #    &#34;&#34;&#34;&lt;meta http-equiv=&#34;Content-Security-Policy&#34; content=&#34;default-src &#39;self&#39; https://*.presalytics.io; script-src &#39;self&#39; https://*.presalytics.io {0};&#34;&gt;&#34;&#34;&#34;.format(allowed)
         ]
         return tags
 
@@ -438,7 +471,7 @@ the rendering process</dd>
             for item in lxml_scripts:
                 body.append(item)
         head = E.HEAD()
-        for meta in self.get_meta_tags():
+        for meta in self.get_meta_tags(body):
             lxml_meta = lxml.html.fragment_fromstring(meta)
             head.append(lxml_meta)
         for link in self.plugin_mgr.get_styles():
@@ -565,20 +598,36 @@ the rendering process</dd>
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.story.revealer.Revealer.get_meta_tags"><code class="name flex">
-<span>def <span class="ident">get_meta_tags</span></span>(<span>self)</span>
+<span>def <span class="ident">get_meta_tags</span></span>(<span>self, body=())</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L121-L127" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L122-L144" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">def get_meta_tags(self):
+<pre><code class="python">def get_meta_tags(self, body=tuple()):
+    &#34;&#34;&#34;
+    Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts. 
+    &#34;&#34;&#34;
+
+    scripts = body.findall(&#34;.//script&#34;)
+
+    srcs = []
+    for script in scripts:
+        src = script.get(&#34;src&#34;)
+        if src:
+            root = urllib.parse.urlparse(src).netloc
+            if root:
+                srcs.append(root)
+    allowed = &#39; &#39;.join(set(srcs))
+
     tags = [
         &#39;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;,
         &#39;&lt;meta http-equiv=&#34;X-UA-Compatible&#34; content=&#34;IE=edge&#34;&gt;&#39;,
-        &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;
+        &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;,
+    #    &#34;&#34;&#34;&lt;meta http-equiv=&#34;Content-Security-Policy&#34; content=&#34;default-src &#39;self&#39; https://*.presalytics.io; script-src &#39;self&#39; https://*.presalytics.io {0};&#34;&gt;&#34;&#34;&#34;.format(allowed)
     ]
     return tags</code></pre>
 </details>
@@ -594,7 +643,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L129-L159" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L146-L176" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def package_as_standalone(self):
     &#34;&#34;&#34;
@@ -614,7 +663,7 @@ reveal.js presentation as conent</p>
         for item in lxml_scripts:
             body.append(item)
     head = E.HEAD()
-    for meta in self.get_meta_tags():
+    for meta in self.get_meta_tags(body):
         lxml_meta = lxml.html.fragment_fromstring(meta)
         head.append(lxml_meta)
     for link in self.plugin_mgr.get_styles():
@@ -637,7 +686,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L168-L173" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L185-L190" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_info(self):
     &#34;&#34;&#34;
@@ -657,7 +706,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L175-L190" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L192-L207" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render(self):
     &#34;&#34;&#34;
@@ -687,7 +736,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L192-L221" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L209-L238" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render_page(self, page: &#39;Page&#39;) -&gt; str:
     &#34;&#34;&#34;
@@ -751,7 +800,7 @@ Defaults to 127.0.0.1 (localhost).</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L223-L263" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L240-L280" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def present(self, files_path=None, debug=True, port=8082, host=&#39;127.0.0.1&#39;):
     &#34;&#34;&#34;

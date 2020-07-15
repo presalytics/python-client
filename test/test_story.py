@@ -2,8 +2,11 @@ import unittest
 import os
 import json
 import lxml
+import lxml.html
+import lxml.etree
 import base64
 import io
+import uuid
 import presalytics.story.revealer
 import presalytics.story.outline
 import presalytics.lib.tools.component_tools
@@ -129,19 +132,24 @@ class TestStory(unittest.TestCase):
             {'test_data': 'This is a test to d3 an object from d3'},
             script_filename='d3-test.js',
         )
+        widget.story_id = str(uuid.uuid4())
+        w = widget.serialize()
+        self.assertTrue(isinstance(w, presalytics.story.outline.Widget))
+        new_widget = presalytics.lib.widgets.d3.D3Widget.deserialize(w)
+        self.assertTrue(isinstance(new_widget, presalytics.lib.widgets.d3.D3Widget))
 
-        outline = presalytics.lib.tools.component_tools.create_outline_from_widget(
-            widget,
-            page_name='d3 page',
-            title='D3 Test Story',
-            description='This is a test story'
-        )
+        html = widget.standalone_html()
 
-        client = presalytics.Client()
+        doc = lxml.html.document_fromstring(html)
 
-        story = client.story.story_post({"outline": outline.dump()})
+        self.assertTrue(isinstance(doc, lxml.etree._Element))
 
-        print(story.id)
+        frame = lxml.html.fragment_fromstring(widget.to_html())
+
+        self.assertTrue(isinstance(frame, lxml.etree._Element))
+
+        
+        
 
 
     def tearDown(self):

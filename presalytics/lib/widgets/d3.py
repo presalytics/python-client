@@ -19,6 +19,64 @@ logger = logging.getLogger(__name__)
 
 
 class D3Widget(presalytics.story.components.WidgetBase):
+    """
+    A `Widget` for rendering user-defined d3.js scripts
+
+    This class allows users to load [d3.js](https://d3js.org/) objects
+    into widgets in order to create custom and interactive widgets.
+    User can define d3 scripts in a separate file and load them via `script_filename`
+    parameter.
+
+    Parameters
+    ----------
+
+    name : str
+        the name of widget.  Must be unique within `presalytics.COMPONENTS`
+
+    d3_data: dict
+        Data that will be loaded into the script when run in the browser. Avaiable
+        in the script as the `data` object.
+    
+    id: str, optional
+        A unique identifier the widget.  Automatically generated when the
+        widget is created or updated.
+
+    story_id : str, optional
+        The story_id of the parent story
+
+    script64 : str. optional
+        A base64-encoded string of the script's text.  Used for server-to-server
+        transport over https
+
+    script_filename: str, optional
+        Required when updating the script text.  Read into the `script64` parameter
+        via the `read_file` method
+
+
+    Script Local Variables:
+    ----------
+
+    The following vairables are avialable to users when writing scripts:
+
+    data: `javascript object`
+        The data loaded into the script via `d3_data` parameter
+
+    container: `html element`
+        The first div in the body
+    
+    d3: `javascript object`
+        The root d3 object for selecting, creating and editing elements on the DOM
+        
+
+    Security Note:
+    ----------
+
+    Scripts loaded via this widget are *Sandboxed*.  These script can only interact with
+    dom elements defined in the widget script loaded via the `script_filename` parameter.
+    Fetch and xhr actions are also disabled via a restrictive Content Security Policy.
+
+
+    """
     __component_kind__ = 'd3'
     __plugins__ = [
         {
@@ -51,6 +109,9 @@ class D3Widget(presalytics.story.components.WidgetBase):
             raise presalytics.lib.exceptions.InvalidConfigurationError("D3 Widget must be supplied either a script64 or script_filename keyword argument.")
         
     def read_file(self, filename) -> typing.Optional[str]:
+        """
+        Find a file named `filename` and return its base64-ecoded content
+        """
 
         search_paths = list(set(presalytics.autodiscover_paths))
         data64 = None
@@ -68,6 +129,9 @@ class D3Widget(presalytics.story.components.WidgetBase):
         return data64 
 
     def to_html(self, data=None, **kwargs) -> str:
+        """
+        Renders the sandboxed iframe with will contain the d3 script widget
+        """
         if not self.story_id:
             message = "This object requires a valid story_id to render."
             raise presalytics.lib.exceptions.MissingConfigException(message=message)
@@ -77,7 +141,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
     def create_container(self, **kwargs):
         """
         Wraps the D3 objects in an endpoint at the story API load via a sandboxed `<iframe>` that
-        will be rendered inside of a story and rescaled to give repsonsive effect
+        will be rendered
         """
         params = {
             "story_host": self.get_client(delegate_login=True).story.api_client.configuration.host,
@@ -132,6 +196,11 @@ class D3Widget(presalytics.story.components.WidgetBase):
 
 
     def standalone_html(self) -> str:
+        """
+        Returns string with an html document containing that d3 widget
+
+        Loaded via the Story API d3 endpoint
+        """
         SIMPLE_HTML = jinja2.Template("""<!DOCTYPE html>
         <html>
             <head>

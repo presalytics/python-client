@@ -1,6 +1,6 @@
 ## v0.5.3 (2020-07-14)
 
-* Create Content Security Policy meta tag -- use metadata to allow inline scripts
+* Add D3Widget, Content Secuirty Policies 
 
 ## v0.5.2 (2020-07-14)
 

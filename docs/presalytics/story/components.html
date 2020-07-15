@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L0-L671" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L0-L674" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import abc
 import typing
@@ -430,11 +430,14 @@ class Renderer(ComponentBase):
         allowed_scripts = presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().values()
         script_elements = body.findall(&#34;.//script&#34;)
         for ele in script_elements:
-            try:
-                link = ele.get(&#34;src&#34;)
-            except KeyError:
-                ele.getparent().remove(ele)
-            if link not in allowed_scripts:
+            remove_ele = True
+            script_id = ele.get(&#34;id&#34;)
+            if script_id in self.story_outline.allowed_ids:
+                remove_ele = False
+            link = ele.get(&#34;src&#34;)
+            if link in allowed_scripts:
+                remove_ele = False
+            if remove_ele:
                 ele.getparent().remove(ele)
         return body
         
@@ -1081,6 +1084,7 @@ that allows the widget to be serialzed into a <a title="presalytics.story.outlin
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
+<li><a title="presalytics.lib.widgets.d3.D3Widget" href="/python-client/presalytics/lib/widgets/d3.html#presalytics.lib.widgets.d3.D3Widget">D3Widget</a></li>
 <li><a title="presalytics.lib.widgets.matplotlib.MatplotlibFigure" href="/python-client/presalytics/lib/widgets/matplotlib.html#presalytics.lib.widgets.matplotlib.MatplotlibFigure">MatplotlibFigure</a></li>
 <li><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></li>
 </ul>
@@ -1579,7 +1583,7 @@ the Presalytics API story service</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L323-L584" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L323-L587" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Renderer(ComponentBase):
     &#34;&#34;&#34;
@@ -1664,11 +1668,14 @@ the Presalytics API story service</dd>
         allowed_scripts = presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().values()
         script_elements = body.findall(&#34;.//script&#34;)
         for ele in script_elements:
-            try:
-                link = ele.get(&#34;src&#34;)
-            except KeyError:
-                ele.getparent().remove(ele)
-            if link not in allowed_scripts:
+            remove_ele = True
+            script_id = ele.get(&#34;id&#34;)
+            if script_id in self.story_outline.allowed_ids:
+                remove_ele = False
+            link = ele.get(&#34;src&#34;)
+            if link in allowed_scripts:
+                remove_ele = False
+            if remove_ele:
                 ele.getparent().remove(ele)
         return body
         
@@ -1864,7 +1871,7 @@ See __init___.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L414-L419" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L417-L422" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
@@ -1908,7 +1915,7 @@ about your use case, and will respond promptly to help.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L394-L412" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L394-L415" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def strip_unauthorized_scripts(self, body):
     &#34;&#34;&#34;
@@ -1922,11 +1929,14 @@ about your use case, and will respond promptly to help.</p></section>
     allowed_scripts = presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().values()
     script_elements = body.findall(&#34;.//script&#34;)
     for ele in script_elements:
-        try:
-            link = ele.get(&#34;src&#34;)
-        except KeyError:
-            ele.getparent().remove(ele)
-        if link not in allowed_scripts:
+        remove_ele = True
+        script_id = ele.get(&#34;id&#34;)
+        if script_id in self.story_outline.allowed_ids:
+            remove_ele = False
+        link = ele.get(&#34;src&#34;)
+        if link in allowed_scripts:
+            remove_ele = False
+        if remove_ele:
             ele.getparent().remove(ele)
     return body</code></pre>
 </details>
@@ -1941,7 +1951,7 @@ about your use case, and will respond promptly to help.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L421-L430" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L424-L433" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def serialize(self) -&gt; &#39;StoryOutline&#39;:
     &#34;&#34;&#34;
@@ -1965,7 +1975,7 @@ so the latest data is available during the renering process.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L432-L461" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L435-L464" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_outline_from_instances(self, sub_dict: typing.Dict = None):
     &#34;&#34;&#34;
@@ -2008,7 +2018,7 @@ classes referenced in the <a title="presalytics.story.outline.StoryOutline" href
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L463-L488" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L466-L491" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_component_implicit_plugins(self, sub_dict: typing.Dict = None):
     &#34;&#34;&#34;
@@ -2046,7 +2056,7 @@ classes referenced in the <a title="presalytics.story.outline.StoryOutline" href
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L540-L548" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L543-L551" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_story(self):
     &#34;&#34;&#34;
@@ -2074,7 +2084,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L550-L565" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L553-L568" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def view(self, update=False):
     &#34;&#34;&#34;
@@ -2109,7 +2119,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L568-L584" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L571-L587" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def manage(self, update=False):
     &#34;&#34;&#34;
@@ -2150,7 +2160,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L587-L672" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L590-L675" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ComponentRegistry(presalytics.lib.registry.RegistryBase):
     &#34;&#34;&#34;
@@ -2254,7 +2264,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L598-L602" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L601-L605" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_type(self, klass):
     &#34;&#34;&#34;
@@ -2271,7 +2281,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L604-L608" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L607-L611" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_name(self, klass):
     &#34;&#34;&#34;
@@ -2288,7 +2298,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L610-L614" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L613-L617" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_instance_name(self, klass):
     &#34;&#34;&#34;
@@ -2306,7 +2316,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L616-L632" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L619-L635" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_instance_registry_key(self, klass):
     &#34;&#34;&#34;
@@ -2335,7 +2345,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L635-L651" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L638-L654" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def load_class(self, klass):
     &#34;&#34;&#34;
@@ -2364,7 +2374,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L653-L655" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L656-L658" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_instance(self, key):
     self.load_deferred_modules()
@@ -2379,7 +2389,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L657-L664" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L660-L667" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def unregister(self, klass):
     &#34;&#34;&#34;
@@ -2399,7 +2409,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L666-L672" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L669-L675" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def find_instance(self, string_with_key_or_name) -&gt; typing.List[str]:
     is_key = self.instance_regex.match(string_with_key_or_name)

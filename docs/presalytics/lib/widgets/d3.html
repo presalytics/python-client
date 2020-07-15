@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>presalytics.lib.widgets.d3 API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>presalytics.lib.widgets.d3</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L0-L235" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">import typing
+import base64
+import uuid
+import logging
+import jinja2
+import json
+import os
+import lxml
+import lxml.html
+import presalytics
+import presalytics.lib.exceptions
+
+if typing.TYPE_CHECKING:
+    pass
+
+
+logger = logging.getLogger(__name__)
+
+
+class D3Widget(presalytics.story.components.WidgetBase):
+    &#34;&#34;&#34;
+    A `Widget` for rendering user-defined d3.js scripts
+
+    This class allows users to load [d3.js](https://d3js.org/) objects
+    into widgets in order to create custom and interactive widgets.
+    User can define d3 scripts in a separate file and load them via `script_filename`
+    parameter.
+
+    Parameters
+    ----------
+
+    name : str
+        the name of widget.  Must be unique within `presalytics.COMPONENTS`
+
+    d3_data: dict
+        Data that will be loaded into the script when run in the browser. Avaiable
+        in the script as the `data` object.
+    
+    id: str, optional
+        A unique identifier the widget.  Automatically generated when the
+        widget is created or updated.
+
+    story_id : str, optional
+        The story_id of the parent story
+
+    script64 : str. optional
+        A base64-encoded string of the script&#39;s text.  Used for server-to-server
+        transport over https
+
+    script_filename: str, optional
+        Required when updating the script text.  Read into the `script64` parameter
+        via the `read_file` method
+
+
+    Script Local Variables:
+    ----------
+
+    The following vairables are avialable to users when writing scripts:
+
+    data: `javascript object`
+        The data loaded into the script via `d3_data` parameter
+
+    container: `html element`
+        The first div in the body
+    
+    d3: `javascript object`
+        The root d3 object for selecting, creating and editing elements on the DOM
+        
+
+    Security Note:
+    ----------
+
+    Scripts loaded via this widget are *Sandboxed*.  These script can only interact with
+    dom elements defined in the widget script loaded via the `script_filename` parameter.
+    Fetch and xhr actions are also disabled via a restrictive Content Security Policy.
+
+
+    &#34;&#34;&#34;
+    __component_kind__ = &#39;d3&#39;
+    __plugins__ = [
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;d3&#39;
+            }
+        }
+    ]
+
+    def __init__(self, 
+                 name: str, 
+                 d3_data: typing.Dict,
+                 id: str = None, 
+                 story_id: str = None,
+                 script64: str = None, 
+                 script_filename: str = None, *args, **kwargs):
+        if not id:
+            id = &#39;d3-&#39; + str(uuid.uuid4())
+        self.id = id
+        self.d3_data = d3_data
+        self.story_id = story_id
+        super(D3Widget, self).__init__(name, *args, **kwargs)
+        self.script_filename = script_filename
+        self.script64 = self.read_file(script_filename)
+        if not self.script64:
+            self.script64 = script64
+        if not self.script64:
+            raise presalytics.lib.exceptions.InvalidConfigurationError(&#34;D3 Widget must be supplied either a script64 or script_filename keyword argument.&#34;)
+        
+    def read_file(self, filename) -&gt; typing.Optional[str]:
+        &#34;&#34;&#34;
+        Find a file named `filename` and return its base64-ecoded content
+        &#34;&#34;&#34;
+
+        search_paths = list(set(presalytics.autodiscover_paths))
+        data64 = None
+        if os.getcwd() not in search_paths:
+            search_paths.append(os.getcwd())
+        for path in search_paths:
+            fpath = os.path.join(path, filename)
+            if os.path.exists(fpath):
+                with open(fpath, &#39;rb&#39;) as f:
+                    data = f.read()
+                    data64 = base64.b64encode(data).decode(&#39;utf-8&#39;)  #type: ignore
+                break
+        if not data64:
+            logger.debug(&#34;File {0} could not be found&#34;.format(filename))
+        return data64 
+
+    def to_html(self, data=None, **kwargs) -&gt; str:
+        &#34;&#34;&#34;
+        Renders the sandboxed iframe with will contain the d3 script widget
+        &#34;&#34;&#34;
+        if not self.story_id:
+            message = &#34;This object requires a valid story_id to render.&#34;
+            raise presalytics.lib.exceptions.MissingConfigException(message=message)
+        html = self.create_container()
+        return html
+
+    def create_container(self, **kwargs):
+        &#34;&#34;&#34;
+        Wraps the D3 objects in an endpoint at the story API load via a sandboxed `&lt;iframe&gt;` that
+        will be rendered
+        &#34;&#34;&#34;
+        params = {
+            &#34;story_host&#34;: self.get_client(delegate_login=True).story.api_client.configuration.host,
+            &#34;id&#34;: self.id,
+            &#34;story_id&#34;: self.story_id,
+        }
+        source_url = &#34;{story_host}/{story_id}/d3/{id}&#34;.format(**params)
+        empty_parent_div = lxml.html.Element(&#34;div&#34;, {
+            &#39;class&#39;: &#39;empty-parent bg-light&#39;,
+            &#39;style&#39;: &#39;height: 100%; width: 100%, display: block; text-align: left;&#39;
+        })
+        frame = lxml.html.Element(&#34;iframe&#34;, {
+            &#39;src&#39;: source_url,
+            &#39;frameborder&#39;: &#34;0&#34;,
+            &#39;scrolling&#39;: &#34;auto&#34;,
+            &#39;class&#39;: &#39;d3-responsive-frame&#39;,
+            &#39;style&#39;: &#39;max-height: none; max-width: none; height:1005; width: 100%;&#39;,
+            &#39;sandbox&#39;: &#39;allow-forms allow-scripts&#39;
+        })
+        empty_parent_div.append(frame)
+        return lxml.html.tostring(empty_parent_div).decode(&#39;utf-8&#39;)
+
+    @classmethod
+    def deserialize(cls, outline, **kwargs):
+        d3_data = outline.data.get(&#34;d3_data&#34;)
+        story_id = outline.data.get(&#34;story_id&#34;, None)
+        id = outline.data.get(&#39;id&#39;, None)
+        data = outline.data.get(&#39;d3_data&#39;, None)
+        filename = outline.data.get(&#39;filename&#39;, None)
+        script64 = outline.data.get(&#39;script64&#39;, None)
+        return cls(outline.name,
+                   d3_data,
+                   id=id,
+                   story_id=story_id,
+                   script64=script64,
+                   script_filename=filename,
+                   **kwargs)
+
+    def serialize(self, **kwargs):
+        data = {
+            &#39;d3_data&#39;: self.d3_data,
+            &#39;id&#39;: self.id,
+            &#39;story_id&#39;: self.story_id,
+            &#39;filename&#39;: self.script_filename,
+            &#39;script64&#39;: self.script64
+        }
+        return presalytics.story.outline.Widget(
+            name=self.name,
+            kind=self.__component_kind__,
+            data=data,
+        )
+
+
+    def standalone_html(self) -&gt; str:
+        &#34;&#34;&#34;
+        Returns string with an html document containing that d3 widget
+
+        Loaded via the Story API d3 endpoint
+        &#34;&#34;&#34;
+        SIMPLE_HTML = jinja2.Template(&#34;&#34;&#34;&lt;!DOCTYPE html&gt;
+        &lt;html&gt;
+            &lt;head&gt;
+                &lt;meta charset=&#34;UTF-8&#34;&gt;
+                &lt;style&gt;
+                {{ extra_css }}
+                &lt;/style&gt;
+            &lt;/head&gt;
+            &lt;body&gt;
+                &lt;script type=&#34;text/javascript&#34; src=&#34;{{ d3_url }}&#34;&gt;&lt;/script&gt;
+                &lt;div id=&#34;{{ id }}&#34;&gt;&lt;/div&gt;
+                &lt;script type=&#34;text/javascript&#34;&gt;
+
+                    var id = &#39;{{id}}&#39;;
+
+                    var data = JSON.parse(&#39;{{data|safe}}&#39;);
+
+                    var container = document.getElementById(id);
+
+                    {{script|safe}}
+            
+                &lt;/script&gt;
+            &lt;/body&gt;
+        &lt;/html&gt;&#34;&#34;&#34;)
+        data = json.dumps(self.d3_data)  # dont use hyphens in data keys
+        script = base64.b64decode(self.script64).decode(&#39;utf-8&#39;)  #type: ignore
+        context = {
+            &#34;id&#34;: self.id,
+            &#34;d3_url&#34;: presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get(&#39;d3&#39;),
+            &#34;data&#34;: data,
+            &#34;script&#34;: script
+        }
+        return SIMPLE_HTML.render(**context)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="presalytics.lib.widgets.d3.D3Widget"><code class="flex name class">
+<span>class <span class="ident">D3Widget</span></span>
+<span>(</span><span>name, d3_data, id=None, story_id=None, script64=None, script_filename=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A <code>Widget</code> for rendering user-defined d3.js scripts</p>
+<p>This class allows users to load <a href="https://d3js.org/">d3.js</a> objects
+into widgets in order to create custom and interactive widgets.
+User can define d3 scripts in a separate file and load them via <code>script_filename</code>
+parameter.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>the name of widget.
+Must be unique within <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS"><code>COMPONENTS</code></a></dd>
+<dt><strong><code>d3_data</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Data that will be loaded into the script when run in the browser. Avaiable
+in the script as the <code>data</code> object.</dd>
+<dt><strong><code>id</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>A unique identifier the widget.
+Automatically generated when the
+widget is created or updated.</dd>
+<dt><strong><code>story_id</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The story_id of the parent story</dd>
+<dt><strong><code>script64</code></strong> :&ensp;<code>str.</code> optional</dt>
+<dd>A base64-encoded string of the script's text.
+Used for server-to-server
+transport over https</dd>
+<dt><strong><code>script_filename</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>Required when updating the script text.
+Read into the <code>script64</code> parameter
+via the <code>read_file</code> method</dd>
+</dl>
+<h2 id="script-local-variables">Script Local Variables:</h2>
+<p>The following vairables are avialable to users when writing scripts:</p>
+<p>data: <code>javascript object</code>
+The data loaded into the script via <code>d3_data</code> parameter</p>
+<p>container: <code>html element</code>
+The first div in the body</p>
+<p>d3: <code>javascript object</code>
+The root d3 object for selecting, creating and editing elements on the DOM</p>
+<h2 id="security-note">Security Note:</h2>
+<p>Scripts loaded via this widget are <em>Sandboxed</em>.
+These script can only interact with
+dom elements defined in the widget script loaded via the <code>script_filename</code> parameter.
+Fetch and xhr actions are also disabled via a restrictive Content Security Policy.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L21-L236" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class D3Widget(presalytics.story.components.WidgetBase):
+    &#34;&#34;&#34;
+    A `Widget` for rendering user-defined d3.js scripts
+
+    This class allows users to load [d3.js](https://d3js.org/) objects
+    into widgets in order to create custom and interactive widgets.
+    User can define d3 scripts in a separate file and load them via `script_filename`
+    parameter.
+
+    Parameters
+    ----------
+
+    name : str
+        the name of widget.  Must be unique within `presalytics.COMPONENTS`
+
+    d3_data: dict
+        Data that will be loaded into the script when run in the browser. Avaiable
+        in the script as the `data` object.
+    
+    id: str, optional
+        A unique identifier the widget.  Automatically generated when the
+        widget is created or updated.
+
+    story_id : str, optional
+        The story_id of the parent story
+
+    script64 : str. optional
+        A base64-encoded string of the script&#39;s text.  Used for server-to-server
+        transport over https
+
+    script_filename: str, optional
+        Required when updating the script text.  Read into the `script64` parameter
+        via the `read_file` method
+
+
+    Script Local Variables:
+    ----------
+
+    The following vairables are avialable to users when writing scripts:
+
+    data: `javascript object`
+        The data loaded into the script via `d3_data` parameter
+
+    container: `html element`
+        The first div in the body
+    
+    d3: `javascript object`
+        The root d3 object for selecting, creating and editing elements on the DOM
+        
+
+    Security Note:
+    ----------
+
+    Scripts loaded via this widget are *Sandboxed*.  These script can only interact with
+    dom elements defined in the widget script loaded via the `script_filename` parameter.
+    Fetch and xhr actions are also disabled via a restrictive Content Security Policy.
+
+
+    &#34;&#34;&#34;
+    __component_kind__ = &#39;d3&#39;
+    __plugins__ = [
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;d3&#39;
+            }
+        }
+    ]
+
+    def __init__(self, 
+                 name: str, 
+                 d3_data: typing.Dict,
+                 id: str = None, 
+                 story_id: str = None,
+                 script64: str = None, 
+                 script_filename: str = None, *args, **kwargs):
+        if not id:
+            id = &#39;d3-&#39; + str(uuid.uuid4())
+        self.id = id
+        self.d3_data = d3_data
+        self.story_id = story_id
+        super(D3Widget, self).__init__(name, *args, **kwargs)
+        self.script_filename = script_filename
+        self.script64 = self.read_file(script_filename)
+        if not self.script64:
+            self.script64 = script64
+        if not self.script64:
+            raise presalytics.lib.exceptions.InvalidConfigurationError(&#34;D3 Widget must be supplied either a script64 or script_filename keyword argument.&#34;)
+        
+    def read_file(self, filename) -&gt; typing.Optional[str]:
+        &#34;&#34;&#34;
+        Find a file named `filename` and return its base64-ecoded content
+        &#34;&#34;&#34;
+
+        search_paths = list(set(presalytics.autodiscover_paths))
+        data64 = None
+        if os.getcwd() not in search_paths:
+            search_paths.append(os.getcwd())
+        for path in search_paths:
+            fpath = os.path.join(path, filename)
+            if os.path.exists(fpath):
+                with open(fpath, &#39;rb&#39;) as f:
+                    data = f.read()
+                    data64 = base64.b64encode(data).decode(&#39;utf-8&#39;)  #type: ignore
+                break
+        if not data64:
+            logger.debug(&#34;File {0} could not be found&#34;.format(filename))
+        return data64 
+
+    def to_html(self, data=None, **kwargs) -&gt; str:
+        &#34;&#34;&#34;
+        Renders the sandboxed iframe with will contain the d3 script widget
+        &#34;&#34;&#34;
+        if not self.story_id:
+            message = &#34;This object requires a valid story_id to render.&#34;
+            raise presalytics.lib.exceptions.MissingConfigException(message=message)
+        html = self.create_container()
+        return html
+
+    def create_container(self, **kwargs):
+        &#34;&#34;&#34;
+        Wraps the D3 objects in an endpoint at the story API load via a sandboxed `&lt;iframe&gt;` that
+        will be rendered
+        &#34;&#34;&#34;
+        params = {
+            &#34;story_host&#34;: self.get_client(delegate_login=True).story.api_client.configuration.host,
+            &#34;id&#34;: self.id,
+            &#34;story_id&#34;: self.story_id,
+        }
+        source_url = &#34;{story_host}/{story_id}/d3/{id}&#34;.format(**params)
+        empty_parent_div = lxml.html.Element(&#34;div&#34;, {
+            &#39;class&#39;: &#39;empty-parent bg-light&#39;,
+            &#39;style&#39;: &#39;height: 100%; width: 100%, display: block; text-align: left;&#39;
+        })
+        frame = lxml.html.Element(&#34;iframe&#34;, {
+            &#39;src&#39;: source_url,
+            &#39;frameborder&#39;: &#34;0&#34;,
+            &#39;scrolling&#39;: &#34;auto&#34;,
+            &#39;class&#39;: &#39;d3-responsive-frame&#39;,
+            &#39;style&#39;: &#39;max-height: none; max-width: none; height:1005; width: 100%;&#39;,
+            &#39;sandbox&#39;: &#39;allow-forms allow-scripts&#39;
+        })
+        empty_parent_div.append(frame)
+        return lxml.html.tostring(empty_parent_div).decode(&#39;utf-8&#39;)
+
+    @classmethod
+    def deserialize(cls, outline, **kwargs):
+        d3_data = outline.data.get(&#34;d3_data&#34;)
+        story_id = outline.data.get(&#34;story_id&#34;, None)
+        id = outline.data.get(&#39;id&#39;, None)
+        data = outline.data.get(&#39;d3_data&#39;, None)
+        filename = outline.data.get(&#39;filename&#39;, None)
+        script64 = outline.data.get(&#39;script64&#39;, None)
+        return cls(outline.name,
+                   d3_data,
+                   id=id,
+                   story_id=story_id,
+                   script64=script64,
+                   script_filename=filename,
+                   **kwargs)
+
+    def serialize(self, **kwargs):
+        data = {
+            &#39;d3_data&#39;: self.d3_data,
+            &#39;id&#39;: self.id,
+            &#39;story_id&#39;: self.story_id,
+            &#39;filename&#39;: self.script_filename,
+            &#39;script64&#39;: self.script64
+        }
+        return presalytics.story.outline.Widget(
+            name=self.name,
+            kind=self.__component_kind__,
+            data=data,
+        )
+
+
+    def standalone_html(self) -&gt; str:
+        &#34;&#34;&#34;
+        Returns string with an html document containing that d3 widget
+
+        Loaded via the Story API d3 endpoint
+        &#34;&#34;&#34;
+        SIMPLE_HTML = jinja2.Template(&#34;&#34;&#34;&lt;!DOCTYPE html&gt;
+        &lt;html&gt;
+            &lt;head&gt;
+                &lt;meta charset=&#34;UTF-8&#34;&gt;
+                &lt;style&gt;
+                {{ extra_css }}
+                &lt;/style&gt;
+            &lt;/head&gt;
+            &lt;body&gt;
+                &lt;script type=&#34;text/javascript&#34; src=&#34;{{ d3_url }}&#34;&gt;&lt;/script&gt;
+                &lt;div id=&#34;{{ id }}&#34;&gt;&lt;/div&gt;
+                &lt;script type=&#34;text/javascript&#34;&gt;
+
+                    var id = &#39;{{id}}&#39;;
+
+                    var data = JSON.parse(&#39;{{data|safe}}&#39;);
+
+                    var container = document.getElementById(id);
+
+                    {{script|safe}}
+            
+                &lt;/script&gt;
+            &lt;/body&gt;
+        &lt;/html&gt;&#34;&#34;&#34;)
+        data = json.dumps(self.d3_data)  # dont use hyphens in data keys
+        script = base64.b64decode(self.script64).decode(&#39;utf-8&#39;)  #type: ignore
+        context = {
+            &#34;id&#34;: self.id,
+            &#34;d3_url&#34;: presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get(&#39;d3&#39;),
+            &#34;data&#34;: data,
+            &#34;script&#34;: script
+        }
+        return SIMPLE_HTML.render(**context)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></li>
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.widgets.d3.D3Widget.read_file"><code class="name flex">
+<span>def <span class="ident">read_file</span></span>(<span>self, filename)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Find a file named <code>filename</code> and return its base64-ecoded content</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L111-L129" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def read_file(self, filename) -&gt; typing.Optional[str]:
+    &#34;&#34;&#34;
+    Find a file named `filename` and return its base64-ecoded content
+    &#34;&#34;&#34;
+
+    search_paths = list(set(presalytics.autodiscover_paths))
+    data64 = None
+    if os.getcwd() not in search_paths:
+        search_paths.append(os.getcwd())
+    for path in search_paths:
+        fpath = os.path.join(path, filename)
+        if os.path.exists(fpath):
+            with open(fpath, &#39;rb&#39;) as f:
+                data = f.read()
+                data64 = base64.b64encode(data).decode(&#39;utf-8&#39;)  #type: ignore
+            break
+    if not data64:
+        logger.debug(&#34;File {0} could not be found&#34;.format(filename))
+    return data64 </code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.d3.D3Widget.to_html"><code class="name flex">
+<span>def <span class="ident">to_html</span></span>(<span>self, data=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Renders the sandboxed iframe with will contain the d3 script widget</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L131-L139" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_html(self, data=None, **kwargs) -&gt; str:
+    &#34;&#34;&#34;
+    Renders the sandboxed iframe with will contain the d3 script widget
+    &#34;&#34;&#34;
+    if not self.story_id:
+        message = &#34;This object requires a valid story_id to render.&#34;
+        raise presalytics.lib.exceptions.MissingConfigException(message=message)
+    html = self.create_container()
+    return html</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.d3.D3Widget.create_container"><code class="name flex">
+<span>def <span class="ident">create_container</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Wraps the D3 objects in an endpoint at the story API load via a sandboxed <code>&lt;iframe&gt;</code> that
+will be rendered</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L141-L165" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def create_container(self, **kwargs):
+    &#34;&#34;&#34;
+    Wraps the D3 objects in an endpoint at the story API load via a sandboxed `&lt;iframe&gt;` that
+    will be rendered
+    &#34;&#34;&#34;
+    params = {
+        &#34;story_host&#34;: self.get_client(delegate_login=True).story.api_client.configuration.host,
+        &#34;id&#34;: self.id,
+        &#34;story_id&#34;: self.story_id,
+    }
+    source_url = &#34;{story_host}/{story_id}/d3/{id}&#34;.format(**params)
+    empty_parent_div = lxml.html.Element(&#34;div&#34;, {
+        &#39;class&#39;: &#39;empty-parent bg-light&#39;,
+        &#39;style&#39;: &#39;height: 100%; width: 100%, display: block; text-align: left;&#39;
+    })
+    frame = lxml.html.Element(&#34;iframe&#34;, {
+        &#39;src&#39;: source_url,
+        &#39;frameborder&#39;: &#34;0&#34;,
+        &#39;scrolling&#39;: &#34;auto&#34;,
+        &#39;class&#39;: &#39;d3-responsive-frame&#39;,
+        &#39;style&#39;: &#39;max-height: none; max-width: none; height:1005; width: 100%;&#39;,
+        &#39;sandbox&#39;: &#39;allow-forms allow-scripts&#39;
+    })
+    empty_parent_div.append(frame)
+    return lxml.html.tostring(empty_parent_div).decode(&#39;utf-8&#39;)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.widgets.d3.D3Widget.standalone_html"><code class="name flex">
+<span>def <span class="ident">standalone_html</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns string with an html document containing that d3 widget</p>
+<p>Loaded via the Story API d3 endpoint</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L198-L236" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def standalone_html(self) -&gt; str:
+    &#34;&#34;&#34;
+    Returns string with an html document containing that d3 widget
+
+    Loaded via the Story API d3 endpoint
+    &#34;&#34;&#34;
+    SIMPLE_HTML = jinja2.Template(&#34;&#34;&#34;&lt;!DOCTYPE html&gt;
+    &lt;html&gt;
+        &lt;head&gt;
+            &lt;meta charset=&#34;UTF-8&#34;&gt;
+            &lt;style&gt;
+            {{ extra_css }}
+            &lt;/style&gt;
+        &lt;/head&gt;
+        &lt;body&gt;
+            &lt;script type=&#34;text/javascript&#34; src=&#34;{{ d3_url }}&#34;&gt;&lt;/script&gt;
+            &lt;div id=&#34;{{ id }}&#34;&gt;&lt;/div&gt;
+            &lt;script type=&#34;text/javascript&#34;&gt;
+
+                var id = &#39;{{id}}&#39;;
+
+                var data = JSON.parse(&#39;{{data|safe}}&#39;);
+
+                var container = document.getElementById(id);
+
+                {{script|safe}}
+        
+            &lt;/script&gt;
+        &lt;/body&gt;
+    &lt;/html&gt;&#34;&#34;&#34;)
+    data = json.dumps(self.d3_data)  # dont use hyphens in data keys
+    script = base64.b64decode(self.script64).decode(&#39;utf-8&#39;)  #type: ignore
+    context = {
+        &#34;id&#34;: self.id,
+        &#34;d3_url&#34;: presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get(&#39;d3&#39;),
+        &#34;data&#34;: data,
+        &#34;script&#34;: script
+    }
+    return SIMPLE_HTML.render(**context)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.story.components.WidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="presalytics.lib.widgets" href="/python-client/presalytics/lib/widgets/index.html">presalytics.lib.widgets</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="presalytics.lib.widgets.d3.D3Widget" href="/python-client/presalytics/lib/widgets/d3.html#presalytics.lib.widgets.d3.D3Widget">D3Widget</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.lib.widgets.d3.D3Widget.read_file" href="/python-client/presalytics/lib/widgets/d3.html#presalytics.lib.widgets.d3.D3Widget.read_file">read_file</a></code></li>
+<li><code><a title="presalytics.lib.widgets.d3.D3Widget.to_html" href="/python-client/presalytics/lib/widgets/d3.html#presalytics.lib.widgets.d3.D3Widget.to_html">to_html</a></code></li>
+<li><code><a title="presalytics.lib.widgets.d3.D3Widget.create_container" href="/python-client/presalytics/lib/widgets/d3.html#presalytics.lib.widgets.d3.D3Widget.create_container">create_container</a></code></li>
+<li><code><a title="presalytics.lib.widgets.d3.D3Widget.standalone_html" href="/python-client/presalytics/lib/widgets/d3.html#presalytics.lib.widgets.d3.D3Widget.standalone_html">standalone_html</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

@@ -1787,7 +1787,7 @@ the Presalytics API story service</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L323-L584" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L323-L587" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Renderer(ComponentBase):
     &#34;&#34;&#34;
@@ -1872,11 +1872,14 @@ the Presalytics API story service</dd>
         allowed_scripts = presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().values()
         script_elements = body.findall(&#34;.//script&#34;)
         for ele in script_elements:
-            try:
-                link = ele.get(&#34;src&#34;)
-            except KeyError:
-                ele.getparent().remove(ele)
-            if link not in allowed_scripts:
+            remove_ele = True
+            script_id = ele.get(&#34;id&#34;)
+            if script_id in self.story_outline.allowed_ids:
+                remove_ele = False
+            link = ele.get(&#34;src&#34;)
+            if link in allowed_scripts:
+                remove_ele = False
+            if remove_ele:
                 ele.getparent().remove(ele)
         return body
         
@@ -2072,7 +2075,7 @@ See __init___.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L414-L419" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L417-L422" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
@@ -2116,7 +2119,7 @@ about your use case, and will respond promptly to help.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L394-L412" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L394-L415" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def strip_unauthorized_scripts(self, body):
     &#34;&#34;&#34;
@@ -2130,11 +2133,14 @@ about your use case, and will respond promptly to help.</p></section>
     allowed_scripts = presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().values()
     script_elements = body.findall(&#34;.//script&#34;)
     for ele in script_elements:
-        try:
-            link = ele.get(&#34;src&#34;)
-        except KeyError:
-            ele.getparent().remove(ele)
-        if link not in allowed_scripts:
+        remove_ele = True
+        script_id = ele.get(&#34;id&#34;)
+        if script_id in self.story_outline.allowed_ids:
+            remove_ele = False
+        link = ele.get(&#34;src&#34;)
+        if link in allowed_scripts:
+            remove_ele = False
+        if remove_ele:
             ele.getparent().remove(ele)
     return body</code></pre>
 </details>
@@ -2149,7 +2155,7 @@ about your use case, and will respond promptly to help.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L421-L430" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L424-L433" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def serialize(self) -&gt; &#39;StoryOutline&#39;:
     &#34;&#34;&#34;
@@ -2173,7 +2179,7 @@ so the latest data is available during the renering process.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L432-L461" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L435-L464" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_outline_from_instances(self, sub_dict: typing.Dict = None):
     &#34;&#34;&#34;
@@ -2216,7 +2222,7 @@ classes referenced in the <a title="presalytics.story.outline.StoryOutline" href
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L463-L488" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L466-L491" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_component_implicit_plugins(self, sub_dict: typing.Dict = None):
     &#34;&#34;&#34;
@@ -2254,7 +2260,7 @@ classes referenced in the <a title="presalytics.story.outline.StoryOutline" href
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L540-L548" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L543-L551" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_story(self):
     &#34;&#34;&#34;
@@ -2282,7 +2288,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L550-L565" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L553-L568" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def view(self, update=False):
     &#34;&#34;&#34;
@@ -2317,7 +2323,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L568-L584" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L571-L587" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def manage(self, update=False):
     &#34;&#34;&#34;
@@ -2373,7 +2379,7 @@ the rendering process</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L35-L263" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L36-L280" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Revealer(presalytics.story.components.Renderer):
     &#34;&#34;&#34;
@@ -2461,11 +2467,27 @@ the rendering process</dd>
             logger.info(&#34;Revealer could not extract story_id from outline.&#34;)
         return base
     
-    def get_meta_tags(self):
+    def get_meta_tags(self, body=tuple()):
+        &#34;&#34;&#34;
+        Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts. 
+        &#34;&#34;&#34;
+
+        scripts = body.findall(&#34;.//script&#34;)
+
+        srcs = []
+        for script in scripts:
+            src = script.get(&#34;src&#34;)
+            if src:
+                root = urllib.parse.urlparse(src).netloc
+                if root:
+                    srcs.append(root)
+        allowed = &#39; &#39;.join(set(srcs))
+
         tags = [
             &#39;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;,
             &#39;&lt;meta http-equiv=&#34;X-UA-Compatible&#34; content=&#34;IE=edge&#34;&gt;&#39;,
-            &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;
+            &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;,
+        #    &#34;&#34;&#34;&lt;meta http-equiv=&#34;Content-Security-Policy&#34; content=&#34;default-src &#39;self&#39; https://*.presalytics.io; script-src &#39;self&#39; https://*.presalytics.io {0};&#34;&gt;&#34;&#34;&#34;.format(allowed)
         ]
         return tags
 
@@ -2487,7 +2509,7 @@ the rendering process</dd>
             for item in lxml_scripts:
                 body.append(item)
         head = E.HEAD()
-        for meta in self.get_meta_tags():
+        for meta in self.get_meta_tags(body):
             lxml_meta = lxml.html.fragment_fromstring(meta)
             head.append(lxml_meta)
         for link in self.plugin_mgr.get_styles():
@@ -2614,20 +2636,36 @@ the rendering process</dd>
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.Revealer.get_meta_tags"><code class="name flex">
-<span>def <span class="ident">get_meta_tags</span></span>(<span>self)</span>
+<span>def <span class="ident">get_meta_tags</span></span>(<span>self, body=())</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L121-L127" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L122-L144" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">def get_meta_tags(self):
+<pre><code class="python">def get_meta_tags(self, body=tuple()):
+    &#34;&#34;&#34;
+    Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts. 
+    &#34;&#34;&#34;
+
+    scripts = body.findall(&#34;.//script&#34;)
+
+    srcs = []
+    for script in scripts:
+        src = script.get(&#34;src&#34;)
+        if src:
+            root = urllib.parse.urlparse(src).netloc
+            if root:
+                srcs.append(root)
+    allowed = &#39; &#39;.join(set(srcs))
+
     tags = [
         &#39;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;,
         &#39;&lt;meta http-equiv=&#34;X-UA-Compatible&#34; content=&#34;IE=edge&#34;&gt;&#39;,
-        &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;
+        &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;,
+    #    &#34;&#34;&#34;&lt;meta http-equiv=&#34;Content-Security-Policy&#34; content=&#34;default-src &#39;self&#39; https://*.presalytics.io; script-src &#39;self&#39; https://*.presalytics.io {0};&#34;&gt;&#34;&#34;&#34;.format(allowed)
     ]
     return tags</code></pre>
 </details>
@@ -2643,7 +2681,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L129-L159" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L146-L176" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def package_as_standalone(self):
     &#34;&#34;&#34;
@@ -2663,7 +2701,7 @@ reveal.js presentation as conent</p>
         for item in lxml_scripts:
             body.append(item)
     head = E.HEAD()
-    for meta in self.get_meta_tags():
+    for meta in self.get_meta_tags(body):
         lxml_meta = lxml.html.fragment_fromstring(meta)
         head.append(lxml_meta)
     for link in self.plugin_mgr.get_styles():
@@ -2686,7 +2724,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L168-L173" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L185-L190" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_info(self):
     &#34;&#34;&#34;
@@ -2706,7 +2744,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L175-L190" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L192-L207" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render(self):
     &#34;&#34;&#34;
@@ -2736,7 +2774,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L192-L221" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L209-L238" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render_page(self, page: &#39;Page&#39;) -&gt; str:
     &#34;&#34;&#34;
@@ -2800,7 +2838,7 @@ Defaults to 127.0.0.1 (localhost).</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L223-L263" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L240-L280" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def present(self, files_path=None, debug=True, port=8082, host=&#39;127.0.0.1&#39;):
     &#34;&#34;&#34;
@@ -6010,7 +6048,7 @@ config into an html <code>&lt;script&gt;</code> fragment.</p>
     __plugin_name__ = &#39;external_scripts&#39;
 
     SCRIPT_MAP = {
-        &#39;d3&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/d3/5.12.0/d3.min.js&#39;,
+        &#39;d3&#39;: &#39;https://d3js.org/d3.v5.min.js&#39;,
         &#39;d3v3&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js&#39;,
         &#39;reveal&#39;: {
             &#39;base&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js&#39;,
@@ -7435,6 +7473,7 @@ that allows the widget to be serialzed into a <a title="presalytics.story.outlin
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
+<li><a title="presalytics.lib.widgets.d3.D3Widget" href="/python-client/presalytics/lib/widgets/d3.html#presalytics.lib.widgets.d3.D3Widget">D3Widget</a></li>
 <li><a title="presalytics.lib.widgets.matplotlib.MatplotlibFigure" href="/python-client/presalytics/lib/widgets/matplotlib.html#presalytics.lib.widgets.matplotlib.MatplotlibFigure">MatplotlibFigure</a></li>
 <li><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></li>
 </ul>

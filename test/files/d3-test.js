@@ -1,4 +1,4 @@
 
-var selector = 'div.' + id;
+var selector = 'div#' + id;
 
-d3.select(selector).append("p").text(data.test-data);
+d3.select(selector).append("p").text(data.test_data);

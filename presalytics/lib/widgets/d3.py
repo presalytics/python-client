@@ -47,7 +47,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
         self.script64 = self.read_file(script_filename)
         if not self.script64:
             self.script64 = script64
-        else:
+        if not self.script64:
             raise presalytics.lib.exceptions.InvalidConfigurationError("D3 Widget must be supplied either a script64 or script_filename keyword argument.")
         
     def read_file(self, filename) -> typing.Optional[str]:
@@ -145,17 +145,19 @@ class D3Widget(presalytics.story.components.WidgetBase):
                 <div id="{{ id }}"></div>
                 <script type="text/javascript">
 
-                    var id = {{id}}
+                    var id = '{{id}}';
 
-                    var data = {{data}}
+                    var data = JSON.parse('{{data|safe}}');
 
-                    {{script}}
+                    var container = document.getElementById(id);
+
+                    {{script|safe}}
             
                 </script>
             </body>
         </html>""")
-        data = json.dumps(self.d3_data)
-        script = base64.b64decode(self.script64)  #type: ignore
+        data = json.dumps(self.d3_data)  # dont use hyphens in data keys
+        script = base64.b64decode(self.script64).decode('utf-8')  #type: ignore
         context = {
             "id": self.id,
             "d3_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('d3'),
@@ -163,4 +165,3 @@ class D3Widget(presalytics.story.components.WidgetBase):
             "script": script
         }
         return SIMPLE_HTML.render(**context)
-

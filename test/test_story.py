@@ -126,7 +126,7 @@ class TestStory(unittest.TestCase):
         
         widget = presalytics.lib.widgets.d3.D3Widget(
             'test-widget',
-            {'test-data': 'This is a test to d3 an object from d3'},
+            {'test_data': 'This is a test to d3 an object from d3'},
             script_filename='d3-test.js',
         )
 

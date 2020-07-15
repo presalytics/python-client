@@ -102,7 +102,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
 
     @classmethod
     def deserialize(cls, outline, **kwargs):
-        d3_data = outline.data.get("data")
+        d3_data = outline.data.get("d3_data")
         story_id = outline.data.get("story_id", None)
         id = outline.data.get('id', None)
         data = outline.data.get('d3_data', None)

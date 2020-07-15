@@ -6,6 +6,8 @@ import logging
 import jinja2
 import json
 import os
+import lxml
+import lxml.html
 import presalytics
 import presalytics.lib.exceptions
 

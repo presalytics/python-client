@@ -403,11 +403,14 @@ class Renderer(ComponentBase):
         allowed_scripts = presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().values()
         script_elements = body.findall(".//script")
         for ele in script_elements:
-            try:
-                link = ele.get("src")
-            except KeyError:
-                ele.getparent().remove(ele)
-            if link not in allowed_scripts:
+            remove_ele = True
+            script_id = ele.get("id")
+            if script_id in self.story_outline.allowed_ids:
+                remove_ele = False
+            link = ele.get("src")
+            if link in allowed_scripts:
+                remove_ele = False
+            if remove_ele:
                 ele.getparent().remove(ele)
         return body
         

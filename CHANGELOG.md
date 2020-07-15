@@ -1,3 +1,7 @@
+## v0.5.3 (2020-07-14)
+
+* Create Content Security Policy meta tag -- use metadata to allow inline scripts
+
 ## v0.5.2 (2020-07-14)
 
 * Fix page order bug in `presalytics.lib.tools.ooxml_tools.create_pages_from_ooxml_document`

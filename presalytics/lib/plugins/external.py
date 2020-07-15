@@ -113,7 +113,7 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
     __plugin_name__ = 'external_scripts'
 
     SCRIPT_MAP = {
-        'd3': 'https://cdnjs.cloudflare.com/ajax/libs/d3/5.12.0/d3.min.js',
+        'd3': 'https://d3js.org/d3.v5.min.js',
         'd3v3': 'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js',
         'reveal': {
             'base': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js',

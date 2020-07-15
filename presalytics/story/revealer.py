@@ -13,6 +13,7 @@ import lxml.html.builder as E
 import datetime
 import six
 import sys
+import urllib.parse
 import presalytics
 import presalytics.lib
 import presalytics.lib.plugins
@@ -118,11 +119,27 @@ class Revealer(presalytics.story.components.Renderer):
             logger.info("Revealer could not extract story_id from outline.")
         return base
     
-    def get_meta_tags(self):
+    def get_meta_tags(self, body=tuple()):
+        """
+        Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts. 
+        """
+
+        scripts = body.find('//script')
+
+        srcs = []
+        for script in scripts:
+            src = script.get("src")
+            if src:
+                root = urllib.parse.urlparse(src).netloc
+                if root:
+                    srcs.append(root)
+        allowed = ' '.join(set(srcs))
+
         tags = [
             '<meta charset="utf-8">',
             '<meta http-equiv="X-UA-Compatible" content="IE=edge">',
-            '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">'
+            '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">',
+            """<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://*.presalytics.io; script-src 'self' https://*.presalytics.io {0};">""".format(allowed)
         ]
         return tags
 
@@ -144,7 +161,7 @@ class Revealer(presalytics.story.components.Renderer):
             for item in lxml_scripts:
                 body.append(item)
         head = E.HEAD()
-        for meta in self.get_meta_tags():
+        for meta in self.get_meta_tags(body):
             lxml_meta = lxml.html.fragment_fromstring(meta)
             head.append(lxml_meta)
         for link in self.plugin_mgr.get_styles():

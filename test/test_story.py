@@ -8,6 +8,7 @@ import presalytics.story.revealer
 import presalytics.story.outline
 import presalytics.lib.tools.component_tools
 import presalytics.lib.widgets.ooxml_editors
+import presalytics.lib.widgets.d3
 
 
 class TestStory(unittest.TestCase):
@@ -120,6 +121,28 @@ class TestStory(unittest.TestCase):
         story = client.story.story_post_file_json(file_upload=file)
         from presalytics.client.presalytics_story import Story
         self.assertTrue(type(story) is Story)
+
+    def d3(self):
+        
+        widget = presalytics.lib.widgets.d3.D3Widget(
+            'test-widget',
+            {'test-data': 'This is a test to d3 an object from d3'},
+            script_filename='d3-test.js',
+        )
+
+        outline = presalytics.lib.tools.component_tools.create_outline_from_widget(
+            widget,
+            page_name='d3 page',
+            title='D3 Test Story',
+            description='This is a test story'
+        )
+
+        client = presalytics.Client()
+
+        story = client.story.story_post(outline.dump())
+
+        
+
 
     def tearDown(self):
         pass

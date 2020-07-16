@@ -98,7 +98,8 @@ class D3Widget(presalytics.story.components.WidgetBase):
                  css64: str = None,
                  css_filename: str = None, 
                  html64: str = None,
-                 html_filename: str *args, **kwargs):
+                 html_filename: str = None,
+                 *args, **kwargs):
         if not id:
             id = 'd3-' + str(uuid.uuid4())
         self.id = id
@@ -122,20 +123,20 @@ class D3Widget(presalytics.story.components.WidgetBase):
         """
         Find a file named `filename` and return its base64-ecoded content
         """
-
-        search_paths = list(set(presalytics.autodiscover_paths))
         data64 = None
-        if os.getcwd() not in search_paths:
-            search_paths.append(os.getcwd())
-        for path in search_paths:
-            fpath = os.path.join(path, filename)
-            if os.path.exists(fpath):
-                with open(fpath, 'rb') as f:
-                    data = f.read()
-                    data64 = base64.b64encode(data).decode('utf-8')  #type: ignore
-                break
-        if not data64:
-            logger.debug("File {0} could not be found".format(filename))
+        if filename:
+            search_paths = list(set(presalytics.autodiscover_paths))
+            if os.getcwd() not in search_paths:
+                search_paths.append(os.getcwd())
+            for path in search_paths:
+                fpath = os.path.join(path, filename)
+                if os.path.exists(fpath):
+                    with open(fpath, 'rb') as f:
+                        data = f.read()
+                        data64 = base64.b64encode(data).decode('utf-8')  #type: ignore
+                    break
+            if not data64:
+                logger.debug("File {0} could not be found".format(filename))
         return data64 
 
     def to_html(self, data=None, **kwargs) -> str:
@@ -191,7 +192,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
                    id=id,
                    story_id=story_id,
                    script64=script64,
-                   script_filename=js_filename,
+                   script_filename=script_filename,
                    html64=html64,
                    html_filename=html_filename,
                    css64=css64,
@@ -203,7 +204,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
             'd3_data': self.d3_data,
             'id': self.id,
             'story_id': self.story_id,
-            'filename': self.script_filename,
+            'script_filename': self.script_filename,
             'script64': self.script64,
             'css64': self.css64,
             'html64': self.html64,
@@ -248,9 +249,9 @@ class D3Widget(presalytics.story.components.WidgetBase):
             </body>
         </html>""")
         data = json.dumps(self.d3_data)  # dont use hyphens in data keys
-        script = base64.b64decode(self.script64).decode('utf-8')  #type: ignore
-        extra_css = base64.b64decode(self.css64).decode('utf-8')
-        html_fragment = base64.b64decode(self.css64).decode('utf-8') # disable nested iframes
+        script = base64.b64decode(self.script64).decode('utf-8')  #type: ignore  #Required
+        extra_css = base64.b64decode(self.css64).decode('utf-8') if self.css64 else None  #type: ignore  
+        html_fragment = base64.b64decode(self.html64).decode('utf-8') if self.html64 else None  #type: ignore   # disable nested iframes
         context = {
             "id": self.id,
             "d3_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('d3'),

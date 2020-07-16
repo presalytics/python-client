@@ -134,7 +134,7 @@ class TestStory(unittest.TestCase):
                 'left_text': 'This is the left window'
             },
             script_filename='d3-test.js',
-            css_fliename='fragment.css',
+            css_filename='fragment.css',
             html_filename='fragment.html'
         )
         widget.story_id = str(uuid.uuid4())

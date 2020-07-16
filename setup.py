@@ -10,7 +10,7 @@
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "presalytics"
-VERSION = "0.5.3"
+VERSION = "0.5.4"
 
 # To install the library, run the following
 #
@@ -37,7 +37,8 @@ REQUIRES = [
     "jsonpatch",
     "pandas",
     "wsgi_microservice_middleware>=0.1.5",
-    "cachetools==4.1.0"
+    "cachetools==4.1.0",
+    "python-jose"
 ]
 
 with open("README.md", "r") as fh:

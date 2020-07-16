@@ -129,8 +129,13 @@ class TestStory(unittest.TestCase):
         
         widget = presalytics.lib.widgets.d3.D3Widget(
             'test-widget',
-            {'test_data': 'This is a test to d3 an object from d3'},
+            {
+                'right_text': 'This is the right window',
+                'left_text': 'This is the left window'
+            },
             script_filename='d3-test.js',
+            css_fliename='fragment.css',
+            html_filename='fragment.html'
         )
         widget.story_id = str(uuid.uuid4())
         w = widget.serialize()
@@ -147,6 +152,12 @@ class TestStory(unittest.TestCase):
         frame = lxml.html.fragment_fromstring(widget.to_html())
 
         self.assertTrue(isinstance(frame, lxml.etree._Element))
+
+        client = presalytics.Client()
+
+        outline = presalytics.lib.tools.component_tools.create_outline_from_widget(widget)
+
+        client.story.story_post({"outline": outline.dump()})
 
         
         

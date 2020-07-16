@@ -1,0 +1,18 @@
+.flex-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: stretch;
+    background-color: beige;
+}
+
+.left-window {
+    flex-grow: 1;
+    color: black;
+
+}
+
+.right-window {
+    flex-grow: 4;
+    color: red;
+}

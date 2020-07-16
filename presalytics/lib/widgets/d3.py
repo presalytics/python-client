@@ -94,7 +94,11 @@ class D3Widget(presalytics.story.components.WidgetBase):
                  id: str = None, 
                  story_id: str = None,
                  script64: str = None, 
-                 script_filename: str = None, *args, **kwargs):
+                 script_filename: str = None, 
+                 css64: str = None,
+                 css_filename: str = None, 
+                 html64: str = None,
+                 html_filename: str *args, **kwargs):
         if not id:
             id = 'd3-' + str(uuid.uuid4())
         self.id = id
@@ -107,7 +111,13 @@ class D3Widget(presalytics.story.components.WidgetBase):
             self.script64 = script64
         if not self.script64:
             raise presalytics.lib.exceptions.InvalidConfigurationError("D3 Widget must be supplied either a script64 or script_filename keyword argument.")
-        
+        self.html64 = self.read_file(html_filename)
+        self.html64 = self.html64 if self.html64 else html64
+        self.css64 = self.read_file(css_filename)
+        self.css64 = self.css64 if self.css64 else css64
+        self.html_filename = html_filename
+        self.css_filename = css_filename
+
     def read_file(self, filename) -> typing.Optional[str]:
         """
         Find a file named `filename` and return its base64-ecoded content
@@ -170,14 +180,22 @@ class D3Widget(presalytics.story.components.WidgetBase):
         story_id = outline.data.get("story_id", None)
         id = outline.data.get('id', None)
         data = outline.data.get('d3_data', None)
-        filename = outline.data.get('filename', None)
+        script_filename = outline.data.get('script_filename', None)
         script64 = outline.data.get('script64', None)
+        html_filename = outline.data.get('html_filename', None)
+        html64 = outline.data.get('html64', None)
+        css_filename = outline.data.get('css_filename', None)
+        css64 = outline.data.get('css64', None)
         return cls(outline.name,
                    d3_data,
                    id=id,
                    story_id=story_id,
                    script64=script64,
-                   script_filename=filename,
+                   script_filename=js_filename,
+                   html64=html64,
+                   html_filename=html_filename,
+                   css64=css64,
+                   css_filename=css_filename,
                    **kwargs)
 
     def serialize(self, **kwargs):
@@ -186,7 +204,11 @@ class D3Widget(presalytics.story.components.WidgetBase):
             'id': self.id,
             'story_id': self.story_id,
             'filename': self.script_filename,
-            'script64': self.script64
+            'script64': self.script64,
+            'css64': self.css64,
+            'html64': self.html64,
+            'html_filename': self.html_filename,
+            'css_filename': self.css_filename
         }
         return presalytics.story.outline.Widget(
             name=self.name,
@@ -206,12 +228,12 @@ class D3Widget(presalytics.story.components.WidgetBase):
             <head>
                 <meta charset="UTF-8">
                 <style>
-                {{ extra_css }}
+                {{ css }}
                 </style>
             </head>
             <body>
                 <script type="text/javascript" src="{{ d3_url }}"></script>
-                <div id="{{ id }}"></div>
+                <div id="{{ id }}">{{ html_fragment }}</div>
                 <script type="text/javascript">
 
                     var id = '{{id}}';
@@ -227,10 +249,14 @@ class D3Widget(presalytics.story.components.WidgetBase):
         </html>""")
         data = json.dumps(self.d3_data)  # dont use hyphens in data keys
         script = base64.b64decode(self.script64).decode('utf-8')  #type: ignore
+        extra_css = base64.b64decode(self.css64).decode('utf-8')
+        html_fragment = base64.b64decode(self.css64).decode('utf-8') # disable nested iframes
         context = {
             "id": self.id,
             "d3_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('d3'),
             "data": data,
-            "script": script
+            "script": script,
+            "css": extra_css,
+            "html_fragment": html_fragment
         }
         return SIMPLE_HTML.render(**context)

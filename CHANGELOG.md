@@ -1,5 +1,9 @@
 ## v0.5.3 (2020-07-14)
 
+* Update D3 Widgeth to include custom html, css from files
+
+## v0.5.3 (2020-07-14)
+
 * Add D3Widget, Content Secuirty Policies 
 
 ## v0.5.2 (2020-07-14)

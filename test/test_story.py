@@ -153,11 +153,13 @@ class TestStory(unittest.TestCase):
 
         self.assertTrue(isinstance(frame, lxml.etree._Element))
 
-        client = presalytics.Client()
+        # Uncomment to view test results
 
-        outline = presalytics.lib.tools.component_tools.create_outline_from_widget(widget)
+        # client = presalytics.Client()
 
-        client.story.story_post({"outline": outline.dump()})
+        # outline = presalytics.lib.tools.component_tools.create_outline_from_widget(widget)
+
+        # client.story.story_post({"outline": outline.dump()})
 
         
         

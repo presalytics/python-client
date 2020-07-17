@@ -52,6 +52,28 @@ class D3Widget(presalytics.story.components.WidgetBase):
         Required when updating the script text.  Read into the `script64` parameter
         via the `read_file` method
 
+    html64 : str. optional
+        A base64-encoded string of the html fragments's text.  Used for server-to-server
+        transport over https
+
+    html_filename: str, optional
+        The name of file in the local directory with an html framement that should be rendered within the
+        body (inside element `<div id="{{id}}" class="d3-container"></div>`) of the iframe containing the 
+        d3 script
+
+    css64 : str. optional
+        A base64-encoded string of the css styles to apply to the d3 document.  Used for server-to-server
+        transport over https.
+    
+    css_filename: str, optional
+        A css file containing styles that will be applied to d3
+
+        Note: Styles `html {width: 100%; height:100%;} body {width: 100%; height: 100%; margin: 0px;}`
+        are applied by default if not css is provided
+
+
+    
+
 
     Script Local Variables:
     ----------
@@ -217,6 +239,18 @@ class D3Widget(presalytics.story.components.WidgetBase):
             data=data,
         )
 
+    DEFAULT_CSS = """
+    html {
+        height: 100%;
+        width: 100%;
+    }
+    body {
+        height: 100%;
+        width: 100%;
+        margin: 0px;
+    }
+    """
+
 
     def standalone_html(self) -> str:
         """
@@ -250,7 +284,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
         </html>""")
         data = json.dumps(self.d3_data)  # dont use hyphens in data keys
         script = base64.b64decode(self.script64).decode('utf-8')  #type: ignore  #Required
-        extra_css = base64.b64decode(self.css64).decode('utf-8') if self.css64 else None  #type: ignore  
+        extra_css = base64.b64decode(self.css64).decode('utf-8') if self.css64 else D3Widget.DEFAULT_CSS  #type: ignore  
         html_fragment = base64.b64decode(self.html64).decode('utf-8') if self.html64 else None  #type: ignore   # disable nested iframes
         context = {
             "id": self.id,

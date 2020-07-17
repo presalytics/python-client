@@ -169,7 +169,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
             'frameborder': "0",
             'scrolling': "auto",
             'class': 'd3-responsive-frame',
-            'style': 'max-height: none; max-width: none; height:1005; width: 100%;',
+            'style': 'max-height: none; max-width: none; height:100%; width: 100%;',
             'sandbox': 'allow-forms allow-scripts'
         })
         empty_parent_div.append(frame)

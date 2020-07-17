@@ -1,3 +1,13 @@
+body {
+    height: 100vh;
+    width: 100vh;
+}
+
+.d3-container {
+    height: 100%;
+    width: 100%;
+}
+
 .flex-container {
     display: flex;
     height: 100%;

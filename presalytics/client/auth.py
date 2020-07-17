@@ -216,7 +216,7 @@ class AuthenticationMixIn(object):
             VER = 'build'
         return "presalytics-python-client/{0}".format(VER)
 
-    _get_user_agent = get_user_agent.__func__()
+    _get_user_agent = get_user_agent.__func__()  #type: ignore
 
     def set_host(self, hosts_dict):
         for parent_cls in self.__class__.__bases__:
@@ -239,3 +239,12 @@ class AuthenticationMixIn(object):
         :return: datetime.
         """
         return super()._ApiClient__deserialize_datetime(string).astimezone(datetime.timezone.utc)
+
+    @property
+    def external_root_url(self):
+        if presalytics.CONFIG.get("BROWSER_API_HOST", None):
+            base_uri = self.configuration.host.rstrip("/").split("/")[-1]
+            target = presalytics.CONFIG["BROWSER_API_HOST"].rstrip("/") + "/story"
+        else:
+            target = self.configuration.host
+        return target

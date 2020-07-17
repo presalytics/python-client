@@ -36,3 +36,8 @@ try:
     PRESALYTICS['HOSTS'].update(site_host)
 except KeyError:
     pass
+
+try:
+    PRESALYTICS['BROWSER_API_HOST'] = os.environ['BROWSER_API_HOST']
+except KeyError:
+    pass

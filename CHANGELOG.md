@@ -1,3 +1,7 @@
+## v0.5.6 (2020-07-17)
+
+* Add `external_root_url` to `AuthenticationMixIn`, implement in `D3Widget`
+
 ## v0.5.5 (2020-07-17)
 
 * Add D3Widget to `__init__.py`
@@ -5,7 +9,7 @@
 
 ## v0.5.4 (2020-07-14)
 
-* Update D3 Widgeth to include custom html, css from files
+* Update D3pipWidget to include custom html, css from files
 
 ## v0.5.3 (2020-07-14)
 

@@ -191,6 +191,9 @@ from presalytics.lib.templates.base import (
     BootstrapCustomTemplate
 )
 from presalytics.lib.widgets.matplotlib import MatplotlibFigure, MatplotlibResponsiveFigure
+from presalytics.lib.widgets.d3 import (
+    D3Widget
+)
 from presalytics.lib.widgets.ooxml import (
     OoxmlWidgetBase,
     OoxmlFileWidget, 
@@ -217,6 +220,7 @@ from presalytics.lib.widgets.ooxml_editors import (
     MultiXmlTransform
 )
 
+
 __all__ = [
     'CONFIG',
     'COMPONENTS',
@@ -231,6 +235,7 @@ __all__ = [
     'OoxmlEndpointMap',
     'OoxmlWidgetBase',
     'OoxmlEditorWidget',
+    'D3Widget',
     'ChartUpdaterWidget',
     'TableUpdaterWidget',
     'XmlTransformBase',

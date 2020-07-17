@@ -1,4 +1,9 @@
-## v0.5.3 (2020-07-14)
+## v0.5.5 (2020-07-17)
+
+* Add D3Widget to `__init__.py`
+* Bug fix to `presalytics.lib.tools.workflows`
+
+## v0.5.4 (2020-07-14)
 
 * Update D3 Widgeth to include custom html, css from files
 

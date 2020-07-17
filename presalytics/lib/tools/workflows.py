@@ -108,7 +108,7 @@ def push_outline(outline, username=None, password=None) -> 'StoryOutline':
     """
     client = presalytics.client.api.Client(username=username, password=password)
     if outline.story_id == "empty" or not outline.story_id:
-        story = client.story.story_post(outline.dump())
+        story = client.story.story_post({"outline": outline.dump()})
     else:
         old_story = client.story.story_id_get(outline.story_id)
         old_story.outline = outline.dump()

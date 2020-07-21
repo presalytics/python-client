@@ -324,7 +324,7 @@ class Client(object):
         an `presalytics.lib.exceptions.InvalidTokenException` when `deletegate_login` is True.
         """
         if self.token_util.is_api_access_token_expired():
-            if self.token_util.token.get('refresh_token', None):
+            if self.token_util.token.get('refresh_token', None) and self.client_secret:
                 refresh_token = self.token_util.token["refresh_token"]
                 token = self.oidc.refresh_token(refresh_token)
                 self.token_util.process_token(token)

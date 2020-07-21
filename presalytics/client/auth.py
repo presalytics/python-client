@@ -11,6 +11,7 @@ import posixpath
 import presalytics
 import presalytics.lib.exceptions
 import presalytics.lib.constants
+import presalytics.story.outline
 import typing
 if typing.TYPE_CHECKING:
     from presalytics.client.api import Client
@@ -38,7 +39,8 @@ class TokenUtil(object):
             except Exception:
                 raise presalytics.lib.exceptions.MisConfiguredTokenException()
         else:
-            self.token = {}
+            if not self.token:
+                self.token = {}
 
     def is_api_access_token_expired(self):
         try:
@@ -101,7 +103,7 @@ class TokenUtil(object):
     @staticmethod
     def put_token_file(token, token_filepath):
         with open(token_filepath, mode='w+') as newtoken:
-            json.dump(token, newtoken)
+            json.dump(token, newtoken, cls=presalytics.story.outline.OutlineEncoder)
 
     @staticmethod
     def load_token_from_file(token_filepath):

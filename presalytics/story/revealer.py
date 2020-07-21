@@ -74,6 +74,8 @@ class Revealer(presalytics.story.components.Renderer):
         for key, val in kwargs.items():
             if key in presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config.keys():
                 reveal_params.update({key: val})
+        if len(self.story_outline.pages) == 0:
+            reveal_params.update({'controls': False})
         reveal_plugin_config = {
             'kind': 'script',
             'name': 'reveal',

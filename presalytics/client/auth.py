@@ -39,7 +39,7 @@ class TokenUtil(object):
             except Exception:
                 raise presalytics.lib.exceptions.MisConfiguredTokenException()
         else:
-            if not self.token:
+            if not hasattr(self, 'token'):
                 self.token = {}
 
     def is_api_access_token_expired(self):

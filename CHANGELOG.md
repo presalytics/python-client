@@ -1,3 +1,8 @@
+## v0.5.7 (2020-07-21)
+
+* Update `presalytics.story.revealer.Revealer` to hide controls for single page stories
+* Fix auth bug introduced to token caching with switch to 3rd party auth
+
 ## v0.5.6 (2020-07-17)
 
 * Add `external_root_url` to `AuthenticationMixIn`, implement in `D3Widget`

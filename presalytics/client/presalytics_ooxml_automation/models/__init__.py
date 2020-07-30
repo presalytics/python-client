@@ -37,6 +37,7 @@ from presalytics.client.presalytics_ooxml_automation.models.chart_rows import Ch
 from presalytics.client.presalytics_ooxml_automation.models.chart_rows_details import ChartRowsDetails
 from presalytics.client.presalytics_ooxml_automation.models.child_objects import ChildObjects
 from presalytics.client.presalytics_ooxml_automation.models.document import Document
+from presalytics.client.presalytics_ooxml_automation.models.document_clone_dto import DocumentCloneDTO
 from presalytics.client.presalytics_ooxml_automation.models.document_details import DocumentDetails
 from presalytics.client.presalytics_ooxml_automation.models.document_type import DocumentType
 from presalytics.client.presalytics_ooxml_automation.models.ooxml_dto import OoxmlDTO

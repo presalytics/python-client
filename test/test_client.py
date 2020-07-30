@@ -73,3 +73,26 @@ class TestClient(unittest.TestCase):
                 os.remove(target_path)
             except Exception:
                 pass
+
+    def test_clone(self):
+        test_upload_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'files', 'star.pptx')
+        client = presalytics.client.api.get_client()
+        try:
+            test_story = client.story.story_post_file(file=test_upload_file)
+            test_story_details = client.story.story_id_get(test_story.id, include_relationships=True)
+            from presalytics.client.presalytics_ooxml_automation.models import DocumentCloneDTO
+            ooxml_id = test_story_details.ooxml_documents[0].ooxml_automation_id
+            clone_dto = DocumentCloneDTO(
+                id=ooxml_id,
+                story_id=str(uuid.uuid4())
+            )
+            cloned_document = client.ooxml_automation.documents_clone_post_id(ooxml_id, document_clone_dto=clone_dto)
+        finally:
+            try:
+                client.story.story_id_delete(test_story.id)
+            except Exception:
+                pass
+            try:
+                client.ooxml_automation.documents_delete_id(cloned_document.id)
+            except Exception:
+                pass

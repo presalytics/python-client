@@ -21,6 +21,7 @@ class OoxmlTheme(presalytics.lib.plugins.reveal_theme.RevealCustomTheme):
         config.update({'path': import_path})
         with open(scss_file, 'r') as file:
             scss_template_string = file.read()
+        # TODO: check scss_template_string for keys, and ensure that all of the keys are in the config (currently throws KeyError)
         scss_string = scss_template_string.format(**config)
         new_css = sass.compile(string=scss_string)
         style_string = "<style>\n{0}\n</style>".format(new_css)

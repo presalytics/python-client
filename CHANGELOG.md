@@ -1,3 +1,7 @@
+## v0.5.7 (2020-07-30)
+
+* Add cloning functionality for ooxml documents
+
 ## v0.5.7 (2020-07-21)
 
 * Update `presalytics.story.revealer.Revealer` to hide controls for single page stories

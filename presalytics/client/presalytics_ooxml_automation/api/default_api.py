@@ -3063,7 +3063,7 @@ class DefaultApi(object):
 
         :param async_req bool: execute request asynchronously
         :param str id: the Source document Id (required)
-        :param DocumentCloneDTO document_clone_dto: A DocumentCloneDto objec with parameters required for cloning the document
+        :param DocumentCloneDTO document_clone_dto: A DocumentCloneDto object with containing information required for cloning the document
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -3089,7 +3089,7 @@ class DefaultApi(object):
 
         :param async_req bool: execute request asynchronously
         :param str id: the Source document Id (required)
-        :param DocumentCloneDTO document_clone_dto: A DocumentCloneDto objec with parameters required for cloning the document
+        :param DocumentCloneDTO document_clone_dto: A DocumentCloneDto object with containing information required for cloning the document
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will

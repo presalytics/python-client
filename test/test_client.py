@@ -87,6 +87,10 @@ class TestClient(unittest.TestCase):
                 story_id=str(uuid.uuid4())
             )
             cloned_document = client.ooxml_automation.documents_clone_post_id(ooxml_id, document_clone_dto=clone_dto)
+
+            new_story = client.story.story_post({'outline': test_story.outline})
+
+
         finally:
             try:
                 client.story.story_id_delete(test_story.id)
@@ -96,3 +100,8 @@ class TestClient(unittest.TestCase):
                 client.ooxml_automation.documents_delete_id(cloned_document.id)
             except Exception:
                 pass
+            # try:
+            #     client.story.story_id_delete(new_story.id)
+            # except Exception:
+            #     pass
+

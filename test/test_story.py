@@ -159,9 +159,7 @@ class TestStory(unittest.TestCase):
 
         # outline = presalytics.lib.tools.component_tools.create_outline_from_widget(widget)
 
-        # client.story.story_post({"outline": outline.dump()})
-
-        
+        # client.story.story_post({"outline": outline.dump()})ks
         
 
 

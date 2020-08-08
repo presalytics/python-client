@@ -1,7 +1,10 @@
 import sass
 import os
 import posixpath
+import string
+import typing
 import presalytics.lib.plugins.reveal_theme
+import presalytics.story.util
 
 
 class OoxmlTheme(presalytics.lib.plugins.reveal_theme.RevealCustomTheme):
@@ -22,9 +25,18 @@ class OoxmlTheme(presalytics.lib.plugins.reveal_theme.RevealCustomTheme):
         with open(scss_file, 'r') as file:
             scss_template_string = file.read()
         # TODO: check scss_template_string for keys, and ensure that all of the keys are in the config (currently throws KeyError)
-        scss_string = scss_template_string.format(**config)
+        config = self.config_to_camelCase(config)
         new_css = sass.compile(string=scss_string)
         style_string = "<style>\n{0}\n</style>".format(new_css)
         font_names = [config["headingFont"], config["bodyFont"]]
         links = self.get_fonts(font_names)
         return links + style_string
+    
+    def config_to_camelCase(self, config: typing.Dict) -> typing.Dict:
+        new_dict = dict()
+        for key, val in config.items():
+            new_dict.update({
+                presalytics.story.util.to_camel_case(key): val
+            })
+        return new_dict
+

@@ -54,7 +54,12 @@ def story_post_file_bytes(client: 'Client',
         resp = requests.post(endpoint, headers=headers, files=_file)
     except Exception as ex:
         message = "An error occured in the presalytics API client"
-        raise presalytics.lib.exceptions.ApiError(message=message, status_code=resp.status_code)
+        if locals().get("resp", None):
+            code = resp.status_code
+        else:
+            code = 500
+        raise presalytics.lib.exceptions.ApiError(message=message, status_code=code)
+            
     data = resp.json()
     if resp.status_code > 299:
         logger.error(data['detail'])

@@ -24,9 +24,8 @@ class OoxmlTheme(presalytics.lib.plugins.reveal_theme.RevealCustomTheme):
         config.update({'path': import_path})
         with open(scss_file, 'r') as file:
             scss_template_string = file.read()
-        # TODO: check scss_template_string for keys, and ensure that all of the keys are in the config (currently throws KeyError)
         config = self.config_to_camelCase(config)
-        new_css = sass.compile(string=scss_string)
+        new_css = sass.compile(string=scss_template_string)
         style_string = "<style>\n{0}\n</style>".format(new_css)
         font_names = [config["headingFont"], config["bodyFont"]]
         links = self.get_fonts(font_names)

@@ -1,6 +1,7 @@
-## v0.5.7 (2020-07-30)
+## v0.5.8 (2020-07-30)
 
 * Add cloning functionality for ooxml documents
+* Fix camelCase bug in `presalytics.lib.plugins.ooxml`
 
 ## v0.5.7 (2020-07-21)
 

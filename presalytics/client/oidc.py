@@ -266,6 +266,11 @@ class OidcClient(object):
             "audience": audience
         }
         return self._post(self.token_endpoint, post_data)
+
+    def get_user_id(self, token) -> str:
+        payload = presalytics.client.oidc.OidcClient().validate_token(token)
+        return payload.get('https://api.presalytics.io/api_user_id', None)
+
     
         
 

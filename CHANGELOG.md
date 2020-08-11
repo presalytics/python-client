@@ -1,3 +1,8 @@
+## v0.5.9 (2020-08-11)
+
+* Add methods to support async in the story api
+* Update tests to support async
+
 ## v0.5.8 (2020-07-30)
 
 * Add cloning functionality for ooxml documents

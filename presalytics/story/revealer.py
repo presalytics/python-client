@@ -145,7 +145,7 @@ class Revealer(presalytics.story.components.Renderer):
         ]
         return tags
 
-    def package_as_standalone(self):
+    def package_as_standalone(self, pages=None):
         """
         Render the story outline as a html document with only the 
         reveal.js presentation as conent
@@ -154,7 +154,7 @@ class Revealer(presalytics.story.components.Renderer):
         ----------
         A `str` containing a complete html document with the presentation
         """
-        pres = self.render()
+        pres = self.render(pages=pages)
         body = E.BODY()
         body.append(pres)
         body = self.strip_unauthorized_scripts(body)
@@ -191,7 +191,7 @@ class Revealer(presalytics.story.components.Renderer):
         info = self.story_outline.info
         info.date_modified = datetime.datetime.utcnow()
 
-    def render(self):
+    def render(self, pages=None):
         """
         Creates a reveal.js presenation html fragement
 
@@ -200,12 +200,16 @@ class Revealer(presalytics.story.components.Renderer):
         A `str` html fragment containing a reveal.js presentation
         """
         reveal_base = self.base
-        for page in self.story_outline.pages:
-            slides_container = reveal_base[0]
-            slide = lxml.etree.SubElement(slides_container, "section")
-            page_html = self.render_page(page)
-            slide_fragment = lxml.html.fragment_fromstring(page_html)
-            slide.append(slide_fragment)
+        if not pages:
+            pages_to_render = [p for p in range(0, len(self.story_outline.pages))]
+        for p in reange(0, len(self.story_outline.pages)):
+            if p in pages_to_render:
+                page = self.story_outline.pages[p]
+                slides_container = reveal_base[0]
+                slide = lxml.etree.SubElement(slides_container, "section")
+                page_html = self.render_page(page)
+                slide_fragment = lxml.html.fragment_fromstring(page_html)
+                slide.append(slide_fragment)
         return reveal_base
 
     def render_page(self, page: 'Page') -> str:

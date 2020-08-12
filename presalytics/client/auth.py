@@ -2,6 +2,7 @@ import json
 import logging
 import pkg_resources
 import sys
+import os
 import weakref
 import dateutil
 import dateutil.parser

@@ -29,8 +29,8 @@ class TestComponents(unittest.TestCase):
         test_file = os.path.join(os.path.dirname(__file__), "files", "star.pptx")
         tmp_filename = os.path.join(os.path.dirname(__file__), os.path.basename(test_file))
         shutil.copyfile(test_file, tmp_filename)
-        client_info = get_client().get_client_info()
-        story = presalytics.create_story_from_ooxml_file(tmp_filename, client_info=client_info)
+        client_info = get_client().get_client_info() 
+        story = get_client().upload_file_and_await_outline(tmp_filename, include_relationships=True)
         outline = presalytics.StoryOutline.load(story.outline)
         old_widget = outline.pages[0].widgets[0]
         childs = get_client().ooxml_automation.documents_childobjects_get_id(old_widget.data["document_ooxml_id"])
@@ -75,7 +75,7 @@ class TestComponents(unittest.TestCase):
         test_file = os.path.join(os.path.dirname(__file__), "files", "star.pptx")
         tmp_filename = os.path.join(os.path.dirname(__file__), os.path.basename(test_file))
         shutil.copyfile(test_file, tmp_filename)
-        story = presalytics.create_story_from_ooxml_file(tmp_filename)
+        story = get_client().upload_file_and_await_outline(tmp_filename, include_relationships=True)
         pathlib.Path(tmp_filename).touch()
         story_outline = presalytics.StoryOutline.load(story.outline)
         widget_data = story_outline.pages[0].widgets[0]
@@ -117,13 +117,12 @@ class TestComponents(unittest.TestCase):
 
     def test_chart_update(self):
         story: "Story"
-        story_detailed: "Story"
+
         document: "OoxmlDocument"
 
         test_file = os.path.join(os.path.dirname(__file__), "files", "bubblechart.pptx")
-        story = get_client().story.story_post_file(file=[test_file])
-        story_detailed = get_client().story.story_id_get(story.id, include_relationships=True)
-        document = story_detailed.ooxml_documents[0]
+        story = get_client().upload_file_and_await_outline(test_file, include_relationships=True)
+        document = story.ooxml_documents[0]
         object_tree = get_client().ooxml_automation.documents_childobjects_get_id(document.ooxml_automation_id)
         endpoint_map = presalytics.OoxmlEndpointMap.chart() 
         object_type = endpoint_map.get_object_type()
@@ -162,14 +161,12 @@ class TestComponents(unittest.TestCase):
 
     def test_table_update(self):
         story: "Story"
-        story_detailed: "Story"
         document: "OoxmlDocument"
         dto: "TableTableDataDTO"
 
         test_file = os.path.join(os.path.dirname(__file__), "files", "table.pptx")
-        story = get_client().story.story_post_file(file=[test_file])
-        story_detailed = get_client().story.story_id_get(story.id, include_relationships=True)
-        document = story_detailed.ooxml_documents[0]
+        story = get_client().upload_file_and_await_outline(test_file, include_relationships=True)
+        document = story.ooxml_documents[0]
         object_tree = get_client().ooxml_automation.documents_childobjects_get_id(document.ooxml_automation_id)
         endpoint_map = presalytics.OoxmlEndpointMap.table() 
         object_type = endpoint_map.get_object_type()

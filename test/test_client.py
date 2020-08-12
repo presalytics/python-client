@@ -62,7 +62,7 @@ class TestClient(unittest.TestCase):
         test_upload_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'files', 'star.pptx')
         client = presalytics.client.api.get_client()
         try:
-            test_story = client.story.story_post_file(file=test_upload_file)
+            test_story = client.upload_file_and_await_outline(test_upload_file)
             download_folder = os.path.dirname(os.path.abspath(__file__))
             test_filename = "test-file.pptx"
             client.download_file(test_story.id, test_story.ooxml_documents[0].ooxml_automation_id, filename=test_filename, download_folder=download_folder)

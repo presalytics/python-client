@@ -483,10 +483,6 @@ class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn,
         presalytics.client.presalytics_doc_converter.api_client.ApiClient.__init__(self)
         self.update_configuration()
 
-    @property
-    def api_name(self):
-        return 'doc-converter'
-
 
 class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_ooxml_automation.api_client.ApiClient):
     """
@@ -497,10 +493,6 @@ class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMix
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
         self.update_configuration()
-    
-    @property
-    def api_name(self):
-        return 'ooxml-automation'
 
 
 class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_story.api_client.ApiClient):
@@ -512,10 +504,6 @@ class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presal
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics.client.presalytics_story.api_client.ApiClient.__init__(self)
         self.update_configuration()
-
-    @property
-    def api_name(self):
-        return 'story'
 
 
 @functools.lru_cache(maxsize=None)

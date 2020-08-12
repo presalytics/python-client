@@ -15,7 +15,6 @@ import presalytics.lib.constants
 import presalytics.story.outline
 import typing
 import mimetypes
-import abc
 from werkzeug.datastructures import FileStorage
 if typing.TYPE_CHECKING:
     from presalytics.client.api import Client
@@ -116,7 +115,7 @@ class TokenUtil(object):
         return token
 
 
-class AuthenticationMixIn(abc.ABC):
+class AuthenticationMixIn(object):
     def __init__(self, parent: 'Client', ignore_api_exceptions=False, **kwargs):
         self._ignore_api_exceptions = ignore_api_exceptions
         self.parent = weakref.ref(parent)
@@ -124,9 +123,8 @@ class AuthenticationMixIn(abc.ABC):
         self.update_configuration()
 
     @property
-    @abc.abstractmethod
     def api_name(self):
-        return NotImplemented
+        return self.configuration.host.rstrip("/").split("/")[-1]
 
     def call_api(
             self, resource_path, method,

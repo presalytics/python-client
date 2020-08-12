@@ -190,7 +190,7 @@ class Revealer(presalytics.story.components.Renderer):
         reveal_base = self.base
         if not pages:
             pages_to_render = [p for p in range(0, len(self.story_outline.pages))]
-        for p in reange(0, len(self.story_outline.pages)):
+        for p in range(0, len(self.story_outline.pages)):
             if p in pages_to_render:
                 page = self.story_outline.pages[p]
                 slides_container = reveal_base[0]

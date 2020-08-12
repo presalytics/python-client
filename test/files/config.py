@@ -9,7 +9,8 @@ PRESALYTICS = {
     'PASSWORD': os.environ['PRESALYTICS_PASSWORD'],
     'CLIENT_ID': os.environ.get('CLIENT_ID'),
     'CLIENT_SECRET': os.environ.get('CLIENT_SECRET'),
-    'HOSTS': {}
+    'HOSTS': {},
+    'BROWSER_API_HOST': {}
 }
 
 try:
@@ -38,6 +39,12 @@ except KeyError:
     pass
 
 try:
-    PRESALYTICS['BROWSER_API_HOST'] = os.environ['BROWSER_API_HOST']
+    PRESALYTICS['BROWSER_API_HOST']['STORY'] = os.environ['BROWSER_API_HOST_STORY']
 except KeyError:
     pass
+
+try:
+    PRESALYTICS['BROWSER_API_HOST']['OOXML_AUTOMATION'] = os.environ['BROWSER_API_HOST_OOXML_AUTOMATION']
+except KeyError:
+    pass
+

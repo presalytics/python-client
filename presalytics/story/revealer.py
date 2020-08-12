@@ -101,18 +101,6 @@ class Revealer(presalytics.story.components.Renderer):
             "class": "reveal",
         })
         lxml.etree.SubElement(base, "div", attrib={"class": "slides"})
-        try:
-            client = self.get_client()
-            website_token = client.token_util.token["access_token"]
-            base.attrib['data-jwt'] = client.token_util.token["access_token"]
-            base.attrib['data-jwt-refresh'] = client.token_util.token["refresh_token"]
-            if presalytics.CONFIG.get("BROWSER_API_HOST", None):
-                story_target = presalytics.CONFIG["BROWSER_API_HOST"] + "/story"
-            else:
-                story_target = client.story.api_client.configuration.host
-            base.attrib['data-story-target'] = story_target
-        except Exception as ex:
-            logger.exception(ex, "Could not obtain access token from revealer component.")
 
         try:
             story_id = self.story_outline.story_id

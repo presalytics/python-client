@@ -133,9 +133,11 @@ RESERVED_NAMES: list of str, optional
 IGNORE_PATHS: list of str, optional
     A list of paths to not to include in registry autosdiscover
 
-BROWSER_API_HOST: str, optional
-    If present, the root url for browser-based api calls.  May be required when services are running on a cluster that
-    deletegates certificate authentication to an external service.  See for more info: https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content
+BROWSER_API_HOST: dict, optional
+    If present, the root url for browser-based api calls.  Each service can have an independent browser host.
+    Service keys include `OOXML_AUTOMATION`, `STORY`, `DOC_CONVERTER`.  May be required when services are running on a cluster that
+    deletegates certificate authentication to an external service or in debug/test environments.  
+    See for more info: https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content
 
 The object can also take on values for user-defined extensions, and please consult
 the documentation for those package for those vairables definition.

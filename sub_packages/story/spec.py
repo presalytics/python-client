@@ -7,7 +7,7 @@ env.read_env()
 host = env("STORY_HOST", "https://api.presalytics.io")
 
 SPEC = {
-        "update": False,
+        "update": True,
         "update_type": "patch",
         "endpoint": "{0}/story/no_tags_spec".format(host),
         "package_name": "presalytics_story",

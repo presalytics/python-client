@@ -13,6 +13,8 @@ import presalytics.lib.exceptions
 import presalytics.lib.constants
 import presalytics.story.outline
 import typing
+import mimetypes
+from werkzeug.datastructures import FileStorage
 if typing.TYPE_CHECKING:
     from presalytics.client.api import Client
 
@@ -250,3 +252,37 @@ class AuthenticationMixIn(object):
         else:
             target = self.configuration.host
         return target
+
+    def files_parameters(self, files=None):
+        """Builds form parameters.
+
+        This override method expands the capabilites of codegen filehandler to
+        accept a `werkzeug.datastructures.FileStorage` object.
+
+        :param files: File parameters. Either a string file path or a `werkzeug.datastructures.FileStorage` object
+        :return: Form parameters with files.
+        """
+        params = []
+
+        if files:
+            for k, v in six.iteritems(files):
+                if not v:
+                    continue
+                if type(v) is str or type(v) is list:
+                    file_names = v if type(v) is list else [v]
+                    for n in file_names:
+                        with open(n, 'rb') as f:
+                            filename = os.path.basename(f.name)
+                            filedata = f.read()
+
+                else:
+                    if type(v) is FileStorage:
+                        filename = v.filename
+                        v.stream.seek(0)
+                        filedata = v.stream.read()
+                    else:
+                        raise AttributeError("Invalid File Object")
+                mimetype = (mimetypes.guess_type(filename)[0] or 'application/octet-stream')
+                params.append(tuple([k, tuple([filename, filedata, mimetype])]))
+
+        return params

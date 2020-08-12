@@ -29,6 +29,7 @@ from presalytics.client.presalytics_story.models.problem_detail import ProblemDe
 from presalytics.client.presalytics_story.models.required_parameters_to_create_a_view import RequiredParametersToCreateAView
 from presalytics.client.presalytics_story.models.session import Session
 from presalytics.client.presalytics_story.models.session_all_of import SessionAllOf
+from presalytics.client.presalytics_story.models.status import Status
 from presalytics.client.presalytics_story.models.story import Story
 from presalytics.client.presalytics_story.models.story_all_of import StoryAllOf
 from presalytics.client.presalytics_story.models.story_collaborator import StoryCollaborator

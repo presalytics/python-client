@@ -78,10 +78,9 @@ class TestClient(unittest.TestCase):
         test_upload_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'files', 'star.pptx')
         client = presalytics.client.api.get_client()
         try:
-            test_story = client.story.story_post_file(file=test_upload_file)
-            test_story_details = client.story.story_id_get(test_story.id, include_relationships=True)
+            test_story = client.upload_file_and_await_outline(test_upload_file)
             from presalytics.client.presalytics_ooxml_automation.models import DocumentCloneDTO
-            ooxml_id = test_story_details.ooxml_documents[0].ooxml_automation_id
+            ooxml_id = test_story.ooxml_documents[0].ooxml_automation_id
             clone_dto = DocumentCloneDTO(
                 id=ooxml_id,
                 story_id=str(uuid.uuid4())

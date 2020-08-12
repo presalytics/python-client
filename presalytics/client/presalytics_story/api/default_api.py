@@ -707,6 +707,7 @@ class DefaultApi(object):
 
         :param async_req bool: execute request asynchronously
         :param bool include_relationships: Indicate whether the returned object should include child relationships
+        :param bool include_outline: Determines whether a repsonse including story objects should include the story outline.  Defaults to true. Useful for speeding up processing times.
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -732,6 +733,7 @@ class DefaultApi(object):
 
         :param async_req bool: execute request asynchronously
         :param bool include_relationships: Indicate whether the returned object should include child relationships
+        :param bool include_outline: Determines whether a repsonse including story objects should include the story outline.  Defaults to true. Useful for speeding up processing times.
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -748,7 +750,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['include_relationships']  # noqa: E501
+        all_params = ['include_relationships', 'include_outline']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -770,6 +772,8 @@ class DefaultApi(object):
         query_params = []
         if 'include_relationships' in local_var_params:
             query_params.append(('include_relationships', local_var_params['include_relationships']))  # noqa: E501
+        if 'include_outline' in local_var_params:
+            query_params.append(('include_outline', local_var_params['include_outline']))  # noqa: E501
 
         header_params = {}
 
@@ -1632,6 +1636,122 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
+    def story_id_d3_id_get(self, id, d3_id, **kwargs):  # noqa: E501
+        """Story: Get D3 Iframe  # noqa: E501
+
+        Gets a barebones html document with objects redender by d3 script with a Restrictive Content-Security-Policy.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.story_id_d3_id_get(id, d3_id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str id: the id from the story object (required)
+        :param str d3_id: A d3 figure id from a D3Widget instance in the Presaltyics Python Library (required)
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: str
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+        kwargs['_return_http_data_only'] = True
+        return self.story_id_d3_id_get_with_http_info(id, d3_id, **kwargs)  # noqa: E501
+
+    def story_id_d3_id_get_with_http_info(self, id, d3_id, **kwargs):  # noqa: E501
+        """Story: Get D3 Iframe  # noqa: E501
+
+        Gets a barebones html document with objects redender by d3 script with a Restrictive Content-Security-Policy.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.story_id_d3_id_get_with_http_info(id, d3_id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str id: the id from the story object (required)
+        :param str d3_id: A d3 figure id from a D3Widget instance in the Presaltyics Python Library (required)
+        :param _return_http_data_only: response data without head status code
+                                       and headers
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: tuple(str, status_code(int), headers(HTTPHeaderDict))
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+
+        local_var_params = locals()
+
+        all_params = ['id', 'd3_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
+
+        for key, val in six.iteritems(local_var_params['kwargs']):
+            if key not in all_params:
+                raise ApiTypeError(
+                    "Got an unexpected keyword argument '%s'"
+                    " to method story_id_d3_id_get" % key
+                )
+            local_var_params[key] = val
+        del local_var_params['kwargs']
+        # verify the required parameter 'id' is set
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
+            raise ApiValueError("Missing the required parameter `id` when calling `story_id_d3_id_get`")  # noqa: E501
+        # verify the required parameter 'd3_id' is set
+        if ('d3_id' not in local_var_params or
+                local_var_params['d3_id'] is None):
+            raise ApiValueError("Missing the required parameter `d3_id` when calling `story_id_d3_id_get`")  # noqa: E501
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'id' in local_var_params:
+            path_params['id'] = local_var_params['id']  # noqa: E501
+        if 'd3_id' in local_var_params:
+            path_params['d3_id'] = local_var_params['d3_id']  # noqa: E501
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = []
+        local_var_files = {}
+
+        body_params = None
+        # HTTP header `Accept`
+        header_params['Accept'] = self.api_client.select_header_accept(
+            ['text/html'])  # noqa: E501
+
+        # Authentication setting
+        auth_settings = []  # noqa: E501
+
+        return self.api_client.call_api(
+            '/{id}/d3/{d3_id}', 'GET',
+            path_params,
+            query_params,
+            header_params,
+            body=body_params,
+            post_params=form_params,
+            files=local_var_files,
+            response_type='str',  # noqa: E501
+            auth_settings=auth_settings,
+            async_req=local_var_params.get('async_req'),
+            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
+            _preload_content=local_var_params.get('_preload_content', True),
+            _request_timeout=local_var_params.get('_request_timeout'),
+            collection_formats=collection_formats)
+
     def story_id_delete(self, id, **kwargs):  # noqa: E501
         """Story: Delete by Id  # noqa: E501
 
@@ -1869,6 +1989,7 @@ class DefaultApi(object):
         :param str id: the id from the story object (required)
         :param bool replace_existing: Indicates whether a put or post method would replace the existing contents
         :param str obsolete_id: A primary key pointing to an obsolete item in the story. Item type is context-dependent
+        :param bool include_outline: Determines whether a repsonse including story objects should include the story outline.  Defaults to true. Useful for speeding up processing times.
         :param list[file] file:
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
@@ -1897,6 +2018,7 @@ class DefaultApi(object):
         :param str id: the id from the story object (required)
         :param bool replace_existing: Indicates whether a put or post method would replace the existing contents
         :param str obsolete_id: A primary key pointing to an obsolete item in the story. Item type is context-dependent
+        :param bool include_outline: Determines whether a repsonse including story objects should include the story outline.  Defaults to true. Useful for speeding up processing times.
         :param list[file] file:
         :param _return_http_data_only: response data without head status code
                                        and headers
@@ -1914,7 +2036,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['id', 'replace_existing', 'obsolete_id', 'file']  # noqa: E501
+        all_params = ['id', 'replace_existing', 'obsolete_id', 'include_outline', 'file']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -1944,6 +2066,8 @@ class DefaultApi(object):
             query_params.append(('replace_existing', local_var_params['replace_existing']))  # noqa: E501
         if 'obsolete_id' in local_var_params:
             query_params.append(('obsolete_id', local_var_params['obsolete_id']))  # noqa: E501
+        if 'include_outline' in local_var_params:
+            query_params.append(('include_outline', local_var_params['include_outline']))  # noqa: E501
 
         header_params = {}
 
@@ -1993,6 +2117,7 @@ class DefaultApi(object):
         :param async_req bool: execute request asynchronously
         :param str id: the id from the story object (required)
         :param bool include_relationships: Indicate whether the returned object should include child relationships
+        :param bool include_outline: Determines whether a repsonse including story objects should include the story outline.  Defaults to true. Useful for speeding up processing times.
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -2019,6 +2144,7 @@ class DefaultApi(object):
         :param async_req bool: execute request asynchronously
         :param str id: the id from the story object (required)
         :param bool include_relationships: Indicate whether the returned object should include child relationships
+        :param bool include_outline: Determines whether a repsonse including story objects should include the story outline.  Defaults to true. Useful for speeding up processing times.
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -2035,7 +2161,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['id', 'include_relationships']  # noqa: E501
+        all_params = ['id', 'include_relationships', 'include_outline']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -2063,6 +2189,8 @@ class DefaultApi(object):
         query_params = []
         if 'include_relationships' in local_var_params:
             query_params.append(('include_relationships', local_var_params['include_relationships']))  # noqa: E501
+        if 'include_outline' in local_var_params:
+            query_params.append(('include_outline', local_var_params['include_outline']))  # noqa: E501
 
         header_params = {}
 
@@ -2209,6 +2337,234 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
+    def story_id_outline_get(self, id, **kwargs):  # noqa: E501
+        """Story: Get Story Outline  # noqa: E501
+
+        Returns Story's outline  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.story_id_outline_get(id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str id: the id from the story object (required)
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: Outline
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+        kwargs['_return_http_data_only'] = True
+        return self.story_id_outline_get_with_http_info(id, **kwargs)  # noqa: E501
+
+    def story_id_outline_get_with_http_info(self, id, **kwargs):  # noqa: E501
+        """Story: Get Story Outline  # noqa: E501
+
+        Returns Story's outline  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.story_id_outline_get_with_http_info(id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str id: the id from the story object (required)
+        :param _return_http_data_only: response data without head status code
+                                       and headers
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: tuple(Outline, status_code(int), headers(HTTPHeaderDict))
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+
+        local_var_params = locals()
+
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
+
+        for key, val in six.iteritems(local_var_params['kwargs']):
+            if key not in all_params:
+                raise ApiTypeError(
+                    "Got an unexpected keyword argument '%s'"
+                    " to method story_id_outline_get" % key
+                )
+            local_var_params[key] = val
+        del local_var_params['kwargs']
+        # verify the required parameter 'id' is set
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
+            raise ApiValueError("Missing the required parameter `id` when calling `story_id_outline_get`")  # noqa: E501
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'id' in local_var_params:
+            path_params['id'] = local_var_params['id']  # noqa: E501
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = []
+        local_var_files = {}
+
+        body_params = None
+        # HTTP header `Accept`
+        header_params['Accept'] = self.api_client.select_header_accept(
+            ['application/json'])  # noqa: E501
+
+        # Authentication setting
+        auth_settings = []  # noqa: E501
+
+        return self.api_client.call_api(
+            '/{id}/outline', 'GET',
+            path_params,
+            query_params,
+            header_params,
+            body=body_params,
+            post_params=form_params,
+            files=local_var_files,
+            response_type='Outline',  # noqa: E501
+            auth_settings=auth_settings,
+            async_req=local_var_params.get('async_req'),
+            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
+            _preload_content=local_var_params.get('_preload_content', True),
+            _request_timeout=local_var_params.get('_request_timeout'),
+            collection_formats=collection_formats)
+
+    def story_id_outline_post(self, id, outline, **kwargs):  # noqa: E501
+        """Story: Post Story Outline  # noqa: E501
+
+        Update a story outline.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.story_id_outline_post(id, outline, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str id: the id from the story object (required)
+        :param Outline outline: A story outline object (required)
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: None
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+        kwargs['_return_http_data_only'] = True
+        return self.story_id_outline_post_with_http_info(id, outline, **kwargs)  # noqa: E501
+
+    def story_id_outline_post_with_http_info(self, id, outline, **kwargs):  # noqa: E501
+        """Story: Post Story Outline  # noqa: E501
+
+        Update a story outline.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.story_id_outline_post_with_http_info(id, outline, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str id: the id from the story object (required)
+        :param Outline outline: A story outline object (required)
+        :param _return_http_data_only: response data without head status code
+                                       and headers
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: None
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+
+        local_var_params = locals()
+
+        all_params = ['id', 'outline']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
+
+        for key, val in six.iteritems(local_var_params['kwargs']):
+            if key not in all_params:
+                raise ApiTypeError(
+                    "Got an unexpected keyword argument '%s'"
+                    " to method story_id_outline_post" % key
+                )
+            local_var_params[key] = val
+        del local_var_params['kwargs']
+        # verify the required parameter 'id' is set
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
+            raise ApiValueError("Missing the required parameter `id` when calling `story_id_outline_post`")  # noqa: E501
+        # verify the required parameter 'outline' is set
+        if ('outline' not in local_var_params or
+                local_var_params['outline'] is None):
+            raise ApiValueError("Missing the required parameter `outline` when calling `story_id_outline_post`")  # noqa: E501
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'id' in local_var_params:
+            path_params['id'] = local_var_params['id']  # noqa: E501
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = []
+        local_var_files = {}
+
+        body_params = None
+        if 'outline' in local_var_params:
+            body_params = local_var_params['outline']
+        # HTTP header `Accept`
+        header_params['Accept'] = self.api_client.select_header_accept(
+            ['application/json'])  # noqa: E501
+
+        # HTTP header `Content-Type`
+        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
+            ['application/json'])  # noqa: E501
+
+        # Authentication setting
+        auth_settings = []  # noqa: E501
+
+        return self.api_client.call_api(
+            '/{id}/outline', 'POST',
+            path_params,
+            query_params,
+            header_params,
+            body=body_params,
+            post_params=form_params,
+            files=local_var_files,
+            response_type=None,  # noqa: E501
+            auth_settings=auth_settings,
+            async_req=local_var_params.get('async_req'),
+            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
+            _preload_content=local_var_params.get('_preload_content', True),
+            _request_timeout=local_var_params.get('_request_timeout'),
+            collection_formats=collection_formats)
+
     def story_id_put(self, id, story, **kwargs):  # noqa: E501
         """Story: Modify  # noqa: E501
 
@@ -2221,6 +2577,7 @@ class DefaultApi(object):
         :param async_req bool: execute request asynchronously
         :param str id: the id from the story object (required)
         :param Story story: The updated story object (required)
+        :param bool include_outline: Determines whether a repsonse including story objects should include the story outline.  Defaults to true. Useful for speeding up processing times.
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -2247,6 +2604,7 @@ class DefaultApi(object):
         :param async_req bool: execute request asynchronously
         :param str id: the id from the story object (required)
         :param Story story: The updated story object (required)
+        :param bool include_outline: Determines whether a repsonse including story objects should include the story outline.  Defaults to true. Useful for speeding up processing times.
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -2263,7 +2621,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['id', 'story']  # noqa: E501
+        all_params = ['id', 'story', 'include_outline']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -2293,6 +2651,8 @@ class DefaultApi(object):
             path_params['id'] = local_var_params['id']  # noqa: E501
 
         query_params = []
+        if 'include_outline' in local_var_params:
+            query_params.append(('include_outline', local_var_params['include_outline']))  # noqa: E501
 
         header_params = {}
 
@@ -2416,7 +2776,7 @@ class DefaultApi(object):
         body_params = None
         # HTTP header `Accept`
         header_params['Accept'] = self.api_client.select_header_accept(
-            ['text/html', 'application/json'])  # noqa: E501
+            ['application/json'])  # noqa: E501
 
         # Authentication setting
         auth_settings = []  # noqa: E501
@@ -2669,6 +3029,114 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
+    def story_id_status_get(self, id, **kwargs):  # noqa: E501
+        """Story: Get Story Status  # noqa: E501
+
+        Returns code indicating whether story has active running background and is healthy (e.g., the latest outline is valid)  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.story_id_status_get(id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str id: the id from the story object (required)
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: Status
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+        kwargs['_return_http_data_only'] = True
+        return self.story_id_status_get_with_http_info(id, **kwargs)  # noqa: E501
+
+    def story_id_status_get_with_http_info(self, id, **kwargs):  # noqa: E501
+        """Story: Get Story Status  # noqa: E501
+
+        Returns code indicating whether story has active running background and is healthy (e.g., the latest outline is valid)  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.story_id_status_get_with_http_info(id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool: execute request asynchronously
+        :param str id: the id from the story object (required)
+        :param _return_http_data_only: response data without head status code
+                                       and headers
+        :param _preload_content: if False, the urllib3.HTTPResponse object will
+                                 be returned without reading/decoding response
+                                 data. Default is True.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: tuple(Status, status_code(int), headers(HTTPHeaderDict))
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+
+        local_var_params = locals()
+
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
+
+        for key, val in six.iteritems(local_var_params['kwargs']):
+            if key not in all_params:
+                raise ApiTypeError(
+                    "Got an unexpected keyword argument '%s'"
+                    " to method story_id_status_get" % key
+                )
+            local_var_params[key] = val
+        del local_var_params['kwargs']
+        # verify the required parameter 'id' is set
+        if ('id' not in local_var_params or
+                local_var_params['id'] is None):
+            raise ApiValueError("Missing the required parameter `id` when calling `story_id_status_get`")  # noqa: E501
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'id' in local_var_params:
+            path_params['id'] = local_var_params['id']  # noqa: E501
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = []
+        local_var_files = {}
+
+        body_params = None
+        # HTTP header `Accept`
+        header_params['Accept'] = self.api_client.select_header_accept(
+            ['application/json'])  # noqa: E501
+
+        # Authentication setting
+        auth_settings = []  # noqa: E501
+
+        return self.api_client.call_api(
+            '/{id}/status', 'GET',
+            path_params,
+            query_params,
+            header_params,
+            body=body_params,
+            post_params=form_params,
+            files=local_var_files,
+            response_type='Status',  # noqa: E501
+            auth_settings=auth_settings,
+            async_req=local_var_params.get('async_req'),
+            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
+            _preload_content=local_var_params.get('_preload_content', True),
+            _request_timeout=local_var_params.get('_request_timeout'),
+            collection_formats=collection_formats)
+
     def story_outline_schema(self, schema_version, **kwargs):  # noqa: E501
         """Story Outline Schema  # noqa: E501
 
@@ -2888,6 +3356,7 @@ class DefaultApi(object):
 
         :param async_req bool: execute request asynchronously
         :param Outline outline: A story outline json object (required)
+        :param bool include_outline: Determines whether a repsonse including story objects should include the story outline.  Defaults to true. Useful for speeding up processing times.
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -2913,6 +3382,7 @@ class DefaultApi(object):
 
         :param async_req bool: execute request asynchronously
         :param Outline outline: A story outline json object (required)
+        :param bool include_outline: Determines whether a repsonse including story objects should include the story outline.  Defaults to true. Useful for speeding up processing times.
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -2929,7 +3399,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['outline']  # noqa: E501
+        all_params = ['outline', 'include_outline']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -2953,6 +3423,8 @@ class DefaultApi(object):
         path_params = {}
 
         query_params = []
+        if 'include_outline' in local_var_params:
+            query_params.append(('include_outline', local_var_params['include_outline']))  # noqa: E501
 
         header_params = {}
 
@@ -2999,6 +3471,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
+        :param bool include_outline: Determines whether a repsonse including story objects should include the story outline.  Defaults to true. Useful for speeding up processing times.
         :param list[file] file:
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
@@ -3024,6 +3497,7 @@ class DefaultApi(object):
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
+        :param bool include_outline: Determines whether a repsonse including story objects should include the story outline.  Defaults to true. Useful for speeding up processing times.
         :param list[file] file:
         :param _return_http_data_only: response data without head status code
                                        and headers
@@ -3041,7 +3515,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['file']  # noqa: E501
+        all_params = ['include_outline', 'file']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -3061,6 +3535,8 @@ class DefaultApi(object):
         path_params = {}
 
         query_params = []
+        if 'include_outline' in local_var_params:
+            query_params.append(('include_outline', local_var_params['include_outline']))  # noqa: E501
 
         header_params = {}
 
@@ -3098,17 +3574,18 @@ class DefaultApi(object):
             _request_timeout=local_var_params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def story_post_file_json(self, file_upload, **kwargs):  # noqa: E501
+    def story_post_file_json(self, **kwargs):  # noqa: E501
         """Story: Upload a File (base64)  # noqa: E501
 
         Upload new story to presalytics api via an Open Office Xml file  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.story_post_file_json(file_upload, async_req=True)
+        >>> thread = api.story_post_file_json(async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param FileUpload file_upload: A json-formatted object that includes a base64 encoded file (required)
+        :param bool include_outline: Determines whether a repsonse including story objects should include the story outline.  Defaults to true. Useful for speeding up processing times.
+        :param FileUpload file_upload: A json-formatted object that includes a base64 encoded file (file encoded utf-8)
         :param _preload_content: if False, the urllib3.HTTPResponse object will
                                  be returned without reading/decoding response
                                  data. Default is True.
@@ -3121,19 +3598,20 @@ class DefaultApi(object):
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
-        return self.story_post_file_json_with_http_info(file_upload, **kwargs)  # noqa: E501
+        return self.story_post_file_json_with_http_info(**kwargs)  # noqa: E501
 
-    def story_post_file_json_with_http_info(self, file_upload, **kwargs):  # noqa: E501
+    def story_post_file_json_with_http_info(self, **kwargs):  # noqa: E501
         """Story: Upload a File (base64)  # noqa: E501
 
         Upload new story to presalytics api via an Open Office Xml file  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.story_post_file_json_with_http_info(file_upload, async_req=True)
+        >>> thread = api.story_post_file_json_with_http_info(async_req=True)
         >>> result = thread.get()
 
         :param async_req bool: execute request asynchronously
-        :param FileUpload file_upload: A json-formatted object that includes a base64 encoded file (required)
+        :param bool include_outline: Determines whether a repsonse including story objects should include the story outline.  Defaults to true. Useful for speeding up processing times.
+        :param FileUpload file_upload: A json-formatted object that includes a base64 encoded file (file encoded utf-8)
         :param _return_http_data_only: response data without head status code
                                        and headers
         :param _preload_content: if False, the urllib3.HTTPResponse object will
@@ -3150,7 +3628,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['file_upload']  # noqa: E501
+        all_params = ['include_outline', 'file_upload']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -3164,16 +3642,14 @@ class DefaultApi(object):
                 )
             local_var_params[key] = val
         del local_var_params['kwargs']
-        # verify the required parameter 'file_upload' is set
-        if ('file_upload' not in local_var_params or
-                local_var_params['file_upload'] is None):
-            raise ApiValueError("Missing the required parameter `file_upload` when calling `story_post_file_json`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
+        if 'include_outline' in local_var_params:
+            query_params.append(('include_outline', local_var_params['include_outline']))  # noqa: E501
 
         header_params = {}
 

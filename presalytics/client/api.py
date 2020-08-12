@@ -12,6 +12,9 @@ import wsgi_microservice_middleware
 import functools
 import six
 import mimetypes
+import typing
+import io
+import time
 import presalytics
 import presalytics.lib.exceptions
 import presalytics.lib.constants as cnst
@@ -20,7 +23,6 @@ import presalytics.client.oidc
 import presalytics.client.presalytics_ooxml_automation.api_client
 import presalytics.client.presalytics_story.api_client
 import presalytics.client.presalytics_doc_converter.api_client
-
 from uuid import uuid4
 from werkzeug.datastructures import FileStorage
 
@@ -427,6 +429,50 @@ class Client(object):
             "delegate_login": self._delegate_login
         }
 
+    STATUS_REPOLL_SECONDS = 2
+    STATUS_REPOLL_MAX_CYCLES = 20
+
+    def upload_file_and_await_outline(self, 
+                                      file: typing.Union[FileStorage, str],
+                                      include_relationships=True,
+                                      status_repoll_seconds: int = None, 
+                                      repoll_max_cycles: int = None):
+        """ Useful for testing """
+        if type(file) is str:
+            content_type = mimetypes.guess_type(file, False)[0] # type: ignore
+            with open(file, 'rb') as f:  # type: ignore
+                stream = io.BytesIO(f.read())
+            file = FileStorage(
+                stream=stream,  # type: ignore
+                filename=file,  # type: ignore
+                content_type=content_type,
+                content_length=stream.__sizeof__()             
+            )
+        if not status_repoll_seconds:
+            status_repoll_seconds = self.STATUS_REPOLL_SECONDS
+        if not repoll_max_cycles:
+            repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
+        story = self.story.story_post_file(file=file)
+        task_running = True
+        repoll_cycle_count = 0
+        while task_running:
+            status, status_code, _ = self.story.story_id_status_get_with_http_info(story.id)
+            if status_code == 204:
+                task_running = False
+            elif status_code == 200:
+                if status.status == "SUCCESS":
+                    task_running = False
+                elif repoll_cycle_count >= repoll_max_cycles:
+                    raise presalytics.lib.exceptions.ApiError(message="Error occured while uploading file", status_code=500)
+                else:
+                    logger.info("Story creation task still running.  Rechecking status in {0} seconds".format(status_repoll_seconds))
+                    time.sleep(status_repoll_seconds)
+                    repoll_cycle_count += 1
+        return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)
+
+                
+        
+
 class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_doc_converter.api_client.ApiClient):
     """
     Wraps `presalytics.client.presalytics_doc_converter.api_client.ApiClient` with 
@@ -448,39 +494,6 @@ class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMix
         presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
         self.update_configuration()
 
-    def files_parameters(self, files=None):
-        """Builds form parameters.
-
-        This override method expands the capabilites of codegen filehandler to
-        accept a `werkzeug.datastructures.FileStorage` object.
-
-        :param files: File parameters. Either a string file path or a `werkzeug.datastructures.FileStorage` object
-        :return: Form parameters with files.
-        """
-        params = []
-
-        if files:
-            for k, v in six.iteritems(files):
-                if not v:
-                    continue
-                if type(v) is str or type(v) is list:
-                    file_names = v if type(v) is list else [v]
-                    for n in file_names:
-                        with open(n, 'rb') as f:
-                            filename = os.path.basename(f.name)
-                            filedata = f.read()
-
-                else:
-                    if type(v) is FileStorage:
-                        filename = v.filename
-                        v.stream.seek(0)
-                        filedata = v.stream.read()
-                    else:
-                        raise AttributeError("Invalid File Object")
-                mimetype = (mimetypes.guess_type(filename)[0] or 'application/octet-stream')
-                params.append(tuple([k, tuple([filename, filedata, mimetype])]))
-
-        return params
 
 class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_story.api_client.ApiClient):
     """

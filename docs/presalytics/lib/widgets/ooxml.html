@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L0-L901" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L0-L898" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import typing
 import time
@@ -331,11 +331,8 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         Wraps the Presalytics API Ooxml Automation service SVG endpoint in an `&lt;iframe&gt;` that
         will be rendered inside of a story
         &#34;&#34;&#34;
-        client = self.get_client()
-        self.token = client.token_util.token[&#34;access_token&#34;]
         svg_container_div = lxml.html.Element(&#34;div&#34;, {
             &#39;class&#39;: &#39;svg-container&#39;,
-            &#39;data-jwt&#39;: self.token,
             &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
             &#39;data-object-id&#39;: self.object_ooxml_id
         })
@@ -1487,7 +1484,7 @@ that for the object of interest</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L231-L390" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L231-L387" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
     &#34;&#34;&#34;
@@ -1565,11 +1562,8 @@ that for the object of interest</dd>
         Wraps the Presalytics API Ooxml Automation service SVG endpoint in an `&lt;iframe&gt;` that
         will be rendered inside of a story
         &#34;&#34;&#34;
-        client = self.get_client()
-        self.token = client.token_util.token[&#34;access_token&#34;]
         svg_container_div = lxml.html.Element(&#34;div&#34;, {
             &#39;class&#39;: &#39;svg-container&#39;,
-            &#39;data-jwt&#39;: self.token,
             &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
             &#39;data-object-id&#39;: self.object_ooxml_id
         })
@@ -1673,18 +1667,15 @@ will be rendered inside of a story</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L302-L324" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L302-L321" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def create_container(self, **kwargs):
     &#34;&#34;&#34;
     Wraps the Presalytics API Ooxml Automation service SVG endpoint in an `&lt;iframe&gt;` that
     will be rendered inside of a story
     &#34;&#34;&#34;
-    client = self.get_client()
-    self.token = client.token_util.token[&#34;access_token&#34;]
     svg_container_div = lxml.html.Element(&#34;div&#34;, {
         &#39;class&#39;: &#39;svg-container&#39;,
-        &#39;data-jwt&#39;: self.token,
         &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
         &#39;data-object-id&#39;: self.object_ooxml_id
     })
@@ -1708,7 +1699,7 @@ will be rendered inside of a story</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L327-L337" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L324-L334" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def to_html(self, **kwargs):
     &#34;&#34;&#34;
@@ -1731,7 +1722,7 @@ will be rendered inside of a story</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L339-L357" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L336-L354" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_svg(self, id, timeout_iterator=0) -&gt; str:
     &#34;&#34;&#34;
@@ -1763,7 +1754,7 @@ Filname is optional.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L359-L366" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L356-L363" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_svg_file(self, filename=None):
     &#34;&#34;&#34;
@@ -1843,7 +1834,7 @@ idenitifiable by a combinatation of <code>object_ooxml_id</code> and <code>endpo
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L393-L620" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L390-L617" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlFileWidget(OoxmlWidgetBase):
     &#34;&#34;&#34;
@@ -2092,7 +2083,7 @@ the updated rendering data to the server</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L490-L547" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L487-L544" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update(self):
     &#34;&#34;&#34;
@@ -2210,7 +2201,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L623-L772" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L620-L769" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class UpdaterWidgetBase(OoxmlWidgetBase):
     &#34;&#34;&#34;
@@ -2385,7 +2376,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L697-L701" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L694-L698" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def build_endpoint(self) -&gt; str:
     &#34;&#34;&#34;
@@ -2402,7 +2393,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L703-L715" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L700-L712" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_dto(self):
     &#34;&#34;&#34;
@@ -2428,7 +2419,7 @@ the <code>svg_html</code> attribute</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L731-L737" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L728-L734" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_from_dto(self, dto):
     &#34;&#34;&#34;
@@ -2448,7 +2439,7 @@ the <code>svg_html</code> attribute</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L739-L746" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L736-L743" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_from_data_table(self, data_table):
     &#34;&#34;&#34;
@@ -2507,7 +2498,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L775-L848" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L772-L845" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ChartUpdaterWidget(UpdaterWidgetBase):
     &#34;&#34;&#34;
@@ -2602,7 +2593,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L826-L839" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L823-L836" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_dataframe(self) -&gt; pandas.DataFrame:
     &#34;&#34;&#34;
@@ -2628,7 +2619,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L841-L848" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L838-L845" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def put_dataframe(self, df: pandas.DataFrame):
     data_dict = df.to_dict(&#39;split&#39;)
@@ -2691,7 +2682,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L852-L901" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L849-L898" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class TableUpdaterWidget(UpdaterWidgetBase):
     &#34;&#34;&#34;

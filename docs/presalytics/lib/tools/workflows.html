@@ -135,7 +135,7 @@ def push_outline(outline, username=None, password=None) -&gt; &#39;StoryOutline&
     &#34;&#34;&#34;
     client = presalytics.client.api.Client(username=username, password=password)
     if outline.story_id == &#34;empty&#34; or not outline.story_id:
-        story = client.story.story_post(outline.dump())
+        story = client.story.story_post({&#34;outline&#34;: outline.dump()})
     else:
         old_story = client.story.story_id_get(outline.story_id)
         old_story.outline = outline.dump()
@@ -481,7 +481,7 @@ def update_outline(outline, filename=None, message=None):
     &#34;&#34;&#34;
     client = presalytics.client.api.Client(username=username, password=password)
     if outline.story_id == &#34;empty&#34; or not outline.story_id:
-        story = client.story.story_post(outline.dump())
+        story = client.story.story_post({&#34;outline&#34;: outline.dump()})
     else:
         old_story = client.story.story_id_get(outline.story_id)
         old_story.outline = outline.dump()

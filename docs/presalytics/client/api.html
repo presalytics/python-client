@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L0-L508" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L0-L521" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import os
 import cgi
@@ -39,6 +39,9 @@ import wsgi_microservice_middleware
 import functools
 import six
 import mimetypes
+import typing
+import io
+import time
 import presalytics
 import presalytics.lib.exceptions
 import presalytics.lib.constants as cnst
@@ -47,7 +50,6 @@ import presalytics.client.oidc
 import presalytics.client.presalytics_ooxml_automation.api_client
 import presalytics.client.presalytics_story.api_client
 import presalytics.client.presalytics_doc_converter.api_client
-
 from uuid import uuid4
 from werkzeug.datastructures import FileStorage
 
@@ -351,7 +353,7 @@ class Client(object):
         an `presalytics.lib.exceptions.InvalidTokenException` when `deletegate_login` is True.
         &#34;&#34;&#34;
         if self.token_util.is_api_access_token_expired():
-            if self.token_util.token.get(&#39;refresh_token&#39;, None):
+            if self.token_util.token.get(&#39;refresh_token&#39;, None) and self.client_secret:
                 refresh_token = self.token_util.token[&#34;refresh_token&#34;]
                 token = self.oidc.refresh_token(refresh_token)
                 self.token_util.process_token(token)
@@ -454,6 +456,50 @@ class Client(object):
             &#34;delegate_login&#34;: self._delegate_login
         }
 
+    STATUS_REPOLL_SECONDS = 2
+    STATUS_REPOLL_MAX_CYCLES = 20
+
+    def upload_file_and_await_outline(self, 
+                                      file: typing.Union[FileStorage, str],
+                                      include_relationships=True,
+                                      status_repoll_seconds: int = None, 
+                                      repoll_max_cycles: int = None):
+        &#34;&#34;&#34; Useful for testing &#34;&#34;&#34;
+        if type(file) is str:
+            content_type = mimetypes.guess_type(file, False)[0] # type: ignore
+            with open(file, &#39;rb&#39;) as f:  # type: ignore
+                stream = io.BytesIO(f.read())
+            file = FileStorage(
+                stream=stream,  # type: ignore
+                filename=file,  # type: ignore
+                content_type=content_type,
+                content_length=stream.__sizeof__()             
+            )
+        if not status_repoll_seconds:
+            status_repoll_seconds = self.STATUS_REPOLL_SECONDS
+        if not repoll_max_cycles:
+            repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
+        story = self.story.story_post_file(file=file)
+        task_running = True
+        repoll_cycle_count = 0
+        while task_running:
+            status, status_code, _ = self.story.story_id_status_get_with_http_info(story.id)
+            if status_code == 204:
+                task_running = False
+            elif status_code == 200:
+                if status.status == &#34;SUCCESS&#34;:
+                    task_running = False
+                elif repoll_cycle_count &gt;= repoll_max_cycles:
+                    raise presalytics.lib.exceptions.ApiError(message=&#34;Error occured while uploading file&#34;, status_code=500)
+                else:
+                    logger.info(&#34;Story creation task still running.  Rechecking status in {0} seconds&#34;.format(status_repoll_seconds))
+                    time.sleep(status_repoll_seconds)
+                    repoll_cycle_count += 1
+        return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)
+
+                
+        
+
 class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_doc_converter.api_client.ApiClient):
     &#34;&#34;&#34;
     Wraps `presalytics.client.presalytics_doc_converter.api_client.ApiClient` with 
@@ -475,39 +521,6 @@ class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMix
         presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
         self.update_configuration()
 
-    def files_parameters(self, files=None):
-        &#34;&#34;&#34;Builds form parameters.
-
-        This override method expands the capabilites of codegen filehandler to
-        accept a `werkzeug.datastructures.FileStorage` object.
-
-        :param files: File parameters. Either a string file path or a `werkzeug.datastructures.FileStorage` object
-        :return: Form parameters with files.
-        &#34;&#34;&#34;
-        params = []
-
-        if files:
-            for k, v in six.iteritems(files):
-                if not v:
-                    continue
-                if type(v) is str or type(v) is list:
-                    file_names = v if type(v) is list else [v]
-                    for n in file_names:
-                        with open(n, &#39;rb&#39;) as f:
-                            filename = os.path.basename(f.name)
-                            filedata = f.read()
-
-                else:
-                    if type(v) is FileStorage:
-                        filename = v.filename
-                        v.stream.seek(0)
-                        filedata = v.stream.read()
-                    else:
-                        raise AttributeError(&#34;Invalid File Object&#34;)
-                mimetype = (mimetypes.guess_type(filename)[0] or &#39;application/octet-stream&#39;)
-                params.append(tuple([k, tuple([filename, filedata, mimetype])]))
-
-        return params
 
 class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_story.api_client.ApiClient):
     &#34;&#34;&#34;
@@ -550,7 +563,7 @@ def get_client():
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L496-L504" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L509-L517" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@functools.lru_cache(maxsize=None)
 def get_client():
@@ -769,7 +782,7 @@ if the user has not authenticated by the time the interval has expired.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L32-L428" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L34-L471" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Client(object):
     &#34;&#34;&#34; Class for interacting with Presalytics API endpoints
@@ -1066,7 +1079,7 @@ if the user has not authenticated by the time the interval has expired.</dd>
         an `presalytics.lib.exceptions.InvalidTokenException` when `deletegate_login` is True.
         &#34;&#34;&#34;
         if self.token_util.is_api_access_token_expired():
-            if self.token_util.token.get(&#39;refresh_token&#39;, None):
+            if self.token_util.token.get(&#39;refresh_token&#39;, None) and self.client_secret:
                 refresh_token = self.token_util.token[&#34;refresh_token&#34;]
                 token = self.oidc.refresh_token(refresh_token)
                 self.token_util.process_token(token)
@@ -1167,8 +1180,94 @@ if the user has not authenticated by the time the interval has expired.</dd>
             &#34;client_id&#34;: self.client_id,
             &#34;cache_tokens&#34;: self.token_util.token_cache,
             &#34;delegate_login&#34;: self._delegate_login
-        }</code></pre>
+        }
+
+    STATUS_REPOLL_SECONDS = 2
+    STATUS_REPOLL_MAX_CYCLES = 20
+
+    def upload_file_and_await_outline(self, 
+                                      file: typing.Union[FileStorage, str],
+                                      include_relationships=True,
+                                      status_repoll_seconds: int = None, 
+                                      repoll_max_cycles: int = None):
+        &#34;&#34;&#34; Useful for testing &#34;&#34;&#34;
+        if type(file) is str:
+            content_type = mimetypes.guess_type(file, False)[0] # type: ignore
+            with open(file, &#39;rb&#39;) as f:  # type: ignore
+                stream = io.BytesIO(f.read())
+            file = FileStorage(
+                stream=stream,  # type: ignore
+                filename=file,  # type: ignore
+                content_type=content_type,
+                content_length=stream.__sizeof__()             
+            )
+        if not status_repoll_seconds:
+            status_repoll_seconds = self.STATUS_REPOLL_SECONDS
+        if not repoll_max_cycles:
+            repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
+        story = self.story.story_post_file(file=file)
+        task_running = True
+        repoll_cycle_count = 0
+        while task_running:
+            status, status_code, _ = self.story.story_id_status_get_with_http_info(story.id)
+            if status_code == 204:
+                task_running = False
+            elif status_code == 200:
+                if status.status == &#34;SUCCESS&#34;:
+                    task_running = False
+                elif repoll_cycle_count &gt;= repoll_max_cycles:
+                    raise presalytics.lib.exceptions.ApiError(message=&#34;Error occured while uploading file&#34;, status_code=500)
+                else:
+                    logger.info(&#34;Story creation task still running.  Rechecking status in {0} seconds&#34;.format(status_repoll_seconds))
+                    time.sleep(status_repoll_seconds)
+                    repoll_cycle_count += 1
+        return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)</code></pre>
 </details>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.client.api.Client.STATUS_REPOLL_SECONDS"><code class="name">var <span class="ident">STATUS_REPOLL_SECONDS</span></code></dt>
+<dd>
+<section class="desc"><p>int(x=0) -&gt; integer
+int(x, base=10) -&gt; integer</p>
+<p>Convert a number or string to an integer, or return 0 if no arguments
+are given.
+If x is a number, return x.<strong>int</strong>().
+For floating point
+numbers, this truncates towards zero.</p>
+<p>If x is not a number or if base is given, then x must be a string,
+bytes, or bytearray instance representing an integer literal in the
+given base.
+The literal can be preceded by '+' or '-' and be surrounded
+by whitespace.
+The base defaults to 10.
+Valid bases are 0 and 2-36.
+Base 0 means to interpret the base from the string as an integer literal.</p>
+<pre><code>&gt;&gt;&gt; int('0b100', base=0)
+4
+</code></pre></section>
+</dd>
+<dt id="presalytics.client.api.Client.STATUS_REPOLL_MAX_CYCLES"><code class="name">var <span class="ident">STATUS_REPOLL_MAX_CYCLES</span></code></dt>
+<dd>
+<section class="desc"><p>int(x=0) -&gt; integer
+int(x, base=10) -&gt; integer</p>
+<p>Convert a number or string to an integer, or return 0 if no arguments
+are given.
+If x is a number, return x.<strong>int</strong>().
+For floating point
+numbers, this truncates towards zero.</p>
+<p>If x is not a number or if base is given, then x must be a string,
+bytes, or bytearray instance representing an integer literal in the
+given base.
+The literal can be preceded by '+' or '-' and be surrounded
+by whitespace.
+The base defaults to 10.
+Valid bases are 0 and 2-36.
+Base 0 means to interpret the base from the string as an integer literal.</p>
+<pre><code>&gt;&gt;&gt; int('0b100', base=0)
+4
+</code></pre></section>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.client.api.Client.login"><code class="name flex">
@@ -1179,7 +1278,7 @@ if the user has not authenticated by the time the interval has expired.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L308-L317" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L310-L319" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def login(self):
     &#34;&#34;&#34;
@@ -1203,7 +1302,7 @@ an <a title="presalytics.lib.exceptions.InvalidTokenException" href="/python-cli
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L320-L344" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L322-L346" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def refresh_token(self):
     &#34;&#34;&#34;
@@ -1212,7 +1311,7 @@ an <a title="presalytics.lib.exceptions.InvalidTokenException" href="/python-cli
     an `presalytics.lib.exceptions.InvalidTokenException` when `deletegate_login` is True.
     &#34;&#34;&#34;
     if self.token_util.is_api_access_token_expired():
-        if self.token_util.token.get(&#39;refresh_token&#39;, None):
+        if self.token_util.token.get(&#39;refresh_token&#39;, None) and self.client_secret:
             refresh_token = self.token_util.token[&#34;refresh_token&#34;]
             token = self.oidc.refresh_token(refresh_token)
             self.token_util.process_token(token)
@@ -1242,7 +1341,7 @@ an <a title="presalytics.lib.exceptions.InvalidTokenException" href="/python-cli
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L346-L358" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L348-L360" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_auth_header(self):
     &#34;&#34;&#34;
@@ -1272,7 +1371,7 @@ package, this method will pull the request id from the call stack.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L360-L377" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L362-L379" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_request_id_header(self):
     &#34;&#34;&#34;
@@ -1314,7 +1413,7 @@ current working directory.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L379-L408" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L381-L410" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def download_file(self, story_id, ooxml_automation_id, download_folder=None, filename=None, **kwargs):
     &#34;&#34;&#34;
@@ -1369,7 +1468,7 @@ components and new client instances</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L410-L428" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L412-L430" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_client_info(self):
     &#34;&#34;&#34;
@@ -1392,6 +1491,55 @@ components and new client instances</p>
     }</code></pre>
 </details>
 </dd>
+<dt id="presalytics.client.api.Client.upload_file_and_await_outline"><code class="name flex">
+<span>def <span class="ident">upload_file_and_await_outline</span></span>(<span>self, file, include_relationships=True, status_repoll_seconds=None, repoll_max_cycles=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Useful for testing</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L435-L471" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def upload_file_and_await_outline(self, 
+                                  file: typing.Union[FileStorage, str],
+                                  include_relationships=True,
+                                  status_repoll_seconds: int = None, 
+                                  repoll_max_cycles: int = None):
+    &#34;&#34;&#34; Useful for testing &#34;&#34;&#34;
+    if type(file) is str:
+        content_type = mimetypes.guess_type(file, False)[0] # type: ignore
+        with open(file, &#39;rb&#39;) as f:  # type: ignore
+            stream = io.BytesIO(f.read())
+        file = FileStorage(
+            stream=stream,  # type: ignore
+            filename=file,  # type: ignore
+            content_type=content_type,
+            content_length=stream.__sizeof__()             
+        )
+    if not status_repoll_seconds:
+        status_repoll_seconds = self.STATUS_REPOLL_SECONDS
+    if not repoll_max_cycles:
+        repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
+    story = self.story.story_post_file(file=file)
+    task_running = True
+    repoll_cycle_count = 0
+    while task_running:
+        status, status_code, _ = self.story.story_id_status_get_with_http_info(story.id)
+        if status_code == 204:
+            task_running = False
+        elif status_code == 200:
+            if status.status == &#34;SUCCESS&#34;:
+                task_running = False
+            elif repoll_cycle_count &gt;= repoll_max_cycles:
+                raise presalytics.lib.exceptions.ApiError(message=&#34;Error occured while uploading file&#34;, status_code=500)
+            else:
+                logger.info(&#34;Story creation task still running.  Rechecking status in {0} seconds&#34;.format(status_repoll_seconds))
+                time.sleep(status_repoll_seconds)
+                repoll_cycle_count += 1
+    return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)</code></pre>
+</details>
+</dd>
 </dl>
 </dd>
 <dt id="presalytics.client.api.DocConverterApiClientWithAuth"><code class="flex name class">
@@ -1404,7 +1552,7 @@ components and new client instances</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L430-L438" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L476-L484" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_doc_converter.api_client.ApiClient):
     &#34;&#34;&#34;
@@ -1426,6 +1574,7 @@ components and new client instances</p>
 <li><code><b><a title="presalytics.client.auth.AuthenticationMixIn" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn">AuthenticationMixIn</a></b></code>:
 <ul class="hlist">
 <li><code><a title="presalytics.client.auth.AuthenticationMixIn.call_api" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn.call_api">call_api</a></code></li>
+<li><code><a title="presalytics.client.auth.AuthenticationMixIn.files_parameters" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn.files_parameters">files_parameters</a></code></li>
 <li><code><a title="presalytics.client.auth.AuthenticationMixIn.update_configuration" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn.update_configuration">update_configuration</a></code></li>
 </ul>
 </li>
@@ -1434,7 +1583,6 @@ components and new client instances</p>
 <li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.NATIVE_TYPES_MAPPING" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.NATIVE_TYPES_MAPPING">NATIVE_TYPES_MAPPING</a></code></li>
 <li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.PRIMITIVE_TYPES" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.PRIMITIVE_TYPES">PRIMITIVE_TYPES</a></code></li>
 <li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.deserialize" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.deserialize">deserialize</a></code></li>
-<li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.files_parameters" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.files_parameters">files_parameters</a></code></li>
 <li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.parameters_to_tuples" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.parameters_to_tuples">parameters_to_tuples</a></code></li>
 <li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.pool" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.pool">pool</a></code></li>
 <li><code><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient.request" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient.request">request</a></code></li>
@@ -1457,7 +1605,7 @@ components and new client instances</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L441-L483" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L487-L495" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_ooxml_automation.api_client.ApiClient):
     &#34;&#34;&#34;
@@ -1467,104 +1615,19 @@ components and new client instances</p>
     def __init__(self, parent: Client, **kwargs):
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
-        self.update_configuration()
-
-    def files_parameters(self, files=None):
-        &#34;&#34;&#34;Builds form parameters.
-
-        This override method expands the capabilites of codegen filehandler to
-        accept a `werkzeug.datastructures.FileStorage` object.
-
-        :param files: File parameters. Either a string file path or a `werkzeug.datastructures.FileStorage` object
-        :return: Form parameters with files.
-        &#34;&#34;&#34;
-        params = []
-
-        if files:
-            for k, v in six.iteritems(files):
-                if not v:
-                    continue
-                if type(v) is str or type(v) is list:
-                    file_names = v if type(v) is list else [v]
-                    for n in file_names:
-                        with open(n, &#39;rb&#39;) as f:
-                            filename = os.path.basename(f.name)
-                            filedata = f.read()
-
-                else:
-                    if type(v) is FileStorage:
-                        filename = v.filename
-                        v.stream.seek(0)
-                        filedata = v.stream.read()
-                    else:
-                        raise AttributeError(&#34;Invalid File Object&#34;)
-                mimetype = (mimetypes.guess_type(filename)[0] or &#39;application/octet-stream&#39;)
-                params.append(tuple([k, tuple([filename, filedata, mimetype])]))
-
-        return params</code></pre>
+        self.update_configuration()</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="presalytics.client.auth.AuthenticationMixIn" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn">AuthenticationMixIn</a></li>
 <li><a title="presalytics.client.presalytics_ooxml_automation.api_client.ApiClient" href="/python-client/presalytics/client/presalytics_ooxml_automation/api_client.html#presalytics.client.presalytics_ooxml_automation.api_client.ApiClient">ApiClient</a></li>
 </ul>
-<h3>Methods</h3>
-<dl>
-<dt id="presalytics.client.api.OoxmlAutomationApiClientWithAuth.files_parameters"><code class="name flex">
-<span>def <span class="ident">files_parameters</span></span>(<span>self, files=None)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Builds form parameters.</p>
-<p>This override method expands the capabilites of codegen filehandler to
-accept a <code>werkzeug.datastructures.FileStorage</code> object.</p>
-<p>:param files: File parameters. Either a string file path or a <code>werkzeug.datastructures.FileStorage</code> object
-:return: Form parameters with files.</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L451-L483" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def files_parameters(self, files=None):
-    &#34;&#34;&#34;Builds form parameters.
-
-    This override method expands the capabilites of codegen filehandler to
-    accept a `werkzeug.datastructures.FileStorage` object.
-
-    :param files: File parameters. Either a string file path or a `werkzeug.datastructures.FileStorage` object
-    :return: Form parameters with files.
-    &#34;&#34;&#34;
-    params = []
-
-    if files:
-        for k, v in six.iteritems(files):
-            if not v:
-                continue
-            if type(v) is str or type(v) is list:
-                file_names = v if type(v) is list else [v]
-                for n in file_names:
-                    with open(n, &#39;rb&#39;) as f:
-                        filename = os.path.basename(f.name)
-                        filedata = f.read()
-
-            else:
-                if type(v) is FileStorage:
-                    filename = v.filename
-                    v.stream.seek(0)
-                    filedata = v.stream.read()
-                else:
-                    raise AttributeError(&#34;Invalid File Object&#34;)
-            mimetype = (mimetypes.guess_type(filename)[0] or &#39;application/octet-stream&#39;)
-            params.append(tuple([k, tuple([filename, filedata, mimetype])]))
-
-    return params</code></pre>
-</details>
-</dd>
-</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="presalytics.client.auth.AuthenticationMixIn" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn">AuthenticationMixIn</a></b></code>:
 <ul class="hlist">
 <li><code><a title="presalytics.client.auth.AuthenticationMixIn.call_api" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn.call_api">call_api</a></code></li>
+<li><code><a title="presalytics.client.auth.AuthenticationMixIn.files_parameters" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn.files_parameters">files_parameters</a></code></li>
 <li><code><a title="presalytics.client.auth.AuthenticationMixIn.update_configuration" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn.update_configuration">update_configuration</a></code></li>
 </ul>
 </li>
@@ -1595,7 +1658,7 @@ accept a <code>werkzeug.datastructures.FileStorage</code> object.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L485-L493" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L498-L506" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_story.api_client.ApiClient):
     &#34;&#34;&#34;
@@ -1617,6 +1680,7 @@ accept a <code>werkzeug.datastructures.FileStorage</code> object.</p>
 <li><code><b><a title="presalytics.client.auth.AuthenticationMixIn" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn">AuthenticationMixIn</a></b></code>:
 <ul class="hlist">
 <li><code><a title="presalytics.client.auth.AuthenticationMixIn.call_api" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn.call_api">call_api</a></code></li>
+<li><code><a title="presalytics.client.auth.AuthenticationMixIn.files_parameters" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn.files_parameters">files_parameters</a></code></li>
 <li><code><a title="presalytics.client.auth.AuthenticationMixIn.update_configuration" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn.update_configuration">update_configuration</a></code></li>
 </ul>
 </li>
@@ -1625,7 +1689,6 @@ accept a <code>werkzeug.datastructures.FileStorage</code> object.</p>
 <li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.NATIVE_TYPES_MAPPING" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.NATIVE_TYPES_MAPPING">NATIVE_TYPES_MAPPING</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.PRIMITIVE_TYPES" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.PRIMITIVE_TYPES">PRIMITIVE_TYPES</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.deserialize" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.deserialize">deserialize</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.files_parameters" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.files_parameters">files_parameters</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.parameters_to_tuples" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.parameters_to_tuples">parameters_to_tuples</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.pool" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.pool">pool</a></code></li>
 <li><code><a title="presalytics.client.presalytics_story.api_client.ApiClient.request" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient.request">request</a></code></li>
@@ -1668,6 +1731,9 @@ accept a <code>werkzeug.datastructures.FileStorage</code> object.</p>
 <li><code><a title="presalytics.client.api.Client.get_request_id_header" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.get_request_id_header">get_request_id_header</a></code></li>
 <li><code><a title="presalytics.client.api.Client.download_file" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.download_file">download_file</a></code></li>
 <li><code><a title="presalytics.client.api.Client.get_client_info" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.get_client_info">get_client_info</a></code></li>
+<li><code><a title="presalytics.client.api.Client.upload_file_and_await_outline" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.upload_file_and_await_outline">upload_file_and_await_outline</a></code></li>
+<li><code><a title="presalytics.client.api.Client.STATUS_REPOLL_SECONDS" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.STATUS_REPOLL_SECONDS">STATUS_REPOLL_SECONDS</a></code></li>
+<li><code><a title="presalytics.client.api.Client.STATUS_REPOLL_MAX_CYCLES" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.STATUS_REPOLL_MAX_CYCLES">STATUS_REPOLL_MAX_CYCLES</a></code></li>
 </ul>
 </li>
 <li>
@@ -1675,9 +1741,6 @@ accept a <code>werkzeug.datastructures.FileStorage</code> object.</p>
 </li>
 <li>
 <h4><code><a title="presalytics.client.api.OoxmlAutomationApiClientWithAuth" href="/python-client/presalytics/client/api.html#presalytics.client.api.OoxmlAutomationApiClientWithAuth">OoxmlAutomationApiClientWithAuth</a></code></h4>
-<ul class="">
-<li><code><a title="presalytics.client.api.OoxmlAutomationApiClientWithAuth.files_parameters" href="/python-client/presalytics/client/api.html#presalytics.client.api.OoxmlAutomationApiClientWithAuth.files_parameters">files_parameters</a></code></li>
-</ul>
 </li>
 <li>
 <h4><code><a title="presalytics.client.api.StoryApiClientWithAuth" href="/python-client/presalytics/client/api.html#presalytics.client.api.StoryApiClientWithAuth">StoryApiClientWithAuth</a></code></h4>

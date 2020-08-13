@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/story_tools.py#L0-L68" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/story_tools.py#L0-L73" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import typing
 import logging
@@ -81,7 +81,12 @@ def story_post_file_bytes(client: &#39;Client&#39;,
         resp = requests.post(endpoint, headers=headers, files=_file)
     except Exception as ex:
         message = &#34;An error occured in the presalytics API client&#34;
-        raise presalytics.lib.exceptions.ApiError(message=message, status_code=resp.status_code)
+        if locals().get(&#34;resp&#34;, None):
+            code = resp.status_code
+        else:
+            code = 500
+        raise presalytics.lib.exceptions.ApiError(message=message, status_code=code)
+            
     data = resp.json()
     if resp.status_code &gt; 299:
         logger.error(data[&#39;detail&#39;])
@@ -130,7 +135,7 @@ additional API call ascertain the file's mimetype</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/story_tools.py#L15-L69" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/story_tools.py#L15-L74" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def story_post_file_bytes(client: &#39;Client&#39;, 
                           binary_obj: &#39;BytesIO&#39;, 
@@ -174,7 +179,12 @@ additional API call ascertain the file's mimetype</dd>
         resp = requests.post(endpoint, headers=headers, files=_file)
     except Exception as ex:
         message = &#34;An error occured in the presalytics API client&#34;
-        raise presalytics.lib.exceptions.ApiError(message=message, status_code=resp.status_code)
+        if locals().get(&#34;resp&#34;, None):
+            code = resp.status_code
+        else:
+            code = 500
+        raise presalytics.lib.exceptions.ApiError(message=message, status_code=code)
+            
     data = resp.json()
     if resp.status_code &gt; 299:
         logger.error(data[&#39;detail&#39;])

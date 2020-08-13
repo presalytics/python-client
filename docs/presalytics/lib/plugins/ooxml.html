@@ -23,12 +23,15 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/ooxml.py#L0-L28" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/ooxml.py#L0-L41" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import sass
 import os
 import posixpath
+import string
+import typing
 import presalytics.lib.plugins.reveal_theme
+import presalytics.story.util
 
 
 class OoxmlTheme(presalytics.lib.plugins.reveal_theme.RevealCustomTheme):
@@ -48,12 +51,21 @@ class OoxmlTheme(presalytics.lib.plugins.reveal_theme.RevealCustomTheme):
         config.update({&#39;path&#39;: import_path})
         with open(scss_file, &#39;r&#39;) as file:
             scss_template_string = file.read()
+        config = self.config_to_camelCase(config)
         scss_string = scss_template_string.format(**config)
         new_css = sass.compile(string=scss_string)
         style_string = &#34;&lt;style&gt;\n{0}\n&lt;/style&gt;&#34;.format(new_css)
         font_names = [config[&#34;headingFont&#34;], config[&#34;bodyFont&#34;]]
         links = self.get_fonts(font_names)
-        return links + style_string</code></pre>
+        return links + style_string
+    
+    def config_to_camelCase(self, config: typing.Dict) -&gt; typing.Dict:
+        new_dict = dict()
+        for key, val in config.items():
+            new_dict.update({
+                presalytics.story.util.to_camel_case(key): val
+            })
+        return new_dict</code></pre>
 </details>
 </section>
 <section>
@@ -75,7 +87,7 @@ and feeds those values into the <a title="presalytics.lib.plugins.reveal_theme.R
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/ooxml.py#L7-L29" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/ooxml.py#L10-L41" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlTheme(presalytics.lib.plugins.reveal_theme.RevealCustomTheme):
     &#34;&#34;&#34;
@@ -94,12 +106,21 @@ and feeds those values into the <a title="presalytics.lib.plugins.reveal_theme.R
         config.update({&#39;path&#39;: import_path})
         with open(scss_file, &#39;r&#39;) as file:
             scss_template_string = file.read()
+        config = self.config_to_camelCase(config)
         scss_string = scss_template_string.format(**config)
         new_css = sass.compile(string=scss_string)
         style_string = &#34;&lt;style&gt;\n{0}\n&lt;/style&gt;&#34;.format(new_css)
         font_names = [config[&#34;headingFont&#34;], config[&#34;bodyFont&#34;]]
         links = self.get_fonts(font_names)
-        return links + style_string</code></pre>
+        return links + style_string
+    
+    def config_to_camelCase(self, config: typing.Dict) -&gt; typing.Dict:
+        new_dict = dict()
+        for key, val in config.items():
+            new_dict.update({
+                presalytics.story.util.to_camel_case(key): val
+            })
+        return new_dict</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -108,6 +129,28 @@ and feeds those values into the <a title="presalytics.lib.plugins.reveal_theme.R
 <li><a title="presalytics.lib.plugins.base.PluginBase" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase">PluginBase</a></li>
 <li>abc.ABC</li>
 </ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.plugins.ooxml.OoxmlTheme.config_to_camelCase"><code class="name flex">
+<span>def <span class="ident">config_to_camelCase</span></span>(<span>self, config)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/ooxml.py#L35-L41" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def config_to_camelCase(self, config: typing.Dict) -&gt; typing.Dict:
+    new_dict = dict()
+    for key, val in config.items():
+        new_dict.update({
+            presalytics.story.util.to_camel_case(key): val
+        })
+    return new_dict</code></pre>
+</details>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme">RevealCustomTheme</a></b></code>:
@@ -141,6 +184,9 @@ and feeds those values into the <a title="presalytics.lib.plugins.reveal_theme.R
 <ul>
 <li>
 <h4><code><a title="presalytics.lib.plugins.ooxml.OoxmlTheme" href="/python-client/presalytics/lib/plugins/ooxml.html#presalytics.lib.plugins.ooxml.OoxmlTheme">OoxmlTheme</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.lib.plugins.ooxml.OoxmlTheme.config_to_camelCase" href="/python-client/presalytics/lib/plugins/ooxml.html#presalytics.lib.plugins.ooxml.OoxmlTheme.config_to_camelCase">config_to_camelCase</a></code></li>
+</ul>
 </li>
 </ul>
 </li>

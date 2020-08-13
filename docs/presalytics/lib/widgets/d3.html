@@ -203,7 +203,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
         will be rendered
         &#34;&#34;&#34;
         params = {
-            &#34;story_host&#34;: self.get_client(delegate_login=True).story.api_client.configuration.host,
+            &#34;story_host&#34;: self.get_client(delegate_login=True).story.api_client.external_root_url,
             &#34;id&#34;: self.id,
             &#34;story_id&#34;: self.story_id,
         }
@@ -560,7 +560,7 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
         will be rendered
         &#34;&#34;&#34;
         params = {
-            &#34;story_host&#34;: self.get_client(delegate_login=True).story.api_client.configuration.host,
+            &#34;story_host&#34;: self.get_client(delegate_login=True).story.api_client.external_root_url,
             &#34;id&#34;: self.id,
             &#34;story_id&#34;: self.story_id,
         }
@@ -771,7 +771,7 @@ will be rendered</p></section>
     will be rendered
     &#34;&#34;&#34;
     params = {
-        &#34;story_host&#34;: self.get_client(delegate_login=True).story.api_client.configuration.host,
+        &#34;story_host&#34;: self.get_client(delegate_login=True).story.api_client.external_root_url,
         &#34;id&#34;: self.id,
         &#34;story_id&#34;: self.story_id,
     }

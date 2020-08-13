@@ -59,7 +59,7 @@ information on licensing, please contact <a href="mailto:inquires@presalytics.io
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/__init__.py#L0-L253" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/__init__.py#L0-L260" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
 # Presalytics Python Library
@@ -196,9 +196,11 @@ RESERVED_NAMES: list of str, optional
 IGNORE_PATHS: list of str, optional
     A list of paths to not to include in registry autosdiscover
 
-BROWSER_API_HOST: str, optional
-    If present, the root url for browser-based api calls.  May be required when services are running on a cluster that
-    deletegates certificate authentication to an external service.  See for more info: https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content
+BROWSER_API_HOST: dict, optional
+    If present, the root url for browser-based api calls.  Each service can have an independent browser host.
+    Service keys include `OOXML_AUTOMATION`, `STORY`, `DOC_CONVERTER`.  May be required when services are running on a cluster that
+    deletegates certificate authentication to an external service or in debug/test environments.  
+    See for more info: https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content
 
 The object can also take on values for user-defined extensions, and please consult
 the documentation for those package for those vairables definition.
@@ -254,6 +256,9 @@ from presalytics.lib.templates.base import (
     BootstrapCustomTemplate
 )
 from presalytics.lib.widgets.matplotlib import MatplotlibFigure, MatplotlibResponsiveFigure
+from presalytics.lib.widgets.d3 import (
+    D3Widget
+)
 from presalytics.lib.widgets.ooxml import (
     OoxmlWidgetBase,
     OoxmlFileWidget, 
@@ -280,6 +285,7 @@ from presalytics.lib.widgets.ooxml_editors import (
     MultiXmlTransform
 )
 
+
 __all__ = [
     &#39;CONFIG&#39;,
     &#39;COMPONENTS&#39;,
@@ -294,6 +300,7 @@ __all__ = [
     &#39;OoxmlEndpointMap&#39;,
     &#39;OoxmlWidgetBase&#39;,
     &#39;OoxmlEditorWidget&#39;,
+    &#39;D3Widget&#39;,
     &#39;ChartUpdaterWidget&#39;,
     &#39;TableUpdaterWidget&#39;,
     &#39;XmlTransformBase&#39;,
@@ -418,10 +425,12 @@ Redirect URIs must be approved by Presalytics API devops for use in client appli
 registries.</dd>
 <dt><strong><code>IGNORE_PATHS</code></strong> :&ensp;<code>list</code> of <code>str</code>, optional</dt>
 <dd>A list of paths to not to include in registry autosdiscover</dd>
-<dt><strong><code>BROWSER_API_HOST</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dt><strong><code>BROWSER_API_HOST</code></strong> :&ensp;<code>dict</code>, optional</dt>
 <dd>If present, the root url for browser-based api calls.
+Each service can have an independent browser host.
+Service keys include <code>OOXML_AUTOMATION</code>, <code>STORY</code>, <code>DOC_CONVERTER</code>.
 May be required when services are running on a cluster that
-deletegates certificate authentication to an external service.
+deletegates certificate authentication to an external service or in debug/test environments.<br>
 See for more info: <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content">https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content</a></dd>
 </dl>
 <p>The object can also take on values for user-defined extensions, and please consult
@@ -538,7 +547,7 @@ additional API call ascertain the file's mimetype</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/story_tools.py#L15-L69" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/story_tools.py#L15-L74" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def story_post_file_bytes(client: &#39;Client&#39;, 
                           binary_obj: &#39;BytesIO&#39;, 
@@ -582,7 +591,12 @@ additional API call ascertain the file's mimetype</dd>
         resp = requests.post(endpoint, headers=headers, files=_file)
     except Exception as ex:
         message = &#34;An error occured in the presalytics API client&#34;
-        raise presalytics.lib.exceptions.ApiError(message=message, status_code=resp.status_code)
+        if locals().get(&#34;resp&#34;, None):
+            code = resp.status_code
+        else:
+            code = 500
+        raise presalytics.lib.exceptions.ApiError(message=message, status_code=code)
+            
     data = resp.json()
     if resp.status_code &gt; 299:
         logger.error(data[&#39;detail&#39;])
@@ -968,7 +982,7 @@ if the user has not authenticated by the time the interval has expired.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L32-L428" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L34-L471" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Client(object):
     &#34;&#34;&#34; Class for interacting with Presalytics API endpoints
@@ -1265,7 +1279,7 @@ if the user has not authenticated by the time the interval has expired.</dd>
         an `presalytics.lib.exceptions.InvalidTokenException` when `deletegate_login` is True.
         &#34;&#34;&#34;
         if self.token_util.is_api_access_token_expired():
-            if self.token_util.token.get(&#39;refresh_token&#39;, None):
+            if self.token_util.token.get(&#39;refresh_token&#39;, None) and self.client_secret:
                 refresh_token = self.token_util.token[&#34;refresh_token&#34;]
                 token = self.oidc.refresh_token(refresh_token)
                 self.token_util.process_token(token)
@@ -1366,8 +1380,94 @@ if the user has not authenticated by the time the interval has expired.</dd>
             &#34;client_id&#34;: self.client_id,
             &#34;cache_tokens&#34;: self.token_util.token_cache,
             &#34;delegate_login&#34;: self._delegate_login
-        }</code></pre>
+        }
+
+    STATUS_REPOLL_SECONDS = 2
+    STATUS_REPOLL_MAX_CYCLES = 20
+
+    def upload_file_and_await_outline(self, 
+                                      file: typing.Union[FileStorage, str],
+                                      include_relationships=True,
+                                      status_repoll_seconds: int = None, 
+                                      repoll_max_cycles: int = None):
+        &#34;&#34;&#34; Useful for testing &#34;&#34;&#34;
+        if type(file) is str:
+            content_type = mimetypes.guess_type(file, False)[0] # type: ignore
+            with open(file, &#39;rb&#39;) as f:  # type: ignore
+                stream = io.BytesIO(f.read())
+            file = FileStorage(
+                stream=stream,  # type: ignore
+                filename=file,  # type: ignore
+                content_type=content_type,
+                content_length=stream.__sizeof__()             
+            )
+        if not status_repoll_seconds:
+            status_repoll_seconds = self.STATUS_REPOLL_SECONDS
+        if not repoll_max_cycles:
+            repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
+        story = self.story.story_post_file(file=file)
+        task_running = True
+        repoll_cycle_count = 0
+        while task_running:
+            status, status_code, _ = self.story.story_id_status_get_with_http_info(story.id)
+            if status_code == 204:
+                task_running = False
+            elif status_code == 200:
+                if status.status == &#34;SUCCESS&#34;:
+                    task_running = False
+                elif repoll_cycle_count &gt;= repoll_max_cycles:
+                    raise presalytics.lib.exceptions.ApiError(message=&#34;Error occured while uploading file&#34;, status_code=500)
+                else:
+                    logger.info(&#34;Story creation task still running.  Rechecking status in {0} seconds&#34;.format(status_repoll_seconds))
+                    time.sleep(status_repoll_seconds)
+                    repoll_cycle_count += 1
+        return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)</code></pre>
 </details>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.Client.STATUS_REPOLL_SECONDS"><code class="name">var <span class="ident">STATUS_REPOLL_SECONDS</span></code></dt>
+<dd>
+<section class="desc"><p>int(x=0) -&gt; integer
+int(x, base=10) -&gt; integer</p>
+<p>Convert a number or string to an integer, or return 0 if no arguments
+are given.
+If x is a number, return x.<strong>int</strong>().
+For floating point
+numbers, this truncates towards zero.</p>
+<p>If x is not a number or if base is given, then x must be a string,
+bytes, or bytearray instance representing an integer literal in the
+given base.
+The literal can be preceded by '+' or '-' and be surrounded
+by whitespace.
+The base defaults to 10.
+Valid bases are 0 and 2-36.
+Base 0 means to interpret the base from the string as an integer literal.</p>
+<pre><code>&gt;&gt;&gt; int('0b100', base=0)
+4
+</code></pre></section>
+</dd>
+<dt id="presalytics.Client.STATUS_REPOLL_MAX_CYCLES"><code class="name">var <span class="ident">STATUS_REPOLL_MAX_CYCLES</span></code></dt>
+<dd>
+<section class="desc"><p>int(x=0) -&gt; integer
+int(x, base=10) -&gt; integer</p>
+<p>Convert a number or string to an integer, or return 0 if no arguments
+are given.
+If x is a number, return x.<strong>int</strong>().
+For floating point
+numbers, this truncates towards zero.</p>
+<p>If x is not a number or if base is given, then x must be a string,
+bytes, or bytearray instance representing an integer literal in the
+given base.
+The literal can be preceded by '+' or '-' and be surrounded
+by whitespace.
+The base defaults to 10.
+Valid bases are 0 and 2-36.
+Base 0 means to interpret the base from the string as an integer literal.</p>
+<pre><code>&gt;&gt;&gt; int('0b100', base=0)
+4
+</code></pre></section>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.Client.login"><code class="name flex">
@@ -1378,7 +1478,7 @@ if the user has not authenticated by the time the interval has expired.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L308-L317" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L310-L319" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def login(self):
     &#34;&#34;&#34;
@@ -1402,7 +1502,7 @@ an <a title="presalytics.lib.exceptions.InvalidTokenException" href="/python-cli
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L320-L344" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L322-L346" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def refresh_token(self):
     &#34;&#34;&#34;
@@ -1411,7 +1511,7 @@ an <a title="presalytics.lib.exceptions.InvalidTokenException" href="/python-cli
     an `presalytics.lib.exceptions.InvalidTokenException` when `deletegate_login` is True.
     &#34;&#34;&#34;
     if self.token_util.is_api_access_token_expired():
-        if self.token_util.token.get(&#39;refresh_token&#39;, None):
+        if self.token_util.token.get(&#39;refresh_token&#39;, None) and self.client_secret:
             refresh_token = self.token_util.token[&#34;refresh_token&#34;]
             token = self.oidc.refresh_token(refresh_token)
             self.token_util.process_token(token)
@@ -1441,7 +1541,7 @@ an <a title="presalytics.lib.exceptions.InvalidTokenException" href="/python-cli
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L346-L358" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L348-L360" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_auth_header(self):
     &#34;&#34;&#34;
@@ -1471,7 +1571,7 @@ package, this method will pull the request id from the call stack.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L360-L377" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L362-L379" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_request_id_header(self):
     &#34;&#34;&#34;
@@ -1513,7 +1613,7 @@ current working directory.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L379-L408" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L381-L410" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def download_file(self, story_id, ooxml_automation_id, download_folder=None, filename=None, **kwargs):
     &#34;&#34;&#34;
@@ -1568,7 +1668,7 @@ components and new client instances</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L410-L428" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L412-L430" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_client_info(self):
     &#34;&#34;&#34;
@@ -1589,6 +1689,55 @@ components and new client instances</p>
         &#34;cache_tokens&#34;: self.token_util.token_cache,
         &#34;delegate_login&#34;: self._delegate_login
     }</code></pre>
+</details>
+</dd>
+<dt id="presalytics.Client.upload_file_and_await_outline"><code class="name flex">
+<span>def <span class="ident">upload_file_and_await_outline</span></span>(<span>self, file, include_relationships=True, status_repoll_seconds=None, repoll_max_cycles=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Useful for testing</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L435-L471" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def upload_file_and_await_outline(self, 
+                                  file: typing.Union[FileStorage, str],
+                                  include_relationships=True,
+                                  status_repoll_seconds: int = None, 
+                                  repoll_max_cycles: int = None):
+    &#34;&#34;&#34; Useful for testing &#34;&#34;&#34;
+    if type(file) is str:
+        content_type = mimetypes.guess_type(file, False)[0] # type: ignore
+        with open(file, &#39;rb&#39;) as f:  # type: ignore
+            stream = io.BytesIO(f.read())
+        file = FileStorage(
+            stream=stream,  # type: ignore
+            filename=file,  # type: ignore
+            content_type=content_type,
+            content_length=stream.__sizeof__()             
+        )
+    if not status_repoll_seconds:
+        status_repoll_seconds = self.STATUS_REPOLL_SECONDS
+    if not repoll_max_cycles:
+        repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
+    story = self.story.story_post_file(file=file)
+    task_running = True
+    repoll_cycle_count = 0
+    while task_running:
+        status, status_code, _ = self.story.story_id_status_get_with_http_info(story.id)
+        if status_code == 204:
+            task_running = False
+        elif status_code == 200:
+            if status.status == &#34;SUCCESS&#34;:
+                task_running = False
+            elif repoll_cycle_count &gt;= repoll_max_cycles:
+                raise presalytics.lib.exceptions.ApiError(message=&#34;Error occured while uploading file&#34;, status_code=500)
+            else:
+                logger.info(&#34;Story creation task still running.  Rechecking status in {0} seconds&#34;.format(status_repoll_seconds))
+                time.sleep(status_repoll_seconds)
+                repoll_cycle_count += 1
+    return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)</code></pre>
 </details>
 </dd>
 </dl>
@@ -2356,7 +2505,7 @@ prior to opening in the web browser</dd>
 </dd>
 <dt id="presalytics.Revealer"><code class="flex name class">
 <span>class <span class="ident">Revealer</span></span>
-<span>(</span><span>story_outline, **kwargs)</span>
+<span>(</span><span>story_outline, pages=None, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Renders <a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a> objects to
@@ -2379,7 +2528,7 @@ the rendering process</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L36-L280" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L36-L282" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Revealer(presalytics.story.components.Renderer):
     &#34;&#34;&#34;
@@ -2412,16 +2561,28 @@ the rendering process</dd>
     def __init__(
             self,
             story_outline: &#39;StoryOutline&#39;,
+            pages: typing.List[int] = None,
             **kwargs):
         super(Revealer, self).__init__(story_outline, **kwargs)
         logger.info(&#34;Initializing story render for {}&#34;.format(story_outline.title))
         self.story_outline.validate()
+        if isinstance(pages, int):
+            pages = [pages]
+        elif not pages:
+            pages = [p for p in range(0, len(self.story_outline.pages))]
+        elif not isinstance(pages, list) or not isinstance(pages[0], int):
+            raise presalytics.lib.exceptions.InvalidArgumentException(message=&#39;&#34;pages&#34; must be a list of integers&#39;)
+        if len([p for p in pages if p &gt;= len(self.story_outline.pages)]) &gt; 0:
+            raise presalytics.lib.exceptions.InvalidArgumentException(message=&#39;&#34;pages&#34; can only contain integers lower than the number of pages in the story&#39;)
+        self.pages_to_render = pages
         self.base = self._make_base()
         logger.info(&#34;Loading plugins&#34;)
         reveal_params = {}
         for key, val in kwargs.items():
             if key in presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config.keys():
                 reveal_params.update({key: val})
+        if len(self.pages_to_render) == 1:
+            reveal_params.update({&#39;controls&#39;: False})  # hide controls on single page story
         reveal_plugin_config = {
             &#39;kind&#39;: &#39;script&#39;,
             &#39;name&#39;: &#39;reveal&#39;,
@@ -2447,18 +2608,6 @@ the rendering process</dd>
             &#34;class&#34;: &#34;reveal&#34;,
         })
         lxml.etree.SubElement(base, &#34;div&#34;, attrib={&#34;class&#34;: &#34;slides&#34;})
-        try:
-            client = self.get_client()
-            website_token = client.token_util.token[&#34;access_token&#34;]
-            base.attrib[&#39;data-jwt&#39;] = client.token_util.token[&#34;access_token&#34;]
-            base.attrib[&#39;data-jwt-refresh&#39;] = client.token_util.token[&#34;refresh_token&#34;]
-            if presalytics.CONFIG.get(&#34;BROWSER_API_HOST&#34;, None):
-                story_target = presalytics.CONFIG[&#34;BROWSER_API_HOST&#34;] + &#34;/story&#34;
-            else:
-                story_target = client.story.api_client.configuration.host
-            base.attrib[&#39;data-story-target&#39;] = story_target
-        except Exception as ex:
-            logger.exception(ex, &#34;Could not obtain access token from revealer component.&#34;)
 
         try:
             story_id = self.story_outline.story_id
@@ -2546,12 +2695,14 @@ the rendering process</dd>
         A `str` html fragment containing a reveal.js presentation
         &#34;&#34;&#34;
         reveal_base = self.base
-        for page in self.story_outline.pages:
-            slides_container = reveal_base[0]
-            slide = lxml.etree.SubElement(slides_container, &#34;section&#34;)
-            page_html = self.render_page(page)
-            slide_fragment = lxml.html.fragment_fromstring(page_html)
-            slide.append(slide_fragment)
+        for p in range(0, len(self.story_outline.pages)):
+            if p in self.pages_to_render:
+                page = self.story_outline.pages[p]
+                slides_container = reveal_base[0]
+                slide = lxml.etree.SubElement(slides_container, &#34;section&#34;)
+                page_html = self.render_page(page)
+                slide_fragment = lxml.html.fragment_fromstring(page_html)
+                slide.append(slide_fragment)
         return reveal_base
 
     def render_page(self, page: &#39;Page&#39;) -&gt; str:
@@ -2744,7 +2895,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L192-L207" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L192-L209" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render(self):
     &#34;&#34;&#34;
@@ -2755,12 +2906,14 @@ reveal.js presentation as conent</p>
     A `str` html fragment containing a reveal.js presentation
     &#34;&#34;&#34;
     reveal_base = self.base
-    for page in self.story_outline.pages:
-        slides_container = reveal_base[0]
-        slide = lxml.etree.SubElement(slides_container, &#34;section&#34;)
-        page_html = self.render_page(page)
-        slide_fragment = lxml.html.fragment_fromstring(page_html)
-        slide.append(slide_fragment)
+    for p in range(0, len(self.story_outline.pages)):
+        if p in self.pages_to_render:
+            page = self.story_outline.pages[p]
+            slides_container = reveal_base[0]
+            slide = lxml.etree.SubElement(slides_container, &#34;section&#34;)
+            page_html = self.render_page(page)
+            slide_fragment = lxml.html.fragment_fromstring(page_html)
+            slide.append(slide_fragment)
     return reveal_base</code></pre>
 </details>
 </dd>
@@ -2774,7 +2927,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L209-L238" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L211-L240" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render_page(self, page: &#39;Page&#39;) -&gt; str:
     &#34;&#34;&#34;
@@ -2838,7 +2991,7 @@ Defaults to 127.0.0.1 (localhost).</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L240-L280" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L242-L282" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def present(self, files_path=None, debug=True, port=8082, host=&#39;127.0.0.1&#39;):
     &#34;&#34;&#34;
@@ -3376,7 +3529,7 @@ idenitifiable by a combinatation of <code>object_ooxml_id</code> and <code>endpo
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L393-L620" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L390-L617" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlFileWidget(OoxmlWidgetBase):
     &#34;&#34;&#34;
@@ -3625,7 +3778,7 @@ the updated rendering data to the server</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L490-L547" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L487-L544" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update(self):
     &#34;&#34;&#34;
@@ -4253,7 +4406,7 @@ that for the object of interest</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L231-L390" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L231-L387" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
     &#34;&#34;&#34;
@@ -4331,11 +4484,8 @@ that for the object of interest</dd>
         Wraps the Presalytics API Ooxml Automation service SVG endpoint in an `&lt;iframe&gt;` that
         will be rendered inside of a story
         &#34;&#34;&#34;
-        client = self.get_client()
-        self.token = client.token_util.token[&#34;access_token&#34;]
         svg_container_div = lxml.html.Element(&#34;div&#34;, {
             &#39;class&#39;: &#39;svg-container&#39;,
-            &#39;data-jwt&#39;: self.token,
             &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
             &#39;data-object-id&#39;: self.object_ooxml_id
         })
@@ -4439,18 +4589,15 @@ will be rendered inside of a story</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L302-L324" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L302-L321" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def create_container(self, **kwargs):
     &#34;&#34;&#34;
     Wraps the Presalytics API Ooxml Automation service SVG endpoint in an `&lt;iframe&gt;` that
     will be rendered inside of a story
     &#34;&#34;&#34;
-    client = self.get_client()
-    self.token = client.token_util.token[&#34;access_token&#34;]
     svg_container_div = lxml.html.Element(&#34;div&#34;, {
         &#39;class&#39;: &#39;svg-container&#39;,
-        &#39;data-jwt&#39;: self.token,
         &#39;data-object-type&#39;: self.endpoint_map.endpoint_id,
         &#39;data-object-id&#39;: self.object_ooxml_id
     })
@@ -4474,7 +4621,7 @@ will be rendered inside of a story</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L327-L337" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L324-L334" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def to_html(self, **kwargs):
     &#34;&#34;&#34;
@@ -4497,7 +4644,7 @@ will be rendered inside of a story</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L339-L357" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L336-L354" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_svg(self, id, timeout_iterator=0) -&gt; str:
     &#34;&#34;&#34;
@@ -4529,7 +4676,7 @@ Filname is optional.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L359-L366" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L356-L363" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_svg_file(self, filename=None):
     &#34;&#34;&#34;
@@ -4795,6 +4942,535 @@ as variables to modify the underlying OpenOfficeXml</dd>
 </li>
 </ul>
 </dd>
+<dt id="presalytics.D3Widget"><code class="flex name class">
+<span>class <span class="ident">D3Widget</span></span>
+<span>(</span><span>name, d3_data, id=None, story_id=None, script64=None, script_filename=None, css64=None, css_filename=None, html64=None, html_filename=None, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A <code>Widget</code> for rendering user-defined d3.js scripts</p>
+<p>This class allows users to load <a href="https://d3js.org/">d3.js</a> objects
+into widgets in order to create custom and interactive widgets.
+User can define d3 scripts in a separate file and load them via <code>script_filename</code>
+parameter.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>the name of widget.
+Must be unique within <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS"><code>COMPONENTS</code></a></dd>
+<dt><strong><code>d3_data</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Data that will be loaded into the script when run in the browser. Avaiable
+in the script as the <code>data</code> object.</dd>
+<dt><strong><code>id</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>A unique identifier the widget.
+Automatically generated when the
+widget is created or updated.</dd>
+<dt><strong><code>story_id</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The story_id of the parent story</dd>
+<dt><strong><code>script64</code></strong> :&ensp;<code>str.</code> optional</dt>
+<dd>A base64-encoded string of the script's text.
+Used for server-to-server
+transport over https</dd>
+<dt><strong><code>script_filename</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>Required when updating the script text.
+Read into the <code>script64</code> parameter
+via the <code>read_file</code> method</dd>
+<dt><strong><code>html64</code></strong> :&ensp;<code>str.</code> optional</dt>
+<dd>A base64-encoded string of the html fragments's text.
+Used for server-to-server
+transport over https</dd>
+<dt><strong><code>html_filename</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The name of file in the local directory with an html framement that should be rendered within the
+body (inside element <code>&lt;div id="{{id}}" class="d3-container"&gt;&lt;/div&gt;</code>) of the iframe containing the
+d3 script</dd>
+<dt><strong><code>css64</code></strong> :&ensp;<code>str.</code> optional</dt>
+<dd>A base64-encoded string of the css styles to apply to the d3 document.
+Used for server-to-server
+transport over https.</dd>
+<dt><strong><code>css_filename</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>
+<p>A css file containing styles that will be applied to d3</p>
+<p>Note: Styles <code>html {width: 100%; height:100%;} body {width: 100%; height: 100%; margin: 0px;}</code>
+are applied by default if not css is provided</p>
+</dd>
+</dl>
+<h2 id="script-local-variables">Script Local Variables:</h2>
+<p>The following vairables are avialable to users when writing scripts:</p>
+<p>data: <code>javascript object</code>
+The data loaded into the script via <code>d3_data</code> parameter</p>
+<p>container: <code>html element</code>
+The first div in the body</p>
+<p>d3: <code>javascript object</code>
+The root d3 object for selecting, creating and editing elements on the DOM</p>
+<h2 id="security-note">Security Note:</h2>
+<p>Scripts loaded via this widget are <em>Sandboxed</em>.
+These script can only interact with
+dom elements defined in the widget script loaded via the <code>script_filename</code> parameter.
+Fetch and xhr actions are also disabled via a restrictive Content Security Policy.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L21-L297" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class D3Widget(presalytics.story.components.WidgetBase):
+    &#34;&#34;&#34;
+    A `Widget` for rendering user-defined d3.js scripts
+
+    This class allows users to load [d3.js](https://d3js.org/) objects
+    into widgets in order to create custom and interactive widgets.
+    User can define d3 scripts in a separate file and load them via `script_filename`
+    parameter.
+
+    Parameters
+    ----------
+
+    name : str
+        the name of widget.  Must be unique within `presalytics.COMPONENTS`
+
+    d3_data: dict
+        Data that will be loaded into the script when run in the browser. Avaiable
+        in the script as the `data` object.
+    
+    id: str, optional
+        A unique identifier the widget.  Automatically generated when the
+        widget is created or updated.
+
+    story_id : str, optional
+        The story_id of the parent story
+
+    script64 : str. optional
+        A base64-encoded string of the script&#39;s text.  Used for server-to-server
+        transport over https
+
+    script_filename: str, optional
+        Required when updating the script text.  Read into the `script64` parameter
+        via the `read_file` method
+
+    html64 : str. optional
+        A base64-encoded string of the html fragments&#39;s text.  Used for server-to-server
+        transport over https
+
+    html_filename: str, optional
+        The name of file in the local directory with an html framement that should be rendered within the
+        body (inside element `&lt;div id=&#34;{{id}}&#34; class=&#34;d3-container&#34;&gt;&lt;/div&gt;`) of the iframe containing the 
+        d3 script
+
+    css64 : str. optional
+        A base64-encoded string of the css styles to apply to the d3 document.  Used for server-to-server
+        transport over https.
+    
+    css_filename: str, optional
+        A css file containing styles that will be applied to d3
+
+        Note: Styles `html {width: 100%; height:100%;} body {width: 100%; height: 100%; margin: 0px;}`
+        are applied by default if not css is provided
+
+
+    
+
+
+    Script Local Variables:
+    ----------
+
+    The following vairables are avialable to users when writing scripts:
+
+    data: `javascript object`
+        The data loaded into the script via `d3_data` parameter
+
+    container: `html element`
+        The first div in the body
+    
+    d3: `javascript object`
+        The root d3 object for selecting, creating and editing elements on the DOM
+        
+
+    Security Note:
+    ----------
+
+    Scripts loaded via this widget are *Sandboxed*.  These script can only interact with
+    dom elements defined in the widget script loaded via the `script_filename` parameter.
+    Fetch and xhr actions are also disabled via a restrictive Content Security Policy.
+
+
+    &#34;&#34;&#34;
+    __component_kind__ = &#39;d3&#39;
+    __plugins__ = [
+        {
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;d3&#39;
+            }
+        }
+    ]
+
+    def __init__(self, 
+                 name: str, 
+                 d3_data: typing.Dict,
+                 id: str = None, 
+                 story_id: str = None,
+                 script64: str = None, 
+                 script_filename: str = None, 
+                 css64: str = None,
+                 css_filename: str = None, 
+                 html64: str = None,
+                 html_filename: str = None,
+                 *args, **kwargs):
+        if not id:
+            id = &#39;d3-&#39; + str(uuid.uuid4())
+        self.id = id
+        self.d3_data = d3_data
+        self.story_id = story_id
+        super(D3Widget, self).__init__(name, *args, **kwargs)
+        self.script_filename = script_filename
+        self.script64 = self.read_file(script_filename)
+        if not self.script64:
+            self.script64 = script64
+        if not self.script64:
+            raise presalytics.lib.exceptions.InvalidConfigurationError(&#34;D3 Widget must be supplied either a script64 or script_filename keyword argument.&#34;)
+        self.html64 = self.read_file(html_filename)
+        self.html64 = self.html64 if self.html64 else html64
+        self.css64 = self.read_file(css_filename)
+        self.css64 = self.css64 if self.css64 else css64
+        self.html_filename = html_filename
+        self.css_filename = css_filename
+
+    def read_file(self, filename) -&gt; typing.Optional[str]:
+        &#34;&#34;&#34;
+        Find a file named `filename` and return its base64-ecoded content
+        &#34;&#34;&#34;
+        data64 = None
+        if filename:
+            search_paths = list(set(presalytics.autodiscover_paths))
+            if os.getcwd() not in search_paths:
+                search_paths.append(os.getcwd())
+            for path in search_paths:
+                fpath = os.path.join(path, filename)
+                if os.path.exists(fpath):
+                    with open(fpath, &#39;rb&#39;) as f:
+                        data = f.read()
+                        data64 = base64.b64encode(data).decode(&#39;utf-8&#39;)  #type: ignore
+                    break
+            if not data64:
+                logger.debug(&#34;File {0} could not be found&#34;.format(filename))
+        return data64 
+
+    def to_html(self, data=None, **kwargs) -&gt; str:
+        &#34;&#34;&#34;
+        Renders the sandboxed iframe with will contain the d3 script widget
+        &#34;&#34;&#34;
+        if not self.story_id:
+            message = &#34;This object requires a valid story_id to render.&#34;
+            raise presalytics.lib.exceptions.MissingConfigException(message=message)
+        html = self.create_container()
+        return html
+
+    def create_container(self, **kwargs):
+        &#34;&#34;&#34;
+        Wraps the D3 objects in an endpoint at the story API load via a sandboxed `&lt;iframe&gt;` that
+        will be rendered
+        &#34;&#34;&#34;
+        params = {
+            &#34;story_host&#34;: self.get_client(delegate_login=True).story.api_client.external_root_url,
+            &#34;id&#34;: self.id,
+            &#34;story_id&#34;: self.story_id,
+        }
+        source_url = &#34;{story_host}/{story_id}/d3/{id}&#34;.format(**params)
+        empty_parent_div = lxml.html.Element(&#34;div&#34;, {
+            &#39;class&#39;: &#39;empty-parent bg-light&#39;,
+            &#39;style&#39;: &#39;height: 100%; width: 100%, display: block; text-align: left;&#39;
+        })
+        frame = lxml.html.Element(&#34;iframe&#34;, {
+            &#39;src&#39;: source_url,
+            &#39;frameborder&#39;: &#34;0&#34;,
+            &#39;scrolling&#39;: &#34;auto&#34;,
+            &#39;class&#39;: &#39;d3-responsive-frame&#39;,
+            &#39;style&#39;: &#39;max-height: none; max-width: none; height:100%; width: 100%;&#39;,
+            &#39;sandbox&#39;: &#39;allow-forms allow-scripts&#39;
+        })
+        empty_parent_div.append(frame)
+        return lxml.html.tostring(empty_parent_div).decode(&#39;utf-8&#39;)
+
+    @classmethod
+    def deserialize(cls, outline, **kwargs):
+        d3_data = outline.data.get(&#34;d3_data&#34;)
+        story_id = outline.data.get(&#34;story_id&#34;, None)
+        id = outline.data.get(&#39;id&#39;, None)
+        data = outline.data.get(&#39;d3_data&#39;, None)
+        script_filename = outline.data.get(&#39;script_filename&#39;, None)
+        script64 = outline.data.get(&#39;script64&#39;, None)
+        html_filename = outline.data.get(&#39;html_filename&#39;, None)
+        html64 = outline.data.get(&#39;html64&#39;, None)
+        css_filename = outline.data.get(&#39;css_filename&#39;, None)
+        css64 = outline.data.get(&#39;css64&#39;, None)
+        return cls(outline.name,
+                   d3_data,
+                   id=id,
+                   story_id=story_id,
+                   script64=script64,
+                   script_filename=script_filename,
+                   html64=html64,
+                   html_filename=html_filename,
+                   css64=css64,
+                   css_filename=css_filename,
+                   **kwargs)
+
+    def serialize(self, **kwargs):
+        data = {
+            &#39;d3_data&#39;: self.d3_data,
+            &#39;id&#39;: self.id,
+            &#39;story_id&#39;: self.story_id,
+            &#39;script_filename&#39;: self.script_filename,
+            &#39;script64&#39;: self.script64,
+            &#39;css64&#39;: self.css64,
+            &#39;html64&#39;: self.html64,
+            &#39;html_filename&#39;: self.html_filename,
+            &#39;css_filename&#39;: self.css_filename
+        }
+        return presalytics.story.outline.Widget(
+            name=self.name,
+            kind=self.__component_kind__,
+            data=data,
+        )
+
+    DEFAULT_CSS = &#34;&#34;&#34;
+    html {
+        height: 100%;
+        width: 100%;
+    }
+    body {
+        height: 100%;
+        width: 100%;
+        margin: 0px;
+    }
+    &#34;&#34;&#34;
+
+
+    def standalone_html(self) -&gt; str:
+        &#34;&#34;&#34;
+        Returns string with an html document containing that d3 widget
+
+        Loaded via the Story API d3 endpoint
+        &#34;&#34;&#34;
+        SIMPLE_HTML = jinja2.Template(&#34;&#34;&#34;&lt;!DOCTYPE html&gt;
+        &lt;html&gt;
+            &lt;head&gt;
+                &lt;meta charset=&#34;UTF-8&#34;&gt;
+                &lt;style&gt;
+                {{ css }}
+                &lt;/style&gt;
+            &lt;/head&gt;
+            &lt;body&gt;
+                &lt;script type=&#34;text/javascript&#34; src=&#34;{{ d3_url }}&#34;&gt;&lt;/script&gt;
+                &lt;div id=&#34;{{ id }}&#34; class=&#34;d3-container&#34;&gt;{{ html_fragment }}&lt;/div&gt;
+                &lt;script type=&#34;text/javascript&#34;&gt;
+
+                    var id = &#39;{{id}}&#39;;
+
+                    var data = JSON.parse(&#39;{{data|safe}}&#39;);
+
+                    var container = document.getElementById(id);
+
+                    {{script|safe}}
+            
+                &lt;/script&gt;
+            &lt;/body&gt;
+        &lt;/html&gt;&#34;&#34;&#34;)
+        data = json.dumps(self.d3_data)  # dont use hyphens in data keys
+        script = base64.b64decode(self.script64).decode(&#39;utf-8&#39;)  #type: ignore  #Required
+        extra_css = base64.b64decode(self.css64).decode(&#39;utf-8&#39;) if self.css64 else D3Widget.DEFAULT_CSS  #type: ignore  
+        html_fragment = base64.b64decode(self.html64).decode(&#39;utf-8&#39;) if self.html64 else None  #type: ignore   # disable nested iframes
+        context = {
+            &#34;id&#34;: self.id,
+            &#34;d3_url&#34;: presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get(&#39;d3&#39;),
+            &#34;data&#34;: data,
+            &#34;script&#34;: script,
+            &#34;css&#34;: extra_css,
+            &#34;html_fragment&#34;: html_fragment
+        }
+        return SIMPLE_HTML.render(**context)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></li>
+<li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.D3Widget.DEFAULT_CSS"><code class="name">var <span class="ident">DEFAULT_CSS</span></code></dt>
+<dd>
+<section class="desc"><p>str(object='') -&gt; str
+str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
+<p>Create a new string object from the given object. If encoding or
+errors is specified, then the object must expose a data buffer
+that will be decoded using the given encoding and error handler.
+Otherwise, returns the result of object.<strong>str</strong>() (if defined)
+or repr(object).
+encoding defaults to sys.getdefaultencoding().
+errors defaults to 'strict'.</p></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.D3Widget.read_file"><code class="name flex">
+<span>def <span class="ident">read_file</span></span>(<span>self, filename)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Find a file named <code>filename</code> and return its base64-ecoded content</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L144-L162" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def read_file(self, filename) -&gt; typing.Optional[str]:
+    &#34;&#34;&#34;
+    Find a file named `filename` and return its base64-ecoded content
+    &#34;&#34;&#34;
+    data64 = None
+    if filename:
+        search_paths = list(set(presalytics.autodiscover_paths))
+        if os.getcwd() not in search_paths:
+            search_paths.append(os.getcwd())
+        for path in search_paths:
+            fpath = os.path.join(path, filename)
+            if os.path.exists(fpath):
+                with open(fpath, &#39;rb&#39;) as f:
+                    data = f.read()
+                    data64 = base64.b64encode(data).decode(&#39;utf-8&#39;)  #type: ignore
+                break
+        if not data64:
+            logger.debug(&#34;File {0} could not be found&#34;.format(filename))
+    return data64 </code></pre>
+</details>
+</dd>
+<dt id="presalytics.D3Widget.to_html"><code class="name flex">
+<span>def <span class="ident">to_html</span></span>(<span>self, data=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Renders the sandboxed iframe with will contain the d3 script widget</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L164-L172" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_html(self, data=None, **kwargs) -&gt; str:
+    &#34;&#34;&#34;
+    Renders the sandboxed iframe with will contain the d3 script widget
+    &#34;&#34;&#34;
+    if not self.story_id:
+        message = &#34;This object requires a valid story_id to render.&#34;
+        raise presalytics.lib.exceptions.MissingConfigException(message=message)
+    html = self.create_container()
+    return html</code></pre>
+</details>
+</dd>
+<dt id="presalytics.D3Widget.create_container"><code class="name flex">
+<span>def <span class="ident">create_container</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Wraps the D3 objects in an endpoint at the story API load via a sandboxed <code>&lt;iframe&gt;</code> that
+will be rendered</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L174-L198" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def create_container(self, **kwargs):
+    &#34;&#34;&#34;
+    Wraps the D3 objects in an endpoint at the story API load via a sandboxed `&lt;iframe&gt;` that
+    will be rendered
+    &#34;&#34;&#34;
+    params = {
+        &#34;story_host&#34;: self.get_client(delegate_login=True).story.api_client.external_root_url,
+        &#34;id&#34;: self.id,
+        &#34;story_id&#34;: self.story_id,
+    }
+    source_url = &#34;{story_host}/{story_id}/d3/{id}&#34;.format(**params)
+    empty_parent_div = lxml.html.Element(&#34;div&#34;, {
+        &#39;class&#39;: &#39;empty-parent bg-light&#39;,
+        &#39;style&#39;: &#39;height: 100%; width: 100%, display: block; text-align: left;&#39;
+    })
+    frame = lxml.html.Element(&#34;iframe&#34;, {
+        &#39;src&#39;: source_url,
+        &#39;frameborder&#39;: &#34;0&#34;,
+        &#39;scrolling&#39;: &#34;auto&#34;,
+        &#39;class&#39;: &#39;d3-responsive-frame&#39;,
+        &#39;style&#39;: &#39;max-height: none; max-width: none; height:100%; width: 100%;&#39;,
+        &#39;sandbox&#39;: &#39;allow-forms allow-scripts&#39;
+    })
+    empty_parent_div.append(frame)
+    return lxml.html.tostring(empty_parent_div).decode(&#39;utf-8&#39;)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.D3Widget.standalone_html"><code class="name flex">
+<span>def <span class="ident">standalone_html</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns string with an html document containing that d3 widget</p>
+<p>Loaded via the Story API d3 endpoint</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L255-L297" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def standalone_html(self) -&gt; str:
+    &#34;&#34;&#34;
+    Returns string with an html document containing that d3 widget
+
+    Loaded via the Story API d3 endpoint
+    &#34;&#34;&#34;
+    SIMPLE_HTML = jinja2.Template(&#34;&#34;&#34;&lt;!DOCTYPE html&gt;
+    &lt;html&gt;
+        &lt;head&gt;
+            &lt;meta charset=&#34;UTF-8&#34;&gt;
+            &lt;style&gt;
+            {{ css }}
+            &lt;/style&gt;
+        &lt;/head&gt;
+        &lt;body&gt;
+            &lt;script type=&#34;text/javascript&#34; src=&#34;{{ d3_url }}&#34;&gt;&lt;/script&gt;
+            &lt;div id=&#34;{{ id }}&#34; class=&#34;d3-container&#34;&gt;{{ html_fragment }}&lt;/div&gt;
+            &lt;script type=&#34;text/javascript&#34;&gt;
+
+                var id = &#39;{{id}}&#39;;
+
+                var data = JSON.parse(&#39;{{data|safe}}&#39;);
+
+                var container = document.getElementById(id);
+
+                {{script|safe}}
+        
+            &lt;/script&gt;
+        &lt;/body&gt;
+    &lt;/html&gt;&#34;&#34;&#34;)
+    data = json.dumps(self.d3_data)  # dont use hyphens in data keys
+    script = base64.b64decode(self.script64).decode(&#39;utf-8&#39;)  #type: ignore  #Required
+    extra_css = base64.b64decode(self.css64).decode(&#39;utf-8&#39;) if self.css64 else D3Widget.DEFAULT_CSS  #type: ignore  
+    html_fragment = base64.b64decode(self.html64).decode(&#39;utf-8&#39;) if self.html64 else None  #type: ignore   # disable nested iframes
+    context = {
+        &#34;id&#34;: self.id,
+        &#34;d3_url&#34;: presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get(&#39;d3&#39;),
+        &#34;data&#34;: data,
+        &#34;script&#34;: script,
+        &#34;css&#34;: extra_css,
+        &#34;html_fragment&#34;: html_fragment
+    }
+    return SIMPLE_HTML.render(**context)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="presalytics.story.components.WidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="presalytics.ChartUpdaterWidget"><code class="flex name class">
 <span>class <span class="ident">ChartUpdaterWidget</span></span>
 <span>(</span><span>name, story_id, chart_id, dto=None, data_table=None, **kwargs)</span>
@@ -4825,7 +5501,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L775-L848" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L772-L845" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ChartUpdaterWidget(UpdaterWidgetBase):
     &#34;&#34;&#34;
@@ -4920,7 +5596,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L826-L839" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L823-L836" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_dataframe(self) -&gt; pandas.DataFrame:
     &#34;&#34;&#34;
@@ -4946,7 +5622,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L841-L848" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L838-L845" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def put_dataframe(self, df: pandas.DataFrame):
     data_dict = df.to_dict(&#39;split&#39;)
@@ -5009,7 +5685,7 @@ the subclass' <code>_get_dto_table_name</code> method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L852-L901" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml.py#L849-L898" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class TableUpdaterWidget(UpdaterWidgetBase):
     &#34;&#34;&#34;
@@ -6283,7 +6959,7 @@ and feeds those values into the <a title="presalytics.lib.plugins.reveal_theme.R
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/ooxml.py#L7-L29" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/ooxml.py#L10-L41" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlTheme(presalytics.lib.plugins.reveal_theme.RevealCustomTheme):
     &#34;&#34;&#34;
@@ -6302,12 +6978,21 @@ and feeds those values into the <a title="presalytics.lib.plugins.reveal_theme.R
         config.update({&#39;path&#39;: import_path})
         with open(scss_file, &#39;r&#39;) as file:
             scss_template_string = file.read()
+        config = self.config_to_camelCase(config)
         scss_string = scss_template_string.format(**config)
         new_css = sass.compile(string=scss_string)
         style_string = &#34;&lt;style&gt;\n{0}\n&lt;/style&gt;&#34;.format(new_css)
         font_names = [config[&#34;headingFont&#34;], config[&#34;bodyFont&#34;]]
         links = self.get_fonts(font_names)
-        return links + style_string</code></pre>
+        return links + style_string
+    
+    def config_to_camelCase(self, config: typing.Dict) -&gt; typing.Dict:
+        new_dict = dict()
+        for key, val in config.items():
+            new_dict.update({
+                presalytics.story.util.to_camel_case(key): val
+            })
+        return new_dict</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -6316,6 +7001,28 @@ and feeds those values into the <a title="presalytics.lib.plugins.reveal_theme.R
 <li><a title="presalytics.lib.plugins.base.PluginBase" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase">PluginBase</a></li>
 <li>abc.ABC</li>
 </ul>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.OoxmlTheme.config_to_camelCase"><code class="name flex">
+<span>def <span class="ident">config_to_camelCase</span></span>(<span>self, config)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/ooxml.py#L35-L41" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def config_to_camelCase(self, config: typing.Dict) -&gt; typing.Dict:
+    new_dict = dict()
+    for key, val in config.items():
+        new_dict.update({
+            presalytics.story.util.to_camel_case(key): val
+        })
+    return new_dict</code></pre>
+</details>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme">RevealCustomTheme</a></b></code>:
@@ -8160,6 +8867,9 @@ def configure(cls, filenames: typing.List[str], variables: typing.Dict = {}, old
 <li><code><a title="presalytics.Client.get_request_id_header" href="/python-client/presalytics/index.html#presalytics.Client.get_request_id_header">get_request_id_header</a></code></li>
 <li><code><a title="presalytics.Client.download_file" href="/python-client/presalytics/index.html#presalytics.Client.download_file">download_file</a></code></li>
 <li><code><a title="presalytics.Client.get_client_info" href="/python-client/presalytics/index.html#presalytics.Client.get_client_info">get_client_info</a></code></li>
+<li><code><a title="presalytics.Client.upload_file_and_await_outline" href="/python-client/presalytics/index.html#presalytics.Client.upload_file_and_await_outline">upload_file_and_await_outline</a></code></li>
+<li><code><a title="presalytics.Client.STATUS_REPOLL_SECONDS" href="/python-client/presalytics/index.html#presalytics.Client.STATUS_REPOLL_SECONDS">STATUS_REPOLL_SECONDS</a></code></li>
+<li><code><a title="presalytics.Client.STATUS_REPOLL_MAX_CYCLES" href="/python-client/presalytics/index.html#presalytics.Client.STATUS_REPOLL_MAX_CYCLES">STATUS_REPOLL_MAX_CYCLES</a></code></li>
 </ul>
 </li>
 <li>
@@ -8242,6 +8952,16 @@ def configure(cls, filenames: typing.List[str], variables: typing.Dict = {}, old
 </ul>
 </li>
 <li>
+<h4><code><a title="presalytics.D3Widget" href="/python-client/presalytics/index.html#presalytics.D3Widget">D3Widget</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.D3Widget.read_file" href="/python-client/presalytics/index.html#presalytics.D3Widget.read_file">read_file</a></code></li>
+<li><code><a title="presalytics.D3Widget.to_html" href="/python-client/presalytics/index.html#presalytics.D3Widget.to_html">to_html</a></code></li>
+<li><code><a title="presalytics.D3Widget.create_container" href="/python-client/presalytics/index.html#presalytics.D3Widget.create_container">create_container</a></code></li>
+<li><code><a title="presalytics.D3Widget.standalone_html" href="/python-client/presalytics/index.html#presalytics.D3Widget.standalone_html">standalone_html</a></code></li>
+<li><code><a title="presalytics.D3Widget.DEFAULT_CSS" href="/python-client/presalytics/index.html#presalytics.D3Widget.DEFAULT_CSS">DEFAULT_CSS</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="presalytics.ChartUpdaterWidget" href="/python-client/presalytics/index.html#presalytics.ChartUpdaterWidget">ChartUpdaterWidget</a></code></h4>
 <ul class="">
 <li><code><a title="presalytics.ChartUpdaterWidget.get_dataframe" href="/python-client/presalytics/index.html#presalytics.ChartUpdaterWidget.get_dataframe">get_dataframe</a></code></li>
@@ -8300,6 +9020,9 @@ def configure(cls, filenames: typing.List[str], variables: typing.Dict = {}, old
 </li>
 <li>
 <h4><code><a title="presalytics.OoxmlTheme" href="/python-client/presalytics/index.html#presalytics.OoxmlTheme">OoxmlTheme</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.OoxmlTheme.config_to_camelCase" href="/python-client/presalytics/index.html#presalytics.OoxmlTheme.config_to_camelCase">config_to_camelCase</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="presalytics.RevealConfigPlugin" href="/python-client/presalytics/index.html#presalytics.RevealConfigPlugin">RevealConfigPlugin</a></code></h4>

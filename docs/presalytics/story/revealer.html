@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L0-L279" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L0-L281" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import os
 import shutil
@@ -91,16 +91,28 @@ class Revealer(presalytics.story.components.Renderer):
     def __init__(
             self,
             story_outline: &#39;StoryOutline&#39;,
+            pages: typing.List[int] = None,
             **kwargs):
         super(Revealer, self).__init__(story_outline, **kwargs)
         logger.info(&#34;Initializing story render for {}&#34;.format(story_outline.title))
         self.story_outline.validate()
+        if isinstance(pages, int):
+            pages = [pages]
+        elif not pages:
+            pages = [p for p in range(0, len(self.story_outline.pages))]
+        elif not isinstance(pages, list) or not isinstance(pages[0], int):
+            raise presalytics.lib.exceptions.InvalidArgumentException(message=&#39;&#34;pages&#34; must be a list of integers&#39;)
+        if len([p for p in pages if p &gt;= len(self.story_outline.pages)]) &gt; 0:
+            raise presalytics.lib.exceptions.InvalidArgumentException(message=&#39;&#34;pages&#34; can only contain integers lower than the number of pages in the story&#39;)
+        self.pages_to_render = pages
         self.base = self._make_base()
         logger.info(&#34;Loading plugins&#34;)
         reveal_params = {}
         for key, val in kwargs.items():
             if key in presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config.keys():
                 reveal_params.update({key: val})
+        if len(self.pages_to_render) == 1:
+            reveal_params.update({&#39;controls&#39;: False})  # hide controls on single page story
         reveal_plugin_config = {
             &#39;kind&#39;: &#39;script&#39;,
             &#39;name&#39;: &#39;reveal&#39;,
@@ -126,18 +138,6 @@ class Revealer(presalytics.story.components.Renderer):
             &#34;class&#34;: &#34;reveal&#34;,
         })
         lxml.etree.SubElement(base, &#34;div&#34;, attrib={&#34;class&#34;: &#34;slides&#34;})
-        try:
-            client = self.get_client()
-            website_token = client.token_util.token[&#34;access_token&#34;]
-            base.attrib[&#39;data-jwt&#39;] = client.token_util.token[&#34;access_token&#34;]
-            base.attrib[&#39;data-jwt-refresh&#39;] = client.token_util.token[&#34;refresh_token&#34;]
-            if presalytics.CONFIG.get(&#34;BROWSER_API_HOST&#34;, None):
-                story_target = presalytics.CONFIG[&#34;BROWSER_API_HOST&#34;] + &#34;/story&#34;
-            else:
-                story_target = client.story.api_client.configuration.host
-            base.attrib[&#39;data-story-target&#39;] = story_target
-        except Exception as ex:
-            logger.exception(ex, &#34;Could not obtain access token from revealer component.&#34;)
 
         try:
             story_id = self.story_outline.story_id
@@ -225,12 +225,14 @@ class Revealer(presalytics.story.components.Renderer):
         A `str` html fragment containing a reveal.js presentation
         &#34;&#34;&#34;
         reveal_base = self.base
-        for page in self.story_outline.pages:
-            slides_container = reveal_base[0]
-            slide = lxml.etree.SubElement(slides_container, &#34;section&#34;)
-            page_html = self.render_page(page)
-            slide_fragment = lxml.html.fragment_fromstring(page_html)
-            slide.append(slide_fragment)
+        for p in range(0, len(self.story_outline.pages)):
+            if p in self.pages_to_render:
+                page = self.story_outline.pages[p]
+                slides_container = reveal_base[0]
+                slide = lxml.etree.SubElement(slides_container, &#34;section&#34;)
+                page_html = self.render_page(page)
+                slide_fragment = lxml.html.fragment_fromstring(page_html)
+                slide.append(slide_fragment)
         return reveal_base
 
     def render_page(self, page: &#39;Page&#39;) -&gt; str:
@@ -318,7 +320,7 @@ class Revealer(presalytics.story.components.Renderer):
 <dl>
 <dt id="presalytics.story.revealer.Revealer"><code class="flex name class">
 <span>class <span class="ident">Revealer</span></span>
-<span>(</span><span>story_outline, **kwargs)</span>
+<span>(</span><span>story_outline, pages=None, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Renders <a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a> objects to
@@ -341,7 +343,7 @@ the rendering process</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L36-L280" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L36-L282" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Revealer(presalytics.story.components.Renderer):
     &#34;&#34;&#34;
@@ -374,16 +376,28 @@ the rendering process</dd>
     def __init__(
             self,
             story_outline: &#39;StoryOutline&#39;,
+            pages: typing.List[int] = None,
             **kwargs):
         super(Revealer, self).__init__(story_outline, **kwargs)
         logger.info(&#34;Initializing story render for {}&#34;.format(story_outline.title))
         self.story_outline.validate()
+        if isinstance(pages, int):
+            pages = [pages]
+        elif not pages:
+            pages = [p for p in range(0, len(self.story_outline.pages))]
+        elif not isinstance(pages, list) or not isinstance(pages[0], int):
+            raise presalytics.lib.exceptions.InvalidArgumentException(message=&#39;&#34;pages&#34; must be a list of integers&#39;)
+        if len([p for p in pages if p &gt;= len(self.story_outline.pages)]) &gt; 0:
+            raise presalytics.lib.exceptions.InvalidArgumentException(message=&#39;&#34;pages&#34; can only contain integers lower than the number of pages in the story&#39;)
+        self.pages_to_render = pages
         self.base = self._make_base()
         logger.info(&#34;Loading plugins&#34;)
         reveal_params = {}
         for key, val in kwargs.items():
             if key in presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config.keys():
                 reveal_params.update({key: val})
+        if len(self.pages_to_render) == 1:
+            reveal_params.update({&#39;controls&#39;: False})  # hide controls on single page story
         reveal_plugin_config = {
             &#39;kind&#39;: &#39;script&#39;,
             &#39;name&#39;: &#39;reveal&#39;,
@@ -409,18 +423,6 @@ the rendering process</dd>
             &#34;class&#34;: &#34;reveal&#34;,
         })
         lxml.etree.SubElement(base, &#34;div&#34;, attrib={&#34;class&#34;: &#34;slides&#34;})
-        try:
-            client = self.get_client()
-            website_token = client.token_util.token[&#34;access_token&#34;]
-            base.attrib[&#39;data-jwt&#39;] = client.token_util.token[&#34;access_token&#34;]
-            base.attrib[&#39;data-jwt-refresh&#39;] = client.token_util.token[&#34;refresh_token&#34;]
-            if presalytics.CONFIG.get(&#34;BROWSER_API_HOST&#34;, None):
-                story_target = presalytics.CONFIG[&#34;BROWSER_API_HOST&#34;] + &#34;/story&#34;
-            else:
-                story_target = client.story.api_client.configuration.host
-            base.attrib[&#39;data-story-target&#39;] = story_target
-        except Exception as ex:
-            logger.exception(ex, &#34;Could not obtain access token from revealer component.&#34;)
 
         try:
             story_id = self.story_outline.story_id
@@ -508,12 +510,14 @@ the rendering process</dd>
         A `str` html fragment containing a reveal.js presentation
         &#34;&#34;&#34;
         reveal_base = self.base
-        for page in self.story_outline.pages:
-            slides_container = reveal_base[0]
-            slide = lxml.etree.SubElement(slides_container, &#34;section&#34;)
-            page_html = self.render_page(page)
-            slide_fragment = lxml.html.fragment_fromstring(page_html)
-            slide.append(slide_fragment)
+        for p in range(0, len(self.story_outline.pages)):
+            if p in self.pages_to_render:
+                page = self.story_outline.pages[p]
+                slides_container = reveal_base[0]
+                slide = lxml.etree.SubElement(slides_container, &#34;section&#34;)
+                page_html = self.render_page(page)
+                slide_fragment = lxml.html.fragment_fromstring(page_html)
+                slide.append(slide_fragment)
         return reveal_base
 
     def render_page(self, page: &#39;Page&#39;) -&gt; str:
@@ -706,7 +710,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L192-L207" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L192-L209" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render(self):
     &#34;&#34;&#34;
@@ -717,12 +721,14 @@ reveal.js presentation as conent</p>
     A `str` html fragment containing a reveal.js presentation
     &#34;&#34;&#34;
     reveal_base = self.base
-    for page in self.story_outline.pages:
-        slides_container = reveal_base[0]
-        slide = lxml.etree.SubElement(slides_container, &#34;section&#34;)
-        page_html = self.render_page(page)
-        slide_fragment = lxml.html.fragment_fromstring(page_html)
-        slide.append(slide_fragment)
+    for p in range(0, len(self.story_outline.pages)):
+        if p in self.pages_to_render:
+            page = self.story_outline.pages[p]
+            slides_container = reveal_base[0]
+            slide = lxml.etree.SubElement(slides_container, &#34;section&#34;)
+            page_html = self.render_page(page)
+            slide_fragment = lxml.html.fragment_fromstring(page_html)
+            slide.append(slide_fragment)
     return reveal_base</code></pre>
 </details>
 </dd>
@@ -736,7 +742,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L209-L238" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L211-L240" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render_page(self, page: &#39;Page&#39;) -&gt; str:
     &#34;&#34;&#34;
@@ -800,7 +806,7 @@ Defaults to 127.0.0.1 (localhost).</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L240-L280" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L242-L282" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def present(self, files_path=None, debug=True, port=8082, host=&#39;127.0.0.1&#39;):
     &#34;&#34;&#34;

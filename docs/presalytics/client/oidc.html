@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L0-L276" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L0-L281" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import urllib.parse
 import requests
@@ -292,6 +292,11 @@ class OidcClient(object):
             &#34;audience&#34;: audience
         }
         return self._post(self.token_endpoint, post_data)
+
+    def get_user_id(self, token) -&gt; str:
+        payload = presalytics.client.oidc.OidcClient().validate_token(token)
+        return payload.get(&#39;https://api.presalytics.io/api_user_id&#39;, None)
+
     
         
 
@@ -364,7 +369,7 @@ Defaults to True.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L37-L268" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L37-L272" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OidcClient(object):
     &#34;&#34;&#34;
@@ -597,7 +602,11 @@ Defaults to True.</dd>
             &#34;grant_type&#34;: &#34;client_credentials&#34;,
             &#34;audience&#34;: audience
         }
-        return self._post(self.token_endpoint, post_data)</code></pre>
+        return self._post(self.token_endpoint, post_data)
+
+    def get_user_id(self, token) -&gt; str:
+        payload = presalytics.client.oidc.OidcClient().validate_token(token)
+        return payload.get(&#39;https://api.presalytics.io/api_user_id&#39;, None)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -793,6 +802,21 @@ Defaults to True.</dd>
     return self._post(self.token_endpoint, post_data)</code></pre>
 </details>
 </dd>
+<dt id="presalytics.client.oidc.OidcClient.get_user_id"><code class="name flex">
+<span>def <span class="ident">get_user_id</span></span>(<span>self, token)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L270-L272" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_user_id(self, token) -&gt; str:
+    payload = presalytics.client.oidc.OidcClient().validate_token(token)
+    return payload.get(&#39;https://api.presalytics.io/api_user_id&#39;, None)</code></pre>
+</details>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -823,6 +847,7 @@ Defaults to True.</dd>
 <li><code><a title="presalytics.client.oidc.OidcClient.validate_token" href="/python-client/presalytics/client/oidc.html#presalytics.client.oidc.OidcClient.validate_token">validate_token</a></code></li>
 <li><code><a title="presalytics.client.oidc.OidcClient.refresh_token" href="/python-client/presalytics/client/oidc.html#presalytics.client.oidc.OidcClient.refresh_token">refresh_token</a></code></li>
 <li><code><a title="presalytics.client.oidc.OidcClient.client_credentials_token" href="/python-client/presalytics/client/oidc.html#presalytics.client.oidc.OidcClient.client_credentials_token">client_credentials_token</a></code></li>
+<li><code><a title="presalytics.client.oidc.OidcClient.get_user_id" href="/python-client/presalytics/client/oidc.html#presalytics.client.oidc.OidcClient.get_user_id">get_user_id</a></code></li>
 </ul>
 </li>
 </ul>

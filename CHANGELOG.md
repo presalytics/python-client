@@ -1,3 +1,7 @@
+## v0.5.11 (2020-08-13)
+
+* Fix single-page rendering bugs
+
 ## v0.5.10 (2020-08-13)
 
 * Enable single-page rendering

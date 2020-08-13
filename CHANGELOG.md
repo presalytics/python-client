@@ -2,6 +2,7 @@
 
 * Add methods to support async in the story api
 * Update tests to support async
+* Remove jwts from html generation
 
 ## v0.5.8 (2020-07-30)
 

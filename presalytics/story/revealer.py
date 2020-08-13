@@ -64,17 +64,27 @@ class Revealer(presalytics.story.components.Renderer):
     def __init__(
             self,
             story_outline: 'StoryOutline',
+            pages: typing.List[int] = None,
             **kwargs):
         super(Revealer, self).__init__(story_outline, **kwargs)
         logger.info("Initializing story render for {}".format(story_outline.title))
         self.story_outline.validate()
+        if isinstance(pages, int):
+            pages = [pages]
+        elif not pages:
+            pages = [p for p in range(0, len(self.story_outline.pages))]
+        elif not isinstance(pages, list) and not isinstance(pages[0], int):
+            raise presalytics.lib.exceptions.InvalidArgumentException(message='"pages" must be a list of integers')
+        if len([p for p in pages if p >= len(self.story_outline.pages)]) > 0:
+            raise presalytics.lib.exceptions.InvalidArgumentException(message='"pages" can only contain integers lower than the number of pages in the story')
+        self.pages_to_render = pages
         self.base = self._make_base()
         logger.info("Loading plugins")
         reveal_params = {}
         for key, val in kwargs.items():
             if key in presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config.keys():
                 reveal_params.update({key: val})
-        if len(self.story_outline.pages) == 1:
+        if len(self.pages_to_render) == 1:
             reveal_params.update({'controls': False})  # hide controls on single page story
         reveal_plugin_config = {
             'kind': 'script',
@@ -133,7 +143,7 @@ class Revealer(presalytics.story.components.Renderer):
         ]
         return tags
 
-    def package_as_standalone(self, pages=None):
+    def package_as_standalone(self):
         """
         Render the story outline as a html document with only the 
         reveal.js presentation as conent
@@ -142,7 +152,7 @@ class Revealer(presalytics.story.components.Renderer):
         ----------
         A `str` containing a complete html document with the presentation
         """
-        pres = self.render(pages=pages)
+        pres = self.render()
         body = E.BODY()
         body.append(pres)
         body = self.strip_unauthorized_scripts(body)
@@ -179,7 +189,7 @@ class Revealer(presalytics.story.components.Renderer):
         info = self.story_outline.info
         info.date_modified = datetime.datetime.utcnow()
 
-    def render(self, pages=None):
+    def render(self):
         """
         Creates a reveal.js presenation html fragement
 
@@ -188,10 +198,8 @@ class Revealer(presalytics.story.components.Renderer):
         A `str` html fragment containing a reveal.js presentation
         """
         reveal_base = self.base
-        if not pages:
-            pages_to_render = [p for p in range(0, len(self.story_outline.pages))]
         for p in range(0, len(self.story_outline.pages)):
-            if p in pages_to_render:
+            if p in self.pages_to_render:
                 page = self.story_outline.pages[p]
                 slides_container = reveal_base[0]
                 slide = lxml.etree.SubElement(slides_container, "section")

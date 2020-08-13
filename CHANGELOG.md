@@ -1,3 +1,7 @@
+## v0.5.10 (2020-08-13)
+
+* Enable single-page rendering
+
 ## v0.5.9 (2020-08-11)
 
 * Add methods to support async in the story api

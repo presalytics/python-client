@@ -304,11 +304,8 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         Wraps the Presalytics API Ooxml Automation service SVG endpoint in an `<iframe>` that
         will be rendered inside of a story
         """
-        client = self.get_client()
-        self.token = client.token_util.token["access_token"]
         svg_container_div = lxml.html.Element("div", {
             'class': 'svg-container',
-            'data-jwt': self.token,
             'data-object-type': self.endpoint_map.endpoint_id,
             'data-object-id': self.object_ooxml_id
         })

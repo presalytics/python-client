@@ -73,7 +73,7 @@ class Revealer(presalytics.story.components.Renderer):
             pages = [pages]
         elif not pages:
             pages = [p for p in range(0, len(self.story_outline.pages))]
-        elif not isinstance(pages, list) and not isinstance(pages[0], int):
+        elif not isinstance(pages, list) or not isinstance(pages[0], int):
             raise presalytics.lib.exceptions.InvalidArgumentException(message='"pages" must be a list of integers')
         if len([p for p in pages if p >= len(self.story_outline.pages)]) > 0:
             raise presalytics.lib.exceptions.InvalidArgumentException(message='"pages" can only contain integers lower than the number of pages in the story')

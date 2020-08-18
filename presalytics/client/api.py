@@ -453,8 +453,19 @@ class Client(object):
         if not repoll_max_cycles:
             repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
         story = self.story.story_post_file(file=file)
+        self.await_outline(story.id)
+        return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)
+
+    def await_outline(self,
+                      story_id,
+                      status_repoll_seconds: int = None, 
+                      repoll_max_cycles: int = None):
         task_running = True
         repoll_cycle_count = 0
+        if not status_repoll_seconds:
+            status_repoll_seconds = self.STATUS_REPOLL_SECONDS
+        if not repoll_max_cycles:
+            repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
         while task_running:
             status, status_code, _ = self.story.story_id_status_get_with_http_info(story.id)
             if status_code == 204:
@@ -468,7 +479,9 @@ class Client(object):
                     logger.info("Story creation task still running.  Rechecking status in {0} seconds".format(status_repoll_seconds))
                     time.sleep(status_repoll_seconds)
                     repoll_cycle_count += 1
-        return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)
+        return self.story.story_id_outline_get(story_id)
+
+
 
                 
         

@@ -467,7 +467,7 @@ class Client(object):
         if not repoll_max_cycles:
             repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
         while task_running:
-            status, status_code, _ = self.story.story_id_status_get_with_http_info(story.id)
+            status, status_code, _ = self.story.story_id_status_get_with_http_info(story_id)
             if status_code == 204:
                 task_running = False
             elif status_code == 200:

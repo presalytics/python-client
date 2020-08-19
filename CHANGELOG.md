@@ -3,6 +3,7 @@
 
 * Fix api_name and external_root_url bug
 * Incorporate async to workflows
+* add new story api endpoints
 
 ## v0.5.11 (2020-08-13)
 

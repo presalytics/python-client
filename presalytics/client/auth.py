@@ -15,6 +15,7 @@ import presalytics.lib.constants
 import presalytics.story.outline
 import typing
 import mimetypes
+import abc
 from werkzeug.datastructures import FileStorage
 if typing.TYPE_CHECKING:
     from presalytics.client.api import Client
@@ -115,7 +116,7 @@ class TokenUtil(object):
         return token
 
 
-class AuthenticationMixIn(object):
+class AuthenticationMixIn(abc.ABC):
     def __init__(self, parent: 'Client', ignore_api_exceptions=False, **kwargs):
         self._ignore_api_exceptions = ignore_api_exceptions
         self.parent = weakref.ref(parent)
@@ -123,8 +124,9 @@ class AuthenticationMixIn(object):
         self.update_configuration()
 
     @property
+    @abc.abstractmethod
     def api_name(self):
-        return self.configuration.host.rstrip("/").split("/")[-1]
+        return NotImplemented
 
     def call_api(
             self, resource_path, method,
@@ -251,11 +253,10 @@ class AuthenticationMixIn(object):
 
     @property
     def external_root_url(self):
-        base_uri = self.configuration.host.rstrip("/").split("/")[-1]
-        service_key = base_uri.replace("-", "_").upper()
-        if presalytics.CONFIG.get(service_key, None):
+        service_key = self.api_name.replace("-", "_").upper()
+        if presalytics.CONFIG.get("BROWSER_API_HOST", dict()).get(service_key, None):
             service_host = presalytics.CONFIG["BROWSER_API_HOST"][service_key]
-            target = service_host.rstrip("/") + "/" + base_uri
+            target = service_host + "/" + self.api_name
         else:
             target = self.configuration.host
         return target

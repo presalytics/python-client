@@ -1,5 +1,5 @@
 
-## v0.5.11 (2020-08-18)
+## v0.5.12 (2020-08-18)
 
 * Fix api_name and external_root_url bug
 * Incorporate async to workflows

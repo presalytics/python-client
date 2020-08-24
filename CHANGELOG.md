@@ -1,3 +1,7 @@
+## v0.5.14 (2020-08-24)
+
+* Increase match greediness in `presalytics.lib.widgets.ooxml_editors.TextReplace`
+
 ## v0.5.13 (2020-08-18)
 
 * add new story api endpoints

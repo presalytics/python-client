@@ -186,8 +186,12 @@ class TextReplace(XmlTransformBase):
                 ret += item.text
             return ret
 
-        def get_position(self, match_string):
-            return self.get_plaintext_string().find(match_string)
+        def get_position(self, match_strings):
+            for potential_match in match_strings:
+                i = self.get_plaintext_string().find(potential_match) 
+                if i >= 0:
+                    break
+            return i, potential_match
 
         def get_list_index_of_position(self, position: int):
             for item in self._list:
@@ -232,10 +236,12 @@ class TextReplace(XmlTransformBase):
     def replace_handlebars(self, info_list, params):
         """
         Method that finds template tags and replaces them 
+
+        TODO: Upgrade to Liquid Syntax (or similar)
         """
         for key, val in params.items():
-            match_key = "{{" + key + "}}"
-            match_start_position =  info_list.get_position(match_key)
+            match_keys = ["{{" + key + "}}", "{{ " + key + " }}"]
+            match_start_position, match_key =  info_list.get_position(match_keys)
             if match_start_position > -1:
                 match_end_position = match_start_position + len(match_key) - 1
                 match_start_index = info_list.get_list_index_of_position(match_start_position)

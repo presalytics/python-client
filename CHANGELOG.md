@@ -1,3 +1,8 @@
+## v0.5.16 (2020-08-28)
+
+* Add toolbar to reveal plugin
+* Change reveal.js approved links from cdn to presalytics.io
+
 ## v0.5.15 (2020-08-24)
 
 * Fix color insert libreoffice compatibility bug in `presalytics.lib.widgets.ooxml_editors.ChangeShapeColor` 

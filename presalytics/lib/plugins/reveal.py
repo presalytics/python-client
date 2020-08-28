@@ -1,3 +1,4 @@
+import presalytics
 import presalytics.lib.plugins.base as ext
 import presalytics.lib.plugins.jinja as jinja
 
@@ -25,6 +26,34 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
             'name': 'external_links',
             'config': {
                 'approved_styles_key': 'reveal.base'
+            }
+        },
+        {
+            'kind': 'script',
+            'name': 'external_scripts',
+            'config': {
+                'approved_scripts_key': 'reveal.screenfull'
+            }
+        },
+        {
+            'kind': 'style',
+            'name': 'external_links',
+            'config': {
+                'approved_styles_key': 'reveal.toolbar'
+            }
+        },
+        {
+            'kind': 'style',
+            'name': 'external_links',
+            'config': {
+                'approved_styles_key': 'font-awesome'
+            }
+        },
+        {
+            'kind': 'script',
+            'name': 'external_scripts',
+            'config': {
+                'approved_scripts_key': 'reveal.toolbar'
             }
         },
         {
@@ -61,11 +90,11 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
 
     template = """
     <script type="text/javascript"> 
-        window.onload = function(e) {
-            Reveal.initialize(
-                {{ reveal_config|tojson(indent=4) }}
-            );
-        };
+        window.addEventListener('toolbar-initialized', function(e) {
+            var config = {{ reveal_config|tojson(indent=4) }};
+            config.plugins = [window.presalyticsToolbar];
+            Reveal.initialize(config);
+        });
     </script>
     """
     """
@@ -219,7 +248,48 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
         'height': "100%",
         'margin': 0,
         'minScale': 1,
-        'maxScale': 1
+        'maxScale': 1,
+
+        # Presalytics toolbar
+        'showToolbar': True,
+
+        'toolbar': {
+            # Specifies where the toolbar will be shown: 'top' or 'bottom'
+            'position': 'bottom',
+
+            # Add button to toggle fullscreen mode for the presentation
+            'fullscreen': True,
+
+            # Add button to toggle the overview mode on and off
+            'overview': True,
+
+            # Add button to pause (hide) the presentation display
+            'pause': True,
+
+            # Add button to show the speaker notes
+            'notes': False,
+
+            # Add button to show the help overlay
+            'help': False,
+
+            # If true, the reveal.js-menu will be moved into the toolbar.
+            # Set to false to leave the menu on its own.
+            'captureMenu': True,
+
+            # If true, the playback control will be moved into the toolbar.
+            # This is only relevant if the presentation is configured to autoSlide.
+            # Set to false to leave the menu on its own.
+            'capturePlaybackControl': True,
+
+            # By default the menu will load it's own font-awesome library
+            # icons. If your presentation needs to load a different
+            # font-awesome library the 'loadIcons' option can be set to false
+            # and the menu will not attempt to load the font-awesome library.
+            'loadIcons': True,
+
+            # Instructs the toolbar to load the Presaytics chat interface
+            'chat': True,
+        }
     }
     """
     A dictionary containing default values for rendering presalytics stories

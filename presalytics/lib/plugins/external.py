@@ -55,25 +55,27 @@ class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
 
     STYLES_MAP = {
         'reveal': {
-            'base': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css',
+            'base': '{0}/static/vendor/reveal/reveal.css'.format(site_host),
             'themes': {
-                'beige': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/beige.min.css',
-                'black': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/black.min.css',
-                'blood': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/blood.min.css',
-                'league': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/league.min.css',
-                'moon': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/moon.min.css',
-                'night': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/night.min.css',
-                'serif': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/serif.min.css',
-                'simple': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/simple.min.css',
-                'sky': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/sky.min.css',
-                'solarized': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/solarized.min.css',
-                'white': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css'
+                'beige': '{0}/static/vendor/reveal/theme/beige.css'.format(site_host),
+                'black': '{0}/static/vendor/reveal/theme/black.css'.format(site_host),
+                'blood': '{0}/static/vendor/reveal/theme/blood.css'.format(site_host),
+                'league': '{0}/static/vendor/reveal/theme/league.css'.format(site_host),
+                'moon': '{0}/static/vendor/reveal/theme/moon.css'.format(site_host),
+                'night': '{0}/static/vendor/reveal/theme/night.css'.format(site_host),
+                'serif': '{0}/static/vendor/reveal/theme/serif.css'.format(site_host),
+                'simple': '{0}/static/vendor/reveal/theme/simple.css'.format(site_host),
+                'sky': '{0}/static/vendor/reveal/theme/sky.min.css'.format(site_host),
+                'solarized': '{0}/static/vendor/reveal/theme/solarized.css'.format(site_host),
+                'white': '{0}/static/vendor/reveal/theme/white.css'.format(site_host)
             },
             'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css',
-            'customizations': '{0}/static/css/reveal-customizations.css'.format(site_host) 
+            'customizations': '{0}/static/css/reveal-customizations.css'.format(site_host),
+            'toolbar': '{0}/static/css/toolbar.css'.format(site_host),
         },
         'preloaders' : '{0}/static/css/preloaders.css'.format(site_host),
-        'bootstrap4': "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        'bootstrap4': "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css",
+        'font-awesome': '{0}/static/vendor/fontawesome-free/css/all.min.css'.format(site_host),
     }
     
     """
@@ -116,15 +118,16 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
         'd3': 'https://d3js.org/d3.v5.min.js',
         'd3v3': 'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js',
         'reveal': {
-            'base': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js',
-            'marked': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/marked.js',
-            'markdown': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js',
-            'highlight': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/highlight/highlight.min.js',
-            'math': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js',
-            'zoom': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js',
-            'notes': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js',
-            'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js',
+            'base': '{0}/static/vendor/reveal/reveal.js'.format(site_host),
+            # 'markdown': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js',
+            # 'highlight': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/highlight/highlight.min.js',
+            # 'math': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js',
+            # 'zoom': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js',
+            # 'notes': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js',
+            # 'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js',
             'customizations': '{0}/static/js/revealcustomizations.js'.format(site_host),
+            'toolbar': '{0}/static/js/toolbar.js'.format(site_host),
+            'screenfull': '{0}/static/vendor/screenfull/screenfull.min.js'.format(site_host),
 
         },
         'mpld3': '{0}/static/mpld3/mpld3.min.js'.format(site_host),

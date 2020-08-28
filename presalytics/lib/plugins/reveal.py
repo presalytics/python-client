@@ -289,6 +289,9 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
 
             # Instructs the toolbar to load the Presaytics chat interface
             'chat': True,
+
+            # Shows the make pdf button
+            'pdf': True,
         }
     }
     """

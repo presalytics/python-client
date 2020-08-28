@@ -116,7 +116,7 @@ class ChangeShapeColor(XmlTransformBase):
         else:
             shapes = lxml_element.findall('.//{*}sp')
         object_name = params.get("object_name", None)
-        color = params.get("hex_color")
+        color = params.get("hex_color").lstrip("#").upper()
         if object_name:
             for shape in shapes:
                 is_target = False

@@ -1,3 +1,7 @@
+## v0.5.15 (2020-08-24)
+
+* Fix color insert libreoffice compatibility bug in `presalytics.lib.widgets.ooxml_editors.ChangeShapeColor` 
+
 ## v0.5.14 (2020-08-24)
 
 * Increase match greediness in `presalytics.lib.widgets.ooxml_editors.TextReplace`

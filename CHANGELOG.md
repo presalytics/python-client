@@ -1,3 +1,7 @@
+## v0.5.17 (2020-08-30)
+
+* Fix font-awesome for CORS/CDN in `external.py`
+
 ## v0.5.16 (2020-08-28)
 
 * Add toolbar to reveal plugin

@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L0-L157" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L0-L160" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import typing
 import presalytics
@@ -82,25 +82,27 @@ class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
 
     STYLES_MAP = {
         &#39;reveal&#39;: {
-            &#39;base&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css&#39;,
+            &#39;base&#39;: &#39;{0}/static/vendor/reveal/reveal.css&#39;.format(site_host),
             &#39;themes&#39;: {
-                &#39;beige&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/beige.min.css&#39;,
-                &#39;black&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/black.min.css&#39;,
-                &#39;blood&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/blood.min.css&#39;,
-                &#39;league&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/league.min.css&#39;,
-                &#39;moon&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/moon.min.css&#39;,
-                &#39;night&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/night.min.css&#39;,
-                &#39;serif&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/serif.min.css&#39;,
-                &#39;simple&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/simple.min.css&#39;,
-                &#39;sky&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/sky.min.css&#39;,
-                &#39;solarized&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/solarized.min.css&#39;,
-                &#39;white&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css&#39;
+                &#39;beige&#39;: &#39;{0}/static/vendor/reveal/theme/beige.css&#39;.format(site_host),
+                &#39;black&#39;: &#39;{0}/static/vendor/reveal/theme/black.css&#39;.format(site_host),
+                &#39;blood&#39;: &#39;{0}/static/vendor/reveal/theme/blood.css&#39;.format(site_host),
+                &#39;league&#39;: &#39;{0}/static/vendor/reveal/theme/league.css&#39;.format(site_host),
+                &#39;moon&#39;: &#39;{0}/static/vendor/reveal/theme/moon.css&#39;.format(site_host),
+                &#39;night&#39;: &#39;{0}/static/vendor/reveal/theme/night.css&#39;.format(site_host),
+                &#39;serif&#39;: &#39;{0}/static/vendor/reveal/theme/serif.css&#39;.format(site_host),
+                &#39;simple&#39;: &#39;{0}/static/vendor/reveal/theme/simple.css&#39;.format(site_host),
+                &#39;sky&#39;: &#39;{0}/static/vendor/reveal/theme/sky.min.css&#39;.format(site_host),
+                &#39;solarized&#39;: &#39;{0}/static/vendor/reveal/theme/solarized.css&#39;.format(site_host),
+                &#39;white&#39;: &#39;{0}/static/vendor/reveal/theme/white.css&#39;.format(site_host)
             },
             &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css&#39;,
-            &#39;customizations&#39;: &#39;{0}/static/css/reveal-customizations.css&#39;.format(site_host) 
+            &#39;customizations&#39;: &#39;{0}/static/css/reveal-customizations.css&#39;.format(site_host),
+            &#39;toolbar&#39;: &#39;{0}/static/css/toolbar.css&#39;.format(site_host),
         },
         &#39;preloaders&#39; : &#39;{0}/static/css/preloaders.css&#39;.format(site_host),
-        &#39;bootstrap4&#39;: &#34;https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css&#34;
+        &#39;bootstrap4&#39;: &#34;https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css&#34;,
+        &#39;font-awesome&#39;: &#39;{0}/static/vendor/fontawesome-free/css/all.min.css&#39;.format(site_host),
     }
     
     &#34;&#34;&#34;
@@ -143,15 +145,16 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
         &#39;d3&#39;: &#39;https://d3js.org/d3.v5.min.js&#39;,
         &#39;d3v3&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js&#39;,
         &#39;reveal&#39;: {
-            &#39;base&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js&#39;,
-            &#39;marked&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/marked.js&#39;,
-            &#39;markdown&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js&#39;,
-            &#39;highlight&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/highlight/highlight.min.js&#39;,
-            &#39;math&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js&#39;,
-            &#39;zoom&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js&#39;,
-            &#39;notes&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js&#39;,
-            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js&#39;,
+            &#39;base&#39;: &#39;{0}/static/vendor/reveal/reveal.js&#39;.format(site_host),
+            # &#39;markdown&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js&#39;,
+            # &#39;highlight&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/highlight/highlight.min.js&#39;,
+            # &#39;math&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js&#39;,
+            # &#39;zoom&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js&#39;,
+            # &#39;notes&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js&#39;,
+            # &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js&#39;,
             &#39;customizations&#39;: &#39;{0}/static/js/revealcustomizations.js&#39;.format(site_host),
+            &#39;toolbar&#39;: &#39;{0}/static/js/toolbar.js&#39;.format(site_host),
+            &#39;screenfull&#39;: &#39;{0}/static/vendor/screenfull/screenfull.min.js&#39;.format(site_host),
 
         },
         &#39;mpld3&#39;: &#39;{0}/static/mpld3/mpld3.min.js&#39;.format(site_host),
@@ -296,7 +299,7 @@ config into an html <code>&lt;link&gt;</code> fragment.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L44-L100" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L44-L102" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
     &#34;&#34;&#34;
@@ -312,25 +315,27 @@ config into an html <code>&lt;link&gt;</code> fragment.</p>
 
     STYLES_MAP = {
         &#39;reveal&#39;: {
-            &#39;base&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css&#39;,
+            &#39;base&#39;: &#39;{0}/static/vendor/reveal/reveal.css&#39;.format(site_host),
             &#39;themes&#39;: {
-                &#39;beige&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/beige.min.css&#39;,
-                &#39;black&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/black.min.css&#39;,
-                &#39;blood&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/blood.min.css&#39;,
-                &#39;league&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/league.min.css&#39;,
-                &#39;moon&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/moon.min.css&#39;,
-                &#39;night&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/night.min.css&#39;,
-                &#39;serif&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/serif.min.css&#39;,
-                &#39;simple&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/simple.min.css&#39;,
-                &#39;sky&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/sky.min.css&#39;,
-                &#39;solarized&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/solarized.min.css&#39;,
-                &#39;white&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css&#39;
+                &#39;beige&#39;: &#39;{0}/static/vendor/reveal/theme/beige.css&#39;.format(site_host),
+                &#39;black&#39;: &#39;{0}/static/vendor/reveal/theme/black.css&#39;.format(site_host),
+                &#39;blood&#39;: &#39;{0}/static/vendor/reveal/theme/blood.css&#39;.format(site_host),
+                &#39;league&#39;: &#39;{0}/static/vendor/reveal/theme/league.css&#39;.format(site_host),
+                &#39;moon&#39;: &#39;{0}/static/vendor/reveal/theme/moon.css&#39;.format(site_host),
+                &#39;night&#39;: &#39;{0}/static/vendor/reveal/theme/night.css&#39;.format(site_host),
+                &#39;serif&#39;: &#39;{0}/static/vendor/reveal/theme/serif.css&#39;.format(site_host),
+                &#39;simple&#39;: &#39;{0}/static/vendor/reveal/theme/simple.css&#39;.format(site_host),
+                &#39;sky&#39;: &#39;{0}/static/vendor/reveal/theme/sky.min.css&#39;.format(site_host),
+                &#39;solarized&#39;: &#39;{0}/static/vendor/reveal/theme/solarized.css&#39;.format(site_host),
+                &#39;white&#39;: &#39;{0}/static/vendor/reveal/theme/white.css&#39;.format(site_host)
             },
             &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css&#39;,
-            &#39;customizations&#39;: &#39;{0}/static/css/reveal-customizations.css&#39;.format(site_host) 
+            &#39;customizations&#39;: &#39;{0}/static/css/reveal-customizations.css&#39;.format(site_host),
+            &#39;toolbar&#39;: &#39;{0}/static/css/toolbar.css&#39;.format(site_host),
         },
         &#39;preloaders&#39; : &#39;{0}/static/css/preloaders.css&#39;.format(site_host),
-        &#39;bootstrap4&#39;: &#34;https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css&#34;
+        &#39;bootstrap4&#39;: &#34;https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css&#34;,
+        &#39;font-awesome&#39;: &#39;{0}/static/vendor/fontawesome-free/css/all.min.css&#39;.format(site_host),
     }
     
     &#34;&#34;&#34;
@@ -383,7 +388,7 @@ of a <a title="presalytics.story.outline.Plugin" href="/python-client/presalytic
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L88-L100" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L90-L102" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def to_style(self, config, **kwargs):
     &#34;&#34;&#34;
@@ -425,7 +430,7 @@ config into an html <code>&lt;script&gt;</code> fragment.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L103-L158" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L105-L161" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
     &#34;&#34;&#34;
@@ -443,15 +448,16 @@ config into an html <code>&lt;script&gt;</code> fragment.</p>
         &#39;d3&#39;: &#39;https://d3js.org/d3.v5.min.js&#39;,
         &#39;d3v3&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js&#39;,
         &#39;reveal&#39;: {
-            &#39;base&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js&#39;,
-            &#39;marked&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/marked.js&#39;,
-            &#39;markdown&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js&#39;,
-            &#39;highlight&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/highlight/highlight.min.js&#39;,
-            &#39;math&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js&#39;,
-            &#39;zoom&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js&#39;,
-            &#39;notes&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js&#39;,
-            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js&#39;,
+            &#39;base&#39;: &#39;{0}/static/vendor/reveal/reveal.js&#39;.format(site_host),
+            # &#39;markdown&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js&#39;,
+            # &#39;highlight&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/highlight/highlight.min.js&#39;,
+            # &#39;math&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js&#39;,
+            # &#39;zoom&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js&#39;,
+            # &#39;notes&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js&#39;,
+            # &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js&#39;,
             &#39;customizations&#39;: &#39;{0}/static/js/revealcustomizations.js&#39;.format(site_host),
+            &#39;toolbar&#39;: &#39;{0}/static/js/toolbar.js&#39;.format(site_host),
+            &#39;screenfull&#39;: &#39;{0}/static/vendor/screenfull/screenfull.min.js&#39;.format(site_host),
 
         },
         &#39;mpld3&#39;: &#39;{0}/static/mpld3/mpld3.min.js&#39;.format(site_host),
@@ -511,7 +517,7 @@ of a <a title="presalytics.story.outline.Plugin" href="/python-client/presalytic
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L146-L158" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L149-L161" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def to_script(self, config, **kwargs):
     &#34;&#34;&#34;

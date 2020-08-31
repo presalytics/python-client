@@ -198,7 +198,7 @@ IGNORE_PATHS: list of str, optional
 
 BROWSER_API_HOST: dict, optional
     If present, the root url for browser-based api calls.  Each service can have an independent browser host.
-    Service keys include `OOXML_AUTOMATION`, `STORY`, `DOC_CONVERTER`.  May be required when services are running on a cluster that
+    Service keys include `OOXML_AUTOMATION`, `STORY`, `DOC_CONVERTER`, and `SITE`.  May be required when services are running on a cluster that
     deletegates certificate authentication to an external service or in debug/test environments.  
     See for more info: https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content
 
@@ -428,7 +428,7 @@ registries.</dd>
 <dt><strong><code>BROWSER_API_HOST</code></strong> :&ensp;<code>dict</code>, optional</dt>
 <dd>If present, the root url for browser-based api calls.
 Each service can have an independent browser host.
-Service keys include <code>OOXML_AUTOMATION</code>, <code>STORY</code>, <code>DOC_CONVERTER</code>.
+Service keys include <code>OOXML_AUTOMATION</code>, <code>STORY</code>, <code>DOC_CONVERTER</code>, and <code>SITE</code>.
 May be required when services are running on a cluster that
 deletegates certificate authentication to an external service or in debug/test environments.<br>
 See for more info: <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content">https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content</a></dd>
@@ -982,7 +982,7 @@ if the user has not authenticated by the time the interval has expired.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L34-L471" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L34-L482" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Client(object):
     &#34;&#34;&#34; Class for interacting with Presalytics API endpoints
@@ -1406,10 +1406,21 @@ if the user has not authenticated by the time the interval has expired.</dd>
         if not repoll_max_cycles:
             repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
         story = self.story.story_post_file(file=file)
+        self.await_outline(story.id)
+        return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)
+
+    def await_outline(self,
+                      story_id,
+                      status_repoll_seconds: int = None, 
+                      repoll_max_cycles: int = None):
         task_running = True
         repoll_cycle_count = 0
+        if not status_repoll_seconds:
+            status_repoll_seconds = self.STATUS_REPOLL_SECONDS
+        if not repoll_max_cycles:
+            repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
         while task_running:
-            status, status_code, _ = self.story.story_id_status_get_with_http_info(story.id)
+            status, status_code, _ = self.story.story_id_status_get_with_http_info(story_id)
             if status_code == 204:
                 task_running = False
             elif status_code == 200:
@@ -1421,7 +1432,7 @@ if the user has not authenticated by the time the interval has expired.</dd>
                     logger.info(&#34;Story creation task still running.  Rechecking status in {0} seconds&#34;.format(status_repoll_seconds))
                     time.sleep(status_repoll_seconds)
                     repoll_cycle_count += 1
-        return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)</code></pre>
+        return self.story.story_id_outline_get(story_id)</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
@@ -1699,7 +1710,7 @@ components and new client instances</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L435-L471" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L435-L457" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def upload_file_and_await_outline(self, 
                                   file: typing.Union[FileStorage, str],
@@ -1722,10 +1733,32 @@ components and new client instances</p>
     if not repoll_max_cycles:
         repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
     story = self.story.story_post_file(file=file)
+    self.await_outline(story.id)
+    return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.Client.await_outline"><code class="name flex">
+<span>def <span class="ident">await_outline</span></span>(<span>self, story_id, status_repoll_seconds=None, repoll_max_cycles=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L459-L482" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def await_outline(self,
+                  story_id,
+                  status_repoll_seconds: int = None, 
+                  repoll_max_cycles: int = None):
     task_running = True
     repoll_cycle_count = 0
+    if not status_repoll_seconds:
+        status_repoll_seconds = self.STATUS_REPOLL_SECONDS
+    if not repoll_max_cycles:
+        repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
     while task_running:
-        status, status_code, _ = self.story.story_id_status_get_with_http_info(story.id)
+        status, status_code, _ = self.story.story_id_status_get_with_http_info(story_id)
         if status_code == 204:
             task_running = False
         elif status_code == 200:
@@ -1737,7 +1770,7 @@ components and new client instances</p>
                 logger.info(&#34;Story creation task still running.  Rechecking status in {0} seconds&#34;.format(status_repoll_seconds))
                 time.sleep(status_repoll_seconds)
                 repoll_cycle_count += 1
-    return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)</code></pre>
+    return self.story.story_id_outline_get(story_id)</code></pre>
 </details>
 </dd>
 </dl>
@@ -4745,7 +4778,7 @@ as variables to modify the underlying OpenOfficeXml</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L379-L496" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L385-L502" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
     &#34;&#34;&#34;
@@ -4883,7 +4916,7 @@ as variables to modify the underlying OpenOfficeXml</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L441-L448" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L447-L454" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_xml(self, xml_str) -&gt; str:
     &#34;&#34;&#34;
@@ -4903,7 +4936,7 @@ as variables to modify the underlying OpenOfficeXml</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L450-L467" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L456-L473" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update(self):
     &#34;&#34;&#34;
@@ -5960,7 +5993,7 @@ have their color changed.</dd>
         else:
             shapes = lxml_element.findall(&#39;.//{*}sp&#39;)
         object_name = params.get(&#34;object_name&#34;, None)
-        color = params.get(&#34;hex_color&#34;)
+        color = params.get(&#34;hex_color&#34;).lstrip(&#34;#&#34;).upper()
         if object_name:
             for shape in shapes:
                 is_target = False
@@ -6059,7 +6092,7 @@ def replace_color_on_target_shape(shape_xml: lxml.etree.Element, new_color: str)
     else:
         shapes = lxml_element.findall(&#39;.//{*}sp&#39;)
     object_name = params.get(&#34;object_name&#34;, None)
-    color = params.get(&#34;hex_color&#34;)
+    color = params.get(&#34;hex_color&#34;).lstrip(&#34;#&#34;).upper()
     if object_name:
         for shape in shapes:
             is_target = False
@@ -6103,7 +6136,7 @@ The the dictionary keys should not be enclosed in handlebars.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L135-L277" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L135-L283" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class TextReplace(XmlTransformBase):
     &#34;&#34;&#34;
@@ -6159,8 +6192,12 @@ The the dictionary keys should not be enclosed in handlebars.</p></section>
                 ret += item.text
             return ret
 
-        def get_position(self, match_string):
-            return self.get_plaintext_string().find(match_string)
+        def get_position(self, match_strings):
+            for potential_match in match_strings:
+                i = self.get_plaintext_string().find(potential_match) 
+                if i &gt;= 0:
+                    break
+            return i, potential_match
 
         def get_list_index_of_position(self, position: int):
             for item in self._list:
@@ -6205,10 +6242,12 @@ The the dictionary keys should not be enclosed in handlebars.</p></section>
     def replace_handlebars(self, info_list, params):
         &#34;&#34;&#34;
         Method that finds template tags and replaces them 
+
+        TODO: Upgrade to Liquid Syntax (or similar)
         &#34;&#34;&#34;
         for key, val in params.items():
-            match_key = &#34;{{&#34; + key + &#34;}}&#34;
-            match_start_position =  info_list.get_position(match_key)
+            match_keys = [&#34;{{&#34; + key + &#34;}}&#34;, &#34;{{ &#34; + key + &#34; }}&#34;]
+            match_start_position, match_key =  info_list.get_position(match_keys)
             if match_start_position &gt; -1:
                 match_end_position = match_start_position + len(match_key) - 1
                 match_start_index = info_list.get_list_index_of_position(match_start_position)
@@ -6282,7 +6321,7 @@ The the dictionary keys should not be enclosed in handlebars.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L161-L228" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L161-L232" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class TextList(object):
     &#34;&#34;&#34;
@@ -6312,8 +6351,12 @@ The the dictionary keys should not be enclosed in handlebars.</p></section>
             ret += item.text
         return ret
 
-    def get_position(self, match_string):
-        return self.get_plaintext_string().find(match_string)
+    def get_position(self, match_strings):
+        for potential_match in match_strings:
+            i = self.get_plaintext_string().find(potential_match) 
+            if i &gt;= 0:
+                break
+        return i, potential_match
 
     def get_list_index_of_position(self, position: int):
         for item in self._list:
@@ -6361,19 +6404,22 @@ The the dictionary keys should not be enclosed in handlebars.</p></section>
 <span>def <span class="ident">replace_handlebars</span></span>(<span>self, info_list, params)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Method that finds template tags and replaces them</p></section>
+<section class="desc"><p>Method that finds template tags and replaces them </p>
+<p>TODO: Upgrade to Liquid Syntax (or similar)</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L232-L249" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L236-L255" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def replace_handlebars(self, info_list, params):
     &#34;&#34;&#34;
     Method that finds template tags and replaces them 
+
+    TODO: Upgrade to Liquid Syntax (or similar)
     &#34;&#34;&#34;
     for key, val in params.items():
-        match_key = &#34;{{&#34; + key + &#34;}}&#34;
-        match_start_position =  info_list.get_position(match_key)
+        match_keys = [&#34;{{&#34; + key + &#34;}}&#34;, &#34;{{ &#34; + key + &#34; }}&#34;]
+        match_start_position, match_key =  info_list.get_position(match_keys)
         if match_start_position &gt; -1:
             match_end_position = match_start_position + len(match_key) - 1
             match_start_index = info_list.get_list_index_of_position(match_start_position)
@@ -6406,7 +6452,7 @@ replacement values.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L252-L277" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L258-L283" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def transform_function(self, lxml_element, params):
     &#34;&#34;&#34;
@@ -6489,7 +6535,7 @@ The <code>params</code> that will be the loaded into the instance's <code>transf
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L319-L376" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L325-L382" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class MultiXmlTransform(XmlTransformBase):
     &#34;&#34;&#34;
@@ -6580,7 +6626,7 @@ config into an html <code>&lt;link&gt;</code> fragment.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L44-L100" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L44-L102" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
     &#34;&#34;&#34;
@@ -6596,25 +6642,27 @@ config into an html <code>&lt;link&gt;</code> fragment.</p>
 
     STYLES_MAP = {
         &#39;reveal&#39;: {
-            &#39;base&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css&#39;,
+            &#39;base&#39;: &#39;{0}/static/vendor/reveal/reveal.css&#39;.format(site_host),
             &#39;themes&#39;: {
-                &#39;beige&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/beige.min.css&#39;,
-                &#39;black&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/black.min.css&#39;,
-                &#39;blood&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/blood.min.css&#39;,
-                &#39;league&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/league.min.css&#39;,
-                &#39;moon&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/moon.min.css&#39;,
-                &#39;night&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/night.min.css&#39;,
-                &#39;serif&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/serif.min.css&#39;,
-                &#39;simple&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/simple.min.css&#39;,
-                &#39;sky&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/sky.min.css&#39;,
-                &#39;solarized&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/solarized.min.css&#39;,
-                &#39;white&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css&#39;
+                &#39;beige&#39;: &#39;{0}/static/vendor/reveal/theme/beige.css&#39;.format(site_host),
+                &#39;black&#39;: &#39;{0}/static/vendor/reveal/theme/black.css&#39;.format(site_host),
+                &#39;blood&#39;: &#39;{0}/static/vendor/reveal/theme/blood.css&#39;.format(site_host),
+                &#39;league&#39;: &#39;{0}/static/vendor/reveal/theme/league.css&#39;.format(site_host),
+                &#39;moon&#39;: &#39;{0}/static/vendor/reveal/theme/moon.css&#39;.format(site_host),
+                &#39;night&#39;: &#39;{0}/static/vendor/reveal/theme/night.css&#39;.format(site_host),
+                &#39;serif&#39;: &#39;{0}/static/vendor/reveal/theme/serif.css&#39;.format(site_host),
+                &#39;simple&#39;: &#39;{0}/static/vendor/reveal/theme/simple.css&#39;.format(site_host),
+                &#39;sky&#39;: &#39;{0}/static/vendor/reveal/theme/sky.min.css&#39;.format(site_host),
+                &#39;solarized&#39;: &#39;{0}/static/vendor/reveal/theme/solarized.css&#39;.format(site_host),
+                &#39;white&#39;: &#39;{0}/static/vendor/reveal/theme/white.css&#39;.format(site_host)
             },
             &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css&#39;,
-            &#39;customizations&#39;: &#39;{0}/static/css/reveal-customizations.css&#39;.format(site_host) 
+            &#39;customizations&#39;: &#39;{0}/static/css/reveal-customizations.css&#39;.format(site_host),
+            &#39;toolbar&#39;: &#39;{0}/static/css/toolbar.css&#39;.format(site_host),
         },
         &#39;preloaders&#39; : &#39;{0}/static/css/preloaders.css&#39;.format(site_host),
-        &#39;bootstrap4&#39;: &#34;https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css&#34;
+        &#39;bootstrap4&#39;: &#34;https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css&#34;,
+        &#39;font-awesome&#39;: &#39;{0}/static/vendor/fontawesome-free/css/all.min.css&#39;.format(site_host),
     }
     
     &#34;&#34;&#34;
@@ -6667,7 +6715,7 @@ of a <a title="presalytics.story.outline.Plugin" href="/python-client/presalytic
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L88-L100" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L90-L102" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def to_style(self, config, **kwargs):
     &#34;&#34;&#34;
@@ -6709,7 +6757,7 @@ config into an html <code>&lt;script&gt;</code> fragment.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L103-L158" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L105-L161" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
     &#34;&#34;&#34;
@@ -6727,15 +6775,16 @@ config into an html <code>&lt;script&gt;</code> fragment.</p>
         &#39;d3&#39;: &#39;https://d3js.org/d3.v5.min.js&#39;,
         &#39;d3v3&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js&#39;,
         &#39;reveal&#39;: {
-            &#39;base&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js&#39;,
-            &#39;marked&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/marked.js&#39;,
-            &#39;markdown&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js&#39;,
-            &#39;highlight&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/highlight/highlight.min.js&#39;,
-            &#39;math&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js&#39;,
-            &#39;zoom&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js&#39;,
-            &#39;notes&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js&#39;,
-            &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js&#39;,
+            &#39;base&#39;: &#39;{0}/static/vendor/reveal/reveal.js&#39;.format(site_host),
+            # &#39;markdown&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js&#39;,
+            # &#39;highlight&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/highlight/highlight.min.js&#39;,
+            # &#39;math&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/math/math.min.js&#39;,
+            # &#39;zoom&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js&#39;,
+            # &#39;notes&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js&#39;,
+            # &#39;print&#39;: &#39;https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js&#39;,
             &#39;customizations&#39;: &#39;{0}/static/js/revealcustomizations.js&#39;.format(site_host),
+            &#39;toolbar&#39;: &#39;{0}/static/js/toolbar.js&#39;.format(site_host),
+            &#39;screenfull&#39;: &#39;{0}/static/vendor/screenfull/screenfull.min.js&#39;.format(site_host),
 
         },
         &#39;mpld3&#39;: &#39;{0}/static/mpld3/mpld3.min.js&#39;.format(site_host),
@@ -6795,7 +6844,7 @@ of a <a title="presalytics.story.outline.Plugin" href="/python-client/presalytic
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L146-L158" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/external.py#L149-L161" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def to_script(self, config, **kwargs):
     &#34;&#34;&#34;
@@ -7050,7 +7099,7 @@ refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://g
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal.py#L5-L226" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal.py#L6-L299" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
     &#34;&#34;&#34;
@@ -7075,6 +7124,34 @@ refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://g
             &#39;name&#39;: &#39;external_links&#39;,
             &#39;config&#39;: {
                 &#39;approved_styles_key&#39;: &#39;reveal.base&#39;
+            }
+        },
+        {
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;reveal.screenfull&#39;
+            }
+        },
+        {
+            &#39;kind&#39;: &#39;style&#39;,
+            &#39;name&#39;: &#39;external_links&#39;,
+            &#39;config&#39;: {
+                &#39;approved_styles_key&#39;: &#39;reveal.toolbar&#39;
+            }
+        },
+        {
+            &#39;kind&#39;: &#39;style&#39;,
+            &#39;name&#39;: &#39;external_links&#39;,
+            &#39;config&#39;: {
+                &#39;approved_styles_key&#39;: &#39;font-awesome&#39;
+            }
+        },
+        {
+            &#39;kind&#39;: &#39;script&#39;,
+            &#39;name&#39;: &#39;external_scripts&#39;,
+            &#39;config&#39;: {
+                &#39;approved_scripts_key&#39;: &#39;reveal.toolbar&#39;
             }
         },
         {
@@ -7111,11 +7188,11 @@ refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://g
 
     template = &#34;&#34;&#34;
     &lt;script type=&#34;text/javascript&#34;&gt; 
-        window.onload = function(e) {
-            Reveal.initialize(
-                {{ reveal_config|tojson(indent=4) }}
-            );
-        };
+        window.addEventListener(&#39;toolbar-initialized&#39;, function(e) {
+            var config = {{ reveal_config|tojson(indent=4) }};
+            config.plugins = [window.presalyticsToolbar];
+            Reveal.initialize(config);
+        });
     &lt;/script&gt;
     &#34;&#34;&#34;
     &#34;&#34;&#34;
@@ -7269,7 +7346,51 @@ refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://g
         &#39;height&#39;: &#34;100%&#34;,
         &#39;margin&#39;: 0,
         &#39;minScale&#39;: 1,
-        &#39;maxScale&#39;: 1
+        &#39;maxScale&#39;: 1,
+
+        # Presalytics toolbar
+        &#39;showToolbar&#39;: True,
+
+        &#39;toolbar&#39;: {
+            # Specifies where the toolbar will be shown: &#39;top&#39; or &#39;bottom&#39;
+            &#39;position&#39;: &#39;bottom&#39;,
+
+            # Add button to toggle fullscreen mode for the presentation
+            &#39;fullscreen&#39;: True,
+
+            # Add button to toggle the overview mode on and off
+            &#39;overview&#39;: True,
+
+            # Add button to pause (hide) the presentation display
+            &#39;pause&#39;: True,
+
+            # Add button to show the speaker notes
+            &#39;notes&#39;: False,
+
+            # Add button to show the help overlay
+            &#39;help&#39;: False,
+
+            # If true, the reveal.js-menu will be moved into the toolbar.
+            # Set to false to leave the menu on its own.
+            &#39;captureMenu&#39;: True,
+
+            # If true, the playback control will be moved into the toolbar.
+            # This is only relevant if the presentation is configured to autoSlide.
+            # Set to false to leave the menu on its own.
+            &#39;capturePlaybackControl&#39;: True,
+
+            # By default the menu will load it&#39;s own font-awesome library
+            # icons. If your presentation needs to load a different
+            # font-awesome library the &#39;loadIcons&#39; option can be set to false
+            # and the menu will not attempt to load the font-awesome library.
+            &#39;loadIcons&#39;: True,
+
+            # Instructs the toolbar to load the Presaytics chat interface
+            &#39;chat&#39;: True,
+
+            # Shows the make pdf button
+            &#39;pdf&#39;: True,
+        }
     }
     &#34;&#34;&#34;
     A dictionary containing default values for rendering presalytics stories
@@ -8868,6 +8989,7 @@ def configure(cls, filenames: typing.List[str], variables: typing.Dict = {}, old
 <li><code><a title="presalytics.Client.download_file" href="/python-client/presalytics/index.html#presalytics.Client.download_file">download_file</a></code></li>
 <li><code><a title="presalytics.Client.get_client_info" href="/python-client/presalytics/index.html#presalytics.Client.get_client_info">get_client_info</a></code></li>
 <li><code><a title="presalytics.Client.upload_file_and_await_outline" href="/python-client/presalytics/index.html#presalytics.Client.upload_file_and_await_outline">upload_file_and_await_outline</a></code></li>
+<li><code><a title="presalytics.Client.await_outline" href="/python-client/presalytics/index.html#presalytics.Client.await_outline">await_outline</a></code></li>
 <li><code><a title="presalytics.Client.STATUS_REPOLL_SECONDS" href="/python-client/presalytics/index.html#presalytics.Client.STATUS_REPOLL_SECONDS">STATUS_REPOLL_SECONDS</a></code></li>
 <li><code><a title="presalytics.Client.STATUS_REPOLL_MAX_CYCLES" href="/python-client/presalytics/index.html#presalytics.Client.STATUS_REPOLL_MAX_CYCLES">STATUS_REPOLL_MAX_CYCLES</a></code></li>
 </ul>

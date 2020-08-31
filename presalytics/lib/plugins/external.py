@@ -70,7 +70,6 @@ class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
                 'white': '{0}/static/vendor/reveal/theme/white.css'.format(site_host)
             },
             'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css',
-            'customizations': '{0}/static/css/reveal-customizations.css'.format(site_host),
             'toolbar': '{0}/static/css/toolbar.css'.format(site_host),
         },
         'preloaders' : '{0}/static/css/preloaders.css'.format(site_host),
@@ -125,7 +124,6 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
             # 'zoom': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/zoom-js/zoom.min.js',
             # 'notes': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/notes/notes.min.js',
             # 'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/print-pdf/print-pdf.min.js',
-            'customizations': '{0}/static/js/revealcustomizations.js'.format(site_host),
             'toolbar': '{0}/static/js/toolbar.js'.format(site_host),
             'screenfull': '{0}/static/vendor/screenfull/screenfull.min.js'.format(site_host),
 

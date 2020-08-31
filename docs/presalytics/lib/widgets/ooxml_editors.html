@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L0-L495" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L0-L501" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import typing
 import types
@@ -143,7 +143,7 @@ class ChangeShapeColor(XmlTransformBase):
         else:
             shapes = lxml_element.findall(&#39;.//{*}sp&#39;)
         object_name = params.get(&#34;object_name&#34;, None)
-        color = params.get(&#34;hex_color&#34;)
+        color = params.get(&#34;hex_color&#34;).lstrip(&#34;#&#34;).upper()
         if object_name:
             for shape in shapes:
                 is_target = False
@@ -213,8 +213,12 @@ class TextReplace(XmlTransformBase):
                 ret += item.text
             return ret
 
-        def get_position(self, match_string):
-            return self.get_plaintext_string().find(match_string)
+        def get_position(self, match_strings):
+            for potential_match in match_strings:
+                i = self.get_plaintext_string().find(potential_match) 
+                if i &gt;= 0:
+                    break
+            return i, potential_match
 
         def get_list_index_of_position(self, position: int):
             for item in self._list:
@@ -259,10 +263,12 @@ class TextReplace(XmlTransformBase):
     def replace_handlebars(self, info_list, params):
         &#34;&#34;&#34;
         Method that finds template tags and replaces them 
+
+        TODO: Upgrade to Liquid Syntax (or similar)
         &#34;&#34;&#34;
         for key, val in params.items():
-            match_key = &#34;{{&#34; + key + &#34;}}&#34;
-            match_start_position =  info_list.get_position(match_key)
+            match_keys = [&#34;{{&#34; + key + &#34;}}&#34;, &#34;{{ &#34; + key + &#34; }}&#34;]
+            match_start_position, match_key =  info_list.get_position(match_keys)
             if match_start_position &gt; -1:
                 match_end_position = match_start_position + len(match_key) - 1
                 match_start_index = info_list.get_list_index_of_position(match_start_position)
@@ -550,7 +556,7 @@ used in a workspace.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L308-L315" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L314-L321" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_transform_registry():
     &#34;&#34;&#34;
@@ -761,7 +767,7 @@ have their color changed.</dd>
         else:
             shapes = lxml_element.findall(&#39;.//{*}sp&#39;)
         object_name = params.get(&#34;object_name&#34;, None)
-        color = params.get(&#34;hex_color&#34;)
+        color = params.get(&#34;hex_color&#34;).lstrip(&#34;#&#34;).upper()
         if object_name:
             for shape in shapes:
                 is_target = False
@@ -860,7 +866,7 @@ def replace_color_on_target_shape(shape_xml: lxml.etree.Element, new_color: str)
     else:
         shapes = lxml_element.findall(&#39;.//{*}sp&#39;)
     object_name = params.get(&#34;object_name&#34;, None)
-    color = params.get(&#34;hex_color&#34;)
+    color = params.get(&#34;hex_color&#34;).lstrip(&#34;#&#34;).upper()
     if object_name:
         for shape in shapes:
             is_target = False
@@ -904,7 +910,7 @@ The the dictionary keys should not be enclosed in handlebars.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L135-L277" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L135-L283" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class TextReplace(XmlTransformBase):
     &#34;&#34;&#34;
@@ -960,8 +966,12 @@ The the dictionary keys should not be enclosed in handlebars.</p></section>
                 ret += item.text
             return ret
 
-        def get_position(self, match_string):
-            return self.get_plaintext_string().find(match_string)
+        def get_position(self, match_strings):
+            for potential_match in match_strings:
+                i = self.get_plaintext_string().find(potential_match) 
+                if i &gt;= 0:
+                    break
+            return i, potential_match
 
         def get_list_index_of_position(self, position: int):
             for item in self._list:
@@ -1006,10 +1016,12 @@ The the dictionary keys should not be enclosed in handlebars.</p></section>
     def replace_handlebars(self, info_list, params):
         &#34;&#34;&#34;
         Method that finds template tags and replaces them 
+
+        TODO: Upgrade to Liquid Syntax (or similar)
         &#34;&#34;&#34;
         for key, val in params.items():
-            match_key = &#34;{{&#34; + key + &#34;}}&#34;
-            match_start_position =  info_list.get_position(match_key)
+            match_keys = [&#34;{{&#34; + key + &#34;}}&#34;, &#34;{{ &#34; + key + &#34; }}&#34;]
+            match_start_position, match_key =  info_list.get_position(match_keys)
             if match_start_position &gt; -1:
                 match_end_position = match_start_position + len(match_key) - 1
                 match_start_index = info_list.get_list_index_of_position(match_start_position)
@@ -1083,7 +1095,7 @@ The the dictionary keys should not be enclosed in handlebars.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L161-L228" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L161-L232" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class TextList(object):
     &#34;&#34;&#34;
@@ -1113,8 +1125,12 @@ The the dictionary keys should not be enclosed in handlebars.</p></section>
             ret += item.text
         return ret
 
-    def get_position(self, match_string):
-        return self.get_plaintext_string().find(match_string)
+    def get_position(self, match_strings):
+        for potential_match in match_strings:
+            i = self.get_plaintext_string().find(potential_match) 
+            if i &gt;= 0:
+                break
+        return i, potential_match
 
     def get_list_index_of_position(self, position: int):
         for item in self._list:
@@ -1162,19 +1178,22 @@ The the dictionary keys should not be enclosed in handlebars.</p></section>
 <span>def <span class="ident">replace_handlebars</span></span>(<span>self, info_list, params)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Method that finds template tags and replaces them</p></section>
+<section class="desc"><p>Method that finds template tags and replaces them </p>
+<p>TODO: Upgrade to Liquid Syntax (or similar)</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L232-L249" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L236-L255" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def replace_handlebars(self, info_list, params):
     &#34;&#34;&#34;
     Method that finds template tags and replaces them 
+
+    TODO: Upgrade to Liquid Syntax (or similar)
     &#34;&#34;&#34;
     for key, val in params.items():
-        match_key = &#34;{{&#34; + key + &#34;}}&#34;
-        match_start_position =  info_list.get_position(match_key)
+        match_keys = [&#34;{{&#34; + key + &#34;}}&#34;, &#34;{{ &#34; + key + &#34; }}&#34;]
+        match_start_position, match_key =  info_list.get_position(match_keys)
         if match_start_position &gt; -1:
             match_end_position = match_start_position + len(match_key) - 1
             match_start_index = info_list.get_list_index_of_position(match_start_position)
@@ -1207,7 +1226,7 @@ replacement values.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L252-L277" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L258-L283" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def transform_function(self, lxml_element, params):
     &#34;&#34;&#34;
@@ -1258,7 +1277,7 @@ can be deserialized at run-time without a loaded instance in <code>locals()</cod
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L280-L295" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L286-L301" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class XmlTransformRegistry(presalytics.lib.registry.RegistryBase):
     &#34;&#34;&#34;
@@ -1292,7 +1311,7 @@ can be deserialized at run-time without a loaded instance in <code>locals()</cod
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L291-L292" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L297-L298" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_name(self, klass):
     return getattr(klass, &#34;__xml_transform_name__&#34;, None)</code></pre>
@@ -1306,7 +1325,7 @@ can be deserialized at run-time without a loaded instance in <code>locals()</cod
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L294-L295" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L300-L301" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_type(self, klass):
     return getattr(klass, &#34;__xml_transform_kind__&#34;, None)</code></pre>
@@ -1367,7 +1386,7 @@ The <code>params</code> that will be the loaded into the instance's <code>transf
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L319-L376" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L325-L382" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class MultiXmlTransform(XmlTransformBase):
     &#34;&#34;&#34;
@@ -1487,7 +1506,7 @@ as variables to modify the underlying OpenOfficeXml</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L379-L496" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L385-L502" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlEditorWidget(presalytics.lib.widgets.ooxml.OoxmlWidgetBase):
     &#34;&#34;&#34;
@@ -1625,7 +1644,7 @@ as variables to modify the underlying OpenOfficeXml</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L441-L448" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L447-L454" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_xml(self, xml_str) -&gt; str:
     &#34;&#34;&#34;
@@ -1645,7 +1664,7 @@ as variables to modify the underlying OpenOfficeXml</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L450-L467" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/ooxml_editors.py#L456-L473" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update(self):
     &#34;&#34;&#34;

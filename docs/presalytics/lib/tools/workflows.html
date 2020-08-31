@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L0-L292" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L0-L293" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import typing
 import os
@@ -139,8 +139,9 @@ def push_outline(outline, username=None, password=None) -&gt; &#39;StoryOutline&
     else:
         old_story = client.story.story_id_get(outline.story_id)
         old_story.outline = outline.dump()
-        story = client.story.story_id_put(outline.story_id, old_story)
-    return presalytics.story.outline.StoryOutline.load(story.outline)
+        story = client.story.story_id_outline_post(old_story.id, outline.dump())
+    synced_outline_str = client.await_outline(story.id)
+    return presalytics.story.outline.StoryOutline.load(synced_outline_str)
 
 
 def pull_outline(story_id, username=None, password=None) -&gt; &#39;StoryOutline&#39;:
@@ -473,7 +474,7 @@ def update_outline(outline, filename=None, message=None):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L105-L116" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L105-L117" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def push_outline(outline, username=None, password=None) -&gt; &#39;StoryOutline&#39;:
     &#34;&#34;&#34;
@@ -485,8 +486,9 @@ def update_outline(outline, filename=None, message=None):
     else:
         old_story = client.story.story_id_get(outline.story_id)
         old_story.outline = outline.dump()
-        story = client.story.story_id_put(outline.story_id, old_story)
-    return presalytics.story.outline.StoryOutline.load(story.outline)</code></pre>
+        story = client.story.story_id_outline_post(old_story.id, outline.dump())
+    synced_outline_str = client.await_outline(story.id)
+    return presalytics.story.outline.StoryOutline.load(synced_outline_str)</code></pre>
 </details>
 </dd>
 <dt id="presalytics.lib.tools.workflows.pull_outline"><code class="name flex">
@@ -497,7 +499,7 @@ def update_outline(outline, filename=None, message=None):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L119-L128" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L120-L129" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def pull_outline(story_id, username=None, password=None) -&gt; &#39;StoryOutline&#39;:
     &#34;&#34;&#34;
@@ -521,7 +523,7 @@ def update_outline(outline, filename=None, message=None):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L131-L143" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L132-L144" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def delete_all_stories(username=None, password=None):
     &#34;&#34;&#34;
@@ -546,7 +548,7 @@ def update_outline(outline, filename=None, message=None):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L146-L151" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L147-L152" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def delete_by_id(story_id, username=None, password=None):
     &#34;&#34;&#34;
@@ -564,7 +566,7 @@ def update_outline(outline, filename=None, message=None):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L153-L180" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L154-L181" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def share_story(story_id,
                 emails=None, 
@@ -604,7 +606,7 @@ def update_outline(outline, filename=None, message=None):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L182-L187" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L183-L188" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_story(story_id):
     &#34;&#34;&#34;
@@ -622,7 +624,7 @@ def update_outline(outline, filename=None, message=None):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L189-L204" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L190-L205" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def create_config_file(username, password=None, set_dict={}, overwrite=False):
     config_file = os.path.join(os.getcwd(), &#34;config.py&#34;)
@@ -650,7 +652,7 @@ def update_outline(outline, filename=None, message=None):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L206-L219" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L207-L220" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def create_cron_target():
     if sys.platform.startswith(&#34;linux&#34;):
@@ -684,7 +686,7 @@ dictionary is for ease of use and will get parsed into a compliant string.</p></
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L221-L249" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L222-L250" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def apply_json_patch(outline, patch):
     &#34;&#34;&#34;
@@ -725,7 +727,7 @@ dictionary is for ease of use and will get parsed into a compliant string.</p></
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L251-L286" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/workflows.py#L252-L287" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_outline(outline, filename=None, message=None):
     &#34;&#34;&#34;

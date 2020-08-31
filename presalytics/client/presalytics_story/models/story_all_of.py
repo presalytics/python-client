@@ -68,8 +68,7 @@ class StoryAllOf(object):
             self.is_public = is_public
         if ooxml_documents is not None:
             self.ooxml_documents = ooxml_documents
-        if outline is not None:
-            self.outline = outline
+        self.outline = outline
         if outline_history is not None:
             self.outline_history = outline_history
         if revision is not None:

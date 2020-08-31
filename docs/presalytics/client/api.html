@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L0-L521" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L0-L546" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import os
 import cgi
@@ -480,10 +480,21 @@ class Client(object):
         if not repoll_max_cycles:
             repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
         story = self.story.story_post_file(file=file)
+        self.await_outline(story.id)
+        return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)
+
+    def await_outline(self,
+                      story_id,
+                      status_repoll_seconds: int = None, 
+                      repoll_max_cycles: int = None):
         task_running = True
         repoll_cycle_count = 0
+        if not status_repoll_seconds:
+            status_repoll_seconds = self.STATUS_REPOLL_SECONDS
+        if not repoll_max_cycles:
+            repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
         while task_running:
-            status, status_code, _ = self.story.story_id_status_get_with_http_info(story.id)
+            status, status_code, _ = self.story.story_id_status_get_with_http_info(story_id)
             if status_code == 204:
                 task_running = False
             elif status_code == 200:
@@ -495,7 +506,9 @@ class Client(object):
                     logger.info(&#34;Story creation task still running.  Rechecking status in {0} seconds&#34;.format(status_repoll_seconds))
                     time.sleep(status_repoll_seconds)
                     repoll_cycle_count += 1
-        return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)
+        return self.story.story_id_outline_get(story_id)
+
+
 
                 
         
@@ -510,6 +523,10 @@ class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn,
         presalytics.client.presalytics_doc_converter.api_client.ApiClient.__init__(self)
         self.update_configuration()
 
+    @property
+    def api_name(self):
+        return &#39;doc-converter&#39;
+
 
 class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_ooxml_automation.api_client.ApiClient):
     &#34;&#34;&#34;
@@ -521,6 +538,10 @@ class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMix
         presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
         self.update_configuration()
 
+    @property
+    def api_name(self):
+        return &#39;ooxml-automation&#39;
+
 
 class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_story.api_client.ApiClient):
     &#34;&#34;&#34;
@@ -531,6 +552,10 @@ class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presal
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics.client.presalytics_story.api_client.ApiClient.__init__(self)
         self.update_configuration()
+
+    @property
+    def api_name(self):
+        return &#39;story&#39;
 
 
 @functools.lru_cache(maxsize=None)
@@ -563,7 +588,7 @@ def get_client():
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L509-L517" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L534-L542" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@functools.lru_cache(maxsize=None)
 def get_client():
@@ -782,7 +807,7 @@ if the user has not authenticated by the time the interval has expired.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L34-L471" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L34-L482" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Client(object):
     &#34;&#34;&#34; Class for interacting with Presalytics API endpoints
@@ -1206,10 +1231,21 @@ if the user has not authenticated by the time the interval has expired.</dd>
         if not repoll_max_cycles:
             repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
         story = self.story.story_post_file(file=file)
+        self.await_outline(story.id)
+        return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)
+
+    def await_outline(self,
+                      story_id,
+                      status_repoll_seconds: int = None, 
+                      repoll_max_cycles: int = None):
         task_running = True
         repoll_cycle_count = 0
+        if not status_repoll_seconds:
+            status_repoll_seconds = self.STATUS_REPOLL_SECONDS
+        if not repoll_max_cycles:
+            repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
         while task_running:
-            status, status_code, _ = self.story.story_id_status_get_with_http_info(story.id)
+            status, status_code, _ = self.story.story_id_status_get_with_http_info(story_id)
             if status_code == 204:
                 task_running = False
             elif status_code == 200:
@@ -1221,7 +1257,7 @@ if the user has not authenticated by the time the interval has expired.</dd>
                     logger.info(&#34;Story creation task still running.  Rechecking status in {0} seconds&#34;.format(status_repoll_seconds))
                     time.sleep(status_repoll_seconds)
                     repoll_cycle_count += 1
-        return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)</code></pre>
+        return self.story.story_id_outline_get(story_id)</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
@@ -1499,7 +1535,7 @@ components and new client instances</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L435-L471" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L435-L457" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def upload_file_and_await_outline(self, 
                                   file: typing.Union[FileStorage, str],
@@ -1522,10 +1558,32 @@ components and new client instances</p>
     if not repoll_max_cycles:
         repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
     story = self.story.story_post_file(file=file)
+    self.await_outline(story.id)
+    return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.api.Client.await_outline"><code class="name flex">
+<span>def <span class="ident">await_outline</span></span>(<span>self, story_id, status_repoll_seconds=None, repoll_max_cycles=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L459-L482" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def await_outline(self,
+                  story_id,
+                  status_repoll_seconds: int = None, 
+                  repoll_max_cycles: int = None):
     task_running = True
     repoll_cycle_count = 0
+    if not status_repoll_seconds:
+        status_repoll_seconds = self.STATUS_REPOLL_SECONDS
+    if not repoll_max_cycles:
+        repoll_max_cycles = self.STATUS_REPOLL_MAX_CYCLES
     while task_running:
-        status, status_code, _ = self.story.story_id_status_get_with_http_info(story.id)
+        status, status_code, _ = self.story.story_id_status_get_with_http_info(story_id)
         if status_code == 204:
             task_running = False
         elif status_code == 200:
@@ -1537,7 +1595,7 @@ components and new client instances</p>
                 logger.info(&#34;Story creation task still running.  Rechecking status in {0} seconds&#34;.format(status_repoll_seconds))
                 time.sleep(status_repoll_seconds)
                 repoll_cycle_count += 1
-    return self.story.story_id_get(story.id, include_outline=True, include_relationships=include_relationships)</code></pre>
+    return self.story.story_id_outline_get(story_id)</code></pre>
 </details>
 </dd>
 </dl>
@@ -1552,7 +1610,7 @@ components and new client instances</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L476-L484" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L489-L501" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_doc_converter.api_client.ApiClient):
     &#34;&#34;&#34;
@@ -1562,13 +1620,34 @@ components and new client instances</p>
     def __init__(self, parent: Client, **kwargs):
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics.client.presalytics_doc_converter.api_client.ApiClient.__init__(self)
-        self.update_configuration()</code></pre>
+        self.update_configuration()
+
+    @property
+    def api_name(self):
+        return &#39;doc-converter&#39;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="presalytics.client.auth.AuthenticationMixIn" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn">AuthenticationMixIn</a></li>
+<li>abc.ABC</li>
 <li><a title="presalytics.client.presalytics_doc_converter.api_client.ApiClient" href="/python-client/presalytics/client/presalytics_doc_converter/api_client.html#presalytics.client.presalytics_doc_converter.api_client.ApiClient">ApiClient</a></li>
 </ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="presalytics.client.api.DocConverterApiClientWithAuth.api_name"><code class="name">var <span class="ident">api_name</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L499-L501" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def api_name(self):
+    return &#39;doc-converter&#39;</code></pre>
+</details>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="presalytics.client.auth.AuthenticationMixIn" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn">AuthenticationMixIn</a></b></code>:
@@ -1605,7 +1684,7 @@ components and new client instances</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L487-L495" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L504-L516" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_ooxml_automation.api_client.ApiClient):
     &#34;&#34;&#34;
@@ -1615,13 +1694,34 @@ components and new client instances</p>
     def __init__(self, parent: Client, **kwargs):
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
-        self.update_configuration()</code></pre>
+        self.update_configuration()
+
+    @property
+    def api_name(self):
+        return &#39;ooxml-automation&#39;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="presalytics.client.auth.AuthenticationMixIn" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn">AuthenticationMixIn</a></li>
+<li>abc.ABC</li>
 <li><a title="presalytics.client.presalytics_ooxml_automation.api_client.ApiClient" href="/python-client/presalytics/client/presalytics_ooxml_automation/api_client.html#presalytics.client.presalytics_ooxml_automation.api_client.ApiClient">ApiClient</a></li>
 </ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="presalytics.client.api.OoxmlAutomationApiClientWithAuth.api_name"><code class="name">var <span class="ident">api_name</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L514-L516" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def api_name(self):
+    return &#39;ooxml-automation&#39;</code></pre>
+</details>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="presalytics.client.auth.AuthenticationMixIn" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn">AuthenticationMixIn</a></b></code>:
@@ -1658,7 +1758,7 @@ components and new client instances</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L498-L506" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L519-L531" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_story.api_client.ApiClient):
     &#34;&#34;&#34;
@@ -1668,13 +1768,34 @@ components and new client instances</p>
     def __init__(self, parent: Client, **kwargs):
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics.client.presalytics_story.api_client.ApiClient.__init__(self)
-        self.update_configuration()</code></pre>
+        self.update_configuration()
+
+    @property
+    def api_name(self):
+        return &#39;story&#39;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="presalytics.client.auth.AuthenticationMixIn" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn">AuthenticationMixIn</a></li>
+<li>abc.ABC</li>
 <li><a title="presalytics.client.presalytics_story.api_client.ApiClient" href="/python-client/presalytics/client/presalytics_story/api_client.html#presalytics.client.presalytics_story.api_client.ApiClient">ApiClient</a></li>
 </ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="presalytics.client.api.StoryApiClientWithAuth.api_name"><code class="name">var <span class="ident">api_name</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/api.py#L529-L531" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def api_name(self):
+    return &#39;story&#39;</code></pre>
+</details>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="presalytics.client.auth.AuthenticationMixIn" href="/python-client/presalytics/client/auth.html#presalytics.client.auth.AuthenticationMixIn">AuthenticationMixIn</a></b></code>:
@@ -1732,18 +1853,28 @@ components and new client instances</p>
 <li><code><a title="presalytics.client.api.Client.download_file" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.download_file">download_file</a></code></li>
 <li><code><a title="presalytics.client.api.Client.get_client_info" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.get_client_info">get_client_info</a></code></li>
 <li><code><a title="presalytics.client.api.Client.upload_file_and_await_outline" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.upload_file_and_await_outline">upload_file_and_await_outline</a></code></li>
+<li><code><a title="presalytics.client.api.Client.await_outline" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.await_outline">await_outline</a></code></li>
 <li><code><a title="presalytics.client.api.Client.STATUS_REPOLL_SECONDS" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.STATUS_REPOLL_SECONDS">STATUS_REPOLL_SECONDS</a></code></li>
 <li><code><a title="presalytics.client.api.Client.STATUS_REPOLL_MAX_CYCLES" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client.STATUS_REPOLL_MAX_CYCLES">STATUS_REPOLL_MAX_CYCLES</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="presalytics.client.api.DocConverterApiClientWithAuth" href="/python-client/presalytics/client/api.html#presalytics.client.api.DocConverterApiClientWithAuth">DocConverterApiClientWithAuth</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.client.api.DocConverterApiClientWithAuth.api_name" href="/python-client/presalytics/client/api.html#presalytics.client.api.DocConverterApiClientWithAuth.api_name">api_name</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="presalytics.client.api.OoxmlAutomationApiClientWithAuth" href="/python-client/presalytics/client/api.html#presalytics.client.api.OoxmlAutomationApiClientWithAuth">OoxmlAutomationApiClientWithAuth</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.client.api.OoxmlAutomationApiClientWithAuth.api_name" href="/python-client/presalytics/client/api.html#presalytics.client.api.OoxmlAutomationApiClientWithAuth.api_name">api_name</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="presalytics.client.api.StoryApiClientWithAuth" href="/python-client/presalytics/client/api.html#presalytics.client.api.StoryApiClientWithAuth">StoryApiClientWithAuth</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.client.api.StoryApiClientWithAuth.api_name" href="/python-client/presalytics/client/api.html#presalytics.client.api.StoryApiClientWithAuth.api_name">api_name</a></code></li>
+</ul>
 </li>
 </ul>
 </li>

@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L0-L295" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L0-L296" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import json
 import logging
@@ -42,6 +42,7 @@ import presalytics.lib.constants
 import presalytics.story.outline
 import typing
 import mimetypes
+import abc
 from werkzeug.datastructures import FileStorage
 if typing.TYPE_CHECKING:
     from presalytics.client.api import Client
@@ -142,7 +143,7 @@ class TokenUtil(object):
         return token
 
 
-class AuthenticationMixIn(object):
+class AuthenticationMixIn(abc.ABC):
     def __init__(self, parent: &#39;Client&#39;, ignore_api_exceptions=False, **kwargs):
         self._ignore_api_exceptions = ignore_api_exceptions
         self.parent = weakref.ref(parent)
@@ -150,8 +151,9 @@ class AuthenticationMixIn(object):
         self.update_configuration()
 
     @property
+    @abc.abstractmethod
     def api_name(self):
-        return self.configuration.host.rstrip(&#34;/&#34;).split(&#34;/&#34;)[-1]
+        return NotImplemented
 
     def call_api(
             self, resource_path, method,
@@ -278,11 +280,10 @@ class AuthenticationMixIn(object):
 
     @property
     def external_root_url(self):
-        base_uri = self.configuration.host.rstrip(&#34;/&#34;).split(&#34;/&#34;)[-1]
-        service_key = base_uri.replace(&#34;-&#34;, &#34;_&#34;).upper()
-        if presalytics.CONFIG.get(service_key, None):
+        service_key = self.api_name.replace(&#34;-&#34;, &#34;_&#34;).upper()
+        if presalytics.CONFIG.get(&#34;BROWSER_API_HOST&#34;, dict()).get(service_key, None):
             service_host = presalytics.CONFIG[&#34;BROWSER_API_HOST&#34;][service_key]
-            target = service_host.rstrip(&#34;/&#34;) + &#34;/&#34; + base_uri
+            target = service_host + &#34;/&#34; + self.api_name
         else:
             target = self.configuration.host
         return target
@@ -341,7 +342,7 @@ class AuthenticationMixIn(object):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L26-L115" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L27-L116" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class TokenUtil(object):
     def __init__(self, token=None, token_file=None, token_cache=False):
@@ -444,7 +445,7 @@ class AuthenticationMixIn(object):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L106-L109" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L107-L110" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@staticmethod
 def put_token_file(token, token_filepath):
@@ -460,7 +461,7 @@ def put_token_file(token, token_filepath):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L111-L115" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L112-L116" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@staticmethod
 def load_token_from_file(token_filepath):
@@ -480,7 +481,7 @@ def load_token_from_file(token_filepath):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L48-L69" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L49-L70" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def is_api_access_token_expired(self):
     try:
@@ -514,7 +515,7 @@ def load_token_from_file(token_filepath):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L85-L104" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L86-L105" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def process_token(self, token):
     self.token = {
@@ -545,13 +546,14 @@ def load_token_from_file(token_filepath):
 <span>(</span><span>parent, ignore_api_exceptions=False, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Helper class that provides a standard way to create an ABC using
+inheritance.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L118-L296" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L119-L297" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">class AuthenticationMixIn(object):
+<pre><code class="python">class AuthenticationMixIn(abc.ABC):
     def __init__(self, parent: &#39;Client&#39;, ignore_api_exceptions=False, **kwargs):
         self._ignore_api_exceptions = ignore_api_exceptions
         self.parent = weakref.ref(parent)
@@ -559,8 +561,9 @@ def load_token_from_file(token_filepath):
         self.update_configuration()
 
     @property
+    @abc.abstractmethod
     def api_name(self):
-        return self.configuration.host.rstrip(&#34;/&#34;).split(&#34;/&#34;)[-1]
+        return NotImplemented
 
     def call_api(
             self, resource_path, method,
@@ -687,11 +690,10 @@ def load_token_from_file(token_filepath):
 
     @property
     def external_root_url(self):
-        base_uri = self.configuration.host.rstrip(&#34;/&#34;).split(&#34;/&#34;)[-1]
-        service_key = base_uri.replace(&#34;-&#34;, &#34;_&#34;).upper()
-        if presalytics.CONFIG.get(service_key, None):
+        service_key = self.api_name.replace(&#34;-&#34;, &#34;_&#34;).upper()
+        if presalytics.CONFIG.get(&#34;BROWSER_API_HOST&#34;, dict()).get(service_key, None):
             service_host = presalytics.CONFIG[&#34;BROWSER_API_HOST&#34;][service_key]
-            target = service_host.rstrip(&#34;/&#34;) + &#34;/&#34; + base_uri
+            target = service_host + &#34;/&#34; + self.api_name
         else:
             target = self.configuration.host
         return target
@@ -731,6 +733,10 @@ def load_token_from_file(token_filepath):
 
         return params</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>abc.ABC</li>
+</ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="presalytics.client.api.DocConverterApiClientWithAuth" href="/python-client/presalytics/client/api.html#presalytics.client.api.DocConverterApiClientWithAuth">DocConverterApiClientWithAuth</a></li>
@@ -747,7 +753,7 @@ def load_token_from_file(token_filepath):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L220-L226" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L222-L228" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@staticmethod
 def get_user_agent():
@@ -767,11 +773,12 @@ def get_user_agent():
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L125-L127" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L126-L129" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
+@abc.abstractmethod
 def api_name(self):
-    return self.configuration.host.rstrip(&#34;/&#34;).split(&#34;/&#34;)[-1]</code></pre>
+    return NotImplemented</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.auth.AuthenticationMixIn.external_root_url"><code class="name">var <span class="ident">external_root_url</span></code></dt>
@@ -780,15 +787,14 @@ def api_name(self):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L252-L261" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L254-L262" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@property
 def external_root_url(self):
-    base_uri = self.configuration.host.rstrip(&#34;/&#34;).split(&#34;/&#34;)[-1]
-    service_key = base_uri.replace(&#34;-&#34;, &#34;_&#34;).upper()
-    if presalytics.CONFIG.get(service_key, None):
+    service_key = self.api_name.replace(&#34;-&#34;, &#34;_&#34;).upper()
+    if presalytics.CONFIG.get(&#34;BROWSER_API_HOST&#34;, dict()).get(service_key, None):
         service_host = presalytics.CONFIG[&#34;BROWSER_API_HOST&#34;][service_key]
-        target = service_host.rstrip(&#34;/&#34;) + &#34;/&#34; + base_uri
+        target = service_host + &#34;/&#34; + self.api_name
     else:
         target = self.configuration.host
     return target</code></pre>
@@ -806,7 +812,7 @@ rather than at class initialized (good for ipython notebooks)</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L129-L205" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L131-L207" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def call_api(
         self, resource_path, method,
@@ -898,7 +904,7 @@ Mostly used for debugging purposes, but self-hosted API endpoints may require in
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L207-L218" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L209-L220" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_configuration(self):
     &#34;&#34;&#34;
@@ -922,7 +928,7 @@ Mostly used for debugging purposes, but self-hosted API endpoints may require in
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L230-L240" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L232-L242" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def set_host(self, hosts_dict):
     for parent_cls in self.__class__.__bases__:
@@ -949,7 +955,7 @@ accept a <code>werkzeug.datastructures.FileStorage</code> object.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L264-L296" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/auth.py#L265-L297" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def files_parameters(self, files=None):
     &#34;&#34;&#34;Builds form parameters.

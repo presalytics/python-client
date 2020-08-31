@@ -74,9 +74,8 @@ class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
         },
         'preloaders' : '{0}/static/css/preloaders.css'.format(site_host),
         'bootstrap4': "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css",
-        'font-awesome': '{0}/static/vendor/fontawesome-free/css/all.min.css'.format(site_host),
+        'font-awesome': 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css',
     }
-    
     """
     Static nested dictionary containing links to external stylesheets that will be rendered alongside this plugin
     """

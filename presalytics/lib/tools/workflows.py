@@ -113,7 +113,7 @@ def push_outline(outline, username=None, password=None) -> 'StoryOutline':
         old_story = client.story.story_id_get(outline.story_id)
         old_story.outline = outline.dump()
         story = client.story.story_id_outline_post(old_story.id, outline.dump())
-    synced_outline_str = client.await_outline(story.id)
+    synced_outline_str = client.await_outline(outline.story_id)
     return presalytics.story.outline.StoryOutline.load(synced_outline_str)
 
 

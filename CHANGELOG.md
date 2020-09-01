@@ -1,3 +1,7 @@
+## v0.5.18 (2020-09-01)
+
+* Update `ooxml_editors.TextReplace` to enable child object editing
+
 ## v0.5.17 (2020-08-30)
 
 * Fix font-awesome for CORS/CDN in `external.py`

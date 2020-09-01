@@ -142,8 +142,15 @@ class TextReplace(XmlTransformBase):
     Function Parameters Dictionary
     ----------
 
-    A dictionary that maps template tags to the new strings that will replace the
-    tags in the rendered widget.  The the dictionary keys should not be enclosed in handlebars.
+    replace_map: dict
+        A dictionary that maps template tags to the new strings that will replace the
+        tags in the rendered widget.  The the dictionary keys should not be enclosed in handlebars.
+    
+    object_name: str, optional
+        The name of a sub object will be the target of this function.  If not includes, this will
+        default to the parent object.  Allows different replace map to be applied to multiple elements in
+        a widget    
+
     """
     __xml_transform_name__ = "TextReplace"
 
@@ -272,14 +279,23 @@ class TextReplace(XmlTransformBase):
             A dictionary that maps template tags (no handlebars) to their respective
             replacement values.
         """
-        text_list = lxml_element.findall('.//{*}t')
+        target_object = lxml_element
+        target_object_name = params.get("object_name", None)
+        if target_object_name:
+            nvProps = lxml_element.findall('.//{*}cNvPr')
+            for ele in nvProps:
+                if ele.get("name", None) == target_object_name:
+                    target_object = ele.getparent().getparent()
+                    break
+                
+        text_list = target_object.findall('.//{*}t')
         info_list = TextReplace.TextList()
         position = 0
         for tag in text_list:
             info = self.TextElementInfo(tag, position)
             position = info.end_position + 1
             info_list.append(info)
-        self.replace_handlebars(info_list, params)
+        self.replace_handlebars(info_list, params.get("replace_map"))
         return lxml_element
 
 

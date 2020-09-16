@@ -265,13 +265,6 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
             'name': 'external_scripts',
             'kind': 'script',
             'config': {
-                'approved_scripts_key': 'jquery'
-            }
-        },
-        {
-            'name': 'external_scripts',
-            'kind': 'script',
-            'config': {
                 'approved_scripts_key': 'ooxml'
             }
         },

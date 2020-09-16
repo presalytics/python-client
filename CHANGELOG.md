@@ -1,3 +1,7 @@
+## v0.5.19 (2020-09-20)
+
+* Point `ooxml.js` to static folder on main site in `presalytics.lib.plugings.external.ApprovedExternalScripts`
+
 ## v0.5.18 (2020-09-01)
 
 * Update `ooxml_editors.TextReplace` to enable child object editing

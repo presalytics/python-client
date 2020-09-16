@@ -139,6 +139,8 @@ class Revealer(presalytics.story.components.Renderer):
             '<meta charset="utf-8">',
             '<meta http-equiv="X-UA-Compatible" content="IE=edge">',
             '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">',
+            '<title>Presalytics | ' + self.story_outline.title + '</title>',
+            '<meta name="description" content="' + self.story_outline.description + '" />'
         #    """<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://*.presalytics.io; script-src 'self' https://*.presalytics.io {0};">""".format(allowed)
         ]
         return tags

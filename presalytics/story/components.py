@@ -6,12 +6,15 @@ import webbrowser
 import re
 import six
 import sys
+import uuid
+import base64
 import urllib.parse
 import presalytics.lib
 import presalytics.lib.registry
 import presalytics.lib.exceptions
 import presalytics.lib.constants
 import presalytics.client.api
+
 if typing.TYPE_CHECKING:
     from presalytics.story.outline import Widget, Page, Plugin, OutlineBase, StoryOutline
 
@@ -134,6 +137,12 @@ class WidgetBase(ComponentBase):
     ----------
     outline_widget: Widget
         A `presalytics.story.outline.Widget` object
+
+    nonce: str
+        A "Number used ONCE" that will be used as cache key for rendering subdocuments.
+        The nonce is included the Url that pulls the story from the Presalytics Story API.
+        This nonce is to be used during the rendering process by the `to_html` method for
+        widgets that implement this feature.
     """
     outline_widget: typing.Optional['Widget']
 
@@ -143,9 +152,46 @@ class WidgetBase(ComponentBase):
         super(WidgetBase, self).__init__(*args, **kwargs)
         self.name = name
         self.outline_widget = None
+        self.nonce = str(uuid.uuid4())
 
     def render(self, component, **kwargs):
-        self.to_html(component, **kwargs)
+        subdocument = self.create_subdocument(**kwargs)
+        if subdocument:
+            try:
+                self.cache_subdocument(subdocument)
+            except Exception as ex:
+                logger.exception(ex)
+        return self.to_html(component, **kwargs)
+
+    
+    def cache_subdocument(self, subdocument: str) -> bool:
+        subdocument_encoded = base64.b64encode(subdocument.encode('utf-8'))
+        client = self.get_client()
+        access_token = client.token_util.token.get('access_token', None)
+        if access_token:
+            api_user_id = client.oidc.get_user_id(access_token)
+            payload = {
+                'user_id': api_user_id,
+                'subdocument': subdocument_encoded,
+                'nonce': self.nonce
+            }
+            client.story.cache_post(payload)
+            return True
+        return False   
+    
+    def create_subdocument(self, **kwargs) -> typing.Optional[str]:
+        """
+        Returns an html document that will be rendered by browser.  If a `str` is returned, 
+        then the html subdocument is cached into the story API for retreival by the browser after
+        rendering.  Widgets that render `<iframe>`, `<object>`, or `<embed>` tags should override 
+        this method to return the subdocument that will be rendered by the browser. 
+
+        Returns
+        ----------
+
+        An `str` containing an html document
+        """
+        return None
 
     @abc.abstractmethod
     def to_html(self, data: typing.Dict = None, **kwargs) -> str:

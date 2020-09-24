@@ -23,14 +23,14 @@ class WidgetPage(presalytics.story.components.PageTemplateBase):
         return self.outline_page
 
     def render(self, **kwargs):
-        return self.widgets[0].to_html()
+        return self.widgets[0].render()
 
 
 def htmlize(widget):
     """
     Jinja filter to render a widget to a html string
     """
-    html = widget.to_html()
+    html = widget.render()
     try:
         html = html.decode('utf-8')
     except Exception:

@@ -152,16 +152,12 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
         }
     ] #type: ignore
 
-    def __init__(self, figure: 'Figure', name: str, story_id: str = "empty", *args, **kwargs):
-        self.story_id = story_id
+    def __init__(self, figure: 'Figure', name: str, *args, **kwargs):
         super(MatplotlibResponsiveFigure, self).__init__(figure, name, *args, **kwargs)
         self.story_host = self.get_client(delegate_login=True).story.api_client.configuration.host
 
         
     def to_html(self):
-        if not self.story_id:
-            message = "This object requires a valid story_id to render."
-            raise presalytics.lib.exceptions.MissingConfigException(message=message)
         html = self.create_container()
         return html
 
@@ -171,12 +167,8 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
         Wraps the Matplotlib Figure in a SVG endpoint load via `<iframe>` that
         will be rendered inside of a story and rescaled to give repsonsive effect
         """
-        params = {
-            "site_host": self.get_client(delegate_login=True).site_host,
-            "figure_id": self.figure_id,
-            "story_id": self.story_id
-        }
-        source_url = "{site_host}/story/matplotlib-figure/{story_id}/{figure_id}".format(**params)
+        story_host = self.get_client(delegate_login=True).story.api_client.external_root_url
+        source_url = "{0}/cache/{1}".format(story_host, self.nonce)
         empty_parent_div = lxml.html.Element("div", {
             'class': 'empty-parent bg-light matplotlib-responsive-container',
             'style': 'height: 100%; width: 100%, display: block; text-align: left;'
@@ -215,6 +207,9 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
             data=data,
             additional_properties=self.additional_properties
         )
+    
+    def create_subdocument(self, **kwargs):
+        return self.standalone_html()
 
     def standalone_html(self) -> str:
         SIMPLE_HTML = jinja2.Template("""<!DOCTYPE html>

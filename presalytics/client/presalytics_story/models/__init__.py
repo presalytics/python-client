@@ -16,9 +16,14 @@ from __future__ import absolute_import
 # import models into model package
 from presalytics.client.presalytics_story.models.add_new_collaborator_request import AddNewCollaboratorRequest
 from presalytics.client.presalytics_story.models.base_model import BaseModel
+from presalytics.client.presalytics_story.models.cache_post_request import CachePostRequest
 from presalytics.client.presalytics_story.models.collaborator_bulk_update_request import CollaboratorBulkUpdateRequest
 from presalytics.client.presalytics_story.models.create_session_request import CreateSessionRequest
+from presalytics.client.presalytics_story.models.event import Event
+from presalytics.client.presalytics_story.models.event_all_of import EventAllOf
 from presalytics.client.presalytics_story.models.file_upload import FileUpload
+from presalytics.client.presalytics_story.models.manage_event import ManageEvent
+from presalytics.client.presalytics_story.models.message import Message
 from presalytics.client.presalytics_story.models.modify_inactive_collaborator import ModifyInactiveCollaborator
 from presalytics.client.presalytics_story.models.ooxml_document import OoxmlDocument
 from presalytics.client.presalytics_story.models.ooxml_document_all_of import OoxmlDocumentAllOf

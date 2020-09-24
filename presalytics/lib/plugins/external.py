@@ -54,6 +54,7 @@ class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
     __plugin_name__ = 'external_links'
 
     STYLES_MAP = {
+        'c3': 'https://{0}/static/vendor/c3/c3.min.css'.format(site_host),
         'reveal': {
             'base': '{0}/static/vendor/reveal/reveal.css'.format(site_host),
             'themes': {
@@ -75,6 +76,8 @@ class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
         'preloaders' : '{0}/static/css/preloaders.css'.format(site_host),
         'bootstrap4': "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css",
         'font-awesome': 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css',
+        'boostrap-table': 'https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css'
+    
     }
     """
     Static nested dictionary containing links to external stylesheets that will be rendered alongside this plugin
@@ -113,6 +116,7 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
     __plugin_name__ = 'external_scripts'
 
     SCRIPT_MAP = {
+        'c3': 'https://{0}/static/vendor/c3/c3.min.js'.format(site_host),
         'd3': 'https://d3js.org/d3.v5.min.js',
         'd3v3': 'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js',
         'reveal': {
@@ -132,7 +136,8 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
         'mpl-responsive': '{0}/static/js/mpl-responsive.js'.format(site_host),
         'jquery': 'https://code.jquery.com/jquery-3.4.1.min.js',
         'popper': 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js',
-        'bootstrap4': 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js'
+        'bootstrap4': 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js',
+        'boostrap-table': 'https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js'
     }
     """
     Static nested dictionary containing links to external scripts that will be rendered alongside this plugin

@@ -135,15 +135,33 @@ class Revealer(presalytics.story.components.Renderer):
                     srcs.append(root)
         allowed = ' '.join(set(srcs))
 
+        hosts = ["https://presalytics.io", "https://*.presalytics.io"]
+        for _, val in presalytics.CONFIG.get("BROWSER_API_HOST", {}).items():
+            if val not in hosts:
+                hosts.append(val)
+
+        allowed_hosts = ' '.join(set(hosts))
+        frame_hosts = self.get_embedded_frame_hosts()
         tags = [
             '<meta charset="utf-8">',
             '<meta http-equiv="X-UA-Compatible" content="IE=edge">',
             '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">',
             '<title>Presalytics | ' + self.story_outline.title + '</title>',
-            '<meta name="description" content="' + self.story_outline.description + '" />'
-        #    """<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://*.presalytics.io; script-src 'self' https://*.presalytics.io {0};">""".format(allowed)
+            '<meta name="description" content="' + self.story_outline.description + '" />',
+            """<meta http-equiv="Content-Security-Policy" content="default-src 'self' {0}; script-src 'self' 'unsafe-inline' {0} {1}; frame-src: 'self' {2};">""".format(allowed_hosts, allowed, frame_hosts)
         ]
         return tags
+
+    def get_embedded_frame_hosts(self) -> typing.List[str]:
+        frame_hosts = []
+        for p in self.story_outline.pages:
+            for w in p.widgets:
+                if w.kind == 'url':
+                    url = w.data.get('url')
+                    host = urllib.parse.urlparse(url).netloc  # type: ignore
+                    frame_hosts.append('https://{0}'.format(host))
+        return frame_hosts
+
 
     def package_as_standalone(self):
         """

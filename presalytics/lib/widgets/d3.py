@@ -100,21 +100,12 @@ class D3Widget(presalytics.story.components.WidgetBase):
 
     """
     __component_kind__ = 'd3'
-    __plugins__ = [
-        {
-            'name': 'external_scripts',
-            'kind': 'script',
-            'config': {
-                'approved_scripts_key': 'd3'
-            }
-        }
-    ]
+
 
     def __init__(self, 
                  name: str, 
                  d3_data: typing.Dict,
-                 id: str = None, 
-                 story_id: str = None,
+                 id: str = None,
                  script64: str = None, 
                  script_filename: str = None, 
                  css64: str = None,
@@ -126,7 +117,6 @@ class D3Widget(presalytics.story.components.WidgetBase):
             id = 'd3-' + str(uuid.uuid4())
         self.id = id
         self.d3_data = d3_data
-        self.story_id = story_id
         super(D3Widget, self).__init__(name, *args, **kwargs)
         self.script_filename = script_filename
         self.script64 = self.read_file(script_filename)
@@ -165,9 +155,6 @@ class D3Widget(presalytics.story.components.WidgetBase):
         """
         Renders the sandboxed iframe with will contain the d3 script widget
         """
-        if not self.story_id:
-            message = "This object requires a valid story_id to render."
-            raise presalytics.lib.exceptions.MissingConfigException(message=message)
         html = self.create_container()
         return html
 
@@ -176,12 +163,8 @@ class D3Widget(presalytics.story.components.WidgetBase):
         Wraps the D3 objects in an endpoint at the story API load via a sandboxed `<iframe>` that
         will be rendered
         """
-        params = {
-            "story_host": self.get_client(delegate_login=True).story.api_client.external_root_url,
-            "id": self.id,
-            "story_id": self.story_id,
-        }
-        source_url = "{story_host}/{story_id}/d3/{id}".format(**params)
+        story_host = self.get_client(delegate_login=True).story.api_client.external_root_url
+        source_url = "{0}/cache/{1}".format(story_host, self.nonce)
         empty_parent_div = lxml.html.Element("div", {
             'class': 'empty-parent bg-light',
             'style': 'height: 100%; width: 100%, display: block; text-align: left;'
@@ -250,6 +233,9 @@ class D3Widget(presalytics.story.components.WidgetBase):
         margin: 0px;
     }
     """
+
+    def create_subdocument(self, **kwargs):
+        return self.standalone_html()
 
 
     def standalone_html(self) -> str:

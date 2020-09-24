@@ -196,6 +196,9 @@ from presalytics.lib.widgets.matplotlib import MatplotlibFigure, MatplotlibRespo
 from presalytics.lib.widgets.d3 import (
     D3Widget
 )
+from presalytics.lib.widgets.chart import ChartWidget
+from presalytics.lib.widgets.data_table import DataTableWidget
+from presalytics.lib.widgets.url import UrlWidget
 from presalytics.lib.widgets.ooxml import (
     OoxmlWidgetBase,
     OoxmlFileWidget, 
@@ -223,6 +226,7 @@ from presalytics.lib.widgets.ooxml_editors import (
 )
 
 
+
 __all__ = [
     'CONFIG',
     'COMPONENTS',
@@ -238,6 +242,9 @@ __all__ = [
     'OoxmlWidgetBase',
     'OoxmlEditorWidget',
     'D3Widget',
+    'ChartWidget',
+    'DataTableWidget',
+    'UrlWidget',
     'ChartUpdaterWidget',
     'TableUpdaterWidget',
     'XmlTransformBase',

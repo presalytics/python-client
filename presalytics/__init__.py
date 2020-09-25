@@ -199,6 +199,7 @@ from presalytics.lib.widgets.d3 import (
 from presalytics.lib.widgets.chart import ChartWidget
 from presalytics.lib.widgets.data_table import DataTableWidget
 from presalytics.lib.widgets.url import UrlWidget
+from presalytics.lib.widgets.markdown import MarkdownWidget
 from presalytics.lib.widgets.ooxml import (
     OoxmlWidgetBase,
     OoxmlFileWidget, 

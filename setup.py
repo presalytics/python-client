@@ -38,7 +38,9 @@ REQUIRES = [
     "pandas",
     "wsgi_microservice_middleware>=0.1.5",
     "cachetools==4.1.0",
-    "python-jose"
+    "python-jose",
+    'markdown',
+    'py-gfm'
 ]
 
 with open("README.md", "r") as fh:

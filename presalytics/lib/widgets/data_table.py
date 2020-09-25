@@ -44,13 +44,9 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
 
     def __init__(self, 
                  name: str,
-                 id: str,
                  table_data: typing.Dict,
                  *args,
                  **kwargs):
-        if not id:
-            id = 'chart-' + str(uuid.uuid4())
-        self.id = id
         self.table_data = table_data
         super(DataTableWidget, self).__init__(name, *args, **kwargs)
 
@@ -87,8 +83,6 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
     @classmethod
     def deserialize(cls, outline, **kwargs):
         table_data = outline.data.get("table_data")
-        story_id = outline.data.get("story_id", None)
-        id = outline.data.get('id', None)
         return cls(outline.name,
                    id=id,
                    table_data=table_data,
@@ -98,8 +92,6 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
     def serialize(self, **kwargs):
         data = {
             'table_data': self.table_data,
-            'id': self.id,
-            'story_id': self.story_id,
         }
         return presalytics.story.outline.Widget(
             name=self.name,
@@ -140,21 +132,15 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
                 <link href="{{bootstrap4_css_url}}" rel="stylesheet"/>
                 <link href="{{font_awesome_url}}" rel="stylesheet"/>
                 <link href="{{bootstrap_table_css_url}}" rel="stylesheet"/>
-                <div id="{{ id }}" class="data-table-container"></div>
+                <div id="table" class="data-table-container"></div>
                 <script type="text/javascript" src="{{ jquery_url }}"></script>
                 <script type="text/javascript" src="{{ popper_url }}"></script>  
                 <script type="text/javascript" src="{{ bootstrap4_js_url }}"></script>  
                 <script type="text/javascript" src="{{ boostrap_table_js_url }}"></script>  
                 <script type="text/javascript">
-                    document.addEventListener("DOMContentLoaded", function(event) { 
-                        var id = '{{id}}';
-
+                    $(document).ready(function() {
                         var data = JSON.parse('{{data|safe}}');
-
-                        var container = document.getElementById(id);
-
-                        c3.generate(data);
-                    
+                        $("#table").bootstrapTable(data);
                     });
                 </script>
             </body>

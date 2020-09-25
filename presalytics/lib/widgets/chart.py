@@ -33,14 +33,10 @@ class ChartWidget(presalytics.story.components.WidgetBase):
     name : str
         the name of widget.  Must be unique within `presalytics.COMPONENTS`
 
-    data: dict
+    chart_data: dict
         Data that will be loaded into the `c3.generate()` method.  Please go
         to [c3js.org](https://c3js.org/gettingstarted.html) for more information 
         on how to configure this object.
-
-    story_id : str, optional
-        The story_id of the parent story
-
     """
     __component_kind__ = 'chart'
 
@@ -90,8 +86,6 @@ class ChartWidget(presalytics.story.components.WidgetBase):
     @classmethod
     def deserialize(cls, outline, **kwargs):
         chart_data = outline.data.get("chart_data")
-        story_id = outline.data.get("story_id", None)
-        id = outline.data.get('id', None)
         return cls(outline.name,
                    chart_data=chart_data,
                    **kwargs)

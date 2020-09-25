@@ -20,12 +20,9 @@ logger = logging.getLogger(__name__)
 
 class UrlWidget(presalytics.story.components.WidgetBase):
     """
-    A `Widget` for rendering chart objects, implemented over the top of c3.js.
-    For security reasons, charts are loaded via a sandboxed iframe that points
-    to an endpoint in the Presalytics Story API.
-
-    This class allows users to load [c3.js](https://c3js.org/) objects
-    into widgets in order load charts directly off a simple data object.
+    A `Widget` for rendering urls in an iframe.  Allows users
+    load 3rd party site and applications natively within a presalytics
+    story.
 
     Parameters
     ----------
@@ -33,13 +30,8 @@ class UrlWidget(presalytics.story.components.WidgetBase):
     name : str
         the name of widget.  Must be unique within `presalytics.COMPONENTS`
 
-    data: dict
-        Data that will be loaded into the `c3.generate()` method.  Please go
-        to [c3js.org](https://c3js.org/gettingstarted.html) for more information 
-        on how to configure this object.
-
-    story_id : str, optional
-        The story_id of the parent story
+    url: str
+        The url to be loaded in the `<iframe>`.  For secutriy reasons, it must be https.
 
     """
     __component_kind__ = 'url'
@@ -50,7 +42,7 @@ class UrlWidget(presalytics.story.components.WidgetBase):
                  *args,
                  **kwargs):
         self.url = url
-        super(ChartWidget, self).__init__(name, *args, **kwargs)
+        super(UrlWidget, self).__init__(name, *args, **kwargs)
 
 
     def to_html(self, data=None, **kwargs) -> str:

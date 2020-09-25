@@ -146,7 +146,6 @@ class ChartWidget(presalytics.story.components.WidgetBase):
         data = json.dumps(self.chart_data)  # dont use hyphens in data keys
         extra_css = base64.b64decode(self.css64).decode('utf-8') if self.css64 else ChartWidget.DEFAULT_CSS  #type: ignore  
         context = {
-            "id": self.id,
             "c3_styles_url": presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten().get('c3'),
             "c3_script_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('c3'),
             "d3_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('d3'),

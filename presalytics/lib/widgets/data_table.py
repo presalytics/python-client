@@ -84,9 +84,7 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
     def deserialize(cls, outline, **kwargs):
         table_data = outline.data.get("table_data")
         return cls(outline.name,
-                   id=id,
                    table_data=table_data,
-                   story_id=story_id,
                     **kwargs)
 
     def serialize(self, **kwargs):
@@ -148,7 +146,6 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
         data = json.dumps(self.table_data)  # dont use hyphens in data keys
         extra_css = base64.b64decode(self.css64).decode('utf-8') if self.css64 else DataTableWidget.DEFAULT_CSS  #type: ignore  
         context = {
-            "id": self.id,
             "bootstrap4_css_url": presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten().get('boostrap4'),
             "font_awesome_url": presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten().get('font-awesome'),
             "bootstrap_table_css_url": presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten().get('bootstrap-table'),

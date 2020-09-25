@@ -46,15 +46,16 @@ class ChartWidget(presalytics.story.components.WidgetBase):
 
     def __init__(self, 
                  name: str,
-                 id: str,
                  chart_data: typing.Dict,
                  *args,
                  **kwargs):
-        if not id:
-            id = 'chart-' + str(uuid.uuid4())
-        self.id = id
         self.chart_data = chart_data
         super(ChartWidget, self).__init__(name, *args, **kwargs)
+        self.add_bind_to()
+
+    def add_bind_to(self):
+        if 'bindto' not in self.chart_data.keys():
+            self.chart_data['bindto'] = 'chart'
 
 
     def to_html(self, data=None, **kwargs) -> str:
@@ -92,16 +93,12 @@ class ChartWidget(presalytics.story.components.WidgetBase):
         story_id = outline.data.get("story_id", None)
         id = outline.data.get('id', None)
         return cls(outline.name,
-                   id=id,
                    chart_data=chart_data,
-                   story_id=story_id,
-                    **kwargs)
+                   **kwargs)
 
     def serialize(self, **kwargs):
         data = {
             'chart_data': self.chart_data,
-            'id': self.id,
-            'story_id': self.story_id,
         }
         return presalytics.story.outline.Widget(
             name=self.name,
@@ -143,17 +140,11 @@ class ChartWidget(presalytics.story.components.WidgetBase):
                 <link href="{{c3_styles_url}}" rel="stylesheet"/>
                 <script type="text/javascript" src="{{ d3_url }}"></script>
                 <script type="text/javascript" src="{{ c3_script_url }}"></script>  
-                <div id="{{ id }}" class="chart-container"></div>
+                <div id="chart" class="chart-container"></div>
                 <script type="text/javascript">
                     document.addEventListener("DOMContentLoaded", function(event) { 
-                        var id = '{{id}}';
-
                         var data = JSON.parse('{{data|safe}}');
-
-                        var container = document.getElementById(id);
-
                         c3.generate(data);
-                    
                     });
                 </script>
             </body>

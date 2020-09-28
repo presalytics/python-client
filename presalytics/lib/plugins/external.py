@@ -76,7 +76,7 @@ class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
         'preloaders' : '{0}/static/css/preloaders.css'.format(site_host),
         'bootstrap4': "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css",
         'font-awesome': 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css',
-        'boostrap-table': 'https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css',
+        'bootstrap-table': 'https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css',
         'markdown-css': 'https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css'
     
     }
@@ -138,7 +138,7 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
         'jquery': 'https://code.jquery.com/jquery-3.4.1.min.js',
         'popper': 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js',
         'bootstrap4': 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js',
-        'boostrap-table': 'https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js'
+        'bootstrap-table': 'https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js'
     }
     """
     Static nested dictionary containing links to external scripts that will be rendered alongside this plugin

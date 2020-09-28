@@ -54,7 +54,7 @@ class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
     __plugin_name__ = 'external_links'
 
     STYLES_MAP = {
-        'c3': 'https://{0}/static/vendor/c3/c3.min.css'.format(site_host),
+        'c3': '{0}/static/vendor/c3/c3.min.css'.format(site_host),
         'reveal': {
             'base': '{0}/static/vendor/reveal/reveal.css'.format(site_host),
             'themes': {
@@ -117,7 +117,7 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
     __plugin_name__ = 'external_scripts'
 
     SCRIPT_MAP = {
-        'c3': 'https://{0}/static/vendor/c3/c3.min.js'.format(site_host),
+        'c3': '{0}/static/vendor/c3/c3.min.js'.format(site_host),
         'd3': 'https://d3js.org/d3.v5.min.js',
         'd3v3': 'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js',
         'reveal': {

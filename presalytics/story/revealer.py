@@ -19,6 +19,7 @@ import presalytics.lib
 import presalytics.lib.plugins
 import presalytics.lib.plugins.base
 import presalytics.lib.plugins.reveal
+import presalytics.lib.plugins.external
 import presalytics.lib.templates
 import presalytics.lib.templates.base
 import presalytics.story.util
@@ -134,11 +135,14 @@ class Revealer(presalytics.story.components.Renderer):
                 if root:
                     srcs.append(root)
         allowed = ' '.join(set(srcs))
-
         hosts = ["https://presalytics.io", "https://*.presalytics.io"]
-        for _, val in presalytics.CONFIG.get("BROWSER_API_HOST", {}).items():
-            if val not in hosts:
-                hosts.append(val)
+        approved = presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten()
+        approved.update(presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten())
+        for _, val in approved.items():
+            url = urllib.parse.urlparse(url)
+            host = "{0}://{1}".format(url.scheme, url.netloc)
+            if host not in hosts:
+                hosts.append(host)
 
         allowed_hosts = ' '.join(set(hosts))
         frame_hosts = ' '.join(set(self.get_embedded_frame_hosts()))

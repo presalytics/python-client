@@ -138,6 +138,7 @@ class Revealer(presalytics.story.components.Renderer):
         hosts = ["https://presalytics.io", "https://*.presalytics.io"]
         approved = presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten()
         approved.update(presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten())
+        approved.update(presalytics.CONFIG.get("BROWSER_API_HOST", {}))
         for _, val in approved.items():
             url = urllib.parse.urlparse(val)
             host = "{0}://{1}".format(url.scheme, url.netloc)
@@ -152,7 +153,7 @@ class Revealer(presalytics.story.components.Renderer):
             '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">',
             '<title>Presalytics | ' + self.story_outline.title + '</title>',
             '<meta name="description" content="' + self.story_outline.description + '" />',
-            """<meta http-equiv="Content-Security-Policy" content="default-src 'self' {0}; script-src 'self' 'unsafe-inline' {0} {1}; frame-src 'self' {2};">""".format(allowed_hosts, allowed, frame_hosts)
+            """<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-eval' 'unsafe-inline' {0}; script-src 'self' 'unsafe-eval' 'unsafe-inline' {0} {1}; frame-src 'self' {2};">""".format(allowed_hosts, allowed, frame_hosts)
         ]
         return tags
 

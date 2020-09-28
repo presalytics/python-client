@@ -5,7 +5,7 @@ import presalytics.lib.exceptions
 
 site_host = "https://presalytics.io"
 try:
-    site_host = presalytics.CONFIG.get("BROWSER_API_HOST", {}).GET('SITE', "https://presalytics.io") #type: ignore
+    site_host = presalytics.CONFIG.get("BROWSER_API_HOST", {}).get('SITE', "https://presalytics.io") #type: ignore
 except (KeyError, AttributeError, ImportError, ModuleNotFoundError):
     pass
 

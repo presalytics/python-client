@@ -86,7 +86,7 @@ class ChartWidget(presalytics.story.components.WidgetBase):
 
     def add_bind_to(self):
         if 'bindto' not in self.chart_data.keys():
-            self.chart_data['bindto'] = 'chart'
+            self.chart_data['bindto'] = '#chart'
 
 
     def to_html(self, data=None, **kwargs) -> str:

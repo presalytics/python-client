@@ -154,14 +154,14 @@ class WidgetBase(ComponentBase):
         self.outline_widget = None
         self.nonce = str(uuid.uuid4())
 
-    def render(self, component, **kwargs):
+    def render(self, **kwargs):
         subdocument = self.create_subdocument(**kwargs)
         if subdocument:
             try:
                 self.cache_subdocument(subdocument)
             except Exception as ex:
                 logger.exception(ex)
-        return self.to_html(component, **kwargs)
+        return self.to_html(**kwargs)
 
     
     def cache_subdocument(self, subdocument: str) -> bool:
@@ -189,7 +189,7 @@ class WidgetBase(ComponentBase):
         Returns
         ----------
 
-        An `str` containing an html document
+        An `str` containing an html document if implemented, otherwise None.
         """
         return None
 

@@ -30,7 +30,7 @@ def htmlize(widget):
     """
     Jinja filter to render a widget to a html string
     """
-    html = widget.render()
+    html = widget.render(widget)
     try:
         html = html.decode('utf-8')
     except Exception:

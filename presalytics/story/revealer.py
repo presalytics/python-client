@@ -141,7 +141,7 @@ class Revealer(presalytics.story.components.Renderer):
                 hosts.append(val)
 
         allowed_hosts = ' '.join(set(hosts))
-        frame_hosts = self.get_embedded_frame_hosts()
+        frame_hosts = ' '.join(set(self.get_embedded_frame_hosts()))
         tags = [
             '<meta charset="utf-8">',
             '<meta http-equiv="X-UA-Compatible" content="IE=edge">',

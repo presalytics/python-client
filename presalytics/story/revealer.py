@@ -153,7 +153,7 @@ class Revealer(presalytics.story.components.Renderer):
             '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">',
             '<title>Presalytics | ' + self.story_outline.title + '</title>',
             '<meta name="description" content="' + self.story_outline.description + '" />',
-            """<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-eval' 'unsafe-inline' blob: {0}; script-src 'self' 'unsafe-eval' 'unsafe-inline' {0} {1}; frame-src 'self' {2};">""".format(allowed_hosts, allowed, frame_hosts)
+            """<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-eval' 'unsafe-inline' blob: {0}; script-src 'self' 'unsafe-eval' 'unsafe-inline' {0} {1}; frame-src 'self' blob: {2};">""".format(allowed_hosts, allowed, frame_hosts)
         ]
         return tags
 

@@ -40,6 +40,7 @@ class MatplotlibFigure(presalytics.story.components.WidgetBase):
 
     figure_id : str
         A unique identifier used to render the that figure into a d3.js object
+
     """
     __component_kind__ = 'matplotlib-figure'
     additional_properties: typing.Dict

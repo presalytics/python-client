@@ -37,17 +37,52 @@ class ChartWidget(presalytics.story.components.WidgetBase):
         Data that will be loaded into the `c3.generate()` method.  Please go
         to [c3js.org](https://c3js.org/gettingstarted.html) for more information 
         on how to configure this object.
+
+    css64 : str. optional
+        A base64-encoded string of the css styles to apply to the d3 document.  Used for server-to-server
+        transport over https.
+    
+    css_filename: str, optional
+        A css file containing styles that will be applied to d3
+
+        Note: Styles `html {width: 100%; height:100%;} body {width: 100%; height: 100%; margin: 0px;}`
+        are applied by default if not css is provided
     """
     __component_kind__ = 'chart'
 
     def __init__(self, 
                  name: str,
                  chart_data: typing.Dict,
+                 css64: str = None,
+                 css_filename: str = None,
                  *args,
                  **kwargs):
         self.chart_data = chart_data
         super(ChartWidget, self).__init__(name, *args, **kwargs)
         self.add_bind_to()
+        self.css64 = self.read_file(css_filename)
+        self.css64 = self.css64 if self.css64 else css64
+        self.css_filename = css_filename
+
+    def read_file(self, filename) -> typing.Optional[str]:
+        """
+        Find a file named `filename` and return its base64-ecoded content
+        """
+        data64 = None
+        if filename:
+            search_paths = list(set(presalytics.autodiscover_paths))
+            if os.getcwd() not in search_paths:
+                search_paths.append(os.getcwd())
+            for path in search_paths:
+                fpath = os.path.join(path, filename)
+                if os.path.exists(fpath):
+                    with open(fpath, 'rb') as f:
+                        data = f.read()
+                        data64 = base64.b64encode(data).decode('utf-8')  #type: ignore
+                    break
+            if not data64:
+                logger.debug("File {0} could not be found".format(filename))
+        return data64
 
     def add_bind_to(self):
         if 'bindto' not in self.chart_data.keys():

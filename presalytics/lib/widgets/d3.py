@@ -72,9 +72,6 @@ class D3Widget(presalytics.story.components.WidgetBase):
         are applied by default if not css is provided
 
 
-    
-
-
     Script Local Variables:
     ----------
 
@@ -126,9 +123,9 @@ class D3Widget(presalytics.story.components.WidgetBase):
             raise presalytics.lib.exceptions.InvalidConfigurationError("D3 Widget must be supplied either a script64 or script_filename keyword argument.")
         self.html64 = self.read_file(html_filename)
         self.html64 = self.html64 if self.html64 else html64
+        self.html_filename = html_filename
         self.css64 = self.read_file(css_filename)
         self.css64 = self.css64 if self.css64 else css64
-        self.html_filename = html_filename
         self.css_filename = css_filename
 
     def read_file(self, filename) -> typing.Optional[str]:

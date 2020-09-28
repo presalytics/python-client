@@ -139,7 +139,7 @@ class Revealer(presalytics.story.components.Renderer):
         approved = presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten()
         approved.update(presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten())
         for _, val in approved.items():
-            url = urllib.parse.urlparse(url)
+            url = urllib.parse.urlparse(val)
             host = "{0}://{1}".format(url.scheme, url.netloc)
             if host not in hosts:
                 hosts.append(host)

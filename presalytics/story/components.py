@@ -165,7 +165,7 @@ class WidgetBase(ComponentBase):
 
     
     def cache_subdocument(self, subdocument: str) -> bool:
-        subdocument_encoded = str(base64.b64encode(subdocument.encode('utf-8')))
+        subdocument_encoded = base64.b64encode(subdocument.encode('utf-8')).decode('utf-8')
         client = self.get_client()
         access_token = client.token_util.token.get('access_token', None)
         if access_token:

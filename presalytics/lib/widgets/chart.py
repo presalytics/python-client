@@ -145,7 +145,17 @@ class ChartWidget(presalytics.story.components.WidgetBase):
         width: 100%;
         margin: 0px;
     }
+
+    .c3-axis-y text,
+    .c3-axis-x text,
+    .c3-axis-y2 text,
+    .c3-legend-item text
+    {
+        font-size: 1rem;
+    }
     """
+
+
 
     def create_subdocument(self, **kwargs):
         return self.standalone_html()

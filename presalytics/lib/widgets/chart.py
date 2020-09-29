@@ -175,7 +175,7 @@ class ChartWidget(presalytics.story.components.WidgetBase):
                     document.addEventListener("DOMContentLoaded", (event) => { 
                         var data = JSON.parse('{{data|safe}}');
 
-                        var aspectRatio = data.aspectRatio || 56.25%;
+                        var aspectRatio = data.aspectRatio || 0.5625; // 16:9 AR
 
                         var chart = c3.generate(data);
 

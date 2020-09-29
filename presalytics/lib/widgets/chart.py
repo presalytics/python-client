@@ -183,6 +183,7 @@ class ChartWidget(presalytics.story.components.WidgetBase):
                             var width = document.querySelector('#chart').offsetWidth;
                             var newHeight = width * aspectRatio;
                             chart.resize({width: newHeight});
+                            chart.internal.selectChart.style('max-height', 'none');
                         }
 
                         const observer = new ResizeObserver(c3Resize);

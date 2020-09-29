@@ -153,6 +153,10 @@ class ChartWidget(presalytics.story.components.WidgetBase):
     {
         font-size: 1rem;
     }
+
+    #chart {
+        margin: 20px;
+    }
     """
 
 
@@ -207,8 +211,6 @@ class ChartWidget(presalytics.story.components.WidgetBase):
                         observer.observe(document.querySelector('body'));
 
                         c3Resize();
-
-                        
                     });
                 </script>
             </body>

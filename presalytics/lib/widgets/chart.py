@@ -171,9 +171,25 @@ class ChartWidget(presalytics.story.components.WidgetBase):
                 <script type="text/javascript" src="{{ c3_script_url }}"></script>  
                 <div id="chart" class="chart-container"></div>
                 <script type="text/javascript">
-                    document.addEventListener("DOMContentLoaded", function(event) { 
+
+                    document.addEventListener("DOMContentLoaded", (event) => { 
                         var data = JSON.parse('{{data|safe}}');
-                        c3.generate(data);
+
+                        var aspectRatio = data.aspectRatio || 56.25;
+
+                        var chart = c3.generate(data);
+
+                        var c3Resize = () => {
+                            var width = document.querySelector('#chart').offsetWidth;
+                            var newHeight = width * aspectRatio;
+                            chart.resize({width: newHeight});
+                        }
+
+                        const observer = new ResizeObserver(c3Resize);
+
+                        observer.observe('body');
+
+                        
                     });
                 </script>
             </body>

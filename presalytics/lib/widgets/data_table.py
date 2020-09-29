@@ -141,7 +141,23 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
         height: 100%;
         width: 100%;
         margin: 0px;
+        background-color: #f8f9fa;
     }
+
+    .data-table-container {
+        border: none;
+    }
+
+    .data-table-container tbody {
+        background-color: #fff;
+    }
+
+    .data-table-container thead {
+        background-color: #199ec7;
+        color: white;
+    }
+
+
     """
 
     def create_subdocument(self, **kwargs):

@@ -189,6 +189,8 @@ class ChartWidget(presalytics.story.components.WidgetBase):
 
                         observer.observe(document.querySelector('body'));
 
+                        c3Resize();
+
                         
                     });
                 </script>

@@ -188,12 +188,18 @@ class ChartWidget(presalytics.story.components.WidgetBase):
                         var aspectRatio = data.aspectRatio || 0.5625; // 16:9 AR
 
                         var chart = c3.generate(data);
+                        var timeout;
 
                         var c3Resize = () => {
-                            var width = document.querySelector('#chart').offsetWidth;
-                            var newHeight = width * aspectRatio;
-                            chart.resize({height: newHeight});
-                            chart.internal.selectChart.style('max-height', 'none');
+                            clearTimeout(timeout);
+                            timeout = setTimeout( () => {
+                                timeout = null;
+                                var width = document.querySelector('#chart').offsetWidth;
+                                var newHeight = width * aspectRatio;
+                                chart.resize({height: newHeight});
+                                chart.internal.selectChart.style('max-height', 'none');
+                            }, 500);
+                            
                         }
 
                         const observer = new ResizeObserver(c3Resize);

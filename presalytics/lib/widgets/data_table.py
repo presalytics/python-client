@@ -141,11 +141,11 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
         height: 100%;
         width: 100%;
         margin: 0px;
-        background-color: #f8f9fa;
+        background-color: #f8f9fa !important;
     }
 
     .data-table-container {
-        border: none;
+        border: none !important;
     }
 
     .data-table-container tbody {

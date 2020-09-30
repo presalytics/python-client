@@ -1,3 +1,4 @@
+import copy
 import presalytics
 import presalytics.lib.plugins.base as ext
 import presalytics.lib.plugins.jinja as jinja
@@ -66,7 +67,7 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
     ]
 
     def to_script(self, config, **kwargs):
-        reveal_config = self.default_config
+        reveal_config = copy.deepcopy(self.default_config)
         if config.get("reveal_params", None):
             reveal_config.update(config.pop("reveal_params"))
         config.update({'reveal_config': reveal_config})

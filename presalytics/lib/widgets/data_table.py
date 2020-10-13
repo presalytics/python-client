@@ -147,6 +147,8 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
 
     .data-table-container {
         border: none !important;
+        display: table;
+        width: 100%;
     }
 
     .data-table-container tbody {

@@ -10,6 +10,7 @@ import lxml
 import lxml.html
 import presalytics
 import presalytics.lib.exceptions
+import presalytics.story.outline
 
 if typing.TYPE_CHECKING:
     pass
@@ -194,7 +195,7 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
                 </script>
             </body>
         </html>""")
-        data = json.dumps(self.table_data)  # dont use hyphens in data keys
+        data = json.dumps(self.table_data, cls=presalytics.story.outline.OutlineEncoder)  # dont use hyphens in data keys
         extra_css = base64.b64decode(self.css64).decode('utf-8') if self.css64 else DataTableWidget.DEFAULT_CSS  #type: ignore  
         context = {
             "bootstrap4_css_url": presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten().get('bootstrap4'),

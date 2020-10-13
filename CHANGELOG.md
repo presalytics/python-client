@@ -1,6 +1,15 @@
+## v0.5.20 (2020-09-20)
+
+* Fix json encoder in `presalytics.lib.widgets.datatable.DataTableWidget`
+* update Story Api Endpoints
+
 ## v0.5.19 (2020-09-20)
 
-* Point `ooxml.js` to static folder on main site in `presalytics.lib.plugings.external.ApprovedExternalScripts`
+* Point `ooxml.js` to static folder on main site in `presalytics.lib.plugins.external.ApprovedExternalScripts`
+* Add `presalytics.lib.widgets.url.UrlWidget`
+* Add `presalytics.lib.widgets.chart.ChartWidget`
+* Add `presalytics.lib.widgets.datatable.DataTableWidget`
+* Fix immutability bug in `presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config`
 
 ## v0.5.18 (2020-09-01)
 

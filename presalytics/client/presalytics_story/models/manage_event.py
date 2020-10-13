@@ -32,7 +32,7 @@ class ManageEvent(object):
     """
     openapi_types = {
         'action': 'str',
-        'action_params': 'list[dict(str, str)]',
+        'action_params': 'dict(str, str)',
         'name': 'str'
     }
 
@@ -74,7 +74,7 @@ class ManageEvent(object):
         :param action: The action of this ManageEvent.  # noqa: E501
         :type: str
         """
-        allowed_values = ["create", "fire", "update"]  # noqa: E501
+        allowed_values = ["create", "fire", "change"]  # noqa: E501
         if action not in allowed_values:
             raise ValueError(
                 "Invalid value for `action` ({0}), must be one of {1}"  # noqa: E501
@@ -89,7 +89,7 @@ class ManageEvent(object):
 
 
         :return: The action_params of this ManageEvent.  # noqa: E501
-        :rtype: list[dict(str, str)]
+        :rtype: dict(str, str)
         """
         return self._action_params
 
@@ -99,7 +99,7 @@ class ManageEvent(object):
 
 
         :param action_params: The action_params of this ManageEvent.  # noqa: E501
-        :type: list[dict(str, str)]
+        :type: dict(str, str)
         """
 
         self._action_params = action_params

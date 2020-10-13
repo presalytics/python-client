@@ -1,4 +1,8 @@
-## v0.5.20 (2020-09-20)
+## v0.5.21 (2020-10-13)
+
+* Fix page css clases
+
+## v0.5.20 (2020-10-13)
 
 * Fix json encoder in `presalytics.lib.widgets.datatable.DataTableWidget`
 * update Story Api Endpoints

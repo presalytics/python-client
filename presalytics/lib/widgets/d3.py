@@ -270,7 +270,6 @@ class D3Widget(presalytics.story.components.WidgetBase):
         script = base64.b64decode(self.script64).decode('utf-8')  #type: ignore  #Required
         extra_css = base64.b64decode(self.css64).decode('utf-8') if self.css64 else D3Widget.DEFAULT_CSS  #type: ignore  
         html_fragment = base64.b64decode(self.html64).decode('utf-8') if self.html64 else None  #type: ignore   # disable nested iframes
-        story_host = self.get_client(delegate_login=True).story.api_client.external_root_url
         context = {
             "id": self.id,
             "d3_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('d3'),

@@ -184,6 +184,7 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
                 <link href="{{bootstrap4_css_url}}" rel="stylesheet"/>
                 <link href="{{font_awesome_url}}" rel="stylesheet"/>
                 <link href="{{bootstrap_table_css_url}}" rel="stylesheet"/>
+                <script type="text/javascript" src="{{ events_url }}"></script>
                 <div id="table" class="data-table-container"></div>
                 <script type="text/javascript" src="{{ jquery_url }}"></script>
                 <script type="text/javascript" src="{{ popper_url }}"></script>  
@@ -207,6 +208,7 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
             "popper_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('popper'),
             "boostrap_table_js_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('bootstrap-table'),
             "d3_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('d3'),
+            "events_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('events'),
             "data": data,
             "css": extra_css
         }

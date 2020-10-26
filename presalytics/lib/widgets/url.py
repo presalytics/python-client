@@ -67,7 +67,7 @@ class UrlWidget(presalytics.story.components.WidgetBase):
             'scrolling': "auto",
             'class': 'd3-responsive-frame',
             'style': 'max-height: none; max-width: none; height:100%; width: 100%;',
-            'sandbox': 'allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin'
+            'sandbox': 'allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox'
         })
         empty_parent_div.append(frame)
         return lxml.html.tostring(empty_parent_div).decode('utf-8')

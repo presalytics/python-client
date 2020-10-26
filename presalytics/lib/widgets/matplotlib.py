@@ -224,6 +224,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
             <body>
                 <script type="text/javascript" src="{{ d3_url }}"></script>
                 <script type="text/javascript" src="{{ mpld3_url }}"></script>
+                <script type="text/javascript" src="{{ events_url }}"></script>
                 <div id="{{ figid }}"></div>
                 <script type="text/javascript">
 
@@ -236,6 +237,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
         context = {
             "d3_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('d3v3'),
             "mpld3_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('mpld3'),
+            "events_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('events'),
             "figid": self.figure_id,
             "figure_json": figure_json
         }

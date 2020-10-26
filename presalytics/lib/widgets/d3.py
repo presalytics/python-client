@@ -278,6 +278,6 @@ class D3Widget(presalytics.story.components.WidgetBase):
             "script": script,
             "css": extra_css,
             "html_fragment": html_fragment,
-            "events_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('events').format(story_host),
+            "events_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('events'),
         }
         return SIMPLE_HTML.render(**context)

@@ -226,7 +226,7 @@ class ChartWidget(presalytics.story.components.WidgetBase):
             "c3_styles_url": presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten().get('c3'),
             "c3_script_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('c3'),
             "d3_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('d3'),
-            "events_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('events').format(story_host),
+            "events_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('events'),
             "data": data,
             "css": extra_css
         }

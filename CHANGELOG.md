@@ -1,3 +1,7 @@
+## v0.5.22 (2020-10-13)
+
+* Add events handling to widgets with nested iframes
+
 ## v0.5.21 (2020-10-13)
 
 * Fix page css clases

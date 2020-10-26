@@ -185,7 +185,8 @@ class ChartWidget(presalytics.story.components.WidgetBase):
             <body>
                 <link href="{{c3_styles_url}}" rel="stylesheet"/>
                 <script type="text/javascript" src="{{ d3_url }}"></script>
-                <script type="text/javascript" src="{{ c3_script_url }}"></script>  
+                <script type="text/javascript" src="{{ c3_script_url }}"></script>
+                <script type="text/javascript" src="{{ events_url }}"></script>
                 <div id="chart" class="chart-container"></div>
                 <script type="text/javascript">
 
@@ -220,10 +221,12 @@ class ChartWidget(presalytics.story.components.WidgetBase):
         </html>""")
         data = json.dumps(self.chart_data)  # dont use hyphens in data keys
         extra_css = base64.b64decode(self.css64).decode('utf-8') if self.css64 else ChartWidget.DEFAULT_CSS  #type: ignore  
+        story_host = self.get_client(delegate_login=True).story.api_client.external_root_url
         context = {
             "c3_styles_url": presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten().get('c3'),
             "c3_script_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('c3'),
             "d3_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('d3'),
+            "events_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('events').format(story_host),
             "data": data,
             "css": extra_css
         }

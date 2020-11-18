@@ -371,6 +371,8 @@ def main():
             #load story outline from file
         if config:
             set_dict = {} if not args.set else parse_vars(args.set)
+            if 'CACHE_TOKENS' not in set_dict.keys():
+                set_dict['CACHE_TOKENS'] = True
             presalytics.lib.tools.workflows.create_config_file(args.username, 
                                                                password=args.password, 
                                                                set_dict=set_dict, 
@@ -385,8 +387,13 @@ def main():
                     if os.path.exists(abs_filename):
                         filename = abs_filename
                     else:
-                        logger.error("Could not find file: {}".format(filename))
-                        return
+                        if pull and args.id:
+                            outline = presalytics.lib.tools.workflows.pull_outline(args.id, username=args.username, password=args.password)
+                            _dump(outline, filename, args.overwrite, args.json)
+                            pull = False
+                        else:
+                            logger.error("Could not find file: {}".format(filename))
+                            return
                 outline = _load_file(filename)
         except Exception:
             logger.error("Error handling file: {}".format(filename))

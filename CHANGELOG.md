@@ -1,3 +1,8 @@
+## v0.5.23
+
+* Fix cli initial pull in empty workspace
+* Fix cli default to CACHE_TOKENS = True
+
 ## v0.5.22 (2020-10-13)
 
 * Add events handling to widgets with nested iframes

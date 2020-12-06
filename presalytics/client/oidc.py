@@ -85,6 +85,43 @@ class OidcClient(object):
         except:
             pass
 
+    def poll_for_token(self, device_code_response):
+        sleep_interval = device_code_response["interval"]
+        auth_data = {
+            "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
+            "device_code": device_code_response["device_code"],
+            "client_id": self.client_id
+        }
+        headers = {
+            'content-type': 'application/x-www-form-urlencoded'
+        }
+        repoll = True
+        while repoll:
+            token_response = requests.post(self.token_endpoint, auth_data, headers=headers)
+            if token_response.status_code != 200:
+                err_resp = token_response.json()
+                err_msg = err_resp["error"]
+                if err_msg in self.repoll_errors:
+                    time.sleep(sleep_interval)
+                    if err_msg == "slow_down":
+                        time.sleep(sleep_interval)
+                    logger.debug("User has not yet logged in.  Repolling...")                     
+                else:
+                    message = "Error: {0} -- {1}".format(err_msg, err_resp["error_description"])
+                    raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
+            else:
+                repoll = False
+        token_data = token_response.json()
+        if token_data.get('access_token', None):
+            print("Login Success! Please continue with your work.")
+            logger.debug("User logged in successfully.")
+        else:
+            message = "Error: {0} -- {1}".format(err_msg, err_resp["error_description"])
+            raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
+        if self.validate_tokens:
+            self.validate_token(token_data["access_token"])
+
+
 
     def token(self, username, password=None, audience=None, scope=None, **kwargs) -> typing.Dict:
         """
@@ -117,40 +154,7 @@ class OidcClient(object):
 
             device_code_response = self._post(self.device_endpoint, device_data)
             self.handle_device_code_response(device_code_response)
-            sleep_interval = device_code_response["interval"]
-            auth_data = {
-                "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
-                "device_code": device_code_response["device_code"],
-                "client_id": self.client_id
-            }
-            headers = {
-                'content-type': 'application/x-www-form-urlencoded'
-            }
-            repoll = True
-            while repoll:
-                token_response = requests.post(self.token_endpoint, auth_data, headers=headers)
-                if token_response.status_code != 200:
-                    err_resp = token_response.json()
-                    err_msg = err_resp["error"]
-                    if err_msg in self.repoll_errors:
-                        time.sleep(sleep_interval)
-                        if err_msg == "slow_down":
-                            time.sleep(sleep_interval)
-                        logger.debug("User has not yet logged in.  Repolling...")                     
-                    else:
-                        message = "Error: {0} -- {1}".format(err_msg, err_resp["error_description"])
-                        raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
-                else:
-                    repoll = False
-            token_data = token_response.json()
-            if token_data.get('access_token', None):
-                print("Login Success! Please continue with your work.")
-                logger.debug("User logged in successfully.")
-            else:
-                message = "Error: {0} -- {1}".format(err_msg, err_resp["error_description"])
-                raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
-        if self.validate_tokens:
-            self.validate_token(token_data["access_token"])
+            token_data = self.poll_for_token(device_code_response)
         return token_data
 
     def validate_token(self, token):

@@ -75,6 +75,17 @@ class OidcClient(object):
             "slow_down"
         ]
 
+    def handle_device_code_response(self, device_code_response):
+        user_code_message = "This device's user code is: {}.  Please verify this code when logging in.".format(device_code_response["user_code"])
+        print(user_code_message)
+        cli_message = "Please open a webrowser to {0} and login.".format(device_code_response["verification_uri_complete"])
+        print(cli_message)
+        try:
+            webbrowser.open_new_tab(device_code_response["verification_uri_complete"])
+        except:
+            pass
+
+
     def token(self, username, password=None, audience=None, scope=None, **kwargs) -> typing.Dict:
         """
         Get an access token
@@ -105,14 +116,7 @@ class OidcClient(object):
             }
 
             device_code_response = self._post(self.device_endpoint, device_data)
-            user_code_message = "This device's user code is: {}.  Please verify this code when logging in.".format(device_code_response["user_code"])
-            print(user_code_message)
-            cli_message = "Please open a webrowser to {0} and login.".format(device_code_response["verification_uri_complete"])
-            print(cli_message)
-            try:
-                webbrowser.open_new_tab(device_code_response["verification_uri_complete"])
-            except:
-                pass
+            self.handle_device_code_response(device_code_response)
             sleep_interval = device_code_response["interval"]
             auth_data = {
                 "grant_type": "urn:ietf:params:oauth:grant-type:device_code",

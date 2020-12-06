@@ -1,3 +1,10 @@
+## v0.6.0
+
+* Add handle_device_code_response to provide entrypoint for other devices to override and leverage device authorization (e.g., workspace, native apps)
+* Add `presalytics.lib.tools.workflow.create_workspace`
+* Change file handling support beyond ooxml files
+* Change loader to allow for explicit loading via settings.py 
+
 ## v0.5.23
 
 * Fix cli initial pull in empty workspace

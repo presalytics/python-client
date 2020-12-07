@@ -1,3 +1,7 @@
+## v0.5.24
+
+* Eliminate overwrite error in cli
+
 ## v0.5.23
 
 * Fix cli initial pull in empty workspace

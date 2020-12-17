@@ -391,6 +391,7 @@ def main():
                             outline = presalytics.lib.tools.workflows.pull_outline(args.id, username=args.username, password=args.password)
                             _dump(outline, filename, args.overwrite, args.json)
                             pull = False
+                            write = False
                         else:
                             logger.error("Could not find file: {}".format(filename))
                             return

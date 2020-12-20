@@ -120,8 +120,7 @@ class OidcClient(object):
             raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
         if self.validate_tokens:
             self.validate_token(token_data["access_token"])
-
-
+        return token_data
 
     def token(self, username, password=None, audience=None, scope=None, **kwargs) -> typing.Dict:
         """

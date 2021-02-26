@@ -3,11 +3,8 @@ import presalytics
 import presalytics.lib.plugins.base
 import presalytics.lib.exceptions
 
-site_host = "https://presalytics.io"
-try:
-    site_host = presalytics.CONFIG.get("BROWSER_API_HOST", {}).get('SITE', "https://presalytics.io") #type: ignore
-except (KeyError, AttributeError, ImportError, ModuleNotFoundError):
-    pass
+
+site_host = presalytics.settings.SITE_HOST
 
 
 class AttrDict(dict):

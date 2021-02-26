@@ -138,7 +138,8 @@ class Revealer(presalytics.story.components.Renderer):
         hosts = ["https://presalytics.io", "https://*.presalytics.io"]
         approved = presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten()
         approved.update(presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten())
-        approved.update(presalytics.CONFIG.get("BROWSER_API_HOST", {}))
+        browser_hosts = {k: v for (k, v) in presalytics.settings.__dict__.items() if "BROWER_API_HOST" in k and v is not None}
+        approved.update(browser_hosts)
         for _, val in approved.items():
             url = urllib.parse.urlparse(val)
             host = "{0}://{1}".format(url.scheme, url.netloc)
@@ -258,7 +259,7 @@ class Revealer(presalytics.story.components.Renderer):
         except Exception as ex:
             logger.exception(ex)
             t, v, tb = sys.exc_info()
-            if not presalytics.CONFIG.get("DEBUG", False):
+            if not presalytics.settings.DEBUG:  #type: ignore[attr-defined]
                 page_html = presalytics.lib.exceptions.RenderExceptionHandler(ex, "page", traceback=tb).render_exception()
             else:
                 six.reraise(t, v, tb)

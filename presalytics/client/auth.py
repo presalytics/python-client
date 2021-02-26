@@ -8,7 +8,6 @@ import dateutil
 import dateutil.parser
 import datetime
 import six
-import posixpath
 import presalytics
 import presalytics.lib.exceptions
 import presalytics.lib.constants
@@ -67,7 +66,7 @@ class TokenUtil(object):
                 return False
         except Exception as ex:
             logger.exception(ex)
-            return True # Get a new token on unknown errors
+            return True  # Get a new token on unknown errors
 
     def _load_token_file(self):
         try:
@@ -216,8 +215,7 @@ class AuthenticationMixIn(abc.ABC):
         if self.configuration is None:
             raise presalytics.lib.exceptions.MissingConfigException("Base API not yet configured, please reconstruct API initialization")
         self.user_agent = AuthenticationMixIn._get_user_agent
-        if presalytics.CONFIG.get("HOSTS", None):
-            self.set_host(presalytics.CONFIG.get('HOSTS'))
+        self.set_host()
 
     @staticmethod
     def get_user_agent():
@@ -227,17 +225,18 @@ class AuthenticationMixIn(abc.ABC):
             VER = 'build'
         return "presalytics-python-client/{0}".format(VER)
 
-    _get_user_agent = get_user_agent.__func__()  #type: ignore
+    _get_user_agent = get_user_agent.__func__()  # type: ignore
 
-    def set_host(self, hosts_dict):
+    def set_host(self):
         for parent_cls in self.__class__.__bases__:
             if parent_cls.__name__ == 'ApiClient':
+                hosts_dict = {k: v for (k, v) in presalytics.settings.__dict__.items() if "HOST_" in k}
                 for k, v in hosts_dict.items():
                     if k.lower() in parent_cls.__module__:
                         host_key = k
                         break
         try:
-            self.configuration.host = hosts_dict[host_key]
+            self.configuration.host = getattr(presalytics.settings, "HOST_" + host_key.Upper())
         except (KeyError, UnboundLocalError):
             pass
 
@@ -254,13 +253,14 @@ class AuthenticationMixIn(abc.ABC):
     @property
     def external_root_url(self):
         service_key = self.api_name.replace("-", "_").upper()
-        if presalytics.CONFIG.get("BROWSER_API_HOST", dict()).get(service_key, None):
-            service_host = presalytics.CONFIG["BROWSER_API_HOST"][service_key]
-            target = service_host + "/" + self.api_name
+        browser_host = getattr(presalytics.settings, "BROWSER_API_HOST_" + service_key)
+        if not browser_host:
+            broswer_host = getattr(presalytics.settings, "HOST_" + service_key)
+        if broswer_host:
+            target = browser_host + "/" + self.api_name
         else:
             target = self.configuration.host
         return target
-
 
     def files_parameters(self, files=None):
         """Builds form parameters.

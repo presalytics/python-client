@@ -31,7 +31,7 @@ and interact with the Presalytics API.
 
 Please review the push, pull, and create subcommands for more options.
 
-For more information about the Presalytics API, please visit 
+For more information about the Presalytics API, please visit
 <https://presalytics.io> or send your questions to inquires@presalytics.io.
 
 Command Line Instructions
@@ -59,7 +59,7 @@ verbosity.add_argument('-q', '--quiet', default=False, action='store_true', help
 yaml_help = "Writes file updates to YAML format.  Yaml is the default."
 json_help = "Writes file updates to JSON format"
 overwrite_help = "Forces (o)verwrite of file with returned Story Outline (if exists)"
-username_help = "Overrides the username in presalytics.CONFIG (if present)"
+username_help = "Overrides the username in presalytics.settings (if present)"
 password_help = "The user's Presalytics API password"
 subparsers = parser.add_subparsers(title='Story API Commands', prog='presalytics', dest='story_api')
 
@@ -84,8 +84,8 @@ and writes the retrieved story outline to a local file (--file)
 
 id_help = """
 The Preslytics API Story Service Id for the story (type: UUID-v4)
-If not supplied, the tool searches the file from the --file option 
-for a 'storyId' attribute 
+If not supplied, the tool searches the file from the --file option
+for a 'storyId' attribute
 """
 
 pull = subparsers.add_parser('pull', description=pull_description, help='Pull a Story Outline revision')
@@ -100,9 +100,9 @@ pull_options.add_argument('-j', '--json', default=False, action='store_true', he
 
 create_description = """
 
-The widget or page instance in the [name] arguemnt must be avialable in 
-`presalytics.COMPONENTS` at run-time.  Widget and page instances are loaded 
-into `presalytics.COMPONENTS` from the current working directory and other 
+The widget or page instance in the [name] arguemnt must be avialable in
+`presalytics.COMPONENTS` at run-time.  Widget and page instances are loaded
+into `presalytics.COMPONENTS` from the current working directory and other
 configured folders at import of the presalytics module.
 """
 
@@ -123,13 +123,13 @@ create_options.add_argument('--ooxml_file', default=False, action='store_true', 
 create.add_argument('-o', '--overwrite', default=False, action='store_true', help=overwrite_help)
 create.add_argument('-u', '--username', default=None, action='store', help=username_help)
 create.add_argument('-p', '--password', default=None, action='store', help=password_help)
-create.add_argument('-s', '--source', default=None, action='store', help="The module containing the instance.  Needed only if instance not auto-loaded into presalytics.CONFIG")
+create.add_argument('-s', '--source', default=None, action='store', help="The module containing the instance.  Needed only if instance not auto-loaded into presalytics.settings")
 create_output_options = create.add_mutually_exclusive_group(required=False)
 create_output_options.add_argument('-y', '--yaml', default=False, action='store_true', help=yaml_help)
 create_output_options.add_argument('-j', '--json', default=False, action='store_true', help=json_help)
 
 update_description = """
-Update the Story outline from instances contained in scripts in the active workspace 
+Update the Story outline from instances contained in scripts in the active workspace
 """
 
 update = subparsers.add_parser('update', description=update_description, help='Update a Story Outline From Local Scripts')
@@ -144,15 +144,16 @@ Modify a Story's outline
 
 You can either 'add' or 'remove' a widget to or from a page in story outline.
 
-For more complex operations, you can apply a JSON 'patch' to to the story outline per 
-[RFC 6902](https://tools.ietf.org/html/rfc6902).  You can find good exmaples at 
+For more complex operations, you can apply a JSON 'patch' to to the story outline per
+[RFC 6902](https://tools.ietf.org/html/rfc6902).  You can find good exmaples at
 www.jsonpatch.com
-""" 
+"""
+
 modify = subparsers.add_parser('modify', description=modify_description, help='Modify a Story Outline')
 modify.add_argument('action', choices=['add', 'remove', 'patch'], action='store', help="You can either add or remove a widget (quick & easy), or apply a json patch (more complex)")
 modify.add_argument('-n', '--name', default=None, action='store', help="The name of the widget you would like to add or remove")
 modify.add_argument('--position', default=None, action='store', type=int, help="The position in the widget list to place the widget")
-modify.add_argument('--page_number', default=None, action='store', type=int, help="The page number to add or remove the widget to/from" )
+modify.add_argument('--page_number', default=None, action='store', type=int, help="The page number to add or remove the widget to/from")
 modify.add_argument('--patch', default=None, action='store', help="The json patch (per RFC 6902) you want to apply to the Story Outline.")
 modify_output_options = modify.add_mutually_exclusive_group(required=False)
 modify_output_options.add_argument('-y', '--yaml', default=False, action='store_true', help=yaml_help)
@@ -205,6 +206,7 @@ config.add_argument('-p', '--password', default=None, action='store', help=passw
 config.add_argument('-s', "--set", metavar="KEY=VALUE", default=None, nargs='+', help="Pass config values to to `config.py` with KEY=VALUE stucture (e.g., '-s USE_LOGGER=False'")
 config.add_argument('-o', '--overwrite', default=False, action='store_true', help=overwrite_help)
 
+
 def parse_var(s):
     """
     Parse a key, value pair, separated by '='
@@ -216,13 +218,13 @@ def parse_var(s):
         foo="hello world"
     """
     items = s.split('=')
-    key = items[0].strip() # we remove blanks around keys, as is logical
+    key = items[0].strip()  # we remove blanks around keys, as is logical
     if len(items) > 1:
         # rejoin the rest:
         value = '='.join(items[1:])
         if value == 'True' or value == 'true':
             value = True
-        if value == 'False'or value == 'false':
+        if value == 'False' or value == 'false':
             value = False
     return (key, value)
 
@@ -239,6 +241,7 @@ def parse_vars(items):
             d[key] = value
     return d
 
+
 def _load_file(filename):
     if filename.endswith('yaml') or filename.endswith('yml'):
         outline = presalytics.StoryOutline.import_yaml(filename)
@@ -252,14 +255,16 @@ def _load_file(filename):
 def _make_url(story_id, url_type):
     route = "/story/{0}/{1}/".format(url_type, story_id)
     try:
-        host = presalytics.CONFIG["HOSTS"]["SITE"]
+        host = presalytics.settings.HOST_SITE
     except (KeyError, AttributeError):
         host = presalytics.lib.constants.SITE_HOST
     return urllib.parse.urljoin(host, route)
 
+
 def _open_page(story_id, url_type):
     url = _make_url(story_id, url_type)
     webbrowser.open_new_tab(url)
+
 
 def _write(outline, filename, json=False):
     if json:
@@ -267,7 +272,8 @@ def _write(outline, filename, json=False):
             f.write(outline.dump())
     else:
         outline.export_yaml(filename)
-    
+
+
 def _dump(outline, filename, overwrite=False, json=False):
     if os.path.exists(filename):
         if not overwrite:
@@ -280,25 +286,20 @@ def _dump(outline, filename, overwrite=False, json=False):
 
 
 def main():
-    """ Command-line entry point 
-    
+    """ Command-line entry point
+
     Run the following from the command line for more information:
 
         python3 -m presalytics --help
-    
+
     or inside a python virtual environment:
 
         presalytics -h
-    
+
     """
     try:
         args = parser.parse_args()
         filename = args.file
-        file_extension = filename.split(".")[-1]
-        if file_extension == "yaml" or file_extension == "yml":
-            original_file_is_yaml = True
-        else:
-            original_file_is_yaml - False
         lgs = [logging.getLogger(n) for n in logging.root.manager.loggerDict]
         if args.verbose or args.quiet:
             for lg in lgs:
@@ -368,14 +369,14 @@ def main():
             push = False
             pull = False
             write = False
-            #load story outline from file
+            # load story outline from file
         if config:
             set_dict = {} if not args.set else parse_vars(args.set)
             if 'CACHE_TOKENS' not in set_dict.keys():
                 set_dict['CACHE_TOKENS'] = True
-            presalytics.lib.tools.workflows.create_config_file(args.username, 
-                                                               password=args.password, 
-                                                               set_dict=set_dict, 
+            presalytics.lib.tools.workflows.create_config_file(args.username,
+                                                               password=args.password,
+                                                               set_dict=set_dict,
                                                                overwrite=args.overwrite)
             logger.info("File 'config.py creating in folder " + os.getcwd())
             return
@@ -417,14 +418,14 @@ def main():
                         patch = json.loads(args.patch)
                     except json.JSONDecodeError:
                         patch = ast.literal_eval(args.patch)
-                except Exception as ex:
+                except Exception:
                     logger.error("A patch could not be created from [--patch]: {}".format(args.patch))
                     return
                 outline = presalytics.lib.tools.workflows.apply_json_patch(outline, patch)
             _dump(outline, filename, True, args.json)
         if update:
-            outline = presalytics.lib.tools.workflows.update_outline(outline, filename=filename, message=args.message)      
-            _dump(outline, filename, True, args.json)  
+            outline = presalytics.lib.tools.workflows.update_outline(outline, filename=filename, message=args.message)
+            _dump(outline, filename, True, args.json)
         if push:
             if not message:
                 pretty_time = datetime.datetime.now().strftime("%d-%m-%Y at %H:%M")
@@ -433,7 +434,7 @@ def main():
             outline = presalytics.lib.tools.workflows.push_outline(outline, username=args.username, password=args.password)
         try:
             story_id = outline.story_id
-        except:
+        except Exception:
             logger.error("A story outline could not be found or created.  Please use the [--file] option to designate a target outline.")
             return
         if ooxml:
@@ -451,7 +452,7 @@ def main():
                 else:
                     logger.error("Could not find a path to file: {0}".format(ooxml_file))
                     return
-            if args.action == "add" or args.action == "replace": 
+            if args.action == "add" or args.action == "replace":
                 presalytics.lib.tools.ooxml_tools.add_ooxml_document_to_story(story_id, ooxml_file, replace_id=args.replace_id, username=args.username, password=args.password)
         if pull:
             if story_id == "empty":
@@ -463,7 +464,6 @@ def main():
                 else:
                     _id = outline.story_id
                 outline = presalytics.lib.tools.workflows.pull_outline(_id, username=args.username, password=args.password)
-       
         if write:
             _dump(outline, filename, args.overwrite, args.json)
         if account:
@@ -474,11 +474,11 @@ def main():
                     presalytics.lib.tools.workflows.delete_by_id(args.id, username=args.username, password=args.password)
         if share:
             presalytics.lib.tools.workflows.share_story(story_id, 
-                                                           emails=args.emails, 
-                                                           user_ids=args.user_ids, 
-                                                           username=args.username,
-                                                           password=args.password,
-                                                           collaborator_type=args.collaborator_type)
+                                                        emails=args.emails,
+                                                        user_ids=args.user_ids,
+                                                        username=args.username,
+                                                        password=args.password,
+                                                        collaborator_type=args.collaborator_type)
         if story_id != 'empty':
             try:
                 if args.view:

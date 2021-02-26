@@ -176,6 +176,9 @@ class PluginRegistry(presalytics.lib.registry.RegistryBase):
     def get_type(self, klass):
         return getattr(klass, "__plugin_kind__", None)
 
+    def get_settings_object(self):
+        return presalytics.settings.PLUGINS
+
 
 class Graph():
     """
@@ -331,7 +334,7 @@ class PluginManager(object):
                 except Exception as ex:
                     logger.exception(ex)
                     t, v, tb = sys.exc_info()
-                    if not presalytics.CONFIG.get("DEBUG", False):
+                    if not presalytics.settings.DEBUG:
                         div = presalytics.lib.exceptions.RenderExceptionHandler(ex, "plugin", traceback=tb).render_exception()
                         template = lxml.html.Element('template')
                         template.extend(list(lxml.html.fragment_fromstring(div)))

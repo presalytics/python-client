@@ -1,20 +1,13 @@
 import os
 import cgi
-import webbrowser
 import time
-import requests
-import urllib.parse
-import importlib.util
 import logging
-import json
 import environs
 import wsgi_microservice_middleware
 import functools
-import six
 import mimetypes
 import typing
 import io
-import time
 import presalytics
 import presalytics.lib.exceptions
 import presalytics.lib.constants as cnst
@@ -56,7 +49,7 @@ class Client(object):
     every time an API call is made. If building a client to operate in a multi-user environment, 
     this behavior should be turned off so that one user cannot not pull one another's tokens.
     To do this, ensure the following parameters are pass to the configuration either 
-    via initialization or in a `presalytics.CONFIG` file: 
+    via initialization or in a `presaltyics.settings`: 
     
         cache_tokens = False,
         delegate_login = True
@@ -70,13 +63,13 @@ class Client(object):
 
     username : str, optional
         Defaults to None.  The user's Presalytics API username.  This keyword will take precedence over a passed to the client
-        via `presalytics.CONFIG`.  The username must either be present in `presalytics.CONFIG` or be passed in 
+        via `presalytics.settings`.  The username must either be present in `presalytics.settings` or be passed in 
         via keyword, otherwise the client will raise a `presalytics.lib.exceptions.MissingConfigException`.
 
     password : str, optional
         Defaults to None.  The user's Presalytics API password.  This useful for quickly testing scripts, but in most 
         scenario users should not be passing plaintext into the client via this keyword.  In a secure, single-user 
-        environment, passwords are better placed in the `presalytics.CONFIG` object for reuseability.  A more secure
+        environment, passwords are better placed in the `presalytics.settings` object for reuseability.  A more secure
         is to leave passwords out of the configuration, keep `delegate_login` = `False`, and acquire tokens via the browser.
  
     delegate_login : bool, optional
@@ -108,7 +101,7 @@ class Client(object):
 
     direct_grant : bool
         Indicates whether an token will be acquire via the "direct_grant" OpenID Connect flow.  Usually indicates
-        whether the user has supplied a passwork to the client either through `presalytics.CONFIG` ro 
+        whether the user has supplied a passwork to the client either through `presalytics.settings` ro 
         during object initialization.
 
     doc_converter : presalytics.client.presalytics_doc_converter.api.default_api.DefaultApi
@@ -194,13 +187,13 @@ class Client(object):
         A handler for managing an caching tokens acquired from auth.presalytics.io.
 
     site_host : str
-        The login site host for acquiring tokens.  Set from `presalytics.CONFIG` with keyword `["SITE"]["HOST"]`.
+        The login site host for acquiring tokens.  Set from `presalytics.settings` with keyword `HOST_SITE`.
         Defaults to https://presalytics.io.
 
     redirect_uri : str
         Useful if implementing authorization code flow for and OpenID Connect client.  Redirect URIs must 
         be approved by Presalytics API devops for use in client applications. Set from Set from 
-        `presalytics.CONFIG` with keyword `["REDIRECT_URI"]`.  Defaults to https://presalytics.io/user/login-success. 
+        `presalytics.settings` with keyword `REDIRECT_URI`.  Defaults to https://presalytics.io/user/login-success. 
 
     login_sleep_interval : int
         The duration (in seconds) between attempts to acquire a token after browser-based authentication. Defaults
@@ -227,7 +220,7 @@ class Client(object):
             self.username = username
         else:
             try:
-                self.username = presalytics.CONFIG['USERNAME']
+                self.username = presalytics.settings.USERNAME
             except KeyError:
                 if token:
                     self.username = None
@@ -238,7 +231,7 @@ class Client(object):
             if password:
                 self.password = password
             else:
-                self.password = presalytics.CONFIG['PASSWORD']
+                self.password = presalytics.settings.PASSWORD
             self.direct_grant = True
         except KeyError:
             self.password = None
@@ -247,30 +240,29 @@ class Client(object):
             if client_id:
                 self.client_id = client_id
             else:
-                self.client_id = presalytics.CONFIG['CLIENT_ID']
+                self.client_id = presalytics.settings.CLIENT_ID
         except KeyError:
             self.client_id = cnst.DEFAULT_CLIENT_ID
         try:
             if client_secret:
                 self.client_secret = client_secret
             else:
-                self.client_secret = presalytics.CONFIG['CLIENT_SECRET']
+                self.client_secret = presalytics.settings.CLIENT_SECRET
             self.confidential_client = True
         except KeyError:
             self.client_secret = None
             self.confidential_client = False
 
         try:
-            self.site_host = presalytics.CONFIG["HOSTS"]["SITE"]
+            self.site_host = presalytics.settings.HOST_SITE
         except KeyError:
             self.site_host = cnst.SITE_HOST
 
-
         try:
-            self.redirect_uri = presalytics.CONFIG["REDIRECT_URI"]
+            self.redirect_uri = presalytics.settings.REDIRECT_URI
         except KeyError:
             self.redirect_uri = cnst.REDIRECT_URI
-        if delegate_login or presalytics.CONFIG.get("DELEGATE_LOGIN", False):
+        if delegate_login or presalytics.settings.DELEGATE_LOGIN:
             self._delegate_login = True
         else:
             self._delegate_login = False
@@ -278,8 +270,8 @@ class Client(object):
             client_id=self.client_id,
             client_secret=self.client_secret
         )
-        if presalytics.CONFIG.get("CACHE_TOKENS", None):
-            cache_tokens = presalytics.CONFIG.get("CACHE_TOKENS")
+        if presalytics.settings.CACHE_TOKENS:
+            cache_tokens = presalytics.settings.CACHE_TOKENS
         self.token_util = presalytics.client.auth.TokenUtil(token_cache=cache_tokens)
         if token:
             #  Assume if token is passed as string, then it's an access token
@@ -317,7 +309,6 @@ class Client(object):
             token = self.oidc.token(username=self.username)
         self.token_util.process_token(token)
         return self.token_util.token
-
 
     def refresh_token(self):
         """
@@ -439,7 +430,7 @@ class Client(object):
                                       repoll_max_cycles: int = None):
         """ Useful for testing """
         if type(file) is str:
-            content_type = mimetypes.guess_type(file, False)[0] # type: ignore
+            content_type = mimetypes.guess_type(file, False)[0]  # type: ignore
             with open(file, 'rb') as f:  # type: ignore
                 stream = io.BytesIO(f.read())
             file = FileStorage(
@@ -481,10 +472,6 @@ class Client(object):
                     repoll_cycle_count += 1
         return self.story.story_id_outline_get(story_id)
 
-
-
-                
-        
 
 class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_doc_converter.api_client.ApiClient):
     """
@@ -534,7 +521,7 @@ class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presal
 @functools.lru_cache(maxsize=None)
 def get_client():
     """
-    Caches a client instance for default parameters set in `presalytics.CONFIG`.
+    Caches a client instance for default parameters set in `presalytics.settings`.
 
     DO NOT use in server-side operation
     """

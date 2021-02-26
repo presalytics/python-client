@@ -19,7 +19,7 @@ class TestStory(unittest.TestCase):
     Test module features thatr render stories to dashboards or other formats.
 
     Please note that these are integration tests, the development environment and
-    `presaltytics.CONFIG` must be set up appropriately for these test execute 
+    `presaltytics.settings` must be set up appropriately for these test execute 
     sucessfully.
     """
     def setUp(self):
@@ -80,13 +80,14 @@ class TestStory(unittest.TestCase):
 
     def test_render_page_exception(self):
         test_file = os.path.join(os.path.dirname(__file__), 'files', 'bad-outline.yaml')
-        _debug = presalytics.CONFIG.pop("DEBUG", None)
+        _debug = presalytics.settings.DEBUG
+        presalytics.settings.DEBUG = True
         outline = presalytics.story.outline.StoryOutline.import_yaml(test_file)
         revealer = presalytics.story.revealer.Revealer(outline)
         html = revealer.package_as_standalone().decode('utf-8')
         self.assertTrue("Oops!" in html)
         if _debug:
-            presalytics.CONFIG.update({"DEBUG": _debug})
+            presalytics.settings.DEBUG = _debug
     
     def text_replace_transform_test(self):
         test_file = os.path.join(os.path.dirname(__file__), 'files', 'ooxml_test_2.xml')

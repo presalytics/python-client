@@ -8,9 +8,9 @@ import logging
 import typing
 import abc
 import re
-import types
-import ast
+import presalytics
 import presalytics.lib.exceptions
+import presalytics.lib.util
 
 
 logger = logging.getLogger('presalytics.lib.registry')
@@ -29,24 +29,16 @@ class RegistryBase(abc.ABC):
     deferred_modules: typing.List[typing.Dict[str, typing.Any]]
     show_errors = False
 
-    def __init__(self, 
-                 show_errors=False, 
-                 autodiscover_paths=[], 
-                 reserved_names: typing.List[str] = None, 
-                 ignore_paths: typing.List[str] = None,
-                 **kwargs):
+    def __init__(self, show_errors=False, **kwargs):
         RegistryBase.show_errors = show_errors
         self.error_class = presalytics.lib.exceptions.RegistryError
-        self.autodiscover_paths = autodiscover_paths
-        self.ignore_paths = ignore_paths if ignore_paths else []
+        self.use_autodiscover = presalytics.settings.USE_AUTODISCOVER
+        self.autodiscover_paths = presalytics.settings.AUTODISCOVER_PATHS
+        self.ignore_paths = presalytics.settings.IGNORE_PATHS
         self.registry = {}
         self.reserved_names = ["config.py", "setup.py"]
         self.deferred_modules = []  # modules to load at at runtime, if theres a ciruclat dependency at import-time
-        try:
-            if reserved_names:
-                self.reserved_names.extend(reserved_names)
-        except Exception:
-            pass
+        self.reserved_names.extend(presalytics.settings.RESERVED_NAMES)
         remove_paths = []
         for path in self.ignore_paths:
             for search_path in self.autodiscover_paths:
@@ -54,7 +46,8 @@ class RegistryBase(abc.ABC):
                     remove_paths.append(search_path)
         for remove_path in remove_paths:
             self.autodiscover_paths.remove(remove_path)
-        self.discover()
+        if self.use_autodiscover:
+            self.discover()
         self.key_regex = re.compile(r'(.*)\.(.*)')
 
     def raise_error(self, message):
@@ -67,6 +60,18 @@ class RegistryBase(abc.ABC):
     @abc.abstractmethod
     def get_name(self, klass):
         raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_settings_object(self):
+        raise NotImplementedError
+
+    def create_static_registry(self):
+        for klass_path in self.get_settings_object():
+            self.direct_import(klass_path)
+
+    def direct_import(self, klass_import_path):
+        klass = presalytics.lib.util.import_string(klass_import_path)
+        self.register(klass)
 
     @staticmethod
     def onerror(name):
@@ -130,7 +135,6 @@ class RegistryBase(abc.ABC):
             if inspect.isclass(val) or isinstance(val, abc.ABC):
                 self.load_class(val)
 
-
     def load_deferred_modules(self):
         if len(self.deferred_modules) > 0:
             new_deferred = []
@@ -150,9 +154,8 @@ class RegistryBase(abc.ABC):
                     message = "Failure to execute deferred load on module '{}'.  Please check exception message and review for errors.".format(mod.get("name", None))
                     logger.error(message)
                     new_deferred.append(mod)
-            self.deferred_modules = new_deferred # removes modules successfully loaded from the list
-                 
-                
+            self.deferred_modules = new_deferred  # removes modules successfully loaded from the list
+
     def discover(self):
         current_path = os.getcwd()
         if current_path not in self.autodiscover_paths:
@@ -178,7 +181,7 @@ class RegistryBase(abc.ABC):
                                 "module": mod,
                                 "spec": mod_spec
                             })
-                    except (AttributeError, ImportError) as circ:
+                    except (AttributeError, ImportError):
                         # Checks for targets of circular imports, and defer those imports to runtime
                         message = "Likely circular import in module '{}'. Deferring import to run-time.".format(mod.__name__)
                         logger.info(message)
@@ -239,10 +242,9 @@ class RegistryBase(abc.ABC):
             del frame
         return in_stack
 
-
     def register(self, klass):
         self.load_class(klass)
-    
+
     def unregister(self, klass):
         key = self.get_registry_key(klass)
         if key:
@@ -255,7 +257,7 @@ class RegistryBase(abc.ABC):
         else:
             self.load_deferred_modules()
             return [x for x in self.registry.keys() if string_with_key_or_name in x]
-            
+
             
             
 

@@ -26,7 +26,7 @@ def update_components(filename=None):
         autodiscover_paths.append(abs_filedir)
     if len(autodiscover_paths) > len(presalytics.COMPONENTS.autodiscover_paths):
         presalytics.COMPONENTS = presalytics.story.components.ComponentRegistry(autodiscover_paths=autodiscover_paths, 
-                                                                                reserved_names=presalytics.CONFIG.get("RESERVED_NAMES", []))
+                                                                                reserved_names=presalytics.settings.RESERVED_NAMES
 
 def get_component(name, filename=None):
     inst: 'ComponentBase'

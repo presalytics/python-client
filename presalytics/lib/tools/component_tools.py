@@ -38,8 +38,8 @@ def create_outline_from_widget(widget: 'WidgetBase',
         revision="0",
         date_created=datetime.datetime.now().astimezone(datetime.timezone.utc).isoformat(),
         date_modified=datetime.datetime.now().astimezone(datetime.timezone.utc).isoformat(),
-        created_by=presalytics.CONFIG["USERNAME"],
-        modified_by=presalytics.CONFIG["USERNAME"],
+        created_by=presalytics.settings.USERNAME,  # type: ignore
+        modified_by=presalytics.settings.USERNAME,  # type: ignore
         revision_notes="Created by 'create_outline_from_widget' method"
     )
 
@@ -94,8 +94,8 @@ def create_outline_from_page(page: 'PageTemplateBase',
         revision="0",
         date_created=datetime.datetime.now().astimezone(datetime.timezone.utc).isoformat(),
         date_modified=datetime.datetime.now().astimezone(datetime.timezone.utc).isoformat(),
-        created_by=presalytics.CONFIG["USERNAME"],
-        modified_by=presalytics.CONFIG["USERNAME"],
+        created_by=presalytics.settings.USERNAME,  # type: ignore[attr-defined]
+        modified_by=presalytics.settings.USERNAME,  # type: ignore[attr-defined]
         revision_notes="Created by 'create_outline_from_page' method"
     )
 

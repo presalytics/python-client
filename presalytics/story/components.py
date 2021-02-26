@@ -322,7 +322,7 @@ class PageTemplateBase(ComponentBase):
                     raise presalytics.lib.exceptions.MissingConfigException(message)
         except Exception as ex:
             logger.exception(ex)
-            if not presalytics.CONFIG.get("DEBUG", False):
+            if not presalytics.settings.DEBUG:
                 widget_instance = presalytics.lib.exceptions.RenderExceptionHandler(ex)
             else:
                 t, v, tb = sys.exc_info()
@@ -372,8 +372,8 @@ class Renderer(ComponentBase):
     objects into html and rendering them over the web
 
     With this class, users can push changes to their `presalytics.story.outline.StoryOutline`
-    to the Presalytics API and web clients.  Renderer class contains a couplemethods for 
-    syncing changes from component instances in the `presalytics.CONFIG` to the Presalytics API 
+    to the Presalytics API and web clients.  Renderer class contains a couplemethods for
+    syncing changes from component instances in the `presalytics.settings` to the Presalytics API 
     Story service.
 
     * The `view` method allows users programattically view their stories at https://presalytics.io 
@@ -416,7 +416,7 @@ class Renderer(ComponentBase):
         super(Renderer, self).__init__(**kwargs)
         self.story_outline = story_outline
         try:
-            self.site_host = presalytics.CONFIG["HOSTS"]["SITE"]
+            self.site_host = presalytics.settings.HOST_SITE  #type: ignore[attr-defined]
         except (KeyError, AttributeError):
             self.site_host = presalytics.lib.constants.SITE_HOST
         try:
@@ -662,6 +662,9 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
         """
         return getattr(klass, "name", None)
 
+    def get_settings_object(self):
+        return presalytics.settings.COMPONENTS
+
     def get_instance_registry_key(self, klass):
         """
         Creates a registry key from a class instance by concatenating the 
@@ -679,7 +682,6 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
                 message = '{0} instance missing "__component_kind__" or "name" attribute'.format(klass_type)
                 logger.error(message)
         return key
-
 
     def load_class(self, klass):
         """

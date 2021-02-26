@@ -19,7 +19,7 @@ class TestClient(unittest.TestCase):
         """
         Tests for client configuration into presalytics api via device grant
         """
-        if not presalytics.CONFIG.get("PASSWORD", None):
+        if not presalytics.settings.PASSWORD:
             client = presalytics.client.api.Client(config_file=self.config_file)
             username = os.environ["PRESALYTICS_USERNAME"]
             self.assertEqual(client.username, username)
@@ -30,9 +30,9 @@ class TestClient(unittest.TestCase):
         """
         tests if password grant works
         """
-        if presalytics.CONFIG.get("PASSWORD", None):
-            username = presalytics.CONFIG.get("USERNAME")
-            password = presalytics.CONFIG.get("PASSWORD")
+        if presalytics.settings.PASSWORD:
+            username = presalytics.settings.USERNAME
+            password = presalytics.seetings.PASSWORD
             client_id = os.environ.get("CLIENT_ID")
             client_secret = os.environ.get("CLIENT_SECRET")
             client = presalytics.client.api.Client(

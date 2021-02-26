@@ -7,7 +7,6 @@ import lxml.etree
 import abc
 import re
 import requests
-import collections
 import presalytics
 import presalytics.lib.registry
 import presalytics.lib.exceptions
@@ -315,6 +314,9 @@ class XmlTransformRegistry(presalytics.lib.registry.RegistryBase):
 
     def get_type(self, klass):
         return getattr(klass, "__xml_transform_kind__", None)
+    
+    def get_settings_object(self):
+        return presalytics.settings.XML_TRANSFORMS
 
 
 XML_TRANSFORM_REGISTRY = None

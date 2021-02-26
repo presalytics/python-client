@@ -76,11 +76,9 @@ class OoxmlEndpointMap(object):
         self.endpoint_id = endpoint_id
         if not baseurl:
             self.baseurl = OoxmlEndpointMap._BASE_URL
-            custom_hosts = presalytics.CONFIG.get("HOSTS", None)
-            if custom_hosts:
-                ooxml_host = custom_hosts.get("OOXML_AUTOMATION", None)
-                if ooxml_host:
-                    self.baseurl = ooxml_host
+            ooxml_host = presalytics.settings.HOST_OOXML_AUTOMATION  # type: ignore[attr-defined]
+            if ooxml_host:
+                self.baseurl = ooxml_host
                 
         else:
             self.baseurl = baseurl

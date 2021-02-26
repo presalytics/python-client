@@ -5,8 +5,7 @@
 
     Tools to interfacing with the Presalytics.io API.
 """
-
-
+import os
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "presalytics"
@@ -19,33 +18,22 @@ VERSION = "0.6.0"
 # prerequisite: setuptools
 # http://pypi.python.org/pypi/setuptools
 
-REQUIRES = [
-    "urllib3 >= 1.15",
-    "six >= 1.10",
-    "certifi",
-    "python-dateutil",
-    "flask",
-    "requests",
-    "environs",
-    "matplotlib",
-    "lxml",
-    "pyyaml",
-    "mpld3",
-    "libsass",
-    "jsonschema",
-    "semantic_version",
-    "jsonpatch",
-    "pandas",
-    "wsgi_microservice_middleware>=0.1.5",
-    "cachetools==4.1.0",
-    "python-jose",
-    'markdown',
-    'py-gfm'
-]
+
+def get_requirements():
+    thelibFolder = os.path.dirname(os.path.realpath(__file__))
+    requirementPath = thelibFolder + '/requirements.txt'
+    install_requires = []
+    if os.path.isfile(requirementPath):
+        with open(requirementPath) as f:
+            install_requires = f.read().splitlines()
+    return install_requires
+
+
+REQUIRES = get_requirements()
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
-    
+
 
 setup(
     name=NAME,

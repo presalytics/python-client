@@ -46,6 +46,7 @@ class RegistryBase(abc.ABC):
                     remove_paths.append(search_path)
         for remove_path in remove_paths:
             self.autodiscover_paths.remove(remove_path)
+        self.create_static_registry()
         if self.use_autodiscover:
             self.discover()
         self.key_regex = re.compile(r'(.*)\.(.*)')

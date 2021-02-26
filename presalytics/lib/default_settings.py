@@ -1,7 +1,7 @@
 """
 Default settings for the Presalytics Python Client
 
-This module contains a comprehesive set of values that can used to control the Preslaytics
+This module contains a comprehesive set of values that can used to control the Presalytics
 Python client's behavior.  The `presalytics.lib.loader` module contains to load these
 settings into the `presalytics.settings` instance on initialization.  User should not reference
 the settings in this module directly, but rather use the `presaltyics.settings` instacne in their
@@ -158,6 +158,11 @@ HOST_WORKSPACE_API: str = presalytics.lib.constants.DEFAULT_HOST_WORKSPACE_API
 The base url calls into the Workspace API
 """
 
+HOST_DOC_CONVERTER: str = presalytics.lib.constants.DEFAULT_HOST_DOC_CONVERTER
+"""
+The base url for calls into the Doc Converter API
+"""
+
 HOST_SITE: str = presalytics.lib.constants.DEFAULT_HOST_SITE
 """
 The base url for API calls into the presalytics website
@@ -216,8 +221,8 @@ COMPONENTS: typing.List[str] = [
     'presalytics.lib.widgets.ooxml.OoxmlFileWidget',
     'presalytics.lib.widgets.ooxml.ChartUpdaterWidget',
     'presalytics.lib.widgets.ooxml.TableUpdaterWidget',
-    'preslaytics.lib.widgets.url.UrlWidget',
-    'presalytics.lib.themes.OoxmlTheme',
+    'presalytics.lib.widgets.url.UrlWidget',
+    'presalytics.lib.themes.ooxml.OoxmlTheme',
     'presalytics.lib.templates.base.WidgetPage',
     'presalytics.lib.templates.base.JinjaTemplateBuilder',
     'presalytics.lib.templates.base.TitleWithSingleItem',

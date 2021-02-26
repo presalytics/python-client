@@ -1,6 +1,5 @@
 import abc
 import typing
-import os
 import logging
 import webbrowser
 import re
@@ -16,7 +15,7 @@ import presalytics.lib.constants
 import presalytics.client.api
 
 if typing.TYPE_CHECKING:
-    from presalytics.story.outline import Widget, Page, Plugin, OutlineBase, StoryOutline
+    from presalytics.story.outline import Widget, Page, Plugin, StoryOutline
 
 
 logger = logging.getLogger("presalytics.story.components")
@@ -603,7 +602,7 @@ class Renderer(ComponentBase):
             prior to opening in the web browser
         """
         if not self.view_url:
-            message = "The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via preslaytics.io"
+            message = "The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via presalytics.io"
             raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
         if update:
             self.update_story()
@@ -620,7 +619,7 @@ class Renderer(ComponentBase):
             prior to opening in the web browser
         """
         if not self.manage_url:
-            message = "The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via preslaytics.io"
+            message = "The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via presalytics.io"
             raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
 
         if update:

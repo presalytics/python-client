@@ -232,11 +232,11 @@ class AuthenticationMixIn(abc.ABC):
             if parent_cls.__name__ == 'ApiClient':
                 hosts_dict = {k: v for (k, v) in presalytics.settings.__dict__.items() if "HOST_" in k}
                 for k, v in hosts_dict.items():
-                    if k.lower() in parent_cls.__module__:
+                    if k.replace("HOST_", "").lower() in parent_cls.__module__:
                         host_key = k
                         break
         try:
-            self.configuration.host = getattr(presalytics.settings, "HOST_" + host_key.Upper())
+            self.configuration.host = getattr(presalytics.settings, host_key)
         except (KeyError, UnboundLocalError):
             pass
 
@@ -255,12 +255,8 @@ class AuthenticationMixIn(abc.ABC):
         service_key = self.api_name.replace("-", "_").upper()
         browser_host = getattr(presalytics.settings, "BROWSER_API_HOST_" + service_key)
         if not browser_host:
-            broswer_host = getattr(presalytics.settings, "HOST_" + service_key)
-        if broswer_host:
-            target = browser_host + "/" + self.api_name
-        else:
-            target = self.configuration.host
-        return target
+            browser_host = getattr(presalytics.settings, "HOST_" + service_key) or self.configuration.host
+        return browser_host
 
     def files_parameters(self, files=None):
         """Builds form parameters.

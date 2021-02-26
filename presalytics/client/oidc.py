@@ -1,5 +1,3 @@
-
-import urllib.parse
 import requests
 import posixpath
 import logging

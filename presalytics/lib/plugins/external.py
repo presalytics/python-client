@@ -4,7 +4,7 @@ import presalytics.lib.plugins.base
 import presalytics.lib.exceptions
 
 
-site_host = presalytics.settings.SITE_HOST
+site_host = presalytics.settings.HOST_SITE
 
 
 class AttrDict(dict):

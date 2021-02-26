@@ -20,7 +20,6 @@ import tempfile
 
 # python 2 and python 3 compatibility library
 import six
-from six.moves.urllib.parse import quote
 
 from presalytics.client.presalytics_story.configuration import Configuration
 import presalytics.client.presalytics_story.models
@@ -460,8 +459,7 @@ class ApiClient(object):
                     with open(n, 'rb') as f:
                         filename = os.path.basename(f.name)
                         filedata = f.read()
-                        mimetype = (mimetypes.guess_type(filename)[0] or
-                                    'application/octet-stream')
+                        mimetype = (mimetypes.guess_type(filename)[0] or 'application/octet-stream')
                         params.append(
                             tuple([k, tuple([filename, filedata, mimetype])]))
 
@@ -626,8 +624,7 @@ class ApiClient(object):
         if klass.openapi_types is not None:
             for attr, attr_type in six.iteritems(klass.openapi_types):
                 if (data is not None and
-                        klass.attribute_map[attr] in data and
-                        isinstance(data, (list, dict))):
+                        klass.attribute_map[attr] in data and isinstance(data, (list, dict))):
                     value = data[klass.attribute_map[attr]]
                     kwargs[attr] = self.__deserialize(value, attr_type)
 

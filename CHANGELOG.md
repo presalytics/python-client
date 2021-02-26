@@ -4,13 +4,14 @@
 
 - [ ] Add `presalytics.lib.tools.workflow.create_workspace`
 - [ ] Change file handling support beyond ooxml files
-- [ ] Change loader to allow for explicit loading via settings.py
-- [ ] Turn off logger, autodiscovery, and token caching by default
-- [ ] Create `presalytics.settings` module for default settings, incorprate into `__init__.py`
-- [ ] Create websocket for event listener and forward events to localhost
+- [x] Change loader to allow for explicit loading via settings.py
+- [x] Turn off logger, autodiscovery, and token caching by default
+- [x] Create `presalytics.settings` module for default settings, incorprate into `__init__.py`
+- [ ] Create `presalytics.client.websocket` for event listener and forward events to localhost
 - [ ] Create `presalytics.story.ClientSideRenderer` to set up caching and return meta for client-side apps to render stories
 - [ ] Add CLI commands for websocket
 - [x] Incorporate `requirements.txt` into `setup.py`
+- [x] Standardize linting with mypy and flake8
 
 ## v0.5.24
 

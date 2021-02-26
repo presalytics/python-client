@@ -64,7 +64,7 @@ class ComponentBase(abc.ABC):
         An identifier for this component class.  Used for component registration.
 
     __plugins__ : list of dict
-        A list of dictionaries that reference `presalytics.story.outline.Plugin` configurations.  When a 
+        A list of dictionaries that reference `presalytics.story.outline.Plugin` configurations.  When a
         `presaltytics.story.components.Renderer` is initialized, it will load these plugins into the
         rendered.  This allows plugins to be statically configured on `presalytics.story.components` classes,
         in lieu dynamic configurations on `presalytics.story.outline.StoryOutline` instances.
@@ -163,7 +163,6 @@ class WidgetBase(ComponentBase):
                 logger.exception(ex)
         return self.to_html(**kwargs)
 
-    
     def cache_subdocument(self, subdocument: str) -> bool:
         subdocument_encoded = base64.b64encode(subdocument.encode('utf-8')).decode('utf-8')
         client = self.get_client()
@@ -177,14 +176,14 @@ class WidgetBase(ComponentBase):
             }
             client.story.cache_post(payload)
             return True
-        return False   
-    
+        return False
+
     def create_subdocument(self, **kwargs) -> typing.Optional[str]:
         """
-        Returns an html document that will be rendered by browser.  If a `str` is returned, 
+        Returns an html document that will be rendered by browser.  If a `str` is returned,
         then the html subdocument is cached into the story API for retreival by the browser after
-        rendering.  Widgets that render `<iframe>`, `<object>`, or `<embed>` tags should override 
-        this method to return the subdocument that will be rendered by the browser. 
+        rendering.  Widgets that render `<iframe>`, `<object>`, or `<embed>` tags should override
+        this method to return the subdocument that will be rendered by the browser.
 
         Returns
         ----------
@@ -293,7 +292,6 @@ class PageTemplateBase(ComponentBase):
         super(PageTemplateBase, self).__init__(**kwargs)
         self.outline_page = page
         self.widgets = self.get_page_widgets(self.outline_page)
-        
 
     @abc.abstractmethod
     def render(self, **kwargs) -> str:
@@ -339,7 +337,7 @@ class PageTemplateBase(ComponentBase):
             next_widget = self.load_widget(widget_outline)
             widget_instances.append(next_widget)
         return widget_instances
-    
+
     def serialize(self):
         return self.outline_page.dump()
 
@@ -352,7 +350,7 @@ class ThemeBase(ComponentBase):
     """
     Themes are containers for plugins should be rendered once
     across the entire document.  The init method should configure
-    parameters with get passed to plugins via serialization and 
+    parameters with get passed to plugins via serialization and
     deserialization.
     """
     plugins: typing.Optional[typing.List['Plugin']]
@@ -368,18 +366,18 @@ class ThemeBase(ComponentBase):
 
 class Renderer(ComponentBase):
     """
-    Base class for objects that convert `presalytics.story.outline.StoryOutline` 
+    Base class for objects that convert `presalytics.story.outline.StoryOutline`
     objects into html and rendering them over the web
 
     With this class, users can push changes to their `presalytics.story.outline.StoryOutline`
     to the Presalytics API and web clients.  Renderer class contains a couplemethods for
-    syncing changes from component instances in the `presalytics.settings` to the Presalytics API 
+    syncing changes from component instances in the `presalytics.settings` to the Presalytics API
     Story service.
 
-    * The `view` method allows users programattically view their stories at https://presalytics.io 
+    * The `view` method allows users programattically view their stories at https://presalytics.io
     after changes are made
 
-    * The `manage` method takes users to to the story management interface, where users can share their 
+    * The `manage` method takes users to to the story management interface, where users can share their
     work with other users, continue making edits or change story properties.
 
 
@@ -387,13 +385,13 @@ class Renderer(ComponentBase):
     ----------
     story_outline : presalytics.story.outline.StoryOutline
         The presalytics StoryOutline to be rendered and presented
-    
+
     Attributes
     -----------
     plugins : list of dict
         Plugin data that transform to html `<script>` and `<link>` tags through
         the rendering process
-    
+
     site_host : str
         The host of the website.  Defaults to https://presalytics.io.
 
@@ -411,12 +409,12 @@ class Renderer(ComponentBase):
     manage_url: typing.Optional[str]
 
     __component_type__ = 'renderer'
-    
-    def __init__(self, story_outline : 'StoryOutline', **kwargs):
+
+    def __init__(self, story_outline: 'StoryOutline', **kwargs):
         super(Renderer, self).__init__(**kwargs)
         self.story_outline = story_outline
         try:
-            self.site_host = presalytics.settings.HOST_SITE  #type: ignore[attr-defined]
+            self.site_host = presalytics.settings.HOST_SITE  # type: ignore[attr-defined]
         except (KeyError, AttributeError):
             self.site_host = presalytics.lib.constants.SITE_HOST
         try:
@@ -435,15 +433,13 @@ class Renderer(ComponentBase):
         """
         return self.view()
 
-            
-    
     def strip_unauthorized_scripts(self, body):
         """
         Finds and removes unauthorized scripts from that the html document.  For security reasons,
-        content in `<script>` tags that has not been vetted by presalytics.io devops 
+        content in `<script>` tags that has not been vetted by presalytics.io devops
 
-        If you would like to get a tag included in the base library, raise an issue on 
-        [Github](https://github.com/presalytics/python-client/issues/new).  We'd love to hear from you and learn 
+        If you would like to get a tag included in the base library, raise an issue on
+        [Github](https://github.com/presalytics/python-client/issues/new).  We'd love to hear from you and learn
         about your use case, and will respond promptly to help.
         """
         allowed_scripts = presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().values()
@@ -459,7 +455,7 @@ class Renderer(ComponentBase):
             if remove_ele:
                 ele.getparent().remove(ele)
         return body
-        
+
     @classmethod
     def deserialize(cls, component: 'StoryOutline', **kwargs):
         """
@@ -480,8 +476,8 @@ class Renderer(ComponentBase):
 
     def update_outline_from_instances(self, sub_dict: typing.Dict = None):
         """
-        If a component instance for the widget is available in `presalytics.COMPONENTS`, 
-        this method find the instance and regenerates the component data 
+        If a component instance for the widget is available in `presalytics.COMPONENTS`,
+        this method find the instance and regenerates the component data
         so the latest data is available during the renering process.
         """
         if not sub_dict:
@@ -527,7 +523,7 @@ class Renderer(ComponentBase):
                                     klass = presalytics.COMPONENTS.get(class_key)
                                     if klass:
                                         if len(klass.__plugins__) > 0:
-                                            self.plugins.extend(klass.__plugins__)                           
+                                            self.plugins.extend(klass.__plugins__)
                 if isinstance(val, dict):
                     if len(val.keys()) > 0:
                         self.get_component_implicit_plugins(val)
@@ -537,7 +533,7 @@ class Renderer(ComponentBase):
                             self.get_component_implicit_plugins(list_item)
 
     def _set_outline_data_from_instance(self, inst):
-        
+
         if inst.__component_type__ == 'widget':
             self._set_widget_outline_data(inst)
         if inst.__component_type__ == 'page':
@@ -554,7 +550,7 @@ class Renderer(ComponentBase):
                 break
         theme_outline = inst.serialize()
         if theme_index:
-            self.story_outline.themes[theme_index] = theme_outline    
+            self.story_outline.themes[theme_index] = theme_outline
 
     def _set_page_outline_data(self, inst: 'PageTemplateBase'):
         page_index = None
@@ -583,8 +579,8 @@ class Renderer(ComponentBase):
             if page_index:
                 break
         w_outline = inst.serialize()
-        if isinstance(page_index, int) and isinstance(widget_index, int): #  Causes 'unsupported target for assingment error`
-            self.story_outline.pages[page_index].widgets[widget_index] = w_outline #type: ignore
+        if isinstance(page_index, int) and isinstance(widget_index, int):  # Causes 'unsupported target for assingment error`
+            self.story_outline.pages[page_index].widgets[widget_index] = w_outline  # type: ignore
 
     def update_story(self):
         """
@@ -595,7 +591,7 @@ class Renderer(ComponentBase):
         story = client.story.story_id_get(self.story_outline.story_id)
         story.outline = self.story_outline.dump()
         client.story.story_id_put(story.id, story)
-    
+
     def view(self, update=False):
         """
         Updates a story and opens it on the presalytics.io website
@@ -613,7 +609,6 @@ class Renderer(ComponentBase):
             self.update_story()
         webbrowser.open_new_tab(self.view_url)
 
-
     def manage(self, update=False):
         """
         Updates a story and opens the management page on the presalytics.io website
@@ -627,7 +622,7 @@ class Renderer(ComponentBase):
         if not self.manage_url:
             message = "The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via preslaytics.io"
             raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
-            
+
         if update:
             self.update_story()
         webbrowser.open_new_tab(self.manage_url)
@@ -639,6 +634,7 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
     `presalytics.story.components.ComponentBase`.
 
     """
+
     def __init__(self, **kwargs):
         self.instances = {}
         self.instance_regex = re.compile(r'(.*)\.(.*)\.(.*)')
@@ -667,7 +663,7 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
 
     def get_instance_registry_key(self, klass):
         """
-        Creates a registry key from a class instance by concatenating the 
+        Creates a registry key from a class instance by concatenating the
         `__component_type__`, `__component_kind__`, and `name` attributes of an instance
         """
         key = None
@@ -694,7 +690,7 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
                 if key:
                     if key not in self.instances.keys():
                         self.instances[key] = klass
-                    
+
             except Exception:
                 if self.show_errors:
                     klass_type = self.get_type(klass)

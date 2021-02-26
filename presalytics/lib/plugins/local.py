@@ -5,6 +5,7 @@ import presalytics.lib.exceptions
 
 css_path = os.path.join(os.path.dirname(__file__), "css")
 
+
 class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
     """
     Plugin incorporate styles from a css stylesheet in a local filepath
@@ -19,7 +20,7 @@ class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
         "reveal_overrides": os.path.join(css_path, "reveal-overrides-base.css")
     }
     """
-    Dictionary containing a map configuration keys to css files that are 
+    Dictionary containing a map configuration keys to css files that are
     member of the Presalytics Python Library manifest
     """
 
@@ -32,7 +33,7 @@ class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
         config : dict
             A dictionary containing either a "css_file_path" key, which points
             to a local file path, or a "css_file_id" refers to a css file included
-            in the Presalytics Python Library's manifest 
+            in the Presalytics Python Library's manifest
         """
         id = config.get("css_file_id", None)
         if not id:

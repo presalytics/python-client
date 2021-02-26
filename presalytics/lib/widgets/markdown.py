@@ -39,7 +39,7 @@ class MarkdownWidget(presalytics.story.components.WidgetBase):
     css64 : str. optional
         A base64-encoded string of the css styles to apply to the d3 document.  Used for server-to-server
         transport over https.
-    
+
     css_filename: str, optional
         A css file containing styles that will be applied to d3
 
@@ -66,11 +66,11 @@ class MarkdownWidget(presalytics.story.components.WidgetBase):
         }
     ]
 
-    def __init__(self, 
+    def __init__(self,
                  name: str,
                  markdown_text: str,
                  css64: str = None,
-                 css_filename: str = None, 
+                 css_filename: str = None,
                  *args,
                  **kwargs):
         self.markdown_text = markdown_text
@@ -94,12 +94,11 @@ class MarkdownWidget(presalytics.story.components.WidgetBase):
                 if os.path.exists(fpath):
                     with open(fpath, 'rb') as f:
                         data = f.read()
-                        data64 = base64.b64encode(data).decode('utf-8')  #type: ignore
+                        data64 = base64.b64encode(data).decode('utf-8')  # type: ignore
                     break
             if not data64:
                 logger.debug("File {0} could not be found".format(filename))
         return data64
-
 
     def to_html(self, data=None, **kwargs) -> str:
         """
@@ -124,11 +123,11 @@ class MarkdownWidget(presalytics.story.components.WidgetBase):
             kind=self.__component_kind__,
             data=data,
         )
-    
+
     @classmethod
     def from_file(cls, name, filepath: str, **kwargs):
         """
-        Loads `markdown_text` via a file, rather than a string object.  
+        Loads `markdown_text` via a file, rather than a string object.
         `filepath` can be relative or absolute.
         """
         with open(filepath, 'r') as f:

@@ -23,7 +23,7 @@ def roundup_date_modified(current_datetime: datetime.datetime):
 
 def get_site_host():
     site_host = presalytics.lib.constants.SITE_HOST
-    try: 
+    try:
         site_host = presalytics.settings.HOST_SITE
     except (KeyError, AttributeError):
         pass

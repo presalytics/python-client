@@ -12,8 +12,8 @@ def create_outline_from_widget(widget: 'WidgetBase',
                                title: str = None,
                                description: str = None) -> 'StoryOutline':
     """
-    Creates a `presalytics.story.outline.StoryOutline` from a subclass of 
-    `presalytics.story.components.WidgetBase`.  Useful for quickstarts, demos, and 
+    Creates a `presalytics.story.outline.StoryOutline` from a subclass of
+    `presalytics.story.components.WidgetBase`.  Useful for quickstarts, demos, and
     rapidly sharing content without having to manaully build a `StoryOutline`.
 
     Parameters
@@ -68,12 +68,13 @@ def create_outline_from_widget(widget: 'WidgetBase',
 
     return outline
 
+
 def create_outline_from_page(page: 'PageTemplateBase',
                              title: str = None,
                              description: str = None) -> 'StoryOutline':
     """
-    Creates a `presalytics.story.outline.StoryOutline` from a subclass of 
-    `presalytics.story.components.PageTemplateBase`.  Useful for quick starts, demos, and 
+    Creates a `presalytics.story.outline.StoryOutline` from a subclass of
+    `presalytics.story.components.PageTemplateBase`.  Useful for quick starts, demos, and
     rapidly sharing content without having to manaully build a `StoryOutline`.
 
     Parameters

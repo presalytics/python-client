@@ -36,7 +36,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
     d3_data: dict
         Data that will be loaded into the script when run in the browser. Avaiable
         in the script as the `data` object.
-    
+
     id: str, optional
         A unique identifier the widget.  Automatically generated when the
         widget is created or updated.
@@ -58,13 +58,13 @@ class D3Widget(presalytics.story.components.WidgetBase):
 
     html_filename: str, optional
         The name of file in the local directory with an html framement that should be rendered within the
-        body (inside element `<div id="{{id}}" class="d3-container"></div>`) of the iframe containing the 
+        body (inside element `<div id="{{id}}" class="d3-container"></div>`) of the iframe containing the
         d3 script
 
     css64 : str. optional
         A base64-encoded string of the css styles to apply to the d3 document.  Used for server-to-server
         transport over https.
-    
+
     css_filename: str, optional
         A css file containing styles that will be applied to d3
 
@@ -82,10 +82,10 @@ class D3Widget(presalytics.story.components.WidgetBase):
 
     container: `html element`
         The first div in the body
-    
+
     d3: `javascript object`
         The root d3 object for selecting, creating and editing elements on the DOM
-        
+
 
     Security Note:
     ----------
@@ -98,15 +98,14 @@ class D3Widget(presalytics.story.components.WidgetBase):
     """
     __component_kind__ = 'd3'
 
-
-    def __init__(self, 
-                 name: str, 
+    def __init__(self,
+                 name: str,
                  d3_data: typing.Dict,
                  id: str = None,
-                 script64: str = None, 
-                 script_filename: str = None, 
+                 script64: str = None,
+                 script_filename: str = None,
                  css64: str = None,
-                 css_filename: str = None, 
+                 css_filename: str = None,
                  html64: str = None,
                  html_filename: str = None,
                  *args, **kwargs):
@@ -142,11 +141,11 @@ class D3Widget(presalytics.story.components.WidgetBase):
                 if os.path.exists(fpath):
                     with open(fpath, 'rb') as f:
                         data = f.read()
-                        data64 = base64.b64encode(data).decode('utf-8')  #type: ignore
+                        data64 = base64.b64encode(data).decode('utf-8')  # type: ignore
                     break
             if not data64:
                 logger.debug("File {0} could not be found".format(filename))
-        return data64 
+        return data64
 
     def to_html(self, data=None, **kwargs) -> str:
         """
@@ -234,7 +233,6 @@ class D3Widget(presalytics.story.components.WidgetBase):
     def create_subdocument(self, **kwargs):
         return self.standalone_html()
 
-
     def standalone_html(self) -> str:
         """
         Returns string with an html document containing that d3 widget
@@ -262,14 +260,14 @@ class D3Widget(presalytics.story.components.WidgetBase):
                     var container = document.getElementById(id);
 
                     {{script|safe}}
-            
+
                 </script>
             </body>
         </html>""")
         data = json.dumps(self.d3_data)  # dont use hyphens in data keys
-        script = base64.b64decode(self.script64).decode('utf-8')  #type: ignore  #Required
-        extra_css = base64.b64decode(self.css64).decode('utf-8') if self.css64 else D3Widget.DEFAULT_CSS  #type: ignore  
-        html_fragment = base64.b64decode(self.html64).decode('utf-8') if self.html64 else None  #type: ignore   # disable nested iframes
+        script = base64.b64decode(self.script64).decode('utf-8')  # type: ignore  #Required
+        extra_css = base64.b64decode(self.css64).decode('utf-8') if self.css64 else D3Widget.DEFAULT_CSS  # type: ignore
+        html_fragment = base64.b64decode(self.html64).decode('utf-8') if self.html64 else None  # type: ignore   # disable nested iframes
         context = {
             "id": self.id,
             "d3_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('d3'),

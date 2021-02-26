@@ -19,13 +19,15 @@ import jsonschema
 from presalytics.story.util import to_camel_case, to_snake_case
 from presalytics.lib.exceptions import ValidationError
 
+
 class OutlineEncoder(json.JSONEncoder):
     """
     Json encoder for `presalytics.story.outline.OutlineBase` objects
     """
+
     def default(self, obj):
         """
-        Override method for deserializing objects that inherit from 
+        Override method for deserializing objects that inherit from
         `presalytics.story.outline.OutlineBase`
         """
         if issubclass(obj.__class__, OutlineBase):
@@ -35,7 +37,7 @@ class OutlineEncoder(json.JSONEncoder):
         if isinstance(obj, uuid.UUID):
             return str(obj)
         # Generalized numpy encoder/decoder -- for http transport
-        # If input object is an ndarray it will be converted into a dict 
+        # If input object is an ndarray it will be converted into a dict
         # holding dtype, shape and the data, base64 encoded.
         if isinstance(obj, np.ndarray):
             if obj.flags['C_CONTIGUOUS']:
@@ -50,6 +52,7 @@ class OutlineEncoder(json.JSONEncoder):
                         shape=obj.shape)
         return json.JSONEncoder.default(self, obj)
 
+
 def json_numpy_obj_hook(dct):
     """
     Decodes a previously encoded numpy ndarray with proper shape and dtype.
@@ -62,18 +65,19 @@ def json_numpy_obj_hook(dct):
 
 def get_current_spec_version():
     """
-    Get the latest version of the story outline schema via reading foldernames in 
+    Get the latest version of the story outline schema via reading foldernames in
     the schemas subfolder of this file's directory
     """
     schema_dir = os.path.join(os.path.dirname(__file__), "schemas")
     major, minor, patch = None, None, None
     latest = None
     for _dir in os.listdir(schema_dir):
-        if not latest: 
+        if not latest:
             latest = semantic_version.Version(_dir)
         elif latest < semantic_version.Version(_dir):
             latest = semantic_version.Version(_dir)
     return str(latest)
+
 
 def load_schema(version_number):
     path = os.path.join(os.path.dirname(__file__), "schemas", version_number, "story-outline.schema.json")
@@ -81,10 +85,10 @@ def load_schema(version_number):
         data = json.load(f)
     return data
 
+
 def load_latest_schema():
     version_number = get_current_spec_version()
     return load_schema(version_number)
-
 
 
 class OutlineBase(abc.ABC):
@@ -93,7 +97,7 @@ class OutlineBase(abc.ABC):
 
     Includes methods for validiating, serializing, and deserializing outline classes
     """
-    
+
     __annotations__: typing.Dict
     __required__: typing.Sequence[str]
     additional_properties: typing.Dict
@@ -114,7 +118,7 @@ class OutlineBase(abc.ABC):
     def validate(self):
         """
         Ensures that the outline component has all required attributes.  Raises
-        a `presalytics.lib.exceptions.ValidationError` if required attributes are 
+        a `presalytics.lib.exceptions.ValidationError` if required attributes are
         missing.  Reads the list of requried objects from the __required__ class
         variable
         """
@@ -122,7 +126,6 @@ class OutlineBase(abc.ABC):
             if not hasattr(self, key):
                 err_message = 'Could not load {0} object, source data missing "{1}" key'.format(self.__class__.__name__, key)
                 raise ValidationError(err_message)
-
 
     @classmethod
     def deserialize(cls, json_obj: dict):
@@ -133,12 +136,12 @@ class OutlineBase(abc.ABC):
         ----------
         json_obj : dict
             A dictionary containing attributes of the class
-        
+
         Returns
         ----------
             A `class` instance
         """
-        if type(json_obj) == cls:
+        if isinstance(json_obj, cls):
             return json_obj
         updated_obj = {}
         for key, val in json_obj.items():
@@ -158,7 +161,7 @@ class OutlineBase(abc.ABC):
         ----------
         json_str : str
             A dictionary containing attributes of the class
-        
+
         Returns
         ----------
         A `class` instance
@@ -175,13 +178,13 @@ class OutlineBase(abc.ABC):
         ----------
         yaml_file : str
             Filepath to the file with yaml representing that class
-        
+
         Returns
         ----------
         A `class` instance
         """
         with open(yaml_file, 'r') as file:
-            obj = yaml.unsafe_load(file) # use unsafe loader per: https://github.com/yaml/pyyaml/issues/286, Monitor for fix.
+            obj = yaml.unsafe_load(file)  # use unsafe loader per: https://github.com/yaml/pyyaml/issues/286, Monitor for fix.
         return cls.deserialize(obj)
 
     def export_yaml(self, filename):
@@ -238,22 +241,22 @@ class Info(OutlineBase):
     ----------
     revision : str
         The current revision number of the story outline
-    
+
     date_created : datetime.datetime
-        The creation date of the story in UTC 
-    
+        The creation date of the story in UTC
+
     date_modified : datetime.dataime
-        The last modified  date of the story in UTC 
-    
+        The last modified  date of the story in UTC
+
     created_by : str
         The Presalytics API user id of the user that created the story
-    
+
     modified_by : str
         The Presalytics API user id of the user that last modified the story
-    
+
     revision_notes : str, optional
         Text explaining the changes made during that latest revision to the story
-    
+
     """
     revision: str
     date_created: datetime.datetime
@@ -279,6 +282,7 @@ class Info(OutlineBase):
         self.modified_by = modified_by
         self.revision_notes = revision_notes
 
+
 class Plugin(OutlineBase):
     """
     Represents at plugin to be incorporated in the story during rendering process.  The information
@@ -292,11 +296,11 @@ class Plugin(OutlineBase):
         or "script" for a `presalytics.lib.plugins.base.ScriptPlugin`
 
     name : str
-        The name of the plugin.  A name must be unique within a 
+        The name of the plugin.  A name must be unique within a
         given `presalytics.PLUGINS` registry.
 
     config : dict
-        The configiuration of the plugin.  The keys in this dictionary are unqiue to a given 
+        The configiuration of the plugin.  The keys in this dictionary are unqiue to a given
         plugin.
     """
     kind: str
@@ -309,7 +313,6 @@ class Plugin(OutlineBase):
         'name'
     ]
 
-
     def __init__(self, kind, name, config, **kwargs):
         super(Plugin, self).__init__(**kwargs)
         self.kind = kind
@@ -319,7 +322,7 @@ class Plugin(OutlineBase):
 
 class Widget(OutlineBase):
     """
-    A represenation of an analytic or graphic object to be rendered within a 
+    A represenation of an analytic or graphic object to be rendered within a
     `presalytics.story.outline.Page`. At render-time, the `presalytics.COMPONENTS`
     registry is queried for a matching class or instance. If found, the widget is
     rendered.
@@ -327,17 +330,17 @@ class Widget(OutlineBase):
     Attributes
     ----------
     kind : str
-        The kind of Widget. Typically corresponds to a class that inherits from 
+        The kind of Widget. Typically corresponds to a class that inherits from
         `presalytics.story.components.WidgetBase`
 
     name : str
-        The name of the Widget.  Correpsonds to a local instance of 
+        The name of the Widget.  Correpsonds to a local instance of
         `presalytics.story.components.WidgetBase` loaded into `presalytics.COMPONENTS`
 
     data : dict
         Widget data required so the corresponding subclass of `presalytics.story.components.WidgetBase`
         can initialize and render
-        
+
     plugins : list of presalytics.story.outline.Plugin
         A list of plugins that must be rendered alongside this widget
     """
@@ -375,16 +378,16 @@ class Page(OutlineBase):
     Attributes
     ----------
     kind : str
-        The kind of Page. Typically corresponds to a class that inherits from 
+        The kind of Page. Typically corresponds to a class that inherits from
         `presalytics.story.components.PageTemplateBase`
 
     name : str
-        The name of the Page.  A name must be unique within a 
+        The name of the Page.  A name must be unique within a
         given `presalytics.COMPONENTS` registry
 
     widgets : list of presalytics.story.outline.Widget
-        Widgets that will be rendered along with the page        
-        
+        Widgets that will be rendered along with the page
+
     plugins : list of presalytics.story.outline.Plugin
         A list of plugins that must be rendered alongside this widget
 
@@ -415,24 +418,24 @@ class Page(OutlineBase):
 
 class Theme(OutlineBase):
     """
-    A container for story properties that persist accross all pages of story. At render-time, 
+    A container for story properties that persist accross all pages of story. At render-time,
     the `presalytics.COMPONENTS` registry is queried for a matching class. If found, the theme is
     incorporated into the story.
 
     Attributes
     ----------
     kind : str
-        The kind of Theme. Typically corresponds to a class that inherits from 
+        The kind of Theme. Typically corresponds to a class that inherits from
         `presalytics.story.components.ThemeBase`
 
     name : str
-        The name of the Theme.  Corresponds to a local instance of 
+        The name of the Theme.  Corresponds to a local instance of
         `presalytics.story.components.ThemeBase` loaded into `presalytics.COMPONENTS`
 
     data : dict
         Widget data required so the corresponding subclass of `presalytics.story.components.ThemeBase`
         can initialize and render
-        
+
     plugins : A list of presalytics.story.outline.Plugin
         A list of plugins that must be rendered alongside this widget
     """
@@ -461,7 +464,7 @@ class Theme(OutlineBase):
 
 class StoryOutline(OutlineBase):
     """
-    A StoryOutline contains instructions for a `presalytics.story.components.Renderer` 
+    A StoryOutline contains instructions for a `presalytics.story.components.Renderer`
     (e.g., `presalytics.story.revealer.Revealer`) to render an story into html.
 
     A story outline's `info`, `pages`, `widgets`, and `themes` are intended to be easily editable
@@ -480,22 +483,22 @@ class StoryOutline(OutlineBase):
 
     outline_version : str
         the version of that StoryOuline schema.
-    
+
     info : presalytics.story.outline.Info
         Metadata about this StoryOutline
-    
+
     pages : list of presalytics.story.outline.Page
         The pages that will be rendered in this story
-    
+
     themes : list of presalytics.story.outline.Theme
         The themes that will underlie each `presalytics.story.outline.Page` in the StoryOutline
-    
+
     title : str, optional
         A title for the story
 
     description: str, optional
         A description of the story
-    
+
     story_id : str, optional
         The Presalytics API Story Id.  Automatically added once the story outline has been pushed to
         the server.
@@ -544,4 +547,3 @@ class StoryOutline(OutlineBase):
         def validate(self):
             super(StoryOutline, self).validate()
             jsonschema.validate(instance=self.to_dict(), schema=load_latest_schema())
-        

@@ -8,6 +8,7 @@ default_log_path = os.getcwd() + os.path.sep + 'presalytics.log'
 
 USE_LOGGER = False
 
+
 def configure_logger(log_path=default_log_path, log_level='DEBUG', file_logger=True):
     logging.config.dictConfig({
         'version': 1,
@@ -39,8 +40,9 @@ def configure_logger(log_path=default_log_path, log_level='DEBUG', file_logger=T
         log_file = os.path.join(log_dir, 'presalytics.log')
         file_handler = logging.FileHandler(log_file)
         logger.addHandler(file_handler)
-    
+
     USE_LOGGER = file_logger
+
 
 def handle_exception(exc_type, exc_value, exc_traceback):
     """ Catches unhandled exceptions for logger """

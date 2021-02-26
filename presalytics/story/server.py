@@ -22,6 +22,7 @@ def story(id):
     template_name = str(id) + '.html'
     return flask.render_template(template_name)
 
+
 @app.route('/img/<path:filename>/')
 def static_img(filename=None):
     directory = os.path.join(app.static_folder, "img")
@@ -53,10 +54,10 @@ def shutdown():
 
 
 class LocalServer(object):
-    def __init__(self, 
-                 host='127.0.0.1', 
-                 debug=True, 
-                 port=8082, 
+    def __init__(self,
+                 host='127.0.0.1',
+                 debug=True,
+                 port=8082,
                  root_path=None,
                  use_reloader=False,
                  **kwargs):
@@ -71,11 +72,11 @@ class LocalServer(object):
     def run(self):
         app.root_path = self.root_path
         app.static_folder = self.static_dir
-        app.run(host=self.host, 
-                debug=self.debug, 
-                port=self.port, 
+        app.run(host=self.host,
+                debug=self.debug,
+                port=self.port,
                 use_reloader=self.use_reloader)
-    
+
     def make_local_folders(self, files_path=None):
         if files_path is None:
             files_path = os.getcwd()
@@ -128,8 +129,6 @@ class LocalServer(object):
                 logger.error(message)
                 # logger.exception(ex) # non-critical error
 
-
-
     def get_static_files_dict(self):
         static_files_dict = {}
         root = self.root_path
@@ -141,7 +140,6 @@ class LocalServer(object):
                 static_files_dict[key] = value
         static_files_dict['favicon.ico'] = os.path.join(static, "favicon.ico")
         return static_files_dict
-                
 
 
 class Browser(threading.Thread):

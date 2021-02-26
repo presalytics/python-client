@@ -36,7 +36,7 @@ class TokenUtil(object):
             pass
         if token is not None:
             try:
-                self.process_token(token)    
+                self.process_token(token)
                 if self.token_cache:
                     self._put_token_file()
             except Exception:
@@ -90,7 +90,7 @@ class TokenUtil(object):
             if token.get('expires_in', None):
                 access_token_expire_time = datetime.datetime.utcnow().astimezone(datetime.timezone.utc) + datetime.timedelta(seconds=token['expires_in'])
             else:
-                pass    # TODO: add logic to introspect token for expire time 
+                pass    # TODO: add logic to introspect token for expire time
         else:
             access_token_expire_time = token["access_token_expire_time"]
         if access_token_expire_time:
@@ -140,7 +140,7 @@ class AuthenticationMixIn(abc.ABC):
         """
         if self.parent() is None:
             message = """
-            Missing reference to Client class.  Client was like garbage collected by the intepreter.\n  
+            Missing reference to Client class.  Client was like garbage collected by the intepreter.\n
             Please initialize the Client class on its own line to avoid this error.  For example:\n\n
             client = presalytics.Client()\n
             story = client.story.story_id_get(story_id)
@@ -160,21 +160,21 @@ class AuthenticationMixIn(abc.ABC):
             endpoint = self.configuration.host + resource_path
             logger.info("Sending {0} message to {1}. Request Id: {2}".format(method, endpoint, request_id))
             call_args = (
-                resource_path, 
-                method, 
+                resource_path,
+                method,
                 path_params,
-                query_params, 
-                header_params, 
-                body, 
-                post_params, 
-                files, 
+                query_params,
+                header_params,
+                body,
+                post_params,
+                files,
                 response_type,
-                auth_settings, 
-                async_req, 
-                _return_http_data_only, 
-                collection_formats, 
+                auth_settings,
+                async_req,
+                _return_http_data_only,
+                collection_formats,
                 _preload_content,
-                _request_timeout, 
+                _request_timeout,
                 _host
             )
             response = super(AuthenticationMixIn, self).call_api(*call_args)
@@ -277,15 +277,15 @@ class AuthenticationMixIn(abc.ABC):
             for k, v in six.iteritems(files):
                 if not v:
                     continue
-                if type(v) is str or type(v) is list:
-                    file_names = v if type(v) is list else [v]
+                if isinstance(v, str) or isinstance(v, list):
+                    file_names = v if isinstance(v, list) else [v]
                     for n in file_names:
                         with open(n, 'rb') as f:
                             filename = os.path.basename(f.name)
                             filedata = f.read()
 
                 else:
-                    if type(v) is FileStorage:
+                    if isinstance(v, FileStorage):
                         filename = v.filename
                         v.stream.seek(0)
                         filedata = v.stream.read()

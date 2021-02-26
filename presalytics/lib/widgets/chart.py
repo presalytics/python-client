@@ -35,13 +35,13 @@ class ChartWidget(presalytics.story.components.WidgetBase):
 
     chart_data: dict
         Data that will be loaded into the `c3.generate()` method.  Please go
-        to [c3js.org](https://c3js.org/gettingstarted.html) for more information 
+        to [c3js.org](https://c3js.org/gettingstarted.html) for more information
         on how to configure this object.
 
     css64 : str. optional
         A base64-encoded string of the css styles to apply to the d3 document.  Used for server-to-server
         transport over https.
-    
+
     css_filename: str, optional
         A css file containing styles that will be applied to d3
 
@@ -50,7 +50,7 @@ class ChartWidget(presalytics.story.components.WidgetBase):
     """
     __component_kind__ = 'chart'
 
-    def __init__(self, 
+    def __init__(self,
                  name: str,
                  chart_data: typing.Dict,
                  css64: str = None,
@@ -78,7 +78,7 @@ class ChartWidget(presalytics.story.components.WidgetBase):
                 if os.path.exists(fpath):
                     with open(fpath, 'rb') as f:
                         data = f.read()
-                        data64 = base64.b64encode(data).decode('utf-8')  #type: ignore
+                        data64 = base64.b64encode(data).decode('utf-8')  # type: ignore
                     break
             if not data64:
                 logger.debug("File {0} could not be found".format(filename))
@@ -87,7 +87,6 @@ class ChartWidget(presalytics.story.components.WidgetBase):
     def add_bind_to(self):
         if 'bindto' not in self.chart_data.keys():
             self.chart_data['bindto'] = '#chart'
-
 
     def to_html(self, data=None, **kwargs) -> str:
         """
@@ -162,11 +161,8 @@ class ChartWidget(presalytics.story.components.WidgetBase):
     }
     """
 
-
-
     def create_subdocument(self, **kwargs):
         return self.standalone_html()
-
 
     def standalone_html(self) -> str:
         """
@@ -190,7 +186,7 @@ class ChartWidget(presalytics.story.components.WidgetBase):
                 <div id="chart" class="chart-container"></div>
                 <script type="text/javascript">
 
-                    document.addEventListener("DOMContentLoaded", (event) => { 
+                    document.addEventListener("DOMContentLoaded", (event) => {
                         var data = JSON.parse('{{data|safe}}');
 
                         var aspectRatio = data.aspectRatio || 0.5625; // 16:9 AR
@@ -207,7 +203,7 @@ class ChartWidget(presalytics.story.components.WidgetBase):
                                 chart.resize({height: newHeight});
                                 chart.internal.selectChart.style('max-height', 'none');
                             }, 500);
-                            
+
                         }
 
                         const observer = new ResizeObserver(c3Resize);
@@ -220,7 +216,7 @@ class ChartWidget(presalytics.story.components.WidgetBase):
             </body>
         </html>""")
         data = json.dumps(self.chart_data)  # dont use hyphens in data keys
-        extra_css = base64.b64decode(self.css64).decode('utf-8') if self.css64 else ChartWidget.DEFAULT_CSS  #type: ignore  
+        extra_css = base64.b64decode(self.css64).decode('utf-8') if self.css64 else ChartWidget.DEFAULT_CSS  # type: ignore
         context = {
             "c3_styles_url": presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten().get('c3'),
             "c3_script_url": presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get('c3'),

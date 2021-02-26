@@ -36,14 +36,14 @@ logger = logging.getLogger('presalytics.story.revealer')
 
 class Revealer(presalytics.story.components.Renderer):
     """
-    Renders `presalytics.story.outline.StoryOutline` objects to 
+    Renders `presalytics.story.outline.StoryOutline` objects to
     [reveal.js](https://github.com/hakimel/reveal.js/) presentations
 
     Parameters
     ----------
     story_outline : presalytics.story.outline.StoryOutline
         The presalytics StoryOutline to be rendered and presented
-    
+
     Attributes
     -----------
     base : lxml.etree.Element
@@ -119,10 +119,10 @@ class Revealer(presalytics.story.components.Renderer):
         except Exception:
             logger.info("Revealer could not extract story_id from outline.")
         return base
-    
+
     def get_meta_tags(self, body=tuple()):
         """
-        Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts. 
+        Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts.
         """
 
         scripts = body.findall(".//script")
@@ -168,10 +168,9 @@ class Revealer(presalytics.story.components.Renderer):
                     frame_hosts.append('https://{0}'.format(host))
         return frame_hosts
 
-
     def package_as_standalone(self):
         """
-        Render the story outline as a html document with only the 
+        Render the story outline as a html document with only the
         reveal.js presentation as conent
 
         Returns
@@ -259,7 +258,7 @@ class Revealer(presalytics.story.components.Renderer):
         except Exception as ex:
             logger.exception(ex)
             t, v, tb = sys.exc_info()
-            if not presalytics.settings.DEBUG:  #type: ignore[attr-defined]
+            if not presalytics.settings.DEBUG:  # type: ignore[attr-defined]
                 page_html = presalytics.lib.exceptions.RenderExceptionHandler(ex, "page", traceback=tb).render_exception()
             else:
                 six.reraise(t, v, tb)
@@ -267,7 +266,7 @@ class Revealer(presalytics.story.components.Renderer):
 
     def present(self, files_path=None, debug=True, port=8082, host='127.0.0.1'):
         """
-        Creates and opens the rendered story in the browser.  Story files are served by 
+        Creates and opens the rendered story in the browser.  Story files are served by
         a local flask server.  Not for production use.  Press Ctrl + C to close the server.
 
         Parameters
@@ -279,14 +278,14 @@ class Revealer(presalytics.story.components.Renderer):
         debug : str
             Defaults to True.  Indicates whether the flask server should be started
             in debug mode.
-        
+
         port : str
             The network port to serve the story onto.  Defautls to 8082.
-        
+
         host : str
             The host to for the local server.  Typically either localhost or the default gateway.
             Defaults to 127.0.0.1 (localhost).
-        
+
         """
         logger.info("Building story rendering at http://{0}:{1}".format(host, port))
         if not files_path:

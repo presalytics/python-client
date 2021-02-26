@@ -31,21 +31,21 @@ if typing.TYPE_CHECKING:
 class OoxmlEndpointMap(object):
     """
     Mapping class that bridges Presalytics API Ooxml Automation service endpoints
-    and component class that consume those endpoints (typically subclasses of 
+    and component class that consume those endpoints (typically subclasses of
     `presalytics.lib.widgets.ooxml.OoxmlWidgetBase`)
 
-    The classmethods on this class are conveninece methods to help users 
+    The classmethods on this class are conveninece methods to help users
     quickly inform their widget which endpoint their of a Ooxml Document their
     targets.
 
-    Instance methods on this class are used by widget to generate urls and 
+    Instance methods on this class are used by widget to generate urls and
     lookup against object tree for target objects.
 
     Parameters
     ----------
     endpoint_id : str
         A unique string for identifying the object_type related to the enpoint
-    
+
     baseurl : str
         For developer use. Allows this to generate urls for non-standard instances
         of the Ooxml Automation service.  Defaults to https://api.presalytics.io/ooxml-automation/
@@ -54,7 +54,7 @@ class OoxmlEndpointMap(object):
     ----------
     root_url : str
         the home url for the class instance.  Typically `http://api.presalytics.io/ooxml-automation/{object_type}`
-    
+
     OBJECT_TYPE_MAP : str
         A mapping table for object_types and object tree lookup keys
     """
@@ -79,13 +79,11 @@ class OoxmlEndpointMap(object):
             ooxml_host = presalytics.settings.HOST_OOXML_AUTOMATION  # type: ignore[attr-defined]
             if ooxml_host:
                 self.baseurl = ooxml_host
-                
+
         else:
             self.baseurl = baseurl
         self.root_url = posixpath.join(self.baseurl, self.endpoint_id)
         self.OBJECT_TYPE_MAP = self._build_object_type_map()
-    
-
 
     def _build_object_type_map(self):
         return {
@@ -95,7 +93,7 @@ class OoxmlEndpointMap(object):
             "Slide": [
                 OoxmlEndpointMap._GROUP,
                 OoxmlEndpointMap._SHAPE,
-                OoxmlEndpointMap._SHAPETREE, 
+                OoxmlEndpointMap._SHAPETREE,
                 OoxmlEndpointMap._CONNECTION_SHAPE,
                 OoxmlEndpointMap._SLIDE
             ],
@@ -112,7 +110,7 @@ class OoxmlEndpointMap(object):
                 OoxmlEndpointMap._DOCUMENT
             ]
         }
-    
+
     def get_object_type(self):
         """
         Returns the Ooxml Automation service object type for this endpoint
@@ -168,7 +166,7 @@ class OoxmlEndpointMap(object):
         targeting Document objects
         """
         return cls(OoxmlEndpointMap._DOCUMENT, baseurl)
-    
+
     @classmethod
     def group(cls, baseurl=None):
         """
@@ -228,7 +226,7 @@ class OoxmlEndpointMap(object):
 
 class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
     """
-    Base class for creating widgets from objects at endpoints in the 
+    Base class for creating widgets from objects at endpoints in the
     Presalytics API Ooxml Automation service.
 
     Parameters
@@ -237,11 +235,11 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         The widget name.  If not provided, will be the `object_name` or `filename`
 
     story_id : str, optional
-        The the id of the story in the Presalytics API Story service.  If not provided, 
-        a new story will be created.  Do not supply if this object has not yet been created. 
-    
+        The the id of the story in the Presalytics API Story service.  If not provided,
+        a new story will be created.  Do not supply if this object has not yet been created.
+
     object_ooxml_id : str, optional
-        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this 
+        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this
         object has not yet been created.
 
     endpoint_map : presalytics.lib.widgets.ooxml.OoxmlEndpointMap, optional
@@ -275,7 +273,7 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         }
     ]
 
-    def __init__(self, 
+    def __init__(self,
                  name,
                  story_id=None,
                  object_ooxml_id=None,
@@ -300,8 +298,8 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
             'data-object-type': self.endpoint_map.endpoint_id,
             'data-object-id': self.object_ooxml_id
         })
-        preloader_container_div = lxml.html.Element( "div", {"class":"preloader-container"})
-        preloader_row_div = lxml.etree.SubElement(preloader_container_div, "div", attrib={"class":"preloader-row"})
+        preloader_container_div = lxml.html.Element("div", {"class": "preloader-container"})
+        preloader_row_div = lxml.etree.SubElement(preloader_container_div, "div", attrib={"class": "preloader-row"})
         preloader_file = os.path.join(os.path.dirname(__file__), "img", "preloader.svg")
         svg = lxml.html.parse(preloader_file)
         preloader_row_div.append(svg.getroot())
@@ -310,7 +308,6 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         })
         empty_parent_div.extend([svg_container_div, preloader_container_div])
         return lxml.html.tostring(empty_parent_div)
-
 
     def to_html(self, **kwargs):
         """
@@ -370,8 +367,8 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
     @classmethod
     def deserialize(cls, component, **kwargs):
         return cls(
-            component.name, 
-            component.data["story_id"], 
+            component.name,
+            component.data["story_id"],
             component.data["object_id"],
             OoxmlEndpointMap(component.data["endpoint_id"]),
             **kwargs
@@ -383,16 +380,16 @@ class OoxmlFileWidget(OoxmlWidgetBase):
     Builds a `widget` from a Presentation or Spreadsheet document
 
     This class interacts with the Presalytics API to extract SVG objects from
-    Presentation and spreadsheet documents, identify them, and render them 
+    Presentation and spreadsheet documents, identify them, and render them
     into a story. The file is uploaded to Presalytics API Ooxml Automation service,
-    which then processes the file and scans for objects in the file's object tree 
+    which then processes the file and scans for objects in the file's object tree
     (As seen in the 'Selection Pane' in PowerPoint) for objects matching the 'object_name'.
-    When rendered, this widget retrieves an SVG of the identified object for rendering within 
-    the story. 
+    When rendered, this widget retrieves an SVG of the identified object for rendering within
+    the story.
 
-    Please note that the Presalytics API Ooxml Automation object will be created overwritten 
-    each time this widget is initialized, and replaced within the corresponding 
-    `presalytics.story.outline.StoryOutline`.  For in-place editing of widgets Ooxml Automation objects 
+    Please note that the Presalytics API Ooxml Automation object will be created overwritten
+    each time this widget is initialized, and replaced within the corresponding
+    `presalytics.story.outline.StoryOutline`.  For in-place editing of widgets Ooxml Automation objects
     that are already bound to the `Story`, please see `presalytics.lib.widgets.ooxml_editors.OoxmlEditorWidget`
 
     Parameters
@@ -402,15 +399,15 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         the object to be rendered
 
     name : str, optional
-        The widget name.  If not provided, attribute will be set as the `object_name` 
+        The widget name.  If not provided, attribute will be set as the `object_name`
         or `filename`
 
     story_id : str, optional
-        The the id of the story in the Presalytics API Story service.  If not provided, 
-        a new story will be created.  Do not supply if this object has not yet been created. 
-    
+        The the id of the story in the Presalytics API Story service.  If not provided,
+        a new story will be created.  Do not supply if this object has not yet been created.
+
     object_ooxml_id : str, optional
-        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this 
+        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this
         object has not yet been created.
 
     endpoint_map : presalytics.lib.widgets.ooxml.OoxmlEndpointMap, optional
@@ -421,7 +418,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         The name of the object in the file's object tree the will be rendered
 
     previous_ooxml_version : str, optional
-        The id Ooxml Automation service document object that was previously used to 
+        The id Ooxml Automation service document object that was previously used to
         occupy this widget in the `presalytics.story.outline.StoryOutline`
 
     file_last_modified : str, optional
@@ -432,7 +429,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
     document_ooxml_id : str, optional
         The identifier for the parent "Document" object in the Ooxml Automation service for the object
         idenitifiable by a combinatation of `object_ooxml_id` and `endpoint_map`.
-    
+
     """
     object_name: typing.Optional[str]
     ooxml_id: str
@@ -534,7 +531,6 @@ class OoxmlFileWidget(OoxmlWidgetBase):
                     self.object_ooxml_id = target_dto.entity_id
                     self.file_last_modified = presalytics.lib.util.roundup_date_modified(this_file_last_modified)
 
-
     @classmethod
     def deserialize(cls, component, **kwargs):
         init_args = {
@@ -610,11 +606,11 @@ class OoxmlFileWidget(OoxmlWidgetBase):
 
 class UpdaterWidgetBase(OoxmlWidgetBase):
     """
-    Abstract class for create simple interfaces to update widgets from a simple data table. 
+    Abstract class for create simple interfaces to update widgets from a simple data table.
 
-    This class simplifies updates to Ooxml Automation service endpoints, allowing updates to 
-    ooxml object data and its underlying xml via simple data transfer objects definted in the 
-    Presalytics Ooxml Automation server.  
+    This class simplifies updates to Ooxml Automation service endpoints, allowing updates to
+    ooxml object data and its underlying xml via simple data transfer objects definted in the
+    Presalytics Ooxml Automation server.
 
     Inheriting classes must override the `_get_dto_class`, `_get_endpoint_path`, and `_get_dto_table_name`
     methods
@@ -625,11 +621,11 @@ class UpdaterWidgetBase(OoxmlWidgetBase):
         The widget name.  If not provided, will be the `object_name` or `filename`
 
     story_id : str
-        The the id of the story in the Presalytics API Story service.  If not provided, 
-        a new story will be created.  Do not supply if this object has not yet been created. 
-    
+        The the id of the story in the Presalytics API Story service.  If not provided,
+        a new story will be created.  Do not supply if this object has not yet been created.
+
     object_id : str
-        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this 
+        The identifier of the Ooxml Automation service object bound the Story. Do not supply if this
         object has not yet been created.
 
     endpoint_map : presalytics.lib.widgets.ooxml.OoxmlEndpointMap
@@ -645,20 +641,20 @@ class UpdaterWidgetBase(OoxmlWidgetBase):
         the subclass' `_get_dto_table_name` method.
 
     """
-    def __init__(self, 
-                name,
-                story_id: str,
-                object_id: str,
-                endpoint_map: OoxmlEndpointMap,
-                dto=None, 
-                data_table=None,
-                **kwargs):
+
+    def __init__(self,
+                 name,
+                 story_id: str,
+                 object_id: str,
+                 endpoint_map: OoxmlEndpointMap,
+                 dto=None,
+                 data_table=None,
+                 **kwargs):
         super(UpdaterWidgetBase, self).__init__(name, story_id, object_id, endpoint_map, **kwargs)
         self.dto = dto
         self.data_table = data_table
         self.object_id = object_id
-    
-    
+
     @abc.abstractmethod
     def _get_dto_class(self) -> typing.Type:
         """
@@ -669,8 +665,8 @@ class UpdaterWidgetBase(OoxmlWidgetBase):
     @abc.abstractmethod
     def _get_endpoint_path(self) -> str:
         """
-        Returns the relative path to the the endpoint used , starting from the `root_url` of the 
-        `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` object. 
+        Returns the relative path to the the endpoint used , starting from the `root_url` of the
+        `presalytics.lib.widgets.ooxml.OoxmlEndpointMap` object.
         """
         return NotImplemented
 
@@ -687,7 +683,7 @@ class UpdaterWidgetBase(OoxmlWidgetBase):
         Returns the endpoints used for Api calls
         """
         return posixpath.join(self.endpoint_map.root_url, self._get_endpoint_path(), self.object_ooxml_id)
-    
+
     def get_dto(self):
         """
         Returns an instance of the dto object from the OoxmlAutomation Service API
@@ -751,23 +747,23 @@ class UpdaterWidgetBase(OoxmlWidgetBase):
     @classmethod
     def deserialize(cls, component, **kwargs):
         return cls(
-            component.name, 
-            component.data["story_id"], 
+            component.name,
+            component.data["story_id"],
             component.data["object_id"],
             component.data.get("dto", None),
             component.data.get("data_table", None),
             **kwargs
         )
 
-        
+
 class ChartUpdaterWidget(UpdaterWidgetBase):
     """
     Updates a Chart in the Ooxml Automation service API at the the endpoint '/Chart/ChartUpdate/'
 
-    This class simplifies chart updates, for charts residing in the Ooxml Automation Service, 
+    This class simplifies chart updates, for charts residing in the Ooxml Automation Service,
     allowing updates to ooxml object data and its underlying xml either via a list of lists or
     the `presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO`
-    object.  
+    object.
 
     Parameters
     ----------
@@ -775,10 +771,10 @@ class ChartUpdaterWidget(UpdaterWidgetBase):
         A name for the widget.
 
     story_id : str
-        The the id of the story in the Presalytics API Story service. 
-    
+        The the id of the story in the Presalytics API Story service.
+
     chart_id : str
-        The identifier of the Ooxml Automation Chart service object. 
+        The identifier of the Ooxml Automation Chart service object.
 
     dto: presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO, optional
         A an instance of the data transfer object model. The class of this object is defined by the
@@ -790,17 +786,16 @@ class ChartUpdaterWidget(UpdaterWidgetBase):
 
     """
     __component_kind__ = "chart-updater"
-    
-    def __init__(self, 
-                name,
-                story_id: str,
-                chart_id: str,
-                dto: 'ChartChartDataDTO' = None, 
-                data_table: typing.Sequence[typing.Sequence] = None,
-                **kwargs):
+
+    def __init__(self,
+                 name,
+                 story_id: str,
+                 chart_id: str,
+                 dto: 'ChartChartDataDTO' = None,
+                 data_table: typing.Sequence[typing.Sequence] = None,
+                 **kwargs):
         super().__init__(name, story_id, chart_id, OoxmlEndpointMap.chart(), dto=dto, data_table=data_table, **kwargs)
         self.chart_id = chart_id
-
 
     def _get_dto_class(self):
         return presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO
@@ -813,10 +808,10 @@ class ChartUpdaterWidget(UpdaterWidgetBase):
 
     def get_dataframe(self) -> pandas.DataFrame:
         """
-        Returns a panda datagrame of the 
+        Returns a panda datagrame of the
         """
         data: collections.OrderedDict
-        
+
         if not self.dto:
             self.dto = self.get_dto()
         data = collections.OrderedDict()
@@ -825,26 +820,25 @@ class ChartUpdaterWidget(UpdaterWidgetBase):
                 self.dto.series_names[i]: pandas.Series(self.dto.data_points[i], self.dto.category_names)
             })
         return pandas.DataFrame(data)
-    
+
     def put_dataframe(self, df: pandas.DataFrame):
         data_dict = df.to_dict('split')
         data_points = list(map(list, zip(*data_dict['data'])))
-        dto = self._get_dto_class()(chart_id=self.chart_id, 
-                                 series_names=data_dict["columns"], 
-                                 category_names=data_dict["index"],
-                                 data_points=data_points)
+        dto = self._get_dto_class()(chart_id=self.chart_id,
+                                    series_names=data_dict["columns"],
+                                    category_names=data_dict["index"],
+                                    data_points=data_points)
         self._put_dto(dto)
 
-        
 
 class TableUpdaterWidget(UpdaterWidgetBase):
     """
     Updates a Table in the Ooxml Automation service API at the the endpoint '/Table/TableUpdate/'
 
-    This class simplifies table updates, for tables residing in the Ooxml Automation Service, 
+    This class simplifies table updates, for tables residing in the Ooxml Automation Service,
     allowing updates to ooxml object data and its underlying xml either via a list of lists or
     the `presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO`
-    object.  
+    object.
 
     Parameters
     ----------
@@ -852,10 +846,10 @@ class TableUpdaterWidget(UpdaterWidgetBase):
         A name for the widget.
 
     story_id : str
-        The the id of the story in the Presalytics API Story service. 
-    
+        The the id of the story in the Presalytics API Story service.
+
     table_id : str
-        The identifier of the Ooxml Automation Table service object. 
+        The identifier of the Ooxml Automation Table service object.
 
     dto: presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO, optional
         A an instance of the data transfer object model. The class of this object is defined by the
@@ -867,17 +861,16 @@ class TableUpdaterWidget(UpdaterWidgetBase):
 
     """
     __component_kind__ = "table-updater"
-    
-    def __init__(self, 
-                name,
-                story_id: str,
-                table_id: str,
-                dto: 'TableTableDataDTO' = None, 
-                data_table: typing.Sequence[typing.Sequence] = None,
-                **kwargs):
+
+    def __init__(self,
+                 name,
+                 story_id: str,
+                 table_id: str,
+                 dto: 'TableTableDataDTO' = None,
+                 data_table: typing.Sequence[typing.Sequence] = None,
+                 **kwargs):
         super().__init__(name, story_id, table_id, OoxmlEndpointMap.table(), dto=dto, data_table=data_table, **kwargs)
         self.table_id = table_id
-
 
     def _get_dto_class(self):
         return presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO
@@ -887,4 +880,3 @@ class TableUpdaterWidget(UpdaterWidgetBase):
 
     def _get_dto_table_name(self):
         return "table_data"
-    

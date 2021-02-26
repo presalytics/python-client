@@ -6,11 +6,11 @@ import presalytics.lib.plugins.jinja as jinja
 
 class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
     """
-    Allows users configure reveal.js initialization settings for when their 
+    Allows users configure reveal.js initialization settings for when their
     story is rendered via `presalytics.story.revealer.Revealer`
 
     For more information regarding reveal.js' initialization settings, please
-    refer to https://github.com/hakimel/reveal.js/#configuration        
+    refer to https://github.com/hakimel/reveal.js/#configuration
     """
     __plugin_name__ = 'reveal'
 
@@ -74,7 +74,7 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
         return self.render(config)
 
     template = """
-    <script type="text/javascript"> 
+    <script type="text/javascript">
         window.addEventListener('toolbar-initialized', function(e) {
             var config = {{ reveal_config|tojson(indent=4) }};
             config.plugins = [window.presalyticsToolbar];
@@ -83,10 +83,10 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
     </script>
     """
     """
-    The `<script>` fragment that get populated with a initialization data 
+    The `<script>` fragment that get populated with a initialization data
     via the `presalytics.lib.plugins.jinja.JinjaPluginMakerMixin`
     """
-    
+
     default_config = {
         'controls': True,  # Display presentation control arrows
         # Help the user learn the controls by providing hints, for example by
@@ -107,13 +107,13 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
         'slideNumber': False,
 
         # Add the current slide number to the URL hash so that reloading the
-        #page/copying the URL will return you to the same slide
+        # page/copying the URL will return you to the same slide
         'hash': False,
 
         # Push each slide change to the browser history. Implies `hash: true`
         'history': False,
 
-        # Enable keyboard shortcuts for navigation 
+        # Enable keyboard shortcuts for navigation
         'keyboard': True,
 
         # Enable the slide overview mode
@@ -181,7 +181,7 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
 
         # Specify the average time in seconds that you think you will spend
         # presenting each slide. This is used to show a pacing timer in the
-        # speaker view 
+        # speaker view
         'defaultTiming': 120,
 
         # Enable slide navigation via mouse wheel
@@ -202,26 +202,26 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
         'previewLinks': False,
 
         # Transition style
-        'transition': 'slide', # none/fade/slide/convex/concave/zoom
+        'transition': 'slide',  # none/fade/slide/convex/concave/zoom
 
         # Transition speed
-        'transitionSpeed': 'default', # default/fast/slow
+        'transitionSpeed': 'default',  # default/fast/slow
 
         # Transition style for full page slide backgrounds
-        'backgroundTransition': 'fade', # none/fade/slide/convex/concave/zoom
+        'backgroundTransition': 'fade',  # none/fade/slide/convex/concave/zoom
 
         # Number of slides away from the current that are visible
         'viewDistance': 3,
 
         # Parallax background image
-        'parallaxBackgroundImage': '', # e.g. "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'"
+        'parallaxBackgroundImage': '',  # e.g. "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'"
 
         # Parallax background size
-        'parallaxBackgroundSize': '', # CSS syntax, e.g. "2100px 900px"
+        'parallaxBackgroundSize': '',  # CSS syntax, e.g. "2100px 900px"
 
         # Number of pixels to move the parallax background per slide
         # - Calculated automatically unless specified
-        # - Set to 0 to disable movement along an axis 
+        # - Set to 0 to disable movement along an axis
         'parallaxBackgroundHorizontal': 'null',
         'parallaxBackgroundVertical': 'null',
 

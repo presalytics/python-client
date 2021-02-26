@@ -107,6 +107,7 @@ class Settings(object):
     COMPONENTS: typing.List[str]
     PLUGINS: typing.List[str]
     XML_TRANSFORMS: typing.List[str]
+    AUTODISCOVER_PATHS = typing.List[str]
 
     def __init__(self, *args, **kwargs):
         self.get_settings_from_module(presalytics.lib.default_settings)

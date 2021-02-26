@@ -57,4 +57,3 @@ from presalytics.client.presalytics_story.models.story_outline_history import St
 from presalytics.client.presalytics_story.models.story_outline_history_all_of import StoryOutlineHistoryAllOf
 from presalytics.client.presalytics_story.models.view import View
 from presalytics.client.presalytics_story.models.view_all_of import ViewAllOf
-

@@ -2,10 +2,12 @@ import json
 import presalytics.lib.plugins.base as ext
 import presalytics.lib.plugins.jinja as jinja
 
+
 class Mpld3NumpyToJson(json.JSONEncoder):
     """
-    Simplified Numpy encoder that returns json that mpld3 will understand 
+    Simplified Numpy encoder that returns json that mpld3 will understand
     """
+
     def default(self, obj):
         import numpy as np
         if isinstance(obj, np.ndarray):
@@ -42,4 +44,3 @@ class Mpld3Plugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
             'fig_json': fig_json
         }
         return self.render(render_config)
-

@@ -80,7 +80,7 @@ class InvalidConfigurationError(PresalyticsBaseException):
 
 
 class RegistryError(PresalyticsBaseException):
-     def __init__(self, registry, message=None):
+    def __init__(self, registry, message=None):
         if not message:
             message = "The was an unknown error in inside the registry"
         message = "{0} Error: ".format(registry.__class__.__name__) + message
@@ -92,6 +92,7 @@ class InvalidArgumentException(PresalyticsBaseException):
         if not message:
             message = "One of the arguments supplied to this method is invalid."
         super().__init__(message)
+
 
 class ApiException(PresalyticsBaseException):
     def __init__(self, default_exception=None):
@@ -120,14 +121,14 @@ class RenderExceptionHandler(object):
         self.exception_type = self.exception.__class__.__name__
         self.line_no = None
 
-        try: 
+        try:
             first_frame = self.get_source_frame(traceback)
             self.source_module = first_frame.tb_frame.f_globals['__name__']
             self.line_no = first_frame.tb_lineno
         except Exception:
             self.source_module = "unidentified"
             self.line_no = "unknown"
-    
+
         if isinstance(self.exception, PresalyticsBaseException):
             self.message = self.exception.message
         else:
@@ -142,7 +143,6 @@ class RenderExceptionHandler(object):
             return self.get_source_frame(next)
         else:
             return tb
-        
 
     def render_exception(self):
         container = lxml.html.Element("div", {
@@ -163,10 +163,9 @@ class RenderExceptionHandler(object):
         note = lxml.html.Element("p")
         note.text = "If you have trouble understainding this error message, try building your story using " \
             "with the presalytics.Revealer's `present()` method.  If should give you more thorough error logging."
-        
+
         container.extend([header, message, _type, exception_message, source, note])
         return lxml.html.tostring(container).decode('utf-8')
-    
+
     def to_html(self):
         return self.render_exception()
-         

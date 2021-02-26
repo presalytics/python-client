@@ -1,0 +1,14 @@
+{
+    "python.linting.mypyEnabled": true,
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveTimeout": 1500,
+    "python.formatting.provider": "autopep8",
+    "python.formatting.autopep8Args": [
+        "--in-place",
+        "--agressive",
+        "--global-config",
+        "setup.cfg"
+    ]
+}

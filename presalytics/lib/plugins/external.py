@@ -11,6 +11,7 @@ class AttrDict(dict):
     """ Dictionary subclass whose entries can be accessed by attributes
         (as well as normally).
     """
+
     def __init__(self, *args, **kwargs):
         super(AttrDict, self).__init__(*args, **kwargs)
         self.__dict__ = self
@@ -22,7 +23,7 @@ class AttrDict(dict):
             return data
         else:
             return AttrDict({key: AttrDict.from_nested_dict(data[key])
-                            for key in data})
+                             for key in data})
 
     def flatten(self) -> typing.Dict:
         return AttrDict._flatten(self, '', {})
@@ -40,7 +41,7 @@ class AttrDict(dict):
 
 class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
     """
-    `presalytics.lib.plugins.base.StylePlugin` subclass for converting a `presalytics.story.outline.Plugin` 
+    `presalytics.lib.plugins.base.StylePlugin` subclass for converting a `presalytics.story.outline.Plugin`
     config into an html `<link>` fragment.
 
     Attributes
@@ -70,12 +71,12 @@ class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
             'print': 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/print/pdf.min.css',
             'toolbar': '{0}/static/css/toolbar.css'.format(site_host),
         },
-        'preloaders' : '{0}/static/css/preloaders.css'.format(site_host),
+        'preloaders': '{0}/static/css/preloaders.css'.format(site_host),
         'bootstrap4': "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css",
         'font-awesome': 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css',
         'bootstrap-table': 'https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css',
         'markdown-css': 'https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css'
-    
+
     }
     """
     Static nested dictionary containing links to external stylesheets that will be rendered alongside this plugin
@@ -85,12 +86,11 @@ class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
         super(ApprovedExternalLinks, self).__init__(**kwargs)
         self.attr_dict = AttrDict(self.STYLES_MAP)
 
-
     def to_style(self, config, **kwargs):
         """
         Converts a dot-notation key for nested dictionaries (e.g., 'reveal.base') into a
-        string contain an html fragement with `<link>` tag.  The dot-notation key 
-        is pulled from the 'approved_styles_key' of the 'config' attrubte of subclass 
+        string contain an html fragement with `<link>` tag.  The dot-notation key
+        is pulled from the 'approved_styles_key' of the 'config' attrubte of subclass
         of a `presalytics.story.outline.Plugin` object.
         """
         key = config['approved_styles_key']
@@ -103,7 +103,7 @@ class ApprovedExternalLinks(presalytics.lib.plugins.base.StylePlugin):
 
 class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
     """
-    `presalytics.lib.plugins.base.ScriptPlugin` subclass for converting a `presalytics.story.outline.Plugin` 
+    `presalytics.lib.plugins.base.ScriptPlugin` subclass for converting a `presalytics.story.outline.Plugin`
     config into an html `<script>` fragment.
 
     Attributes
@@ -146,12 +146,11 @@ class ApprovedExternalScripts(presalytics.lib.plugins.base.ScriptPlugin):
         super(ApprovedExternalScripts, self).__init__(**kwargs)
         self.attr_dict = AttrDict(self.SCRIPT_MAP)
 
-
     def to_script(self, config, **kwargs):
         """
         Converts a dot-notation key for nested dictionaries (e.g., 'reveal.base') into a
-        string containing an html fragement with `<script>` tags.  The dot-notation key 
-        is pulled from the 'approved_styles_key' of the 'config' attrubte of subclass 
+        string containing an html fragement with `<script>` tags.  The dot-notation key
+        is pulled from the 'approved_styles_key' of the 'config' attrubte of subclass
         of a `presalytics.story.outline.Plugin` object.
         """
         key = config['approved_scripts_key']

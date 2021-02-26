@@ -25,7 +25,7 @@ class PluginBase(abc.ABC):
     ----------
 
     __plugin_kind__ : str
-        The __plugin_kind__ is a static string that instructs classes 
+        The __plugin_kind__ is a static string that instructs classes
         the render story outlines (e.g., presalytics.story.revealer.Revealer) where
         to where render the plugin (i.e., at the bottom of the html body for scripts).
 
@@ -36,7 +36,7 @@ class PluginBase(abc.ABC):
     __dependencies__ : list of dict
         A list of plugs that should be rendered above this plugin in an html document.  This ensures
         the needed javascript or css is loaded prior user's plugin runs.
-        
+
         For example, if a user creates plugin requires d3.js to function, dependencies should include
         the following configuration:
 
@@ -98,7 +98,7 @@ class PluginBase(abc.ABC):
 
 class ScriptPlugin(PluginBase):
     """
-    A script plugin incorporates whitelisted or local `<script>` tags into a 
+    A script plugin incorporates whitelisted or local `<script>` tags into a
     rendered story
     """
     __plugin_kind__ = 'script'
@@ -167,6 +167,7 @@ class PluginRegistry(presalytics.lib.registry.RegistryBase):
     """
     The Plugin Registry class
     """
+
     def __init__(self, **kwargs):
         super(PluginRegistry, self).__init__(**kwargs)
 
@@ -186,6 +187,7 @@ class Graph():
 
     Adapted from https://www.geeksforgeeks.org/detect-cycle-in-a-graph/
     """
+
     def __init__(self, vertices):
         self.graph = collections.defaultdict(list)
         self.V = vertices
@@ -348,7 +350,7 @@ class PluginManager(object):
     def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.List[typing.Dict] = None) -> typing.List[typing.Dict]:
         if not plugin_list:
             plugin_list = []
-    
+
         for key, val in source_dict.items():
             if key == "plugins":
                 if isinstance(val, list):

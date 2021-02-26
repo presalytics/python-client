@@ -31,4 +31,3 @@ from presalytics.client.presalytics_doc_converter.exceptions import ApiException
 # import models into sdk package
 from presalytics.client.presalytics_doc_converter.models.file_to_convert import FileToConvert
 from presalytics.client.presalytics_doc_converter.models.file_url import FileUrl
-

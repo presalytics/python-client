@@ -19,7 +19,7 @@ logger = logging.getLogger('presalytics.lib.registry')
 class RegistryBase(abc.ABC):
     """
     In-memory container for python objects that return attributes from both the
-    `get_type` and `get_name` abstract functions. 
+    `get_type` and `get_name` abstract functions.
 
     The `discover` method searches the current working directory, directories at
     in the `autodiscover_paths` attribute, and packages in the current python environment
@@ -140,14 +140,14 @@ class RegistryBase(abc.ABC):
             new_deferred = []
             for mod in self.deferred_modules:
                 try:
-                    name = mod.get("name") 
-                    if name in sys.modules: 
-                        module = sys.modules[name] 
-                    else: 
+                    name = mod.get("name")
+                    if name in sys.modules:
+                        module = sys.modules[name]
+                    else:
                         spec = mod.get("spec")
                         module = mod.get("module")
                         sys.modules[name] = module
-                        spec.loader.exec_module(module) 
+                        spec.loader.exec_module(module)
                     self.get_classes(module)
                 except Exception as ex:
                     logger.exception(ex)
@@ -210,7 +210,7 @@ class RegistryBase(abc.ABC):
             frame_module = frame.f_globals['__name__']
             if frame_module == '__main__':
                 try:
-                    frame_module = inspect.getmodule(frame).__spec__.name #type: ignore
+                    frame_module = inspect.getmodule(frame).__spec__.name  # type: ignore
                 except AttributeError:
                     # vscode and spyder's parent controllers load __main__ without a module spec
                     if not getattr(inspect.getmodule(frame), "__spec__", None):
@@ -219,14 +219,14 @@ class RegistryBase(abc.ABC):
                             frame_module = os.path.basename(fname).replace(".py", "")
                             if module_name == frame_module:
                                 return True
-                            else: 
+                            else:
                                 return False
                         except AttributeError:
                             return in_stack
                         except Exception:
                             return True
                     else:
-                        return True # Don't load this module for unknown errors
+                        return True  # Don't load this module for unknown errors
                 except Exception:
                     return True
             if module_name == frame_module:
@@ -257,7 +257,3 @@ class RegistryBase(abc.ABC):
         else:
             self.load_deferred_modules()
             return [x for x in self.registry.keys() if string_with_key_or_name in x]
-
-            
-            
-

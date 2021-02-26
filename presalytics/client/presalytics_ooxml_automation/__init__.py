@@ -142,4 +142,3 @@ from presalytics.client.presalytics_ooxml_automation.models.theme_line_map impor
 from presalytics.client.presalytics_ooxml_automation.models.theme_line_map_details import ThemeLineMapDetails
 from presalytics.client.presalytics_ooxml_automation.models.theme_themes import ThemeThemes
 from presalytics.client.presalytics_ooxml_automation.models.theme_themes_details import ThemeThemesDetails
-

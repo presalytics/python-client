@@ -342,8 +342,8 @@ class Configuration(object):
                         'enum_values': [
                             "https"
                         ]
-                        }
                     }
+                }
             }
         ]
 

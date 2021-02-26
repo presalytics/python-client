@@ -33,7 +33,6 @@ def get_jwks():
         raise presalytics.lib.exceptions.ApiError(message="Could not get jwks from Uri", status_code=r.status_code)
 
 
-
 class OidcClient(object):
     """
     A helper class for negotiating tokens from an oidc provider, defalting to https://login.presalytics.io
@@ -57,6 +56,7 @@ class OidcClient(object):
 
 
     """
+
     def __init__(self, client_id=None, client_secret=None, validate_tokens=True, *args, **kwargs):
         self.auth_host = kwargs.get("auth_host", cnst.OIDC_AUTH_HOST)
         self.well_known_endpoint = posixpath.join(self.auth_host, kwargs.get("well_known_path", ".well-known/openid-configuration"))
@@ -82,7 +82,7 @@ class OidcClient(object):
         print(cli_message)
         try:
             webbrowser.open_new_tab(device_code_response["verification_uri_complete"])
-        except:
+        except BaseException:
             pass
 
     def poll_for_token(self, device_code_response):
@@ -105,7 +105,7 @@ class OidcClient(object):
                     time.sleep(sleep_interval)
                     if err_msg == "slow_down":
                         time.sleep(sleep_interval)
-                    logger.debug("User has not yet logged in.  Repolling...")                     
+                    logger.debug("User has not yet logged in.  Repolling...")
                 else:
                     message = "Error: {0} -- {1}".format(err_msg, err_resp["error_description"])
                     raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
@@ -131,7 +131,7 @@ class OidcClient(object):
         if not audience:
             audience = self.audience
         if password and self.client_secret:
-            #use password grant if present (not recommended)
+            # use password grant if present (not recommended)
             data = {
                 "grant_type": "password",
                 "username": username,
@@ -142,7 +142,7 @@ class OidcClient(object):
                 "scope": scope
             }
             token_data = self._post(self.token_endpoint, data)
-            
+
         else:
             # Use device grant as default
             device_data = {
@@ -189,10 +189,8 @@ class OidcClient(object):
                 raise presalytics.lib.exceptions.ApiError(message="invalid token (likely malformed)", status_code=401)
             logger.debug("Access token validated.")
             return payload
-        
-        raise presalytics.lib.exceptions.ApiError(message="invalid_header: could not find key in jwks",status_code=401)
-        
 
+        raise presalytics.lib.exceptions.ApiError(message="invalid_header: could not find key in jwks", status_code=401)
 
     def refresh_token(self, refresh_token, scope=None):
         """
@@ -212,7 +210,7 @@ class OidcClient(object):
         }
 
         token_data = self._post(self.token_endpoint, data)
-        
+
         if self.validate_tokens:
             self.validate_token(token_data["access_token"])
         return token_data
@@ -227,7 +225,6 @@ class OidcClient(object):
             raise ex
 
         return self._handle_response(response)
-
 
     def _handle_response(self, response):
         if response.status_code == 401:
@@ -258,7 +255,7 @@ class OidcClient(object):
                 except Exception:
                     pass
         return data
-    
+
     def client_credentials_token(self, audience=None, scope=None):
         if not self.client_secret:
             raise presalytics.lib.exceptions.ApiError(message="Must have client secret for client credentials grant", status_code=400)
@@ -277,13 +274,3 @@ class OidcClient(object):
     def get_user_id(self, token) -> str:
         payload = presalytics.client.oidc.OidcClient().validate_token(token)
         return payload.get('https://api.presalytics.io/api_user_id', None)
-
-    
-        
-
-
-        
-
-
-
-        

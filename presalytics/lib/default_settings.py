@@ -4,7 +4,7 @@ Default settings for the Presalytics Python Client
 This module contains a comprehesive set of values that can used to control the Preslaytics
 Python client's behavior.  The `presalytics.lib.loader` module contains to load these
 settings into the `presalytics.settings` instance on initialization.  User should not reference
-the settings in this module directly, but rather use the `presaltyics.settings` instacne in their 
+the settings in this module directly, but rather use the `presaltyics.settings` instacne in their
 scripts and applications.  Settings can be referring to as `presaltyics.settings.[SETTING_NAME]`.
 
 Users can override these default settings via two methods:
@@ -13,8 +13,8 @@ Users can override these default settings via two methods:
     the same key as the variable in this file will override this, provide the value can be parsed by
     the [environs](https://pypi.org/project/environs/) python package.
 
-    2. `settings.py` file:  A file named `settings.py` in the user's current working directory.  The active working 
-    direcotry can be determine by using the `os.getcwd()` command.  This `settings.py` file takes the highest 
+    2. `settings.py` file:  A file named `settings.py` in the user's current working directory.  The active working
+    direcotry can be determine by using the `os.getcwd()` command.  This `settings.py` file takes the highest
     priority.  Settings defined in this file will override both the `default_settings.py` file and any enviroment variables.
 """
 import logging
@@ -28,7 +28,7 @@ import presalytics.lib.constants
 
 USE_LOGGER: bool = False
 """
-Toggles whether the presalytics verbose file logger should be used.  Helpful for 
+Toggles whether the presalytics verbose file logger should be used.  Helpful for
 tracing exceptions while writing code.
 """
 
@@ -44,24 +44,24 @@ Use debugging features.  Useful for rendering widgets and pages.
 
 USERNAME: typing.Optional[str] = None
 """
-The user's Presalytics API email/username.  This is the email address that the user uses when logging in at 
+The user's Presalytics API email/username.  This is the email address that the user uses when logging in at
 https://login.presalytics.io.  Will be passed to instances of the `presalytics.client.api.Client` object.
 """
 
 PASSWORD: typing.Optional[str] = None
 """
-The user's Presalytics API username.  Will be passed to instances of the 
-`presalytics.client.api.Client` object.  If running in an insecure or 
+The user's Presalytics API username.  Will be passed to instances of the
+`presalytics.client.api.Client` object.  If running in an insecure or
 multiuser environment, leave this blank and let the `presalytics.client.api.Client`
 object handle token acquisition via browser-based login.
 """
 
 DELEGATE_LOGIN: bool = False
 """
-Defaults to False.  Indicates whether the client would redirect to a browser to 
-acquire an API token. If `DELEGATE_LOGIN` is `True`, when the `presalytics.client.api.Client` does not have 
+Defaults to False.  Indicates whether the client would redirect to a browser to
+acquire an API token. If `DELEGATE_LOGIN` is `True`, when the `presalytics.client.api.Client` does not have
 access to a valid API token, the client will raise a `presalytics.lib.exceptions.InvalidTokenException`.
-The default operation will automatically open a new browser tab to acquire a new token 
+The default operation will automatically open a new browser tab to acquire a new token
 via website client from the presalytics.io login page.  Putting this setting to True is
 useful for server-side development.
 """
@@ -82,12 +82,12 @@ Connect login.  Defaults to "python-client".
 CLIENT_SECRET: typing.Optional[str] = None
 """
 For developer use. Allows developers to implement a `client_credentials` OpenID
-Connect login.  Defaults to None.  
+Connect login.  Defaults to None.
 """
 
 VERIFY_HTTPS: bool = True
 """
-For developer use.  Allows for unencrypted connections.  Defaults to True.  No 
+For developer use.  Allows for unencrypted connections.  Defaults to True.  No
 reason to turn this to False unless you're in a complex development scenario
 and you know what you're doing.
 """
@@ -101,14 +101,21 @@ Redirect URIs must be approved by Presalytics API devops for use in client appli
 
 RESERVED_NAMES: typing.List[str] = []
 """
-A list of filenames for *.py files in the current workspace that should be ignored by the 
-registries. 
+A list of filenames for *.py files in the current workspace that should be ignored by the
+registries.
 """
 
 USE_AUTODISCOVER: bool = False
 """
 Allow registries to recurisively serach working directory and virtual environments for presalytics componets.
 Good for development, but degrades performance.
+"""
+
+AUTODISCOVER_PATHS: typing.List[str] = []
+"""
+A list of extra paths to search when looking for classes to add to a registry.  By default, registries
+already search the current directory and virtual environment folders when `USE_AUTODISCOVER` is
+set to true.
 """
 
 IGNORE_PATHS: typing.List[str] = []
@@ -196,7 +203,7 @@ OVERRIDE_REGISTRY_DEFAULTS: bool = False
 By default, registry settings are additive --> Registries import the default classes from this file and any `settings.py`
 files found in packages in the `INSTALLED_PACKAGES` setting.
 For a performance boost, a user can limit the imported list of classes in their registries to a defined
-list in their `settings.py` file by setting `OVERRIDE_REGISTRY_DEFAULTS` to `True` 
+list in their `settings.py` file by setting `OVERRIDE_REGISTRY_DEFAULTS` to `True`
 """
 
 COMPONENTS: typing.List[str] = [
@@ -218,7 +225,7 @@ COMPONENTS: typing.List[str] = [
     'presalytics.lib.templates.base.BootstrapCustomTemplate'
 ]
 """
-A list of string containing the dotted path names of Components that should be imported into the 
+A list of string containing the dotted path names of Components that should be imported into the
 Presalytics component registry at `presalytics.COMPONENTS`.  The dotted path name is the same name path used for an import statement
 at the top of a python file
 """
@@ -235,7 +242,7 @@ PLUGINS: typing.List[str] = [
     'presalytics.lib.plugins.scss.ScssPlugin'
 ]
 """
-A list of string containing the dotted path names of Plugins that should be imported into the 
+A list of string containing the dotted path names of Plugins that should be imported into the
 Presalytics plugins registry at `presalytics.PLUGINS`.  The dotted path name is the same name path used for an import statement
 at the top of a python file
 """
@@ -246,7 +253,7 @@ XML_TRANSFORMS: typing.List[str] = [
     'presalytics.lib.widgets.ooxml_editors.MultiXmlTransform'
 ]
 """
-A list of string containing the dotted path names of Components that should be imported into the 
+A list of string containing the dotted path names of Components that should be imported into the
 Presalytics component registry.  The dotted path name is the same name path used for an import statement
 at the top of a python file
 """

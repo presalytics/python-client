@@ -12,7 +12,7 @@ class RevealCustomTheme(presalytics.lib.plugins.base.StylePlugin):
 
     This plugin's configuration dictionary keys and that load them in
     as variable to a _variables.scss file and compiles the scss using the
-    sass python package. 
+    sass python package.
 
     See reveal.js' [Creating a Theme](https://github.com/hakimel/reveal.js/blob/8a54118f43b91030f3965088d5e1c1c7598a5cd3/css/theme/README.md)
     page for more information regarding configuration values.
@@ -22,7 +22,7 @@ class RevealCustomTheme(presalytics.lib.plugins.base.StylePlugin):
 
     fonts_base_url = 'https://fonts.googleapis.com/css?family={0}'
     """
-    Google fonts base url for loading fonts via a `<link>` tag 
+    Google fonts base url for loading fonts via a `<link>` tag
     """
 
     def to_style(self, config, **kwargs):

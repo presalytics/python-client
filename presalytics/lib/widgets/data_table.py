@@ -36,13 +36,13 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
 
     data: dict
         Data that will be loaded into the `c3.generate()` method.  Please go
-        to [c3js.org](https://c3js.org/gettingstarted.html) for more information 
+        to [c3js.org](https://c3js.org/gettingstarted.html) for more information
         on how to configure this object.
 
     css64 : str. optional
         A base64-encoded string of the css styles to apply to the d3 document.  Used for server-to-server
         transport over https.
-    
+
     css_filename: str, optional
         A css file containing styles that will be applied to d3
 
@@ -51,13 +51,12 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
 
     """
     __component_kind__ = 'data-table'
- 
 
-    def __init__(self, 
+    def __init__(self,
                  name: str,
                  table_data: typing.Dict,
                  css64: str = None,
-                 css_filename: str = None, 
+                 css_filename: str = None,
                  *args,
                  **kwargs):
         self.table_data = table_data
@@ -80,12 +79,11 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
                 if os.path.exists(fpath):
                     with open(fpath, 'rb') as f:
                         data = f.read()
-                        data64 = base64.b64encode(data).decode('utf-8')  #type: ignore
+                        data64 = base64.b64encode(data).decode('utf-8')  # type: ignore
                     break
             if not data64:
                 logger.debug("File {0} could not be found".format(filename))
         return data64
-
 
     def to_html(self, data=None, **kwargs) -> str:
         """
@@ -121,7 +119,7 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
         table_data = outline.data.get("table_data")
         return cls(outline.name,
                    table_data=table_data,
-                    **kwargs)
+                   **kwargs)
 
     def serialize(self, **kwargs):
         data = {
@@ -187,9 +185,9 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
                 <script type="text/javascript" src="{{ events_url }}"></script>
                 <div id="table" class="data-table-container"></div>
                 <script type="text/javascript" src="{{ jquery_url }}"></script>
-                <script type="text/javascript" src="{{ popper_url }}"></script>  
-                <script type="text/javascript" src="{{ bootstrap4_js_url }}"></script>  
-                <script type="text/javascript" src="{{ boostrap_table_js_url }}"></script>  
+                <script type="text/javascript" src="{{ popper_url }}"></script>
+                <script type="text/javascript" src="{{ bootstrap4_js_url }}"></script>
+                <script type="text/javascript" src="{{ boostrap_table_js_url }}"></script>
                 <script type="text/javascript">
                     $(document).ready(function() {
                         var data = JSON.parse('{{data|safe}}');
@@ -199,7 +197,7 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
             </body>
         </html>""")
         data = json.dumps(self.table_data, cls=presalytics.story.outline.OutlineEncoder)  # dont use hyphens in data keys
-        extra_css = base64.b64decode(self.css64).decode('utf-8') if self.css64 else DataTableWidget.DEFAULT_CSS  #type: ignore  
+        extra_css = base64.b64decode(self.css64).decode('utf-8') if self.css64 else DataTableWidget.DEFAULT_CSS  # type: ignore
         context = {
             "bootstrap4_css_url": presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten().get('bootstrap4'),
             "font_awesome_url": presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten().get('font-awesome'),

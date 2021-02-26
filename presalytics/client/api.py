@@ -27,34 +27,34 @@ env = environs.Env()
 class Client(object):
     """ Class for interacting with Presalytics API endpoints
 
-    The Client class creates a simple interface for user to interactive with the 
-    Presalytics API and is the primary building block for user-built automation of stories, 
+    The Client class creates a simple interface for user to interactive with the
+    Presalytics API and is the primary building block for user-built automation of stories,
     dashboards, and interactive presentations.
 
     A client instance wraps python functions around Presalytics API endpoints and
-    manages user authentication. On initialization, he client checks the status of 
+    manages user authentication. On initialization, he client checks the status of
     a user authentication the expiry of their refresh an access tokens.  When needed,
     the client will open a browser to prompt the user to login at the presalytics.io
-    login page (or raise an `presalytics.lib.exceptions.InvalidTokenException` when 
+    login page (or raise an `presalytics.lib.exceptions.InvalidTokenException` when
     `delegate_login` is `True`).
 
-    After authenication, users can call the methods bound to the story, ooxml_automation, 
+    After authenication, users can call the methods bound to the story, ooxml_automation,
     and doc_converter attributes to make calls in into the Presalytics API.
 
     *A note for server-side development*:
 
-    The client class can automatically cache tokens in a file called 
+    The client class can automatically cache tokens in a file called
     "token.json", located in the python's current working directory.  This is done so
-    users running scripts accross multiple client instances do not have to acquire a new token 
-    every time an API call is made. If building a client to operate in a multi-user environment, 
+    users running scripts accross multiple client instances do not have to acquire a new token
+    every time an API call is made. If building a client to operate in a multi-user environment,
     this behavior should be turned off so that one user cannot not pull one another's tokens.
-    To do this, ensure the following parameters are pass to the configuration either 
-    via initialization or in a `presaltyics.settings`: 
-    
+    To do this, ensure the following parameters are pass to the configuration either
+    via initialization or in a `presaltyics.settings`:
+
         cache_tokens = False,
         delegate_login = True
-    
-    When delegate login is True, the client assumes that the application creating 
+
+    When delegate login is True, the client assumes that the application creating
     instances of the client object will handle user authentication.  The simplest way
     to do this is to pass a token to the client via the "token" keyword argument.
 
@@ -63,31 +63,31 @@ class Client(object):
 
     username : str, optional
         Defaults to None.  The user's Presalytics API username.  This keyword will take precedence over a passed to the client
-        via `presalytics.settings`.  The username must either be present in `presalytics.settings` or be passed in 
+        via `presalytics.settings`.  The username must either be present in `presalytics.settings` or be passed in
         via keyword, otherwise the client will raise a `presalytics.lib.exceptions.MissingConfigException`.
 
     password : str, optional
-        Defaults to None.  The user's Presalytics API password.  This useful for quickly testing scripts, but in most 
-        scenario users should not be passing plaintext into the client via this keyword.  In a secure, single-user 
+        Defaults to None.  The user's Presalytics API password.  This useful for quickly testing scripts, but in most
+        scenario users should not be passing plaintext into the client via this keyword.  In a secure, single-user
         environment, passwords are better placed in the `presalytics.settings` object for reuseability.  A more secure
         is to leave passwords out of the configuration, keep `delegate_login` = `False`, and acquire tokens via the browser.
- 
+
     delegate_login : bool, optional
-        Defaults to False.  Indicates whether the client would redirect to a browser to 
-        acquire an API token. If `DELEGATE_LOGIN` is `True`, when the `presalytics.client.api.Client` does not have 
+        Defaults to False.  Indicates whether the client would redirect to a browser to
+        acquire an API token. If `DELEGATE_LOGIN` is `True`, when the `presalytics.client.api.Client` does not have
         access to a valid API token, the client will raise a `presalytics.lib.exceptions.InvalidTokenException`.
-        The default operation will automatically open a new browser tab to acquire a new token 
+        The default operation will automatically open a new browser tab to acquire a new token
         via website client from the presalytics.io login page.  Putting this setting to True is
         useful for server-side development.
 
     token : dict, optional
-        Defaults to None.  A dictionary contain information about tokens acquire from auth.presalytics.io.  The 
-        dictionary must contain an `access_token`, a `refresh_token`, and entries contiaing information about token expiry.  
+        Defaults to None.  A dictionary contain information about tokens acquire from auth.presalytics.io.  The
+        dictionary must contain an `access_token`, a `refresh_token`, and entries contiaing information about token expiry.
 
         Token expiry information can either passed in ISO 8601 formatted string with a UTC offset as dictionary keys
-        `access_token_expire_time` and `refresh_token_expire_time` or an integer in seconds with the corresponding 
+        `access_token_expire_time` and `refresh_token_expire_time` or an integer in seconds with the corresponding
         dictionary keys`expires_in` and `refresh_expires_in`.
-        
+
         if the `dict` passed in via this keywork does is not have the correct entries, the client will
         raise an `presalytics.lib.exceptions.InvalidTokenException`.
 
@@ -101,7 +101,7 @@ class Client(object):
 
     direct_grant : bool
         Indicates whether an token will be acquire via the "direct_grant" OpenID Connect flow.  Usually indicates
-        whether the user has supplied a passwork to the client either through `presalytics.settings` ro 
+        whether the user has supplied a passwork to the client either through `presalytics.settings` ro
         during object initialization.
 
     doc_converter : presalytics.client.presalytics_doc_converter.api.default_api.DefaultApi
@@ -113,17 +113,17 @@ class Client(object):
             client = presalytics.Client()
             api_obj = client.doc_converter.{operation_id}(*args)
 
-        where `{operation_id}` is the `operationId` assocated with the endpoint specified the [Doc Converter 
+        where `{operation_id}` is the `operationId` assocated with the endpoint specified the [Doc Converter
         Service OpenAPI Contract](https://presalytics.io/docs/api-specifications/doc-converter/) , and *args
         are the corresponding arguments that are passed to the method.  A complete list of the avialable
         methods is shown on the `presalytics.client.presalytics_doc_converter.api.default_api.DefaultApi` object.
-        
+
         *Note*:
-        This attribute contains automatically generated methods via 
-        the [OpenAPI generator](https://github.com/OpenAPITools/openapi-generator).  The 
+        This attribute contains automatically generated methods via
+        the [OpenAPI generator](https://github.com/OpenAPITools/openapi-generator).  The
         `presalytics.client.presalytics_doc_converter.api.default_api.DefaultApi` has been passed an an `api_client`
-        keyword argument with an instance of `presalytics.client.api.DocConverterApiClientWithAuth`, which adds 
-        an authentication and request processing middleware layer to the default sub package 
+        keyword argument with an instance of `presalytics.client.api.DocConverterApiClientWithAuth`, which adds
+        an authentication and request processing middleware layer to the default sub package
         built via code generatation.
 
     ooxml_automation : presalytics.client.presalytics_ooxml_automation.api.default_api.DefaultApi
@@ -139,13 +139,13 @@ class Client(object):
         Service OpenAPI Contract](https://presalytics.io/docs/api-specifications/ooxml-automation/) , and *args
         are the corresponding arguments that are passed to the method.  A complete list of the avialable
         methods is shown on the `presalytics.client.presalytics_ooxml_automation.api.default_api.DefaultApi` object.
-        
+
         *Note*:
-        This attribute contains automatically generated methods via 
-        the [OpenAPI generator](https://github.com/OpenAPITools/openapi-generator).  The 
+        This attribute contains automatically generated methods via
+        the [OpenAPI generator](https://github.com/OpenAPITools/openapi-generator).  The
         `presalytics.client.presalytics_ooxml_automation.api.default_api.DefaultApi` has been passed an an `api_client`
-        keyword argument with an instance of `presalytics.client.api.OoxmlAutomationApiClientWithAuth`, which adds 
-        an authentication and request processing middleware layer to the default sub package 
+        keyword argument with an instance of `presalytics.client.api.OoxmlAutomationApiClientWithAuth`, which adds
+        an authentication and request processing middleware layer to the default sub package
         built via code generatation.
 
     story : presalytics.client.presalytics_story.api.default_api.DefaultApi
@@ -161,24 +161,24 @@ class Client(object):
         Service OpenAPI Contract](https://presalytics.io/docs/api-specifications/story/) , and *args
         are the corresponding arguments that are passed to the method.  A complete list of the avialable
         methods is shown on the `presalytics.client.presalytics_story.api.default_api.DefaultApi` object.
-        
+
         *Note*:
-        This attribute contains automatically generated methods via 
-        the [OpenAPI generator](https://github.com/OpenAPITools/openapi-generator).  The 
+        This attribute contains automatically generated methods via
+        the [OpenAPI generator](https://github.com/OpenAPITools/openapi-generator).  The
         `presalytics.client.presalytics_story.api.default_api.DefaultApi` has been passed an an `api_client`
-        keyword argument with an instance of `presalytics.client.api.StoryApiClientWithAuth`, which adds 
-        an authentication and request processing middleware layer to the default sub package 
+        keyword argument with an instance of `presalytics.client.api.StoryApiClientWithAuth`, which adds
+        an authentication and request processing middleware layer to the default sub package
         built via code generatation.
 
     client_id : str
-        The client_id that is used OpenID Connect login.  Defaults to "python-client".  
+        The client_id that is used OpenID Connect login.  Defaults to "python-client".
 
     client_secret : str, optional
         The client_secret used during OpenID Connect login.  Useful `confidential_client` is True.
 
     confidential_client : bool
         Indicates whether a this client can obtain tokens from auth.presalytics.io without a user under
-        OpenID Connect grant type "confidential_client".  Requires a `client_secret`.  Default is False. 
+        OpenID Connect grant type "confidential_client".  Requires a `client_secret`.  Default is False.
 
     oidc : `presalytics.client.oidc.OidcClient`
         A middleware class to help acquire and validate tokens from login.presalytics.io.
@@ -191,20 +191,21 @@ class Client(object):
         Defaults to https://presalytics.io.
 
     redirect_uri : str
-        Useful if implementing authorization code flow for and OpenID Connect client.  Redirect URIs must 
-        be approved by Presalytics API devops for use in client applications. Set from Set from 
-        `presalytics.settings` with keyword `REDIRECT_URI`.  Defaults to https://presalytics.io/user/login-success. 
+        Useful if implementing authorization code flow for and OpenID Connect client.  Redirect URIs must
+        be approved by Presalytics API devops for use in client applications. Set from Set from
+        `presalytics.settings` with keyword `REDIRECT_URI`.  Defaults to https://presalytics.io/user/login-success.
 
     login_sleep_interval : int
         The duration (in seconds) between attempts to acquire a token after browser-based authentication. Defaults
-        to 5 seconds.        
+        to 5 seconds.
 
     login_timeout : int
-        Defaults to 60 seconds.  The amount of time the client will attempt to acquire a token after the 
+        Defaults to 60 seconds.  The amount of time the client will attempt to acquire a token after the
         https://presalytics.io authenicates a user. Raises a `presalytics.lib.exceptions.LoginTimeout`
         if the user has not authenticated by the time the interval has expired.
 
     """
+
     def __init__(
             self,
             username=None,
@@ -215,7 +216,7 @@ class Client(object):
             client_id=None,
             client_secret=None,
             **kwargs):
-    
+
         if username:
             self.username = username
         else:
@@ -277,7 +278,7 @@ class Client(object):
             #  Assume if token is passed as string, then it's an access token
             if isinstance(token, str):
                 self.token_util.token = {"access_token": token}
-            
+
             # if token is a dictionary with an 'access_token_expire_time' key, it's previous been processed / deserialized
             elif token.get('access_token_expire_time', None):
                 self.token_util.token = token
@@ -312,7 +313,7 @@ class Client(object):
 
     def refresh_token(self):
         """
-        Obtains a new access token if the access token is expired. if refresh token is expired, 
+        Obtains a new access token if the access token is expired. if refresh token is expired,
         this method prompt user to re-authenticate when `delegate_login` is `False` or raise
         an `presalytics.lib.exceptions.InvalidTokenException` when `deletegate_login` is True.
         """
@@ -353,14 +354,14 @@ class Client(object):
     def get_request_id_header(self):
         """
         Creates an 'X-Request-Id' token header for tracing requests through Presalytics API
-        services.  If deployed alongside the [WSGI Microservice Middleware](https://github.com/presalytics/WSGI-Microservice-Middleware) 
+        services.  If deployed alongside the [WSGI Microservice Middleware](https://github.com/presalytics/WSGI-Microservice-Middleware)
         package, this method will pull the request id from the call stack.
-        
+
         Returns
         ----------
         A `dict` header representation with an 'X-Request-Id' key to be attached to an API request
         """
-        
+
         current_request_id = wsgi_microservice_middleware.current_request_id()
         if not current_request_id:
             current_request_id = str(uuid4())
@@ -377,14 +378,14 @@ class Client(object):
         ---------
         story : str
             The id of the Presalytics Story API object that manages access to document
-        
+
         ooxml_automation_id : str
             The id of the Presalytics API Ooxml Automation service object that you want to download
-        
+
         download_folder : str, optional
-            The filepath to the local directory that you want to download the file to. Defaults to the 
+            The filepath to the local directory that you want to download the file to. Defaults to the
             current working directory.
-        
+
         filename: str, optional
             The name of the downloaded file. Defaults to the original filename the the object was created.
 
@@ -423,13 +424,13 @@ class Client(object):
     STATUS_REPOLL_SECONDS = 2
     STATUS_REPOLL_MAX_CYCLES = 20
 
-    def upload_file_and_await_outline(self, 
+    def upload_file_and_await_outline(self,
                                       file: typing.Union[FileStorage, str],
                                       include_relationships=True,
-                                      status_repoll_seconds: int = None, 
+                                      status_repoll_seconds: int = None,
                                       repoll_max_cycles: int = None):
         """ Useful for testing """
-        if type(file) is str:
+        if isinstance(file, str):
             content_type = mimetypes.guess_type(file, False)[0]  # type: ignore
             with open(file, 'rb') as f:  # type: ignore
                 stream = io.BytesIO(f.read())
@@ -437,7 +438,7 @@ class Client(object):
                 stream=stream,  # type: ignore
                 filename=file,  # type: ignore
                 content_type=content_type,
-                content_length=stream.__sizeof__()             
+                content_length=stream.__sizeof__()
             )
         if not status_repoll_seconds:
             status_repoll_seconds = self.STATUS_REPOLL_SECONDS
@@ -449,7 +450,7 @@ class Client(object):
 
     def await_outline(self,
                       story_id,
-                      status_repoll_seconds: int = None, 
+                      status_repoll_seconds: int = None,
                       repoll_max_cycles: int = None):
         task_running = True
         repoll_cycle_count = 0
@@ -475,9 +476,10 @@ class Client(object):
 
 class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_doc_converter.api_client.ApiClient):
     """
-    Wraps `presalytics.client.presalytics_doc_converter.api_client.ApiClient` with 
+    Wraps `presalytics.client.presalytics_doc_converter.api_client.ApiClient` with
     `presalytics.client.auth.AuthenticationMixIn` middleware
     """
+
     def __init__(self, parent: Client, **kwargs):
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics.client.presalytics_doc_converter.api_client.ApiClient.__init__(self)
@@ -493,6 +495,7 @@ class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMix
     Wraps `presalytics.client.presalytics_ooxml_automation.api_client.ApiClient` with
     `presalytics.client.auth.AuthenticationMixIn` middleware
     """
+
     def __init__(self, parent: Client, **kwargs):
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
@@ -508,6 +511,7 @@ class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presal
     Wraps `presalytics.client.presalytics_story.api_client.ApiClient` with
     `presalytics.client.auth.AuthenticationMixIn` middleware
     """
+
     def __init__(self, parent: Client, **kwargs):
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
         presalytics.client.presalytics_story.api_client.ApiClient.__init__(self)
@@ -527,8 +531,3 @@ def get_client():
     """
     client = presalytics.Client()
     return client
-
-
-        
-
-

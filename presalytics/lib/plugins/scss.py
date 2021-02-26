@@ -4,6 +4,7 @@ import typing
 import presalytics.lib.exceptions
 import presalytics.lib.plugins.base
 
+
 class ScssPlugin(presalytics.lib.plugins.base.StylePlugin):
     """
     Compiles scss from files and a `dict` of variables and loads
@@ -25,7 +26,7 @@ class ScssPlugin(presalytics.lib.plugins.base.StylePlugin):
 
     variables : dict, optional
         Scss variables to include. Dictionary keys should be prefixed with a
-        `$` to indicate that they are scss variable names.  
+        `$` to indicate that they are scss variable names.
     """
     __plugin_name__ = "scss_files"
 
@@ -54,8 +55,8 @@ class ScssPlugin(presalytics.lib.plugins.base.StylePlugin):
 
     def make_css(self, filenames: typing.List[str], variables: typing.Dict[str, str]):
         """
-        Compiles the scss in filenames to an html fragment using variables 
-        
+        Compiles the scss in filenames to an html fragment using variables
+
         Returns
         ----------
         A `<style>` tag html fragment in a string
@@ -79,11 +80,10 @@ class ScssPlugin(presalytics.lib.plugins.base.StylePlugin):
             raise presalytics.lib.exceptions.MissingConfigException("A file referenced by this plugin could not be found.")
         return "<style>{0}</style>".format(rendered_css)
 
-
     @classmethod
     def configure(cls, filenames: typing.List[str], variables: typing.Dict = {}, old_css: str = None) -> typing.Dict:
         """
-        Call this method when serializing a subclass of `presalytics.story.components.ComponentBase` 
+        Call this method when serializing a subclass of `presalytics.story.components.ComponentBase`
         to generate a configuration for the plugin with a valid `rendered_css` entry
         """
         inst = cls()
@@ -105,4 +105,3 @@ class ScssPlugin(presalytics.lib.plugins.base.StylePlugin):
             }
         }
         return ret
-

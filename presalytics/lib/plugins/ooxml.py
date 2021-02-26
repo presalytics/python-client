@@ -31,7 +31,7 @@ class OoxmlTheme(presalytics.lib.plugins.reveal_theme.RevealCustomTheme):
         font_names = [config["headingFont"], config["bodyFont"]]
         links = self.get_fonts(font_names)
         return links + style_string
-    
+
     def config_to_camelCase(self, config: typing.Dict) -> typing.Dict:
         new_dict = dict()
         for key, val in config.items():
@@ -39,4 +39,3 @@ class OoxmlTheme(presalytics.lib.plugins.reveal_theme.RevealCustomTheme):
                 presalytics.story.util.to_camel_case(key): val
             })
         return new_dict
-

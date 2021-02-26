@@ -18,10 +18,10 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
 
     __component_kind__ = 'ooxml-theme'
 
-    def __init__(self, 
-                 name, 
-                 ooxml_theme_id, 
-                 plugin_config=None, 
+    def __init__(self,
+                 name,
+                 ooxml_theme_id,
+                 plugin_config=None,
                  always_refresh=False,
                  client_info={},
                  **kwargs):
@@ -57,7 +57,6 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
         params.update(fonts)
 
         self.plugin_config = params
-    
 
     def map_color_type(
             self,

@@ -36,28 +36,27 @@ def htmlize(widget):
     except Exception:
         pass
     return html
-    
 
 
 class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
     """
-    Base class for building objects that render html from `presalytics.story.outline.Page` 
-    objects that implementing the [Jinja2](https://jinja.palletsprojects.com/) 
+    Base class for building objects that render html from `presalytics.story.outline.Page`
+    objects that implementing the [Jinja2](https://jinja.palletsprojects.com/)
     python library.
 
     Instances of this class will look for templates located at file location identified by the
     `__template_file__` attribute.  If not template is found, the content in the `template_string`
     attribute will be used. Templates should call each widget's `to_html()` method in a placeholder
-    in order to generate valid html for the page.      
+    in order to generate valid html for the page.
 
-    *About building templates*: Templates are passed a `widgets` attribute and a `widget_index` 
-    integer (initialized at 0) as part of the context during rendering,. To render 
-    multiple widgets on a page, the following pattern can be used inside of templates to 
+    *About building templates*: Templates are passed a `widgets` attribute and a `widget_index`
+    integer (initialized at 0) as part of the context during rendering,. To render
+    multiple widgets on a page, the following pattern can be used inside of templates to
     increment through the widgets as the jinja2 rendering engine moves through the template:
-        
+
         {{ widgets[widget_index.next()].render() }}  // renders widget and increments widget_index
 
-    Please also note that if `<script>` tags are included in the template, they will be 
+    Please also note that if `<script>` tags are included in the template, they will be
     stripped out downstream by a `presalytics.story.components.Renderer` for security
     reasons.  Scripts included in templates will not make it to the browser.
 
@@ -69,24 +68,24 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
     Attributes
     ----------
     __template_file__ : str
-        The filename to an html file containing a fragment that will be rendered into 
+        The filename to an html file containing a fragment that will be rendered into
         a page by a `presalytics.story.components.Renderer`
-    
+
     __template_paths__ : list of str
         user-defined filepaths to directories where Jinja2 should look for the `__template_file__`
 
     __css__ : list of str
         Each str in this list is a key that maps to an entry in the
-        `presalytics.lib.plugins.local.LocalStylesPlugin.LOCAL_STYLES_MAP`. Ids matched here 
+        `presalytics.lib.plugins.local.LocalStylesPlugin.LOCAL_STYLES_MAP`. Ids matched here
         load the css files as a dependent plugin.
 
     template_paths : list of str
-        The folders Jinja2 will look in. Includes that html directory adjacent to this `__file__`, 
+        The folders Jinja2 will look in. Includes that html directory adjacent to this `__file__`,
         appending with the files in the `__template_paths__`
 
     widgets : list of subclass instances of presalytics.story.components.WidgetBase
         Widget to be rendered into the placeholders in the template identified by `__template_file__`
-    
+
     """
     __css__: typing.Sequence[str]
     __template_file__: str
@@ -98,16 +97,17 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
 
     class WidgetIndexer(object):
         """
-        A counter class for 
+        A counter class for
 
         call `widgetindex.next()` in html templates to move this the widget list
         """
+
         def __init__(self):
             self._val = 0
-        
+
         def next(self):
             """
-            Returns the current widget index and increments the value for the next call 
+            Returns the current widget index and increments the value for the next call
             """
             cur = self._val
             self._val += 1
@@ -164,7 +164,7 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
             return self.__template_file__
         else:
             raise NotImplementedError
-    
+
     def render(self, **kwargs):
         """
         Renders the widgets to html
@@ -221,8 +221,6 @@ class JinjaTemplateBuilder(presalytics.story.components.PageTemplateBase):
                 return template_string
         return None
 
-
-
     def load_jinja_template(self) -> jinja2.Template:
         """
         Uses the fileloader to load a local template file into the jinja2 environment
@@ -252,7 +250,7 @@ class TitleWithSingleItem(JinjaTemplateBuilder):
     __template_file__ = 'title_with_single_widget.html'
 
 
-class TwoUpWithTitle(JinjaTemplateBuilder): 
+class TwoUpWithTitle(JinjaTemplateBuilder):
     """
     View two widgets side-by-side on one page
     """
@@ -264,7 +262,7 @@ class TwoUpWithTitle(JinjaTemplateBuilder):
 class BootstrapCustomTemplate(JinjaTemplateBuilder):
     """
     Build customer repsonsive tempaltes using bootstrap to layout widgets
-    
+
     The `presalytics.story.outline.Page` must contain an entry named "template_file" in the its data dictionary.
     The values of the "template_file" varialble must a file path to an html file in the
     current working directory
@@ -276,16 +274,16 @@ class BootstrapCustomTemplate(JinjaTemplateBuilder):
 
     page: presalytics.story.outline.Page
         A story outline page object to create the widget from
-    
+
     template_file: str
         A local file path to an html file that wil be used as a template for rendering the page.
         The file path is relative to the current working directory.
 
     kwargs: dict, optional
-        **kwargs can include parameters to pass to the template rendering context. For example, 
+        **kwargs can include parameters to pass to the template rendering context. For example,
         when kwargs is passed `title="An Example Title"`, during rendering, the template's
-         `{{title}}` place holder will be replaced with with `An Example Title` 
-        
+         `{{title}}` place holder will be replaced with with `An Example Title`
+
     """
     template_file: str
 
@@ -322,9 +320,8 @@ class BootstrapCustomTemplate(JinjaTemplateBuilder):
         },
     ]
 
-
     def __init__(self, page: 'Page', name=None, template_file=None, **kwargs) -> None:
-        try:        
+        try:
             self.template_file = template_file
             if not self.template_file:
                 self.template_file = page.additional_properties["template_file"]
@@ -345,7 +342,3 @@ class BootstrapCustomTemplate(JinjaTemplateBuilder):
         if self.template_string:
             self.outline_page.additional_properties["template_string"] = self.template_string
         return self.outline_page
-
-
-
-

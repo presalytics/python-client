@@ -36,7 +36,7 @@ class UrlWidget(presalytics.story.components.WidgetBase):
     """
     __component_kind__ = 'url'
 
-    def __init__(self, 
+    def __init__(self,
                  name: str,
                  url: str,
                  *args,
@@ -44,10 +44,9 @@ class UrlWidget(presalytics.story.components.WidgetBase):
         self.url = url
         super(UrlWidget, self).__init__(name, *args, **kwargs)
 
-
     def to_html(self, data=None, **kwargs) -> str:
         """
-        Renders url to a sandboxed iframe 
+        Renders url to a sandboxed iframe
         """
         return self.create_container()
 
@@ -76,7 +75,7 @@ class UrlWidget(presalytics.story.components.WidgetBase):
     def deserialize(cls, outline, **kwargs):
         return cls(outline.name,
                    outline.data.get('url'),
-                    **kwargs)
+                   **kwargs)
 
     def serialize(self, **kwargs):
         data = {

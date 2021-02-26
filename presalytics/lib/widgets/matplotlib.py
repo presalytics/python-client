@@ -19,7 +19,7 @@ class MatplotlibFigure(presalytics.story.components.WidgetBase):
     A `Widget` for rendering `matplotlib.pyplot.Figure` instances in stories
 
     This class acts as wrapper class for matplotlib figures, allowing their packaging into
-    `presalytics.story.outline.Widget` objects and serialization to json.  At render-time, 
+    `presalytics.story.outline.Widget` objects and serialization to json.  At render-time,
     the figure is converted to a d3.js object via the [mpld3](https://mpld3.github.io/)
     package.
 
@@ -98,7 +98,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
     A `Widget` for rendering `matplotlib.pyplot.Figure` instances in stories
 
     This class acts as wrapper class for matplotlib figures, allowing their packaging into
-    `presalytics.story.outline.Widget` objects and serialization to json.  At render-time, 
+    `presalytics.story.outline.Widget` objects and serialization to json.  At render-time,
     the figure is converted to a d3.js object via the [mpld3](https://mpld3.github.io/)
     package.
 
@@ -151,17 +151,15 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
                 'approved_styles_key': 'preloaders'
             }
         }
-    ] #type: ignore
+    ]  # type: ignore
 
     def __init__(self, figure: 'Figure', name: str, *args, **kwargs):
         super(MatplotlibResponsiveFigure, self).__init__(figure, name, *args, **kwargs)
         self.story_host = self.get_client(delegate_login=True).story.api_client.configuration.host
 
-        
     def to_html(self):
         html = self.create_container()
         return html
-
 
     def create_container(self, **kwargs):
         """
@@ -184,13 +182,12 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
         empty_parent_div.append(frame)
         return lxml.html.tostring(empty_parent_div).decode('utf-8')
 
-
     @classmethod
     def deserialize(cls, outline, **kwargs):
         figure_dict = outline.data.get("figure_dict")
         story_id = outline.data.get("story_id", None)
         kwargs.update(**outline.additional_properties)
-        return cls(None, 
+        return cls(None,
                    outline.name,
                    story_id,
                    figure_dict=figure_dict,
@@ -208,7 +205,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
             data=data,
             additional_properties=self.additional_properties
         )
-    
+
     def create_subdocument(self, **kwargs):
         return self.standalone_html()
 
@@ -229,7 +226,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
                 <script type="text/javascript">
 
                     mpld3.draw_figure("{{ figid }}", {{ figure_json }});
-            
+
                 </script>
             </body>
         </html>""")

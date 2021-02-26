@@ -301,7 +301,7 @@ def main():
         args = parser.parse_args()
         filename = args.file
         lgs = [logging.getLogger(n) for n in logging.root.manager.loggerDict]
-        if args.verbose or args.quiet:
+        if args.verbose:
             for lg in lgs:
                 lg.setLevel(logging.DEBUG)
         elif args.quiet:
@@ -473,7 +473,7 @@ def main():
                 else:
                     presalytics.lib.tools.workflows.delete_by_id(args.id, username=args.username, password=args.password)
         if share:
-            presalytics.lib.tools.workflows.share_story(story_id, 
+            presalytics.lib.tools.workflows.share_story(story_id,
                                                         emails=args.emails,
                                                         user_ids=args.user_ids,
                                                         username=args.username,
@@ -487,7 +487,7 @@ def main():
                     _open_page(story_id, "manage")
                 if args.show_story:
                     story = presalytics.lib.tools.workflows.get_story(story_id)
-        
+
             except webbrowser.Error:
                 logger.error("This environment does not have a webrowser loaded for use with python.")
                 return
@@ -499,7 +499,7 @@ def main():
             presalytics.lib.tools.workflows.create_cron_target()
     except Exception as ex:
         if isinstance(ex, presalytics.lib.exceptions.PresalyticsBaseException):
-            logger.error(ex.message) # noqa
+            logger.error(ex.message)  # noqa
         else:
             logger.exception(ex)
     finally:

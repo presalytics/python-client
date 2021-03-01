@@ -150,6 +150,7 @@ class WidgetBase(ComponentBase):
     def __init__(self, name, *args, **kwargs) -> None:
         super(WidgetBase, self).__init__(*args, **kwargs)
         self.name = name
+        self.id = kwargs.get('id', None)
         self.outline_widget = None
         self.nonce = str(uuid.uuid4())
 
@@ -290,6 +291,7 @@ class PageTemplateBase(ComponentBase):
     def __init__(self, page: 'Page', **kwargs) -> None:
         super(PageTemplateBase, self).__init__(**kwargs)
         self.outline_page = page
+        self.id = page.id
         self.widgets = self.get_page_widgets(self.outline_page)
 
     @abc.abstractmethod

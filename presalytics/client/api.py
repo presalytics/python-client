@@ -345,11 +345,22 @@ class Client(object):
         ----------
         A `dict` authorization crediential to be attached to an API request
         """
-        self.refresh_token()
+        tkn = self.get_access_token()
         auth_header = {
-            "Authorization": "Bearer " + self.token_util.token["access_token"]
+            "Authorization": "Bearer " + tkn
         }
         return auth_header
+
+    def get_access_token(self):
+        """
+        Refreshes tokens and returns updated access token
+
+        Returns
+        ----------
+        A `str` containing a JWT bearer access token
+        """
+        self.refresh_token()
+        return self.token_util.token["access_token"]
 
     def get_request_id_header(self):
         """

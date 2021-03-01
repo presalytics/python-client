@@ -1,13 +1,10 @@
 
 import typing
 import base64
-import uuid
 import logging
-import jinja2
-import json
 import os
 import lxml
-import lxml.html
+import lxml.html  # noqa: F401
 import markdown
 import mdx_gfm
 import presalytics
@@ -111,6 +108,7 @@ class MarkdownWidget(presalytics.story.components.WidgetBase):
     def deserialize(cls, outline, **kwargs):
         markdown_text = outline.data.get("markdown_text")
         return cls(outline.name,
+                   id=outline.id,
                    markdown_text=markdown_text,
                    **kwargs)
 
@@ -121,6 +119,7 @@ class MarkdownWidget(presalytics.story.components.WidgetBase):
         return presalytics.story.outline.Widget(
             name=self.name,
             kind=self.__component_kind__,
+            id=self.id,
             data=data,
         )
 

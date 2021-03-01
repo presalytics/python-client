@@ -1,17 +1,21 @@
 # Changes by Version
 
-## v0.6.0
+## TODO (v0.7)
 
 - [ ] Add `presalytics.lib.tools.workflow.create_workspace`
 - [ ] Change file handling support beyond ooxml files
+
+## v0.6.0
+
 - [x] Change loader to allow for explicit loading via settings.py
 - [x] Turn off logger, autodiscovery, and token caching by default
 - [x] Create `presalytics.settings` module for default settings, incorprate into `__init__.py`
-- [ ] Create `presalytics.client.websocket` for event listener and forward events to localhost
-- [ ] Create `presalytics.story.ClientSideRenderer` to set up caching and return meta for client-side apps to render stories
-- [ ] Add CLI commands for websocket
+- [x] Create `presalytics.client.websocket` for event listener and forward events to localhost
+- [x] Create `presalytics.story.renderers.ClientSideRenderer` to set up caching and return meta for client-side apps to render stories
+- [x] Add CLI commands for websocket
 - [x] Incorporate `requirements.txt` into `setup.py`
 - [x] Standardize linting with mypy and flake8
+- [ ] Add ids to outline pages and widgets for tracking as page and widget order changes
 
 ## v0.5.24
 
@@ -58,7 +62,7 @@
 
 ## v0.5.15 (2020-08-24)
 
-- [x] Fix color insert libreoffice compatibility bug in `presalytics.lib.widgets.ooxml_editors.ChangeShapeColor` 
+- [x] Fix color insert libreoffice compatibility bug in `presalytics.lib.widgets.ooxml_editors.ChangeShapeColor`
 
 ## v0.5.14 (2020-08-24)
 
@@ -72,7 +76,6 @@
 
 - [x] Fix api_name and external_root_url bug
 - [x] Incorporate async to workflows
-
 
 ## v0.5.11 (2020-08-13)
 
@@ -113,7 +116,7 @@
 
 ## v0.5.3 (2020-07-14)
 
-- [x] Add D3Widget, Content Secuirty Policies 
+- [x] Add D3Widget, Content Secuirty Policies
 
 ## v0.5.2 (2020-07-14)
 
@@ -121,7 +124,7 @@
 
 ## v0.5.1 (2020-05-21)
 
-- [x] Add json endpoint to presaltyics story 
+- [x] Add json endpoint to presaltyics story
 
 ## v0.5.0 (2020-05-21)
 

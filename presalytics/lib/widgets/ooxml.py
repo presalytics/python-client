@@ -1,7 +1,6 @@
 import typing
 import time
 import abc
-import urllib.parse
 import requests
 import os
 import datetime
@@ -22,7 +21,7 @@ import presalytics.lib.plugins.ooxml
 import presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto
 import presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto
 if typing.TYPE_CHECKING:
-    from presalytics.story.outline import StoryOutline, Page, Widget
+    from presalytics.story.outline import Page, Widget
     from presalytics.client.presalytics_story import Story as ApiStory
     from presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto import ChartChartDataDTO
     from presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto import TableTableDataDTO
@@ -359,6 +358,7 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
         widget = presalytics.story.outline.Widget(
             name=self.name,
             kind=self.__component_kind__,
+            id=self.id,
             data=data,
             plugins=None
         )
@@ -371,6 +371,7 @@ class OoxmlWidgetBase(presalytics.story.components.WidgetBase):
             component.data["story_id"],
             component.data["object_id"],
             OoxmlEndpointMap(component.data["endpoint_id"]),
+            id=component.id,
             **kwargs
         )
 
@@ -571,6 +572,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
             )
         if len(kwargs.keys()) > 0:
             init_args.update(kwargs)
+        init_args.update({'id': component.id})
         return cls(**init_args)
 
     def serialize(self):
@@ -598,6 +600,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         widget = presalytics.story.outline.Widget(
             name=self.name,
             kind=self.__component_kind__,
+            id=self.id,
             data=data,
             plugins=None
         )

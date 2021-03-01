@@ -1,0 +1,288 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://api.presalytics.io/story/outline-schema/0.6.0/story-outline.json",
+  "type": "object",
+  "title": "Story Outline Schema",
+  "required": [
+    "outlineVersion",
+    "info",
+    "title",
+    "description",
+    "pages",
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "#/definitions/id"
+    },
+    "outlineVersion": {
+      "$id": "#/properties/outlineVersion",
+      "type": "string",
+      "title": "Schema Version Number",
+      "default": "",
+      "examples": [
+        "0.3.1"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "info": {
+      "$ref": "#/definitions/info"
+    },
+    "title": {
+      "$id": "#/properties/title",
+      "type": "string",
+      "title": "Story Title",
+      "default": "",
+      "examples": [
+        "Example Story"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "description": {
+      "$id": "#/properties/description",
+      "type": "string",
+      "title": "The Description Schema",
+      "default": "",
+      "examples": [
+        "A text-description of this story for other users"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "pages": {
+      "$id": "#/properties/pages",
+      "type": "array",
+      "title": "Pages List",
+      "items": {
+        "$ref": "#/definitions/page"
+      }
+    },
+    "themes": {
+      "$id": "#/properties/themes",
+      "type": "array",
+      "title": "Themes List",
+      "items": {
+        "$ref": "#/definitions/theme"
+      }
+    }
+  },
+  "definitions": {
+    "id": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^urn:uuid:"
+    },
+    "additionalProperties": {
+      "type": "object"
+    },
+    "name": {
+      "type": "string",
+      "title": "Name",
+      "default": "",
+      "examples": [
+        "WidgetName"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "kind": {
+      "type": "string",
+      "title": "Kind (or Class)",
+      "default": "",
+      "examples": [
+        "WidgetKind"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "plugin": {
+      "type": "object",
+      "title": "Plugin",
+      "description": "A configuration for a plugin that renders a `<script>`, `<style>`, or `<link>` into a rendered story",
+      "properties": {
+        "kind": {
+          "$ref": "#/definitions/kind"
+        },
+        "name": {
+          "$ref": "#/definitions/name"
+        },
+        "config": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "config"
+      ]
+    },
+    "pluginList": {
+      "type": "array",
+      "title": "List of Plugins",
+      "items": {
+        "$ref": "#/definitions/plugin"
+      }
+    },
+    "widget": {
+      "type": "object",
+      "title": "Widget",
+      "description": "A unit of analysis that can rendered to html",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/id"
+        },
+        "name": {
+          "$ref": "#/definitions/name"
+        },
+        "kind": {
+          "$ref": "#/definitions/kind"
+        },
+        "data": {
+          "type": "object",
+          "title": "Widget Data",
+          "description": "Data object containing variables that enable the widget to render"
+        },
+        "additionalProperties": {
+          "$ref": "#/definitions/additionalProperties"
+        },
+        "plugins": {
+          "$ref": "#/definitions/pluginList"
+        }
+      },
+      "required": [
+        "name",
+        "kind",
+        "data",
+        "id"
+      ]
+    },
+    "page": {
+      "type": "object",
+      "title": "Page",
+      "description": "A representation of a viewport to the user, and can contain one or many related widgets",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/id"
+        },
+        "name": {
+          "$ref": "#/definitions/name"
+        },
+        "kind": {
+          "$ref": "#/definitions/kind"
+        },
+        "widgets": {
+          "title": "Widget List",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/widget"
+          }
+        },
+        "additionalProperties": {
+          "$ref": "#/definitions/additionalProperties"
+        },
+        "plugins": {
+          "$ref": "#/definitions/pluginList"
+        }
+      },
+      "required": [
+        "name",
+        "kind",
+        "widgets",
+        "id"
+      ]
+    },
+    "theme": {
+      "type": "object",
+      "title": "Contains properties that apply to an entire story",
+      "properties": {
+        "name": {
+          "$ref": "#/definitions/name"
+        },
+        "kind": {
+          "$ref": "#/definitions/kind"
+        },
+        "data": {
+          "type": "object"
+        },
+        "plugins": {
+          "$ref": "#/definitions/pluginList"
+        }
+      },
+      "required": [
+        "name",
+        "kind"
+      ]
+    },
+    "info": {
+      "type": "object",
+      "title": "Story Outline Metadata",
+      "required": [
+        "revision",
+        "dateCreated",
+        "dateModified",
+        "createdBy",
+        "modifiedBy",
+        "revisionNotes"
+      ],
+      "properties": {
+        "revision": {
+          "$id": "#/properties/info/properties/revision",
+          "type": "string",
+          "title": "Revision Number",
+          "default": "",
+          "examples": [
+            "3"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "dateCreated": {
+          "$id": "#/properties/info/properties/dateCreated",
+          "type": "string",
+          "format": "date-time",
+          "title": "Date Created",
+          "default": "",
+          "examples": [
+            "2020-02-29T22:12:10.610673+00:00"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "dateModified": {
+          "$id": "#/properties/info/properties/dateModified",
+          "type": "string",
+          "format": "date-time",
+          "title": "Date Modified",
+          "default": "",
+          "examples": [
+            "2020-02-29T22:12:10.610673+00:00"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "createdBy": {
+          "$id": "#/properties/info/properties/createdBy",
+          "type": "string",
+          "title": "Created by",
+          "examples": [
+            "Username"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "modifiedBy": {
+          "$id": "#/properties/info/properties/modifiedBy",
+          "type": "string",
+          "title": "Modified By",
+          "examples": [
+            "Username"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "revisionNotes": {
+          "$id": "#/properties/info/properties/revisionNotes",
+          "type": "string",
+          "title": "Revision Notes",
+          "default": "",
+          "examples": [
+            "Modified to update widget #1"
+          ],
+          "pattern": "^(.*)$"
+        }
+      }
+    }
+  }
+}

@@ -3,7 +3,6 @@ import jinja2
 import typing
 import json
 import lxml
-import os
 import presalytics.story.components
 import presalytics.story.outline
 import presalytics.lib.exceptions
@@ -72,7 +71,7 @@ class MatplotlibFigure(presalytics.story.components.WidgetBase):
     def deserialize(cls, outline, **kwargs):
         figure_dict = outline.data.get("figure_dict")
         kwargs.update(**outline.additional_properties)
-        return cls(None, outline.name, figure_dict=figure_dict, **outline.additional_properties)
+        return cls(None, outline.name, figure_dict=figure_dict, id=outline.id, **outline.additional_properties)
 
     def serialize(self, **kwargs):
         data = {
@@ -86,6 +85,7 @@ class MatplotlibFigure(presalytics.story.components.WidgetBase):
         )
         return presalytics.story.outline.Widget(
             name=self.name,
+            id=self.id,
             kind=self.__component_kind__,
             plugins=[plugin_obj.to_dict()],
             data=data,

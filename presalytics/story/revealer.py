@@ -1,9 +1,7 @@
 import os
 import shutil
 import lxml.html
-import webbrowser
 import logging
-import collections
 import typing
 import tempfile
 import lxml
@@ -27,8 +25,7 @@ import presalytics.story.server
 import presalytics.story.components
 import presalytics.lib.exceptions
 if typing.TYPE_CHECKING:
-    from presalytics.story.outline import StoryOutline, Page, Plugin
-    from presalytics.story.components import PageTemplateBase, ComponentBase, WidgetBase, ThemeBase
+    from presalytics.story.outline import StoryOutline, Page
 
 
 logger = logging.getLogger('presalytics.story.revealer')

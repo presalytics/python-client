@@ -12,7 +12,6 @@ import dateutil.parser
 import uuid
 import abc
 import typing
-import sys
 import os
 import semantic_version
 import jsonschema
@@ -69,7 +68,6 @@ def get_current_spec_version():
     the schemas subfolder of this file's directory
     """
     schema_dir = os.path.join(os.path.dirname(__file__), "schemas")
-    major, minor, patch = None, None, None
     latest = None
     for _dir in os.listdir(schema_dir):
         if not latest:
@@ -272,7 +270,7 @@ class Info(OutlineBase):
                  created_by,
                  modified_by,
                  revision_notes,
-                 story_id=None,
+                 story_id,
                  **kwargs):
         super(Info, self).__init__(**kwargs)
         self.revision = revision
@@ -281,6 +279,7 @@ class Info(OutlineBase):
         self.created_by = created_by
         self.modified_by = modified_by
         self.revision_notes = revision_notes
+        self.id = story_id
 
 
 class Plugin(OutlineBase):
@@ -351,13 +350,15 @@ class Widget(OutlineBase):
 
     __required__ = [
         'name',
-        'data'
+        'data',
+        'id'
     ]
 
-    def __init__(self, name, kind, data, plugins=None, **kwargs):
+    def __init__(self, name, kind, data, id=None, plugins=None, **kwargs):
         super(Widget, self).__init__(**kwargs)
         self.name = name
         self.kind = kind
+        self.id = id if id else uuid.uuid4()
         if data:
             self.data = data
         else:
@@ -399,13 +400,15 @@ class Page(OutlineBase):
 
     __required__ = [
         'name',
-        'kind'
+        'kind',
+        'id'
     ]
 
-    def __init__(self, name, kind, widgets, plugins=None, **kwargs):
+    def __init__(self, name, kind, widgets, id=None, plugins=None, **kwargs):
         super(Page, self).__init__(**kwargs)
         self.name = name
         self.kind = kind
+        self.id = id if id else uuid.uuid4()
         if widgets:
             self.widgets = [Widget.deserialize(x) for x in widgets]
         else:
@@ -517,6 +520,7 @@ class StoryOutline(OutlineBase):
         'info',
         'pages',
         'title',
+        'id'
     ]
 
     def __init__(self, info, pages, description, title, themes, plugins=None, story_id="empty", **kwargs):

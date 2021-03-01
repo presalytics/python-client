@@ -17,9 +17,12 @@ import presalytics.lib.constants
 import presalytics.lib.tools.story_tools
 import presalytics.lib.tools.ooxml_tools
 import presalytics.lib.tools.workflows
+import presalytics.client
+import presalytics.client.websocket
 
 
 logger = logging.getLogger(__name__)
+
 
 description = """
 Presalytics Python Library
@@ -196,15 +199,11 @@ ooxml.add_argument('--replace-id', action='store', default=None, help="The Ooxml
 ooxml.add_argument('-u', '--username', default=None, action='store', help=username_help)
 ooxml.add_argument('-p', '--password', default=None, action='store', help=password_help)
 
-config_description = """
-Create and manage presalytics `config.py` files
+events_description = """
+Open a websocket and listen for events from the Presalytics API
 """
-
-config = subparsers.add_parser('config', description=config_description, help='Create and manage presalytics `config.py` files')
-config.add_argument('username', action='store', help=username_help)
-config.add_argument('-p', '--password', default=None, action='store', help=password_help)
-config.add_argument('-s', "--set", metavar="KEY=VALUE", default=None, nargs='+', help="Pass config values to to `config.py` with KEY=VALUE stucture (e.g., '-s USE_LOGGER=False'")
-config.add_argument('-o', '--overwrite', default=False, action='store_true', help=overwrite_help)
+events = subparsers.add_parser('events', description=events_description, help='Listen for Presalytics API Events')
+events.add_argument('-l', '--forward-to', default=None, action='store', help='Forward event data to a local url.  Good for app debugging.')
 
 
 def parse_var(s):
@@ -379,6 +378,10 @@ def main():
                                                                set_dict=set_dict,
                                                                overwrite=args.overwrite)
             logger.info("File 'config.py creating in folder " + os.getcwd())
+            return
+        if args.story_api == 'events':
+            ws = presalytics.client.websocket.EventsWebsocket(forward_address=args.forward_to)
+            ws.listen()
             return
         try:
             if not outline:

@@ -180,8 +180,6 @@ class D3Widget(presalytics.story.components.WidgetBase):
     def deserialize(cls, outline, **kwargs):
         d3_data = outline.data.get("d3_data")
         story_id = outline.data.get("story_id", None)
-        id = outline.data.get('id', None)
-        data = outline.data.get('d3_data', None)
         script_filename = outline.data.get('script_filename', None)
         script64 = outline.data.get('script64', None)
         html_filename = outline.data.get('html_filename', None)
@@ -190,7 +188,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
         css64 = outline.data.get('css64', None)
         return cls(outline.name,
                    d3_data,
-                   id=id,
+                   id=outline.id,
                    story_id=story_id,
                    script64=script64,
                    script_filename=script_filename,
@@ -215,6 +213,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
         return presalytics.story.outline.Widget(
             name=self.name,
             kind=self.__component_kind__,
+            id=self.id,
             data=data,
         )
 

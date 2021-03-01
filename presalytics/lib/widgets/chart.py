@@ -1,7 +1,6 @@
 
 import typing
 import base64
-import uuid
 import logging
 import jinja2
 import json
@@ -121,6 +120,7 @@ class ChartWidget(presalytics.story.components.WidgetBase):
     def deserialize(cls, outline, **kwargs):
         chart_data = outline.data.get("chart_data")
         return cls(outline.name,
+                   id=outline.id,
                    chart_data=chart_data,
                    **kwargs)
 
@@ -131,6 +131,7 @@ class ChartWidget(presalytics.story.components.WidgetBase):
         return presalytics.story.outline.Widget(
             name=self.name,
             kind=self.__component_kind__,
+            id=self.id,
             data=data,
         )
 

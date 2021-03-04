@@ -187,4 +187,4 @@ class Settings(object):
             d = dict()
             if is_setting(key):
                 d[key] = val
-            return d
+        return d

@@ -181,3 +181,10 @@ class Settings(object):
                 setattr(self, key, value)
             else:
                 setattr(self, key, value)
+
+    def to_dict(self):
+        for key, val in self.__dict__.items():
+            d = dict()
+            if is_setting(key):
+                d[key] = val
+            return d

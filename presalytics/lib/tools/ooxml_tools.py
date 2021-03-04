@@ -8,8 +8,8 @@ import presalytics.lib.widgets.ooxml
 import presalytics.lib.themes.ooxml
 
 if typing.TYPE_CHECKING:
-    from presalytics.client.presalytics_story import Story
-    from presalytics.client.presalytics_ooxml_automation import Document
+    from presalytics.client.story import Story
+    from presalytics.client.ooxml_automation import Document
     from presalytics.story.components import ThemeBase
     from presalytics.story.outline import StoryOutline
 
@@ -68,7 +68,7 @@ def create_story_from_ooxml_file(filename: str, client_info={}) -> 'Story':
 
     Returns:
     ----------
-    A `presalytics.client.presalytics_story.models.story.Story` containing information about the Story object in the Presalytics API
+    A `presalytics.client.story.models.story.Story` containing information about the Story object in the Presalytics API
 
     """
 
@@ -104,21 +104,21 @@ def create_outline_from_ooxml_document(story_api: 'Story',
     Utility Method for generating a story from a presenation or spreadsheet file
 
     This method encapsulates a standard workflow for interating the the Presalytics
-    API into a single function.  This method takes known `presalytics.client.presalytics_ooxml_automation.models.document.Document`
-    with a known `presalytics.client.presalytics_story.models.story.Story`.  This method returns a `presalytics.story.outline.StoryOutline`
+    API into a single function.  This method takes known `presalytics.client.ooxml_automation.models.document.Document`
+    with a known `presalytics.client.story.models.story.Story`.  This method returns a `presalytics.story.outline.StoryOutline`
     that can be used to replace with existing `presalytics.story.outline.StoryOutline` on the story if the user warrants it.
 
 
     Parameters
     ----------
-    story_api : presalytics.client.presalytics_story.models.story.Story
+    story_api : presalytics.client.story.models.story.Story
         The represenation for the Presalytics API instance that will recieve a new associate with the  **ooxml_document**
 
-    ooxml_document : presalytics.client.presalytics_ooxml_automation.models.document.Document
+    ooxml_document : presalytics.client.ooxml_automation.models.document.Document
         the new ooxml_document will be associated with the story.  The outline will be generated from this object
 
     title : str, optional
-        If not provided, the story will take on the title of the `presalytics.client.presalytics_ooxml_automation.models.document.Document` object
+        If not provided, the story will take on the title of the `presalytics.client.ooxml_automation.models.document.Document` object
 
     description : str, optional
         If not provided, the story description will initialize as the empty string
@@ -187,10 +187,10 @@ def create_pages_from_ooxml_document(story: 'Story',
 
     Parameters
     ----------
-    story : presalytics.client.presalytics_story.models.story.Story
+    story : presalytics.client.story.models.story.Story
         Representation for Presalytics API Story object
 
-    ooxml_document: presalytics.client.presalytics_ooxml_automation.models.document.Document
+    ooxml_document: presalytics.client.ooxml_automation.models.document.Document
         The ooxml_document on the story that you want to create pages from
 
     client_info : dict, optional

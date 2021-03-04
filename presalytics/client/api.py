@@ -13,9 +13,9 @@ import presalytics.lib.exceptions
 import presalytics.lib.constants as cnst
 import presalytics.client.auth
 import presalytics.client.oidc
-import presalytics.client.presalytics_ooxml_automation.api_client
-import presalytics.client.presalytics_story.api_client
-import presalytics.client.presalytics_doc_converter.api_client
+import presalytics.client.ooxml_automation.api_client
+import presalytics.client.story.api_client
+import presalytics.client.doc_converter.api_client
 from uuid import uuid4
 from werkzeug.datastructures import FileStorage
 
@@ -104,7 +104,7 @@ class Client(object):
         whether the user has supplied a passwork to the client either through `presalytics.settings` ro
         during object initialization.
 
-    doc_converter : presalytics.client.presalytics_doc_converter.api.default_api.DefaultApi
+    doc_converter : presalytics.client.doc_converter.api.default_api.DefaultApi
         Interface to the Presalytics API Doc Converter service.  The object contains methods that enable
         the client to make api calls that return deserialized objects from the Presalytics API,
         simplying user and developer interaction with the Presaltytics API.  API calls can be generated
@@ -116,17 +116,17 @@ class Client(object):
         where `{operation_id}` is the `operationId` assocated with the endpoint specified the [Doc Converter
         Service OpenAPI Contract](https://presalytics.io/docs/api-specifications/doc-converter/) , and *args
         are the corresponding arguments that are passed to the method.  A complete list of the avialable
-        methods is shown on the `presalytics.client.presalytics_doc_converter.api.default_api.DefaultApi` object.
+        methods is shown on the `presalytics.client.doc_converter.api.default_api.DefaultApi` object.
 
         *Note*:
         This attribute contains automatically generated methods via
         the [OpenAPI generator](https://github.com/OpenAPITools/openapi-generator).  The
-        `presalytics.client.presalytics_doc_converter.api.default_api.DefaultApi` has been passed an an `api_client`
+        `presalytics.client.doc_converter.api.default_api.DefaultApi` has been passed an an `api_client`
         keyword argument with an instance of `presalytics.client.api.DocConverterApiClientWithAuth`, which adds
         an authentication and request processing middleware layer to the default sub package
         built via code generatation.
 
-    ooxml_automation : presalytics.client.presalytics_ooxml_automation.api.default_api.DefaultApi
+    ooxml_automation : presalytics.client.ooxml_automation.api.default_api.DefaultApi
         Interface to the Presalytics API Ooxml Automation service.  The object contains methods that enable
         the client to make api calls that return deserialized objects from the Presalytics API,
         simplying user and developer interaction with the Presaltytics API.  API calls can be generated
@@ -138,17 +138,17 @@ class Client(object):
         where `{operation_id}` is the `operationId` assocated with the endpoint specified the [Ooxml Automation
         Service OpenAPI Contract](https://presalytics.io/docs/api-specifications/ooxml-automation/) , and *args
         are the corresponding arguments that are passed to the method.  A complete list of the avialable
-        methods is shown on the `presalytics.client.presalytics_ooxml_automation.api.default_api.DefaultApi` object.
+        methods is shown on the `presalytics.client.ooxml_automation.api.default_api.DefaultApi` object.
 
         *Note*:
         This attribute contains automatically generated methods via
         the [OpenAPI generator](https://github.com/OpenAPITools/openapi-generator).  The
-        `presalytics.client.presalytics_ooxml_automation.api.default_api.DefaultApi` has been passed an an `api_client`
+        `presalytics.client.ooxml_automation.api.default_api.DefaultApi` has been passed an an `api_client`
         keyword argument with an instance of `presalytics.client.api.OoxmlAutomationApiClientWithAuth`, which adds
         an authentication and request processing middleware layer to the default sub package
         built via code generatation.
 
-    story : presalytics.client.presalytics_story.api.default_api.DefaultApi
+    story : presalytics.client.story.api.default_api.DefaultApi
         Interface to the Presalytics API Ooxml Automation service.  The object contains methods that enable
         the client to make api calls that return deserialized objects from the Presalytics API,
         simplying user and developer interaction with the Presaltytics API.  API calls can be generated
@@ -160,12 +160,12 @@ class Client(object):
         where `{operation_id}` is the `operationId` assocated with the endpoint specified the [Ooxml Automation
         Service OpenAPI Contract](https://presalytics.io/docs/api-specifications/story/) , and *args
         are the corresponding arguments that are passed to the method.  A complete list of the avialable
-        methods is shown on the `presalytics.client.presalytics_story.api.default_api.DefaultApi` object.
+        methods is shown on the `presalytics.client.story.api.default_api.DefaultApi` object.
 
         *Note*:
         This attribute contains automatically generated methods via
         the [OpenAPI generator](https://github.com/OpenAPITools/openapi-generator).  The
-        `presalytics.client.presalytics_story.api.default_api.DefaultApi` has been passed an an `api_client`
+        `presalytics.client.story.api.default_api.DefaultApi` has been passed an an `api_client`
         keyword argument with an instance of `presalytics.client.api.StoryApiClientWithAuth`, which adds
         an authentication and request processing middleware layer to the default sub package
         built via code generatation.
@@ -294,11 +294,11 @@ class Client(object):
             self.token_util.token = self.refresh_token()
 
         doc_converter_api_client = DocConverterApiClientWithAuth(self, **kwargs)
-        self.doc_converter = presalytics.client.presalytics_doc_converter.DefaultApi(api_client=doc_converter_api_client)
+        self.doc_converter = presalytics.client.doc_converter.DefaultApi(api_client=doc_converter_api_client)
         ooxml_automation_api_client = OoxmlAutomationApiClientWithAuth(self, **kwargs)
-        self.ooxml_automation = presalytics.client.presalytics_ooxml_automation.DefaultApi(api_client=ooxml_automation_api_client)
+        self.ooxml_automation = presalytics.client.ooxml_automation.DefaultApi(api_client=ooxml_automation_api_client)
         story_api_client = StoryApiClientWithAuth(self, **kwargs)
-        self.story = presalytics.client.presalytics_story.DefaultApi(api_client=story_api_client)
+        self.story = presalytics.client.story.DefaultApi(api_client=story_api_client)
 
     def login(self):
         """
@@ -485,15 +485,15 @@ class Client(object):
         return self.story.story_id_outline_get(story_id)
 
 
-class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_doc_converter.api_client.ApiClient):
+class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.doc_converter.api_client.ApiClient):
     """
-    Wraps `presalytics.client.presalytics_doc_converter.api_client.ApiClient` with
+    Wraps `presalytics.client.doc_converter.api_client.ApiClient` with
     `presalytics.client.auth.AuthenticationMixIn` middleware
     """
 
     def __init__(self, parent: Client, **kwargs):
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
-        presalytics.client.presalytics_doc_converter.api_client.ApiClient.__init__(self)
+        presalytics.client.doc_converter.api_client.ApiClient.__init__(self)
         self.update_configuration()
 
     @property
@@ -501,15 +501,15 @@ class DocConverterApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn,
         return 'doc-converter'
 
 
-class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_ooxml_automation.api_client.ApiClient):
+class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.ooxml_automation.api_client.ApiClient):
     """
-    Wraps `presalytics.client.presalytics_ooxml_automation.api_client.ApiClient` with
+    Wraps `presalytics.client.ooxml_automation.api_client.ApiClient` with
     `presalytics.client.auth.AuthenticationMixIn` middleware
     """
 
     def __init__(self, parent: Client, **kwargs):
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
-        presalytics.client.presalytics_ooxml_automation.api_client.ApiClient.__init__(self)
+        presalytics.client.ooxml_automation.api_client.ApiClient.__init__(self)
         self.update_configuration()
 
     @property
@@ -517,15 +517,15 @@ class OoxmlAutomationApiClientWithAuth(presalytics.client.auth.AuthenticationMix
         return 'ooxml-automation'
 
 
-class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.presalytics_story.api_client.ApiClient):
+class StoryApiClientWithAuth(presalytics.client.auth.AuthenticationMixIn, presalytics.client.story.api_client.ApiClient):
     """
-    Wraps `presalytics.client.presalytics_story.api_client.ApiClient` with
+    Wraps `presalytics.client.story.api_client.ApiClient` with
     `presalytics.client.auth.AuthenticationMixIn` middleware
     """
 
     def __init__(self, parent: Client, **kwargs):
         presalytics.client.auth.AuthenticationMixIn.__init__(self, parent, **kwargs)
-        presalytics.client.presalytics_story.api_client.ApiClient.__init__(self)
+        presalytics.client.story.api_client.ApiClient.__init__(self)
         self.update_configuration()
 
     @property

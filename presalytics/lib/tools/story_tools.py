@@ -38,7 +38,7 @@ def story_post_file_bytes(client: 'Client',
 
     Returns
     ----------
-    A `presalytics.client.presalytics_story.models.story.Story` containing information about the Story object in the Presalytics API
+    A `presalytics.client.story.models.story.Story` containing information about the Story object in the Presalytics API
     """
     if not mime_type:
         mime_type = presalytics.lib.tools.ooxml_tools.get_mime_type_from_filename(client, filename)

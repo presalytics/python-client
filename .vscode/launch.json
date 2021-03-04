@@ -15,6 +15,12 @@
                 "http://localhost:7080/"
             ],
             "justMyCode": false
+        },
+        {
+            "name": "Client Codegen",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/sub_packages/generate_subpackages.py"
         }
     ]
 }

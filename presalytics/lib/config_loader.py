@@ -19,10 +19,6 @@ def load_config(additional_paths: typing.List[str] = []) -> typing.Dict:
     module named `config.py`.  If a file is found and has a global variable named
     'PRESALYTICS', the dictionary contained in the 'PRESALYTICS' is returned.
 
-    *Note*: A environment variable called `autodiscover_paths` is automatically
-    loaded into the `additional_paths` keyword argument the the `presalytics` module
-    is imported.
-
     Parameters
     ----------
     additional_paths : list of str, optional
@@ -98,6 +94,7 @@ class Settings(object):
     HOST_OOXML_AUTOMATION: str
     HOST_WORKSPACE_API: str
     HOST_SITE: str
+    HOST_DOC_CONVERTER: str
     BROWSER_API_HOST_EVENTS: typing.Optional[str]
     BROWSER_API_HOST_STORY: typing.Optional[str]
     BROWSER_API_HOST_OOXML_AUTOMATION: typing.Optional[str]
@@ -110,7 +107,7 @@ class Settings(object):
     AUTODISCOVER_PATHS = typing.List[str]
 
     def __init__(self, *args, **kwargs):
-        self.get_settings_from_module(presalytics.lib.default_settings)
+        self.get_default_settings()
         self.get_subpackage_settings()
         self.get_settings_from_environment()
         self.get_workspace_settings()
@@ -120,6 +117,11 @@ class Settings(object):
 
     def get_settings_from_module(self, mod: types.ModuleType):
         for k, v in mod.__dict__.items():
+            if is_setting(k):
+                self.add_setting(k, v)
+
+    def get_default_settings(self):
+        for k, v in presalytics.lib.default_settings.__dict__.items():
             if is_setting(k):
                 setattr(self, k, v)
 
@@ -133,13 +135,13 @@ class Settings(object):
             if os.environ.get(k, None):
                 if is_setting(k):
                     if isinstance(v, list):
-                        setattr(self, k, env.list(k))
+                        self.add_setting(k, env.list(k))
                     elif isinstance(v, bool):
-                        setattr(self, k, env.bool(k))
+                        self.add_setting(k, env.bool(k))
                     elif isinstance(v, int):
-                        setattr(self, k, env.int(k))
+                        self.add_setting(k, env.int(k))
                     else:
-                        setattr(self, k, env(k))
+                        self.add_setting(k, env(k))
 
     def get_subpackage_settings(self):
         for pkg_name in self.INSTALLED_PACKAGES:
@@ -166,3 +168,16 @@ class Settings(object):
             pass
         except ValueError:
             logger.error("settings must be a Python module type.")
+
+    def add_setting(self, key: str, value: typing.Union[str, bool, int, typing.List[str]]):
+        if is_setting(key):
+            if isinstance(value, list):
+                l: list = getattr(self, key)
+                l.extend(value)
+                setattr(self, key, l)
+            elif isinstance(value, dict):
+                d: dict = getattr(self, key)
+                d.update(value)
+                setattr(self, key, value)
+            else:
+                setattr(self, key, value)

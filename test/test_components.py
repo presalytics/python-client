@@ -8,8 +8,8 @@ import io
 import lxml
 from presalytics.client.api import get_client
 if typing.TYPE_CHECKING:
-    from presalytics.client.presalytics_story import Story, OoxmlDocument
-    from presalytics.client.presalytics_ooxml_automation.models import ChartChartDataDTO, TableTableDataDTO
+    from presalytics.client.story import Story, OoxmlDocument
+    from presalytics.client.ooxml_automation.models import TableTableDataDTO
 
 
 class TestComponents(unittest.TestCase):
@@ -18,8 +18,8 @@ class TestComponents(unittest.TestCase):
     """
 
     def test_render_matploytlib_plot(self):
-        presalytics.autodiscover_paths.append('test/files')
-        presalytics.COMPONENTS = presalytics.story.components.ComponentRegistry(autodiscover_paths=presalytics.autodiscover_paths)
+        presalytics.settings.AUTODISCOVER_PATHS.append('test/files')
+        presalytics.COMPONENTS = presalytics.story.components.ComponentRegistry(autodiscover_paths=presalytics.settings.AUTODISCOVER_PATHS)
         test_file = os.path.join(os.path.dirname(__file__), 'files', 'matplotlib-outline.yaml')
         outline = presalytics.StoryOutline.import_yaml(test_file)
         html = presalytics.Revealer(outline).package_as_standalone().decode('utf-8')
@@ -29,19 +29,18 @@ class TestComponents(unittest.TestCase):
         test_file = os.path.join(os.path.dirname(__file__), "files", "star.pptx")
         tmp_filename = os.path.join(os.path.dirname(__file__), os.path.basename(test_file))
         shutil.copyfile(test_file, tmp_filename)
-        client_info = get_client().get_client_info() 
         story = get_client().upload_file_and_await_outline(tmp_filename, include_relationships=True)
         outline = presalytics.StoryOutline.load(story.outline)
         old_widget = outline.pages[0].widgets[0]
         childs = get_client().ooxml_automation.documents_childobjects_get_id(old_widget.data["document_ooxml_id"])
-        endpoint_map = presalytics.OoxmlEndpointMap.shape() 
+        endpoint_map = presalytics.OoxmlEndpointMap.shape()
         object_type = endpoint_map.get_object_type()
         info = next(x for x in childs if x.object_type == object_type)
         new_color = {
             "object_name": info.entity_name,
             "hex_color": "FF0000"
         }
-        multiparams = {"transforms_list" : [
+        multiparams = {"transforms_list": [
             {
                 'name': 'ChangeShapeColor',
                 'function_params': new_color
@@ -49,7 +48,9 @@ class TestComponents(unittest.TestCase):
             {
                 'name': 'TextReplace',
                 'function_params': {
-                    'test_text': "Test Passed!"
+                    'replace_map': {
+                        'test_text': "Test Passed!"
+                    }
                 }
             }
         ]}
@@ -62,8 +63,6 @@ class TestComponents(unittest.TestCase):
             transform_params=multiparams
         )
         outline.pages[0].widgets[0] = widget.outline_widget
-
-        
         presalytics.COMPONENTS.register(widget)
         story.outline = outline.dump()
         get_client().story.story_id_put(story.id, story)
@@ -89,13 +88,13 @@ class TestComponents(unittest.TestCase):
             _bytes = io.BytesIO(f.read())
 
         story = presalytics.story_post_file_bytes(get_client(), _bytes, "testfile.pptx")
-        from presalytics.client.presalytics_story.models.story import Story
+        from presalytics.client.story.models.story import Story
         self.assertIsInstance(story, Story)
 
     def test_multixml(self):
         test_file = os.path.join(os.path.dirname(__file__), "files", "ooxml_test.xml")
         etree = lxml.etree.parse(test_file)
-        multiparams = {"transforms_list" : [
+        multiparams = {"transforms_list": [
             {
                 'name': 'ChangeShapeColor',
                 'function_params': {
@@ -105,11 +104,13 @@ class TestComponents(unittest.TestCase):
             {
                 'name': 'TextReplace',
                 'function_params': {
-                    'test_text': "Test Passed!"
+                    'replace_map': {
+                        'test_text': "Test Passed!"
+                    }
                 }
             }
         ]}
-        inst  = presalytics.MultiXmlTransform(multiparams)
+        inst = presalytics.MultiXmlTransform(multiparams)
         new_lxml = inst.execute(etree.getroot())
         xml_string = lxml.etree.tostring(new_lxml).decode('utf-8')
         self.assertTrue("Test Passed!" in xml_string)
@@ -124,7 +125,7 @@ class TestComponents(unittest.TestCase):
         story = get_client().upload_file_and_await_outline(test_file, include_relationships=True)
         document = story.ooxml_documents[0]
         object_tree = get_client().ooxml_automation.documents_childobjects_get_id(document.ooxml_automation_id)
-        endpoint_map = presalytics.OoxmlEndpointMap.chart() 
+        endpoint_map = presalytics.OoxmlEndpointMap.chart()
         object_type = endpoint_map.get_object_type()
         chart_id = next(entity.entity_id for entity in object_tree if entity.object_type == object_type)
         updater = presalytics.lib.widgets.ooxml.ChartUpdaterWidget('updater', story.id, chart_id)
@@ -132,13 +133,12 @@ class TestComponents(unittest.TestCase):
         dto = updater.get_dto()
         dummySeriesName = "TestSeries1"
         data = [
-            [1,2,5,None],
-            [None,None,4,5],
-            [9,3,8,None],
-            [None,None,3,6]
+            [1, 2, 5, None],
+            [None, None, 4, 5],
+            [9, 3, 8, None],
+            [None, None, 3, 6]
         ]
-        
-        
+
         dto.data_points = data
         series = dto.series_names
         series[0] = dummySeriesName
@@ -168,7 +168,7 @@ class TestComponents(unittest.TestCase):
         story = get_client().upload_file_and_await_outline(test_file, include_relationships=True)
         document = story.ooxml_documents[0]
         object_tree = get_client().ooxml_automation.documents_childobjects_get_id(document.ooxml_automation_id)
-        endpoint_map = presalytics.OoxmlEndpointMap.table() 
+        endpoint_map = presalytics.OoxmlEndpointMap.table()
         object_type = endpoint_map.get_object_type()
         table_id = next(entity.entity_id for entity in object_tree if entity.object_type == object_type)
         updater = presalytics.lib.widgets.ooxml.TableUpdaterWidget('updater', story.id, table_id)
@@ -177,7 +177,6 @@ class TestComponents(unittest.TestCase):
         dummyEntryName = "CR6!XD?"
 
         dto.table_data[2][2] = dummyEntryName
-
 
         updater.update_from_dto(dto)
         # updater.get_svg_file()

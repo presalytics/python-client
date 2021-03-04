@@ -18,13 +18,13 @@ import presalytics.lib.exceptions
 import presalytics.story.outline
 import presalytics.lib.util
 import presalytics.lib.plugins.ooxml
-import presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto
-import presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto
+import presalytics.client.ooxml_automation.models.chart_chart_data_dto
+import presalytics.client.ooxml_automation.models.table_table_data_dto
 if typing.TYPE_CHECKING:
     from presalytics.story.outline import Page, Widget
-    from presalytics.client.presalytics_story import Story as ApiStory
-    from presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto import ChartChartDataDTO
-    from presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto import TableTableDataDTO
+    from presalytics.client.story import Story as ApiStory
+    from presalytics.client.ooxml_automation.models.chart_chart_data_dto import ChartChartDataDTO
+    from presalytics.client.ooxml_automation.models.table_table_data_dto import TableTableDataDTO
 
 
 class OoxmlEndpointMap(object):
@@ -482,7 +482,7 @@ class OoxmlFileWidget(OoxmlWidgetBase):
         page: 'Page'
         widget: 'Widget'
 
-        search_paths = list(set(presalytics.autodiscover_paths))
+        search_paths = list(set(presalytics.settings.AUTODISCOVER_PATHS))
         if os.getcwd() not in search_paths:
             search_paths.append(os.getcwd())
         for path in search_paths:
@@ -765,7 +765,7 @@ class ChartUpdaterWidget(UpdaterWidgetBase):
 
     This class simplifies chart updates, for charts residing in the Ooxml Automation Service,
     allowing updates to ooxml object data and its underlying xml either via a list of lists or
-    the `presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO`
+    the `presalytics.client.ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO`
     object.
 
     Parameters
@@ -779,7 +779,7 @@ class ChartUpdaterWidget(UpdaterWidgetBase):
     chart_id : str
         The identifier of the Ooxml Automation Chart service object.
 
-    dto: presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO, optional
+    dto: presalytics.client.ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO, optional
         A an instance of the data transfer object model. The class of this object is defined by the
         `_get_dto_class()` method.  Represents the current state of the data of the data in the service.
 
@@ -801,7 +801,7 @@ class ChartUpdaterWidget(UpdaterWidgetBase):
         self.chart_id = chart_id
 
     def _get_dto_class(self):
-        return presalytics.client.presalytics_ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO
+        return presalytics.client.ooxml_automation.models.chart_chart_data_dto.ChartChartDataDTO
 
     def _get_endpoint_path(self):
         return "ChartUpdate"
@@ -840,7 +840,7 @@ class TableUpdaterWidget(UpdaterWidgetBase):
 
     This class simplifies table updates, for tables residing in the Ooxml Automation Service,
     allowing updates to ooxml object data and its underlying xml either via a list of lists or
-    the `presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO`
+    the `presalytics.client.ooxml_automation.models.table_table_data_dto.TableTableDataDTO`
     object.
 
     Parameters
@@ -854,7 +854,7 @@ class TableUpdaterWidget(UpdaterWidgetBase):
     table_id : str
         The identifier of the Ooxml Automation Table service object.
 
-    dto: presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO, optional
+    dto: presalytics.client.ooxml_automation.models.table_table_data_dto.TableTableDataDTO, optional
         A an instance of the data transfer object model. The class of this object is defined by the
         `_get_dto_class()` method.  Represents the current state of the data of the data in the service.
 
@@ -876,7 +876,7 @@ class TableUpdaterWidget(UpdaterWidgetBase):
         self.table_id = table_id
 
     def _get_dto_class(self):
-        return presalytics.client.presalytics_ooxml_automation.models.table_table_data_dto.TableTableDataDTO
+        return presalytics.client.ooxml_automation.models.table_table_data_dto.TableTableDataDTO
 
     def _get_endpoint_path(self):
         return "TableUpdate"

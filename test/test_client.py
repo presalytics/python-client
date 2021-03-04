@@ -12,6 +12,7 @@ class TestClient(unittest.TestCase):
     """ Test whether client accurately creates a configuration
         and establishes a connection to the server
     """
+
     def setUp(self):
         self.config_file = os.path.join(os.path.dirname(__file__), 'files', 'config.py')
 
@@ -21,31 +22,27 @@ class TestClient(unittest.TestCase):
         """
         if not presalytics.settings.PASSWORD:
             client = presalytics.client.api.Client(config_file=self.config_file)
-            username = os.environ["PRESALYTICS_USERNAME"]
+            username = presalytics.settings.USERNAME
             self.assertEqual(client.username, username)
             self.assertEqual(client.ooxml_automation.api_client.configuration.host, os.environ["OOXML_AUTOMATION_HOST"])
             self.assertNotEqual(client.token_util.token.get("access_token", None), None)
-       
+
     def test_password_grant(self):
         """
         tests if password grant works
         """
         if presalytics.settings.PASSWORD:
             username = presalytics.settings.USERNAME
-            password = presalytics.seetings.PASSWORD
+            password = presalytics.settings.PASSWORD
             client_id = os.environ.get("CLIENT_ID")
             client_secret = os.environ.get("CLIENT_SECRET")
             client = presalytics.client.api.Client(
-                username=username, 
-                password=password, 
-                client_id=client_id, 
+                username=username,
+                password=password,
+                client_id=client_id,
                 client_secret=client_secret
             )
-
-    def test_module_config(self):
-        from test.files.config import PRESALYTICS
-        client = presalytics.client.api.Client(config=PRESALYTICS)
-        self.assertIsNotNone(client.client_id)
+            self.assertIsNotNone(client)
 
     def test_api_exception(self):
         exception_client = presalytics.client.api.Client(config_file=self.config_file)
@@ -79,7 +76,7 @@ class TestClient(unittest.TestCase):
         client = presalytics.client.api.get_client()
         try:
             test_story = client.upload_file_and_await_outline(test_upload_file)
-            from presalytics.client.presalytics_ooxml_automation.models import DocumentCloneDTO
+            from presalytics.client.ooxml_automation.models import DocumentCloneDTO
             ooxml_id = test_story.ooxml_documents[0].ooxml_automation_id
             clone_dto = DocumentCloneDTO(
                 id=ooxml_id,
@@ -88,7 +85,7 @@ class TestClient(unittest.TestCase):
             cloned_document = client.ooxml_automation.documents_clone_post_id(ooxml_id, document_clone_dto=clone_dto)
 
             new_story = client.story.story_post({'outline': test_story.outline})
-
+            self.assertIsNotNone(new_story)
 
         finally:
             try:
@@ -103,4 +100,3 @@ class TestClient(unittest.TestCase):
             #     client.story.story_id_delete(new_story.id)
             # except Exception:
             #     pass
-

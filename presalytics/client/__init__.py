@@ -1,7 +1,7 @@
 """
 This module conatains objects for interacting with the Presalytics API.  It has three submodules:
-`presalytics.client.presalytics_doc_converter`, 'presalytics.client.presalytics_ooxml_automation`, and
-`presalytics.client.presalytics_story` contain that auto-generate code using the
+`presalytics.client.doc_converter`, 'presalytics.client.ooxml_automation`, and
+`presalytics.client.story` contain that auto-generate code using the
 [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) and specifications from
 http://api.presalytics.io .
 

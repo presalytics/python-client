@@ -162,7 +162,7 @@ class Revealer(presalytics.story.components.Renderer):
                 if w.kind == 'url':
                     url = w.data.get('url')
                     host = urllib.parse.urlparse(url).netloc  # type: ignore
-                    frame_hosts.append('https://{0}'.format(host))
+                    frame_hosts.append('https://{0}'.format(host))  # type: ignore
         return frame_hosts
 
     def package_as_standalone(self):
@@ -259,7 +259,7 @@ class Revealer(presalytics.story.components.Renderer):
                 page_html = presalytics.lib.exceptions.RenderExceptionHandler(ex, "page", traceback=tb).render_exception()
             else:
                 six.reraise(t, v, tb)
-        return page_html
+        return page_html  # type: ignore
 
     def present(self, files_path=None, debug=True, port=8082, host='127.0.0.1'):
         """

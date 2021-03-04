@@ -133,7 +133,7 @@ class AuthenticationMixIn(abc.ABC):
             body=None, post_params=None, files=None,
             response_type=None, auth_settings=None, async_req=None,
             _return_http_data_only=None, collection_formats=None,
-            _preload_content=None, _request_timeout=None, _host=None):
+            _preload_content=None, _request_timeout=None):
         """
         Overriding call_api to force token check, refresh on each api call,
         rather than at class initialized (good for ipython notebooks)
@@ -175,7 +175,6 @@ class AuthenticationMixIn(abc.ABC):
                 collection_formats,
                 _preload_content,
                 _request_timeout,
-                _host
             )
             response = super(AuthenticationMixIn, self).call_api(*call_args)
             logger.info("{0} response received from {1}".format(method, endpoint))
@@ -260,10 +259,8 @@ class AuthenticationMixIn(abc.ABC):
 
     def files_parameters(self, files=None):
         """Builds form parameters.
-
         This override method expands the capabilites of codegen filehandler to
         accept a `werkzeug.datastructures.FileStorage` object.
-
         :param files: File parameters. Either a string file path or a `werkzeug.datastructures.FileStorage` object
         :return: Form parameters with files.
         """
@@ -273,15 +270,15 @@ class AuthenticationMixIn(abc.ABC):
             for k, v in six.iteritems(files):
                 if not v:
                     continue
-                if isinstance(v, str) or isinstance(v, list):
-                    file_names = v if isinstance(v, list) else [v]
+                if type(v) is str or type(v) is list:
+                    file_names = v if type(v) is list else [v]
                     for n in file_names:
                         with open(n, 'rb') as f:
                             filename = os.path.basename(f.name)
                             filedata = f.read()
 
                 else:
-                    if isinstance(v, FileStorage):
+                    if type(v) is FileStorage:
                         filename = v.filename
                         v.stream.seek(0)
                         filedata = v.stream.read()

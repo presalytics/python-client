@@ -69,7 +69,7 @@ class ChartWidget(presalytics.story.components.WidgetBase):
         """
         data64 = None
         if filename:
-            search_paths = list(set(presalytics.autodiscover_paths))
+            search_paths = list(set(presalytics.settings.AUTODISCOVER_PATHS))  # type: ignore
             if os.getcwd() not in search_paths:
                 search_paths.append(os.getcwd())
             for path in search_paths:
@@ -94,7 +94,7 @@ class ChartWidget(presalytics.story.components.WidgetBase):
         html = self.create_container()
         return html
 
-    def create_container(self, **kwargs):
+    def create_container(self, **kwargs) -> str:
         """
         Wraps the D3 objects in an endpoint at the story API load via a sandboxed `<iframe>` that
         will be rendered
@@ -114,7 +114,7 @@ class ChartWidget(presalytics.story.components.WidgetBase):
             'sandbox': 'allow-scripts allow-same-origin'
         })
         empty_parent_div.append(frame)
-        return lxml.html.tostring(empty_parent_div).decode('utf-8')
+        return lxml.html.tostring(empty_parent_div).decode('utf-8')  # type: ignore
 
     @classmethod
     def deserialize(cls, outline, **kwargs):

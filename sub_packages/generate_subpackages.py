@@ -1,32 +1,34 @@
-import requests, os, shutil, importlib.util, fileinput
+import requests
+import os
+import shutil
 from io import BytesIO
 from zipfile import ZipFile
 from pprint import pprint
-from setuptools import sandbox
 from environs import Env
 from tempfile import mkstemp
 from shutil import move
 from os import fdopen, remove
-from doc_converter.spec import SPEC as doc_converter_spec
-from ooxml_automation.spec import SPEC as ooxml_automation_spec
-from story.spec import SPEC as story_spec
+from api_specs import CLIENT_SPECS  # type: ignore
 
 DELETE_TMP_FILES = True
 
 env = Env()
 env.read_env()
 
-CODEGEN_ENDPOINT="https://openapi-generator.presalytics.io/api/gen/clients/python"
-CODEGEN_DL_STUB="https://openapi-generator.presalytics.io/api/gen/download/"
-CODEGEN_DIR=os.path.dirname(os.path.realpath(__file__))
+OPENAPI_ENDPOINT = os.environ.get("OPENAPI_ENDPOINT", "http://localhost:7890/")
+"""
+Note:  Currently you should use a local version of the docker image -- v4.1.3 is the latest versions that works
+    later versions cause a recursion error and have breaking changes Monitor: https://github.com/OpenAPITools/openapi-generator/pull/8326
+Use command: `docker run -e GENERATOR_HOST=http://0.0.0.0  -p 7890:8080 --name openapi openapitools/openapi-generator-online:v4.1.3`
+to start container.  set `OPENAPI_ENDPOINT=http://localhost:7890` in .env file.
+"""
+CODEGEN_ENDPOINT = OPENAPI_ENDPOINT + "/api/gen/clients/python"
+CODEGEN_DL_STUB = OPENAPI_ENDPOINT + "/api/gen/download/"
+CODEGEN_DIR = os.path.dirname(os.path.realpath(__file__))
 TMP_PATH = os.path.join(CODEGEN_DIR, "tmp")
 LIC_PATH = os.path.join(CODEGEN_DIR, "LICENSE")
 
 
-CLIENT_SPECS = []
-CLIENT_SPECS.append(doc_converter_spec)
-CLIENT_SPECS.append(ooxml_automation_spec)
-CLIENT_SPECS.append(story_spec)
 GIT_SSH_COMMAND = 'ssh -i ~/.ssh/id_rsa'
 os.environ['GIT_SSH_COMMAND'] = GIT_SSH_COMMAND
 
@@ -36,13 +38,6 @@ HEADER = {
     'Content-type': 'application/json',
     'Accept': 'application/json'
 }
-
-
-# from git import Repo
-
-# PATH_OF_GIT_REPO = r'path\to\your\project\folder\.git'  # make sure .git folder is properly configured
-# COMMIT_MESSAGE = 'comment from python script'
-
 
 
 def increment_version(old_version, update_type):
@@ -60,22 +55,23 @@ def increment_version(old_version, update_type):
     new_version = "{0}.{1}.{2}".format(_major, _minor, _patch)
     return new_version
 
+
 def replace_ver(file_path, update_type):
-    #Create temp file
+    # Create temp file
     fh, abs_path = mkstemp()
-    with fdopen(fh,'w') as new_file:
+    with fdopen(fh, 'w') as new_file:
         with open(file_path) as old_file:
             for line in old_file:
                 if line[:10] == "VERSION = ":
-                    ver = line.replace("VERSION = ", '').replace('"','').replace('\n','')
+                    ver = line.replace("VERSION = ", '').replace('"', '').replace('\n', '')
                     new_ver = increment_version(ver, update_type)
                     new_file.write('VERSION = "{0}"\n'.format(new_ver))
                 else:
                     new_file.write(line)
 
-    #Remove original file
+    # Remove original file
     remove(file_path)
-    #Move new file
+    # Move new file
     move(abs_path, file_path)
     return new_ver
 
@@ -103,15 +99,16 @@ def update_imports(tmp_dir_path, package_name):
             with open(fpath, "w") as f:
                 f.write(s)
 
+
 for spec in CLIENT_SPECS:
     try:
         if spec["update"] is True:
-            #new_ver = replace_ver(spec["setuppy_path"], spec["update_type"])
             payload = {
                 'openAPIUrl': spec['endpoint'],
-                'options' : {
+                'options': {
                     'packageName': spec['package_name'],
-                    'projectName': 'Presalytics API'
+                    'projectName': 'Presalytics API',
+                    'disableExamples': True
                     # 'packageVersion': new_ver
                 }
             }
@@ -146,7 +143,3 @@ for spec in CLIENT_SPECS:
                 shutil.rmtree(TMP_PATH)
             except Exception:
                 pass
-
-    # repo = git.get_repo("presalytics/" + spec['package_name'])
-
-#Clean temp files

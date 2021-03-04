@@ -133,7 +133,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
         """
         data64 = None
         if filename:
-            search_paths = list(set(presalytics.autodiscover_paths))
+            search_paths = list(set(presalytics.settings.AUTODISCOVER_PATHS))
             if os.getcwd() not in search_paths:
                 search_paths.append(os.getcwd())
             for path in search_paths:

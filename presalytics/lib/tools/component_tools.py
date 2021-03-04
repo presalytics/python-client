@@ -10,7 +10,8 @@ if typing.TYPE_CHECKING:
 def create_outline_from_widget(widget: 'WidgetBase',
                                page_name: str = None,
                                title: str = None,
-                               description: str = None) -> 'StoryOutline':
+                               description: str = None,
+                               story_id: str = None) -> 'StoryOutline':
     """
     Creates a `presalytics.story.outline.StoryOutline` from a subclass of
     `presalytics.story.components.WidgetBase`.  Useful for quickstarts, demos, and
@@ -63,7 +64,8 @@ def create_outline_from_widget(widget: 'WidgetBase',
         pages=[page],
         description=description,
         title=title,
-        themes=[]
+        themes=[],
+        story_id=story_id
     )
 
     return outline

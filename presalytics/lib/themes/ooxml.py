@@ -4,7 +4,7 @@ import presalytics.client.auth
 import presalytics.story.components
 import presalytics.story.outline
 import presalytics.story.util
-import presalytics.client.presalytics_ooxml_automation.models
+import presalytics.client.ooxml_automation.models
 
 
 class OoxmlTheme(presalytics.story.components.ThemeBase):

@@ -270,7 +270,6 @@ class Info(OutlineBase):
                  created_by,
                  modified_by,
                  revision_notes,
-                 story_id,
                  **kwargs):
         super(Info, self).__init__(**kwargs)
         self.revision = revision
@@ -279,7 +278,6 @@ class Info(OutlineBase):
         self.created_by = created_by
         self.modified_by = modified_by
         self.revision_notes = revision_notes
-        self.id = story_id
 
 
 class Plugin(OutlineBase):
@@ -513,7 +511,7 @@ class StoryOutline(OutlineBase):
     description: str
     title: str
     themes: typing.List[Theme]
-    story_id: str
+    id: str
 
     __required__ = [
         'outline_version',
@@ -523,7 +521,7 @@ class StoryOutline(OutlineBase):
         'id'
     ]
 
-    def __init__(self, info, pages, description, title, themes, plugins=None, story_id="empty", **kwargs):
+    def __init__(self, info, pages, description, title, themes, plugins=None, id=None, story_id="empty", **kwargs):
         super(StoryOutline, self).__init__(**kwargs)
         self.outline_version = get_current_spec_version()
         self.info = Info.deserialize(info)
@@ -544,7 +542,7 @@ class StoryOutline(OutlineBase):
             self.plugins = [Plugin.deserialize(x) for x in plugins]
         else:
             self.plugins = []
-        self.story_id = story_id
+        self.id = id or story_id
         if not kwargs.get("validate", True):
             self.validate()
 

@@ -5,7 +5,6 @@ import lxml
 import lxml.html
 import lxml.etree
 import base64
-import io
 import uuid
 import presalytics.story.revealer
 import presalytics.story.outline
@@ -19,9 +18,10 @@ class TestStory(unittest.TestCase):
     Test module features thatr render stories to dashboards or other formats.
 
     Please note that these are integration tests, the development environment and
-    `presaltytics.settings` must be set up appropriately for these test execute 
+    `presaltytics.settings` must be set up appropriately for these test execute
     sucessfully.
     """
+
     def setUp(self):
         pass
 
@@ -43,29 +43,23 @@ class TestStory(unittest.TestCase):
         self.assertEqual(new_dict["pages"][0]["widgets"][0]["data"]["temp"], "data")
         self.assertIsNotNone(json_str)
 
-    def test_plugins(self):
-        from presalytics import PLUGINS
-
     def test_create_outline_from_widget(self):
         import matplotlib.pyplot as plt
         import numpy as np
-        
+
         x = np.random.rand(30)
         y = np.random.rand(30)
         z = np.random.rand(30)
-        
+
         fig, ax = plt.subplots()
 
-        ax.scatter(x, y, s=z*1000, alpha=0.5)
+        ax.scatter(x, y, s=z * 1000, alpha=0.5)
 
         wrapper = presalytics.lib.widgets.matplotlib.MatplotlibResponsiveFigure(fig, "BubbleChart")
 
-
-        outline = presalytics.lib.tools.component_tools.create_outline_from_widget(wrapper)
+        outline = presalytics.lib.tools.component_tools.create_outline_from_widget(wrapper, story_id=str(uuid.uuid4()))
 
         re_wrapper = presalytics.lib.widgets.matplotlib.MatplotlibResponsiveFigure.deserialize(outline.pages[0].widgets[0])
-
-    
 
         self.assertIsInstance(outline, presalytics.story.outline.StoryOutline)
         self.assertIsInstance(re_wrapper, presalytics.lib.widgets.matplotlib.MatplotlibFigure)
@@ -81,14 +75,14 @@ class TestStory(unittest.TestCase):
     def test_render_page_exception(self):
         test_file = os.path.join(os.path.dirname(__file__), 'files', 'bad-outline.yaml')
         _debug = presalytics.settings.DEBUG
-        presalytics.settings.DEBUG = True
+        presalytics.settings.DEBUG = False
         outline = presalytics.story.outline.StoryOutline.import_yaml(test_file)
         revealer = presalytics.story.revealer.Revealer(outline)
         html = revealer.package_as_standalone().decode('utf-8')
         self.assertTrue("Oops!" in html)
         if _debug:
             presalytics.settings.DEBUG = _debug
-    
+
     def text_replace_transform_test(self):
         test_file = os.path.join(os.path.dirname(__file__), 'files', 'ooxml_test_2.xml')
         test_element = lxml.etree.parse(test_file)
@@ -107,14 +101,14 @@ class TestStory(unittest.TestCase):
             self.assertTrue(val in updates)
 
     def upload_from_json(self):
-        from presalytics.client.presalytics_story import FileUpload
+        from presalytics.client.story import FileUpload
 
         test_file = os.path.join(os.path.dirname(__file__), 'files', 'bubblechart.pptx')
         with open(test_file, 'rb') as f:
             bin = f.read()
             content_length = len(bin)
             data = base64.b64encode(bin).decode('UTF-8')
-            
+
         client = presalytics.Client()
         file = FileUpload(
             content_length=content_length,
@@ -123,11 +117,11 @@ class TestStory(unittest.TestCase):
             file=str(data)
         )
         story = client.story.story_post_file_json(file_upload=file)
-        from presalytics.client.presalytics_story import Story
-        self.assertTrue(type(story) is Story)
+        from presalytics.client.story import Story
+        self.assertTrue(isinstance(story, Story))
 
     def d3(self):
-        
+
         widget = presalytics.lib.widgets.d3.D3Widget(
             'test-widget',
             {
@@ -161,8 +155,6 @@ class TestStory(unittest.TestCase):
         # outline = presalytics.lib.tools.component_tools.create_outline_from_widget(widget)
 
         # client.story.story_post({"outline": outline.dump()})ks
-        
-
 
     def tearDown(self):
         pass

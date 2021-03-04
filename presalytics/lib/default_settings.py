@@ -17,6 +17,7 @@ Users can override these default settings via two methods:
     direcotry can be determine by using the `os.getcwd()` command.  This `settings.py` file takes the highest
     priority.  Settings defined in this file will override both the `default_settings.py` file and any enviroment variables.
 """
+import os
 import logging
 import typing
 import presalytics.lib.constants
@@ -42,13 +43,13 @@ DEBUG = False
 Use debugging features.  Useful for rendering widgets and pages.
 """
 
-USERNAME: typing.Optional[str] = None
+USERNAME: typing.Optional[str] = os.environ.get('PRESALYTICS_USERNAME', None)
 """
 The user's Presalytics API email/username.  This is the email address that the user uses when logging in at
 https://login.presalytics.io.  Will be passed to instances of the `presalytics.client.api.Client` object.
 """
 
-PASSWORD: typing.Optional[str] = None
+PASSWORD: typing.Optional[str] = os.environ.get('PRESALYTICS_PASSWORD', None)
 """
 The user's Presalytics API username.  Will be passed to instances of the
 `presalytics.client.api.Client` object.  If running in an insecure or

@@ -114,7 +114,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
         the name of widget.  Must be unique within `presalytics.COMPONENTS`
 
     story_id : str, optional
-        The story of thet
+        The story id
 
     Attributes
     ----------
@@ -154,6 +154,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
     ]  # type: ignore
 
     def __init__(self, figure: 'Figure', name: str, *args, **kwargs):
+        self.story_id = kwargs.get("story_id", None)
         super(MatplotlibResponsiveFigure, self).__init__(figure, name, *args, **kwargs)
         self.story_host = self.get_client(delegate_login=True).story.api_client.configuration.host
 
@@ -189,7 +190,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
         kwargs.update(**outline.additional_properties)
         return cls(None,
                    outline.name,
-                   story_id,
+                   story_id=story_id,
                    figure_dict=figure_dict,
                    **kwargs)
 

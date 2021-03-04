@@ -111,6 +111,7 @@ class Settings(object):
         self.get_subpackage_settings()
         self.get_settings_from_environment()
         self.get_workspace_settings()
+        self.initialize_browser_hosts()
 
     def __dir__(self):
         return [x for x in dir(presalytics.lib.default_settings) if is_setting(x)]
@@ -188,3 +189,10 @@ class Settings(object):
             if is_setting(key):
                 d[key] = val
         return d
+
+    def initialize_browser_hosts(self):
+        for k, v in self.__dict__.items():
+            if 'BROWSER_' in k and not v:
+                default_setting = "HOST_" + k.split("_")[-1]
+                browser_host = getattr(self, default_setting) 
+                setattr(self, k, browser_host)

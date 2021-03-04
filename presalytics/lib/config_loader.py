@@ -193,6 +193,6 @@ class Settings(object):
     def initialize_browser_hosts(self):
         for k, v in self.__dict__.items():
             if 'BROWSER_' in k and not v:
-                default_setting = "HOST_" + k.split("_")[-1]
+                default_setting = k.replace("BROWSER_API_","")
                 browser_host = getattr(self, default_setting) 
                 setattr(self, k, browser_host)

@@ -122,6 +122,7 @@ from presalytics.lib.widgets.ooxml import (
 )
 from presalytics.story.outline import StoryOutline
 from presalytics.story.revealer import Revealer
+from presalytics.story.renderers import ClientSideRenderer
 from presalytics.story.components import WidgetBase, PageTemplateBase, Renderer, ThemeBase
 from presalytics.lib.tools.ooxml_tools import (
     create_story_from_ooxml_file
@@ -146,6 +147,7 @@ __all__ = [
     'Client',
     'StoryOutline',
     'Renderer',
+    'ClientSideRenderer',
     'Revealer',
     'MatplotlibFigure',
     'MatplotlibResponsiveFigure',

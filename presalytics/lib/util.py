@@ -1,6 +1,8 @@
 import datetime
 import re
 import importlib
+import base64
+import typing
 import presalytics.lib.constants
 
 
@@ -76,3 +78,11 @@ def camel_case_split(str):
         else:
             words[-1].append(c)
     return [''.join(word) for word in words]
+
+
+def list_to_base64(string_list: typing.List[str]) -> typing.List[str]:
+    return_list = []
+    for item in string_list:
+        bts = base64.b64encode(item.encode('utf-8'))
+        return_list.append(bts.decode('utf-8'))
+    return return_list

@@ -77,7 +77,7 @@ class ClientSideRenderer(presalytics.story.components.Renderer):
         self.plugins.extend(outline_plugins)
         self.plugin_mgr = presalytics.lib.plugins.base.PluginManager(self.plugins)
 
-    def package(self) -> typing.Dict:
+    def package(self, base64=True) -> typing.Dict:
         """
         Prepares a story for rendering via a client-side application
 
@@ -89,6 +89,10 @@ class ClientSideRenderer(presalytics.story.components.Renderer):
         pages = self.render()
         scripts = self.plugin_mgr.get_scripts()
         styles = self.plugin_mgr.get_styles()
+        if base64:
+            pages = presalytics.lib.util.list_to_base64(pages)
+            scripts = presalytics.lib.util.list_to_base64(scripts)
+            styles = presalytics.lib.util.list_to_base64(styles)
         return {
             "pages": pages,
             "scripts": scripts,

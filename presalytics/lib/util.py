@@ -83,6 +83,6 @@ def camel_case_split(str):
 def list_to_base64(string_list: typing.List[str]) -> typing.List[str]:
     return_list = []
     for item in string_list:
-        bts = base64.b64encode(item.encode('utf-8'))
-        return_list.append(bts.decode('utf-8'))
+        bts = base64.b64encode(item.encode('ascii'))
+        return_list.append(bts.decode('ascii'))
     return return_list

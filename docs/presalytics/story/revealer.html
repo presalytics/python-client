@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.story.revealer API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -23,14 +23,12 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L0-L281" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L0-L303" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import os
 import shutil
 import lxml.html
-import webbrowser
 import logging
-import collections
 import typing
 import tempfile
 import lxml
@@ -46,6 +44,7 @@ import presalytics.lib
 import presalytics.lib.plugins
 import presalytics.lib.plugins.base
 import presalytics.lib.plugins.reveal
+import presalytics.lib.plugins.external
 import presalytics.lib.templates
 import presalytics.lib.templates.base
 import presalytics.story.util
@@ -53,8 +52,7 @@ import presalytics.story.server
 import presalytics.story.components
 import presalytics.lib.exceptions
 if typing.TYPE_CHECKING:
-    from presalytics.story.outline import StoryOutline, Page, Plugin
-    from presalytics.story.components import PageTemplateBase, ComponentBase, WidgetBase, ThemeBase
+    from presalytics.story.outline import StoryOutline, Page
 
 
 logger = logging.getLogger(&#39;presalytics.story.revealer&#39;)
@@ -62,14 +60,14 @@ logger = logging.getLogger(&#39;presalytics.story.revealer&#39;)
 
 class Revealer(presalytics.story.components.Renderer):
     &#34;&#34;&#34;
-    Renders `presalytics.story.outline.StoryOutline` objects to 
+    Renders `presalytics.story.outline.StoryOutline` objects to
     [reveal.js](https://github.com/hakimel/reveal.js/) presentations
 
     Parameters
     ----------
     story_outline : presalytics.story.outline.StoryOutline
         The presalytics StoryOutline to be rendered and presented
-    
+
     Attributes
     -----------
     base : lxml.etree.Element
@@ -145,10 +143,10 @@ class Revealer(presalytics.story.components.Renderer):
         except Exception:
             logger.info(&#34;Revealer could not extract story_id from outline.&#34;)
         return base
-    
+
     def get_meta_tags(self, body=tuple()):
         &#34;&#34;&#34;
-        Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts. 
+        Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts.
         &#34;&#34;&#34;
 
         scripts = body.findall(&#34;.//script&#34;)
@@ -161,18 +159,42 @@ class Revealer(presalytics.story.components.Renderer):
                 if root:
                     srcs.append(root)
         allowed = &#39; &#39;.join(set(srcs))
+        hosts = [&#34;https://presalytics.io&#34;, &#34;https://*.presalytics.io&#34;]
+        approved = presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten()
+        approved.update(presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten())
+        browser_hosts = {k: v for (k, v) in presalytics.settings.__dict__.items() if &#34;BROWER_API_HOST&#34; in k and v is not None}
+        approved.update(browser_hosts)
+        for _, val in approved.items():
+            url = urllib.parse.urlparse(val)
+            host = &#34;{0}://{1}&#34;.format(url.scheme, url.netloc)
+            if host not in hosts:
+                hosts.append(host)
 
+        allowed_hosts = &#39; &#39;.join(set(hosts))
+        frame_hosts = &#39; &#39;.join(set(self.get_embedded_frame_hosts()))
         tags = [
             &#39;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;,
             &#39;&lt;meta http-equiv=&#34;X-UA-Compatible&#34; content=&#34;IE=edge&#34;&gt;&#39;,
             &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;,
-        #    &#34;&#34;&#34;&lt;meta http-equiv=&#34;Content-Security-Policy&#34; content=&#34;default-src &#39;self&#39; https://*.presalytics.io; script-src &#39;self&#39; https://*.presalytics.io {0};&#34;&gt;&#34;&#34;&#34;.format(allowed)
+            &#39;&lt;title&gt;Presalytics | &#39; + self.story_outline.title + &#39;&lt;/title&gt;&#39;,
+            &#39;&lt;meta name=&#34;description&#34; content=&#34;&#39; + self.story_outline.description + &#39;&#34; /&gt;&#39;,
+            &#34;&#34;&#34;&lt;meta http-equiv=&#34;Content-Security-Policy&#34; content=&#34;default-src &#39;self&#39; &#39;unsafe-eval&#39; &#39;unsafe-inline&#39; blob: data: {0}; script-src &#39;self&#39; &#39;unsafe-eval&#39; &#39;unsafe-inline&#39; {0} {1}; frame-src &#39;self&#39; blob: data: {2};&#34;&gt;&#34;&#34;&#34;.format(allowed_hosts, allowed, frame_hosts)
         ]
         return tags
 
+    def get_embedded_frame_hosts(self) -&gt; typing.List[str]:
+        frame_hosts = []
+        for p in self.story_outline.pages:
+            for w in p.widgets:
+                if w.kind == &#39;url&#39;:
+                    url = w.data.get(&#39;url&#39;)
+                    host = urllib.parse.urlparse(url).netloc  # type: ignore
+                    frame_hosts.append(&#39;https://{0}&#39;.format(host))  # type: ignore
+        return frame_hosts
+
     def package_as_standalone(self):
         &#34;&#34;&#34;
-        Render the story outline as a html document with only the 
+        Render the story outline as a html document with only the
         reveal.js presentation as conent
 
         Returns
@@ -260,15 +282,15 @@ class Revealer(presalytics.story.components.Renderer):
         except Exception as ex:
             logger.exception(ex)
             t, v, tb = sys.exc_info()
-            if not presalytics.CONFIG.get(&#34;DEBUG&#34;, False):
+            if not presalytics.settings.DEBUG:  # type: ignore[attr-defined]
                 page_html = presalytics.lib.exceptions.RenderExceptionHandler(ex, &#34;page&#34;, traceback=tb).render_exception()
             else:
                 six.reraise(t, v, tb)
-        return page_html
+        return page_html  # type: ignore
 
     def present(self, files_path=None, debug=True, port=8082, host=&#39;127.0.0.1&#39;):
         &#34;&#34;&#34;
-        Creates and opens the rendered story in the browser.  Story files are served by 
+        Creates and opens the rendered story in the browser.  Story files are served by
         a local flask server.  Not for production use.  Press Ctrl + C to close the server.
 
         Parameters
@@ -280,14 +302,14 @@ class Revealer(presalytics.story.components.Renderer):
         debug : str
             Defaults to True.  Indicates whether the flask server should be started
             in debug mode.
-        
+
         port : str
             The network port to serve the story onto.  Defautls to 8082.
-        
+
         host : str
             The host to for the local server.  Typically either localhost or the default gateway.
             Defaults to 127.0.0.1 (localhost).
-        
+
         &#34;&#34;&#34;
         logger.info(&#34;Building story rendering at http://{0}:{1}&#34;.format(host, port))
         if not files_path:
@@ -323,11 +345,11 @@ class Revealer(presalytics.story.components.Renderer):
 <span>(</span><span>story_outline, pages=None, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Renders <a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a> objects to
+<section class="desc"><p>Renders <code><a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline">StoryOutline</a></code> objects to
 <a href="https://github.com/hakimel/reveal.js/">reveal.js</a> presentations</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>story_outline</code></strong> :&ensp;<a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a></dt>
+<dt><strong><code>story_outline</code></strong> :&ensp;<code><a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline">StoryOutline</a></code></dt>
 <dd>The presalytics StoryOutline to be rendered and presented</dd>
 </dl>
 <h2 id="attributes">Attributes</h2>
@@ -337,24 +359,24 @@ class Revealer(presalytics.story.components.Renderer):
 <dt><strong><code>plugins</code></strong> :&ensp;<code>list</code> of <code>dict</code></dt>
 <dd>Plugin data that transform to html <code>&lt;script&gt;</code> and <code>&lt;link&gt;</code> tags through
 the rendering process</dd>
-<dt><strong><code>plugin_mgr</code></strong> :&ensp;<a title="presalytics.lib.plugins.base.PluginManager" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginManager"><code>PluginManager</code></a></dt>
+<dt><strong><code>plugin_mgr</code></strong> :&ensp;<code><a title="presalytics.lib.plugins.base.PluginManager" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginManager">PluginManager</a></code></dt>
 <dd>Sorts, validates, and renders plugins</dd>
 </dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L36-L282" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L34-L304" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Revealer(presalytics.story.components.Renderer):
     &#34;&#34;&#34;
-    Renders `presalytics.story.outline.StoryOutline` objects to 
+    Renders `presalytics.story.outline.StoryOutline` objects to
     [reveal.js](https://github.com/hakimel/reveal.js/) presentations
 
     Parameters
     ----------
     story_outline : presalytics.story.outline.StoryOutline
         The presalytics StoryOutline to be rendered and presented
-    
+
     Attributes
     -----------
     base : lxml.etree.Element
@@ -430,10 +452,10 @@ the rendering process</dd>
         except Exception:
             logger.info(&#34;Revealer could not extract story_id from outline.&#34;)
         return base
-    
+
     def get_meta_tags(self, body=tuple()):
         &#34;&#34;&#34;
-        Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts. 
+        Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts.
         &#34;&#34;&#34;
 
         scripts = body.findall(&#34;.//script&#34;)
@@ -446,18 +468,42 @@ the rendering process</dd>
                 if root:
                     srcs.append(root)
         allowed = &#39; &#39;.join(set(srcs))
+        hosts = [&#34;https://presalytics.io&#34;, &#34;https://*.presalytics.io&#34;]
+        approved = presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten()
+        approved.update(presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten())
+        browser_hosts = {k: v for (k, v) in presalytics.settings.__dict__.items() if &#34;BROWER_API_HOST&#34; in k and v is not None}
+        approved.update(browser_hosts)
+        for _, val in approved.items():
+            url = urllib.parse.urlparse(val)
+            host = &#34;{0}://{1}&#34;.format(url.scheme, url.netloc)
+            if host not in hosts:
+                hosts.append(host)
 
+        allowed_hosts = &#39; &#39;.join(set(hosts))
+        frame_hosts = &#39; &#39;.join(set(self.get_embedded_frame_hosts()))
         tags = [
             &#39;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;,
             &#39;&lt;meta http-equiv=&#34;X-UA-Compatible&#34; content=&#34;IE=edge&#34;&gt;&#39;,
             &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;,
-        #    &#34;&#34;&#34;&lt;meta http-equiv=&#34;Content-Security-Policy&#34; content=&#34;default-src &#39;self&#39; https://*.presalytics.io; script-src &#39;self&#39; https://*.presalytics.io {0};&#34;&gt;&#34;&#34;&#34;.format(allowed)
+            &#39;&lt;title&gt;Presalytics | &#39; + self.story_outline.title + &#39;&lt;/title&gt;&#39;,
+            &#39;&lt;meta name=&#34;description&#34; content=&#34;&#39; + self.story_outline.description + &#39;&#34; /&gt;&#39;,
+            &#34;&#34;&#34;&lt;meta http-equiv=&#34;Content-Security-Policy&#34; content=&#34;default-src &#39;self&#39; &#39;unsafe-eval&#39; &#39;unsafe-inline&#39; blob: data: {0}; script-src &#39;self&#39; &#39;unsafe-eval&#39; &#39;unsafe-inline&#39; {0} {1}; frame-src &#39;self&#39; blob: data: {2};&#34;&gt;&#34;&#34;&#34;.format(allowed_hosts, allowed, frame_hosts)
         ]
         return tags
 
+    def get_embedded_frame_hosts(self) -&gt; typing.List[str]:
+        frame_hosts = []
+        for p in self.story_outline.pages:
+            for w in p.widgets:
+                if w.kind == &#39;url&#39;:
+                    url = w.data.get(&#39;url&#39;)
+                    host = urllib.parse.urlparse(url).netloc  # type: ignore
+                    frame_hosts.append(&#39;https://{0}&#39;.format(host))  # type: ignore
+        return frame_hosts
+
     def package_as_standalone(self):
         &#34;&#34;&#34;
-        Render the story outline as a html document with only the 
+        Render the story outline as a html document with only the
         reveal.js presentation as conent
 
         Returns
@@ -545,15 +591,15 @@ the rendering process</dd>
         except Exception as ex:
             logger.exception(ex)
             t, v, tb = sys.exc_info()
-            if not presalytics.CONFIG.get(&#34;DEBUG&#34;, False):
+            if not presalytics.settings.DEBUG:  # type: ignore[attr-defined]
                 page_html = presalytics.lib.exceptions.RenderExceptionHandler(ex, &#34;page&#34;, traceback=tb).render_exception()
             else:
                 six.reraise(t, v, tb)
-        return page_html
+        return page_html  # type: ignore
 
     def present(self, files_path=None, debug=True, port=8082, host=&#39;127.0.0.1&#39;):
         &#34;&#34;&#34;
-        Creates and opens the rendered story in the browser.  Story files are served by 
+        Creates and opens the rendered story in the browser.  Story files are served by
         a local flask server.  Not for production use.  Press Ctrl + C to close the server.
 
         Parameters
@@ -565,14 +611,14 @@ the rendering process</dd>
         debug : str
             Defaults to True.  Indicates whether the flask server should be started
             in debug mode.
-        
+
         port : str
             The network port to serve the story onto.  Defautls to 8082.
-        
+
         host : str
             The host to for the local server.  Typically either localhost or the default gateway.
             Defaults to 127.0.0.1 (localhost).
-        
+
         &#34;&#34;&#34;
         logger.info(&#34;Building story rendering at http://{0}:{1}&#34;.format(host, port))
         if not files_path:
@@ -599,6 +645,17 @@ the rendering process</dd>
 <li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
 <li>abc.ABC</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.story.revealer.Revealer.base"><code class="name">var <span class="ident">base</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.reveal_params"><code class="name">var <span class="ident">reveal_params</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.story.revealer.Revealer.get_meta_tags"><code class="name flex">
@@ -609,11 +666,11 @@ the rendering process</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L122-L144" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L120-L156" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_meta_tags(self, body=tuple()):
     &#34;&#34;&#34;
-    Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts. 
+    Security Note: If supplying a body, ensure that its already been stripped of unauthorized scripts.
     &#34;&#34;&#34;
 
     scripts = body.findall(&#34;.//script&#34;)
@@ -626,14 +683,49 @@ the rendering process</dd>
             if root:
                 srcs.append(root)
     allowed = &#39; &#39;.join(set(srcs))
+    hosts = [&#34;https://presalytics.io&#34;, &#34;https://*.presalytics.io&#34;]
+    approved = presalytics.lib.plugins.external.ApprovedExternalLinks().attr_dict.flatten()
+    approved.update(presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten())
+    browser_hosts = {k: v for (k, v) in presalytics.settings.__dict__.items() if &#34;BROWER_API_HOST&#34; in k and v is not None}
+    approved.update(browser_hosts)
+    for _, val in approved.items():
+        url = urllib.parse.urlparse(val)
+        host = &#34;{0}://{1}&#34;.format(url.scheme, url.netloc)
+        if host not in hosts:
+            hosts.append(host)
 
+    allowed_hosts = &#39; &#39;.join(set(hosts))
+    frame_hosts = &#39; &#39;.join(set(self.get_embedded_frame_hosts()))
     tags = [
         &#39;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;,
         &#39;&lt;meta http-equiv=&#34;X-UA-Compatible&#34; content=&#34;IE=edge&#34;&gt;&#39;,
         &#39;&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;&gt;&#39;,
-    #    &#34;&#34;&#34;&lt;meta http-equiv=&#34;Content-Security-Policy&#34; content=&#34;default-src &#39;self&#39; https://*.presalytics.io; script-src &#39;self&#39; https://*.presalytics.io {0};&#34;&gt;&#34;&#34;&#34;.format(allowed)
+        &#39;&lt;title&gt;Presalytics | &#39; + self.story_outline.title + &#39;&lt;/title&gt;&#39;,
+        &#39;&lt;meta name=&#34;description&#34; content=&#34;&#39; + self.story_outline.description + &#39;&#34; /&gt;&#39;,
+        &#34;&#34;&#34;&lt;meta http-equiv=&#34;Content-Security-Policy&#34; content=&#34;default-src &#39;self&#39; &#39;unsafe-eval&#39; &#39;unsafe-inline&#39; blob: data: {0}; script-src &#39;self&#39; &#39;unsafe-eval&#39; &#39;unsafe-inline&#39; {0} {1}; frame-src &#39;self&#39; blob: data: {2};&#34;&gt;&#34;&#34;&#34;.format(allowed_hosts, allowed, frame_hosts)
     ]
     return tags</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.revealer.Revealer.get_embedded_frame_hosts"><code class="name flex">
+<span>def <span class="ident">get_embedded_frame_hosts</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L158-L166" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_embedded_frame_hosts(self) -&gt; typing.List[str]:
+    frame_hosts = []
+    for p in self.story_outline.pages:
+        for w in p.widgets:
+            if w.kind == &#39;url&#39;:
+                url = w.data.get(&#39;url&#39;)
+                host = urllib.parse.urlparse(url).netloc  # type: ignore
+                frame_hosts.append(&#39;https://{0}&#39;.format(host))  # type: ignore
+    return frame_hosts</code></pre>
 </details>
 </dd>
 <dt id="presalytics.story.revealer.Revealer.package_as_standalone"><code class="name flex">
@@ -647,11 +739,11 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L146-L176" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L168-L198" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def package_as_standalone(self):
     &#34;&#34;&#34;
-    Render the story outline as a html document with only the 
+    Render the story outline as a html document with only the
     reveal.js presentation as conent
 
     Returns
@@ -690,7 +782,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L185-L190" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L207-L212" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_info(self):
     &#34;&#34;&#34;
@@ -710,7 +802,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L192-L209" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L214-L231" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render(self):
     &#34;&#34;&#34;
@@ -742,7 +834,7 @@ reveal.js presentation as conent</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L211-L240" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L233-L262" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render_page(self, page: &#39;Page&#39;) -&gt; str:
     &#34;&#34;&#34;
@@ -769,11 +861,11 @@ reveal.js presentation as conent</p>
     except Exception as ex:
         logger.exception(ex)
         t, v, tb = sys.exc_info()
-        if not presalytics.CONFIG.get(&#34;DEBUG&#34;, False):
+        if not presalytics.settings.DEBUG:  # type: ignore[attr-defined]
             page_html = presalytics.lib.exceptions.RenderExceptionHandler(ex, &#34;page&#34;, traceback=tb).render_exception()
         else:
             six.reraise(t, v, tb)
-    return page_html</code></pre>
+    return page_html  # type: ignore</code></pre>
 </details>
 </dd>
 <dt id="presalytics.story.revealer.Revealer.present"><code class="name flex">
@@ -806,11 +898,11 @@ Defaults to 127.0.0.1 (localhost).</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L242-L282" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/revealer.py#L264-L304" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def present(self, files_path=None, debug=True, port=8082, host=&#39;127.0.0.1&#39;):
     &#34;&#34;&#34;
-    Creates and opens the rendered story in the browser.  Story files are served by 
+    Creates and opens the rendered story in the browser.  Story files are served by
     a local flask server.  Not for production use.  Press Ctrl + C to close the server.
 
     Parameters
@@ -822,14 +914,14 @@ Defaults to 127.0.0.1 (localhost).</dd>
     debug : str
         Defaults to True.  Indicates whether the flask server should be started
         in debug mode.
-    
+
     port : str
         The network port to serve the story onto.  Defautls to 8082.
-    
+
     host : str
         The host to for the local server.  Typically either localhost or the default gateway.
         Defaults to 127.0.0.1 (localhost).
-    
+
     &#34;&#34;&#34;
     logger.info(&#34;Building story rendering at http://{0}:{1}&#34;.format(host, port))
     if not files_path:
@@ -889,11 +981,14 @@ Defaults to 127.0.0.1 (localhost).</dd>
 <h4><code><a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer">Revealer</a></code></h4>
 <ul class="">
 <li><code><a title="presalytics.story.revealer.Revealer.get_meta_tags" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.get_meta_tags">get_meta_tags</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.get_embedded_frame_hosts" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.get_embedded_frame_hosts">get_embedded_frame_hosts</a></code></li>
 <li><code><a title="presalytics.story.revealer.Revealer.package_as_standalone" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.package_as_standalone">package_as_standalone</a></code></li>
 <li><code><a title="presalytics.story.revealer.Revealer.update_info" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.update_info">update_info</a></code></li>
 <li><code><a title="presalytics.story.revealer.Revealer.render" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.render">render</a></code></li>
 <li><code><a title="presalytics.story.revealer.Revealer.render_page" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.render_page">render_page</a></code></li>
 <li><code><a title="presalytics.story.revealer.Revealer.present" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.present">present</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.base" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.base">base</a></code></li>
+<li><code><a title="presalytics.story.revealer.Revealer.reveal_params" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer.reveal_params">reveal_params</a></code></li>
 </ul>
 </li>
 </ul>
@@ -902,7 +997,7 @@ Defaults to 127.0.0.1 (localhost).</dd>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

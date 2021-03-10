@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.client API documentation</title>
 <meta name="description" content="This module conatains objects for interacting with the Presalytics API.
 It has three submodules:
-`presalytics.client.presalytics_doc_converter`, …" />
+`presalytics.client.doc_converter`, …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -24,13 +24,14 @@ It has three submodules:
 <section id="section-intro">
 <p>This module conatains objects for interacting with the Presalytics API.
 It has three submodules:
-<a title="presalytics.client.presalytics_doc_converter" href="/python-client/presalytics/client/presalytics_doc_converter/index.html"><code>presalytics.client.presalytics_doc_converter</code></a>, 'presalytics.client.presalytics_ooxml_automation<code>, and</code>presalytics.client.presalytics_story` contain that auto-generate code using the
+<code><a title="presalytics.client.doc_converter" href="/python-client/presalytics/client/doc_converter/index.html">presalytics.client.doc_converter</a></code>, 'presalytics.client.ooxml_automation`, and
+<code><a title="presalytics.client.story" href="/python-client/presalytics/client/story/index.html">presalytics.client.story</a></code> contain that auto-generate code using the
 <a href="https://github.com/OpenAPITools/openapi-generator">OpenAPI Generator</a> and specifications from
 <a href="http://api.presalytics.io">http://api.presalytics.io</a> .</p>
 <p>Modules contained at this level are middlewares to simplify user interaction with the generated
-code base and the Presalytics API.<br>
-- <code>presalytics.client.auth</code> contains authentication and request handling handling middleware
-- <code>presalytics.client.api</code> conatains wrapper classes and convenience extensions so that users
+code base and the Presalytics API.
+- <code><a title="presalytics.client.auth" href="/python-client/presalytics/client/auth.html">presalytics.client.auth</a></code> contains authentication and request handling handling middleware
+- <code><a title="presalytics.client.api" href="/python-client/presalytics/client/api.html">presalytics.client.api</a></code> conatains wrapper classes and convenience extensions so that users
 only need to instantiate one object to get access to all public microservices in the Presalytics API</p>
 <details class="source">
 <summary>
@@ -39,13 +40,13 @@ only need to instantiate one object to get access to all public microservices in
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
 This module conatains objects for interacting with the Presalytics API.  It has three submodules:
-`presalytics.client.presalytics_doc_converter`, &#39;presalytics.client.presalytics_ooxml_automation`, and 
-`presalytics.client.presalytics_story` contain that auto-generate code using the 
-[OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) and specifications from 
+`presalytics.client.doc_converter`, &#39;presalytics.client.ooxml_automation`, and
+`presalytics.client.story` contain that auto-generate code using the
+[OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) and specifications from
 http://api.presalytics.io .
 
-Modules contained at this level are middlewares to simplify user interaction with the generated 
-code base and the Presalytics API.  
+Modules contained at this level are middlewares to simplify user interaction with the generated
+code base and the Presalytics API.
  - `presalytics.client.auth` contains authentication and request handling handling middleware
  - `presalytics.client.api` conatains wrapper classes and convenience extensions so that users
 only need to instantiate one object to get access to all public microservices in the Presalytics API
@@ -63,21 +64,29 @@ only need to instantiate one object to get access to all public microservices in
 <dd>
 <section class="desc"></section>
 </dd>
+<dt><code class="name"><a title="presalytics.client.doc_converter" href="/python-client/presalytics/client/doc_converter/index.html">presalytics.client.doc_converter</a></code></dt>
+<dd>
+<section class="desc"><p>Doc Converter …</p></section>
+</dd>
+<dt><code class="name"><a title="presalytics.client.events" href="/python-client/presalytics/client/events/index.html">presalytics.client.events</a></code></dt>
+<dd>
+<section class="desc"><p>Presalytics Events API …</p></section>
+</dd>
 <dt><code class="name"><a title="presalytics.client.oidc" href="/python-client/presalytics/client/oidc.html">presalytics.client.oidc</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
-<dt><code class="name"><a title="presalytics.client.presalytics_doc_converter" href="/python-client/presalytics/client/presalytics_doc_converter/index.html">presalytics.client.presalytics_doc_converter</a></code></dt>
-<dd>
-<section class="desc"><p>Doc Converter …</p></section>
-</dd>
-<dt><code class="name"><a title="presalytics.client.presalytics_ooxml_automation" href="/python-client/presalytics/client/presalytics_ooxml_automation/index.html">presalytics.client.presalytics_ooxml_automation</a></code></dt>
+<dt><code class="name"><a title="presalytics.client.ooxml_automation" href="/python-client/presalytics/client/ooxml_automation/index.html">presalytics.client.ooxml_automation</a></code></dt>
 <dd>
 <section class="desc"><p>OOXML Automation …</p></section>
 </dd>
-<dt><code class="name"><a title="presalytics.client.presalytics_story" href="/python-client/presalytics/client/presalytics_story/index.html">presalytics.client.presalytics_story</a></code></dt>
+<dt><code class="name"><a title="presalytics.client.story" href="/python-client/presalytics/client/story/index.html">presalytics.client.story</a></code></dt>
 <dd>
 <section class="desc"><p>Story …</p></section>
+</dd>
+<dt><code class="name"><a title="presalytics.client.websocket" href="/python-client/presalytics/client/websocket.html">presalytics.client.websocket</a></code></dt>
+<dd>
+<section class="desc"></section>
 </dd>
 </dl>
 </section>
@@ -103,17 +112,19 @@ only need to instantiate one object to get access to all public microservices in
 <ul>
 <li><code><a title="presalytics.client.api" href="/python-client/presalytics/client/api.html">presalytics.client.api</a></code></li>
 <li><code><a title="presalytics.client.auth" href="/python-client/presalytics/client/auth.html">presalytics.client.auth</a></code></li>
+<li><code><a title="presalytics.client.doc_converter" href="/python-client/presalytics/client/doc_converter/index.html">presalytics.client.doc_converter</a></code></li>
+<li><code><a title="presalytics.client.events" href="/python-client/presalytics/client/events/index.html">presalytics.client.events</a></code></li>
 <li><code><a title="presalytics.client.oidc" href="/python-client/presalytics/client/oidc.html">presalytics.client.oidc</a></code></li>
-<li><code><a title="presalytics.client.presalytics_doc_converter" href="/python-client/presalytics/client/presalytics_doc_converter/index.html">presalytics.client.presalytics_doc_converter</a></code></li>
-<li><code><a title="presalytics.client.presalytics_ooxml_automation" href="/python-client/presalytics/client/presalytics_ooxml_automation/index.html">presalytics.client.presalytics_ooxml_automation</a></code></li>
-<li><code><a title="presalytics.client.presalytics_story" href="/python-client/presalytics/client/presalytics_story/index.html">presalytics.client.presalytics_story</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation" href="/python-client/presalytics/client/ooxml_automation/index.html">presalytics.client.ooxml_automation</a></code></li>
+<li><code><a title="presalytics.client.story" href="/python-client/presalytics/client/story/index.html">presalytics.client.story</a></code></li>
+<li><code><a title="presalytics.client.websocket" href="/python-client/presalytics/client/websocket.html">presalytics.client.websocket</a></code></li>
 </ul>
 </li>
 </ul>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

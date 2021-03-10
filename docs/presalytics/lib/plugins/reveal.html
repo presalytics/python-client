@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.lib.plugins.reveal API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -23,20 +23,21 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal.py#L0-L298" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal.py#L0-L283" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">import presalytics
+<pre><code class="python">import copy
+import presalytics
 import presalytics.lib.plugins.base as ext
 import presalytics.lib.plugins.jinja as jinja
 
 
 class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
     &#34;&#34;&#34;
-    Allows users configure reveal.js initialization settings for when their 
+    Allows users configure reveal.js initialization settings for when their
     story is rendered via `presalytics.story.revealer.Revealer`
 
     For more information regarding reveal.js&#39; initialization settings, please
-    refer to https://github.com/hakimel/reveal.js/#configuration        
+    refer to https://github.com/hakimel/reveal.js/#configuration
     &#34;&#34;&#34;
     __plugin_name__ = &#39;reveal&#39;
 
@@ -89,34 +90,18 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
             &#39;config&#39;: {
                 &#39;approved_styles_key&#39;: &#39;reveal.themes.white&#39;
             }
-        },
-        {
-            &#39;kind&#39;: &#39;style&#39;,
-            &#39;name&#39;: &#39;external_links&#39;,
-            &#39;config&#39;: {
-                &#39;approved_styles_key&#39;: &#39;reveal.customizations&#39;
-            }
-        },
-        {
-            &#39;kind&#39;: &#39;script&#39;,
-            &#39;name&#39;: &#39;external_scripts&#39;,
-            &#39;config&#39;: {
-                &#39;approved_scripts_key&#39;: &#39;reveal.customizations&#39;
-            }
-        },
-        
-        
+        }
     ]
 
     def to_script(self, config, **kwargs):
-        reveal_config = self.default_config
+        reveal_config = copy.deepcopy(self.default_config)
         if config.get(&#34;reveal_params&#34;, None):
             reveal_config.update(config.pop(&#34;reveal_params&#34;))
         config.update({&#39;reveal_config&#39;: reveal_config})
         return self.render(config)
 
     template = &#34;&#34;&#34;
-    &lt;script type=&#34;text/javascript&#34;&gt; 
+    &lt;script type=&#34;text/javascript&#34;&gt;
         window.addEventListener(&#39;toolbar-initialized&#39;, function(e) {
             var config = {{ reveal_config|tojson(indent=4) }};
             config.plugins = [window.presalyticsToolbar];
@@ -125,10 +110,10 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
     &lt;/script&gt;
     &#34;&#34;&#34;
     &#34;&#34;&#34;
-    The `&lt;script&gt;` fragment that get populated with a initialization data 
+    The `&lt;script&gt;` fragment that get populated with a initialization data
     via the `presalytics.lib.plugins.jinja.JinjaPluginMakerMixin`
     &#34;&#34;&#34;
-    
+
     default_config = {
         &#39;controls&#39;: True,  # Display presentation control arrows
         # Help the user learn the controls by providing hints, for example by
@@ -149,13 +134,13 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
         &#39;slideNumber&#39;: False,
 
         # Add the current slide number to the URL hash so that reloading the
-        #page/copying the URL will return you to the same slide
+        # page/copying the URL will return you to the same slide
         &#39;hash&#39;: False,
 
         # Push each slide change to the browser history. Implies `hash: true`
         &#39;history&#39;: False,
 
-        # Enable keyboard shortcuts for navigation 
+        # Enable keyboard shortcuts for navigation
         &#39;keyboard&#39;: True,
 
         # Enable the slide overview mode
@@ -223,7 +208,7 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
 
         # Specify the average time in seconds that you think you will spend
         # presenting each slide. This is used to show a pacing timer in the
-        # speaker view 
+        # speaker view
         &#39;defaultTiming&#39;: 120,
 
         # Enable slide navigation via mouse wheel
@@ -244,26 +229,26 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
         &#39;previewLinks&#39;: False,
 
         # Transition style
-        &#39;transition&#39;: &#39;slide&#39;, # none/fade/slide/convex/concave/zoom
+        &#39;transition&#39;: &#39;slide&#39;,  # none/fade/slide/convex/concave/zoom
 
         # Transition speed
-        &#39;transitionSpeed&#39;: &#39;default&#39;, # default/fast/slow
+        &#39;transitionSpeed&#39;: &#39;default&#39;,  # default/fast/slow
 
         # Transition style for full page slide backgrounds
-        &#39;backgroundTransition&#39;: &#39;fade&#39;, # none/fade/slide/convex/concave/zoom
+        &#39;backgroundTransition&#39;: &#39;fade&#39;,  # none/fade/slide/convex/concave/zoom
 
         # Number of slides away from the current that are visible
         &#39;viewDistance&#39;: 3,
 
         # Parallax background image
-        &#39;parallaxBackgroundImage&#39;: &#39;&#39;, # e.g. &#34;&#39;https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg&#39;&#34;
+        &#39;parallaxBackgroundImage&#39;: &#39;&#39;,  # e.g. &#34;&#39;https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg&#39;&#34;
 
         # Parallax background size
-        &#39;parallaxBackgroundSize&#39;: &#39;&#39;, # CSS syntax, e.g. &#34;2100px 900px&#34;
+        &#39;parallaxBackgroundSize&#39;: &#39;&#39;,  # CSS syntax, e.g. &#34;2100px 900px&#34;
 
         # Number of pixels to move the parallax background per slide
         # - Calculated automatically unless specified
-        # - Set to 0 to disable movement along an axis 
+        # - Set to 0 to disable movement along an axis
         &#39;parallaxBackgroundHorizontal&#39;: &#39;null&#39;,
         &#39;parallaxBackgroundVertical&#39;: &#39;null&#39;,
 
@@ -341,21 +326,21 @@ class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
 </code></dt>
 <dd>
 <section class="desc"><p>Allows users configure reveal.js initialization settings for when their
-story is rendered via <a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer"><code>Revealer</code></a></p>
+story is rendered via <code><a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer">Revealer</a></code></p>
 <p>For more information regarding reveal.js' initialization settings, please
 refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://github.com/hakimel/reveal.js/#configuration</a></p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal.py#L6-L299" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/reveal.py#L7-L284" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class RevealConfigPlugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
     &#34;&#34;&#34;
-    Allows users configure reveal.js initialization settings for when their 
+    Allows users configure reveal.js initialization settings for when their
     story is rendered via `presalytics.story.revealer.Revealer`
 
     For more information regarding reveal.js&#39; initialization settings, please
-    refer to https://github.com/hakimel/reveal.js/#configuration        
+    refer to https://github.com/hakimel/reveal.js/#configuration
     &#34;&#34;&#34;
     __plugin_name__ = &#39;reveal&#39;
 
@@ -408,34 +393,18 @@ refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://g
             &#39;config&#39;: {
                 &#39;approved_styles_key&#39;: &#39;reveal.themes.white&#39;
             }
-        },
-        {
-            &#39;kind&#39;: &#39;style&#39;,
-            &#39;name&#39;: &#39;external_links&#39;,
-            &#39;config&#39;: {
-                &#39;approved_styles_key&#39;: &#39;reveal.customizations&#39;
-            }
-        },
-        {
-            &#39;kind&#39;: &#39;script&#39;,
-            &#39;name&#39;: &#39;external_scripts&#39;,
-            &#39;config&#39;: {
-                &#39;approved_scripts_key&#39;: &#39;reveal.customizations&#39;
-            }
-        },
-        
-        
+        }
     ]
 
     def to_script(self, config, **kwargs):
-        reveal_config = self.default_config
+        reveal_config = copy.deepcopy(self.default_config)
         if config.get(&#34;reveal_params&#34;, None):
             reveal_config.update(config.pop(&#34;reveal_params&#34;))
         config.update({&#39;reveal_config&#39;: reveal_config})
         return self.render(config)
 
     template = &#34;&#34;&#34;
-    &lt;script type=&#34;text/javascript&#34;&gt; 
+    &lt;script type=&#34;text/javascript&#34;&gt;
         window.addEventListener(&#39;toolbar-initialized&#39;, function(e) {
             var config = {{ reveal_config|tojson(indent=4) }};
             config.plugins = [window.presalyticsToolbar];
@@ -444,10 +413,10 @@ refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://g
     &lt;/script&gt;
     &#34;&#34;&#34;
     &#34;&#34;&#34;
-    The `&lt;script&gt;` fragment that get populated with a initialization data 
+    The `&lt;script&gt;` fragment that get populated with a initialization data
     via the `presalytics.lib.plugins.jinja.JinjaPluginMakerMixin`
     &#34;&#34;&#34;
-    
+
     default_config = {
         &#39;controls&#39;: True,  # Display presentation control arrows
         # Help the user learn the controls by providing hints, for example by
@@ -468,13 +437,13 @@ refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://g
         &#39;slideNumber&#39;: False,
 
         # Add the current slide number to the URL hash so that reloading the
-        #page/copying the URL will return you to the same slide
+        # page/copying the URL will return you to the same slide
         &#39;hash&#39;: False,
 
         # Push each slide change to the browser history. Implies `hash: true`
         &#39;history&#39;: False,
 
-        # Enable keyboard shortcuts for navigation 
+        # Enable keyboard shortcuts for navigation
         &#39;keyboard&#39;: True,
 
         # Enable the slide overview mode
@@ -542,7 +511,7 @@ refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://g
 
         # Specify the average time in seconds that you think you will spend
         # presenting each slide. This is used to show a pacing timer in the
-        # speaker view 
+        # speaker view
         &#39;defaultTiming&#39;: 120,
 
         # Enable slide navigation via mouse wheel
@@ -563,26 +532,26 @@ refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://g
         &#39;previewLinks&#39;: False,
 
         # Transition style
-        &#39;transition&#39;: &#39;slide&#39;, # none/fade/slide/convex/concave/zoom
+        &#39;transition&#39;: &#39;slide&#39;,  # none/fade/slide/convex/concave/zoom
 
         # Transition speed
-        &#39;transitionSpeed&#39;: &#39;default&#39;, # default/fast/slow
+        &#39;transitionSpeed&#39;: &#39;default&#39;,  # default/fast/slow
 
         # Transition style for full page slide backgrounds
-        &#39;backgroundTransition&#39;: &#39;fade&#39;, # none/fade/slide/convex/concave/zoom
+        &#39;backgroundTransition&#39;: &#39;fade&#39;,  # none/fade/slide/convex/concave/zoom
 
         # Number of slides away from the current that are visible
         &#39;viewDistance&#39;: 3,
 
         # Parallax background image
-        &#39;parallaxBackgroundImage&#39;: &#39;&#39;, # e.g. &#34;&#39;https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg&#39;&#34;
+        &#39;parallaxBackgroundImage&#39;: &#39;&#39;,  # e.g. &#34;&#39;https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg&#39;&#34;
 
         # Parallax background size
-        &#39;parallaxBackgroundSize&#39;: &#39;&#39;, # CSS syntax, e.g. &#34;2100px 900px&#34;
+        &#39;parallaxBackgroundSize&#39;: &#39;&#39;,  # CSS syntax, e.g. &#34;2100px 900px&#34;
 
         # Number of pixels to move the parallax background per slide
         # - Calculated automatically unless specified
-        # - Set to 0 to disable movement along an axis 
+        # - Set to 0 to disable movement along an axis
         &#39;parallaxBackgroundHorizontal&#39;: &#39;null&#39;,
         &#39;parallaxBackgroundVertical&#39;: &#39;null&#39;,
 
@@ -653,10 +622,14 @@ refer to <a href="https://github.com/hakimel/reveal.js/#configuration">https://g
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="presalytics.lib.plugins.reveal.RevealConfigPlugin.config"><code class="name">var <span class="ident">config</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
 <dt id="presalytics.lib.plugins.reveal.RevealConfigPlugin.template"><code class="name">var <span class="ident">template</span></code></dt>
 <dd>
 <section class="desc"><p>The <code>&lt;script&gt;</code> fragment that get populated with a initialization data
-via the <a title="presalytics.lib.plugins.jinja.JinjaPluginMakerMixin" href="/python-client/presalytics/lib/plugins/jinja.html#presalytics.lib.plugins.jinja.JinjaPluginMakerMixin"><code>JinjaPluginMakerMixin</code></a></p></section>
+via the <code><a title="presalytics.lib.plugins.jinja.JinjaPluginMakerMixin" href="/python-client/presalytics/lib/plugins/jinja.html#presalytics.lib.plugins.jinja.JinjaPluginMakerMixin">JinjaPluginMakerMixin</a></code></p></section>
 </dd>
 <dt id="presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config"><code class="name">var <span class="ident">default_config</span></code></dt>
 <dd>
@@ -697,6 +670,7 @@ via the <a title="presalytics.lib.plugins.jinja.JinjaPluginMakerMixin" href="/py
 <li>
 <h4><code><a title="presalytics.lib.plugins.reveal.RevealConfigPlugin" href="/python-client/presalytics/lib/plugins/reveal.html#presalytics.lib.plugins.reveal.RevealConfigPlugin">RevealConfigPlugin</a></code></h4>
 <ul class="">
+<li><code><a title="presalytics.lib.plugins.reveal.RevealConfigPlugin.config" href="/python-client/presalytics/lib/plugins/reveal.html#presalytics.lib.plugins.reveal.RevealConfigPlugin.config">config</a></code></li>
 <li><code><a title="presalytics.lib.plugins.reveal.RevealConfigPlugin.template" href="/python-client/presalytics/lib/plugins/reveal.html#presalytics.lib.plugins.reveal.RevealConfigPlugin.template">template</a></code></li>
 <li><code><a title="presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config" href="/python-client/presalytics/lib/plugins/reveal.html#presalytics.lib.plugins.reveal.RevealConfigPlugin.default_config">default_config</a></code></li>
 </ul>
@@ -707,7 +681,7 @@ via the <a title="presalytics.lib.plugins.jinja.JinjaPluginMakerMixin" href="/py
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

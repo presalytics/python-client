@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.lib.plugins.matplotlib API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -23,16 +23,18 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/matplotlib.py#L0-L44" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/matplotlib.py#L0-L45" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import json
 import presalytics.lib.plugins.base as ext
 import presalytics.lib.plugins.jinja as jinja
 
+
 class Mpld3NumpyToJson(json.JSONEncoder):
     &#34;&#34;&#34;
-    Simplified Numpy encoder that returns json that mpld3 will understand 
+    Simplified Numpy encoder that returns json that mpld3 will understand
     &#34;&#34;&#34;
+
     def default(self, obj):
         import numpy as np
         if isinstance(obj, np.ndarray):
@@ -85,7 +87,7 @@ class Mpld3Plugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
 <span>(</span><span>*, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, sort_keys=False, indent=None, separators=None, default=None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Simplified Numpy encoder that returns json that mpld3 will understand </p>
+<section class="desc"><p>Simplified Numpy encoder that returns json that mpld3 will understand</p>
 <p>Constructor for JSONEncoder, with sensible defaults.</p>
 <p>If skipkeys is false, then it is a TypeError to attempt
 encoding of keys that are not str, int, float or None.
@@ -125,12 +127,13 @@ version of the object or raise a <code>TypeError</code>.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/matplotlib.py#L5-L13" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/matplotlib.py#L6-L15" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Mpld3NumpyToJson(json.JSONEncoder):
     &#34;&#34;&#34;
-    Simplified Numpy encoder that returns json that mpld3 will understand 
+    Simplified Numpy encoder that returns json that mpld3 will understand
     &#34;&#34;&#34;
+
     def default(self, obj):
         import numpy as np
         if isinstance(obj, np.ndarray):
@@ -165,7 +168,7 @@ implement default like this::</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/matplotlib.py#L9-L13" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/matplotlib.py#L11-L15" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def default(self, obj):
     import numpy as np
@@ -186,7 +189,7 @@ rendered story</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/matplotlib.py#L16-L44" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/matplotlib.py#L18-L46" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Mpld3Plugin(ext.ScriptPlugin, jinja.JinjaPluginMakerMixin):
     __plugin_name__ = &#39;mpld3&#39;
@@ -227,17 +230,13 @@ rendered story</p></section>
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="presalytics.lib.plugins.matplotlib.Mpld3Plugin.config"><code class="name">var <span class="ident">config</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
 <dt id="presalytics.lib.plugins.matplotlib.Mpld3Plugin.template"><code class="name">var <span class="ident">template</span></code></dt>
 <dd>
-<section class="desc"><p>str(object='') -&gt; str
-str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
-<p>Create a new string object from the given object. If encoding or
-errors is specified, then the object must expose a data buffer
-that will be decoded using the given encoding and error handler.
-Otherwise, returns the result of object.<strong>str</strong>() (if defined)
-or repr(object).
-encoding defaults to sys.getdefaultencoding().
-errors defaults to 'strict'.</p></section>
+<section class="desc"></section>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -280,6 +279,7 @@ errors defaults to 'strict'.</p></section>
 <li>
 <h4><code><a title="presalytics.lib.plugins.matplotlib.Mpld3Plugin" href="/python-client/presalytics/lib/plugins/matplotlib.html#presalytics.lib.plugins.matplotlib.Mpld3Plugin">Mpld3Plugin</a></code></h4>
 <ul class="">
+<li><code><a title="presalytics.lib.plugins.matplotlib.Mpld3Plugin.config" href="/python-client/presalytics/lib/plugins/matplotlib.html#presalytics.lib.plugins.matplotlib.Mpld3Plugin.config">config</a></code></li>
 <li><code><a title="presalytics.lib.plugins.matplotlib.Mpld3Plugin.template" href="/python-client/presalytics/lib/plugins/matplotlib.html#presalytics.lib.plugins.matplotlib.Mpld3Plugin.template">template</a></code></li>
 </ul>
 </li>
@@ -289,7 +289,7 @@ errors defaults to 'strict'.</p></section>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

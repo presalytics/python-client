@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.lib.tools.story_tools API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -39,33 +39,33 @@ if typing.TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def story_post_file_bytes(client: &#39;Client&#39;, 
-                          binary_obj: &#39;BytesIO&#39;, 
+def story_post_file_bytes(client: &#39;Client&#39;,
+                          binary_obj: &#39;BytesIO&#39;,
                           filename: str,
                           mime_type: str = None):
     &#34;&#34;&#34;
-    Create a Presalytics API Story object from a file-like `io.BytesIO` object.  Helpful for server-side 
+    Create a Presalytics API Story object from a file-like `io.BytesIO` object.  Helpful for server-side
     interaction with the Presalytics Story API
 
     Parameters
     ----------
     client : presalytics.client.api.Client
         A client object for making api calls
-    
+
     binary_obj : io.BytesIO
         A file-like object for storing file-data in memory.  Often found in multipart messages
         uploaded from browsers.
-    
+
     filename : str
         The filename of the object to be uploaded
 
     mimetype : str, optional
-        If known, please add the mimetype of the file.  Otherwise, this method will execute an 
+        If known, please add the mimetype of the file.  Otherwise, this method will execute an
         additional API call ascertain the file&#39;s mimetype
 
     Returns
     ----------
-    A `presalytics.client.presalytics_story.models.story.Story` containing information about the Story object in the Presalytics API
+    A `presalytics.client.story.models.story.Story` containing information about the Story object in the Presalytics API
     &#34;&#34;&#34;
     if not mime_type:
         mime_type = presalytics.lib.tools.ooxml_tools.get_mime_type_from_filename(client, filename)
@@ -86,7 +86,7 @@ def story_post_file_bytes(client: &#39;Client&#39;,
         else:
             code = 500
         raise presalytics.lib.exceptions.ApiError(message=message, status_code=code)
-            
+
     data = resp.json()
     if resp.status_code &gt; 299:
         logger.error(data[&#39;detail&#39;])
@@ -117,7 +117,7 @@ Helpful for server-side
 interaction with the Presalytics Story API</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>client</code></strong> :&ensp;<a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client"><code>Client</code></a></dt>
+<dt><strong><code>client</code></strong> :&ensp;<code><a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client">Client</a></code></dt>
 <dd>A client object for making api calls</dd>
 <dt><strong><code>binary_obj</code></strong> :&ensp;<code>io.BytesIO</code></dt>
 <dd>A file-like object for storing file-data in memory.
@@ -131,39 +131,39 @@ Otherwise, this method will execute an
 additional API call ascertain the file's mimetype</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>A <a title="presalytics.client.presalytics_story.models.story.Story" href="/python-client/presalytics/client/presalytics_story/models/story.html#presalytics.client.presalytics_story.models.story.Story"><code>Story</code></a> containing information about the Story object in the Presalytics API</p></section>
+<p>A <code><a title="presalytics.client.story.models.story.Story" href="/python-client/presalytics/client/story/models/story.html#presalytics.client.story.models.story.Story">Story</a></code> containing information about the Story object in the Presalytics API</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 <a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/tools/story_tools.py#L15-L74" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">def story_post_file_bytes(client: &#39;Client&#39;, 
-                          binary_obj: &#39;BytesIO&#39;, 
+<pre><code class="python">def story_post_file_bytes(client: &#39;Client&#39;,
+                          binary_obj: &#39;BytesIO&#39;,
                           filename: str,
                           mime_type: str = None):
     &#34;&#34;&#34;
-    Create a Presalytics API Story object from a file-like `io.BytesIO` object.  Helpful for server-side 
+    Create a Presalytics API Story object from a file-like `io.BytesIO` object.  Helpful for server-side
     interaction with the Presalytics Story API
 
     Parameters
     ----------
     client : presalytics.client.api.Client
         A client object for making api calls
-    
+
     binary_obj : io.BytesIO
         A file-like object for storing file-data in memory.  Often found in multipart messages
         uploaded from browsers.
-    
+
     filename : str
         The filename of the object to be uploaded
 
     mimetype : str, optional
-        If known, please add the mimetype of the file.  Otherwise, this method will execute an 
+        If known, please add the mimetype of the file.  Otherwise, this method will execute an
         additional API call ascertain the file&#39;s mimetype
 
     Returns
     ----------
-    A `presalytics.client.presalytics_story.models.story.Story` containing information about the Story object in the Presalytics API
+    A `presalytics.client.story.models.story.Story` containing information about the Story object in the Presalytics API
     &#34;&#34;&#34;
     if not mime_type:
         mime_type = presalytics.lib.tools.ooxml_tools.get_mime_type_from_filename(client, filename)
@@ -184,7 +184,7 @@ additional API call ascertain the file's mimetype</dd>
         else:
             code = 500
         raise presalytics.lib.exceptions.ApiError(message=message, status_code=code)
-            
+
     data = resp.json()
     if resp.status_code &gt; 299:
         logger.error(data[&#39;detail&#39;])
@@ -224,7 +224,7 @@ additional API call ascertain the file's mimetype</dd>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

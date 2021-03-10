@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.lib.util API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -23,10 +23,15 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L0-L27" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L0-L87" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import datetime
+import re
+import importlib
+import base64
+import typing
 import presalytics.lib.constants
+
 
 class classproperty(property):
     def __get__(self, obj, objtype=None):
@@ -43,16 +48,71 @@ def roundup_date_modified(current_datetime: datetime.datetime):
     one_second = datetime.timedelta(seconds=1)
     rounddown = current_datetime.replace(microsecond=0)
     return rounddown + one_second
-    
+
+
 def get_site_host():
     site_host = presalytics.lib.constants.SITE_HOST
-    try: 
-        site_host = presalytics.CONFIG[&#34;HOSTS&#34;][&#34;SITE&#34;]
+    try:
+        site_host = presalytics.settings.HOST_SITE
     except (KeyError, AttributeError):
         pass
     return site_host
 
-        </code></pre>
+
+def import_string(dotted_path) -&gt; type:
+    &#34;&#34;&#34;
+    Import a dotted module path and return the attribute/class designated by the
+    last name in the path. Raise ImportError if the import failed.
+    &#34;&#34;&#34;
+    try:
+        module_path, class_name = dotted_path.rsplit(&#39;.&#39;, 1)
+    except ValueError as err:
+        raise ImportError(&#34;%s doesn&#39;t look like a module path&#34; % dotted_path) from err
+
+    module = importlib.import_module(module_path)
+
+    try:
+        return getattr(module, class_name)
+    except AttributeError as err:
+        raise ImportError(&#39;Module &#34;%s&#34; does not define a &#34;%s&#34; attribute/class&#39; % (
+            module_path, class_name)
+        ) from err
+
+
+def to_snake_case(camel_case_str):
+    s1 = re.sub(&#39;(.)([A-Z][a-z]+)&#39;, r&#39;\1_\2&#39;, camel_case_str)
+    return re.sub(&#39;([a-z0-9])([A-Z])&#39;, r&#39;\1_\2&#39;, s1).lower()
+
+
+def to_camel_case(snake_str):
+    components = snake_str.split(&#39;_&#39;)
+    return components[0] + &#39;&#39;.join(x.title() for x in components[1:])
+
+
+def to_title_case(name_string):
+    try:
+        components = re.split(&#39;_| &#39;, name_string)
+        return &#39;&#39;.join(x[0].upper() + x[1:] for x in components)
+    except Exception:
+        return name_string.replace(&#34; &#34;, &#34;&#34;)
+
+
+def camel_case_split(str):
+    words = [[str[0]]]
+    for c in str[1:]:
+        if words[-1][-1].islower() and c.isupper():
+            words.append(list(c))
+        else:
+            words[-1].append(c)
+    return [&#39;&#39;.join(word) for word in words]
+
+
+def list_to_base64(string_list: typing.List[str]) -&gt; typing.List[str]:
+    return_list = []
+    for item in string_list:
+        bts = base64.b64encode(item.encode(&#39;ascii&#39;))
+        return_list.append(bts.decode(&#39;ascii&#39;))
+    return return_list</code></pre>
 </details>
 </section>
 <section>
@@ -70,7 +130,7 @@ def get_site_host():
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L15-L18" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L20-L23" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def roundup_date_modified(current_datetime: datetime.datetime):
     one_second = datetime.timedelta(seconds=1)
@@ -86,15 +146,132 @@ def get_site_host():
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L20-L26" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L26-L32" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_site_host():
     site_host = presalytics.lib.constants.SITE_HOST
-    try: 
-        site_host = presalytics.CONFIG[&#34;HOSTS&#34;][&#34;SITE&#34;]
+    try:
+        site_host = presalytics.settings.HOST_SITE
     except (KeyError, AttributeError):
         pass
     return site_host</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.util.import_string"><code class="name flex">
+<span>def <span class="ident">import_string</span></span>(<span>dotted_path)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Import a dotted module path and return the attribute/class designated by the
+last name in the path. Raise ImportError if the import failed.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L35-L52" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def import_string(dotted_path) -&gt; type:
+    &#34;&#34;&#34;
+    Import a dotted module path and return the attribute/class designated by the
+    last name in the path. Raise ImportError if the import failed.
+    &#34;&#34;&#34;
+    try:
+        module_path, class_name = dotted_path.rsplit(&#39;.&#39;, 1)
+    except ValueError as err:
+        raise ImportError(&#34;%s doesn&#39;t look like a module path&#34; % dotted_path) from err
+
+    module = importlib.import_module(module_path)
+
+    try:
+        return getattr(module, class_name)
+    except AttributeError as err:
+        raise ImportError(&#39;Module &#34;%s&#34; does not define a &#34;%s&#34; attribute/class&#39; % (
+            module_path, class_name)
+        ) from err</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.util.to_snake_case"><code class="name flex">
+<span>def <span class="ident">to_snake_case</span></span>(<span>camel_case_str)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L55-L57" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_snake_case(camel_case_str):
+    s1 = re.sub(&#39;(.)([A-Z][a-z]+)&#39;, r&#39;\1_\2&#39;, camel_case_str)
+    return re.sub(&#39;([a-z0-9])([A-Z])&#39;, r&#39;\1_\2&#39;, s1).lower()</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.util.to_camel_case"><code class="name flex">
+<span>def <span class="ident">to_camel_case</span></span>(<span>snake_str)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L60-L62" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_camel_case(snake_str):
+    components = snake_str.split(&#39;_&#39;)
+    return components[0] + &#39;&#39;.join(x.title() for x in components[1:])</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.util.to_title_case"><code class="name flex">
+<span>def <span class="ident">to_title_case</span></span>(<span>name_string)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L65-L70" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_title_case(name_string):
+    try:
+        components = re.split(&#39;_| &#39;, name_string)
+        return &#39;&#39;.join(x[0].upper() + x[1:] for x in components)
+    except Exception:
+        return name_string.replace(&#34; &#34;, &#34;&#34;)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.util.camel_case_split"><code class="name flex">
+<span>def <span class="ident">camel_case_split</span></span>(<span>str)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L73-L80" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def camel_case_split(str):
+    words = [[str[0]]]
+    for c in str[1:]:
+        if words[-1][-1].islower() and c.isupper():
+            words.append(list(c))
+        else:
+            words[-1].append(c)
+    return [&#39;&#39;.join(word) for word in words]</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.util.list_to_base64"><code class="name flex">
+<span>def <span class="ident">list_to_base64</span></span>(<span>string_list)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L83-L88" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def list_to_base64(string_list: typing.List[str]) -&gt; typing.List[str]:
+    return_list = []
+    for item in string_list:
+        bts = base64.b64encode(item.encode(&#39;ascii&#39;))
+        return_list.append(bts.decode(&#39;ascii&#39;))
+    return return_list</code></pre>
 </details>
 </dd>
 </dl>
@@ -104,7 +281,7 @@ def get_site_host():
 <dl>
 <dt id="presalytics.lib.util.classproperty"><code class="flex name class">
 <span>class <span class="ident">classproperty</span></span>
-<span>(</span><span>...)</span>
+<span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>property(fget=None, fset=None, fdel=None, doc=None) -&gt; property attribute</p>
@@ -132,7 +309,7 @@ del self._x</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L4-L12" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/util.py#L9-L17" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class classproperty(property):
     def __get__(self, obj, objtype=None):
@@ -167,6 +344,12 @@ del self._x</p></section>
 <ul class="">
 <li><code><a title="presalytics.lib.util.roundup_date_modified" href="/python-client/presalytics/lib/util.html#presalytics.lib.util.roundup_date_modified">roundup_date_modified</a></code></li>
 <li><code><a title="presalytics.lib.util.get_site_host" href="/python-client/presalytics/lib/util.html#presalytics.lib.util.get_site_host">get_site_host</a></code></li>
+<li><code><a title="presalytics.lib.util.import_string" href="/python-client/presalytics/lib/util.html#presalytics.lib.util.import_string">import_string</a></code></li>
+<li><code><a title="presalytics.lib.util.to_snake_case" href="/python-client/presalytics/lib/util.html#presalytics.lib.util.to_snake_case">to_snake_case</a></code></li>
+<li><code><a title="presalytics.lib.util.to_camel_case" href="/python-client/presalytics/lib/util.html#presalytics.lib.util.to_camel_case">to_camel_case</a></code></li>
+<li><code><a title="presalytics.lib.util.to_title_case" href="/python-client/presalytics/lib/util.html#presalytics.lib.util.to_title_case">to_title_case</a></code></li>
+<li><code><a title="presalytics.lib.util.camel_case_split" href="/python-client/presalytics/lib/util.html#presalytics.lib.util.camel_case_split">camel_case_split</a></code></li>
+<li><code><a title="presalytics.lib.util.list_to_base64" href="/python-client/presalytics/lib/util.html#presalytics.lib.util.list_to_base64">list_to_base64</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
@@ -180,7 +363,7 @@ del self._x</p></section>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

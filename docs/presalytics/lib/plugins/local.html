@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.lib.plugins.local API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/local.py#L0-L50" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/local.py#L0-L51" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import os
 import typing
@@ -31,6 +31,7 @@ import presalytics.lib.plugins.base
 import presalytics.lib.exceptions
 
 css_path = os.path.join(os.path.dirname(__file__), &#34;css&#34;)
+
 
 class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
     &#34;&#34;&#34;
@@ -46,7 +47,7 @@ class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
         &#34;reveal_overrides&#34;: os.path.join(css_path, &#34;reveal-overrides-base.css&#34;)
     }
     &#34;&#34;&#34;
-    Dictionary containing a map configuration keys to css files that are 
+    Dictionary containing a map configuration keys to css files that are
     member of the Presalytics Python Library manifest
     &#34;&#34;&#34;
 
@@ -59,7 +60,7 @@ class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
         config : dict
             A dictionary containing either a &#34;css_file_path&#34; key, which points
             to a local file path, or a &#34;css_file_id&#34; refers to a css file included
-            in the Presalytics Python Library&#39;s manifest 
+            in the Presalytics Python Library&#39;s manifest
         &#34;&#34;&#34;
         id = config.get(&#34;css_file_id&#34;, None)
         if not id:
@@ -96,7 +97,7 @@ class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/local.py#L8-L51" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/local.py#L9-L52" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
     &#34;&#34;&#34;
@@ -112,7 +113,7 @@ class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
         &#34;reveal_overrides&#34;: os.path.join(css_path, &#34;reveal-overrides-base.css&#34;)
     }
     &#34;&#34;&#34;
-    Dictionary containing a map configuration keys to css files that are 
+    Dictionary containing a map configuration keys to css files that are
     member of the Presalytics Python Library manifest
     &#34;&#34;&#34;
 
@@ -125,7 +126,7 @@ class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
         config : dict
             A dictionary containing either a &#34;css_file_path&#34; key, which points
             to a local file path, or a &#34;css_file_id&#34; refers to a css file included
-            in the Presalytics Python Library&#39;s manifest 
+            in the Presalytics Python Library&#39;s manifest
         &#34;&#34;&#34;
         id = config.get(&#34;css_file_id&#34;, None)
         if not id:
@@ -151,6 +152,10 @@ class LocalStylesPlugin(presalytics.lib.plugins.base.StylePlugin):
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="presalytics.lib.plugins.local.LocalStylesPlugin.config"><code class="name">var <span class="ident">config</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
 <dt id="presalytics.lib.plugins.local.LocalStylesPlugin.LOCAL_STYLES_MAP"><code class="name">var <span class="ident">LOCAL_STYLES_MAP</span></code></dt>
 <dd>
 <section class="desc"><p>Dictionary containing a map configuration keys to css files that are
@@ -174,7 +179,7 @@ in the Presalytics Python Library's manifest</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/local.py#L26-L51" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/local.py#L27-L52" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def to_style(self, config, **kwargs):
     &#34;&#34;&#34;
@@ -185,7 +190,7 @@ in the Presalytics Python Library's manifest</dd>
     config : dict
         A dictionary containing either a &#34;css_file_path&#34; key, which points
         to a local file path, or a &#34;css_file_id&#34; refers to a css file included
-        in the Presalytics Python Library&#39;s manifest 
+        in the Presalytics Python Library&#39;s manifest
     &#34;&#34;&#34;
     id = config.get(&#34;css_file_id&#34;, None)
     if not id:
@@ -234,6 +239,7 @@ in the Presalytics Python Library's manifest</dd>
 <h4><code><a title="presalytics.lib.plugins.local.LocalStylesPlugin" href="/python-client/presalytics/lib/plugins/local.html#presalytics.lib.plugins.local.LocalStylesPlugin">LocalStylesPlugin</a></code></h4>
 <ul class="">
 <li><code><a title="presalytics.lib.plugins.local.LocalStylesPlugin.to_style" href="/python-client/presalytics/lib/plugins/local.html#presalytics.lib.plugins.local.LocalStylesPlugin.to_style">to_style</a></code></li>
+<li><code><a title="presalytics.lib.plugins.local.LocalStylesPlugin.config" href="/python-client/presalytics/lib/plugins/local.html#presalytics.lib.plugins.local.LocalStylesPlugin.config">config</a></code></li>
 <li><code><a title="presalytics.lib.plugins.local.LocalStylesPlugin.LOCAL_STYLES_MAP" href="/python-client/presalytics/lib/plugins/local.html#presalytics.lib.plugins.local.LocalStylesPlugin.LOCAL_STYLES_MAP">LOCAL_STYLES_MAP</a></code></li>
 </ul>
 </li>
@@ -243,7 +249,7 @@ in the Presalytics Python Library's manifest</dd>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

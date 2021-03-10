@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.lib.themes.ooxml API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L0-L103" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L0-L102" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import typing
 import presalytics
@@ -31,7 +31,7 @@ import presalytics.client.auth
 import presalytics.story.components
 import presalytics.story.outline
 import presalytics.story.util
-import presalytics.client.presalytics_ooxml_automation.models
+import presalytics.client.ooxml_automation.models
 
 
 class OoxmlTheme(presalytics.story.components.ThemeBase):
@@ -45,10 +45,10 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
 
     __component_kind__ = &#39;ooxml-theme&#39;
 
-    def __init__(self, 
-                 name, 
-                 ooxml_theme_id, 
-                 plugin_config=None, 
+    def __init__(self,
+                 name,
+                 ooxml_theme_id,
+                 plugin_config=None,
                  always_refresh=False,
                  client_info={},
                  **kwargs):
@@ -84,7 +84,6 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
         params.update(fonts)
 
         self.plugin_config = params
-    
 
     def map_color_type(
             self,
@@ -149,7 +148,7 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L10-L104" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L10-L103" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OoxmlTheme(presalytics.story.components.ThemeBase):
     &#34;&#34;&#34;
@@ -162,10 +161,10 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
 
     __component_kind__ = &#39;ooxml-theme&#39;
 
-    def __init__(self, 
-                 name, 
-                 ooxml_theme_id, 
-                 plugin_config=None, 
+    def __init__(self,
+                 name,
+                 ooxml_theme_id,
+                 plugin_config=None,
                  always_refresh=False,
                  client_info={},
                  **kwargs):
@@ -201,7 +200,6 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
         params.update(fonts)
 
         self.plugin_config = params
-    
 
     def map_color_type(
             self,
@@ -253,6 +251,25 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
 <li><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></li>
 <li>abc.ABC</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.lib.themes.ooxml.OoxmlTheme.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.themes.ooxml.OoxmlTheme.ooxml_id"><code class="name">var <span class="ident">ooxml_id</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.themes.ooxml.OoxmlTheme.plugin_config"><code class="name">var <span class="ident">plugin_config</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.themes.ooxml.OoxmlTheme.always_refresh"><code class="name">var <span class="ident">always_refresh</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Static methods</h3>
 <dl>
 <dt id="presalytics.lib.themes.ooxml.OoxmlTheme.deseriailize"><code class="name flex">
@@ -263,7 +280,7 @@ class OoxmlTheme(presalytics.story.components.ThemeBase):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L95-L104" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L94-L103" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def deseriailize(cls, component, **kwargs):
@@ -322,7 +339,7 @@ def deseriailize(cls, component, **kwargs):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L62-L75" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/themes/ooxml.py#L61-L74" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def map_color_type(
         self,
@@ -371,10 +388,14 @@ def deseriailize(cls, component, **kwargs):
 <ul>
 <li>
 <h4><code><a title="presalytics.lib.themes.ooxml.OoxmlTheme" href="/python-client/presalytics/lib/themes/ooxml.html#presalytics.lib.themes.ooxml.OoxmlTheme">OoxmlTheme</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="presalytics.lib.themes.ooxml.OoxmlTheme.deseriailize" href="/python-client/presalytics/lib/themes/ooxml.html#presalytics.lib.themes.ooxml.OoxmlTheme.deseriailize">deseriailize</a></code></li>
 <li><code><a title="presalytics.lib.themes.ooxml.OoxmlTheme.get_configuration" href="/python-client/presalytics/lib/themes/ooxml.html#presalytics.lib.themes.ooxml.OoxmlTheme.get_configuration">get_configuration</a></code></li>
 <li><code><a title="presalytics.lib.themes.ooxml.OoxmlTheme.map_color_type" href="/python-client/presalytics/lib/themes/ooxml.html#presalytics.lib.themes.ooxml.OoxmlTheme.map_color_type">map_color_type</a></code></li>
+<li><code><a title="presalytics.lib.themes.ooxml.OoxmlTheme.name" href="/python-client/presalytics/lib/themes/ooxml.html#presalytics.lib.themes.ooxml.OoxmlTheme.name">name</a></code></li>
+<li><code><a title="presalytics.lib.themes.ooxml.OoxmlTheme.ooxml_id" href="/python-client/presalytics/lib/themes/ooxml.html#presalytics.lib.themes.ooxml.OoxmlTheme.ooxml_id">ooxml_id</a></code></li>
+<li><code><a title="presalytics.lib.themes.ooxml.OoxmlTheme.plugin_config" href="/python-client/presalytics/lib/themes/ooxml.html#presalytics.lib.themes.ooxml.OoxmlTheme.plugin_config">plugin_config</a></code></li>
+<li><code><a title="presalytics.lib.themes.ooxml.OoxmlTheme.always_refresh" href="/python-client/presalytics/lib/themes/ooxml.html#presalytics.lib.themes.ooxml.OoxmlTheme.always_refresh">always_refresh</a></code></li>
 </ul>
 </li>
 </ul>
@@ -383,7 +404,7 @@ def deseriailize(cls, component, **kwargs):
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

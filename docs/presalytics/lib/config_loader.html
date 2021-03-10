@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.lib.config_loader API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -23,14 +23,18 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L0-L56" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L0-L197" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">import pkgutil
+<pre><code class="python">import six
 import importlib
 import os
 import typing
+import types
 import logging
 import importlib.util
+import environs
+import presalytics.lib.default_settings
+import presalytics.lib.util
 
 
 logger = logging.getLogger(__name__)
@@ -41,10 +45,6 @@ def load_config(additional_paths: typing.List[str] = []) -&gt; typing.Dict:
     Searches the current working directory and `additional_paths` for a loadable
     module named `config.py`.  If a file is found and has a global variable named
     &#39;PRESALYTICS&#39;, the dictionary contained in the &#39;PRESALYTICS&#39; is returned.
-
-    *Note*: A environment variable called `autodiscover_paths` is automatically
-    loaded into the `additional_paths` keyword argument the the `presalytics` module
-    is imported.
 
     Parameters
     ----------
@@ -66,7 +66,7 @@ def load_config(additional_paths: typing.List[str] = []) -&gt; typing.Dict:
                     config_path = os.path.join(path, name)
                     config_spec = importlib.util.spec_from_file_location(&#34;config&#34;, config_path)
                     config_mod = importlib.util.module_from_spec(config_spec)
-                    config_spec.loader.exec_module(config_mod) #type: ignore
+                    config_spec.loader.exec_module(config_mod)  # type: ignore
                     config_dict = getattr(config_mod, &#34;PRESALYTICS&#34;, None)
                     if not config_dict:
                         config_dict = config_mod.__dict__
@@ -75,13 +75,154 @@ def load_config(additional_paths: typing.List[str] = []) -&gt; typing.Dict:
             if config_dict:
                 break
         if config_dict:
-            return config_dict
+            return config_dict  # type: ignore[no-any-return]
         else:
             return {}
     except Exception as ex:
         logger.exception(ex)
         return {}
-        </code></pre>
+
+
+SETTING_ALLOWED_CHARS = &#39;ABCDEFGHIJKLMNOPQRSTUVWXYZ_&#39;
+
+
+def is_setting(key: str):
+    for letter in key:
+        if letter not in SETTING_ALLOWED_CHARS:
+            return False
+    return True
+
+
+class SettingsMeta(type):
+    def __dir__(cls):
+        return [x for x in dir(presalytics.lib.default_settings) if is_setting(x)]
+
+
+@six.add_metaclass(SettingsMeta)
+class Settings(object):
+    USE_LOGGER: bool
+    LOG_LEVEL: int
+    DEBUG: bool
+    USERNAME: typing.Optional[str]
+    PASSWORD: typing.Optional[str]
+    DELEGATE_LOGIN: bool
+    CACHE_TOKENS: bool
+    CLIENT_ID: str
+    CLIENT_SECRET: typing.Optional[str]
+    VERIFY_HTTPS: bool
+    REDIRECT_URI: str
+    RESERVED_NAMES: typing.List[str]
+    USE_AUTODISCOVER: bool
+    IGNORE_PATHS: typing.List[str]
+    PRESALYTICS_SETTINGS_MODULE: str
+    INSTALLED_PACKAGES: typing.List[str]
+    HOST_EVENTS: str
+    HOST_STORY: str
+    HOST_OOXML_AUTOMATION: str
+    HOST_WORKSPACE_API: str
+    HOST_SITE: str
+    HOST_DOC_CONVERTER: str
+    BROWSER_API_HOST_EVENTS: typing.Optional[str]
+    BROWSER_API_HOST_STORY: typing.Optional[str]
+    BROWSER_API_HOST_OOXML_AUTOMATION: typing.Optional[str]
+    BROWSER_API_HOST_SITE: typing.Optional[str]
+    BROWSER_API_HOST_WORKSPACE_API: typing.Optional[str]
+    OVERRIDE_REGISTRY_DEFAULTS: bool
+    COMPONENTS: typing.List[str]
+    PLUGINS: typing.List[str]
+    XML_TRANSFORMS: typing.List[str]
+    AUTODISCOVER_PATHS = typing.List[str]
+
+    def __init__(self, *args, **kwargs):
+        self.get_default_settings()
+        self.get_subpackage_settings()
+        self.get_settings_from_environment()
+        self.get_workspace_settings()
+        self.initialize_browser_hosts()
+
+    def __dir__(self):
+        return [x for x in dir(presalytics.lib.default_settings) if is_setting(x)]
+
+    def get_settings_from_module(self, mod: types.ModuleType):
+        for k, v in mod.__dict__.items():
+            if is_setting(k):
+                self.add_setting(k, v)
+
+    def get_default_settings(self):
+        for k, v in presalytics.lib.default_settings.__dict__.items():
+            if is_setting(k):
+                setattr(self, k, v)
+
+    def get_settings_from_environment(self):
+        &#34;&#34;&#34;
+        Note: requires default settings already be loaded
+        &#34;&#34;&#34;
+        env = environs.Env()
+        env.read_env()
+        for k, v in self.__dict__.items():
+            if os.environ.get(k, None):
+                if is_setting(k):
+                    if isinstance(v, list):
+                        self.add_setting(k, env.list(k))
+                    elif isinstance(v, bool):
+                        self.add_setting(k, env.bool(k))
+                    elif isinstance(v, int):
+                        self.add_setting(k, env.int(k))
+                    else:
+                        self.add_setting(k, env(k))
+
+    def get_subpackage_settings(self):
+        for pkg_name in self.INSTALLED_PACKAGES:
+            if pkg_name != &#39;presalytics&#39;:
+                try:
+                    mod = presalytics.lib.util.import_string(pkg_name + &#34;.settings&#34;)
+                    if isinstance(mod, types.ModuleType):
+                        self.get_settings_from_module(mod)
+                    else:
+                        raise ValueError
+                except ImportError:
+                    logger.error(&#34;Module [{}] do not contain a top-level settings attribute for Presalytics settings.&#34;.format(pkg_name))
+                except ValueError:
+                    logger.error(&#34;settings must be a Python module type.&#34;)
+
+    def get_workspace_settings(self):
+        try:
+            import settings  # type: ignore
+            if isinstance(settings, types.ModuleType):
+                self.get_settings_from_module(settings)
+            else:
+                raise ValueError
+        except ImportError:
+            pass
+        except ValueError:
+            logger.error(&#34;settings must be a Python module type.&#34;)
+
+    def add_setting(self, key: str, value: typing.Union[str, bool, int, typing.List[str]]):
+        if is_setting(key):
+            if isinstance(value, list):
+                l: list = getattr(self, key)
+                l.extend(value)
+                setattr(self, key, l)
+            elif isinstance(value, dict):
+                d: dict = getattr(self, key)
+                d.update(value)
+                setattr(self, key, value)
+            else:
+                setattr(self, key, value)
+
+    def to_dict(self):
+        d = dict()
+        for key, val in self.__dict__.items():
+            if is_setting(key):
+                d[key] = val
+        return d
+
+    def initialize_browser_hosts(self):
+        for k, v in self.__dict__.items():
+            if &#39;BROWSER_&#39; in k and not v:
+                default_setting = k.replace(&#34;BROWSER_API_&#34;, &#34;&#34;)
+                browser_host = getattr(self, default_setting)
+                setattr(self, k, browser_host)</code></pre>
 </details>
 </section>
 <section>
@@ -99,9 +240,6 @@ def load_config(additional_paths: typing.List[str] = []) -&gt; typing.Dict:
 module named <code>config.py</code>.
 If a file is found and has a global variable named
 'PRESALYTICS', the dictionary contained in the 'PRESALYTICS' is returned.</p>
-<p><em>Note</em>: A environment variable called <code>autodiscover_paths</code> is automatically
-loaded into the <code>additional_paths</code> keyword argument the the <a title="presalytics" href="/python-client/presalytics/index.html"><code>presalytics</code></a> module
-is imported.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>additional_paths</code></strong> :&ensp;<code>list</code> of <code>str</code>, optional</dt>
@@ -112,17 +250,13 @@ is imported.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L12-L56" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L16-L56" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def load_config(additional_paths: typing.List[str] = []) -&gt; typing.Dict:
     &#34;&#34;&#34;
     Searches the current working directory and `additional_paths` for a loadable
     module named `config.py`.  If a file is found and has a global variable named
     &#39;PRESALYTICS&#39;, the dictionary contained in the &#39;PRESALYTICS&#39; is returned.
-
-    *Note*: A environment variable called `autodiscover_paths` is automatically
-    loaded into the `additional_paths` keyword argument the the `presalytics` module
-    is imported.
 
     Parameters
     ----------
@@ -144,7 +278,7 @@ is imported.</p>
                     config_path = os.path.join(path, name)
                     config_spec = importlib.util.spec_from_file_location(&#34;config&#34;, config_path)
                     config_mod = importlib.util.module_from_spec(config_spec)
-                    config_spec.loader.exec_module(config_mod) #type: ignore
+                    config_spec.loader.exec_module(config_mod)  # type: ignore
                     config_dict = getattr(config_mod, &#34;PRESALYTICS&#34;, None)
                     if not config_dict:
                         config_dict = config_mod.__dict__
@@ -153,7 +287,7 @@ is imported.</p>
             if config_dict:
                 break
         if config_dict:
-            return config_dict
+            return config_dict  # type: ignore[no-any-return]
         else:
             return {}
     except Exception as ex:
@@ -161,9 +295,492 @@ is imported.</p>
         return {}</code></pre>
 </details>
 </dd>
+<dt id="presalytics.lib.config_loader.is_setting"><code class="name flex">
+<span>def <span class="ident">is_setting</span></span>(<span>key)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L62-L66" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def is_setting(key: str):
+    for letter in key:
+        if letter not in SETTING_ALLOWED_CHARS:
+            return False
+    return True</code></pre>
+</details>
+</dd>
 </dl>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="presalytics.lib.config_loader.SettingsMeta"><code class="flex name class">
+<span>class <span class="ident">SettingsMeta</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>type(object_or_name, bases, dict)
+type(object) -&gt; the object's type
+type(name, bases, dict) -&gt; a new type</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L69-L71" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class SettingsMeta(type):
+    def __dir__(cls):
+        return [x for x in dir(presalytics.lib.default_settings) if is_setting(x)]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.type</li>
+</ul>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings"><code class="flex name class">
+<span>class <span class="ident">Settings</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L75-L198" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class Settings(object):
+    USE_LOGGER: bool
+    LOG_LEVEL: int
+    DEBUG: bool
+    USERNAME: typing.Optional[str]
+    PASSWORD: typing.Optional[str]
+    DELEGATE_LOGIN: bool
+    CACHE_TOKENS: bool
+    CLIENT_ID: str
+    CLIENT_SECRET: typing.Optional[str]
+    VERIFY_HTTPS: bool
+    REDIRECT_URI: str
+    RESERVED_NAMES: typing.List[str]
+    USE_AUTODISCOVER: bool
+    IGNORE_PATHS: typing.List[str]
+    PRESALYTICS_SETTINGS_MODULE: str
+    INSTALLED_PACKAGES: typing.List[str]
+    HOST_EVENTS: str
+    HOST_STORY: str
+    HOST_OOXML_AUTOMATION: str
+    HOST_WORKSPACE_API: str
+    HOST_SITE: str
+    HOST_DOC_CONVERTER: str
+    BROWSER_API_HOST_EVENTS: typing.Optional[str]
+    BROWSER_API_HOST_STORY: typing.Optional[str]
+    BROWSER_API_HOST_OOXML_AUTOMATION: typing.Optional[str]
+    BROWSER_API_HOST_SITE: typing.Optional[str]
+    BROWSER_API_HOST_WORKSPACE_API: typing.Optional[str]
+    OVERRIDE_REGISTRY_DEFAULTS: bool
+    COMPONENTS: typing.List[str]
+    PLUGINS: typing.List[str]
+    XML_TRANSFORMS: typing.List[str]
+    AUTODISCOVER_PATHS = typing.List[str]
+
+    def __init__(self, *args, **kwargs):
+        self.get_default_settings()
+        self.get_subpackage_settings()
+        self.get_settings_from_environment()
+        self.get_workspace_settings()
+        self.initialize_browser_hosts()
+
+    def __dir__(self):
+        return [x for x in dir(presalytics.lib.default_settings) if is_setting(x)]
+
+    def get_settings_from_module(self, mod: types.ModuleType):
+        for k, v in mod.__dict__.items():
+            if is_setting(k):
+                self.add_setting(k, v)
+
+    def get_default_settings(self):
+        for k, v in presalytics.lib.default_settings.__dict__.items():
+            if is_setting(k):
+                setattr(self, k, v)
+
+    def get_settings_from_environment(self):
+        &#34;&#34;&#34;
+        Note: requires default settings already be loaded
+        &#34;&#34;&#34;
+        env = environs.Env()
+        env.read_env()
+        for k, v in self.__dict__.items():
+            if os.environ.get(k, None):
+                if is_setting(k):
+                    if isinstance(v, list):
+                        self.add_setting(k, env.list(k))
+                    elif isinstance(v, bool):
+                        self.add_setting(k, env.bool(k))
+                    elif isinstance(v, int):
+                        self.add_setting(k, env.int(k))
+                    else:
+                        self.add_setting(k, env(k))
+
+    def get_subpackage_settings(self):
+        for pkg_name in self.INSTALLED_PACKAGES:
+            if pkg_name != &#39;presalytics&#39;:
+                try:
+                    mod = presalytics.lib.util.import_string(pkg_name + &#34;.settings&#34;)
+                    if isinstance(mod, types.ModuleType):
+                        self.get_settings_from_module(mod)
+                    else:
+                        raise ValueError
+                except ImportError:
+                    logger.error(&#34;Module [{}] do not contain a top-level settings attribute for Presalytics settings.&#34;.format(pkg_name))
+                except ValueError:
+                    logger.error(&#34;settings must be a Python module type.&#34;)
+
+    def get_workspace_settings(self):
+        try:
+            import settings  # type: ignore
+            if isinstance(settings, types.ModuleType):
+                self.get_settings_from_module(settings)
+            else:
+                raise ValueError
+        except ImportError:
+            pass
+        except ValueError:
+            logger.error(&#34;settings must be a Python module type.&#34;)
+
+    def add_setting(self, key: str, value: typing.Union[str, bool, int, typing.List[str]]):
+        if is_setting(key):
+            if isinstance(value, list):
+                l: list = getattr(self, key)
+                l.extend(value)
+                setattr(self, key, l)
+            elif isinstance(value, dict):
+                d: dict = getattr(self, key)
+                d.update(value)
+                setattr(self, key, value)
+            else:
+                setattr(self, key, value)
+
+    def to_dict(self):
+        d = dict()
+        for key, val in self.__dict__.items():
+            if is_setting(key):
+                d[key] = val
+        return d
+
+    def initialize_browser_hosts(self):
+        for k, v in self.__dict__.items():
+            if &#39;BROWSER_&#39; in k and not v:
+                default_setting = k.replace(&#34;BROWSER_API_&#34;, &#34;&#34;)
+                browser_host = getattr(self, default_setting)
+                setattr(self, k, browser_host)</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.lib.config_loader.Settings.USE_LOGGER"><code class="name">var <span class="ident">USE_LOGGER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.LOG_LEVEL"><code class="name">var <span class="ident">LOG_LEVEL</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.DEBUG"><code class="name">var <span class="ident">DEBUG</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.USERNAME"><code class="name">var <span class="ident">USERNAME</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.PASSWORD"><code class="name">var <span class="ident">PASSWORD</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.DELEGATE_LOGIN"><code class="name">var <span class="ident">DELEGATE_LOGIN</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.CACHE_TOKENS"><code class="name">var <span class="ident">CACHE_TOKENS</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.CLIENT_ID"><code class="name">var <span class="ident">CLIENT_ID</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.CLIENT_SECRET"><code class="name">var <span class="ident">CLIENT_SECRET</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.VERIFY_HTTPS"><code class="name">var <span class="ident">VERIFY_HTTPS</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.REDIRECT_URI"><code class="name">var <span class="ident">REDIRECT_URI</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.RESERVED_NAMES"><code class="name">var <span class="ident">RESERVED_NAMES</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.USE_AUTODISCOVER"><code class="name">var <span class="ident">USE_AUTODISCOVER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.IGNORE_PATHS"><code class="name">var <span class="ident">IGNORE_PATHS</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.PRESALYTICS_SETTINGS_MODULE"><code class="name">var <span class="ident">PRESALYTICS_SETTINGS_MODULE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.INSTALLED_PACKAGES"><code class="name">var <span class="ident">INSTALLED_PACKAGES</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.HOST_EVENTS"><code class="name">var <span class="ident">HOST_EVENTS</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.HOST_STORY"><code class="name">var <span class="ident">HOST_STORY</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.HOST_OOXML_AUTOMATION"><code class="name">var <span class="ident">HOST_OOXML_AUTOMATION</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.HOST_WORKSPACE_API"><code class="name">var <span class="ident">HOST_WORKSPACE_API</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.HOST_SITE"><code class="name">var <span class="ident">HOST_SITE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.HOST_DOC_CONVERTER"><code class="name">var <span class="ident">HOST_DOC_CONVERTER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.BROWSER_API_HOST_EVENTS"><code class="name">var <span class="ident">BROWSER_API_HOST_EVENTS</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.BROWSER_API_HOST_STORY"><code class="name">var <span class="ident">BROWSER_API_HOST_STORY</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.BROWSER_API_HOST_OOXML_AUTOMATION"><code class="name">var <span class="ident">BROWSER_API_HOST_OOXML_AUTOMATION</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.BROWSER_API_HOST_SITE"><code class="name">var <span class="ident">BROWSER_API_HOST_SITE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.BROWSER_API_HOST_WORKSPACE_API"><code class="name">var <span class="ident">BROWSER_API_HOST_WORKSPACE_API</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.OVERRIDE_REGISTRY_DEFAULTS"><code class="name">var <span class="ident">OVERRIDE_REGISTRY_DEFAULTS</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.COMPONENTS"><code class="name">var <span class="ident">COMPONENTS</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.PLUGINS"><code class="name">var <span class="ident">PLUGINS</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.XML_TRANSFORMS"><code class="name">var <span class="ident">XML_TRANSFORMS</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.AUTODISCOVER_PATHS"><code class="name">var <span class="ident">AUTODISCOVER_PATHS</span></code></dt>
+<dd>
+<section class="desc"><p>list() -&gt; new empty list
+list(iterable) -&gt; new list initialized from iterable's items</p></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.lib.config_loader.Settings.get_settings_from_module"><code class="name flex">
+<span>def <span class="ident">get_settings_from_module</span></span>(<span>self, mod)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L119-L122" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_settings_from_module(self, mod: types.ModuleType):
+    for k, v in mod.__dict__.items():
+        if is_setting(k):
+            self.add_setting(k, v)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.get_default_settings"><code class="name flex">
+<span>def <span class="ident">get_default_settings</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L124-L127" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_default_settings(self):
+    for k, v in presalytics.lib.default_settings.__dict__.items():
+        if is_setting(k):
+            setattr(self, k, v)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.get_settings_from_environment"><code class="name flex">
+<span>def <span class="ident">get_settings_from_environment</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Note: requires default settings already be loaded</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L129-L145" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_settings_from_environment(self):
+    &#34;&#34;&#34;
+    Note: requires default settings already be loaded
+    &#34;&#34;&#34;
+    env = environs.Env()
+    env.read_env()
+    for k, v in self.__dict__.items():
+        if os.environ.get(k, None):
+            if is_setting(k):
+                if isinstance(v, list):
+                    self.add_setting(k, env.list(k))
+                elif isinstance(v, bool):
+                    self.add_setting(k, env.bool(k))
+                elif isinstance(v, int):
+                    self.add_setting(k, env.int(k))
+                else:
+                    self.add_setting(k, env(k))</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.get_subpackage_settings"><code class="name flex">
+<span>def <span class="ident">get_subpackage_settings</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L147-L159" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_subpackage_settings(self):
+    for pkg_name in self.INSTALLED_PACKAGES:
+        if pkg_name != &#39;presalytics&#39;:
+            try:
+                mod = presalytics.lib.util.import_string(pkg_name + &#34;.settings&#34;)
+                if isinstance(mod, types.ModuleType):
+                    self.get_settings_from_module(mod)
+                else:
+                    raise ValueError
+            except ImportError:
+                logger.error(&#34;Module [{}] do not contain a top-level settings attribute for Presalytics settings.&#34;.format(pkg_name))
+            except ValueError:
+                logger.error(&#34;settings must be a Python module type.&#34;)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.get_workspace_settings"><code class="name flex">
+<span>def <span class="ident">get_workspace_settings</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L161-L171" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_workspace_settings(self):
+    try:
+        import settings  # type: ignore
+        if isinstance(settings, types.ModuleType):
+            self.get_settings_from_module(settings)
+        else:
+            raise ValueError
+    except ImportError:
+        pass
+    except ValueError:
+        logger.error(&#34;settings must be a Python module type.&#34;)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.add_setting"><code class="name flex">
+<span>def <span class="ident">add_setting</span></span>(<span>self, key, value)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L173-L184" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def add_setting(self, key: str, value: typing.Union[str, bool, int, typing.List[str]]):
+    if is_setting(key):
+        if isinstance(value, list):
+            l: list = getattr(self, key)
+            l.extend(value)
+            setattr(self, key, l)
+        elif isinstance(value, dict):
+            d: dict = getattr(self, key)
+            d.update(value)
+            setattr(self, key, value)
+        else:
+            setattr(self, key, value)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L186-L191" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_dict(self):
+    d = dict()
+    for key, val in self.__dict__.items():
+        if is_setting(key):
+            d[key] = val
+    return d</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.config_loader.Settings.initialize_browser_hosts"><code class="name flex">
+<span>def <span class="ident">initialize_browser_hosts</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/config_loader.py#L193-L198" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def initialize_browser_hosts(self):
+    for k, v in self.__dict__.items():
+        if &#39;BROWSER_&#39; in k and not v:
+            default_setting = k.replace(&#34;BROWSER_API_&#34;, &#34;&#34;)
+            browser_host = getattr(self, default_setting)
+            setattr(self, k, browser_host)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -180,13 +797,66 @@ is imported.</p>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
 <li><code><a title="presalytics.lib.config_loader.load_config" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.load_config">load_config</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.is_setting" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.is_setting">is_setting</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="presalytics.lib.config_loader.SettingsMeta" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.SettingsMeta">SettingsMeta</a></code></h4>
+</li>
+<li>
+<h4><code><a title="presalytics.lib.config_loader.Settings" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings">Settings</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.lib.config_loader.Settings.get_settings_from_module" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.get_settings_from_module">get_settings_from_module</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.get_default_settings" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.get_default_settings">get_default_settings</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.get_settings_from_environment" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.get_settings_from_environment">get_settings_from_environment</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.get_subpackage_settings" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.get_subpackage_settings">get_subpackage_settings</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.get_workspace_settings" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.get_workspace_settings">get_workspace_settings</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.add_setting" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.add_setting">add_setting</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.to_dict" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.to_dict">to_dict</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.initialize_browser_hosts" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.initialize_browser_hosts">initialize_browser_hosts</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.USE_LOGGER" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.USE_LOGGER">USE_LOGGER</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.LOG_LEVEL" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.LOG_LEVEL">LOG_LEVEL</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.DEBUG" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.DEBUG">DEBUG</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.USERNAME" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.USERNAME">USERNAME</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.PASSWORD" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.PASSWORD">PASSWORD</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.DELEGATE_LOGIN" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.DELEGATE_LOGIN">DELEGATE_LOGIN</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.CACHE_TOKENS" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.CACHE_TOKENS">CACHE_TOKENS</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.CLIENT_ID" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.CLIENT_ID">CLIENT_ID</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.CLIENT_SECRET" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.CLIENT_SECRET">CLIENT_SECRET</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.VERIFY_HTTPS" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.VERIFY_HTTPS">VERIFY_HTTPS</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.REDIRECT_URI" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.REDIRECT_URI">REDIRECT_URI</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.RESERVED_NAMES" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.RESERVED_NAMES">RESERVED_NAMES</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.USE_AUTODISCOVER" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.USE_AUTODISCOVER">USE_AUTODISCOVER</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.IGNORE_PATHS" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.IGNORE_PATHS">IGNORE_PATHS</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.PRESALYTICS_SETTINGS_MODULE" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.PRESALYTICS_SETTINGS_MODULE">PRESALYTICS_SETTINGS_MODULE</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.INSTALLED_PACKAGES" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.INSTALLED_PACKAGES">INSTALLED_PACKAGES</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.HOST_EVENTS" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.HOST_EVENTS">HOST_EVENTS</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.HOST_STORY" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.HOST_STORY">HOST_STORY</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.HOST_OOXML_AUTOMATION" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.HOST_OOXML_AUTOMATION">HOST_OOXML_AUTOMATION</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.HOST_WORKSPACE_API" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.HOST_WORKSPACE_API">HOST_WORKSPACE_API</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.HOST_SITE" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.HOST_SITE">HOST_SITE</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.HOST_DOC_CONVERTER" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.HOST_DOC_CONVERTER">HOST_DOC_CONVERTER</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.BROWSER_API_HOST_EVENTS" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.BROWSER_API_HOST_EVENTS">BROWSER_API_HOST_EVENTS</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.BROWSER_API_HOST_STORY" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.BROWSER_API_HOST_STORY">BROWSER_API_HOST_STORY</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.BROWSER_API_HOST_OOXML_AUTOMATION" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.BROWSER_API_HOST_OOXML_AUTOMATION">BROWSER_API_HOST_OOXML_AUTOMATION</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.BROWSER_API_HOST_SITE" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.BROWSER_API_HOST_SITE">BROWSER_API_HOST_SITE</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.BROWSER_API_HOST_WORKSPACE_API" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.BROWSER_API_HOST_WORKSPACE_API">BROWSER_API_HOST_WORKSPACE_API</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.OVERRIDE_REGISTRY_DEFAULTS" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.OVERRIDE_REGISTRY_DEFAULTS">OVERRIDE_REGISTRY_DEFAULTS</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.COMPONENTS" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.COMPONENTS">COMPONENTS</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.PLUGINS" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.PLUGINS">PLUGINS</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.XML_TRANSFORMS" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.XML_TRANSFORMS">XML_TRANSFORMS</a></code></li>
+<li><code><a title="presalytics.lib.config_loader.Settings.AUTODISCOVER_PATHS" href="/python-client/presalytics/lib/config_loader.html#presalytics.lib.config_loader.Settings.AUTODISCOVER_PATHS">AUTODISCOVER_PATHS</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

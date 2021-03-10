@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.lib.plugins.base API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L0-L362" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L0-L367" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import abc
 import typing
@@ -52,7 +52,7 @@ class PluginBase(abc.ABC):
     ----------
 
     __plugin_kind__ : str
-        The __plugin_kind__ is a static string that instructs classes 
+        The __plugin_kind__ is a static string that instructs classes
         the render story outlines (e.g., presalytics.story.revealer.Revealer) where
         to where render the plugin (i.e., at the bottom of the html body for scripts).
 
@@ -63,7 +63,7 @@ class PluginBase(abc.ABC):
     __dependencies__ : list of dict
         A list of plugs that should be rendered above this plugin in an html document.  This ensures
         the needed javascript or css is loaded prior user&#39;s plugin runs.
-        
+
         For example, if a user creates plugin requires d3.js to function, dependencies should include
         the following configuration:
 
@@ -125,7 +125,7 @@ class PluginBase(abc.ABC):
 
 class ScriptPlugin(PluginBase):
     &#34;&#34;&#34;
-    A script plugin incorporates whitelisted or local `&lt;script&gt;` tags into a 
+    A script plugin incorporates whitelisted or local `&lt;script&gt;` tags into a
     rendered story
     &#34;&#34;&#34;
     __plugin_kind__ = &#39;script&#39;
@@ -194,6 +194,7 @@ class PluginRegistry(presalytics.lib.registry.RegistryBase):
     &#34;&#34;&#34;
     The Plugin Registry class
     &#34;&#34;&#34;
+
     def __init__(self, **kwargs):
         super(PluginRegistry, self).__init__(**kwargs)
 
@@ -203,6 +204,9 @@ class PluginRegistry(presalytics.lib.registry.RegistryBase):
     def get_type(self, klass):
         return getattr(klass, &#34;__plugin_kind__&#34;, None)
 
+    def get_settings_object(self):
+        return presalytics.settings.PLUGINS
+
 
 class Graph():
     &#34;&#34;&#34;
@@ -210,6 +214,7 @@ class Graph():
 
     Adapted from https://www.geeksforgeeks.org/detect-cycle-in-a-graph/
     &#34;&#34;&#34;
+
     def __init__(self, vertices):
         self.graph = collections.defaultdict(list)
         self.V = vertices
@@ -358,7 +363,7 @@ class PluginManager(object):
                 except Exception as ex:
                     logger.exception(ex)
                     t, v, tb = sys.exc_info()
-                    if not presalytics.CONFIG.get(&#34;DEBUG&#34;, False):
+                    if not presalytics.settings.DEBUG:
                         div = presalytics.lib.exceptions.RenderExceptionHandler(ex, &#34;plugin&#34;, traceback=tb).render_exception()
                         template = lxml.html.Element(&#39;template&#39;)
                         template.extend(list(lxml.html.fragment_fromstring(div)))
@@ -372,7 +377,7 @@ class PluginManager(object):
     def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.List[typing.Dict] = None) -&gt; typing.List[typing.Dict]:
         if not plugin_list:
             plugin_list = []
-    
+
         for key, val in source_dict.items():
             if key == &#34;plugins&#34;:
                 if isinstance(val, list):
@@ -415,7 +420,7 @@ the render story outlines (e.g., presalytics.story.revealer.Revealer) where
 to where render the plugin (i.e., at the bottom of the html body for scripts).</dd>
 <dt><strong><code>__plugin_name__</code></strong> :&ensp;<code>str</code></dt>
 <dd>The <strong>plugin_name</strong> is a static string that uniquely identifies this plugin to classes
-the render story outlines (e.g., <a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer"><code>Revealer</code></a>).</dd>
+the render story outlines (e.g., <code><a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer">Revealer</a></code>).</dd>
 <dt><strong><code>__dependencies__</code></strong> :&ensp;<code>list</code> of <code>dict</code></dt>
 <dd>
 <p>A list of plugs that should be rendered above this plugin in an html document.
@@ -433,7 +438,7 @@ the following configuration:</p>
     }
 ]
 </code></pre>
-<p>This ensures that the <a title="presalytics.lib.plugins.external.ApprovedExternalScripts" href="/python-client/presalytics/lib/plugins/external.html#presalytics.lib.plugins.external.ApprovedExternalScripts"><code>ApprovedExternalScripts</code></a> loads during the
+<p>This ensures that the <code><a title="presalytics.lib.plugins.external.ApprovedExternalScripts" href="/python-client/presalytics/lib/plugins/external.html#presalytics.lib.plugins.external.ApprovedExternalScripts">ApprovedExternalScripts</a></code> loads during the
 rendering pushes a <code>&lt;script&gt;</code> tag into the render html that tells the browser to download d3.js from
 a CDN.</p>
 </dd>
@@ -453,7 +458,7 @@ a CDN.</p>
     ----------
 
     __plugin_kind__ : str
-        The __plugin_kind__ is a static string that instructs classes 
+        The __plugin_kind__ is a static string that instructs classes
         the render story outlines (e.g., presalytics.story.revealer.Revealer) where
         to where render the plugin (i.e., at the bottom of the html body for scripts).
 
@@ -464,7 +469,7 @@ a CDN.</p>
     __dependencies__ : list of dict
         A list of plugs that should be rendered above this plugin in an html document.  This ensures
         the needed javascript or css is loaded prior user&#39;s plugin runs.
-        
+
         For example, if a user creates plugin requires d3.js to function, dependencies should include
         the following configuration:
 
@@ -532,6 +537,13 @@ a CDN.</p>
 <li><a title="presalytics.lib.plugins.base.ScriptPlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.ScriptPlugin">ScriptPlugin</a></li>
 <li><a title="presalytics.lib.plugins.base.StylePlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin">StylePlugin</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.lib.plugins.base.PluginBase.config"><code class="name">var <span class="ident">config</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.lib.plugins.base.PluginBase.validate_metadata"><code class="name flex">
@@ -612,7 +624,7 @@ rendered story</p></section>
 </summary>
 <pre><code class="python">class ScriptPlugin(PluginBase):
     &#34;&#34;&#34;
-    A script plugin incorporates whitelisted or local `&lt;script&gt;` tags into a 
+    A script plugin incorporates whitelisted or local `&lt;script&gt;` tags into a
     rendered story
     &#34;&#34;&#34;
     __plugin_kind__ = &#39;script&#39;
@@ -654,6 +666,13 @@ rendered story</p></section>
 <li><a title="presalytics.lib.plugins.matplotlib.Mpld3Plugin" href="/python-client/presalytics/lib/plugins/matplotlib.html#presalytics.lib.plugins.matplotlib.Mpld3Plugin">Mpld3Plugin</a></li>
 <li><a title="presalytics.lib.plugins.reveal.RevealConfigPlugin" href="/python-client/presalytics/lib/plugins/reveal.html#presalytics.lib.plugins.reveal.RevealConfigPlugin">RevealConfigPlugin</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.lib.plugins.base.ScriptPlugin.config"><code class="name">var <span class="ident">config</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.lib.plugins.base.ScriptPlugin.to_script"><code class="name flex">
@@ -667,7 +686,7 @@ A set configuration values for the plugin.
 Required keys should be
 specified by the docstring of the inheriting classes.
 Can be implemented via a <code>mypy_extensions.TypedDict</code> object if warranted.
-The <a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin"><code>Plugin</code></a>'s config element should be passed
+The <code><a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin">Plugin</a></code>'s config element should be passed
 as this value to render the script.</p>
 <h2 id="returns">Returns:</h2>
 <p>A string carrying a html <code>&lt;script&gt;</code> fragments that can be embedded in a html document</p></section>
@@ -765,6 +784,13 @@ def to_script(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
 <li><a title="presalytics.lib.plugins.reveal_theme.RevealCustomTheme" href="/python-client/presalytics/lib/plugins/reveal_theme.html#presalytics.lib.plugins.reveal_theme.RevealCustomTheme">RevealCustomTheme</a></li>
 <li><a title="presalytics.lib.plugins.scss.ScssPlugin" href="/python-client/presalytics/lib/plugins/scss.html#presalytics.lib.plugins.scss.ScssPlugin">ScssPlugin</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.lib.plugins.base.StylePlugin.config"><code class="name">var <span class="ident">config</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.lib.plugins.base.StylePlugin.to_style"><code class="name flex">
@@ -778,7 +804,7 @@ A set configuration values for the plugin.
 Required keys should be
 specified by the docstring of the inheriting classes.
 Can be implemented via a <code>mypy_extensions.TypedDict</code> object if warranted.
-The <a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin"><code>Plugin</code></a>'s config element should be passed
+The <code><a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin">Plugin</a></code>'s config element should be passed
 as this value to render the script.</p>
 <h2 id="returns">Returns:</h2>
 <p>A string carrying a <code>&lt;link&gt;</code> or <code>&lt;style&gt;</code> tags that can be embedded in a html document</p></section>
@@ -830,12 +856,13 @@ def to_style(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L166-L177" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L166-L181" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class PluginRegistry(presalytics.lib.registry.RegistryBase):
     &#34;&#34;&#34;
     The Plugin Registry class
     &#34;&#34;&#34;
+
     def __init__(self, **kwargs):
         super(PluginRegistry, self).__init__(**kwargs)
 
@@ -843,13 +870,27 @@ def to_style(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
         return getattr(klass, &#34;__plugin_name__&#34;, None)
 
     def get_type(self, klass):
-        return getattr(klass, &#34;__plugin_kind__&#34;, None)</code></pre>
+        return getattr(klass, &#34;__plugin_kind__&#34;, None)
+
+    def get_settings_object(self):
+        return presalytics.settings.PLUGINS</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="presalytics.lib.registry.RegistryBase" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase">RegistryBase</a></li>
 <li>abc.ABC</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.lib.plugins.base.PluginRegistry.registry"><code class="name">var <span class="ident">registry</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.plugins.base.PluginRegistry.deferred_modules"><code class="name">var <span class="ident">deferred_modules</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.lib.plugins.base.PluginRegistry.get_name"><code class="name flex">
@@ -860,7 +901,7 @@ def to_style(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L173-L174" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L174-L175" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_name(self, klass):
     return getattr(klass, &#34;__plugin_name__&#34;, None)</code></pre>
@@ -874,10 +915,24 @@ def to_style(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L176-L177" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L177-L178" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_type(self, klass):
     return getattr(klass, &#34;__plugin_kind__&#34;, None)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.lib.plugins.base.PluginRegistry.get_settings_object"><code class="name flex">
+<span>def <span class="ident">get_settings_object</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L180-L181" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_settings_object(self):
+    return presalytics.settings.PLUGINS</code></pre>
 </details>
 </dd>
 </dl>
@@ -887,7 +942,6 @@ def to_style(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
 <ul class="hlist">
 <li><code><a title="presalytics.lib.registry.RegistryBase.module_is_in_stackframe" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.module_is_in_stackframe">module_is_in_stackframe</a></code></li>
 <li><code><a title="presalytics.lib.registry.RegistryBase.register" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.register">register</a></code></li>
-<li><code><a title="presalytics.lib.registry.RegistryBase.show_errors" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.show_errors">show_errors</a></code></li>
 </ul>
 </li>
 </ul>
@@ -902,7 +956,7 @@ def to_style(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L180-L223" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L184-L228" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Graph():
     &#34;&#34;&#34;
@@ -910,6 +964,7 @@ def to_style(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
 
     Adapted from https://www.geeksforgeeks.org/detect-cycle-in-a-graph/
     &#34;&#34;&#34;
+
     def __init__(self, vertices):
         self.graph = collections.defaultdict(list)
         self.V = vertices
@@ -959,7 +1014,7 @@ def to_style(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L190-L191" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L195-L196" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def addEdge(self, u, v):
     self.graph[u].append(v)</code></pre>
@@ -973,7 +1028,7 @@ def to_style(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L193-L213" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L198-L218" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def isCyclicUtil(self, v, visited, recStack):
 
@@ -1006,7 +1061,7 @@ def to_style(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L216-L223" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L221-L228" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def isCyclic(self):
     visited = [False] * self.V
@@ -1029,7 +1084,7 @@ def to_style(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L226-L363" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L231-L368" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class PluginManager(object):
     &#34;&#34;&#34;
@@ -1139,7 +1194,7 @@ def to_style(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
                 except Exception as ex:
                     logger.exception(ex)
                     t, v, tb = sys.exc_info()
-                    if not presalytics.CONFIG.get(&#34;DEBUG&#34;, False):
+                    if not presalytics.settings.DEBUG:
                         div = presalytics.lib.exceptions.RenderExceptionHandler(ex, &#34;plugin&#34;, traceback=tb).render_exception()
                         template = lxml.html.Element(&#39;template&#39;)
                         template.extend(list(lxml.html.fragment_fromstring(div)))
@@ -1153,7 +1208,7 @@ def to_style(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
     def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.List[typing.Dict] = None) -&gt; typing.List[typing.Dict]:
         if not plugin_list:
             plugin_list = []
-    
+
         for key, val in source_dict.items():
             if key == &#34;plugins&#34;:
                 if isinstance(val, list):
@@ -1170,6 +1225,17 @@ def to_style(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
                         plugin_list.extend(PluginManager.get_plugins_from_nested_dict(list_item, plugin_list))
         return plugin_list</code></pre>
 </details>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.lib.plugins.base.PluginManager.dependency_map"><code class="name">var <span class="ident">dependency_map</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.lib.plugins.base.PluginManager.dependency_order"><code class="name">var <span class="ident">dependency_order</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Static methods</h3>
 <dl>
 <dt id="presalytics.lib.plugins.base.PluginManager.get_plugins_from_nested_dict"><code class="name flex">
@@ -1180,7 +1246,7 @@ def to_style(self, config: typing.Dict[str, typing.Any], **kwargs) -&gt; str:
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L344-L363" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L349-L368" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@staticmethod
 def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.List[typing.Dict] = None) -&gt; typing.List[typing.Dict]:
@@ -1215,7 +1281,7 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L243-L265" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L248-L270" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def sort_plugins(self):
     resort = False
@@ -1250,7 +1316,7 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L267-L291" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L272-L296" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def add_plugin_to_dep_map(self, plugin):
     current_plugins = [x[&#34;plugin&#34;] for x in self.dependency_map.values()]
@@ -1287,7 +1353,7 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L293-L295" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L298-L300" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def load_dependencies(self, plugins):
     for plugin in plugins:
@@ -1302,7 +1368,7 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L297-L303" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L302-L308" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def load_graph(self):
     for key, val in self.dependency_map.items():
@@ -1321,7 +1387,7 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L305-L311" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L310-L316" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def check_for_cyclic_dependencies(self) -&gt; None:
     if self.dependency_graph.isCyclic():
@@ -1340,7 +1406,7 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L313-L314" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L318-L319" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_styles(self) -&gt; typing.List[str]:
     return self.render_plugins(&#39;style&#39;)</code></pre>
@@ -1354,7 +1420,7 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L316-L317" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L321-L322" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_scripts(self) -&gt; typing.List[str]:
     return self.render_plugins(&#39;script&#39;)</code></pre>
@@ -1368,7 +1434,7 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L319-L342" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/plugins/base.py#L324-L347" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render_plugins(self, plugin_kind: str) -&gt; typing.List[str]:
     rendered_list: typing.List[str]
@@ -1385,7 +1451,7 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
             except Exception as ex:
                 logger.exception(ex)
                 t, v, tb = sys.exc_info()
-                if not presalytics.CONFIG.get(&#34;DEBUG&#34;, False):
+                if not presalytics.settings.DEBUG:
                     div = presalytics.lib.exceptions.RenderExceptionHandler(ex, &#34;plugin&#34;, traceback=tb).render_exception()
                     template = lxml.html.Element(&#39;template&#39;)
                     template.extend(list(lxml.html.fragment_fromstring(div)))
@@ -1419,18 +1485,21 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
 <ul class="">
 <li><code><a title="presalytics.lib.plugins.base.PluginBase.validate_metadata" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase.validate_metadata">validate_metadata</a></code></li>
 <li><code><a title="presalytics.lib.plugins.base.PluginBase.get_tag" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase.get_tag">get_tag</a></code></li>
+<li><code><a title="presalytics.lib.plugins.base.PluginBase.config" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase.config">config</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="presalytics.lib.plugins.base.ScriptPlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.ScriptPlugin">ScriptPlugin</a></code></h4>
 <ul class="">
 <li><code><a title="presalytics.lib.plugins.base.ScriptPlugin.to_script" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.ScriptPlugin.to_script">to_script</a></code></li>
+<li><code><a title="presalytics.lib.plugins.base.ScriptPlugin.config" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.ScriptPlugin.config">config</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="presalytics.lib.plugins.base.StylePlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin">StylePlugin</a></code></h4>
 <ul class="">
 <li><code><a title="presalytics.lib.plugins.base.StylePlugin.to_style" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin.to_style">to_style</a></code></li>
+<li><code><a title="presalytics.lib.plugins.base.StylePlugin.config" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin.config">config</a></code></li>
 </ul>
 </li>
 <li>
@@ -1438,6 +1507,9 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
 <ul class="">
 <li><code><a title="presalytics.lib.plugins.base.PluginRegistry.get_name" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginRegistry.get_name">get_name</a></code></li>
 <li><code><a title="presalytics.lib.plugins.base.PluginRegistry.get_type" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginRegistry.get_type">get_type</a></code></li>
+<li><code><a title="presalytics.lib.plugins.base.PluginRegistry.get_settings_object" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginRegistry.get_settings_object">get_settings_object</a></code></li>
+<li><code><a title="presalytics.lib.plugins.base.PluginRegistry.registry" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginRegistry.registry">registry</a></code></li>
+<li><code><a title="presalytics.lib.plugins.base.PluginRegistry.deferred_modules" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginRegistry.deferred_modules">deferred_modules</a></code></li>
 </ul>
 </li>
 <li>
@@ -1460,6 +1532,8 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
 <li><code><a title="presalytics.lib.plugins.base.PluginManager.get_styles" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginManager.get_styles">get_styles</a></code></li>
 <li><code><a title="presalytics.lib.plugins.base.PluginManager.get_scripts" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginManager.get_scripts">get_scripts</a></code></li>
 <li><code><a title="presalytics.lib.plugins.base.PluginManager.render_plugins" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginManager.render_plugins">render_plugins</a></code></li>
+<li><code><a title="presalytics.lib.plugins.base.PluginManager.dependency_map" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginManager.dependency_map">dependency_map</a></code></li>
+<li><code><a title="presalytics.lib.plugins.base.PluginManager.dependency_order" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginManager.dependency_order">dependency_order</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1468,7 +1542,7 @@ def get_plugins_from_nested_dict(source_dict: typing.Dict, plugin_list: typing.L
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

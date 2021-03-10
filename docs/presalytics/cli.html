@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.cli API documentation</title>
 <meta name="description" content="Command Line Interface for Presalytics Python Library …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -25,7 +25,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/cli.py#L0-L501" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/cli.py#L0-L512" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
 Command Line Interface for Presalytics Python Library
@@ -46,9 +46,12 @@ import presalytics.lib.constants
 import presalytics.lib.tools.story_tools
 import presalytics.lib.tools.ooxml_tools
 import presalytics.lib.tools.workflows
+import presalytics.client
+import presalytics.client.websocket
 
 
 logger = logging.getLogger(__name__)
+
 
 description = &#34;&#34;&#34;
 Presalytics Python Library
@@ -60,7 +63,7 @@ and interact with the Presalytics API.
 
 Please review the push, pull, and create subcommands for more options.
 
-For more information about the Presalytics API, please visit 
+For more information about the Presalytics API, please visit
 &lt;https://presalytics.io&gt; or send your questions to inquires@presalytics.io.
 
 Command Line Instructions
@@ -88,7 +91,7 @@ verbosity.add_argument(&#39;-q&#39;, &#39;--quiet&#39;, default=False, action=&#
 yaml_help = &#34;Writes file updates to YAML format.  Yaml is the default.&#34;
 json_help = &#34;Writes file updates to JSON format&#34;
 overwrite_help = &#34;Forces (o)verwrite of file with returned Story Outline (if exists)&#34;
-username_help = &#34;Overrides the username in presalytics.CONFIG (if present)&#34;
+username_help = &#34;Overrides the username in presalytics.settings (if present)&#34;
 password_help = &#34;The user&#39;s Presalytics API password&#34;
 subparsers = parser.add_subparsers(title=&#39;Story API Commands&#39;, prog=&#39;presalytics&#39;, dest=&#39;story_api&#39;)
 
@@ -113,8 +116,8 @@ and writes the retrieved story outline to a local file (--file)
 
 id_help = &#34;&#34;&#34;
 The Preslytics API Story Service Id for the story (type: UUID-v4)
-If not supplied, the tool searches the file from the --file option 
-for a &#39;storyId&#39; attribute 
+If not supplied, the tool searches the file from the --file option
+for a &#39;storyId&#39; attribute
 &#34;&#34;&#34;
 
 pull = subparsers.add_parser(&#39;pull&#39;, description=pull_description, help=&#39;Pull a Story Outline revision&#39;)
@@ -129,9 +132,9 @@ pull_options.add_argument(&#39;-j&#39;, &#39;--json&#39;, default=False, action=
 
 create_description = &#34;&#34;&#34;
 
-The widget or page instance in the [name] arguemnt must be avialable in 
-`presalytics.COMPONENTS` at run-time.  Widget and page instances are loaded 
-into `presalytics.COMPONENTS` from the current working directory and other 
+The widget or page instance in the [name] arguemnt must be avialable in
+`presalytics.COMPONENTS` at run-time.  Widget and page instances are loaded
+into `presalytics.COMPONENTS` from the current working directory and other
 configured folders at import of the presalytics module.
 &#34;&#34;&#34;
 
@@ -152,13 +155,13 @@ create_options.add_argument(&#39;--ooxml_file&#39;, default=False, action=&#39;s
 create.add_argument(&#39;-o&#39;, &#39;--overwrite&#39;, default=False, action=&#39;store_true&#39;, help=overwrite_help)
 create.add_argument(&#39;-u&#39;, &#39;--username&#39;, default=None, action=&#39;store&#39;, help=username_help)
 create.add_argument(&#39;-p&#39;, &#39;--password&#39;, default=None, action=&#39;store&#39;, help=password_help)
-create.add_argument(&#39;-s&#39;, &#39;--source&#39;, default=None, action=&#39;store&#39;, help=&#34;The module containing the instance.  Needed only if instance not auto-loaded into presalytics.CONFIG&#34;)
+create.add_argument(&#39;-s&#39;, &#39;--source&#39;, default=None, action=&#39;store&#39;, help=&#34;The module containing the instance.  Needed only if instance not auto-loaded into presalytics.settings&#34;)
 create_output_options = create.add_mutually_exclusive_group(required=False)
 create_output_options.add_argument(&#39;-y&#39;, &#39;--yaml&#39;, default=False, action=&#39;store_true&#39;, help=yaml_help)
 create_output_options.add_argument(&#39;-j&#39;, &#39;--json&#39;, default=False, action=&#39;store_true&#39;, help=json_help)
 
 update_description = &#34;&#34;&#34;
-Update the Story outline from instances contained in scripts in the active workspace 
+Update the Story outline from instances contained in scripts in the active workspace
 &#34;&#34;&#34;
 
 update = subparsers.add_parser(&#39;update&#39;, description=update_description, help=&#39;Update a Story Outline From Local Scripts&#39;)
@@ -173,15 +176,16 @@ Modify a Story&#39;s outline
 
 You can either &#39;add&#39; or &#39;remove&#39; a widget to or from a page in story outline.
 
-For more complex operations, you can apply a JSON &#39;patch&#39; to to the story outline per 
-[RFC 6902](https://tools.ietf.org/html/rfc6902).  You can find good exmaples at 
+For more complex operations, you can apply a JSON &#39;patch&#39; to to the story outline per
+[RFC 6902](https://tools.ietf.org/html/rfc6902).  You can find good exmaples at
 www.jsonpatch.com
-&#34;&#34;&#34; 
+&#34;&#34;&#34;
+
 modify = subparsers.add_parser(&#39;modify&#39;, description=modify_description, help=&#39;Modify a Story Outline&#39;)
 modify.add_argument(&#39;action&#39;, choices=[&#39;add&#39;, &#39;remove&#39;, &#39;patch&#39;], action=&#39;store&#39;, help=&#34;You can either add or remove a widget (quick &amp; easy), or apply a json patch (more complex)&#34;)
 modify.add_argument(&#39;-n&#39;, &#39;--name&#39;, default=None, action=&#39;store&#39;, help=&#34;The name of the widget you would like to add or remove&#34;)
 modify.add_argument(&#39;--position&#39;, default=None, action=&#39;store&#39;, type=int, help=&#34;The position in the widget list to place the widget&#34;)
-modify.add_argument(&#39;--page_number&#39;, default=None, action=&#39;store&#39;, type=int, help=&#34;The page number to add or remove the widget to/from&#34; )
+modify.add_argument(&#39;--page_number&#39;, default=None, action=&#39;store&#39;, type=int, help=&#34;The page number to add or remove the widget to/from&#34;)
 modify.add_argument(&#39;--patch&#39;, default=None, action=&#39;store&#39;, help=&#34;The json patch (per RFC 6902) you want to apply to the Story Outline.&#34;)
 modify_output_options = modify.add_mutually_exclusive_group(required=False)
 modify_output_options.add_argument(&#39;-y&#39;, &#39;--yaml&#39;, default=False, action=&#39;store_true&#39;, help=yaml_help)
@@ -224,15 +228,12 @@ ooxml.add_argument(&#39;--replace-id&#39;, action=&#39;store&#39;, default=None,
 ooxml.add_argument(&#39;-u&#39;, &#39;--username&#39;, default=None, action=&#39;store&#39;, help=username_help)
 ooxml.add_argument(&#39;-p&#39;, &#39;--password&#39;, default=None, action=&#39;store&#39;, help=password_help)
 
-config_description = &#34;&#34;&#34;
-Create and manage presalytics `config.py` files
+events_description = &#34;&#34;&#34;
+Open a websocket and listen for events from the Presalytics API
 &#34;&#34;&#34;
+events = subparsers.add_parser(&#39;events&#39;, description=events_description, help=&#39;Listen for Presalytics API Events&#39;)
+events.add_argument(&#39;-l&#39;, &#39;--forward-to&#39;, default=None, action=&#39;store&#39;, help=&#39;Forward event data to a local url.  Good for app debugging.&#39;)
 
-config = subparsers.add_parser(&#39;config&#39;, description=config_description, help=&#39;Create and manage presalytics `config.py` files&#39;)
-config.add_argument(&#39;username&#39;, action=&#39;store&#39;, help=username_help)
-config.add_argument(&#39;-p&#39;, &#39;--password&#39;, default=None, action=&#39;store&#39;, help=password_help)
-config.add_argument(&#39;-s&#39;, &#34;--set&#34;, metavar=&#34;KEY=VALUE&#34;, default=None, nargs=&#39;+&#39;, help=&#34;Pass config values to to `config.py` with KEY=VALUE stucture (e.g., &#39;-s USE_LOGGER=False&#39;&#34;)
-config.add_argument(&#39;-o&#39;, &#39;--overwrite&#39;, default=False, action=&#39;store_true&#39;, help=overwrite_help)
 
 def parse_var(s):
     &#34;&#34;&#34;
@@ -245,13 +246,13 @@ def parse_var(s):
         foo=&#34;hello world&#34;
     &#34;&#34;&#34;
     items = s.split(&#39;=&#39;)
-    key = items[0].strip() # we remove blanks around keys, as is logical
+    key = items[0].strip()  # we remove blanks around keys, as is logical
     if len(items) &gt; 1:
         # rejoin the rest:
         value = &#39;=&#39;.join(items[1:])
         if value == &#39;True&#39; or value == &#39;true&#39;:
             value = True
-        if value == &#39;False&#39;or value == &#39;false&#39;:
+        if value == &#39;False&#39; or value == &#39;false&#39;:
             value = False
     return (key, value)
 
@@ -268,6 +269,7 @@ def parse_vars(items):
             d[key] = value
     return d
 
+
 def _load_file(filename):
     if filename.endswith(&#39;yaml&#39;) or filename.endswith(&#39;yml&#39;):
         outline = presalytics.StoryOutline.import_yaml(filename)
@@ -281,14 +283,16 @@ def _load_file(filename):
 def _make_url(story_id, url_type):
     route = &#34;/story/{0}/{1}/&#34;.format(url_type, story_id)
     try:
-        host = presalytics.CONFIG[&#34;HOSTS&#34;][&#34;SITE&#34;]
+        host = presalytics.settings.HOST_SITE
     except (KeyError, AttributeError):
         host = presalytics.lib.constants.SITE_HOST
     return urllib.parse.urljoin(host, route)
 
+
 def _open_page(story_id, url_type):
     url = _make_url(story_id, url_type)
     webbrowser.open_new_tab(url)
+
 
 def _write(outline, filename, json=False):
     if json:
@@ -296,7 +300,8 @@ def _write(outline, filename, json=False):
             f.write(outline.dump())
     else:
         outline.export_yaml(filename)
-    
+
+
 def _dump(outline, filename, overwrite=False, json=False):
     if os.path.exists(filename):
         if not overwrite:
@@ -309,27 +314,22 @@ def _dump(outline, filename, overwrite=False, json=False):
 
 
 def main():
-    &#34;&#34;&#34; Command-line entry point 
-    
+    &#34;&#34;&#34; Command-line entry point
+
     Run the following from the command line for more information:
 
         python3 -m presalytics --help
-    
+
     or inside a python virtual environment:
 
         presalytics -h
-    
+
     &#34;&#34;&#34;
     try:
         args = parser.parse_args()
         filename = args.file
-        file_extension = filename.split(&#34;.&#34;)[-1]
-        if file_extension == &#34;yaml&#34; or file_extension == &#34;yml&#34;:
-            original_file_is_yaml = True
-        else:
-            original_file_is_yaml - False
         lgs = [logging.getLogger(n) for n in logging.root.manager.loggerDict]
-        if args.verbose or args.quiet:
+        if args.verbose:
             for lg in lgs:
                 lg.setLevel(logging.DEBUG)
         elif args.quiet:
@@ -397,14 +397,20 @@ def main():
             push = False
             pull = False
             write = False
-            #load story outline from file
+            # load story outline from file
         if config:
             set_dict = {} if not args.set else parse_vars(args.set)
-            presalytics.lib.tools.workflows.create_config_file(args.username, 
-                                                               password=args.password, 
-                                                               set_dict=set_dict, 
+            if &#39;CACHE_TOKENS&#39; not in set_dict.keys():
+                set_dict[&#39;CACHE_TOKENS&#39;] = True
+            presalytics.lib.tools.workflows.create_config_file(args.username,
+                                                               password=args.password,
+                                                               set_dict=set_dict,
                                                                overwrite=args.overwrite)
             logger.info(&#34;File &#39;config.py creating in folder &#34; + os.getcwd())
+            return
+        if args.story_api == &#39;events&#39;:
+            ws = presalytics.client.websocket.EventsWebsocket(forward_address=args.forward_to)
+            ws.listen()
             return
         try:
             if not outline:
@@ -414,8 +420,14 @@ def main():
                     if os.path.exists(abs_filename):
                         filename = abs_filename
                     else:
-                        logger.error(&#34;Could not find file: {}&#34;.format(filename))
-                        return
+                        if pull and args.id:
+                            outline = presalytics.lib.tools.workflows.pull_outline(args.id, username=args.username, password=args.password)
+                            _dump(outline, filename, args.overwrite, args.json)
+                            pull = False
+                            write = False
+                        else:
+                            logger.error(&#34;Could not find file: {}&#34;.format(filename))
+                            return
                 outline = _load_file(filename)
         except Exception:
             logger.error(&#34;Error handling file: {}&#34;.format(filename))
@@ -438,14 +450,14 @@ def main():
                         patch = json.loads(args.patch)
                     except json.JSONDecodeError:
                         patch = ast.literal_eval(args.patch)
-                except Exception as ex:
+                except Exception:
                     logger.error(&#34;A patch could not be created from [--patch]: {}&#34;.format(args.patch))
                     return
                 outline = presalytics.lib.tools.workflows.apply_json_patch(outline, patch)
             _dump(outline, filename, True, args.json)
         if update:
-            outline = presalytics.lib.tools.workflows.update_outline(outline, filename=filename, message=args.message)      
-            _dump(outline, filename, True, args.json)  
+            outline = presalytics.lib.tools.workflows.update_outline(outline, filename=filename, message=args.message)
+            _dump(outline, filename, True, args.json)
         if push:
             if not message:
                 pretty_time = datetime.datetime.now().strftime(&#34;%d-%m-%Y at %H:%M&#34;)
@@ -454,7 +466,7 @@ def main():
             outline = presalytics.lib.tools.workflows.push_outline(outline, username=args.username, password=args.password)
         try:
             story_id = outline.story_id
-        except:
+        except Exception:
             logger.error(&#34;A story outline could not be found or created.  Please use the [--file] option to designate a target outline.&#34;)
             return
         if ooxml:
@@ -472,7 +484,7 @@ def main():
                 else:
                     logger.error(&#34;Could not find a path to file: {0}&#34;.format(ooxml_file))
                     return
-            if args.action == &#34;add&#34; or args.action == &#34;replace&#34;: 
+            if args.action == &#34;add&#34; or args.action == &#34;replace&#34;:
                 presalytics.lib.tools.ooxml_tools.add_ooxml_document_to_story(story_id, ooxml_file, replace_id=args.replace_id, username=args.username, password=args.password)
         if pull:
             if story_id == &#34;empty&#34;:
@@ -484,7 +496,6 @@ def main():
                 else:
                     _id = outline.story_id
                 outline = presalytics.lib.tools.workflows.pull_outline(_id, username=args.username, password=args.password)
-       
         if write:
             _dump(outline, filename, args.overwrite, args.json)
         if account:
@@ -494,12 +505,12 @@ def main():
                 else:
                     presalytics.lib.tools.workflows.delete_by_id(args.id, username=args.username, password=args.password)
         if share:
-            presalytics.lib.tools.workflows.share_story(story_id, 
-                                                           emails=args.emails, 
-                                                           user_ids=args.user_ids, 
-                                                           username=args.username,
-                                                           password=args.password,
-                                                           collaborator_type=args.collaborator_type)
+            presalytics.lib.tools.workflows.share_story(story_id,
+                                                        emails=args.emails,
+                                                        user_ids=args.user_ids,
+                                                        username=args.username,
+                                                        password=args.password,
+                                                        collaborator_type=args.collaborator_type)
         if story_id != &#39;empty&#39;:
             try:
                 if args.view:
@@ -508,7 +519,7 @@ def main():
                     _open_page(story_id, &#34;manage&#34;)
                 if args.show_story:
                     story = presalytics.lib.tools.workflows.get_story(story_id)
-        
+
             except webbrowser.Error:
                 logger.error(&#34;This environment does not have a webrowser loaded for use with python.&#34;)
                 return
@@ -520,7 +531,7 @@ def main():
             presalytics.lib.tools.workflows.create_cron_target()
     except Exception as ex:
         if isinstance(ex, presalytics.lib.exceptions.PresalyticsBaseException):
-            logger.error(ex.message) # noqa
+            logger.error(ex.message)  # noqa
         else:
             logger.exception(ex)
     finally:
@@ -551,7 +562,7 @@ foo="hello world"</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/cli.py#L208-L227" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/cli.py#L209-L228" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def parse_var(s):
     &#34;&#34;&#34;
@@ -564,13 +575,13 @@ foo="hello world"</p></section>
         foo=&#34;hello world&#34;
     &#34;&#34;&#34;
     items = s.split(&#39;=&#39;)
-    key = items[0].strip() # we remove blanks around keys, as is logical
+    key = items[0].strip()  # we remove blanks around keys, as is logical
     if len(items) &gt; 1:
         # rejoin the rest:
         value = &#39;=&#39;.join(items[1:])
         if value == &#39;True&#39; or value == &#39;true&#39;:
             value = True
-        if value == &#39;False&#39;or value == &#39;false&#39;:
+        if value == &#39;False&#39; or value == &#39;false&#39;:
             value = False
     return (key, value)</code></pre>
 </details>
@@ -583,7 +594,7 @@ foo="hello world"</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/cli.py#L230-L240" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/cli.py#L231-L241" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def parse_vars(items):
     &#34;&#34;&#34;
@@ -602,7 +613,7 @@ foo="hello world"</p></section>
 <span>def <span class="ident">main</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Command-line entry point </p>
+<section class="desc"><p>Command-line entry point</p>
 <p>Run the following from the command line for more information:</p>
 <pre><code>python3 -m presalytics --help
 </code></pre>
@@ -612,30 +623,25 @@ foo="hello world"</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/cli.py#L282-L498" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/cli.py#L287-L509" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def main():
-    &#34;&#34;&#34; Command-line entry point 
-    
+    &#34;&#34;&#34; Command-line entry point
+
     Run the following from the command line for more information:
 
         python3 -m presalytics --help
-    
+
     or inside a python virtual environment:
 
         presalytics -h
-    
+
     &#34;&#34;&#34;
     try:
         args = parser.parse_args()
         filename = args.file
-        file_extension = filename.split(&#34;.&#34;)[-1]
-        if file_extension == &#34;yaml&#34; or file_extension == &#34;yml&#34;:
-            original_file_is_yaml = True
-        else:
-            original_file_is_yaml - False
         lgs = [logging.getLogger(n) for n in logging.root.manager.loggerDict]
-        if args.verbose or args.quiet:
+        if args.verbose:
             for lg in lgs:
                 lg.setLevel(logging.DEBUG)
         elif args.quiet:
@@ -703,14 +709,20 @@ foo="hello world"</p></section>
             push = False
             pull = False
             write = False
-            #load story outline from file
+            # load story outline from file
         if config:
             set_dict = {} if not args.set else parse_vars(args.set)
-            presalytics.lib.tools.workflows.create_config_file(args.username, 
-                                                               password=args.password, 
-                                                               set_dict=set_dict, 
+            if &#39;CACHE_TOKENS&#39; not in set_dict.keys():
+                set_dict[&#39;CACHE_TOKENS&#39;] = True
+            presalytics.lib.tools.workflows.create_config_file(args.username,
+                                                               password=args.password,
+                                                               set_dict=set_dict,
                                                                overwrite=args.overwrite)
             logger.info(&#34;File &#39;config.py creating in folder &#34; + os.getcwd())
+            return
+        if args.story_api == &#39;events&#39;:
+            ws = presalytics.client.websocket.EventsWebsocket(forward_address=args.forward_to)
+            ws.listen()
             return
         try:
             if not outline:
@@ -720,8 +732,14 @@ foo="hello world"</p></section>
                     if os.path.exists(abs_filename):
                         filename = abs_filename
                     else:
-                        logger.error(&#34;Could not find file: {}&#34;.format(filename))
-                        return
+                        if pull and args.id:
+                            outline = presalytics.lib.tools.workflows.pull_outline(args.id, username=args.username, password=args.password)
+                            _dump(outline, filename, args.overwrite, args.json)
+                            pull = False
+                            write = False
+                        else:
+                            logger.error(&#34;Could not find file: {}&#34;.format(filename))
+                            return
                 outline = _load_file(filename)
         except Exception:
             logger.error(&#34;Error handling file: {}&#34;.format(filename))
@@ -744,14 +762,14 @@ foo="hello world"</p></section>
                         patch = json.loads(args.patch)
                     except json.JSONDecodeError:
                         patch = ast.literal_eval(args.patch)
-                except Exception as ex:
+                except Exception:
                     logger.error(&#34;A patch could not be created from [--patch]: {}&#34;.format(args.patch))
                     return
                 outline = presalytics.lib.tools.workflows.apply_json_patch(outline, patch)
             _dump(outline, filename, True, args.json)
         if update:
-            outline = presalytics.lib.tools.workflows.update_outline(outline, filename=filename, message=args.message)      
-            _dump(outline, filename, True, args.json)  
+            outline = presalytics.lib.tools.workflows.update_outline(outline, filename=filename, message=args.message)
+            _dump(outline, filename, True, args.json)
         if push:
             if not message:
                 pretty_time = datetime.datetime.now().strftime(&#34;%d-%m-%Y at %H:%M&#34;)
@@ -760,7 +778,7 @@ foo="hello world"</p></section>
             outline = presalytics.lib.tools.workflows.push_outline(outline, username=args.username, password=args.password)
         try:
             story_id = outline.story_id
-        except:
+        except Exception:
             logger.error(&#34;A story outline could not be found or created.  Please use the [--file] option to designate a target outline.&#34;)
             return
         if ooxml:
@@ -778,7 +796,7 @@ foo="hello world"</p></section>
                 else:
                     logger.error(&#34;Could not find a path to file: {0}&#34;.format(ooxml_file))
                     return
-            if args.action == &#34;add&#34; or args.action == &#34;replace&#34;: 
+            if args.action == &#34;add&#34; or args.action == &#34;replace&#34;:
                 presalytics.lib.tools.ooxml_tools.add_ooxml_document_to_story(story_id, ooxml_file, replace_id=args.replace_id, username=args.username, password=args.password)
         if pull:
             if story_id == &#34;empty&#34;:
@@ -790,7 +808,6 @@ foo="hello world"</p></section>
                 else:
                     _id = outline.story_id
                 outline = presalytics.lib.tools.workflows.pull_outline(_id, username=args.username, password=args.password)
-       
         if write:
             _dump(outline, filename, args.overwrite, args.json)
         if account:
@@ -800,12 +817,12 @@ foo="hello world"</p></section>
                 else:
                     presalytics.lib.tools.workflows.delete_by_id(args.id, username=args.username, password=args.password)
         if share:
-            presalytics.lib.tools.workflows.share_story(story_id, 
-                                                           emails=args.emails, 
-                                                           user_ids=args.user_ids, 
-                                                           username=args.username,
-                                                           password=args.password,
-                                                           collaborator_type=args.collaborator_type)
+            presalytics.lib.tools.workflows.share_story(story_id,
+                                                        emails=args.emails,
+                                                        user_ids=args.user_ids,
+                                                        username=args.username,
+                                                        password=args.password,
+                                                        collaborator_type=args.collaborator_type)
         if story_id != &#39;empty&#39;:
             try:
                 if args.view:
@@ -814,7 +831,7 @@ foo="hello world"</p></section>
                     _open_page(story_id, &#34;manage&#34;)
                 if args.show_story:
                     story = presalytics.lib.tools.workflows.get_story(story_id)
-        
+
             except webbrowser.Error:
                 logger.error(&#34;This environment does not have a webrowser loaded for use with python.&#34;)
                 return
@@ -826,7 +843,7 @@ foo="hello world"</p></section>
             presalytics.lib.tools.workflows.create_cron_target()
     except Exception as ex:
         if isinstance(ex, presalytics.lib.exceptions.PresalyticsBaseException):
-            logger.error(ex.message) # noqa
+            logger.error(ex.message)  # noqa
         else:
             logger.exception(ex)
     finally:
@@ -860,7 +877,7 @@ foo="hello world"</p></section>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

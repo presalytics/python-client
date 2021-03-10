@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.story.server API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L0-L158" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L0-L156" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import os
 import logging
@@ -48,6 +48,7 @@ app = flask.Flask(__name__)
 def story(id):
     template_name = str(id) + &#39;.html&#39;
     return flask.render_template(template_name)
+
 
 @app.route(&#39;/img/&lt;path:filename&gt;/&#39;)
 def static_img(filename=None):
@@ -80,10 +81,10 @@ def shutdown():
 
 
 class LocalServer(object):
-    def __init__(self, 
-                 host=&#39;127.0.0.1&#39;, 
-                 debug=True, 
-                 port=8082, 
+    def __init__(self,
+                 host=&#39;127.0.0.1&#39;,
+                 debug=True,
+                 port=8082,
                  root_path=None,
                  use_reloader=False,
                  **kwargs):
@@ -98,11 +99,11 @@ class LocalServer(object):
     def run(self):
         app.root_path = self.root_path
         app.static_folder = self.static_dir
-        app.run(host=self.host, 
-                debug=self.debug, 
-                port=self.port, 
+        app.run(host=self.host,
+                debug=self.debug,
+                port=self.port,
                 use_reloader=self.use_reloader)
-    
+
     def make_local_folders(self, files_path=None):
         if files_path is None:
             files_path = os.getcwd()
@@ -155,8 +156,6 @@ class LocalServer(object):
                 logger.error(message)
                 # logger.exception(ex) # non-critical error
 
-
-
     def get_static_files_dict(self):
         static_files_dict = {}
         root = self.root_path
@@ -168,7 +167,6 @@ class LocalServer(object):
                 static_files_dict[key] = value
         static_files_dict[&#39;favicon.ico&#39;] = os.path.join(static, &#34;favicon.ico&#34;)
         return static_files_dict
-                
 
 
 class Browser(threading.Thread):
@@ -217,7 +215,7 @@ def story(id):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L25-L28" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L26-L29" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@app.route(&#39;/img/&lt;path:filename&gt;/&#39;)
 def static_img(filename=None):
@@ -233,7 +231,7 @@ def static_img(filename=None):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L31-L34" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L32-L35" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@app.route(&#39;/js/&lt;path:filename&gt;/&#39;)
 def static_js(filename=None):
@@ -249,7 +247,7 @@ def static_js(filename=None):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L37-L40" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L38-L41" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@app.route(&#39;/css/&lt;path:filename&gt;/&#39;)
 def static_css(filename=None):
@@ -265,7 +263,7 @@ def static_css(filename=None):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L43-L45" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L44-L46" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@app.route(&#39;/favicon.ico&#39;)
 def favicon():
@@ -280,7 +278,7 @@ def favicon():
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L48-L52" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L49-L53" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@app.route(&#39;/shutdown&#39;, methods=[&#39;POST&#39;])
 def shutdown():
@@ -303,13 +301,13 @@ def shutdown():
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L55-L143" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L56-L142" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class LocalServer(object):
-    def __init__(self, 
-                 host=&#39;127.0.0.1&#39;, 
-                 debug=True, 
-                 port=8082, 
+    def __init__(self,
+                 host=&#39;127.0.0.1&#39;,
+                 debug=True,
+                 port=8082,
                  root_path=None,
                  use_reloader=False,
                  **kwargs):
@@ -324,11 +322,11 @@ def shutdown():
     def run(self):
         app.root_path = self.root_path
         app.static_folder = self.static_dir
-        app.run(host=self.host, 
-                debug=self.debug, 
-                port=self.port, 
+        app.run(host=self.host,
+                debug=self.debug,
+                port=self.port,
                 use_reloader=self.use_reloader)
-    
+
     def make_local_folders(self, files_path=None):
         if files_path is None:
             files_path = os.getcwd()
@@ -381,8 +379,6 @@ def shutdown():
                 logger.error(message)
                 # logger.exception(ex) # non-critical error
 
-
-
     def get_static_files_dict(self):
         static_files_dict = {}
         root = self.root_path
@@ -405,14 +401,14 @@ def shutdown():
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L71-L77" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L72-L78" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def run(self):
     app.root_path = self.root_path
     app.static_folder = self.static_dir
-    app.run(host=self.host, 
-            debug=self.debug, 
-            port=self.port, 
+    app.run(host=self.host,
+            debug=self.debug,
+            port=self.port,
             use_reloader=self.use_reloader)</code></pre>
 </details>
 </dd>
@@ -424,7 +420,7 @@ def shutdown():
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L79-L108" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L80-L109" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def make_local_folders(self, files_path=None):
     if files_path is None:
@@ -466,7 +462,7 @@ def shutdown():
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L110-L128" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L111-L129" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_preloaders(self):
     preloaders = [
@@ -497,7 +493,7 @@ def shutdown():
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L133-L143" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L132-L142" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_static_files_dict(self):
     static_files_dict = {}
@@ -539,7 +535,7 @@ else to the thread.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L147-L155" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L145-L153" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Browser(threading.Thread):
     def __init__(self, address, delay_time=2, *args, **kwargs):
@@ -569,7 +565,7 @@ from the args and kwargs arguments, respectively.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L153-L155" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/server.py#L151-L153" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def run(self):
     time.sleep(self.delay_time)
@@ -625,7 +621,7 @@ from the args and kwargs arguments, respectively.</p></section>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

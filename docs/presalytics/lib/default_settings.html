@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>presalytics.lib.default_settings API documentation</title>
+<meta name="description" content="Default settings for the Presalytics Python Client …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>presalytics.lib.default_settings</code></h1>
+</header>
+<section id="section-intro">
+<p>Default settings for the Presalytics Python Client</p>
+<p>This module contains a comprehesive set of values that can used to control the Presalytics
+Python client's behavior.
+The <code>presalytics.lib.loader</code> module contains to load these
+settings into the <code>presalytics.settings</code> instance on initialization.
+User should not reference
+the settings in this module directly, but rather use the <code>presaltyics.settings</code> instacne in their
+scripts and applications.
+Settings can be referring to as <code>presaltyics.settings.[SETTING_NAME]</code>.</p>
+<p>Users can override these default settings via two methods:</p>
+<pre><code>1. Environment Variables:  Evironment variables (or a .env file in the working directory) with
+the same key as the variable in this file will override this, provide the value can be parsed by
+the [environs](https://pypi.org/project/environs/) python package.
+
+2. &lt;code&gt;settings.py&lt;/code&gt; file:  A file named &lt;code&gt;settings.py&lt;/code&gt; in the user's current working directory.  The active working
+direcotry can be determine by using the &lt;code&gt;os.getcwd()&lt;/code&gt; command.  This &lt;code&gt;settings.py&lt;/code&gt; file takes the highest
+priority.  Settings defined in this file will override both the &lt;code&gt;default\_settings.py&lt;/code&gt; file and any enviroment variables.
+</code></pre>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/default_settings.py#L0-L264" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Default settings for the Presalytics Python Client
+
+This module contains a comprehesive set of values that can used to control the Presalytics
+Python client&#39;s behavior.  The `presalytics.lib.loader` module contains to load these
+settings into the `presalytics.settings` instance on initialization.  User should not reference
+the settings in this module directly, but rather use the `presaltyics.settings` instacne in their
+scripts and applications.  Settings can be referring to as `presaltyics.settings.[SETTING_NAME]`.
+
+Users can override these default settings via two methods:
+
+    1. Environment Variables:  Evironment variables (or a .env file in the working directory) with
+    the same key as the variable in this file will override this, provide the value can be parsed by
+    the [environs](https://pypi.org/project/environs/) python package.
+
+    2. `settings.py` file:  A file named `settings.py` in the user&#39;s current working directory.  The active working
+    direcotry can be determine by using the `os.getcwd()` command.  This `settings.py` file takes the highest
+    priority.  Settings defined in this file will override both the `default_settings.py` file and any enviroment variables.
+&#34;&#34;&#34;
+import os
+import logging
+import typing
+import presalytics.lib.constants
+
+
+#################################
+#     GENERAL CONFIGURATION     #
+#################################
+
+USE_LOGGER: bool = False
+&#34;&#34;&#34;
+Toggles whether the presalytics verbose file logger should be used.  Helpful for
+tracing exceptions while writing code.
+&#34;&#34;&#34;
+
+LOG_LEVEL = logging.DEBUG
+&#34;&#34;&#34;
+Sets the logging verbosity
+&#34;&#34;&#34;
+
+DEBUG = False
+&#34;&#34;&#34;
+Use debugging features.  Useful for rendering widgets and pages.
+&#34;&#34;&#34;
+
+USERNAME: typing.Optional[str] = os.environ.get(&#39;PRESALYTICS_USERNAME&#39;, None)
+&#34;&#34;&#34;
+The user&#39;s Presalytics API email/username.  This is the email address that the user uses when logging in at
+https://login.presalytics.io.  Will be passed to instances of the `presalytics.client.api.Client` object.
+&#34;&#34;&#34;
+
+PASSWORD: typing.Optional[str] = os.environ.get(&#39;PRESALYTICS_PASSWORD&#39;, None)
+&#34;&#34;&#34;
+The user&#39;s Presalytics API username.  Will be passed to instances of the
+`presalytics.client.api.Client` object.  If running in an insecure or
+multiuser environment, leave this blank and let the `presalytics.client.api.Client`
+object handle token acquisition via browser-based login.
+&#34;&#34;&#34;
+
+DELEGATE_LOGIN: bool = False
+&#34;&#34;&#34;
+Defaults to False.  Indicates whether the client would redirect to a browser to
+acquire an API token. If `DELEGATE_LOGIN` is `True`, when the `presalytics.client.api.Client` does not have
+access to a valid API token, the client will raise a `presalytics.lib.exceptions.InvalidTokenException`.
+The default operation will automatically open a new browser tab to acquire a new token
+via website client from the presalytics.io login page.  Putting this setting to True is
+useful for server-side development.
+&#34;&#34;&#34;
+
+CACHE_TOKENS: bool = False
+&#34;&#34;&#34;
+Indicates whether the `presalytics.client.api.Client` should store
+tokens in the current working directory in a file call &#34;token.json&#34;. This should be
+set to False for mutli-user environments.
+&#34;&#34;&#34;
+
+CLIENT_ID: str = presalytics.lib.constants.DEFAULT_CLIENT_ID
+&#34;&#34;&#34;
+For developer use. Allows developers to implement a `client_credentials` OpenID
+Connect login.  Defaults to &#34;python-client&#34;.
+&#34;&#34;&#34;
+
+CLIENT_SECRET: typing.Optional[str] = None
+&#34;&#34;&#34;
+For developer use. Allows developers to implement a `client_credentials` OpenID
+Connect login.  Defaults to None.
+&#34;&#34;&#34;
+
+VERIFY_HTTPS: bool = True
+&#34;&#34;&#34;
+For developer use.  Allows for unencrypted connections.  Defaults to True.  No
+reason to turn this to False unless you&#39;re in a complex development scenario
+and you know what you&#39;re doing.
+&#34;&#34;&#34;
+
+
+REDIRECT_URI: str = presalytics.lib.constants.REDIRECT_URI
+&#34;&#34;&#34;
+For developer use.  Useful if implementing authorization code flow for and OpenID Connect client.
+Redirect URIs must be approved by Presalytics API devops for use in client applications.
+&#34;&#34;&#34;
+
+RESERVED_NAMES: typing.List[str] = []
+&#34;&#34;&#34;
+A list of filenames for *.py files in the current workspace that should be ignored by the
+registries.
+&#34;&#34;&#34;
+
+USE_AUTODISCOVER: bool = False
+&#34;&#34;&#34;
+Allow registries to recurisively serach working directory and virtual environments for presalytics componets.
+Good for development, but degrades performance.
+&#34;&#34;&#34;
+
+AUTODISCOVER_PATHS: typing.List[str] = []
+&#34;&#34;&#34;
+A list of extra paths to search when looking for classes to add to a registry.  By default, registries
+already search the current directory and virtual environment folders when `USE_AUTODISCOVER` is
+set to true.
+&#34;&#34;&#34;
+
+IGNORE_PATHS: typing.List[str] = []
+&#34;&#34;&#34;
+A list of paths to not to include in registry autosdiscover
+&#34;&#34;&#34;
+
+PRESALYTICS_SETTINGS_MODULE: str = &#39;settings.py&#39;
+&#34;&#34;&#34;
+File path to the python module in the user&#39;s workspace with the user overrides for these settings.
+Should should be change if naming conflict exist with another package (e.g., a Django `settings.py` file)
+&#34;&#34;&#34;
+
+INSTALLED_PACKAGES: typing.List[str] = [&#39;presalytics&#39;]
+&#34;&#34;&#34;
+List of strings containing name of package containing Presalytics settings, plugins and components
+&#34;&#34;&#34;
+
+#################
+#     HOSTS     #
+#################
+
+HOST_EVENTS: str = presalytics.lib.constants.DEFAULT_HOST_EVENTS
+&#34;&#34;&#34;
+The base url for calls to the Events API
+&#34;&#34;&#34;
+
+HOST_STORY: str = presalytics.lib.constants.DEFAULT_HOST_STORY
+&#34;&#34;&#34;
+The base url for calls into the Story API
+&#34;&#34;&#34;
+
+HOST_OOXML_AUTOMATION: str = presalytics.lib.constants.DEFAULT_HOST_OOXML_AUTOMATION
+&#34;&#34;&#34;
+The base url for calls into the Ooxml Automation API
+&#34;&#34;&#34;
+
+HOST_WORKSPACE_API: str = presalytics.lib.constants.DEFAULT_HOST_WORKSPACE_API
+&#34;&#34;&#34;
+The base url calls into the Workspace API
+&#34;&#34;&#34;
+
+HOST_DOC_CONVERTER: str = presalytics.lib.constants.DEFAULT_HOST_DOC_CONVERTER
+&#34;&#34;&#34;
+The base url for calls into the Doc Converter API
+&#34;&#34;&#34;
+
+HOST_SITE: str = presalytics.lib.constants.DEFAULT_HOST_SITE
+&#34;&#34;&#34;
+The base url for API calls into the presalytics website
+&#34;&#34;&#34;
+
+BROWSER_API_HOST_EVENTS: typing.Optional[str] = None
+&#34;&#34;&#34;
+The base url web broswers should use to make API calls into Events API.  Useful during rendering of stories.
+Defaults to the `HOST_EVENTS` setting if not present.
+&#34;&#34;&#34;
+
+BROWSER_API_HOST_STORY: typing.Optional[str] = None
+&#34;&#34;&#34;
+The base url web broswers should use to make API calls into Story API.  Useful during rendering of stories.
+Defaults to the `HOST_STORY` setting if not present.
+&#34;&#34;&#34;
+
+BROWSER_API_HOST_OOXML_AUTOMATION: typing.Optional[str] = None
+&#34;&#34;&#34;
+The base url web broswers should use to make API calls into Ooxml Automation API.  Useful during rendering of stories.
+Defaults to the `HOST_OOXML_AUTOMATION` setting if not present.
+&#34;&#34;&#34;
+
+BROWSER_API_HOST_SITE: typing.Optional[str] = None
+&#34;&#34;&#34;
+The base url web broswers should use to make API calls into the presalytics website.  Mainly useful for custom authentication schemes.
+Defaults to the `HOST_SITE` setting if not present.
+&#34;&#34;&#34;
+
+BROWSER_API_HOST_WORKSPACE_API: typing.Optional[str] = None
+&#34;&#34;&#34;
+The base url web broswers should use to make API calls into the Workspace API.  Useful during rendering of stories.
+Defaults to the `HOST_WORKSPACE_API` setting if not present.
+&#34;&#34;&#34;
+
+
+######################
+#     REGISTRIES     #
+######################
+
+OVERRIDE_REGISTRY_DEFAULTS: bool = False
+&#34;&#34;&#34;
+By default, registry settings are additive --&gt; Registries import the default classes from this file and any `settings.py`
+files found in packages in the `INSTALLED_PACKAGES` setting.
+For a performance boost, a user can limit the imported list of classes in their registries to a defined
+list in their `settings.py` file by setting `OVERRIDE_REGISTRY_DEFAULTS` to `True`
+&#34;&#34;&#34;
+
+COMPONENTS: typing.List[str] = [
+    &#39;presalytics.lib.widgets.chart.ChartWidget&#39;,
+    &#39;presalytics.lib.widgets.d3.D3Widget&#39;,
+    &#39;presalytics.lib.widgets.data_table.DataTableWidget&#39;,
+    &#39;presalytics.lib.widgets.markdown.MarkdownWidget&#39;,
+    &#39;presalytics.lib.widgets.matplotlib.MatplotlibFigure&#39;,
+    &#39;presalytics.lib.widgets.matplotlib.MatplotlibResponsiveFigure&#39;,
+    &#39;presalytics.lib.widgets.ooxml.OoxmlFileWidget&#39;,
+    &#39;presalytics.lib.widgets.ooxml.ChartUpdaterWidget&#39;,
+    &#39;presalytics.lib.widgets.ooxml.TableUpdaterWidget&#39;,
+    &#39;presalytics.lib.widgets.url.UrlWidget&#39;,
+    &#39;presalytics.lib.themes.ooxml.OoxmlTheme&#39;,
+    &#39;presalytics.lib.templates.base.WidgetPage&#39;,
+    &#39;presalytics.lib.templates.base.JinjaTemplateBuilder&#39;,
+    &#39;presalytics.lib.templates.base.TitleWithSingleItem&#39;,
+    &#39;presalytics.lib.templates.base.TwoUpWithTitle&#39;,
+    &#39;presalytics.lib.templates.base.BootstrapCustomTemplate&#39;
+]
+&#34;&#34;&#34;
+A list of string containing the dotted path names of Components that should be imported into the
+Presalytics component registry at `presalytics.COMPONENTS`.  The dotted path name is the same name path used for an import statement
+at the top of a python file
+&#34;&#34;&#34;
+
+PLUGINS: typing.List[str] = [
+    &#39;presalytics.lib.plugins.external.ApprovedExternalLinks&#39;,
+    &#39;presalytics.lib.plugins.external.ApprovedExternalScripts&#39;,
+    &#39;presalytics.lib.plugins.local.LocalStylesPlugin&#39;,
+    &#39;presalytics.lib.plugins.matplotlib.Mpld3Plugin&#39;,
+    &#39;presalytics.lib.plugins.matplotlib.Mpld3Plugin&#39;,
+    &#39;presalytics.lib.plugins.ooxml.OoxmlTheme&#39;,
+    &#39;presalytics.lib.plugins.reveal_theme.RevealCustomTheme&#39;,
+    &#39;presalytics.lib.plugins.reveal.RevealConfigPlugin&#39;,
+    &#39;presalytics.lib.plugins.scss.ScssPlugin&#39;
+]
+&#34;&#34;&#34;
+A list of string containing the dotted path names of Plugins that should be imported into the
+Presalytics plugins registry at `presalytics.PLUGINS`.  The dotted path name is the same name path used for an import statement
+at the top of a python file
+&#34;&#34;&#34;
+
+XML_TRANSFORMS: typing.List[str] = [
+    &#39;presalytics.lib.widgets.ooxml_editors.ChangeShapeColor&#39;,
+    &#39;presalytics.lib.widgets.ooxml_editors.TextReplace&#39;,
+    &#39;presalytics.lib.widgets.ooxml_editors.MultiXmlTransform&#39;
+]
+&#34;&#34;&#34;
+A list of string containing the dotted path names of Components that should be imported into the
+Presalytics component registry.  The dotted path name is the same name path used for an import statement
+at the top of a python file
+&#34;&#34;&#34;</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-variables">Global variables</h2>
+<dl>
+<dt id="presalytics.lib.default_settings.USE_LOGGER"><code class="name">var <span class="ident">USE_LOGGER</span></code></dt>
+<dd>
+<section class="desc"><p>Toggles whether the presalytics verbose file logger should be used.
+Helpful for
+tracing exceptions while writing code.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.LOG_LEVEL"><code class="name">var <span class="ident">LOG_LEVEL</span></code></dt>
+<dd>
+<section class="desc"><p>Sets the logging verbosity</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.DEBUG"><code class="name">var <span class="ident">DEBUG</span></code></dt>
+<dd>
+<section class="desc"><p>Use debugging features.
+Useful for rendering widgets and pages.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.USERNAME"><code class="name">var <span class="ident">USERNAME</span></code></dt>
+<dd>
+<section class="desc"><p>The user's Presalytics API email/username.
+This is the email address that the user uses when logging in at
+<a href="https://login.presalytics.io.">https://login.presalytics.io.</a>
+Will be passed to instances of the <code><a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client">Client</a></code> object.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.PASSWORD"><code class="name">var <span class="ident">PASSWORD</span></code></dt>
+<dd>
+<section class="desc"><p>The user's Presalytics API username.
+Will be passed to instances of the
+<code><a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client">Client</a></code> object.
+If running in an insecure or
+multiuser environment, leave this blank and let the <code><a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client">Client</a></code>
+object handle token acquisition via browser-based login.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.DELEGATE_LOGIN"><code class="name">var <span class="ident">DELEGATE_LOGIN</span></code></dt>
+<dd>
+<section class="desc"><p>Defaults to False.
+Indicates whether the client would redirect to a browser to
+acquire an API token. If <code><a title="presalytics.lib.default_settings.DELEGATE_LOGIN" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.DELEGATE_LOGIN">DELEGATE_LOGIN</a></code> is <code>True</code>, when the <code><a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client">Client</a></code> does not have
+access to a valid API token, the client will raise a <code><a title="presalytics.lib.exceptions.InvalidTokenException" href="/python-client/presalytics/lib/exceptions.html#presalytics.lib.exceptions.InvalidTokenException">InvalidTokenException</a></code>.
+The default operation will automatically open a new browser tab to acquire a new token
+via website client from the presalytics.io login page.
+Putting this setting to True is
+useful for server-side development.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.CACHE_TOKENS"><code class="name">var <span class="ident">CACHE_TOKENS</span></code></dt>
+<dd>
+<section class="desc"><p>Indicates whether the <code><a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client">Client</a></code> should store
+tokens in the current working directory in a file call "token.json". This should be
+set to False for mutli-user environments.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.CLIENT_ID"><code class="name">var <span class="ident">CLIENT_ID</span></code></dt>
+<dd>
+<section class="desc"><p>For developer use. Allows developers to implement a <code>client_credentials</code> OpenID
+Connect login.
+Defaults to "python-client".</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.CLIENT_SECRET"><code class="name">var <span class="ident">CLIENT_SECRET</span></code></dt>
+<dd>
+<section class="desc"><p>For developer use. Allows developers to implement a <code>client_credentials</code> OpenID
+Connect login.
+Defaults to None.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.VERIFY_HTTPS"><code class="name">var <span class="ident">VERIFY_HTTPS</span></code></dt>
+<dd>
+<section class="desc"><p>For developer use.
+Allows for unencrypted connections.
+Defaults to True.
+No
+reason to turn this to False unless you're in a complex development scenario
+and you know what you're doing.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.REDIRECT_URI"><code class="name">var <span class="ident">REDIRECT_URI</span></code></dt>
+<dd>
+<section class="desc"><p>For developer use.
+Useful if implementing authorization code flow for and OpenID Connect client.
+Redirect URIs must be approved by Presalytics API devops for use in client applications.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.RESERVED_NAMES"><code class="name">var <span class="ident">RESERVED_NAMES</span></code></dt>
+<dd>
+<section class="desc"><p>A list of filenames for *.py files in the current workspace that should be ignored by the
+registries.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.USE_AUTODISCOVER"><code class="name">var <span class="ident">USE_AUTODISCOVER</span></code></dt>
+<dd>
+<section class="desc"><p>Allow registries to recurisively serach working directory and virtual environments for presalytics componets.
+Good for development, but degrades performance.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.AUTODISCOVER_PATHS"><code class="name">var <span class="ident">AUTODISCOVER_PATHS</span></code></dt>
+<dd>
+<section class="desc"><p>A list of extra paths to search when looking for classes to add to a registry.
+By default, registries
+already search the current directory and virtual environment folders when <code><a title="presalytics.lib.default_settings.USE_AUTODISCOVER" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.USE_AUTODISCOVER">USE_AUTODISCOVER</a></code> is
+set to true.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.IGNORE_PATHS"><code class="name">var <span class="ident">IGNORE_PATHS</span></code></dt>
+<dd>
+<section class="desc"><p>A list of paths to not to include in registry autosdiscover</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.PRESALYTICS_SETTINGS_MODULE"><code class="name">var <span class="ident">PRESALYTICS_SETTINGS_MODULE</span></code></dt>
+<dd>
+<section class="desc"><p>File path to the python module in the user's workspace with the user overrides for these settings.
+Should should be change if naming conflict exist with another package (e.g., a Django <code>settings.py</code> file)</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.INSTALLED_PACKAGES"><code class="name">var <span class="ident">INSTALLED_PACKAGES</span></code></dt>
+<dd>
+<section class="desc"><p>List of strings containing name of package containing Presalytics settings, plugins and components</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.HOST_EVENTS"><code class="name">var <span class="ident">HOST_EVENTS</span></code></dt>
+<dd>
+<section class="desc"><p>The base url for calls to the Events API</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.HOST_STORY"><code class="name">var <span class="ident">HOST_STORY</span></code></dt>
+<dd>
+<section class="desc"><p>The base url for calls into the Story API</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.HOST_OOXML_AUTOMATION"><code class="name">var <span class="ident">HOST_OOXML_AUTOMATION</span></code></dt>
+<dd>
+<section class="desc"><p>The base url for calls into the Ooxml Automation API</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.HOST_WORKSPACE_API"><code class="name">var <span class="ident">HOST_WORKSPACE_API</span></code></dt>
+<dd>
+<section class="desc"><p>The base url calls into the Workspace API</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.HOST_DOC_CONVERTER"><code class="name">var <span class="ident">HOST_DOC_CONVERTER</span></code></dt>
+<dd>
+<section class="desc"><p>The base url for calls into the Doc Converter API</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.HOST_SITE"><code class="name">var <span class="ident">HOST_SITE</span></code></dt>
+<dd>
+<section class="desc"><p>The base url for API calls into the presalytics website</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.BROWSER_API_HOST_EVENTS"><code class="name">var <span class="ident">BROWSER_API_HOST_EVENTS</span></code></dt>
+<dd>
+<section class="desc"><p>The base url web broswers should use to make API calls into Events API.
+Useful during rendering of stories.
+Defaults to the <code><a title="presalytics.lib.default_settings.HOST_EVENTS" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.HOST_EVENTS">HOST_EVENTS</a></code> setting if not present.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.BROWSER_API_HOST_STORY"><code class="name">var <span class="ident">BROWSER_API_HOST_STORY</span></code></dt>
+<dd>
+<section class="desc"><p>The base url web broswers should use to make API calls into Story API.
+Useful during rendering of stories.
+Defaults to the <code><a title="presalytics.lib.default_settings.HOST_STORY" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.HOST_STORY">HOST_STORY</a></code> setting if not present.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.BROWSER_API_HOST_OOXML_AUTOMATION"><code class="name">var <span class="ident">BROWSER_API_HOST_OOXML_AUTOMATION</span></code></dt>
+<dd>
+<section class="desc"><p>The base url web broswers should use to make API calls into Ooxml Automation API.
+Useful during rendering of stories.
+Defaults to the <code><a title="presalytics.lib.default_settings.HOST_OOXML_AUTOMATION" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.HOST_OOXML_AUTOMATION">HOST_OOXML_AUTOMATION</a></code> setting if not present.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.BROWSER_API_HOST_SITE"><code class="name">var <span class="ident">BROWSER_API_HOST_SITE</span></code></dt>
+<dd>
+<section class="desc"><p>The base url web broswers should use to make API calls into the presalytics website.
+Mainly useful for custom authentication schemes.
+Defaults to the <code><a title="presalytics.lib.default_settings.HOST_SITE" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.HOST_SITE">HOST_SITE</a></code> setting if not present.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.BROWSER_API_HOST_WORKSPACE_API"><code class="name">var <span class="ident">BROWSER_API_HOST_WORKSPACE_API</span></code></dt>
+<dd>
+<section class="desc"><p>The base url web broswers should use to make API calls into the Workspace API.
+Useful during rendering of stories.
+Defaults to the <code><a title="presalytics.lib.default_settings.HOST_WORKSPACE_API" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.HOST_WORKSPACE_API">HOST_WORKSPACE_API</a></code> setting if not present.</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.OVERRIDE_REGISTRY_DEFAULTS"><code class="name">var <span class="ident">OVERRIDE_REGISTRY_DEFAULTS</span></code></dt>
+<dd>
+<section class="desc"><p>By default, registry settings are additive &ndash;&gt; Registries import the default classes from this file and any <code>settings.py</code>
+files found in packages in the <code><a title="presalytics.lib.default_settings.INSTALLED_PACKAGES" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.INSTALLED_PACKAGES">INSTALLED_PACKAGES</a></code> setting.
+For a performance boost, a user can limit the imported list of classes in their registries to a defined
+list in their <code>settings.py</code> file by setting <code><a title="presalytics.lib.default_settings.OVERRIDE_REGISTRY_DEFAULTS" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.OVERRIDE_REGISTRY_DEFAULTS">OVERRIDE_REGISTRY_DEFAULTS</a></code> to <code>True</code></p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.COMPONENTS"><code class="name">var <span class="ident">COMPONENTS</span></code></dt>
+<dd>
+<section class="desc"><p>A list of string containing the dotted path names of Components that should be imported into the
+Presalytics component registry at <code><a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS">COMPONENTS</a></code>.
+The dotted path name is the same name path used for an import statement
+at the top of a python file</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.PLUGINS"><code class="name">var <span class="ident">PLUGINS</span></code></dt>
+<dd>
+<section class="desc"><p>A list of string containing the dotted path names of Plugins that should be imported into the
+Presalytics plugins registry at <code><a title="presalytics.PLUGINS" href="/python-client/presalytics/index.html#presalytics.PLUGINS">PLUGINS</a></code>.
+The dotted path name is the same name path used for an import statement
+at the top of a python file</p></section>
+</dd>
+<dt id="presalytics.lib.default_settings.XML_TRANSFORMS"><code class="name">var <span class="ident">XML_TRANSFORMS</span></code></dt>
+<dd>
+<section class="desc"><p>A list of string containing the dotted path names of Components that should be imported into the
+Presalytics component registry.
+The dotted path name is the same name path used for an import statement
+at the top of a python file</p></section>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="presalytics.lib" href="/python-client/presalytics/lib/index.html">presalytics.lib</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-variables">Global variables</a></h3>
+<ul class="">
+<li><code><a title="presalytics.lib.default_settings.USE_LOGGER" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.USE_LOGGER">USE_LOGGER</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.LOG_LEVEL" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.LOG_LEVEL">LOG_LEVEL</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.DEBUG" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.DEBUG">DEBUG</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.USERNAME" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.USERNAME">USERNAME</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.PASSWORD" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.PASSWORD">PASSWORD</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.DELEGATE_LOGIN" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.DELEGATE_LOGIN">DELEGATE_LOGIN</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.CACHE_TOKENS" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.CACHE_TOKENS">CACHE_TOKENS</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.CLIENT_ID" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.CLIENT_ID">CLIENT_ID</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.CLIENT_SECRET" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.CLIENT_SECRET">CLIENT_SECRET</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.VERIFY_HTTPS" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.VERIFY_HTTPS">VERIFY_HTTPS</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.REDIRECT_URI" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.REDIRECT_URI">REDIRECT_URI</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.RESERVED_NAMES" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.RESERVED_NAMES">RESERVED_NAMES</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.USE_AUTODISCOVER" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.USE_AUTODISCOVER">USE_AUTODISCOVER</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.AUTODISCOVER_PATHS" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.AUTODISCOVER_PATHS">AUTODISCOVER_PATHS</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.IGNORE_PATHS" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.IGNORE_PATHS">IGNORE_PATHS</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.PRESALYTICS_SETTINGS_MODULE" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.PRESALYTICS_SETTINGS_MODULE">PRESALYTICS_SETTINGS_MODULE</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.INSTALLED_PACKAGES" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.INSTALLED_PACKAGES">INSTALLED_PACKAGES</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.HOST_EVENTS" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.HOST_EVENTS">HOST_EVENTS</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.HOST_STORY" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.HOST_STORY">HOST_STORY</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.HOST_OOXML_AUTOMATION" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.HOST_OOXML_AUTOMATION">HOST_OOXML_AUTOMATION</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.HOST_WORKSPACE_API" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.HOST_WORKSPACE_API">HOST_WORKSPACE_API</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.HOST_DOC_CONVERTER" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.HOST_DOC_CONVERTER">HOST_DOC_CONVERTER</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.HOST_SITE" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.HOST_SITE">HOST_SITE</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.BROWSER_API_HOST_EVENTS" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.BROWSER_API_HOST_EVENTS">BROWSER_API_HOST_EVENTS</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.BROWSER_API_HOST_STORY" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.BROWSER_API_HOST_STORY">BROWSER_API_HOST_STORY</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.BROWSER_API_HOST_OOXML_AUTOMATION" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.BROWSER_API_HOST_OOXML_AUTOMATION">BROWSER_API_HOST_OOXML_AUTOMATION</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.BROWSER_API_HOST_SITE" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.BROWSER_API_HOST_SITE">BROWSER_API_HOST_SITE</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.BROWSER_API_HOST_WORKSPACE_API" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.BROWSER_API_HOST_WORKSPACE_API">BROWSER_API_HOST_WORKSPACE_API</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.OVERRIDE_REGISTRY_DEFAULTS" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.OVERRIDE_REGISTRY_DEFAULTS">OVERRIDE_REGISTRY_DEFAULTS</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.COMPONENTS" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.COMPONENTS">COMPONENTS</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.PLUGINS" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.PLUGINS">PLUGINS</a></code></li>
+<li><code><a title="presalytics.lib.default_settings.XML_TRANSFORMS" href="/python-client/presalytics/lib/default_settings.html#presalytics.lib.default_settings.XML_TRANSFORMS">XML_TRANSFORMS</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

@@ -1,0 +1,2731 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>presalytics.client.ooxml_automation.models.shared_lines_details API documentation</title>
+<meta name="description" content="OOXML Automation …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>presalytics.client.ooxml_automation.models.shared_lines_details</code></h1>
+</header>
+<section id="section-intro">
+<p>OOXML Automation</p>
+<p>This API helps users convert Excel and Powerpoint documents into rich, live dashboards and stories.
+# noqa: E501</p>
+<p>The version of the OpenAPI document: 0.1.0-no-tags
+Generated by: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a></p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L0-L908" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python"># coding: utf-8
+
+&#34;&#34;&#34;
+    OOXML Automation
+
+    This API helps users convert Excel and Powerpoint documents into rich, live dashboards and stories.  # noqa: E501
+
+    The version of the OpenAPI document: 0.1.0-no-tags
+    Generated by: https://openapi-generator.tech
+&#34;&#34;&#34;
+
+
+import pprint
+import re  # noqa: F401
+
+import six
+
+
+class SharedLinesDetails(object):
+    &#34;&#34;&#34;NOTE: This class is auto generated by OpenAPI Generator.
+    Ref: https://openapi-generator.tech
+
+    Do not edit the class manually.
+    &#34;&#34;&#34;
+
+    &#34;&#34;&#34;
+    Attributes:
+      openapi_types (dict): The key is attribute name
+                            and the value is attribute type.
+      attribute_map (dict): The key is attribute name
+                            and the value is json key in definition.
+    &#34;&#34;&#34;
+    openapi_types = {
+        &#39;line_color_solid_fill&#39;: &#39;SharedSolidFillsDetails&#39;,
+        &#39;connector_id&#39;: &#39;str&#39;,
+        &#39;parent_connector&#39;: &#39;SlideConnectorDetails&#39;,
+        &#39;shape_id&#39;: &#39;str&#39;,
+        &#39;parent_shape&#39;: &#39;SlideShapesDetails&#39;,
+        &#39;dash_type_id&#39;: &#39;int&#39;,
+        &#39;head_end_type_id&#39;: &#39;int&#39;,
+        &#39;tail_end_type_id&#39;: &#39;int&#39;,
+        &#39;weight&#39;: &#39;int&#39;,
+        &#39;head_end_height_id&#39;: &#39;int&#39;,
+        &#39;head_end_width_id&#39;: &#39;int&#39;,
+        &#39;tail_end_height_id&#39;: &#39;int&#39;,
+        &#39;tail_end_width_id&#39;: &#39;int&#39;,
+        &#39;top_border_id&#39;: &#39;str&#39;,
+        &#39;top_border&#39;: &#39;TableBordersDetails&#39;,
+        &#39;bottom_border_id&#39;: &#39;str&#39;,
+        &#39;bottom_border&#39;: &#39;TableBordersDetails&#39;,
+        &#39;right_border_id&#39;: &#39;str&#39;,
+        &#39;right_border&#39;: &#39;TableBordersDetails&#39;,
+        &#39;left_border_id&#39;: &#39;str&#39;,
+        &#39;left_border&#39;: &#39;TableBordersDetails&#39;,
+        &#39;t_lto_br_border_id&#39;: &#39;str&#39;,
+        &#39;t_lto_br_border&#39;: &#39;TableBordersDetails&#39;,
+        &#39;b_lto_tr_border_id&#39;: &#39;str&#39;,
+        &#39;b_lto_tr_border&#39;: &#39;TableBordersDetails&#39;,
+        &#39;line_map_id&#39;: &#39;str&#39;,
+        &#39;line_map&#39;: &#39;ThemeLineMapDetails&#39;,
+        &#39;id&#39;: &#39;str&#39;,
+        &#39;date_created&#39;: &#39;datetime&#39;,
+        &#39;user_created&#39;: &#39;str&#39;,
+        &#39;date_modified&#39;: &#39;datetime&#39;,
+        &#39;user_modified&#39;: &#39;str&#39;
+    }
+
+    attribute_map = {
+        &#39;line_color_solid_fill&#39;: &#39;lineColorSolidFill&#39;,
+        &#39;connector_id&#39;: &#39;connectorId&#39;,
+        &#39;parent_connector&#39;: &#39;parentConnector&#39;,
+        &#39;shape_id&#39;: &#39;shapeId&#39;,
+        &#39;parent_shape&#39;: &#39;parentShape&#39;,
+        &#39;dash_type_id&#39;: &#39;dashTypeId&#39;,
+        &#39;head_end_type_id&#39;: &#39;headEndTypeId&#39;,
+        &#39;tail_end_type_id&#39;: &#39;tailEndTypeId&#39;,
+        &#39;weight&#39;: &#39;weight&#39;,
+        &#39;head_end_height_id&#39;: &#39;headEndHeightId&#39;,
+        &#39;head_end_width_id&#39;: &#39;headEndWidthId&#39;,
+        &#39;tail_end_height_id&#39;: &#39;tailEndHeightId&#39;,
+        &#39;tail_end_width_id&#39;: &#39;tailEndWidthId&#39;,
+        &#39;top_border_id&#39;: &#39;topBorderId&#39;,
+        &#39;top_border&#39;: &#39;topBorder&#39;,
+        &#39;bottom_border_id&#39;: &#39;bottomBorderId&#39;,
+        &#39;bottom_border&#39;: &#39;bottomBorder&#39;,
+        &#39;right_border_id&#39;: &#39;rightBorderId&#39;,
+        &#39;right_border&#39;: &#39;rightBorder&#39;,
+        &#39;left_border_id&#39;: &#39;leftBorderId&#39;,
+        &#39;left_border&#39;: &#39;leftBorder&#39;,
+        &#39;t_lto_br_border_id&#39;: &#39;tLtoBRBorderId&#39;,
+        &#39;t_lto_br_border&#39;: &#39;tLtoBRBorder&#39;,
+        &#39;b_lto_tr_border_id&#39;: &#39;bLtoTRBorderId&#39;,
+        &#39;b_lto_tr_border&#39;: &#39;bLtoTRBorder&#39;,
+        &#39;line_map_id&#39;: &#39;lineMapId&#39;,
+        &#39;line_map&#39;: &#39;lineMap&#39;,
+        &#39;id&#39;: &#39;id&#39;,
+        &#39;date_created&#39;: &#39;dateCreated&#39;,
+        &#39;user_created&#39;: &#39;userCreated&#39;,
+        &#39;date_modified&#39;: &#39;dateModified&#39;,
+        &#39;user_modified&#39;: &#39;userModified&#39;
+    }
+
+    def __init__(self, line_color_solid_fill=None, connector_id=None, parent_connector=None, shape_id=None, parent_shape=None, dash_type_id=None, head_end_type_id=None, tail_end_type_id=None, weight=None, head_end_height_id=None, head_end_width_id=None, tail_end_height_id=None, tail_end_width_id=None, top_border_id=None, top_border=None, bottom_border_id=None, bottom_border=None, right_border_id=None, right_border=None, left_border_id=None, left_border=None, t_lto_br_border_id=None, t_lto_br_border=None, b_lto_tr_border_id=None, b_lto_tr_border=None, line_map_id=None, line_map=None, id=None, date_created=None, user_created=None, date_modified=None, user_modified=None):  # noqa: E501
+        &#34;&#34;&#34;SharedLinesDetails - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
+
+        self._line_color_solid_fill = None
+        self._connector_id = None
+        self._parent_connector = None
+        self._shape_id = None
+        self._parent_shape = None
+        self._dash_type_id = None
+        self._head_end_type_id = None
+        self._tail_end_type_id = None
+        self._weight = None
+        self._head_end_height_id = None
+        self._head_end_width_id = None
+        self._tail_end_height_id = None
+        self._tail_end_width_id = None
+        self._top_border_id = None
+        self._top_border = None
+        self._bottom_border_id = None
+        self._bottom_border = None
+        self._right_border_id = None
+        self._right_border = None
+        self._left_border_id = None
+        self._left_border = None
+        self._t_lto_br_border_id = None
+        self._t_lto_br_border = None
+        self._b_lto_tr_border_id = None
+        self._b_lto_tr_border = None
+        self._line_map_id = None
+        self._line_map = None
+        self._id = None
+        self._date_created = None
+        self._user_created = None
+        self._date_modified = None
+        self._user_modified = None
+        self.discriminator = None
+
+        if line_color_solid_fill is not None:
+            self.line_color_solid_fill = line_color_solid_fill
+        self.connector_id = connector_id
+        if parent_connector is not None:
+            self.parent_connector = parent_connector
+        self.shape_id = shape_id
+        if parent_shape is not None:
+            self.parent_shape = parent_shape
+        if dash_type_id is not None:
+            self.dash_type_id = dash_type_id
+        if head_end_type_id is not None:
+            self.head_end_type_id = head_end_type_id
+        if tail_end_type_id is not None:
+            self.tail_end_type_id = tail_end_type_id
+        if weight is not None:
+            self.weight = weight
+        if head_end_height_id is not None:
+            self.head_end_height_id = head_end_height_id
+        if head_end_width_id is not None:
+            self.head_end_width_id = head_end_width_id
+        if tail_end_height_id is not None:
+            self.tail_end_height_id = tail_end_height_id
+        if tail_end_width_id is not None:
+            self.tail_end_width_id = tail_end_width_id
+        self.top_border_id = top_border_id
+        if top_border is not None:
+            self.top_border = top_border
+        self.bottom_border_id = bottom_border_id
+        if bottom_border is not None:
+            self.bottom_border = bottom_border
+        self.right_border_id = right_border_id
+        if right_border is not None:
+            self.right_border = right_border
+        self.left_border_id = left_border_id
+        if left_border is not None:
+            self.left_border = left_border
+        self.t_lto_br_border_id = t_lto_br_border_id
+        if t_lto_br_border is not None:
+            self.t_lto_br_border = t_lto_br_border
+        self.b_lto_tr_border_id = b_lto_tr_border_id
+        if b_lto_tr_border is not None:
+            self.b_lto_tr_border = b_lto_tr_border
+        self.line_map_id = line_map_id
+        if line_map is not None:
+            self.line_map = line_map
+        if id is not None:
+            self.id = id
+        if date_created is not None:
+            self.date_created = date_created
+        if user_created is not None:
+            self.user_created = user_created
+        if date_modified is not None:
+            self.date_modified = date_modified
+        if user_modified is not None:
+            self.user_modified = user_modified
+
+    @property
+    def line_color_solid_fill(self):
+        &#34;&#34;&#34;Gets the line_color_solid_fill of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The line_color_solid_fill of this SharedLinesDetails.  # noqa: E501
+        :rtype: SharedSolidFillsDetails
+        &#34;&#34;&#34;
+        return self._line_color_solid_fill
+
+    @line_color_solid_fill.setter
+    def line_color_solid_fill(self, line_color_solid_fill):
+        &#34;&#34;&#34;Sets the line_color_solid_fill of this SharedLinesDetails.
+
+
+        :param line_color_solid_fill: The line_color_solid_fill of this SharedLinesDetails.  # noqa: E501
+        :type: SharedSolidFillsDetails
+        &#34;&#34;&#34;
+
+        self._line_color_solid_fill = line_color_solid_fill
+
+    @property
+    def connector_id(self):
+        &#34;&#34;&#34;Gets the connector_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The connector_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._connector_id
+
+    @connector_id.setter
+    def connector_id(self, connector_id):
+        &#34;&#34;&#34;Sets the connector_id of this SharedLinesDetails.
+
+
+        :param connector_id: The connector_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._connector_id = connector_id
+
+    @property
+    def parent_connector(self):
+        &#34;&#34;&#34;Gets the parent_connector of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The parent_connector of this SharedLinesDetails.  # noqa: E501
+        :rtype: SlideConnectorDetails
+        &#34;&#34;&#34;
+        return self._parent_connector
+
+    @parent_connector.setter
+    def parent_connector(self, parent_connector):
+        &#34;&#34;&#34;Sets the parent_connector of this SharedLinesDetails.
+
+
+        :param parent_connector: The parent_connector of this SharedLinesDetails.  # noqa: E501
+        :type: SlideConnectorDetails
+        &#34;&#34;&#34;
+
+        self._parent_connector = parent_connector
+
+    @property
+    def shape_id(self):
+        &#34;&#34;&#34;Gets the shape_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The shape_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._shape_id
+
+    @shape_id.setter
+    def shape_id(self, shape_id):
+        &#34;&#34;&#34;Sets the shape_id of this SharedLinesDetails.
+
+
+        :param shape_id: The shape_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._shape_id = shape_id
+
+    @property
+    def parent_shape(self):
+        &#34;&#34;&#34;Gets the parent_shape of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The parent_shape of this SharedLinesDetails.  # noqa: E501
+        :rtype: SlideShapesDetails
+        &#34;&#34;&#34;
+        return self._parent_shape
+
+    @parent_shape.setter
+    def parent_shape(self, parent_shape):
+        &#34;&#34;&#34;Sets the parent_shape of this SharedLinesDetails.
+
+
+        :param parent_shape: The parent_shape of this SharedLinesDetails.  # noqa: E501
+        :type: SlideShapesDetails
+        &#34;&#34;&#34;
+
+        self._parent_shape = parent_shape
+
+    @property
+    def dash_type_id(self):
+        &#34;&#34;&#34;Gets the dash_type_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The dash_type_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._dash_type_id
+
+    @dash_type_id.setter
+    def dash_type_id(self, dash_type_id):
+        &#34;&#34;&#34;Sets the dash_type_id of this SharedLinesDetails.
+
+
+        :param dash_type_id: The dash_type_id of this SharedLinesDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._dash_type_id = dash_type_id
+
+    @property
+    def head_end_type_id(self):
+        &#34;&#34;&#34;Gets the head_end_type_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The head_end_type_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._head_end_type_id
+
+    @head_end_type_id.setter
+    def head_end_type_id(self, head_end_type_id):
+        &#34;&#34;&#34;Sets the head_end_type_id of this SharedLinesDetails.
+
+
+        :param head_end_type_id: The head_end_type_id of this SharedLinesDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._head_end_type_id = head_end_type_id
+
+    @property
+    def tail_end_type_id(self):
+        &#34;&#34;&#34;Gets the tail_end_type_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The tail_end_type_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._tail_end_type_id
+
+    @tail_end_type_id.setter
+    def tail_end_type_id(self, tail_end_type_id):
+        &#34;&#34;&#34;Sets the tail_end_type_id of this SharedLinesDetails.
+
+
+        :param tail_end_type_id: The tail_end_type_id of this SharedLinesDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._tail_end_type_id = tail_end_type_id
+
+    @property
+    def weight(self):
+        &#34;&#34;&#34;Gets the weight of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The weight of this SharedLinesDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._weight
+
+    @weight.setter
+    def weight(self, weight):
+        &#34;&#34;&#34;Sets the weight of this SharedLinesDetails.
+
+
+        :param weight: The weight of this SharedLinesDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._weight = weight
+
+    @property
+    def head_end_height_id(self):
+        &#34;&#34;&#34;Gets the head_end_height_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The head_end_height_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._head_end_height_id
+
+    @head_end_height_id.setter
+    def head_end_height_id(self, head_end_height_id):
+        &#34;&#34;&#34;Sets the head_end_height_id of this SharedLinesDetails.
+
+
+        :param head_end_height_id: The head_end_height_id of this SharedLinesDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._head_end_height_id = head_end_height_id
+
+    @property
+    def head_end_width_id(self):
+        &#34;&#34;&#34;Gets the head_end_width_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The head_end_width_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._head_end_width_id
+
+    @head_end_width_id.setter
+    def head_end_width_id(self, head_end_width_id):
+        &#34;&#34;&#34;Sets the head_end_width_id of this SharedLinesDetails.
+
+
+        :param head_end_width_id: The head_end_width_id of this SharedLinesDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._head_end_width_id = head_end_width_id
+
+    @property
+    def tail_end_height_id(self):
+        &#34;&#34;&#34;Gets the tail_end_height_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The tail_end_height_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._tail_end_height_id
+
+    @tail_end_height_id.setter
+    def tail_end_height_id(self, tail_end_height_id):
+        &#34;&#34;&#34;Sets the tail_end_height_id of this SharedLinesDetails.
+
+
+        :param tail_end_height_id: The tail_end_height_id of this SharedLinesDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._tail_end_height_id = tail_end_height_id
+
+    @property
+    def tail_end_width_id(self):
+        &#34;&#34;&#34;Gets the tail_end_width_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The tail_end_width_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._tail_end_width_id
+
+    @tail_end_width_id.setter
+    def tail_end_width_id(self, tail_end_width_id):
+        &#34;&#34;&#34;Sets the tail_end_width_id of this SharedLinesDetails.
+
+
+        :param tail_end_width_id: The tail_end_width_id of this SharedLinesDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._tail_end_width_id = tail_end_width_id
+
+    @property
+    def top_border_id(self):
+        &#34;&#34;&#34;Gets the top_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The top_border_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._top_border_id
+
+    @top_border_id.setter
+    def top_border_id(self, top_border_id):
+        &#34;&#34;&#34;Sets the top_border_id of this SharedLinesDetails.
+
+
+        :param top_border_id: The top_border_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._top_border_id = top_border_id
+
+    @property
+    def top_border(self):
+        &#34;&#34;&#34;Gets the top_border of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The top_border of this SharedLinesDetails.  # noqa: E501
+        :rtype: TableBordersDetails
+        &#34;&#34;&#34;
+        return self._top_border
+
+    @top_border.setter
+    def top_border(self, top_border):
+        &#34;&#34;&#34;Sets the top_border of this SharedLinesDetails.
+
+
+        :param top_border: The top_border of this SharedLinesDetails.  # noqa: E501
+        :type: TableBordersDetails
+        &#34;&#34;&#34;
+
+        self._top_border = top_border
+
+    @property
+    def bottom_border_id(self):
+        &#34;&#34;&#34;Gets the bottom_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The bottom_border_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._bottom_border_id
+
+    @bottom_border_id.setter
+    def bottom_border_id(self, bottom_border_id):
+        &#34;&#34;&#34;Sets the bottom_border_id of this SharedLinesDetails.
+
+
+        :param bottom_border_id: The bottom_border_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._bottom_border_id = bottom_border_id
+
+    @property
+    def bottom_border(self):
+        &#34;&#34;&#34;Gets the bottom_border of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The bottom_border of this SharedLinesDetails.  # noqa: E501
+        :rtype: TableBordersDetails
+        &#34;&#34;&#34;
+        return self._bottom_border
+
+    @bottom_border.setter
+    def bottom_border(self, bottom_border):
+        &#34;&#34;&#34;Sets the bottom_border of this SharedLinesDetails.
+
+
+        :param bottom_border: The bottom_border of this SharedLinesDetails.  # noqa: E501
+        :type: TableBordersDetails
+        &#34;&#34;&#34;
+
+        self._bottom_border = bottom_border
+
+    @property
+    def right_border_id(self):
+        &#34;&#34;&#34;Gets the right_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The right_border_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._right_border_id
+
+    @right_border_id.setter
+    def right_border_id(self, right_border_id):
+        &#34;&#34;&#34;Sets the right_border_id of this SharedLinesDetails.
+
+
+        :param right_border_id: The right_border_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._right_border_id = right_border_id
+
+    @property
+    def right_border(self):
+        &#34;&#34;&#34;Gets the right_border of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The right_border of this SharedLinesDetails.  # noqa: E501
+        :rtype: TableBordersDetails
+        &#34;&#34;&#34;
+        return self._right_border
+
+    @right_border.setter
+    def right_border(self, right_border):
+        &#34;&#34;&#34;Sets the right_border of this SharedLinesDetails.
+
+
+        :param right_border: The right_border of this SharedLinesDetails.  # noqa: E501
+        :type: TableBordersDetails
+        &#34;&#34;&#34;
+
+        self._right_border = right_border
+
+    @property
+    def left_border_id(self):
+        &#34;&#34;&#34;Gets the left_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The left_border_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._left_border_id
+
+    @left_border_id.setter
+    def left_border_id(self, left_border_id):
+        &#34;&#34;&#34;Sets the left_border_id of this SharedLinesDetails.
+
+
+        :param left_border_id: The left_border_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._left_border_id = left_border_id
+
+    @property
+    def left_border(self):
+        &#34;&#34;&#34;Gets the left_border of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The left_border of this SharedLinesDetails.  # noqa: E501
+        :rtype: TableBordersDetails
+        &#34;&#34;&#34;
+        return self._left_border
+
+    @left_border.setter
+    def left_border(self, left_border):
+        &#34;&#34;&#34;Sets the left_border of this SharedLinesDetails.
+
+
+        :param left_border: The left_border of this SharedLinesDetails.  # noqa: E501
+        :type: TableBordersDetails
+        &#34;&#34;&#34;
+
+        self._left_border = left_border
+
+    @property
+    def t_lto_br_border_id(self):
+        &#34;&#34;&#34;Gets the t_lto_br_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The t_lto_br_border_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._t_lto_br_border_id
+
+    @t_lto_br_border_id.setter
+    def t_lto_br_border_id(self, t_lto_br_border_id):
+        &#34;&#34;&#34;Sets the t_lto_br_border_id of this SharedLinesDetails.
+
+
+        :param t_lto_br_border_id: The t_lto_br_border_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._t_lto_br_border_id = t_lto_br_border_id
+
+    @property
+    def t_lto_br_border(self):
+        &#34;&#34;&#34;Gets the t_lto_br_border of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The t_lto_br_border of this SharedLinesDetails.  # noqa: E501
+        :rtype: TableBordersDetails
+        &#34;&#34;&#34;
+        return self._t_lto_br_border
+
+    @t_lto_br_border.setter
+    def t_lto_br_border(self, t_lto_br_border):
+        &#34;&#34;&#34;Sets the t_lto_br_border of this SharedLinesDetails.
+
+
+        :param t_lto_br_border: The t_lto_br_border of this SharedLinesDetails.  # noqa: E501
+        :type: TableBordersDetails
+        &#34;&#34;&#34;
+
+        self._t_lto_br_border = t_lto_br_border
+
+    @property
+    def b_lto_tr_border_id(self):
+        &#34;&#34;&#34;Gets the b_lto_tr_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The b_lto_tr_border_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._b_lto_tr_border_id
+
+    @b_lto_tr_border_id.setter
+    def b_lto_tr_border_id(self, b_lto_tr_border_id):
+        &#34;&#34;&#34;Sets the b_lto_tr_border_id of this SharedLinesDetails.
+
+
+        :param b_lto_tr_border_id: The b_lto_tr_border_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._b_lto_tr_border_id = b_lto_tr_border_id
+
+    @property
+    def b_lto_tr_border(self):
+        &#34;&#34;&#34;Gets the b_lto_tr_border of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The b_lto_tr_border of this SharedLinesDetails.  # noqa: E501
+        :rtype: TableBordersDetails
+        &#34;&#34;&#34;
+        return self._b_lto_tr_border
+
+    @b_lto_tr_border.setter
+    def b_lto_tr_border(self, b_lto_tr_border):
+        &#34;&#34;&#34;Sets the b_lto_tr_border of this SharedLinesDetails.
+
+
+        :param b_lto_tr_border: The b_lto_tr_border of this SharedLinesDetails.  # noqa: E501
+        :type: TableBordersDetails
+        &#34;&#34;&#34;
+
+        self._b_lto_tr_border = b_lto_tr_border
+
+    @property
+    def line_map_id(self):
+        &#34;&#34;&#34;Gets the line_map_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The line_map_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._line_map_id
+
+    @line_map_id.setter
+    def line_map_id(self, line_map_id):
+        &#34;&#34;&#34;Sets the line_map_id of this SharedLinesDetails.
+
+
+        :param line_map_id: The line_map_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._line_map_id = line_map_id
+
+    @property
+    def line_map(self):
+        &#34;&#34;&#34;Gets the line_map of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The line_map of this SharedLinesDetails.  # noqa: E501
+        :rtype: ThemeLineMapDetails
+        &#34;&#34;&#34;
+        return self._line_map
+
+    @line_map.setter
+    def line_map(self, line_map):
+        &#34;&#34;&#34;Sets the line_map of this SharedLinesDetails.
+
+
+        :param line_map: The line_map of this SharedLinesDetails.  # noqa: E501
+        :type: ThemeLineMapDetails
+        &#34;&#34;&#34;
+
+        self._line_map = line_map
+
+    @property
+    def id(self):
+        &#34;&#34;&#34;Gets the id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        &#34;&#34;&#34;Sets the id of this SharedLinesDetails.
+
+
+        :param id: The id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._id = id
+
+    @property
+    def date_created(self):
+        &#34;&#34;&#34;Gets the date_created of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The date_created of this SharedLinesDetails.  # noqa: E501
+        :rtype: datetime
+        &#34;&#34;&#34;
+        return self._date_created
+
+    @date_created.setter
+    def date_created(self, date_created):
+        &#34;&#34;&#34;Sets the date_created of this SharedLinesDetails.
+
+
+        :param date_created: The date_created of this SharedLinesDetails.  # noqa: E501
+        :type: datetime
+        &#34;&#34;&#34;
+
+        self._date_created = date_created
+
+    @property
+    def user_created(self):
+        &#34;&#34;&#34;Gets the user_created of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The user_created of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._user_created
+
+    @user_created.setter
+    def user_created(self, user_created):
+        &#34;&#34;&#34;Sets the user_created of this SharedLinesDetails.
+
+
+        :param user_created: The user_created of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._user_created = user_created
+
+    @property
+    def date_modified(self):
+        &#34;&#34;&#34;Gets the date_modified of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The date_modified of this SharedLinesDetails.  # noqa: E501
+        :rtype: datetime
+        &#34;&#34;&#34;
+        return self._date_modified
+
+    @date_modified.setter
+    def date_modified(self, date_modified):
+        &#34;&#34;&#34;Sets the date_modified of this SharedLinesDetails.
+
+
+        :param date_modified: The date_modified of this SharedLinesDetails.  # noqa: E501
+        :type: datetime
+        &#34;&#34;&#34;
+
+        self._date_modified = date_modified
+
+    @property
+    def user_modified(self):
+        &#34;&#34;&#34;Gets the user_modified of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The user_modified of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._user_modified
+
+    @user_modified.setter
+    def user_modified(self, user_modified):
+        &#34;&#34;&#34;Sets the user_modified of this SharedLinesDetails.
+
+
+        :param user_modified: The user_modified of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._user_modified = user_modified
+
+    def to_dict(self):
+        &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
+        result = {}
+
+        for attr, _ in six.iteritems(self.openapi_types):
+            value = getattr(self, attr)
+            if isinstance(value, list):
+                result[attr] = list(map(
+                    lambda x: x.to_dict() if hasattr(x, &#34;to_dict&#34;) else x,
+                    value
+                ))
+            elif hasattr(value, &#34;to_dict&#34;):
+                result[attr] = value.to_dict()
+            elif isinstance(value, dict):
+                result[attr] = dict(map(
+                    lambda item: (item[0], item[1].to_dict())
+                    if hasattr(item[1], &#34;to_dict&#34;) else item,
+                    value.items()
+                ))
+            else:
+                result[attr] = value
+
+        return result
+
+    def to_str(self):
+        &#34;&#34;&#34;Returns the string representation of the model&#34;&#34;&#34;
+        return pprint.pformat(self.to_dict())
+
+    def __repr__(self):
+        &#34;&#34;&#34;For `print` and `pprint`&#34;&#34;&#34;
+        return self.to_str()
+
+    def __eq__(self, other):
+        &#34;&#34;&#34;Returns true if both objects are equal&#34;&#34;&#34;
+        if not isinstance(other, SharedLinesDetails):
+            return False
+
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        &#34;&#34;&#34;Returns true if both objects are not equal&#34;&#34;&#34;
+        return not self == other</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails"><code class="flex name class">
+<span>class <span class="ident">SharedLinesDetails</span></span>
+<span>(</span><span>line_color_solid_fill=None, connector_id=None, parent_connector=None, shape_id=None, parent_shape=None, dash_type_id=None, head_end_type_id=None, tail_end_type_id=None, weight=None, head_end_height_id=None, head_end_width_id=None, tail_end_height_id=None, tail_end_width_id=None, top_border_id=None, top_border=None, bottom_border_id=None, bottom_border=None, right_border_id=None, right_border=None, left_border_id=None, left_border=None, t_lto_br_border_id=None, t_lto_br_border=None, b_lto_tr_border_id=None, b_lto_tr_border=None, line_map_id=None, line_map=None, id=None, date_created=None, user_created=None, date_modified=None, user_modified=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>NOTE: This class is auto generated by OpenAPI Generator.
+Ref: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a></p>
+<p>Do not edit the class manually.</p>
+<p>SharedLinesDetails - a model defined in OpenAPI</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L19-L909" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">class SharedLinesDetails(object):
+    &#34;&#34;&#34;NOTE: This class is auto generated by OpenAPI Generator.
+    Ref: https://openapi-generator.tech
+
+    Do not edit the class manually.
+    &#34;&#34;&#34;
+
+    &#34;&#34;&#34;
+    Attributes:
+      openapi_types (dict): The key is attribute name
+                            and the value is attribute type.
+      attribute_map (dict): The key is attribute name
+                            and the value is json key in definition.
+    &#34;&#34;&#34;
+    openapi_types = {
+        &#39;line_color_solid_fill&#39;: &#39;SharedSolidFillsDetails&#39;,
+        &#39;connector_id&#39;: &#39;str&#39;,
+        &#39;parent_connector&#39;: &#39;SlideConnectorDetails&#39;,
+        &#39;shape_id&#39;: &#39;str&#39;,
+        &#39;parent_shape&#39;: &#39;SlideShapesDetails&#39;,
+        &#39;dash_type_id&#39;: &#39;int&#39;,
+        &#39;head_end_type_id&#39;: &#39;int&#39;,
+        &#39;tail_end_type_id&#39;: &#39;int&#39;,
+        &#39;weight&#39;: &#39;int&#39;,
+        &#39;head_end_height_id&#39;: &#39;int&#39;,
+        &#39;head_end_width_id&#39;: &#39;int&#39;,
+        &#39;tail_end_height_id&#39;: &#39;int&#39;,
+        &#39;tail_end_width_id&#39;: &#39;int&#39;,
+        &#39;top_border_id&#39;: &#39;str&#39;,
+        &#39;top_border&#39;: &#39;TableBordersDetails&#39;,
+        &#39;bottom_border_id&#39;: &#39;str&#39;,
+        &#39;bottom_border&#39;: &#39;TableBordersDetails&#39;,
+        &#39;right_border_id&#39;: &#39;str&#39;,
+        &#39;right_border&#39;: &#39;TableBordersDetails&#39;,
+        &#39;left_border_id&#39;: &#39;str&#39;,
+        &#39;left_border&#39;: &#39;TableBordersDetails&#39;,
+        &#39;t_lto_br_border_id&#39;: &#39;str&#39;,
+        &#39;t_lto_br_border&#39;: &#39;TableBordersDetails&#39;,
+        &#39;b_lto_tr_border_id&#39;: &#39;str&#39;,
+        &#39;b_lto_tr_border&#39;: &#39;TableBordersDetails&#39;,
+        &#39;line_map_id&#39;: &#39;str&#39;,
+        &#39;line_map&#39;: &#39;ThemeLineMapDetails&#39;,
+        &#39;id&#39;: &#39;str&#39;,
+        &#39;date_created&#39;: &#39;datetime&#39;,
+        &#39;user_created&#39;: &#39;str&#39;,
+        &#39;date_modified&#39;: &#39;datetime&#39;,
+        &#39;user_modified&#39;: &#39;str&#39;
+    }
+
+    attribute_map = {
+        &#39;line_color_solid_fill&#39;: &#39;lineColorSolidFill&#39;,
+        &#39;connector_id&#39;: &#39;connectorId&#39;,
+        &#39;parent_connector&#39;: &#39;parentConnector&#39;,
+        &#39;shape_id&#39;: &#39;shapeId&#39;,
+        &#39;parent_shape&#39;: &#39;parentShape&#39;,
+        &#39;dash_type_id&#39;: &#39;dashTypeId&#39;,
+        &#39;head_end_type_id&#39;: &#39;headEndTypeId&#39;,
+        &#39;tail_end_type_id&#39;: &#39;tailEndTypeId&#39;,
+        &#39;weight&#39;: &#39;weight&#39;,
+        &#39;head_end_height_id&#39;: &#39;headEndHeightId&#39;,
+        &#39;head_end_width_id&#39;: &#39;headEndWidthId&#39;,
+        &#39;tail_end_height_id&#39;: &#39;tailEndHeightId&#39;,
+        &#39;tail_end_width_id&#39;: &#39;tailEndWidthId&#39;,
+        &#39;top_border_id&#39;: &#39;topBorderId&#39;,
+        &#39;top_border&#39;: &#39;topBorder&#39;,
+        &#39;bottom_border_id&#39;: &#39;bottomBorderId&#39;,
+        &#39;bottom_border&#39;: &#39;bottomBorder&#39;,
+        &#39;right_border_id&#39;: &#39;rightBorderId&#39;,
+        &#39;right_border&#39;: &#39;rightBorder&#39;,
+        &#39;left_border_id&#39;: &#39;leftBorderId&#39;,
+        &#39;left_border&#39;: &#39;leftBorder&#39;,
+        &#39;t_lto_br_border_id&#39;: &#39;tLtoBRBorderId&#39;,
+        &#39;t_lto_br_border&#39;: &#39;tLtoBRBorder&#39;,
+        &#39;b_lto_tr_border_id&#39;: &#39;bLtoTRBorderId&#39;,
+        &#39;b_lto_tr_border&#39;: &#39;bLtoTRBorder&#39;,
+        &#39;line_map_id&#39;: &#39;lineMapId&#39;,
+        &#39;line_map&#39;: &#39;lineMap&#39;,
+        &#39;id&#39;: &#39;id&#39;,
+        &#39;date_created&#39;: &#39;dateCreated&#39;,
+        &#39;user_created&#39;: &#39;userCreated&#39;,
+        &#39;date_modified&#39;: &#39;dateModified&#39;,
+        &#39;user_modified&#39;: &#39;userModified&#39;
+    }
+
+    def __init__(self, line_color_solid_fill=None, connector_id=None, parent_connector=None, shape_id=None, parent_shape=None, dash_type_id=None, head_end_type_id=None, tail_end_type_id=None, weight=None, head_end_height_id=None, head_end_width_id=None, tail_end_height_id=None, tail_end_width_id=None, top_border_id=None, top_border=None, bottom_border_id=None, bottom_border=None, right_border_id=None, right_border=None, left_border_id=None, left_border=None, t_lto_br_border_id=None, t_lto_br_border=None, b_lto_tr_border_id=None, b_lto_tr_border=None, line_map_id=None, line_map=None, id=None, date_created=None, user_created=None, date_modified=None, user_modified=None):  # noqa: E501
+        &#34;&#34;&#34;SharedLinesDetails - a model defined in OpenAPI&#34;&#34;&#34;  # noqa: E501
+
+        self._line_color_solid_fill = None
+        self._connector_id = None
+        self._parent_connector = None
+        self._shape_id = None
+        self._parent_shape = None
+        self._dash_type_id = None
+        self._head_end_type_id = None
+        self._tail_end_type_id = None
+        self._weight = None
+        self._head_end_height_id = None
+        self._head_end_width_id = None
+        self._tail_end_height_id = None
+        self._tail_end_width_id = None
+        self._top_border_id = None
+        self._top_border = None
+        self._bottom_border_id = None
+        self._bottom_border = None
+        self._right_border_id = None
+        self._right_border = None
+        self._left_border_id = None
+        self._left_border = None
+        self._t_lto_br_border_id = None
+        self._t_lto_br_border = None
+        self._b_lto_tr_border_id = None
+        self._b_lto_tr_border = None
+        self._line_map_id = None
+        self._line_map = None
+        self._id = None
+        self._date_created = None
+        self._user_created = None
+        self._date_modified = None
+        self._user_modified = None
+        self.discriminator = None
+
+        if line_color_solid_fill is not None:
+            self.line_color_solid_fill = line_color_solid_fill
+        self.connector_id = connector_id
+        if parent_connector is not None:
+            self.parent_connector = parent_connector
+        self.shape_id = shape_id
+        if parent_shape is not None:
+            self.parent_shape = parent_shape
+        if dash_type_id is not None:
+            self.dash_type_id = dash_type_id
+        if head_end_type_id is not None:
+            self.head_end_type_id = head_end_type_id
+        if tail_end_type_id is not None:
+            self.tail_end_type_id = tail_end_type_id
+        if weight is not None:
+            self.weight = weight
+        if head_end_height_id is not None:
+            self.head_end_height_id = head_end_height_id
+        if head_end_width_id is not None:
+            self.head_end_width_id = head_end_width_id
+        if tail_end_height_id is not None:
+            self.tail_end_height_id = tail_end_height_id
+        if tail_end_width_id is not None:
+            self.tail_end_width_id = tail_end_width_id
+        self.top_border_id = top_border_id
+        if top_border is not None:
+            self.top_border = top_border
+        self.bottom_border_id = bottom_border_id
+        if bottom_border is not None:
+            self.bottom_border = bottom_border
+        self.right_border_id = right_border_id
+        if right_border is not None:
+            self.right_border = right_border
+        self.left_border_id = left_border_id
+        if left_border is not None:
+            self.left_border = left_border
+        self.t_lto_br_border_id = t_lto_br_border_id
+        if t_lto_br_border is not None:
+            self.t_lto_br_border = t_lto_br_border
+        self.b_lto_tr_border_id = b_lto_tr_border_id
+        if b_lto_tr_border is not None:
+            self.b_lto_tr_border = b_lto_tr_border
+        self.line_map_id = line_map_id
+        if line_map is not None:
+            self.line_map = line_map
+        if id is not None:
+            self.id = id
+        if date_created is not None:
+            self.date_created = date_created
+        if user_created is not None:
+            self.user_created = user_created
+        if date_modified is not None:
+            self.date_modified = date_modified
+        if user_modified is not None:
+            self.user_modified = user_modified
+
+    @property
+    def line_color_solid_fill(self):
+        &#34;&#34;&#34;Gets the line_color_solid_fill of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The line_color_solid_fill of this SharedLinesDetails.  # noqa: E501
+        :rtype: SharedSolidFillsDetails
+        &#34;&#34;&#34;
+        return self._line_color_solid_fill
+
+    @line_color_solid_fill.setter
+    def line_color_solid_fill(self, line_color_solid_fill):
+        &#34;&#34;&#34;Sets the line_color_solid_fill of this SharedLinesDetails.
+
+
+        :param line_color_solid_fill: The line_color_solid_fill of this SharedLinesDetails.  # noqa: E501
+        :type: SharedSolidFillsDetails
+        &#34;&#34;&#34;
+
+        self._line_color_solid_fill = line_color_solid_fill
+
+    @property
+    def connector_id(self):
+        &#34;&#34;&#34;Gets the connector_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The connector_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._connector_id
+
+    @connector_id.setter
+    def connector_id(self, connector_id):
+        &#34;&#34;&#34;Sets the connector_id of this SharedLinesDetails.
+
+
+        :param connector_id: The connector_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._connector_id = connector_id
+
+    @property
+    def parent_connector(self):
+        &#34;&#34;&#34;Gets the parent_connector of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The parent_connector of this SharedLinesDetails.  # noqa: E501
+        :rtype: SlideConnectorDetails
+        &#34;&#34;&#34;
+        return self._parent_connector
+
+    @parent_connector.setter
+    def parent_connector(self, parent_connector):
+        &#34;&#34;&#34;Sets the parent_connector of this SharedLinesDetails.
+
+
+        :param parent_connector: The parent_connector of this SharedLinesDetails.  # noqa: E501
+        :type: SlideConnectorDetails
+        &#34;&#34;&#34;
+
+        self._parent_connector = parent_connector
+
+    @property
+    def shape_id(self):
+        &#34;&#34;&#34;Gets the shape_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The shape_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._shape_id
+
+    @shape_id.setter
+    def shape_id(self, shape_id):
+        &#34;&#34;&#34;Sets the shape_id of this SharedLinesDetails.
+
+
+        :param shape_id: The shape_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._shape_id = shape_id
+
+    @property
+    def parent_shape(self):
+        &#34;&#34;&#34;Gets the parent_shape of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The parent_shape of this SharedLinesDetails.  # noqa: E501
+        :rtype: SlideShapesDetails
+        &#34;&#34;&#34;
+        return self._parent_shape
+
+    @parent_shape.setter
+    def parent_shape(self, parent_shape):
+        &#34;&#34;&#34;Sets the parent_shape of this SharedLinesDetails.
+
+
+        :param parent_shape: The parent_shape of this SharedLinesDetails.  # noqa: E501
+        :type: SlideShapesDetails
+        &#34;&#34;&#34;
+
+        self._parent_shape = parent_shape
+
+    @property
+    def dash_type_id(self):
+        &#34;&#34;&#34;Gets the dash_type_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The dash_type_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._dash_type_id
+
+    @dash_type_id.setter
+    def dash_type_id(self, dash_type_id):
+        &#34;&#34;&#34;Sets the dash_type_id of this SharedLinesDetails.
+
+
+        :param dash_type_id: The dash_type_id of this SharedLinesDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._dash_type_id = dash_type_id
+
+    @property
+    def head_end_type_id(self):
+        &#34;&#34;&#34;Gets the head_end_type_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The head_end_type_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._head_end_type_id
+
+    @head_end_type_id.setter
+    def head_end_type_id(self, head_end_type_id):
+        &#34;&#34;&#34;Sets the head_end_type_id of this SharedLinesDetails.
+
+
+        :param head_end_type_id: The head_end_type_id of this SharedLinesDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._head_end_type_id = head_end_type_id
+
+    @property
+    def tail_end_type_id(self):
+        &#34;&#34;&#34;Gets the tail_end_type_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The tail_end_type_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._tail_end_type_id
+
+    @tail_end_type_id.setter
+    def tail_end_type_id(self, tail_end_type_id):
+        &#34;&#34;&#34;Sets the tail_end_type_id of this SharedLinesDetails.
+
+
+        :param tail_end_type_id: The tail_end_type_id of this SharedLinesDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._tail_end_type_id = tail_end_type_id
+
+    @property
+    def weight(self):
+        &#34;&#34;&#34;Gets the weight of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The weight of this SharedLinesDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._weight
+
+    @weight.setter
+    def weight(self, weight):
+        &#34;&#34;&#34;Sets the weight of this SharedLinesDetails.
+
+
+        :param weight: The weight of this SharedLinesDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._weight = weight
+
+    @property
+    def head_end_height_id(self):
+        &#34;&#34;&#34;Gets the head_end_height_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The head_end_height_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._head_end_height_id
+
+    @head_end_height_id.setter
+    def head_end_height_id(self, head_end_height_id):
+        &#34;&#34;&#34;Sets the head_end_height_id of this SharedLinesDetails.
+
+
+        :param head_end_height_id: The head_end_height_id of this SharedLinesDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._head_end_height_id = head_end_height_id
+
+    @property
+    def head_end_width_id(self):
+        &#34;&#34;&#34;Gets the head_end_width_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The head_end_width_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._head_end_width_id
+
+    @head_end_width_id.setter
+    def head_end_width_id(self, head_end_width_id):
+        &#34;&#34;&#34;Sets the head_end_width_id of this SharedLinesDetails.
+
+
+        :param head_end_width_id: The head_end_width_id of this SharedLinesDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._head_end_width_id = head_end_width_id
+
+    @property
+    def tail_end_height_id(self):
+        &#34;&#34;&#34;Gets the tail_end_height_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The tail_end_height_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._tail_end_height_id
+
+    @tail_end_height_id.setter
+    def tail_end_height_id(self, tail_end_height_id):
+        &#34;&#34;&#34;Sets the tail_end_height_id of this SharedLinesDetails.
+
+
+        :param tail_end_height_id: The tail_end_height_id of this SharedLinesDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._tail_end_height_id = tail_end_height_id
+
+    @property
+    def tail_end_width_id(self):
+        &#34;&#34;&#34;Gets the tail_end_width_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The tail_end_width_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: int
+        &#34;&#34;&#34;
+        return self._tail_end_width_id
+
+    @tail_end_width_id.setter
+    def tail_end_width_id(self, tail_end_width_id):
+        &#34;&#34;&#34;Sets the tail_end_width_id of this SharedLinesDetails.
+
+
+        :param tail_end_width_id: The tail_end_width_id of this SharedLinesDetails.  # noqa: E501
+        :type: int
+        &#34;&#34;&#34;
+
+        self._tail_end_width_id = tail_end_width_id
+
+    @property
+    def top_border_id(self):
+        &#34;&#34;&#34;Gets the top_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The top_border_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._top_border_id
+
+    @top_border_id.setter
+    def top_border_id(self, top_border_id):
+        &#34;&#34;&#34;Sets the top_border_id of this SharedLinesDetails.
+
+
+        :param top_border_id: The top_border_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._top_border_id = top_border_id
+
+    @property
+    def top_border(self):
+        &#34;&#34;&#34;Gets the top_border of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The top_border of this SharedLinesDetails.  # noqa: E501
+        :rtype: TableBordersDetails
+        &#34;&#34;&#34;
+        return self._top_border
+
+    @top_border.setter
+    def top_border(self, top_border):
+        &#34;&#34;&#34;Sets the top_border of this SharedLinesDetails.
+
+
+        :param top_border: The top_border of this SharedLinesDetails.  # noqa: E501
+        :type: TableBordersDetails
+        &#34;&#34;&#34;
+
+        self._top_border = top_border
+
+    @property
+    def bottom_border_id(self):
+        &#34;&#34;&#34;Gets the bottom_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The bottom_border_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._bottom_border_id
+
+    @bottom_border_id.setter
+    def bottom_border_id(self, bottom_border_id):
+        &#34;&#34;&#34;Sets the bottom_border_id of this SharedLinesDetails.
+
+
+        :param bottom_border_id: The bottom_border_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._bottom_border_id = bottom_border_id
+
+    @property
+    def bottom_border(self):
+        &#34;&#34;&#34;Gets the bottom_border of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The bottom_border of this SharedLinesDetails.  # noqa: E501
+        :rtype: TableBordersDetails
+        &#34;&#34;&#34;
+        return self._bottom_border
+
+    @bottom_border.setter
+    def bottom_border(self, bottom_border):
+        &#34;&#34;&#34;Sets the bottom_border of this SharedLinesDetails.
+
+
+        :param bottom_border: The bottom_border of this SharedLinesDetails.  # noqa: E501
+        :type: TableBordersDetails
+        &#34;&#34;&#34;
+
+        self._bottom_border = bottom_border
+
+    @property
+    def right_border_id(self):
+        &#34;&#34;&#34;Gets the right_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The right_border_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._right_border_id
+
+    @right_border_id.setter
+    def right_border_id(self, right_border_id):
+        &#34;&#34;&#34;Sets the right_border_id of this SharedLinesDetails.
+
+
+        :param right_border_id: The right_border_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._right_border_id = right_border_id
+
+    @property
+    def right_border(self):
+        &#34;&#34;&#34;Gets the right_border of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The right_border of this SharedLinesDetails.  # noqa: E501
+        :rtype: TableBordersDetails
+        &#34;&#34;&#34;
+        return self._right_border
+
+    @right_border.setter
+    def right_border(self, right_border):
+        &#34;&#34;&#34;Sets the right_border of this SharedLinesDetails.
+
+
+        :param right_border: The right_border of this SharedLinesDetails.  # noqa: E501
+        :type: TableBordersDetails
+        &#34;&#34;&#34;
+
+        self._right_border = right_border
+
+    @property
+    def left_border_id(self):
+        &#34;&#34;&#34;Gets the left_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The left_border_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._left_border_id
+
+    @left_border_id.setter
+    def left_border_id(self, left_border_id):
+        &#34;&#34;&#34;Sets the left_border_id of this SharedLinesDetails.
+
+
+        :param left_border_id: The left_border_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._left_border_id = left_border_id
+
+    @property
+    def left_border(self):
+        &#34;&#34;&#34;Gets the left_border of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The left_border of this SharedLinesDetails.  # noqa: E501
+        :rtype: TableBordersDetails
+        &#34;&#34;&#34;
+        return self._left_border
+
+    @left_border.setter
+    def left_border(self, left_border):
+        &#34;&#34;&#34;Sets the left_border of this SharedLinesDetails.
+
+
+        :param left_border: The left_border of this SharedLinesDetails.  # noqa: E501
+        :type: TableBordersDetails
+        &#34;&#34;&#34;
+
+        self._left_border = left_border
+
+    @property
+    def t_lto_br_border_id(self):
+        &#34;&#34;&#34;Gets the t_lto_br_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The t_lto_br_border_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._t_lto_br_border_id
+
+    @t_lto_br_border_id.setter
+    def t_lto_br_border_id(self, t_lto_br_border_id):
+        &#34;&#34;&#34;Sets the t_lto_br_border_id of this SharedLinesDetails.
+
+
+        :param t_lto_br_border_id: The t_lto_br_border_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._t_lto_br_border_id = t_lto_br_border_id
+
+    @property
+    def t_lto_br_border(self):
+        &#34;&#34;&#34;Gets the t_lto_br_border of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The t_lto_br_border of this SharedLinesDetails.  # noqa: E501
+        :rtype: TableBordersDetails
+        &#34;&#34;&#34;
+        return self._t_lto_br_border
+
+    @t_lto_br_border.setter
+    def t_lto_br_border(self, t_lto_br_border):
+        &#34;&#34;&#34;Sets the t_lto_br_border of this SharedLinesDetails.
+
+
+        :param t_lto_br_border: The t_lto_br_border of this SharedLinesDetails.  # noqa: E501
+        :type: TableBordersDetails
+        &#34;&#34;&#34;
+
+        self._t_lto_br_border = t_lto_br_border
+
+    @property
+    def b_lto_tr_border_id(self):
+        &#34;&#34;&#34;Gets the b_lto_tr_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The b_lto_tr_border_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._b_lto_tr_border_id
+
+    @b_lto_tr_border_id.setter
+    def b_lto_tr_border_id(self, b_lto_tr_border_id):
+        &#34;&#34;&#34;Sets the b_lto_tr_border_id of this SharedLinesDetails.
+
+
+        :param b_lto_tr_border_id: The b_lto_tr_border_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._b_lto_tr_border_id = b_lto_tr_border_id
+
+    @property
+    def b_lto_tr_border(self):
+        &#34;&#34;&#34;Gets the b_lto_tr_border of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The b_lto_tr_border of this SharedLinesDetails.  # noqa: E501
+        :rtype: TableBordersDetails
+        &#34;&#34;&#34;
+        return self._b_lto_tr_border
+
+    @b_lto_tr_border.setter
+    def b_lto_tr_border(self, b_lto_tr_border):
+        &#34;&#34;&#34;Sets the b_lto_tr_border of this SharedLinesDetails.
+
+
+        :param b_lto_tr_border: The b_lto_tr_border of this SharedLinesDetails.  # noqa: E501
+        :type: TableBordersDetails
+        &#34;&#34;&#34;
+
+        self._b_lto_tr_border = b_lto_tr_border
+
+    @property
+    def line_map_id(self):
+        &#34;&#34;&#34;Gets the line_map_id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The line_map_id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._line_map_id
+
+    @line_map_id.setter
+    def line_map_id(self, line_map_id):
+        &#34;&#34;&#34;Sets the line_map_id of this SharedLinesDetails.
+
+
+        :param line_map_id: The line_map_id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._line_map_id = line_map_id
+
+    @property
+    def line_map(self):
+        &#34;&#34;&#34;Gets the line_map of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The line_map of this SharedLinesDetails.  # noqa: E501
+        :rtype: ThemeLineMapDetails
+        &#34;&#34;&#34;
+        return self._line_map
+
+    @line_map.setter
+    def line_map(self, line_map):
+        &#34;&#34;&#34;Sets the line_map of this SharedLinesDetails.
+
+
+        :param line_map: The line_map of this SharedLinesDetails.  # noqa: E501
+        :type: ThemeLineMapDetails
+        &#34;&#34;&#34;
+
+        self._line_map = line_map
+
+    @property
+    def id(self):
+        &#34;&#34;&#34;Gets the id of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The id of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        &#34;&#34;&#34;Sets the id of this SharedLinesDetails.
+
+
+        :param id: The id of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._id = id
+
+    @property
+    def date_created(self):
+        &#34;&#34;&#34;Gets the date_created of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The date_created of this SharedLinesDetails.  # noqa: E501
+        :rtype: datetime
+        &#34;&#34;&#34;
+        return self._date_created
+
+    @date_created.setter
+    def date_created(self, date_created):
+        &#34;&#34;&#34;Sets the date_created of this SharedLinesDetails.
+
+
+        :param date_created: The date_created of this SharedLinesDetails.  # noqa: E501
+        :type: datetime
+        &#34;&#34;&#34;
+
+        self._date_created = date_created
+
+    @property
+    def user_created(self):
+        &#34;&#34;&#34;Gets the user_created of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The user_created of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._user_created
+
+    @user_created.setter
+    def user_created(self, user_created):
+        &#34;&#34;&#34;Sets the user_created of this SharedLinesDetails.
+
+
+        :param user_created: The user_created of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._user_created = user_created
+
+    @property
+    def date_modified(self):
+        &#34;&#34;&#34;Gets the date_modified of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The date_modified of this SharedLinesDetails.  # noqa: E501
+        :rtype: datetime
+        &#34;&#34;&#34;
+        return self._date_modified
+
+    @date_modified.setter
+    def date_modified(self, date_modified):
+        &#34;&#34;&#34;Sets the date_modified of this SharedLinesDetails.
+
+
+        :param date_modified: The date_modified of this SharedLinesDetails.  # noqa: E501
+        :type: datetime
+        &#34;&#34;&#34;
+
+        self._date_modified = date_modified
+
+    @property
+    def user_modified(self):
+        &#34;&#34;&#34;Gets the user_modified of this SharedLinesDetails.  # noqa: E501
+
+
+        :return: The user_modified of this SharedLinesDetails.  # noqa: E501
+        :rtype: str
+        &#34;&#34;&#34;
+        return self._user_modified
+
+    @user_modified.setter
+    def user_modified(self, user_modified):
+        &#34;&#34;&#34;Sets the user_modified of this SharedLinesDetails.
+
+
+        :param user_modified: The user_modified of this SharedLinesDetails.  # noqa: E501
+        :type: str
+        &#34;&#34;&#34;
+
+        self._user_modified = user_modified
+
+    def to_dict(self):
+        &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
+        result = {}
+
+        for attr, _ in six.iteritems(self.openapi_types):
+            value = getattr(self, attr)
+            if isinstance(value, list):
+                result[attr] = list(map(
+                    lambda x: x.to_dict() if hasattr(x, &#34;to_dict&#34;) else x,
+                    value
+                ))
+            elif hasattr(value, &#34;to_dict&#34;):
+                result[attr] = value.to_dict()
+            elif isinstance(value, dict):
+                result[attr] = dict(map(
+                    lambda item: (item[0], item[1].to_dict())
+                    if hasattr(item[1], &#34;to_dict&#34;) else item,
+                    value.items()
+                ))
+            else:
+                result[attr] = value
+
+        return result
+
+    def to_str(self):
+        &#34;&#34;&#34;Returns the string representation of the model&#34;&#34;&#34;
+        return pprint.pformat(self.to_dict())
+
+    def __repr__(self):
+        &#34;&#34;&#34;For `print` and `pprint`&#34;&#34;&#34;
+        return self.to_str()
+
+    def __eq__(self, other):
+        &#34;&#34;&#34;Returns true if both objects are equal&#34;&#34;&#34;
+        if not isinstance(other, SharedLinesDetails):
+            return False
+
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        &#34;&#34;&#34;Returns true if both objects are not equal&#34;&#34;&#34;
+        return not self == other</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.openapi_types"><code class="name">var <span class="ident">openapi_types</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.attribute_map"><code class="name">var <span class="ident">attribute_map</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.line_color_solid_fill"><code class="name">var <span class="ident">line_color_solid_fill</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the line_color_solid_fill of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The line_color_solid_fill of this SharedLinesDetails.
+# noqa: E501
+:rtype: SharedSolidFillsDetails</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L196-L204" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def line_color_solid_fill(self):
+    &#34;&#34;&#34;Gets the line_color_solid_fill of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The line_color_solid_fill of this SharedLinesDetails.  # noqa: E501
+    :rtype: SharedSolidFillsDetails
+    &#34;&#34;&#34;
+    return self._line_color_solid_fill</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.connector_id"><code class="name">var <span class="ident">connector_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the connector_id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The connector_id of this SharedLinesDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L217-L225" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def connector_id(self):
+    &#34;&#34;&#34;Gets the connector_id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The connector_id of this SharedLinesDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._connector_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.parent_connector"><code class="name">var <span class="ident">parent_connector</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the parent_connector of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The parent_connector of this SharedLinesDetails.
+# noqa: E501
+:rtype: SlideConnectorDetails</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L238-L246" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def parent_connector(self):
+    &#34;&#34;&#34;Gets the parent_connector of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The parent_connector of this SharedLinesDetails.  # noqa: E501
+    :rtype: SlideConnectorDetails
+    &#34;&#34;&#34;
+    return self._parent_connector</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.shape_id"><code class="name">var <span class="ident">shape_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the shape_id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The shape_id of this SharedLinesDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L259-L267" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def shape_id(self):
+    &#34;&#34;&#34;Gets the shape_id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The shape_id of this SharedLinesDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._shape_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.parent_shape"><code class="name">var <span class="ident">parent_shape</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the parent_shape of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The parent_shape of this SharedLinesDetails.
+# noqa: E501
+:rtype: SlideShapesDetails</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L280-L288" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def parent_shape(self):
+    &#34;&#34;&#34;Gets the parent_shape of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The parent_shape of this SharedLinesDetails.  # noqa: E501
+    :rtype: SlideShapesDetails
+    &#34;&#34;&#34;
+    return self._parent_shape</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.dash_type_id"><code class="name">var <span class="ident">dash_type_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the dash_type_id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The dash_type_id of this SharedLinesDetails.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L301-L309" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def dash_type_id(self):
+    &#34;&#34;&#34;Gets the dash_type_id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The dash_type_id of this SharedLinesDetails.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._dash_type_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.head_end_type_id"><code class="name">var <span class="ident">head_end_type_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the head_end_type_id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The head_end_type_id of this SharedLinesDetails.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L322-L330" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def head_end_type_id(self):
+    &#34;&#34;&#34;Gets the head_end_type_id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The head_end_type_id of this SharedLinesDetails.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._head_end_type_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.tail_end_type_id"><code class="name">var <span class="ident">tail_end_type_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the tail_end_type_id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The tail_end_type_id of this SharedLinesDetails.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L343-L351" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def tail_end_type_id(self):
+    &#34;&#34;&#34;Gets the tail_end_type_id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The tail_end_type_id of this SharedLinesDetails.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._tail_end_type_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.weight"><code class="name">var <span class="ident">weight</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the weight of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The weight of this SharedLinesDetails.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L364-L372" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def weight(self):
+    &#34;&#34;&#34;Gets the weight of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The weight of this SharedLinesDetails.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._weight</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.head_end_height_id"><code class="name">var <span class="ident">head_end_height_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the head_end_height_id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The head_end_height_id of this SharedLinesDetails.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L385-L393" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def head_end_height_id(self):
+    &#34;&#34;&#34;Gets the head_end_height_id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The head_end_height_id of this SharedLinesDetails.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._head_end_height_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.head_end_width_id"><code class="name">var <span class="ident">head_end_width_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the head_end_width_id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The head_end_width_id of this SharedLinesDetails.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L406-L414" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def head_end_width_id(self):
+    &#34;&#34;&#34;Gets the head_end_width_id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The head_end_width_id of this SharedLinesDetails.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._head_end_width_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.tail_end_height_id"><code class="name">var <span class="ident">tail_end_height_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the tail_end_height_id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The tail_end_height_id of this SharedLinesDetails.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L427-L435" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def tail_end_height_id(self):
+    &#34;&#34;&#34;Gets the tail_end_height_id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The tail_end_height_id of this SharedLinesDetails.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._tail_end_height_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.tail_end_width_id"><code class="name">var <span class="ident">tail_end_width_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the tail_end_width_id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The tail_end_width_id of this SharedLinesDetails.
+# noqa: E501
+:rtype: int</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L448-L456" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def tail_end_width_id(self):
+    &#34;&#34;&#34;Gets the tail_end_width_id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The tail_end_width_id of this SharedLinesDetails.  # noqa: E501
+    :rtype: int
+    &#34;&#34;&#34;
+    return self._tail_end_width_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.top_border_id"><code class="name">var <span class="ident">top_border_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the top_border_id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The top_border_id of this SharedLinesDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L469-L477" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def top_border_id(self):
+    &#34;&#34;&#34;Gets the top_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The top_border_id of this SharedLinesDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._top_border_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.top_border"><code class="name">var <span class="ident">top_border</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the top_border of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The top_border of this SharedLinesDetails.
+# noqa: E501
+:rtype: TableBordersDetails</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L490-L498" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def top_border(self):
+    &#34;&#34;&#34;Gets the top_border of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The top_border of this SharedLinesDetails.  # noqa: E501
+    :rtype: TableBordersDetails
+    &#34;&#34;&#34;
+    return self._top_border</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.bottom_border_id"><code class="name">var <span class="ident">bottom_border_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the bottom_border_id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The bottom_border_id of this SharedLinesDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L511-L519" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def bottom_border_id(self):
+    &#34;&#34;&#34;Gets the bottom_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The bottom_border_id of this SharedLinesDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._bottom_border_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.bottom_border"><code class="name">var <span class="ident">bottom_border</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the bottom_border of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The bottom_border of this SharedLinesDetails.
+# noqa: E501
+:rtype: TableBordersDetails</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L532-L540" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def bottom_border(self):
+    &#34;&#34;&#34;Gets the bottom_border of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The bottom_border of this SharedLinesDetails.  # noqa: E501
+    :rtype: TableBordersDetails
+    &#34;&#34;&#34;
+    return self._bottom_border</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.right_border_id"><code class="name">var <span class="ident">right_border_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the right_border_id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The right_border_id of this SharedLinesDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L553-L561" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def right_border_id(self):
+    &#34;&#34;&#34;Gets the right_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The right_border_id of this SharedLinesDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._right_border_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.right_border"><code class="name">var <span class="ident">right_border</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the right_border of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The right_border of this SharedLinesDetails.
+# noqa: E501
+:rtype: TableBordersDetails</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L574-L582" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def right_border(self):
+    &#34;&#34;&#34;Gets the right_border of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The right_border of this SharedLinesDetails.  # noqa: E501
+    :rtype: TableBordersDetails
+    &#34;&#34;&#34;
+    return self._right_border</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.left_border_id"><code class="name">var <span class="ident">left_border_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the left_border_id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The left_border_id of this SharedLinesDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L595-L603" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def left_border_id(self):
+    &#34;&#34;&#34;Gets the left_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The left_border_id of this SharedLinesDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._left_border_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.left_border"><code class="name">var <span class="ident">left_border</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the left_border of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The left_border of this SharedLinesDetails.
+# noqa: E501
+:rtype: TableBordersDetails</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L616-L624" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def left_border(self):
+    &#34;&#34;&#34;Gets the left_border of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The left_border of this SharedLinesDetails.  # noqa: E501
+    :rtype: TableBordersDetails
+    &#34;&#34;&#34;
+    return self._left_border</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.t_lto_br_border_id"><code class="name">var <span class="ident">t_lto_br_border_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the t_lto_br_border_id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The t_lto_br_border_id of this SharedLinesDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L637-L645" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def t_lto_br_border_id(self):
+    &#34;&#34;&#34;Gets the t_lto_br_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The t_lto_br_border_id of this SharedLinesDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._t_lto_br_border_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.t_lto_br_border"><code class="name">var <span class="ident">t_lto_br_border</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the t_lto_br_border of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The t_lto_br_border of this SharedLinesDetails.
+# noqa: E501
+:rtype: TableBordersDetails</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L658-L666" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def t_lto_br_border(self):
+    &#34;&#34;&#34;Gets the t_lto_br_border of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The t_lto_br_border of this SharedLinesDetails.  # noqa: E501
+    :rtype: TableBordersDetails
+    &#34;&#34;&#34;
+    return self._t_lto_br_border</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.b_lto_tr_border_id"><code class="name">var <span class="ident">b_lto_tr_border_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the b_lto_tr_border_id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The b_lto_tr_border_id of this SharedLinesDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L679-L687" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def b_lto_tr_border_id(self):
+    &#34;&#34;&#34;Gets the b_lto_tr_border_id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The b_lto_tr_border_id of this SharedLinesDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._b_lto_tr_border_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.b_lto_tr_border"><code class="name">var <span class="ident">b_lto_tr_border</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the b_lto_tr_border of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The b_lto_tr_border of this SharedLinesDetails.
+# noqa: E501
+:rtype: TableBordersDetails</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L700-L708" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def b_lto_tr_border(self):
+    &#34;&#34;&#34;Gets the b_lto_tr_border of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The b_lto_tr_border of this SharedLinesDetails.  # noqa: E501
+    :rtype: TableBordersDetails
+    &#34;&#34;&#34;
+    return self._b_lto_tr_border</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.line_map_id"><code class="name">var <span class="ident">line_map_id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the line_map_id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The line_map_id of this SharedLinesDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L721-L729" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def line_map_id(self):
+    &#34;&#34;&#34;Gets the line_map_id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The line_map_id of this SharedLinesDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._line_map_id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.line_map"><code class="name">var <span class="ident">line_map</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the line_map of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The line_map of this SharedLinesDetails.
+# noqa: E501
+:rtype: ThemeLineMapDetails</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L742-L750" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def line_map(self):
+    &#34;&#34;&#34;Gets the line_map of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The line_map of this SharedLinesDetails.  # noqa: E501
+    :rtype: ThemeLineMapDetails
+    &#34;&#34;&#34;
+    return self._line_map</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the id of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The id of this SharedLinesDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L763-L771" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def id(self):
+    &#34;&#34;&#34;Gets the id of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The id of this SharedLinesDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._id</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.date_created"><code class="name">var <span class="ident">date_created</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the date_created of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The date_created of this SharedLinesDetails.
+# noqa: E501
+:rtype: datetime</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L784-L792" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def date_created(self):
+    &#34;&#34;&#34;Gets the date_created of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The date_created of this SharedLinesDetails.  # noqa: E501
+    :rtype: datetime
+    &#34;&#34;&#34;
+    return self._date_created</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.user_created"><code class="name">var <span class="ident">user_created</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the user_created of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The user_created of this SharedLinesDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L805-L813" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def user_created(self):
+    &#34;&#34;&#34;Gets the user_created of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The user_created of this SharedLinesDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._user_created</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.date_modified"><code class="name">var <span class="ident">date_modified</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the date_modified of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The date_modified of this SharedLinesDetails.
+# noqa: E501
+:rtype: datetime</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L826-L834" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def date_modified(self):
+    &#34;&#34;&#34;Gets the date_modified of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The date_modified of this SharedLinesDetails.  # noqa: E501
+    :rtype: datetime
+    &#34;&#34;&#34;
+    return self._date_modified</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.user_modified"><code class="name">var <span class="ident">user_modified</span></code></dt>
+<dd>
+<section class="desc"><p>Gets the user_modified of this SharedLinesDetails.
+# noqa: E501</p>
+<p>:return: The user_modified of this SharedLinesDetails.
+# noqa: E501
+:rtype: str</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L847-L855" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">@property
+def user_modified(self):
+    &#34;&#34;&#34;Gets the user_modified of this SharedLinesDetails.  # noqa: E501
+
+
+    :return: The user_modified of this SharedLinesDetails.  # noqa: E501
+    :rtype: str
+    &#34;&#34;&#34;
+    return self._user_modified</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the model properties as a dict</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L868-L890" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_dict(self):
+    &#34;&#34;&#34;Returns the model properties as a dict&#34;&#34;&#34;
+    result = {}
+
+    for attr, _ in six.iteritems(self.openapi_types):
+        value = getattr(self, attr)
+        if isinstance(value, list):
+            result[attr] = list(map(
+                lambda x: x.to_dict() if hasattr(x, &#34;to_dict&#34;) else x,
+                value
+            ))
+        elif hasattr(value, &#34;to_dict&#34;):
+            result[attr] = value.to_dict()
+        elif isinstance(value, dict):
+            result[attr] = dict(map(
+                lambda item: (item[0], item[1].to_dict())
+                if hasattr(item[1], &#34;to_dict&#34;) else item,
+                value.items()
+            ))
+        else:
+            result[attr] = value
+
+    return result</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.to_str"><code class="name flex">
+<span>def <span class="ident">to_str</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the string representation of the model</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/ooxml_automation/models/shared_lines_details.py#L892-L894" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def to_str(self):
+    &#34;&#34;&#34;Returns the string representation of the model&#34;&#34;&#34;
+    return pprint.pformat(self.to_dict())</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="presalytics.client.ooxml_automation.models" href="/python-client/presalytics/client/ooxml_automation/models/index.html">presalytics.client.ooxml_automation.models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails">SharedLinesDetails</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.to_dict" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.to_dict">to_dict</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.to_str" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.to_str">to_str</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.line_color_solid_fill" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.line_color_solid_fill">line_color_solid_fill</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.connector_id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.connector_id">connector_id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.parent_connector" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.parent_connector">parent_connector</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.shape_id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.shape_id">shape_id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.parent_shape" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.parent_shape">parent_shape</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.dash_type_id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.dash_type_id">dash_type_id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.head_end_type_id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.head_end_type_id">head_end_type_id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.tail_end_type_id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.tail_end_type_id">tail_end_type_id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.weight" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.weight">weight</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.head_end_height_id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.head_end_height_id">head_end_height_id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.head_end_width_id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.head_end_width_id">head_end_width_id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.tail_end_height_id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.tail_end_height_id">tail_end_height_id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.tail_end_width_id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.tail_end_width_id">tail_end_width_id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.top_border_id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.top_border_id">top_border_id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.top_border" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.top_border">top_border</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.bottom_border_id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.bottom_border_id">bottom_border_id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.bottom_border" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.bottom_border">bottom_border</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.right_border_id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.right_border_id">right_border_id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.right_border" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.right_border">right_border</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.left_border_id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.left_border_id">left_border_id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.left_border" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.left_border">left_border</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.t_lto_br_border_id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.t_lto_br_border_id">t_lto_br_border_id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.t_lto_br_border" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.t_lto_br_border">t_lto_br_border</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.b_lto_tr_border_id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.b_lto_tr_border_id">b_lto_tr_border_id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.b_lto_tr_border" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.b_lto_tr_border">b_lto_tr_border</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.line_map_id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.line_map_id">line_map_id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.line_map" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.line_map">line_map</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.id" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.id">id</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.date_created" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.date_created">date_created</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.user_created" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.user_created">user_created</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.date_modified" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.date_modified">date_modified</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.user_modified" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.user_modified">user_modified</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.openapi_types" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.openapi_types">openapi_types</a></code></li>
+<li><code><a title="presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.attribute_map" href="/python-client/presalytics/client/ooxml_automation/models/shared_lines_details.html#presalytics.client.ooxml_automation.models.shared_lines_details.SharedLinesDetails.attribute_map">attribute_map</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

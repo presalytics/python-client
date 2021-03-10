@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.lib.exceptions API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L0-L171" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L0-L170" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import typing
 import logging
@@ -107,7 +107,7 @@ class InvalidConfigurationError(PresalyticsBaseException):
 
 
 class RegistryError(PresalyticsBaseException):
-     def __init__(self, registry, message=None):
+    def __init__(self, registry, message=None):
         if not message:
             message = &#34;The was an unknown error in inside the registry&#34;
         message = &#34;{0} Error: &#34;.format(registry.__class__.__name__) + message
@@ -119,6 +119,7 @@ class InvalidArgumentException(PresalyticsBaseException):
         if not message:
             message = &#34;One of the arguments supplied to this method is invalid.&#34;
         super().__init__(message)
+
 
 class ApiException(PresalyticsBaseException):
     def __init__(self, default_exception=None):
@@ -147,14 +148,14 @@ class RenderExceptionHandler(object):
         self.exception_type = self.exception.__class__.__name__
         self.line_no = None
 
-        try: 
+        try:
             first_frame = self.get_source_frame(traceback)
             self.source_module = first_frame.tb_frame.f_globals[&#39;__name__&#39;]
             self.line_no = first_frame.tb_lineno
         except Exception:
             self.source_module = &#34;unidentified&#34;
             self.line_no = &#34;unknown&#34;
-    
+
         if isinstance(self.exception, PresalyticsBaseException):
             self.message = self.exception.message
         else:
@@ -169,7 +170,6 @@ class RenderExceptionHandler(object):
             return self.get_source_frame(next)
         else:
             return tb
-        
 
     def render_exception(self):
         container = lxml.html.Element(&#34;div&#34;, {
@@ -190,13 +190,12 @@ class RenderExceptionHandler(object):
         note = lxml.html.Element(&#34;p&#34;)
         note.text = &#34;If you have trouble understainding this error message, try building your story using &#34; \
             &#34;with the presalytics.Revealer&#39;s `present()` method.  If should give you more thorough error logging.&#34;
-        
+
         container.extend([header, message, _type, exception_message, source, note])
         return lxml.html.tostring(container).decode(&#39;utf-8&#39;)
-    
+
     def to_html(self):
-        return self.render_exception()
-         </code></pre>
+        return self.render_exception()</code></pre>
 </details>
 </section>
 <section>
@@ -440,7 +439,7 @@ class RenderExceptionHandler(object):
 <a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L82-L87" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class RegistryError(PresalyticsBaseException):
-     def __init__(self, registry, message=None):
+    def __init__(self, registry, message=None):
         if not message:
             message = &#34;The was an unknown error in inside the registry&#34;
         message = &#34;{0} Error: &#34;.format(registry.__class__.__name__) + message
@@ -486,7 +485,7 @@ class RenderExceptionHandler(object):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L96-L113" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L97-L114" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ApiException(PresalyticsBaseException):
     def __init__(self, default_exception=None):
@@ -523,7 +522,7 @@ class RenderExceptionHandler(object):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L116-L171" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L117-L171" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class RenderExceptionHandler(object):
     def __init__(self, exception: Exception, target_type=&#34;widget&#34;, traceback=None):
@@ -532,14 +531,14 @@ class RenderExceptionHandler(object):
         self.exception_type = self.exception.__class__.__name__
         self.line_no = None
 
-        try: 
+        try:
             first_frame = self.get_source_frame(traceback)
             self.source_module = first_frame.tb_frame.f_globals[&#39;__name__&#39;]
             self.line_no = first_frame.tb_lineno
         except Exception:
             self.source_module = &#34;unidentified&#34;
             self.line_no = &#34;unknown&#34;
-    
+
         if isinstance(self.exception, PresalyticsBaseException):
             self.message = self.exception.message
         else:
@@ -554,7 +553,6 @@ class RenderExceptionHandler(object):
             return self.get_source_frame(next)
         else:
             return tb
-        
 
     def render_exception(self):
         container = lxml.html.Element(&#34;div&#34;, {
@@ -575,10 +573,10 @@ class RenderExceptionHandler(object):
         note = lxml.html.Element(&#34;p&#34;)
         note.text = &#34;If you have trouble understainding this error message, try building your story using &#34; \
             &#34;with the presalytics.Revealer&#39;s `present()` method.  If should give you more thorough error logging.&#34;
-        
+
         container.extend([header, message, _type, exception_message, source, note])
         return lxml.html.tostring(container).decode(&#39;utf-8&#39;)
-    
+
     def to_html(self):
         return self.render_exception()</code></pre>
 </details>
@@ -592,7 +590,7 @@ class RenderExceptionHandler(object):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L139-L144" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/exceptions.py#L140-L145" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_source_frame(self, tb):
     next = tb.tb_next
@@ -631,7 +629,7 @@ class RenderExceptionHandler(object):
     note = lxml.html.Element(&#34;p&#34;)
     note.text = &#34;If you have trouble understainding this error message, try building your story using &#34; \
         &#34;with the presalytics.Revealer&#39;s `present()` method.  If should give you more thorough error logging.&#34;
-    
+
     container.extend([header, message, _type, exception_message, source, note])
     return lxml.html.tostring(container).decode(&#39;utf-8&#39;)</code></pre>
 </details>
@@ -715,7 +713,7 @@ class RenderExceptionHandler(object):
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

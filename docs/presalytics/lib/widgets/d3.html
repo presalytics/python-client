@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.lib.widgets.d3 API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -23,7 +23,7 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L0-L296" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L0-L278" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import typing
 import base64
@@ -62,7 +62,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
     d3_data: dict
         Data that will be loaded into the script when run in the browser. Avaiable
         in the script as the `data` object.
-    
+
     id: str, optional
         A unique identifier the widget.  Automatically generated when the
         widget is created or updated.
@@ -84,21 +84,18 @@ class D3Widget(presalytics.story.components.WidgetBase):
 
     html_filename: str, optional
         The name of file in the local directory with an html framement that should be rendered within the
-        body (inside element `&lt;div id=&#34;{{id}}&#34; class=&#34;d3-container&#34;&gt;&lt;/div&gt;`) of the iframe containing the 
+        body (inside element `&lt;div id=&#34;{{id}}&#34; class=&#34;d3-container&#34;&gt;&lt;/div&gt;`) of the iframe containing the
         d3 script
 
     css64 : str. optional
         A base64-encoded string of the css styles to apply to the d3 document.  Used for server-to-server
         transport over https.
-    
+
     css_filename: str, optional
         A css file containing styles that will be applied to d3
 
         Note: Styles `html {width: 100%; height:100%;} body {width: 100%; height: 100%; margin: 0px;}`
         are applied by default if not css is provided
-
-
-    
 
 
     Script Local Variables:
@@ -111,10 +108,10 @@ class D3Widget(presalytics.story.components.WidgetBase):
 
     container: `html element`
         The first div in the body
-    
+
     d3: `javascript object`
         The root d3 object for selecting, creating and editing elements on the DOM
-        
+
 
     Security Note:
     ----------
@@ -126,25 +123,15 @@ class D3Widget(presalytics.story.components.WidgetBase):
 
     &#34;&#34;&#34;
     __component_kind__ = &#39;d3&#39;
-    __plugins__ = [
-        {
-            &#39;name&#39;: &#39;external_scripts&#39;,
-            &#39;kind&#39;: &#39;script&#39;,
-            &#39;config&#39;: {
-                &#39;approved_scripts_key&#39;: &#39;d3&#39;
-            }
-        }
-    ]
 
-    def __init__(self, 
-                 name: str, 
+    def __init__(self,
+                 name: str,
                  d3_data: typing.Dict,
-                 id: str = None, 
-                 story_id: str = None,
-                 script64: str = None, 
-                 script_filename: str = None, 
+                 id: str = None,
+                 script64: str = None,
+                 script_filename: str = None,
                  css64: str = None,
-                 css_filename: str = None, 
+                 css_filename: str = None,
                  html64: str = None,
                  html_filename: str = None,
                  *args, **kwargs):
@@ -152,7 +139,6 @@ class D3Widget(presalytics.story.components.WidgetBase):
             id = &#39;d3-&#39; + str(uuid.uuid4())
         self.id = id
         self.d3_data = d3_data
-        self.story_id = story_id
         super(D3Widget, self).__init__(name, *args, **kwargs)
         self.script_filename = script_filename
         self.script64 = self.read_file(script_filename)
@@ -162,9 +148,9 @@ class D3Widget(presalytics.story.components.WidgetBase):
             raise presalytics.lib.exceptions.InvalidConfigurationError(&#34;D3 Widget must be supplied either a script64 or script_filename keyword argument.&#34;)
         self.html64 = self.read_file(html_filename)
         self.html64 = self.html64 if self.html64 else html64
+        self.html_filename = html_filename
         self.css64 = self.read_file(css_filename)
         self.css64 = self.css64 if self.css64 else css64
-        self.html_filename = html_filename
         self.css_filename = css_filename
 
     def read_file(self, filename) -&gt; typing.Optional[str]:
@@ -173,7 +159,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
         &#34;&#34;&#34;
         data64 = None
         if filename:
-            search_paths = list(set(presalytics.autodiscover_paths))
+            search_paths = list(set(presalytics.settings.AUTODISCOVER_PATHS))
             if os.getcwd() not in search_paths:
                 search_paths.append(os.getcwd())
             for path in search_paths:
@@ -181,19 +167,16 @@ class D3Widget(presalytics.story.components.WidgetBase):
                 if os.path.exists(fpath):
                     with open(fpath, &#39;rb&#39;) as f:
                         data = f.read()
-                        data64 = base64.b64encode(data).decode(&#39;utf-8&#39;)  #type: ignore
+                        data64 = base64.b64encode(data).decode(&#39;utf-8&#39;)  # type: ignore
                     break
             if not data64:
                 logger.debug(&#34;File {0} could not be found&#34;.format(filename))
-        return data64 
+        return data64
 
     def to_html(self, data=None, **kwargs) -&gt; str:
         &#34;&#34;&#34;
         Renders the sandboxed iframe with will contain the d3 script widget
         &#34;&#34;&#34;
-        if not self.story_id:
-            message = &#34;This object requires a valid story_id to render.&#34;
-            raise presalytics.lib.exceptions.MissingConfigException(message=message)
         html = self.create_container()
         return html
 
@@ -202,12 +185,8 @@ class D3Widget(presalytics.story.components.WidgetBase):
         Wraps the D3 objects in an endpoint at the story API load via a sandboxed `&lt;iframe&gt;` that
         will be rendered
         &#34;&#34;&#34;
-        params = {
-            &#34;story_host&#34;: self.get_client(delegate_login=True).story.api_client.external_root_url,
-            &#34;id&#34;: self.id,
-            &#34;story_id&#34;: self.story_id,
-        }
-        source_url = &#34;{story_host}/{story_id}/d3/{id}&#34;.format(**params)
+        story_host = self.get_client(delegate_login=True).story.api_client.external_root_url
+        source_url = &#34;{0}/cache/{1}&#34;.format(story_host, self.nonce)
         empty_parent_div = lxml.html.Element(&#34;div&#34;, {
             &#39;class&#39;: &#39;empty-parent bg-light&#39;,
             &#39;style&#39;: &#39;height: 100%; width: 100%, display: block; text-align: left;&#39;
@@ -218,7 +197,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
             &#39;scrolling&#39;: &#34;auto&#34;,
             &#39;class&#39;: &#39;d3-responsive-frame&#39;,
             &#39;style&#39;: &#39;max-height: none; max-width: none; height:100%; width: 100%;&#39;,
-            &#39;sandbox&#39;: &#39;allow-forms allow-scripts&#39;
+            &#39;sandbox&#39;: &#39;allow-forms allow-scripts allow-same-origin&#39;
         })
         empty_parent_div.append(frame)
         return lxml.html.tostring(empty_parent_div).decode(&#39;utf-8&#39;)
@@ -227,8 +206,6 @@ class D3Widget(presalytics.story.components.WidgetBase):
     def deserialize(cls, outline, **kwargs):
         d3_data = outline.data.get(&#34;d3_data&#34;)
         story_id = outline.data.get(&#34;story_id&#34;, None)
-        id = outline.data.get(&#39;id&#39;, None)
-        data = outline.data.get(&#39;d3_data&#39;, None)
         script_filename = outline.data.get(&#39;script_filename&#39;, None)
         script64 = outline.data.get(&#39;script64&#39;, None)
         html_filename = outline.data.get(&#39;html_filename&#39;, None)
@@ -237,7 +214,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
         css64 = outline.data.get(&#39;css64&#39;, None)
         return cls(outline.name,
                    d3_data,
-                   id=id,
+                   id=outline.id,
                    story_id=story_id,
                    script64=script64,
                    script_filename=script_filename,
@@ -262,6 +239,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
         return presalytics.story.outline.Widget(
             name=self.name,
             kind=self.__component_kind__,
+            id=self.id,
             data=data,
         )
 
@@ -277,6 +255,8 @@ class D3Widget(presalytics.story.components.WidgetBase):
     }
     &#34;&#34;&#34;
 
+    def create_subdocument(self, **kwargs):
+        return self.standalone_html()
 
     def standalone_html(self) -&gt; str:
         &#34;&#34;&#34;
@@ -294,6 +274,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
             &lt;/head&gt;
             &lt;body&gt;
                 &lt;script type=&#34;text/javascript&#34; src=&#34;{{ d3_url }}&#34;&gt;&lt;/script&gt;
+                &lt;script type=&#34;text/javascript&#34; src=&#34;{{ events_url }}&#34;&gt;&lt;/script&gt;
                 &lt;div id=&#34;{{ id }}&#34; class=&#34;d3-container&#34;&gt;{{ html_fragment }}&lt;/div&gt;
                 &lt;script type=&#34;text/javascript&#34;&gt;
 
@@ -304,21 +285,22 @@ class D3Widget(presalytics.story.components.WidgetBase):
                     var container = document.getElementById(id);
 
                     {{script|safe}}
-            
+
                 &lt;/script&gt;
             &lt;/body&gt;
         &lt;/html&gt;&#34;&#34;&#34;)
         data = json.dumps(self.d3_data)  # dont use hyphens in data keys
-        script = base64.b64decode(self.script64).decode(&#39;utf-8&#39;)  #type: ignore  #Required
-        extra_css = base64.b64decode(self.css64).decode(&#39;utf-8&#39;) if self.css64 else D3Widget.DEFAULT_CSS  #type: ignore  
-        html_fragment = base64.b64decode(self.html64).decode(&#39;utf-8&#39;) if self.html64 else None  #type: ignore   # disable nested iframes
+        script = base64.b64decode(self.script64).decode(&#39;utf-8&#39;)  # type: ignore  #Required
+        extra_css = base64.b64decode(self.css64).decode(&#39;utf-8&#39;) if self.css64 else D3Widget.DEFAULT_CSS  # type: ignore
+        html_fragment = base64.b64decode(self.html64).decode(&#39;utf-8&#39;) if self.html64 else None  # type: ignore   # disable nested iframes
         context = {
             &#34;id&#34;: self.id,
             &#34;d3_url&#34;: presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get(&#39;d3&#39;),
             &#34;data&#34;: data,
             &#34;script&#34;: script,
             &#34;css&#34;: extra_css,
-            &#34;html_fragment&#34;: html_fragment
+            &#34;html_fragment&#34;: html_fragment,
+            &#34;events_url&#34;: presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get(&#39;events&#39;),
         }
         return SIMPLE_HTML.render(**context)</code></pre>
 </details>
@@ -334,7 +316,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
 <dl>
 <dt id="presalytics.lib.widgets.d3.D3Widget"><code class="flex name class">
 <span>class <span class="ident">D3Widget</span></span>
-<span>(</span><span>name, d3_data, id=None, story_id=None, script64=None, script_filename=None, css64=None, css_filename=None, html64=None, html_filename=None, *args, **kwargs)</span>
+<span>(</span><span>name, d3_data, id=None, script64=None, script_filename=None, css64=None, css_filename=None, html64=None, html_filename=None, *args, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>A <code>Widget</code> for rendering user-defined d3.js scripts</p>
@@ -346,7 +328,7 @@ parameter.</p>
 <dl>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>the name of widget.
-Must be unique within <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS"><code>COMPONENTS</code></a></dd>
+Must be unique within <code><a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS">COMPONENTS</a></code></dd>
 <dt><strong><code>d3_data</code></strong> :&ensp;<code>dict</code></dt>
 <dd>Data that will be loaded into the script when run in the browser. Avaiable
 in the script as the <code>data</code> object.</dd>
@@ -356,7 +338,7 @@ Automatically generated when the
 widget is created or updated.</dd>
 <dt><strong><code>story_id</code></strong> :&ensp;<code>str</code>, optional</dt>
 <dd>The story_id of the parent story</dd>
-<dt><strong><code>script64</code></strong> :&ensp;<code>str.</code> optional</dt>
+<dt><strong><code>script64</code></strong> :&ensp;<code>str. optional</code></dt>
 <dd>A base64-encoded string of the script's text.
 Used for server-to-server
 transport over https</dd>
@@ -364,7 +346,7 @@ transport over https</dd>
 <dd>Required when updating the script text.
 Read into the <code>script64</code> parameter
 via the <code>read_file</code> method</dd>
-<dt><strong><code>html64</code></strong> :&ensp;<code>str.</code> optional</dt>
+<dt><strong><code>html64</code></strong> :&ensp;<code>str. optional</code></dt>
 <dd>A base64-encoded string of the html fragments's text.
 Used for server-to-server
 transport over https</dd>
@@ -372,7 +354,7 @@ transport over https</dd>
 <dd>The name of file in the local directory with an html framement that should be rendered within the
 body (inside element <code>&lt;div id="{{id}}" class="d3-container"&gt;&lt;/div&gt;</code>) of the iframe containing the
 d3 script</dd>
-<dt><strong><code>css64</code></strong> :&ensp;<code>str.</code> optional</dt>
+<dt><strong><code>css64</code></strong> :&ensp;<code>str. optional</code></dt>
 <dd>A base64-encoded string of the css styles to apply to the d3 document.
 Used for server-to-server
 transport over https.</dd>
@@ -399,7 +381,7 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L21-L297" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L21-L279" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class D3Widget(presalytics.story.components.WidgetBase):
     &#34;&#34;&#34;
@@ -419,7 +401,7 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
     d3_data: dict
         Data that will be loaded into the script when run in the browser. Avaiable
         in the script as the `data` object.
-    
+
     id: str, optional
         A unique identifier the widget.  Automatically generated when the
         widget is created or updated.
@@ -441,21 +423,18 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
 
     html_filename: str, optional
         The name of file in the local directory with an html framement that should be rendered within the
-        body (inside element `&lt;div id=&#34;{{id}}&#34; class=&#34;d3-container&#34;&gt;&lt;/div&gt;`) of the iframe containing the 
+        body (inside element `&lt;div id=&#34;{{id}}&#34; class=&#34;d3-container&#34;&gt;&lt;/div&gt;`) of the iframe containing the
         d3 script
 
     css64 : str. optional
         A base64-encoded string of the css styles to apply to the d3 document.  Used for server-to-server
         transport over https.
-    
+
     css_filename: str, optional
         A css file containing styles that will be applied to d3
 
         Note: Styles `html {width: 100%; height:100%;} body {width: 100%; height: 100%; margin: 0px;}`
         are applied by default if not css is provided
-
-
-    
 
 
     Script Local Variables:
@@ -468,10 +447,10 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
 
     container: `html element`
         The first div in the body
-    
+
     d3: `javascript object`
         The root d3 object for selecting, creating and editing elements on the DOM
-        
+
 
     Security Note:
     ----------
@@ -483,25 +462,15 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
 
     &#34;&#34;&#34;
     __component_kind__ = &#39;d3&#39;
-    __plugins__ = [
-        {
-            &#39;name&#39;: &#39;external_scripts&#39;,
-            &#39;kind&#39;: &#39;script&#39;,
-            &#39;config&#39;: {
-                &#39;approved_scripts_key&#39;: &#39;d3&#39;
-            }
-        }
-    ]
 
-    def __init__(self, 
-                 name: str, 
+    def __init__(self,
+                 name: str,
                  d3_data: typing.Dict,
-                 id: str = None, 
-                 story_id: str = None,
-                 script64: str = None, 
-                 script_filename: str = None, 
+                 id: str = None,
+                 script64: str = None,
+                 script_filename: str = None,
                  css64: str = None,
-                 css_filename: str = None, 
+                 css_filename: str = None,
                  html64: str = None,
                  html_filename: str = None,
                  *args, **kwargs):
@@ -509,7 +478,6 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
             id = &#39;d3-&#39; + str(uuid.uuid4())
         self.id = id
         self.d3_data = d3_data
-        self.story_id = story_id
         super(D3Widget, self).__init__(name, *args, **kwargs)
         self.script_filename = script_filename
         self.script64 = self.read_file(script_filename)
@@ -519,9 +487,9 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
             raise presalytics.lib.exceptions.InvalidConfigurationError(&#34;D3 Widget must be supplied either a script64 or script_filename keyword argument.&#34;)
         self.html64 = self.read_file(html_filename)
         self.html64 = self.html64 if self.html64 else html64
+        self.html_filename = html_filename
         self.css64 = self.read_file(css_filename)
         self.css64 = self.css64 if self.css64 else css64
-        self.html_filename = html_filename
         self.css_filename = css_filename
 
     def read_file(self, filename) -&gt; typing.Optional[str]:
@@ -530,7 +498,7 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
         &#34;&#34;&#34;
         data64 = None
         if filename:
-            search_paths = list(set(presalytics.autodiscover_paths))
+            search_paths = list(set(presalytics.settings.AUTODISCOVER_PATHS))
             if os.getcwd() not in search_paths:
                 search_paths.append(os.getcwd())
             for path in search_paths:
@@ -538,19 +506,16 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
                 if os.path.exists(fpath):
                     with open(fpath, &#39;rb&#39;) as f:
                         data = f.read()
-                        data64 = base64.b64encode(data).decode(&#39;utf-8&#39;)  #type: ignore
+                        data64 = base64.b64encode(data).decode(&#39;utf-8&#39;)  # type: ignore
                     break
             if not data64:
                 logger.debug(&#34;File {0} could not be found&#34;.format(filename))
-        return data64 
+        return data64
 
     def to_html(self, data=None, **kwargs) -&gt; str:
         &#34;&#34;&#34;
         Renders the sandboxed iframe with will contain the d3 script widget
         &#34;&#34;&#34;
-        if not self.story_id:
-            message = &#34;This object requires a valid story_id to render.&#34;
-            raise presalytics.lib.exceptions.MissingConfigException(message=message)
         html = self.create_container()
         return html
 
@@ -559,12 +524,8 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
         Wraps the D3 objects in an endpoint at the story API load via a sandboxed `&lt;iframe&gt;` that
         will be rendered
         &#34;&#34;&#34;
-        params = {
-            &#34;story_host&#34;: self.get_client(delegate_login=True).story.api_client.external_root_url,
-            &#34;id&#34;: self.id,
-            &#34;story_id&#34;: self.story_id,
-        }
-        source_url = &#34;{story_host}/{story_id}/d3/{id}&#34;.format(**params)
+        story_host = self.get_client(delegate_login=True).story.api_client.external_root_url
+        source_url = &#34;{0}/cache/{1}&#34;.format(story_host, self.nonce)
         empty_parent_div = lxml.html.Element(&#34;div&#34;, {
             &#39;class&#39;: &#39;empty-parent bg-light&#39;,
             &#39;style&#39;: &#39;height: 100%; width: 100%, display: block; text-align: left;&#39;
@@ -575,7 +536,7 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
             &#39;scrolling&#39;: &#34;auto&#34;,
             &#39;class&#39;: &#39;d3-responsive-frame&#39;,
             &#39;style&#39;: &#39;max-height: none; max-width: none; height:100%; width: 100%;&#39;,
-            &#39;sandbox&#39;: &#39;allow-forms allow-scripts&#39;
+            &#39;sandbox&#39;: &#39;allow-forms allow-scripts allow-same-origin&#39;
         })
         empty_parent_div.append(frame)
         return lxml.html.tostring(empty_parent_div).decode(&#39;utf-8&#39;)
@@ -584,8 +545,6 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
     def deserialize(cls, outline, **kwargs):
         d3_data = outline.data.get(&#34;d3_data&#34;)
         story_id = outline.data.get(&#34;story_id&#34;, None)
-        id = outline.data.get(&#39;id&#39;, None)
-        data = outline.data.get(&#39;d3_data&#39;, None)
         script_filename = outline.data.get(&#39;script_filename&#39;, None)
         script64 = outline.data.get(&#39;script64&#39;, None)
         html_filename = outline.data.get(&#39;html_filename&#39;, None)
@@ -594,7 +553,7 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
         css64 = outline.data.get(&#39;css64&#39;, None)
         return cls(outline.name,
                    d3_data,
-                   id=id,
+                   id=outline.id,
                    story_id=story_id,
                    script64=script64,
                    script_filename=script_filename,
@@ -619,6 +578,7 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
         return presalytics.story.outline.Widget(
             name=self.name,
             kind=self.__component_kind__,
+            id=self.id,
             data=data,
         )
 
@@ -634,6 +594,8 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
     }
     &#34;&#34;&#34;
 
+    def create_subdocument(self, **kwargs):
+        return self.standalone_html()
 
     def standalone_html(self) -&gt; str:
         &#34;&#34;&#34;
@@ -651,6 +613,7 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
             &lt;/head&gt;
             &lt;body&gt;
                 &lt;script type=&#34;text/javascript&#34; src=&#34;{{ d3_url }}&#34;&gt;&lt;/script&gt;
+                &lt;script type=&#34;text/javascript&#34; src=&#34;{{ events_url }}&#34;&gt;&lt;/script&gt;
                 &lt;div id=&#34;{{ id }}&#34; class=&#34;d3-container&#34;&gt;{{ html_fragment }}&lt;/div&gt;
                 &lt;script type=&#34;text/javascript&#34;&gt;
 
@@ -661,21 +624,22 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
                     var container = document.getElementById(id);
 
                     {{script|safe}}
-            
+
                 &lt;/script&gt;
             &lt;/body&gt;
         &lt;/html&gt;&#34;&#34;&#34;)
         data = json.dumps(self.d3_data)  # dont use hyphens in data keys
-        script = base64.b64decode(self.script64).decode(&#39;utf-8&#39;)  #type: ignore  #Required
-        extra_css = base64.b64decode(self.css64).decode(&#39;utf-8&#39;) if self.css64 else D3Widget.DEFAULT_CSS  #type: ignore  
-        html_fragment = base64.b64decode(self.html64).decode(&#39;utf-8&#39;) if self.html64 else None  #type: ignore   # disable nested iframes
+        script = base64.b64decode(self.script64).decode(&#39;utf-8&#39;)  # type: ignore  #Required
+        extra_css = base64.b64decode(self.css64).decode(&#39;utf-8&#39;) if self.css64 else D3Widget.DEFAULT_CSS  # type: ignore
+        html_fragment = base64.b64decode(self.html64).decode(&#39;utf-8&#39;) if self.html64 else None  # type: ignore   # disable nested iframes
         context = {
             &#34;id&#34;: self.id,
             &#34;d3_url&#34;: presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get(&#39;d3&#39;),
             &#34;data&#34;: data,
             &#34;script&#34;: script,
             &#34;css&#34;: extra_css,
-            &#34;html_fragment&#34;: html_fragment
+            &#34;html_fragment&#34;: html_fragment,
+            &#34;events_url&#34;: presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get(&#39;events&#39;),
         }
         return SIMPLE_HTML.render(**context)</code></pre>
 </details>
@@ -687,17 +651,13 @@ Fetch and xhr actions are also disabled via a restrictive Content Security Polic
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="presalytics.lib.widgets.d3.D3Widget.outline_widget"><code class="name">var <span class="ident">outline_widget</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
 <dt id="presalytics.lib.widgets.d3.D3Widget.DEFAULT_CSS"><code class="name">var <span class="ident">DEFAULT_CSS</span></code></dt>
 <dd>
-<section class="desc"><p>str(object='') -&gt; str
-str(bytes_or_buffer[, encoding[, errors]]) -&gt; str</p>
-<p>Create a new string object from the given object. If encoding or
-errors is specified, then the object must expose a data buffer
-that will be decoded using the given encoding and error handler.
-Otherwise, returns the result of object.<strong>str</strong>() (if defined)
-or repr(object).
-encoding defaults to sys.getdefaultencoding().
-errors defaults to 'strict'.</p></section>
+<section class="desc"></section>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -710,7 +670,7 @@ errors defaults to 'strict'.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L144-L162" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L130-L148" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def read_file(self, filename) -&gt; typing.Optional[str]:
     &#34;&#34;&#34;
@@ -718,7 +678,7 @@ errors defaults to 'strict'.</p></section>
     &#34;&#34;&#34;
     data64 = None
     if filename:
-        search_paths = list(set(presalytics.autodiscover_paths))
+        search_paths = list(set(presalytics.settings.AUTODISCOVER_PATHS))
         if os.getcwd() not in search_paths:
             search_paths.append(os.getcwd())
         for path in search_paths:
@@ -726,11 +686,11 @@ errors defaults to 'strict'.</p></section>
             if os.path.exists(fpath):
                 with open(fpath, &#39;rb&#39;) as f:
                     data = f.read()
-                    data64 = base64.b64encode(data).decode(&#39;utf-8&#39;)  #type: ignore
+                    data64 = base64.b64encode(data).decode(&#39;utf-8&#39;)  # type: ignore
                 break
         if not data64:
             logger.debug(&#34;File {0} could not be found&#34;.format(filename))
-    return data64 </code></pre>
+    return data64</code></pre>
 </details>
 </dd>
 <dt id="presalytics.lib.widgets.d3.D3Widget.to_html"><code class="name flex">
@@ -741,15 +701,12 @@ errors defaults to 'strict'.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L164-L172" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L150-L155" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def to_html(self, data=None, **kwargs) -&gt; str:
     &#34;&#34;&#34;
     Renders the sandboxed iframe with will contain the d3 script widget
     &#34;&#34;&#34;
-    if not self.story_id:
-        message = &#34;This object requires a valid story_id to render.&#34;
-        raise presalytics.lib.exceptions.MissingConfigException(message=message)
     html = self.create_container()
     return html</code></pre>
 </details>
@@ -763,19 +720,15 @@ will be rendered</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L174-L198" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L157-L177" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def create_container(self, **kwargs):
     &#34;&#34;&#34;
     Wraps the D3 objects in an endpoint at the story API load via a sandboxed `&lt;iframe&gt;` that
     will be rendered
     &#34;&#34;&#34;
-    params = {
-        &#34;story_host&#34;: self.get_client(delegate_login=True).story.api_client.external_root_url,
-        &#34;id&#34;: self.id,
-        &#34;story_id&#34;: self.story_id,
-    }
-    source_url = &#34;{story_host}/{story_id}/d3/{id}&#34;.format(**params)
+    story_host = self.get_client(delegate_login=True).story.api_client.external_root_url
+    source_url = &#34;{0}/cache/{1}&#34;.format(story_host, self.nonce)
     empty_parent_div = lxml.html.Element(&#34;div&#34;, {
         &#39;class&#39;: &#39;empty-parent bg-light&#39;,
         &#39;style&#39;: &#39;height: 100%; width: 100%, display: block; text-align: left;&#39;
@@ -786,7 +739,7 @@ will be rendered</p></section>
         &#39;scrolling&#39;: &#34;auto&#34;,
         &#39;class&#39;: &#39;d3-responsive-frame&#39;,
         &#39;style&#39;: &#39;max-height: none; max-width: none; height:100%; width: 100%;&#39;,
-        &#39;sandbox&#39;: &#39;allow-forms allow-scripts&#39;
+        &#39;sandbox&#39;: &#39;allow-forms allow-scripts allow-same-origin&#39;
     })
     empty_parent_div.append(frame)
     return lxml.html.tostring(empty_parent_div).decode(&#39;utf-8&#39;)</code></pre>
@@ -801,7 +754,7 @@ will be rendered</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L255-L297" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/lib/widgets/d3.py#L235-L279" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def standalone_html(self) -&gt; str:
     &#34;&#34;&#34;
@@ -819,6 +772,7 @@ will be rendered</p></section>
         &lt;/head&gt;
         &lt;body&gt;
             &lt;script type=&#34;text/javascript&#34; src=&#34;{{ d3_url }}&#34;&gt;&lt;/script&gt;
+            &lt;script type=&#34;text/javascript&#34; src=&#34;{{ events_url }}&#34;&gt;&lt;/script&gt;
             &lt;div id=&#34;{{ id }}&#34; class=&#34;d3-container&#34;&gt;{{ html_fragment }}&lt;/div&gt;
             &lt;script type=&#34;text/javascript&#34;&gt;
 
@@ -829,21 +783,22 @@ will be rendered</p></section>
                 var container = document.getElementById(id);
 
                 {{script|safe}}
-        
+
             &lt;/script&gt;
         &lt;/body&gt;
     &lt;/html&gt;&#34;&#34;&#34;)
     data = json.dumps(self.d3_data)  # dont use hyphens in data keys
-    script = base64.b64decode(self.script64).decode(&#39;utf-8&#39;)  #type: ignore  #Required
-    extra_css = base64.b64decode(self.css64).decode(&#39;utf-8&#39;) if self.css64 else D3Widget.DEFAULT_CSS  #type: ignore  
-    html_fragment = base64.b64decode(self.html64).decode(&#39;utf-8&#39;) if self.html64 else None  #type: ignore   # disable nested iframes
+    script = base64.b64decode(self.script64).decode(&#39;utf-8&#39;)  # type: ignore  #Required
+    extra_css = base64.b64decode(self.css64).decode(&#39;utf-8&#39;) if self.css64 else D3Widget.DEFAULT_CSS  # type: ignore
+    html_fragment = base64.b64decode(self.html64).decode(&#39;utf-8&#39;) if self.html64 else None  # type: ignore   # disable nested iframes
     context = {
         &#34;id&#34;: self.id,
         &#34;d3_url&#34;: presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get(&#39;d3&#39;),
         &#34;data&#34;: data,
         &#34;script&#34;: script,
         &#34;css&#34;: extra_css,
-        &#34;html_fragment&#34;: html_fragment
+        &#34;html_fragment&#34;: html_fragment,
+        &#34;events_url&#34;: presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().get(&#39;events&#39;),
     }
     return SIMPLE_HTML.render(**context)</code></pre>
 </details>
@@ -853,6 +808,7 @@ will be rendered</p></section>
 <ul class="hlist">
 <li><code><b><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></b></code>:
 <ul class="hlist">
+<li><code><a title="presalytics.story.components.WidgetBase.create_subdocument" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.create_subdocument">create_subdocument</a></code></li>
 <li><code><a title="presalytics.story.components.WidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
 <li><code><a title="presalytics.story.components.WidgetBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
 <li><code><a title="presalytics.story.components.WidgetBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
@@ -879,11 +835,12 @@ will be rendered</p></section>
 <ul>
 <li>
 <h4><code><a title="presalytics.lib.widgets.d3.D3Widget" href="/python-client/presalytics/lib/widgets/d3.html#presalytics.lib.widgets.d3.D3Widget">D3Widget</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="presalytics.lib.widgets.d3.D3Widget.read_file" href="/python-client/presalytics/lib/widgets/d3.html#presalytics.lib.widgets.d3.D3Widget.read_file">read_file</a></code></li>
 <li><code><a title="presalytics.lib.widgets.d3.D3Widget.to_html" href="/python-client/presalytics/lib/widgets/d3.html#presalytics.lib.widgets.d3.D3Widget.to_html">to_html</a></code></li>
 <li><code><a title="presalytics.lib.widgets.d3.D3Widget.create_container" href="/python-client/presalytics/lib/widgets/d3.html#presalytics.lib.widgets.d3.D3Widget.create_container">create_container</a></code></li>
 <li><code><a title="presalytics.lib.widgets.d3.D3Widget.standalone_html" href="/python-client/presalytics/lib/widgets/d3.html#presalytics.lib.widgets.d3.D3Widget.standalone_html">standalone_html</a></code></li>
+<li><code><a title="presalytics.lib.widgets.d3.D3Widget.outline_widget" href="/python-client/presalytics/lib/widgets/d3.html#presalytics.lib.widgets.d3.D3Widget.outline_widget">outline_widget</a></code></li>
 <li><code><a title="presalytics.lib.widgets.d3.D3Widget.DEFAULT_CSS" href="/python-client/presalytics/lib/widgets/d3.html#presalytics.lib.widgets.d3.D3Widget.DEFAULT_CSS">DEFAULT_CSS</a></code></li>
 </ul>
 </li>
@@ -893,7 +850,7 @@ will be rendered</p></section>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

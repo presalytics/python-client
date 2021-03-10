@@ -5,6 +5,11 @@
 - [ ] Add `presalytics.lib.tools.workflow.create_workspace`
 - [ ] Change file handling support beyond ooxml files
 
+
+## v0.6.1
+
+- [x] Loosen requirements to `>=` to make installs more flexible
+
 ## v0.6.0
 
 - [x] Change loader to allow for explicit loading via settings.py

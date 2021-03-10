@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.story.components API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -23,24 +23,26 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L0-L674" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L0-L719" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">import abc
 import typing
-import os
 import logging
 import webbrowser
 import re
 import six
 import sys
+import uuid
+import base64
 import urllib.parse
 import presalytics.lib
 import presalytics.lib.registry
 import presalytics.lib.exceptions
 import presalytics.lib.constants
 import presalytics.client.api
+
 if typing.TYPE_CHECKING:
-    from presalytics.story.outline import Widget, Page, Plugin, OutlineBase, StoryOutline
+    from presalytics.story.outline import Widget, Page, Plugin, StoryOutline
 
 
 logger = logging.getLogger(&#34;presalytics.story.components&#34;)
@@ -88,7 +90,7 @@ class ComponentBase(abc.ABC):
         An identifier for this component class.  Used for component registration.
 
     __plugins__ : list of dict
-        A list of dictionaries that reference `presalytics.story.outline.Plugin` configurations.  When a 
+        A list of dictionaries that reference `presalytics.story.outline.Plugin` configurations.  When a
         `presaltytics.story.components.Renderer` is initialized, it will load these plugins into the
         rendered.  This allows plugins to be statically configured on `presalytics.story.components` classes,
         in lieu dynamic configurations on `presalytics.story.outline.StoryOutline` instances.
@@ -161,6 +163,12 @@ class WidgetBase(ComponentBase):
     ----------
     outline_widget: Widget
         A `presalytics.story.outline.Widget` object
+
+    nonce: str
+        A &#34;Number used ONCE&#34; that will be used as cache key for rendering subdocuments.
+        The nonce is included the Url that pulls the story from the Presalytics Story API.
+        This nonce is to be used during the rendering process by the `to_html` method for
+        widgets that implement this feature.
     &#34;&#34;&#34;
     outline_widget: typing.Optional[&#39;Widget&#39;]
 
@@ -169,10 +177,47 @@ class WidgetBase(ComponentBase):
     def __init__(self, name, *args, **kwargs) -&gt; None:
         super(WidgetBase, self).__init__(*args, **kwargs)
         self.name = name
+        self.id = kwargs.get(&#39;id&#39;, None)
         self.outline_widget = None
+        self.nonce = str(uuid.uuid4())
 
-    def render(self, component, **kwargs):
-        self.to_html(component, **kwargs)
+    def render(self, **kwargs):
+        subdocument = self.create_subdocument(**kwargs)
+        if subdocument:
+            try:
+                self.cache_subdocument(subdocument)
+            except Exception as ex:
+                logger.exception(ex)
+        return self.to_html(**kwargs)
+
+    def cache_subdocument(self, subdocument: str) -&gt; bool:
+        subdocument_encoded = base64.b64encode(subdocument.encode(&#39;utf-8&#39;)).decode(&#39;utf-8&#39;)
+        client = self.get_client()
+        access_token = client.token_util.token.get(&#39;access_token&#39;, None)
+        if access_token:
+            api_user_id = client.oidc.get_user_id(access_token)
+            payload = {
+                &#39;user_id&#39;: api_user_id,
+                &#39;subdocument&#39;: subdocument_encoded,
+                &#39;nonce&#39;: self.nonce
+            }
+            client.story.cache_post(payload)
+            return True
+        return False
+
+    def create_subdocument(self, **kwargs) -&gt; typing.Optional[str]:
+        &#34;&#34;&#34;
+        Returns an html document that will be rendered by browser.  If a `str` is returned,
+        then the html subdocument is cached into the story API for retreival by the browser after
+        rendering.  Widgets that render `&lt;iframe&gt;`, `&lt;object&gt;`, or `&lt;embed&gt;` tags should override
+        this method to return the subdocument that will be rendered by the browser.
+
+        Returns
+        ----------
+
+        An `str` containing an html document if implemented, otherwise None.
+        &#34;&#34;&#34;
+        return None
 
     @abc.abstractmethod
     def to_html(self, data: typing.Dict = None, **kwargs) -&gt; str:
@@ -273,8 +318,8 @@ class PageTemplateBase(ComponentBase):
     def __init__(self, page: &#39;Page&#39;, **kwargs) -&gt; None:
         super(PageTemplateBase, self).__init__(**kwargs)
         self.outline_page = page
+        self.id = page.id
         self.widgets = self.get_page_widgets(self.outline_page)
-        
 
     @abc.abstractmethod
     def render(self, **kwargs) -&gt; str:
@@ -303,7 +348,7 @@ class PageTemplateBase(ComponentBase):
                     raise presalytics.lib.exceptions.MissingConfigException(message)
         except Exception as ex:
             logger.exception(ex)
-            if not presalytics.CONFIG.get(&#34;DEBUG&#34;, False):
+            if not presalytics.settings.DEBUG:
                 widget_instance = presalytics.lib.exceptions.RenderExceptionHandler(ex)
             else:
                 t, v, tb = sys.exc_info()
@@ -320,7 +365,7 @@ class PageTemplateBase(ComponentBase):
             next_widget = self.load_widget(widget_outline)
             widget_instances.append(next_widget)
         return widget_instances
-    
+
     def serialize(self):
         return self.outline_page.dump()
 
@@ -333,7 +378,7 @@ class ThemeBase(ComponentBase):
     &#34;&#34;&#34;
     Themes are containers for plugins should be rendered once
     across the entire document.  The init method should configure
-    parameters with get passed to plugins via serialization and 
+    parameters with get passed to plugins via serialization and
     deserialization.
     &#34;&#34;&#34;
     plugins: typing.Optional[typing.List[&#39;Plugin&#39;]]
@@ -349,18 +394,18 @@ class ThemeBase(ComponentBase):
 
 class Renderer(ComponentBase):
     &#34;&#34;&#34;
-    Base class for objects that convert `presalytics.story.outline.StoryOutline` 
+    Base class for objects that convert `presalytics.story.outline.StoryOutline`
     objects into html and rendering them over the web
 
     With this class, users can push changes to their `presalytics.story.outline.StoryOutline`
-    to the Presalytics API and web clients.  Renderer class contains a couplemethods for 
-    syncing changes from component instances in the `presalytics.CONFIG` to the Presalytics API 
+    to the Presalytics API and web clients.  Renderer class contains a couplemethods for
+    syncing changes from component instances in the `presalytics.settings` to the Presalytics API
     Story service.
 
-    * The `view` method allows users programattically view their stories at https://presalytics.io 
+    * The `view` method allows users programattically view their stories at https://presalytics.io
     after changes are made
 
-    * The `manage` method takes users to to the story management interface, where users can share their 
+    * The `manage` method takes users to to the story management interface, where users can share their
     work with other users, continue making edits or change story properties.
 
 
@@ -368,13 +413,13 @@ class Renderer(ComponentBase):
     ----------
     story_outline : presalytics.story.outline.StoryOutline
         The presalytics StoryOutline to be rendered and presented
-    
+
     Attributes
     -----------
     plugins : list of dict
         Plugin data that transform to html `&lt;script&gt;` and `&lt;link&gt;` tags through
         the rendering process
-    
+
     site_host : str
         The host of the website.  Defaults to https://presalytics.io.
 
@@ -392,12 +437,12 @@ class Renderer(ComponentBase):
     manage_url: typing.Optional[str]
 
     __component_type__ = &#39;renderer&#39;
-    
-    def __init__(self, story_outline : &#39;StoryOutline&#39;, **kwargs):
+
+    def __init__(self, story_outline: &#39;StoryOutline&#39;, **kwargs):
         super(Renderer, self).__init__(**kwargs)
         self.story_outline = story_outline
         try:
-            self.site_host = presalytics.CONFIG[&#34;HOSTS&#34;][&#34;SITE&#34;]
+            self.site_host = presalytics.settings.HOST_SITE  # type: ignore[attr-defined]
         except (KeyError, AttributeError):
             self.site_host = presalytics.lib.constants.SITE_HOST
         try:
@@ -416,15 +461,13 @@ class Renderer(ComponentBase):
         &#34;&#34;&#34;
         return self.view()
 
-            
-    
     def strip_unauthorized_scripts(self, body):
         &#34;&#34;&#34;
         Finds and removes unauthorized scripts from that the html document.  For security reasons,
-        content in `&lt;script&gt;` tags that has not been vetted by presalytics.io devops 
+        content in `&lt;script&gt;` tags that has not been vetted by presalytics.io devops
 
-        If you would like to get a tag included in the base library, raise an issue on 
-        [Github](https://github.com/presalytics/python-client/issues/new).  We&#39;d love to hear from you and learn 
+        If you would like to get a tag included in the base library, raise an issue on
+        [Github](https://github.com/presalytics/python-client/issues/new).  We&#39;d love to hear from you and learn
         about your use case, and will respond promptly to help.
         &#34;&#34;&#34;
         allowed_scripts = presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().values()
@@ -440,7 +483,7 @@ class Renderer(ComponentBase):
             if remove_ele:
                 ele.getparent().remove(ele)
         return body
-        
+
     @classmethod
     def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
         &#34;&#34;&#34;
@@ -461,8 +504,8 @@ class Renderer(ComponentBase):
 
     def update_outline_from_instances(self, sub_dict: typing.Dict = None):
         &#34;&#34;&#34;
-        If a component instance for the widget is available in `presalytics.COMPONENTS`, 
-        this method find the instance and regenerates the component data 
+        If a component instance for the widget is available in `presalytics.COMPONENTS`,
+        this method find the instance and regenerates the component data
         so the latest data is available during the renering process.
         &#34;&#34;&#34;
         if not sub_dict:
@@ -508,7 +551,7 @@ class Renderer(ComponentBase):
                                     klass = presalytics.COMPONENTS.get(class_key)
                                     if klass:
                                         if len(klass.__plugins__) &gt; 0:
-                                            self.plugins.extend(klass.__plugins__)                           
+                                            self.plugins.extend(klass.__plugins__)
                 if isinstance(val, dict):
                     if len(val.keys()) &gt; 0:
                         self.get_component_implicit_plugins(val)
@@ -518,7 +561,7 @@ class Renderer(ComponentBase):
                             self.get_component_implicit_plugins(list_item)
 
     def _set_outline_data_from_instance(self, inst):
-        
+
         if inst.__component_type__ == &#39;widget&#39;:
             self._set_widget_outline_data(inst)
         if inst.__component_type__ == &#39;page&#39;:
@@ -535,7 +578,7 @@ class Renderer(ComponentBase):
                 break
         theme_outline = inst.serialize()
         if theme_index:
-            self.story_outline.themes[theme_index] = theme_outline    
+            self.story_outline.themes[theme_index] = theme_outline
 
     def _set_page_outline_data(self, inst: &#39;PageTemplateBase&#39;):
         page_index = None
@@ -564,8 +607,8 @@ class Renderer(ComponentBase):
             if page_index:
                 break
         w_outline = inst.serialize()
-        if isinstance(page_index, int) and isinstance(widget_index, int): #  Causes &#39;unsupported target for assingment error`
-            self.story_outline.pages[page_index].widgets[widget_index] = w_outline #type: ignore
+        if isinstance(page_index, int) and isinstance(widget_index, int):  # Causes &#39;unsupported target for assingment error`
+            self.story_outline.pages[page_index].widgets[widget_index] = w_outline  # type: ignore
 
     def update_story(self):
         &#34;&#34;&#34;
@@ -576,7 +619,7 @@ class Renderer(ComponentBase):
         story = client.story.story_id_get(self.story_outline.story_id)
         story.outline = self.story_outline.dump()
         client.story.story_id_put(story.id, story)
-    
+
     def view(self, update=False):
         &#34;&#34;&#34;
         Updates a story and opens it on the presalytics.io website
@@ -588,12 +631,11 @@ class Renderer(ComponentBase):
             prior to opening in the web browser
         &#34;&#34;&#34;
         if not self.view_url:
-            message = &#34;The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via preslaytics.io&#34;
+            message = &#34;The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via presalytics.io&#34;
             raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
         if update:
             self.update_story()
         webbrowser.open_new_tab(self.view_url)
-
 
     def manage(self, update=False):
         &#34;&#34;&#34;
@@ -606,9 +648,9 @@ class Renderer(ComponentBase):
             prior to opening in the web browser
         &#34;&#34;&#34;
         if not self.manage_url:
-            message = &#34;The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via preslaytics.io&#34;
+            message = &#34;The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via presalytics.io&#34;
             raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
-            
+
         if update:
             self.update_story()
         webbrowser.open_new_tab(self.manage_url)
@@ -620,6 +662,7 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
     `presalytics.story.components.ComponentBase`.
 
     &#34;&#34;&#34;
+
     def __init__(self, **kwargs):
         self.instances = {}
         self.instance_regex = re.compile(r&#39;(.*)\.(.*)\.(.*)&#39;)
@@ -643,9 +686,12 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
         &#34;&#34;&#34;
         return getattr(klass, &#34;name&#34;, None)
 
+    def get_settings_object(self):
+        return presalytics.settings.COMPONENTS
+
     def get_instance_registry_key(self, klass):
         &#34;&#34;&#34;
-        Creates a registry key from a class instance by concatenating the 
+        Creates a registry key from a class instance by concatenating the
         `__component_type__`, `__component_kind__`, and `name` attributes of an instance
         &#34;&#34;&#34;
         key = None
@@ -661,7 +707,6 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
                 logger.error(message)
         return key
 
-
     def load_class(self, klass):
         &#34;&#34;&#34;
         Loads a class or instance into the registry
@@ -673,7 +718,7 @@ class ComponentRegistry(presalytics.lib.registry.RegistryBase):
                 if key:
                     if key not in self.instances.keys():
                         self.instances[key] = klass
-                    
+
             except Exception:
                 if self.show_errors:
                     klass_type = self.get_type(klass)
@@ -751,20 +796,20 @@ Used for component registration.</dd>
 <dd>An identifier for this component class.
 Used for component registration.</dd>
 <dt><strong><code>__plugins__</code></strong> :&ensp;<code>list</code> of <code>dict</code></dt>
-<dd>A list of dictionaries that reference <a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin"><code>Plugin</code></a> configurations.
+<dd>A list of dictionaries that reference <code><a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin">Plugin</a></code> configurations.
 When a
 <code>presaltytics.story.components.Renderer</code> is initialized, it will load these plugins into the
 rendered.
-This allows plugins to be statically configured on <a title="presalytics.story.components" href="/python-client/presalytics/story/components.html"><code>presalytics.story.components</code></a> classes,
-in lieu dynamic configurations on <a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a> instances.</dd>
+This allows plugins to be statically configured on <code><a title="presalytics.story.components" href="/python-client/presalytics/story/components.html">presalytics.story.components</a></code> classes,
+in lieu dynamic configurations on <code><a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline">StoryOutline</a></code> instances.</dd>
 <dt><strong><code>client_info</code></strong> :&ensp;<code>str</code></dt>
-<dd>A <code>dict</code> to be unpacked and passed to <a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client"><code>Client</code></a> object when subclasses of
-<a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase"><code>ComponentBase</code></a> require interaction with the Presalytics API.</dd>
+<dd>A <code>dict</code> to be unpacked and passed to <code><a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client">Client</a></code> object when subclasses of
+<code><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></code> require interaction with the Presalytics API.</dd>
 </dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L22-L119" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L24-L121" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ComponentBase(abc.ABC):
     &#34;&#34;&#34;
@@ -808,7 +853,7 @@ in lieu dynamic configurations on <a title="presalytics.story.outline.StoryOutli
         An identifier for this component class.  Used for component registration.
 
     __plugins__ : list of dict
-        A list of dictionaries that reference `presalytics.story.outline.Plugin` configurations.  When a 
+        A list of dictionaries that reference `presalytics.story.outline.Plugin` configurations.  When a
         `presaltytics.story.components.Renderer` is initialized, it will load these plugins into the
         rendered.  This allows plugins to be statically configured on `presalytics.story.components` classes,
         in lieu dynamic configurations on `presalytics.story.outline.StoryOutline` instances.
@@ -876,17 +921,24 @@ in lieu dynamic configurations on <a title="presalytics.story.outline.StoryOutli
 <li><a title="presalytics.story.components.ThemeBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ThemeBase">ThemeBase</a></li>
 <li><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.story.components.ComponentBase.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Static methods</h3>
 <dl>
 <dt id="presalytics.story.components.ComponentBase.deserialize"><code class="name flex">
 <span>def <span class="ident">deserialize</span></span>(<span>component, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Converts <code>component</code> instance to a <a title="presalytics.story.outline" href="/python-client/presalytics/story/outline.html"><code>presalytics.story.outline</code></a> object. Must be overridden in subclass.</p></section>
+<section class="desc"><p>Converts <code>component</code> instance to a <code><a title="presalytics.story.outline" href="/python-client/presalytics/story/outline.html">presalytics.story.outline</a></code> object. Must be overridden in subclass.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L106-L111" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L108-L113" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def deserialize(cls, component, **kwargs):
@@ -908,7 +960,7 @@ Must be overridden in subclass.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L92-L97" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L94-L99" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@abc.abstractmethod
 def render(self, **kwargs):
@@ -922,11 +974,11 @@ def render(self, **kwargs):
 <span>def <span class="ident">serialize</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Initializes <code>component</code> object from <a title="presalytics.story.outline" href="/python-client/presalytics/story/outline.html"><code>presalytics.story.outline</code></a> attributes. Must be overridden in subclass.</p></section>
+<section class="desc"><p>Initializes <code>component</code> object from <code><a title="presalytics.story.outline" href="/python-client/presalytics/story/outline.html">presalytics.story.outline</a></code> attributes. Must be overridden in subclass.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L99-L104" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L101-L106" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@abc.abstractmethod
 def serialize(self):
@@ -940,11 +992,11 @@ def serialize(self):
 <span>def <span class="ident">get_client</span></span>(<span>self, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Initializes <a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client"><code>Client</code></a> using <code>client_info</code></p></section>
+<section class="desc"><p>Initializes <code><a title="presalytics.client.api.Client" href="/python-client/presalytics/client/api.html#presalytics.client.api.Client">Client</a></code> using <code>client_info</code></p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L113-L119" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L115-L121" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_client(self, **kwargs):
     &#34;&#34;&#34;
@@ -963,23 +1015,28 @@ def serialize(self):
 </code></dt>
 <dd>
 <section class="desc"><p>Inherit from this base class to create widget components that can be rendered to html via the
-<a title="presalytics.story.components.Renderer" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer"><code>Renderer</code></a> class.
+<code><a title="presalytics.story.components.Renderer" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer">Renderer</a></code> class.
 This component also needs to build a method
-that allows the widget to be serialzed into a <a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget"><code>Widget</code></a> object.</p>
+that allows the widget to be serialzed into a <code><a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget">Widget</a></code> object.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>widget</code></strong> :&ensp;<code>Widget</code></dt>
-<dd>A <a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget"><code>Widget</code></a> object use for initialized the component class.</dd>
+<dd>A <code><a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget">Widget</a></code> object use for initialized the component class.</dd>
 </dl>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>outline_widget</code></strong> :&ensp;<code>Widget</code></dt>
-<dd>A <a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget"><code>Widget</code></a> object</dd>
+<dd>A <code><a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget">Widget</a></code> object</dd>
+<dt><strong><code>nonce</code></strong> :&ensp;<code>str</code></dt>
+<dd>A "Number used ONCE" that will be used as cache key for rendering subdocuments.
+The nonce is included the Url that pulls the story from the Presalytics Story API.
+This nonce is to be used during the rendering process by the <code>to_html</code> method for
+widgets that implement this feature.</dd>
 </dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L122-L216" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L124-L261" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class WidgetBase(ComponentBase):
     &#34;&#34;&#34;
@@ -996,6 +1053,12 @@ that allows the widget to be serialzed into a <a title="presalytics.story.outlin
     ----------
     outline_widget: Widget
         A `presalytics.story.outline.Widget` object
+
+    nonce: str
+        A &#34;Number used ONCE&#34; that will be used as cache key for rendering subdocuments.
+        The nonce is included the Url that pulls the story from the Presalytics Story API.
+        This nonce is to be used during the rendering process by the `to_html` method for
+        widgets that implement this feature.
     &#34;&#34;&#34;
     outline_widget: typing.Optional[&#39;Widget&#39;]
 
@@ -1004,10 +1067,47 @@ that allows the widget to be serialzed into a <a title="presalytics.story.outlin
     def __init__(self, name, *args, **kwargs) -&gt; None:
         super(WidgetBase, self).__init__(*args, **kwargs)
         self.name = name
+        self.id = kwargs.get(&#39;id&#39;, None)
         self.outline_widget = None
+        self.nonce = str(uuid.uuid4())
 
-    def render(self, component, **kwargs):
-        self.to_html(component, **kwargs)
+    def render(self, **kwargs):
+        subdocument = self.create_subdocument(**kwargs)
+        if subdocument:
+            try:
+                self.cache_subdocument(subdocument)
+            except Exception as ex:
+                logger.exception(ex)
+        return self.to_html(**kwargs)
+
+    def cache_subdocument(self, subdocument: str) -&gt; bool:
+        subdocument_encoded = base64.b64encode(subdocument.encode(&#39;utf-8&#39;)).decode(&#39;utf-8&#39;)
+        client = self.get_client()
+        access_token = client.token_util.token.get(&#39;access_token&#39;, None)
+        if access_token:
+            api_user_id = client.oidc.get_user_id(access_token)
+            payload = {
+                &#39;user_id&#39;: api_user_id,
+                &#39;subdocument&#39;: subdocument_encoded,
+                &#39;nonce&#39;: self.nonce
+            }
+            client.story.cache_post(payload)
+            return True
+        return False
+
+    def create_subdocument(self, **kwargs) -&gt; typing.Optional[str]:
+        &#34;&#34;&#34;
+        Returns an html document that will be rendered by browser.  If a `str` is returned,
+        then the html subdocument is cached into the story API for retreival by the browser after
+        rendering.  Widgets that render `&lt;iframe&gt;`, `&lt;object&gt;`, or `&lt;embed&gt;` tags should override
+        this method to return the subdocument that will be rendered by the browser.
+
+        Returns
+        ----------
+
+        An `str` containing an html document if implemented, otherwise None.
+        &#34;&#34;&#34;
+        return None
 
     @abc.abstractmethod
     def to_html(self, data: typing.Dict = None, **kwargs) -&gt; str:
@@ -1084,37 +1184,48 @@ that allows the widget to be serialzed into a <a title="presalytics.story.outlin
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
+<li><a title="presalytics.lib.widgets.chart.ChartWidget" href="/python-client/presalytics/lib/widgets/chart.html#presalytics.lib.widgets.chart.ChartWidget">ChartWidget</a></li>
 <li><a title="presalytics.lib.widgets.d3.D3Widget" href="/python-client/presalytics/lib/widgets/d3.html#presalytics.lib.widgets.d3.D3Widget">D3Widget</a></li>
+<li><a title="presalytics.lib.widgets.data_table.DataTableWidget" href="/python-client/presalytics/lib/widgets/data_table.html#presalytics.lib.widgets.data_table.DataTableWidget">DataTableWidget</a></li>
+<li><a title="presalytics.lib.widgets.markdown.MarkdownWidget" href="/python-client/presalytics/lib/widgets/markdown.html#presalytics.lib.widgets.markdown.MarkdownWidget">MarkdownWidget</a></li>
 <li><a title="presalytics.lib.widgets.matplotlib.MatplotlibFigure" href="/python-client/presalytics/lib/widgets/matplotlib.html#presalytics.lib.widgets.matplotlib.MatplotlibFigure">MatplotlibFigure</a></li>
 <li><a title="presalytics.lib.widgets.ooxml.OoxmlWidgetBase" href="/python-client/presalytics/lib/widgets/ooxml.html#presalytics.lib.widgets.ooxml.OoxmlWidgetBase">OoxmlWidgetBase</a></li>
+<li><a title="presalytics.lib.widgets.url.UrlWidget" href="/python-client/presalytics/lib/widgets/url.html#presalytics.lib.widgets.url.UrlWidget">UrlWidget</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.story.components.WidgetBase.outline_widget"><code class="name">var <span class="ident">outline_widget</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Static methods</h3>
 <dl>
 <dt id="presalytics.story.components.WidgetBase.deserialize"><code class="name flex">
 <span>def <span class="ident">deserialize</span></span>(<span>component, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Creates an instance of the widget from the data object in the <a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget"><code>Widget</code></a>
+<section class="desc"><p>Creates an instance of the widget from the data object in the <code><a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget">Widget</a></code>
 object. This method exists to ensure widgets can be portable across environments.
 To clarify,
 widgets built on the client-side via the <code>__init__</code> method can be reconstructed server-side via
 the deserialize method.
 This allows decoupling of the widget generation/updating of data and
 the rendering of the widget in a UI.
-Renderers (e.g., <a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer"><code>Revealer</code></a> object)
+Renderers (e.g., <code><a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer">Revealer</a></code> object)
 need not know about how the data get updated, but can update the graphic with data generated by
 the widget when the serialize method is called.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>widget</code></strong> :&ensp;<code>Widget</code></dt>
-<dd>A <a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget"><code>Widget</code></a> object</dd>
+<dd>A <code><a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget">Widget</a></code> object</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase"><code>WidgetBase</code></a> subclass instance</p></section>
+<p><code><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></code> subclass instance</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L195-L216" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L240-L261" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def deserialize(cls, component: &#39;Widget&#39;, **kwargs) -&gt; &#39;WidgetBase&#39;:
@@ -1143,6 +1254,64 @@ def deserialize(cls, component: &#39;Widget&#39;, **kwargs) -&gt; &#39;WidgetBas
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="presalytics.story.components.WidgetBase.cache_subdocument"><code class="name flex">
+<span>def <span class="ident">cache_subdocument</span></span>(<span>self, subdocument)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L166-L179" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def cache_subdocument(self, subdocument: str) -&gt; bool:
+    subdocument_encoded = base64.b64encode(subdocument.encode(&#39;utf-8&#39;)).decode(&#39;utf-8&#39;)
+    client = self.get_client()
+    access_token = client.token_util.token.get(&#39;access_token&#39;, None)
+    if access_token:
+        api_user_id = client.oidc.get_user_id(access_token)
+        payload = {
+            &#39;user_id&#39;: api_user_id,
+            &#39;subdocument&#39;: subdocument_encoded,
+            &#39;nonce&#39;: self.nonce
+        }
+        client.story.cache_post(payload)
+        return True
+    return False</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.components.WidgetBase.create_subdocument"><code class="name flex">
+<span>def <span class="ident">create_subdocument</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns an html document that will be rendered by browser.
+If a <code>str</code> is returned,
+then the html subdocument is cached into the story API for retreival by the browser after
+rendering.
+Widgets that render <code>&lt;iframe&gt;</code>, <code>&lt;object&gt;</code>, or <code>&lt;embed&gt;</code> tags should override
+this method to return the subdocument that will be rendered by the browser.</p>
+<h2 id="returns">Returns</h2>
+<p>An <code>str</code> containing an html document if implemented, otherwise None.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L181-L193" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def create_subdocument(self, **kwargs) -&gt; typing.Optional[str]:
+    &#34;&#34;&#34;
+    Returns an html document that will be rendered by browser.  If a `str` is returned,
+    then the html subdocument is cached into the story API for retreival by the browser after
+    rendering.  Widgets that render `&lt;iframe&gt;`, `&lt;object&gt;`, or `&lt;embed&gt;` tags should override
+    this method to return the subdocument that will be rendered by the browser.
+
+    Returns
+    ----------
+
+    An `str` containing an html document if implemented, otherwise None.
+    &#34;&#34;&#34;
+    return None</code></pre>
+</details>
+</dd>
 <dt id="presalytics.story.components.WidgetBase.to_html"><code class="name flex">
 <span>def <span class="ident">to_html</span></span>(<span>self, data=None, **kwargs)</span>
 </code></dt>
@@ -1163,16 +1332,16 @@ For example,
 keyword arguments could control the styling of the widget, which should not change as the data in
 the object (e.g., a chart) is updated.
 Keyword arguments are loaded via <code>additional_properties</code>
-parameter in in the <a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget"><code>Widget</code></a> object.</p>
+parameter in in the <code><a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget">Widget</a></code> object.</p>
 <h2 id="returns">Returns</h2>
 <dl>
-<dt><code>A</code> <code>str</code> of <code>containing</code> <code>an</code> <code>html</code> <code>fragment</code> <code>that</code> <code>will</code> <code>be</code> <code>loaded</code> <code>into</code> <code>a</code> <code>template</code> <code>in</code> <code>successive</code> <code>operations</code></dt>
+<dt><code>A str</code> of <code>containing an html fragment that will be loaded into a template in successive operations</code></dt>
 <dd>&nbsp;</dd>
 </dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L150-L173" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L195-L218" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@abc.abstractmethod
 def to_html(self, data: typing.Dict = None, **kwargs) -&gt; str:
@@ -1204,7 +1373,7 @@ def to_html(self, data: typing.Dict = None, **kwargs) -&gt; str:
 <span>def <span class="ident">serialize</span></span>(<span>self, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Creates <a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget"><code>Widget</code></a> object from instance data. This widget should
+<section class="desc"><p>Creates <code><a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget">Widget</a></code> object from instance data. This widget should
 have the correct <code>name</code>, <code>data</code> and <code>additional_properties</code> so the same widget can be reconstituted
 via the to_html method, given the same set of data.</p>
 <p>Typically, this method will call an update method that run a local script with updates this
@@ -1217,7 +1386,7 @@ for this widgets default additional_properties should be loaded via these keywor
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L175-L193" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L220-L238" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@abc.abstractmethod
 def serialize(self, **kwargs) -&gt; &#39;Widget&#39;:
@@ -1257,7 +1426,7 @@ def serialize(self, **kwargs) -&gt; &#39;Widget&#39;:
 </code></dt>
 <dd>
 <section class="desc"><p>Inherit from this base class to render templates to html via the
-<a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer"><code>Revealer</code></a> class.</p>
+<code><a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer">Revealer</a></code> class.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>page</code></strong> :&ensp;<code>Page</code></dt>
@@ -1265,16 +1434,16 @@ def serialize(self, **kwargs) -&gt; &#39;Widget&#39;:
 </dl>
 <h2 id="attributes">Attributes</h2>
 <dl>
-<dt><strong><code>outline_page</code></strong> :&ensp;<a title="presalytics.story.outline.Page" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page"><code>Page</code></a></dt>
+<dt><strong><code>outline_page</code></strong> :&ensp;<code><a title="presalytics.story.outline.Page" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page">Page</a></code></dt>
 <dd>The page data</dd>
-<dt><strong><code>widgets</code></strong> :&ensp;<code>list</code> of <code>subclasses</code> of <a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase"><code>WidgetBase</code></a></dt>
+<dt><strong><code>widgets</code></strong> :&ensp;<code>list</code> of <code>subclasses</code> of <code><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></code></dt>
 <dd>A list widget that will be loaded into templates and rendered via placeholders.
 These widgets must have a "to_html(self, data, **kwargs)" method.</dd>
 </dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L219-L302" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L264-L347" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class PageTemplateBase(ComponentBase):
     &#34;&#34;&#34;
@@ -1306,8 +1475,8 @@ These widgets must have a "to_html(self, data, **kwargs)" method.</dd>
     def __init__(self, page: &#39;Page&#39;, **kwargs) -&gt; None:
         super(PageTemplateBase, self).__init__(**kwargs)
         self.outline_page = page
+        self.id = page.id
         self.widgets = self.get_page_widgets(self.outline_page)
-        
 
     @abc.abstractmethod
     def render(self, **kwargs) -&gt; str:
@@ -1336,7 +1505,7 @@ These widgets must have a "to_html(self, data, **kwargs)" method.</dd>
                     raise presalytics.lib.exceptions.MissingConfigException(message)
         except Exception as ex:
             logger.exception(ex)
-            if not presalytics.CONFIG.get(&#34;DEBUG&#34;, False):
+            if not presalytics.settings.DEBUG:
                 widget_instance = presalytics.lib.exceptions.RenderExceptionHandler(ex)
             else:
                 t, v, tb = sys.exc_info()
@@ -1353,7 +1522,7 @@ These widgets must have a "to_html(self, data, **kwargs)" method.</dd>
             next_widget = self.load_widget(widget_outline)
             widget_instances.append(next_widget)
         return widget_instances
-    
+
     def serialize(self):
         return self.outline_page.dump()
 
@@ -1371,6 +1540,21 @@ These widgets must have a "to_html(self, data, **kwargs)" method.</dd>
 <li><a title="presalytics.lib.templates.base.JinjaTemplateBuilder" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.JinjaTemplateBuilder">JinjaTemplateBuilder</a></li>
 <li><a title="presalytics.lib.templates.base.WidgetPage" href="/python-client/presalytics/lib/templates/base.html#presalytics.lib.templates.base.WidgetPage">WidgetPage</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.story.components.PageTemplateBase.outline_page"><code class="name">var <span class="ident">outline_page</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.components.PageTemplateBase.widgets"><code class="name">var <span class="ident">widgets</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.components.PageTemplateBase.plugins"><code class="name">var <span class="ident">plugins</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Static methods</h3>
 <dl>
 <dt id="presalytics.story.components.PageTemplateBase.deseriailize"><code class="name flex">
@@ -1381,7 +1565,7 @@ These widgets must have a "to_html(self, data, **kwargs)" method.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L300-L302" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L345-L347" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def deseriailize(cls, component, **kwargs):
@@ -1399,7 +1583,7 @@ def deseriailize(cls, component, **kwargs):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L252-L257" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L297-L302" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@abc.abstractmethod
 def render(self, **kwargs) -&gt; str:
@@ -1414,11 +1598,11 @@ def render(self, **kwargs) -&gt; str:
 </code></dt>
 <dd>
 <section class="desc"><p>Converts a presalytics.story.outline.Widget object to a subclass of WidgetComponentBase
-via the <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS"><code>COMPONENTS</code></a> registry.</p></section>
+via the <code><a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS">COMPONENTS</a></code> registry.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L259-L284" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L304-L329" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def load_widget(self, widget: &#39;Widget&#39;):
     &#34;&#34;&#34;
@@ -1440,7 +1624,7 @@ via the <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index
                 raise presalytics.lib.exceptions.MissingConfigException(message)
     except Exception as ex:
         logger.exception(ex)
-        if not presalytics.CONFIG.get(&#34;DEBUG&#34;, False):
+        if not presalytics.settings.DEBUG:
             widget_instance = presalytics.lib.exceptions.RenderExceptionHandler(ex)
         else:
             t, v, tb = sys.exc_info()
@@ -1452,12 +1636,12 @@ via the <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index
 <span>def <span class="ident">get_page_widgets</span></span>(<span>self, page)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Converts the widgets within a <a title="presalytics.story.outline.Page" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page"><code>Page</code></a> object to a list
-of widgets subclassed from <a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase"><code>WidgetBase</code></a></p></section>
+<section class="desc"><p>Converts the widgets within a <code><a title="presalytics.story.outline.Page" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page">Page</a></code> object to a list
+of widgets subclassed from <code><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></code></p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L286-L295" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L331-L340" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_page_widgets(self, page: &#39;Page&#39;):
     &#34;&#34;&#34;
@@ -1496,13 +1680,13 @@ deserialization.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L305-L320" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L350-L365" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ThemeBase(ComponentBase):
     &#34;&#34;&#34;
     Themes are containers for plugins should be rendered once
     across the entire document.  The init method should configure
-    parameters with get passed to plugins via serialization and 
+    parameters with get passed to plugins via serialization and
     deserialization.
     &#34;&#34;&#34;
     plugins: typing.Optional[typing.List[&#39;Plugin&#39;]]
@@ -1524,6 +1708,13 @@ deserialization.</p></section>
 <ul class="hlist">
 <li><a title="presalytics.lib.themes.ooxml.OoxmlTheme" href="/python-client/presalytics/lib/themes/ooxml.html#presalytics.lib.themes.ooxml.OoxmlTheme">OoxmlTheme</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.story.components.ThemeBase.plugins"><code class="name">var <span class="ident">plugins</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></b></code>:
@@ -1541,12 +1732,12 @@ deserialization.</p></section>
 <span>(</span><span>story_outline, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Base class for objects that convert <a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a>
+<section class="desc"><p>Base class for objects that convert <code><a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline">StoryOutline</a></code>
 objects into html and rendering them over the web</p>
-<p>With this class, users can push changes to their <a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a>
+<p>With this class, users can push changes to their <code><a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline">StoryOutline</a></code>
 to the Presalytics API and web clients.
 Renderer class contains a couplemethods for
-syncing changes from component instances in the <a title="presalytics.CONFIG" href="/python-client/presalytics/index.html#presalytics.CONFIG"><code>CONFIG</code></a> to the Presalytics API
+syncing changes from component instances in the <code>presalytics.settings</code> to the Presalytics API
 Story service.</p>
 <ul>
 <li>
@@ -1560,7 +1751,7 @@ work with other users, continue making edits or change story properties.</p>
 </ul>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>story_outline</code></strong> :&ensp;<a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a></dt>
+<dt><strong><code>story_outline</code></strong> :&ensp;<code><a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline">StoryOutline</a></code></dt>
 <dd>The presalytics StoryOutline to be rendered and presented</dd>
 </dl>
 <h2 id="attributes">Attributes</h2>
@@ -1583,22 +1774,22 @@ the Presalytics API story service</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L323-L587" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L368-L629" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Renderer(ComponentBase):
     &#34;&#34;&#34;
-    Base class for objects that convert `presalytics.story.outline.StoryOutline` 
+    Base class for objects that convert `presalytics.story.outline.StoryOutline`
     objects into html and rendering them over the web
 
     With this class, users can push changes to their `presalytics.story.outline.StoryOutline`
-    to the Presalytics API and web clients.  Renderer class contains a couplemethods for 
-    syncing changes from component instances in the `presalytics.CONFIG` to the Presalytics API 
+    to the Presalytics API and web clients.  Renderer class contains a couplemethods for
+    syncing changes from component instances in the `presalytics.settings` to the Presalytics API
     Story service.
 
-    * The `view` method allows users programattically view their stories at https://presalytics.io 
+    * The `view` method allows users programattically view their stories at https://presalytics.io
     after changes are made
 
-    * The `manage` method takes users to to the story management interface, where users can share their 
+    * The `manage` method takes users to to the story management interface, where users can share their
     work with other users, continue making edits or change story properties.
 
 
@@ -1606,13 +1797,13 @@ the Presalytics API story service</dd>
     ----------
     story_outline : presalytics.story.outline.StoryOutline
         The presalytics StoryOutline to be rendered and presented
-    
+
     Attributes
     -----------
     plugins : list of dict
         Plugin data that transform to html `&lt;script&gt;` and `&lt;link&gt;` tags through
         the rendering process
-    
+
     site_host : str
         The host of the website.  Defaults to https://presalytics.io.
 
@@ -1630,12 +1821,12 @@ the Presalytics API story service</dd>
     manage_url: typing.Optional[str]
 
     __component_type__ = &#39;renderer&#39;
-    
-    def __init__(self, story_outline : &#39;StoryOutline&#39;, **kwargs):
+
+    def __init__(self, story_outline: &#39;StoryOutline&#39;, **kwargs):
         super(Renderer, self).__init__(**kwargs)
         self.story_outline = story_outline
         try:
-            self.site_host = presalytics.CONFIG[&#34;HOSTS&#34;][&#34;SITE&#34;]
+            self.site_host = presalytics.settings.HOST_SITE  # type: ignore[attr-defined]
         except (KeyError, AttributeError):
             self.site_host = presalytics.lib.constants.SITE_HOST
         try:
@@ -1654,15 +1845,13 @@ the Presalytics API story service</dd>
         &#34;&#34;&#34;
         return self.view()
 
-            
-    
     def strip_unauthorized_scripts(self, body):
         &#34;&#34;&#34;
         Finds and removes unauthorized scripts from that the html document.  For security reasons,
-        content in `&lt;script&gt;` tags that has not been vetted by presalytics.io devops 
+        content in `&lt;script&gt;` tags that has not been vetted by presalytics.io devops
 
-        If you would like to get a tag included in the base library, raise an issue on 
-        [Github](https://github.com/presalytics/python-client/issues/new).  We&#39;d love to hear from you and learn 
+        If you would like to get a tag included in the base library, raise an issue on
+        [Github](https://github.com/presalytics/python-client/issues/new).  We&#39;d love to hear from you and learn
         about your use case, and will respond promptly to help.
         &#34;&#34;&#34;
         allowed_scripts = presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().values()
@@ -1678,7 +1867,7 @@ the Presalytics API story service</dd>
             if remove_ele:
                 ele.getparent().remove(ele)
         return body
-        
+
     @classmethod
     def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
         &#34;&#34;&#34;
@@ -1699,8 +1888,8 @@ the Presalytics API story service</dd>
 
     def update_outline_from_instances(self, sub_dict: typing.Dict = None):
         &#34;&#34;&#34;
-        If a component instance for the widget is available in `presalytics.COMPONENTS`, 
-        this method find the instance and regenerates the component data 
+        If a component instance for the widget is available in `presalytics.COMPONENTS`,
+        this method find the instance and regenerates the component data
         so the latest data is available during the renering process.
         &#34;&#34;&#34;
         if not sub_dict:
@@ -1746,7 +1935,7 @@ the Presalytics API story service</dd>
                                     klass = presalytics.COMPONENTS.get(class_key)
                                     if klass:
                                         if len(klass.__plugins__) &gt; 0:
-                                            self.plugins.extend(klass.__plugins__)                           
+                                            self.plugins.extend(klass.__plugins__)
                 if isinstance(val, dict):
                     if len(val.keys()) &gt; 0:
                         self.get_component_implicit_plugins(val)
@@ -1756,7 +1945,7 @@ the Presalytics API story service</dd>
                             self.get_component_implicit_plugins(list_item)
 
     def _set_outline_data_from_instance(self, inst):
-        
+
         if inst.__component_type__ == &#39;widget&#39;:
             self._set_widget_outline_data(inst)
         if inst.__component_type__ == &#39;page&#39;:
@@ -1773,7 +1962,7 @@ the Presalytics API story service</dd>
                 break
         theme_outline = inst.serialize()
         if theme_index:
-            self.story_outline.themes[theme_index] = theme_outline    
+            self.story_outline.themes[theme_index] = theme_outline
 
     def _set_page_outline_data(self, inst: &#39;PageTemplateBase&#39;):
         page_index = None
@@ -1802,8 +1991,8 @@ the Presalytics API story service</dd>
             if page_index:
                 break
         w_outline = inst.serialize()
-        if isinstance(page_index, int) and isinstance(widget_index, int): #  Causes &#39;unsupported target for assingment error`
-            self.story_outline.pages[page_index].widgets[widget_index] = w_outline #type: ignore
+        if isinstance(page_index, int) and isinstance(widget_index, int):  # Causes &#39;unsupported target for assingment error`
+            self.story_outline.pages[page_index].widgets[widget_index] = w_outline  # type: ignore
 
     def update_story(self):
         &#34;&#34;&#34;
@@ -1814,7 +2003,7 @@ the Presalytics API story service</dd>
         story = client.story.story_id_get(self.story_outline.story_id)
         story.outline = self.story_outline.dump()
         client.story.story_id_put(story.id, story)
-    
+
     def view(self, update=False):
         &#34;&#34;&#34;
         Updates a story and opens it on the presalytics.io website
@@ -1826,12 +2015,11 @@ the Presalytics API story service</dd>
             prior to opening in the web browser
         &#34;&#34;&#34;
         if not self.view_url:
-            message = &#34;The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via preslaytics.io&#34;
+            message = &#34;The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via presalytics.io&#34;
             raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
         if update:
             self.update_story()
         webbrowser.open_new_tab(self.view_url)
-
 
     def manage(self, update=False):
         &#34;&#34;&#34;
@@ -1844,9 +2032,9 @@ the Presalytics API story service</dd>
             prior to opening in the web browser
         &#34;&#34;&#34;
         if not self.manage_url:
-            message = &#34;The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via preslaytics.io&#34;
+            message = &#34;The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via presalytics.io&#34;
             raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
-            
+
         if update:
             self.update_story()
         webbrowser.open_new_tab(self.manage_url)</code></pre>
@@ -1858,20 +2046,40 @@ the Presalytics API story service</dd>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
+<li><a title="presalytics.story.renderers.ClientSideRenderer" href="/python-client/presalytics/story/renderers.html#presalytics.story.renderers.ClientSideRenderer">ClientSideRenderer</a></li>
 <li><a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer">Revealer</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.story.components.Renderer.story_outline"><code class="name">var <span class="ident">story_outline</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.components.Renderer.plugins"><code class="name">var <span class="ident">plugins</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.components.Renderer.view_url"><code class="name">var <span class="ident">view_url</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.components.Renderer.manage_url"><code class="name">var <span class="ident">manage_url</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Static methods</h3>
 <dl>
 <dt id="presalytics.story.components.Renderer.deserialize"><code class="name flex">
 <span>def <span class="ident">deserialize</span></span>(<span>component, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Initializes the class from a <a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a>.
+<section class="desc"><p>Initializes the class from a <code><a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline">StoryOutline</a></code>.
 See __init___.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L417-L422" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L460-L465" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
@@ -1892,7 +2100,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L386-L390" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L431-L435" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def render(self, **kwargs):
     &#34;&#34;&#34;
@@ -1907,7 +2115,7 @@ def deserialize(cls, component: &#39;StoryOutline&#39;, **kwargs):
 <dd>
 <section class="desc"><p>Finds and removes unauthorized scripts from that the html document.
 For security reasons,
-content in <code>&lt;script&gt;</code> tags that has not been vetted by presalytics.io devops </p>
+content in <code>&lt;script&gt;</code> tags that has not been vetted by presalytics.io devops</p>
 <p>If you would like to get a tag included in the base library, raise an issue on
 <a href="https://github.com/presalytics/python-client/issues/new">Github</a>.
 We'd love to hear from you and learn
@@ -1915,15 +2123,15 @@ about your use case, and will respond promptly to help.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L394-L415" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L437-L458" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def strip_unauthorized_scripts(self, body):
     &#34;&#34;&#34;
     Finds and removes unauthorized scripts from that the html document.  For security reasons,
-    content in `&lt;script&gt;` tags that has not been vetted by presalytics.io devops 
+    content in `&lt;script&gt;` tags that has not been vetted by presalytics.io devops
 
-    If you would like to get a tag included in the base library, raise an issue on 
-    [Github](https://github.com/presalytics/python-client/issues/new).  We&#39;d love to hear from you and learn 
+    If you would like to get a tag included in the base library, raise an issue on
+    [Github](https://github.com/presalytics/python-client/issues/new).  We&#39;d love to hear from you and learn
     about your use case, and will respond promptly to help.
     &#34;&#34;&#34;
     allowed_scripts = presalytics.lib.plugins.external.ApprovedExternalScripts().attr_dict.flatten().values()
@@ -1947,11 +2155,11 @@ about your use case, and will respond promptly to help.</p></section>
 <dd>
 <section class="desc"><p>Updates the story_outline</p>
 <h2 id="returns">Returns</h2>
-<p>A refreshed <a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a></p></section>
+<p>A refreshed <code><a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline">StoryOutline</a></code></p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L424-L433" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L467-L476" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def serialize(self) -&gt; &#39;StoryOutline&#39;:
     &#34;&#34;&#34;
@@ -1969,18 +2177,18 @@ about your use case, and will respond promptly to help.</p></section>
 <span>def <span class="ident">update_outline_from_instances</span></span>(<span>self, sub_dict=None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>If a component instance for the widget is available in <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS"><code>COMPONENTS</code></a>,
+<section class="desc"><p>If a component instance for the widget is available in <code><a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS">COMPONENTS</a></code>,
 this method find the instance and regenerates the component data
 so the latest data is available during the renering process.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L435-L464" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L478-L507" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_outline_from_instances(self, sub_dict: typing.Dict = None):
     &#34;&#34;&#34;
-    If a component instance for the widget is available in `presalytics.COMPONENTS`, 
-    this method find the instance and regenerates the component data 
+    If a component instance for the widget is available in `presalytics.COMPONENTS`,
+    this method find the instance and regenerates the component data
     so the latest data is available during the renering process.
     &#34;&#34;&#34;
     if not sub_dict:
@@ -2013,12 +2221,12 @@ so the latest data is available during the renering process.</p></section>
 <span>def <span class="ident">get_component_implicit_plugins</span></span>(<span>self, sub_dict=None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Retrieves plugin data from plugins attached to <a title="presalytics.story.components" href="/python-client/presalytics/story/components.html"><code>presalytics.story.components</code></a>
-classes referenced in the <a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a></p></section>
+<section class="desc"><p>Retrieves plugin data from plugins attached to <code><a title="presalytics.story.components" href="/python-client/presalytics/story/components.html">presalytics.story.components</a></code>
+classes referenced in the <code><a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline">StoryOutline</a></code></p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L466-L491" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L509-L534" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_component_implicit_plugins(self, sub_dict: typing.Dict = None):
     &#34;&#34;&#34;
@@ -2038,7 +2246,7 @@ classes referenced in the <a title="presalytics.story.outline.StoryOutline" href
                                 klass = presalytics.COMPONENTS.get(class_key)
                                 if klass:
                                     if len(klass.__plugins__) &gt; 0:
-                                        self.plugins.extend(klass.__plugins__)                           
+                                        self.plugins.extend(klass.__plugins__)
             if isinstance(val, dict):
                 if len(val.keys()) &gt; 0:
                     self.get_component_implicit_plugins(val)
@@ -2056,7 +2264,7 @@ classes referenced in the <a title="presalytics.story.outline.StoryOutline" href
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L543-L551" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L586-L594" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def update_story(self):
     &#34;&#34;&#34;
@@ -2084,7 +2292,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L553-L568" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L596-L611" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def view(self, update=False):
     &#34;&#34;&#34;
@@ -2097,7 +2305,7 @@ prior to opening in the web browser</dd>
         prior to opening in the web browser
     &#34;&#34;&#34;
     if not self.view_url:
-        message = &#34;The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via preslaytics.io&#34;
+        message = &#34;The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via presalytics.io&#34;
         raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
     if update:
         self.update_story()
@@ -2119,7 +2327,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L571-L587" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L613-L629" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def manage(self, update=False):
     &#34;&#34;&#34;
@@ -2132,9 +2340,9 @@ prior to opening in the web browser</dd>
         prior to opening in the web browser
     &#34;&#34;&#34;
     if not self.manage_url:
-        message = &#34;The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via preslaytics.io&#34;
+        message = &#34;The outline has not been pushed to the Presalytics API yet, and therefore cannot be viewed via presalytics.io&#34;
         raise presalytics.lib.exceptions.InvalidConfigurationError(message=message)
-        
+
     if update:
         self.update_story()
     webbrowser.open_new_tab(self.manage_url)</code></pre>
@@ -2156,11 +2364,11 @@ prior to opening in the web browser</dd>
 </code></dt>
 <dd>
 <section class="desc"><p>A registry of classes and class instances of objects that inherit from
-<a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase"><code>ComponentBase</code></a>.</p></section>
+<code><a title="presalytics.story.components.ComponentBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase">ComponentBase</a></code>.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L590-L675" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L632-L720" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class ComponentRegistry(presalytics.lib.registry.RegistryBase):
     &#34;&#34;&#34;
@@ -2168,6 +2376,7 @@ prior to opening in the web browser</dd>
     `presalytics.story.components.ComponentBase`.
 
     &#34;&#34;&#34;
+
     def __init__(self, **kwargs):
         self.instances = {}
         self.instance_regex = re.compile(r&#39;(.*)\.(.*)\.(.*)&#39;)
@@ -2191,9 +2400,12 @@ prior to opening in the web browser</dd>
         &#34;&#34;&#34;
         return getattr(klass, &#34;name&#34;, None)
 
+    def get_settings_object(self):
+        return presalytics.settings.COMPONENTS
+
     def get_instance_registry_key(self, klass):
         &#34;&#34;&#34;
-        Creates a registry key from a class instance by concatenating the 
+        Creates a registry key from a class instance by concatenating the
         `__component_type__`, `__component_kind__`, and `name` attributes of an instance
         &#34;&#34;&#34;
         key = None
@@ -2209,7 +2421,6 @@ prior to opening in the web browser</dd>
                 logger.error(message)
         return key
 
-
     def load_class(self, klass):
         &#34;&#34;&#34;
         Loads a class or instance into the registry
@@ -2221,7 +2432,7 @@ prior to opening in the web browser</dd>
                 if key:
                     if key not in self.instances.keys():
                         self.instances[key] = klass
-                    
+
             except Exception:
                 if self.show_errors:
                     klass_type = self.get_type(klass)
@@ -2254,6 +2465,17 @@ prior to opening in the web browser</dd>
 <li><a title="presalytics.lib.registry.RegistryBase" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase">RegistryBase</a></li>
 <li>abc.ABC</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.story.components.ComponentRegistry.registry"><code class="name">var <span class="ident">registry</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.components.ComponentRegistry.deferred_modules"><code class="name">var <span class="ident">deferred_modules</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="presalytics.story.components.ComponentRegistry.get_type"><code class="name flex">
@@ -2264,7 +2486,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L601-L605" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L644-L648" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_type(self, klass):
     &#34;&#34;&#34;
@@ -2281,7 +2503,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L607-L611" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L650-L654" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_name(self, klass):
     &#34;&#34;&#34;
@@ -2298,13 +2520,27 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L613-L617" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L656-L660" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_instance_name(self, klass):
     &#34;&#34;&#34;
     Returns the `name` attribute on an instance
     &#34;&#34;&#34;
     return getattr(klass, &#34;name&#34;, None)</code></pre>
+</details>
+</dd>
+<dt id="presalytics.story.components.ComponentRegistry.get_settings_object"><code class="name flex">
+<span>def <span class="ident">get_settings_object</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L662-L663" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def get_settings_object(self):
+    return presalytics.settings.COMPONENTS</code></pre>
 </details>
 </dd>
 <dt id="presalytics.story.components.ComponentRegistry.get_instance_registry_key"><code class="name flex">
@@ -2316,11 +2552,11 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L619-L635" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L665-L681" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_instance_registry_key(self, klass):
     &#34;&#34;&#34;
-    Creates a registry key from a class instance by concatenating the 
+    Creates a registry key from a class instance by concatenating the
     `__component_type__`, `__component_kind__`, and `name` attributes of an instance
     &#34;&#34;&#34;
     key = None
@@ -2345,7 +2581,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L638-L654" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L683-L699" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def load_class(self, klass):
     &#34;&#34;&#34;
@@ -2358,7 +2594,7 @@ prior to opening in the web browser</dd>
             if key:
                 if key not in self.instances.keys():
                     self.instances[key] = klass
-                
+
         except Exception:
             if self.show_errors:
                 klass_type = self.get_type(klass)
@@ -2374,7 +2610,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L656-L658" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L701-L703" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_instance(self, key):
     self.load_deferred_modules()
@@ -2389,7 +2625,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L660-L667" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L705-L712" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def unregister(self, klass):
     &#34;&#34;&#34;
@@ -2409,7 +2645,7 @@ prior to opening in the web browser</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L669-L675" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/components.py#L714-L720" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def find_instance(self, string_with_key_or_name) -&gt; typing.List[str]:
     is_key = self.instance_regex.match(string_with_key_or_name)
@@ -2427,7 +2663,6 @@ prior to opening in the web browser</dd>
 <ul class="hlist">
 <li><code><a title="presalytics.lib.registry.RegistryBase.module_is_in_stackframe" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.module_is_in_stackframe">module_is_in_stackframe</a></code></li>
 <li><code><a title="presalytics.lib.registry.RegistryBase.register" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.register">register</a></code></li>
-<li><code><a title="presalytics.lib.registry.RegistryBase.show_errors" href="/python-client/presalytics/lib/registry.html#presalytics.lib.registry.RegistryBase.show_errors">show_errors</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2455,27 +2690,37 @@ prior to opening in the web browser</dd>
 <li><code><a title="presalytics.story.components.ComponentBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.render">render</a></code></li>
 <li><code><a title="presalytics.story.components.ComponentBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.serialize">serialize</a></code></li>
 <li><code><a title="presalytics.story.components.ComponentBase.get_client" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.get_client">get_client</a></code></li>
+<li><code><a title="presalytics.story.components.ComponentBase.name" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentBase.name">name</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="presalytics.story.components.WidgetBase.deserialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.deserialize">deserialize</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.cache_subdocument" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.cache_subdocument">cache_subdocument</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.create_subdocument" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.create_subdocument">create_subdocument</a></code></li>
 <li><code><a title="presalytics.story.components.WidgetBase.to_html" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.to_html">to_html</a></code></li>
 <li><code><a title="presalytics.story.components.WidgetBase.serialize" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.serialize">serialize</a></code></li>
+<li><code><a title="presalytics.story.components.WidgetBase.outline_widget" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase.outline_widget">outline_widget</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="presalytics.story.components.PageTemplateBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase">PageTemplateBase</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="presalytics.story.components.PageTemplateBase.deseriailize" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.deseriailize">deseriailize</a></code></li>
 <li><code><a title="presalytics.story.components.PageTemplateBase.render" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.render">render</a></code></li>
 <li><code><a title="presalytics.story.components.PageTemplateBase.load_widget" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.load_widget">load_widget</a></code></li>
 <li><code><a title="presalytics.story.components.PageTemplateBase.get_page_widgets" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.get_page_widgets">get_page_widgets</a></code></li>
+<li><code><a title="presalytics.story.components.PageTemplateBase.outline_page" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.outline_page">outline_page</a></code></li>
+<li><code><a title="presalytics.story.components.PageTemplateBase.widgets" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.widgets">widgets</a></code></li>
+<li><code><a title="presalytics.story.components.PageTemplateBase.plugins" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase.plugins">plugins</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="presalytics.story.components.ThemeBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ThemeBase">ThemeBase</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.story.components.ThemeBase.plugins" href="/python-client/presalytics/story/components.html#presalytics.story.components.ThemeBase.plugins">plugins</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="presalytics.story.components.Renderer" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer">Renderer</a></code></h4>
@@ -2489,6 +2734,10 @@ prior to opening in the web browser</dd>
 <li><code><a title="presalytics.story.components.Renderer.update_story" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer.update_story">update_story</a></code></li>
 <li><code><a title="presalytics.story.components.Renderer.view" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer.view">view</a></code></li>
 <li><code><a title="presalytics.story.components.Renderer.manage" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer.manage">manage</a></code></li>
+<li><code><a title="presalytics.story.components.Renderer.story_outline" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer.story_outline">story_outline</a></code></li>
+<li><code><a title="presalytics.story.components.Renderer.plugins" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer.plugins">plugins</a></code></li>
+<li><code><a title="presalytics.story.components.Renderer.view_url" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer.view_url">view_url</a></code></li>
+<li><code><a title="presalytics.story.components.Renderer.manage_url" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer.manage_url">manage_url</a></code></li>
 </ul>
 </li>
 <li>
@@ -2497,11 +2746,14 @@ prior to opening in the web browser</dd>
 <li><code><a title="presalytics.story.components.ComponentRegistry.get_type" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.get_type">get_type</a></code></li>
 <li><code><a title="presalytics.story.components.ComponentRegistry.get_name" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.get_name">get_name</a></code></li>
 <li><code><a title="presalytics.story.components.ComponentRegistry.get_instance_name" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.get_instance_name">get_instance_name</a></code></li>
+<li><code><a title="presalytics.story.components.ComponentRegistry.get_settings_object" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.get_settings_object">get_settings_object</a></code></li>
 <li><code><a title="presalytics.story.components.ComponentRegistry.get_instance_registry_key" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.get_instance_registry_key">get_instance_registry_key</a></code></li>
 <li><code><a title="presalytics.story.components.ComponentRegistry.load_class" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.load_class">load_class</a></code></li>
 <li><code><a title="presalytics.story.components.ComponentRegistry.get_instance" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.get_instance">get_instance</a></code></li>
 <li><code><a title="presalytics.story.components.ComponentRegistry.unregister" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.unregister">unregister</a></code></li>
 <li><code><a title="presalytics.story.components.ComponentRegistry.find_instance" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.find_instance">find_instance</a></code></li>
+<li><code><a title="presalytics.story.components.ComponentRegistry.registry" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.registry">registry</a></code></li>
+<li><code><a title="presalytics.story.components.ComponentRegistry.deferred_modules" href="/python-client/presalytics/story/components.html#presalytics.story.components.ComponentRegistry.deferred_modules">deferred_modules</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2510,7 +2762,7 @@ prior to opening in the web browser</dd>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

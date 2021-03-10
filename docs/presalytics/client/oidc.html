@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.client.oidc API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -23,10 +23,9 @@
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L0-L281" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L0-L273" class="git-link">Browse git</a>
 </summary>
-<pre><code class="python">import urllib.parse
-import requests
+<pre><code class="python">import requests
 import posixpath
 import logging
 import typing
@@ -59,7 +58,6 @@ def get_jwks():
         raise presalytics.lib.exceptions.ApiError(message=&#34;Could not get jwks from Uri&#34;, status_code=r.status_code)
 
 
-
 class OidcClient(object):
     &#34;&#34;&#34;
     A helper class for negotiating tokens from an oidc provider, defalting to https://login.presalytics.io
@@ -83,6 +81,7 @@ class OidcClient(object):
 
 
     &#34;&#34;&#34;
+
     def __init__(self, client_id=None, client_secret=None, validate_tokens=True, *args, **kwargs):
         self.auth_host = kwargs.get(&#34;auth_host&#34;, cnst.OIDC_AUTH_HOST)
         self.well_known_endpoint = posixpath.join(self.auth_host, kwargs.get(&#34;well_known_path&#34;, &#34;.well-known/openid-configuration&#34;))
@@ -101,6 +100,53 @@ class OidcClient(object):
             &#34;slow_down&#34;
         ]
 
+    def handle_device_code_response(self, device_code_response):
+        user_code_message = &#34;This device&#39;s user code is: {}.  Please verify this code when logging in.&#34;.format(device_code_response[&#34;user_code&#34;])
+        print(user_code_message)
+        cli_message = &#34;Please open a webrowser to {0} and login.&#34;.format(device_code_response[&#34;verification_uri_complete&#34;])
+        print(cli_message)
+        try:
+            webbrowser.open_new_tab(device_code_response[&#34;verification_uri_complete&#34;])
+        except BaseException:
+            pass
+
+    def poll_for_token(self, device_code_response):
+        sleep_interval = device_code_response[&#34;interval&#34;]
+        auth_data = {
+            &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:device_code&#34;,
+            &#34;device_code&#34;: device_code_response[&#34;device_code&#34;],
+            &#34;client_id&#34;: self.client_id
+        }
+        headers = {
+            &#39;content-type&#39;: &#39;application/x-www-form-urlencoded&#39;
+        }
+        repoll = True
+        while repoll:
+            token_response = requests.post(self.token_endpoint, auth_data, headers=headers)
+            if token_response.status_code != 200:
+                err_resp = token_response.json()
+                err_msg = err_resp[&#34;error&#34;]
+                if err_msg in self.repoll_errors:
+                    time.sleep(sleep_interval)
+                    if err_msg == &#34;slow_down&#34;:
+                        time.sleep(sleep_interval)
+                    logger.debug(&#34;User has not yet logged in.  Repolling...&#34;)
+                else:
+                    message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
+                    raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
+            else:
+                repoll = False
+        token_data = token_response.json()
+        if token_data.get(&#39;access_token&#39;, None):
+            print(&#34;Login Success! Please continue with your work.&#34;)
+            logger.debug(&#34;User logged in successfully.&#34;)
+        else:
+            message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
+            raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
+        if self.validate_tokens:
+            self.validate_token(token_data[&#34;access_token&#34;])
+        return token_data
+
     def token(self, username, password=None, audience=None, scope=None, **kwargs) -&gt; typing.Dict:
         &#34;&#34;&#34;
         Get an access token
@@ -110,7 +156,7 @@ class OidcClient(object):
         if not audience:
             audience = self.audience
         if password and self.client_secret:
-            #use password grant if present (not recommended)
+            # use password grant if present (not recommended)
             data = {
                 &#34;grant_type&#34;: &#34;password&#34;,
                 &#34;username&#34;: username,
@@ -121,7 +167,7 @@ class OidcClient(object):
                 &#34;scope&#34;: scope
             }
             token_data = self._post(self.token_endpoint, data)
-            
+
         else:
             # Use device grant as default
             device_data = {
@@ -131,48 +177,8 @@ class OidcClient(object):
             }
 
             device_code_response = self._post(self.device_endpoint, device_data)
-            user_code_message = &#34;This device&#39;s user code is: {}.  Please verify this code when logging in.&#34;.format(device_code_response[&#34;user_code&#34;])
-            print(user_code_message)
-            cli_message = &#34;Please open a webrowser to {0} and login.&#34;.format(device_code_response[&#34;verification_uri_complete&#34;])
-            print(cli_message)
-            try:
-                webbrowser.open_new_tab(device_code_response[&#34;verification_uri_complete&#34;])
-            except:
-                pass
-            sleep_interval = device_code_response[&#34;interval&#34;]
-            auth_data = {
-                &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:device_code&#34;,
-                &#34;device_code&#34;: device_code_response[&#34;device_code&#34;],
-                &#34;client_id&#34;: self.client_id
-            }
-            headers = {
-                &#39;content-type&#39;: &#39;application/x-www-form-urlencoded&#39;
-            }
-            repoll = True
-            while repoll:
-                token_response = requests.post(self.token_endpoint, auth_data, headers=headers)
-                if token_response.status_code != 200:
-                    err_resp = token_response.json()
-                    err_msg = err_resp[&#34;error&#34;]
-                    if err_msg in self.repoll_errors:
-                        time.sleep(sleep_interval)
-                        if err_msg == &#34;slow_down&#34;:
-                            time.sleep(sleep_interval)
-                        logger.debug(&#34;User has not yet logged in.  Repolling...&#34;)                     
-                    else:
-                        message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
-                        raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
-                else:
-                    repoll = False
-            token_data = token_response.json()
-            if token_data.get(&#39;access_token&#39;, None):
-                print(&#34;Login Success! Please continue with your work.&#34;)
-                logger.debug(&#34;User logged in successfully.&#34;)
-            else:
-                message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
-                raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
-        if self.validate_tokens:
-            self.validate_token(token_data[&#34;access_token&#34;])
+            self.handle_device_code_response(device_code_response)
+            token_data = self.poll_for_token(device_code_response)
         return token_data
 
     def validate_token(self, token):
@@ -208,10 +214,8 @@ class OidcClient(object):
                 raise presalytics.lib.exceptions.ApiError(message=&#34;invalid token (likely malformed)&#34;, status_code=401)
             logger.debug(&#34;Access token validated.&#34;)
             return payload
-        
-        raise presalytics.lib.exceptions.ApiError(message=&#34;invalid_header: could not find key in jwks&#34;,status_code=401)
-        
 
+        raise presalytics.lib.exceptions.ApiError(message=&#34;invalid_header: could not find key in jwks&#34;, status_code=401)
 
     def refresh_token(self, refresh_token, scope=None):
         &#34;&#34;&#34;
@@ -231,7 +235,7 @@ class OidcClient(object):
         }
 
         token_data = self._post(self.token_endpoint, data)
-        
+
         if self.validate_tokens:
             self.validate_token(token_data[&#34;access_token&#34;])
         return token_data
@@ -246,7 +250,6 @@ class OidcClient(object):
             raise ex
 
         return self._handle_response(response)
-
 
     def _handle_response(self, response):
         if response.status_code == 401:
@@ -277,7 +280,7 @@ class OidcClient(object):
                 except Exception:
                     pass
         return data
-    
+
     def client_credentials_token(self, audience=None, scope=None):
         if not self.client_secret:
             raise presalytics.lib.exceptions.ApiError(message=&#34;Must have client secret for client credentials grant&#34;, status_code=400)
@@ -295,17 +298,7 @@ class OidcClient(object):
 
     def get_user_id(self, token) -&gt; str:
         payload = presalytics.client.oidc.OidcClient().validate_token(token)
-        return payload.get(&#39;https://api.presalytics.io/api_user_id&#39;, None)
-
-    
-        
-
-
-        
-
-
-
-        </code></pre>
+        return payload.get(&#39;https://api.presalytics.io/api_user_id&#39;, None)</code></pre>
 </details>
 </section>
 <section>
@@ -323,7 +316,7 @@ class OidcClient(object):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L22-L33" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L20-L31" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@cachetools.cached(cache=cachetools.TTLCache(maxsize=4096, ttl=300))  # Cache result for 5 minutes
 def get_jwks():
@@ -369,7 +362,7 @@ Defaults to True.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L37-L272" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L34-L274" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OidcClient(object):
     &#34;&#34;&#34;
@@ -394,6 +387,7 @@ Defaults to True.</dd>
 
 
     &#34;&#34;&#34;
+
     def __init__(self, client_id=None, client_secret=None, validate_tokens=True, *args, **kwargs):
         self.auth_host = kwargs.get(&#34;auth_host&#34;, cnst.OIDC_AUTH_HOST)
         self.well_known_endpoint = posixpath.join(self.auth_host, kwargs.get(&#34;well_known_path&#34;, &#34;.well-known/openid-configuration&#34;))
@@ -412,6 +406,53 @@ Defaults to True.</dd>
             &#34;slow_down&#34;
         ]
 
+    def handle_device_code_response(self, device_code_response):
+        user_code_message = &#34;This device&#39;s user code is: {}.  Please verify this code when logging in.&#34;.format(device_code_response[&#34;user_code&#34;])
+        print(user_code_message)
+        cli_message = &#34;Please open a webrowser to {0} and login.&#34;.format(device_code_response[&#34;verification_uri_complete&#34;])
+        print(cli_message)
+        try:
+            webbrowser.open_new_tab(device_code_response[&#34;verification_uri_complete&#34;])
+        except BaseException:
+            pass
+
+    def poll_for_token(self, device_code_response):
+        sleep_interval = device_code_response[&#34;interval&#34;]
+        auth_data = {
+            &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:device_code&#34;,
+            &#34;device_code&#34;: device_code_response[&#34;device_code&#34;],
+            &#34;client_id&#34;: self.client_id
+        }
+        headers = {
+            &#39;content-type&#39;: &#39;application/x-www-form-urlencoded&#39;
+        }
+        repoll = True
+        while repoll:
+            token_response = requests.post(self.token_endpoint, auth_data, headers=headers)
+            if token_response.status_code != 200:
+                err_resp = token_response.json()
+                err_msg = err_resp[&#34;error&#34;]
+                if err_msg in self.repoll_errors:
+                    time.sleep(sleep_interval)
+                    if err_msg == &#34;slow_down&#34;:
+                        time.sleep(sleep_interval)
+                    logger.debug(&#34;User has not yet logged in.  Repolling...&#34;)
+                else:
+                    message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
+                    raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
+            else:
+                repoll = False
+        token_data = token_response.json()
+        if token_data.get(&#39;access_token&#39;, None):
+            print(&#34;Login Success! Please continue with your work.&#34;)
+            logger.debug(&#34;User logged in successfully.&#34;)
+        else:
+            message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
+            raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
+        if self.validate_tokens:
+            self.validate_token(token_data[&#34;access_token&#34;])
+        return token_data
+
     def token(self, username, password=None, audience=None, scope=None, **kwargs) -&gt; typing.Dict:
         &#34;&#34;&#34;
         Get an access token
@@ -421,7 +462,7 @@ Defaults to True.</dd>
         if not audience:
             audience = self.audience
         if password and self.client_secret:
-            #use password grant if present (not recommended)
+            # use password grant if present (not recommended)
             data = {
                 &#34;grant_type&#34;: &#34;password&#34;,
                 &#34;username&#34;: username,
@@ -432,7 +473,7 @@ Defaults to True.</dd>
                 &#34;scope&#34;: scope
             }
             token_data = self._post(self.token_endpoint, data)
-            
+
         else:
             # Use device grant as default
             device_data = {
@@ -442,48 +483,8 @@ Defaults to True.</dd>
             }
 
             device_code_response = self._post(self.device_endpoint, device_data)
-            user_code_message = &#34;This device&#39;s user code is: {}.  Please verify this code when logging in.&#34;.format(device_code_response[&#34;user_code&#34;])
-            print(user_code_message)
-            cli_message = &#34;Please open a webrowser to {0} and login.&#34;.format(device_code_response[&#34;verification_uri_complete&#34;])
-            print(cli_message)
-            try:
-                webbrowser.open_new_tab(device_code_response[&#34;verification_uri_complete&#34;])
-            except:
-                pass
-            sleep_interval = device_code_response[&#34;interval&#34;]
-            auth_data = {
-                &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:device_code&#34;,
-                &#34;device_code&#34;: device_code_response[&#34;device_code&#34;],
-                &#34;client_id&#34;: self.client_id
-            }
-            headers = {
-                &#39;content-type&#39;: &#39;application/x-www-form-urlencoded&#39;
-            }
-            repoll = True
-            while repoll:
-                token_response = requests.post(self.token_endpoint, auth_data, headers=headers)
-                if token_response.status_code != 200:
-                    err_resp = token_response.json()
-                    err_msg = err_resp[&#34;error&#34;]
-                    if err_msg in self.repoll_errors:
-                        time.sleep(sleep_interval)
-                        if err_msg == &#34;slow_down&#34;:
-                            time.sleep(sleep_interval)
-                        logger.debug(&#34;User has not yet logged in.  Repolling...&#34;)                     
-                    else:
-                        message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
-                        raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
-                else:
-                    repoll = False
-            token_data = token_response.json()
-            if token_data.get(&#39;access_token&#39;, None):
-                print(&#34;Login Success! Please continue with your work.&#34;)
-                logger.debug(&#34;User logged in successfully.&#34;)
-            else:
-                message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
-                raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
-        if self.validate_tokens:
-            self.validate_token(token_data[&#34;access_token&#34;])
+            self.handle_device_code_response(device_code_response)
+            token_data = self.poll_for_token(device_code_response)
         return token_data
 
     def validate_token(self, token):
@@ -519,10 +520,8 @@ Defaults to True.</dd>
                 raise presalytics.lib.exceptions.ApiError(message=&#34;invalid token (likely malformed)&#34;, status_code=401)
             logger.debug(&#34;Access token validated.&#34;)
             return payload
-        
-        raise presalytics.lib.exceptions.ApiError(message=&#34;invalid_header: could not find key in jwks&#34;,status_code=401)
-        
 
+        raise presalytics.lib.exceptions.ApiError(message=&#34;invalid_header: could not find key in jwks&#34;, status_code=401)
 
     def refresh_token(self, refresh_token, scope=None):
         &#34;&#34;&#34;
@@ -542,7 +541,7 @@ Defaults to True.</dd>
         }
 
         token_data = self._post(self.token_endpoint, data)
-        
+
         if self.validate_tokens:
             self.validate_token(token_data[&#34;access_token&#34;])
         return token_data
@@ -557,7 +556,6 @@ Defaults to True.</dd>
             raise ex
 
         return self._handle_response(response)
-
 
     def _handle_response(self, response):
         if response.status_code == 401:
@@ -588,7 +586,7 @@ Defaults to True.</dd>
                 except Exception:
                     pass
         return data
-    
+
     def client_credentials_token(self, audience=None, scope=None):
         if not self.client_secret:
             raise presalytics.lib.exceptions.ApiError(message=&#34;Must have client secret for client credentials grant&#34;, status_code=400)
@@ -610,6 +608,75 @@ Defaults to True.</dd>
 </details>
 <h3>Methods</h3>
 <dl>
+<dt id="presalytics.client.oidc.OidcClient.handle_device_code_response"><code class="name flex">
+<span>def <span class="ident">handle_device_code_response</span></span>(<span>self, device_code_response)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L76-L84" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def handle_device_code_response(self, device_code_response):
+    user_code_message = &#34;This device&#39;s user code is: {}.  Please verify this code when logging in.&#34;.format(device_code_response[&#34;user_code&#34;])
+    print(user_code_message)
+    cli_message = &#34;Please open a webrowser to {0} and login.&#34;.format(device_code_response[&#34;verification_uri_complete&#34;])
+    print(cli_message)
+    try:
+        webbrowser.open_new_tab(device_code_response[&#34;verification_uri_complete&#34;])
+    except BaseException:
+        pass</code></pre>
+</details>
+</dd>
+<dt id="presalytics.client.oidc.OidcClient.poll_for_token"><code class="name flex">
+<span>def <span class="ident">poll_for_token</span></span>(<span>self, device_code_response)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L86-L121" class="git-link">Browse git</a>
+</summary>
+<pre><code class="python">def poll_for_token(self, device_code_response):
+    sleep_interval = device_code_response[&#34;interval&#34;]
+    auth_data = {
+        &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:device_code&#34;,
+        &#34;device_code&#34;: device_code_response[&#34;device_code&#34;],
+        &#34;client_id&#34;: self.client_id
+    }
+    headers = {
+        &#39;content-type&#39;: &#39;application/x-www-form-urlencoded&#39;
+    }
+    repoll = True
+    while repoll:
+        token_response = requests.post(self.token_endpoint, auth_data, headers=headers)
+        if token_response.status_code != 200:
+            err_resp = token_response.json()
+            err_msg = err_resp[&#34;error&#34;]
+            if err_msg in self.repoll_errors:
+                time.sleep(sleep_interval)
+                if err_msg == &#34;slow_down&#34;:
+                    time.sleep(sleep_interval)
+                logger.debug(&#34;User has not yet logged in.  Repolling...&#34;)
+            else:
+                message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
+                raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
+        else:
+            repoll = False
+    token_data = token_response.json()
+    if token_data.get(&#39;access_token&#39;, None):
+        print(&#34;Login Success! Please continue with your work.&#34;)
+        logger.debug(&#34;User logged in successfully.&#34;)
+    else:
+        message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
+        raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
+    if self.validate_tokens:
+        self.validate_token(token_data[&#34;access_token&#34;])
+    return token_data</code></pre>
+</details>
+</dd>
 <dt id="presalytics.client.oidc.OidcClient.token"><code class="name flex">
 <span>def <span class="ident">token</span></span>(<span>self, username, password=None, audience=None, scope=None, **kwargs)</span>
 </code></dt>
@@ -618,7 +685,7 @@ Defaults to True.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L78-L150" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L123-L155" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def token(self, username, password=None, audience=None, scope=None, **kwargs) -&gt; typing.Dict:
     &#34;&#34;&#34;
@@ -629,7 +696,7 @@ Defaults to True.</dd>
     if not audience:
         audience = self.audience
     if password and self.client_secret:
-        #use password grant if present (not recommended)
+        # use password grant if present (not recommended)
         data = {
             &#34;grant_type&#34;: &#34;password&#34;,
             &#34;username&#34;: username,
@@ -640,7 +707,7 @@ Defaults to True.</dd>
             &#34;scope&#34;: scope
         }
         token_data = self._post(self.token_endpoint, data)
-        
+
     else:
         # Use device grant as default
         device_data = {
@@ -650,48 +717,8 @@ Defaults to True.</dd>
         }
 
         device_code_response = self._post(self.device_endpoint, device_data)
-        user_code_message = &#34;This device&#39;s user code is: {}.  Please verify this code when logging in.&#34;.format(device_code_response[&#34;user_code&#34;])
-        print(user_code_message)
-        cli_message = &#34;Please open a webrowser to {0} and login.&#34;.format(device_code_response[&#34;verification_uri_complete&#34;])
-        print(cli_message)
-        try:
-            webbrowser.open_new_tab(device_code_response[&#34;verification_uri_complete&#34;])
-        except:
-            pass
-        sleep_interval = device_code_response[&#34;interval&#34;]
-        auth_data = {
-            &#34;grant_type&#34;: &#34;urn:ietf:params:oauth:grant-type:device_code&#34;,
-            &#34;device_code&#34;: device_code_response[&#34;device_code&#34;],
-            &#34;client_id&#34;: self.client_id
-        }
-        headers = {
-            &#39;content-type&#39;: &#39;application/x-www-form-urlencoded&#39;
-        }
-        repoll = True
-        while repoll:
-            token_response = requests.post(self.token_endpoint, auth_data, headers=headers)
-            if token_response.status_code != 200:
-                err_resp = token_response.json()
-                err_msg = err_resp[&#34;error&#34;]
-                if err_msg in self.repoll_errors:
-                    time.sleep(sleep_interval)
-                    if err_msg == &#34;slow_down&#34;:
-                        time.sleep(sleep_interval)
-                    logger.debug(&#34;User has not yet logged in.  Repolling...&#34;)                     
-                else:
-                    message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
-                    raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
-            else:
-                repoll = False
-        token_data = token_response.json()
-        if token_data.get(&#39;access_token&#39;, None):
-            print(&#34;Login Success! Please continue with your work.&#34;)
-            logger.debug(&#34;User logged in successfully.&#34;)
-        else:
-            message = &#34;Error: {0} -- {1}&#34;.format(err_msg, err_resp[&#34;error_description&#34;])
-            raise presalytics.lib.exceptions.ApiError(message=message, status_code=token_response.status_code)
-    if self.validate_tokens:
-        self.validate_token(token_data[&#34;access_token&#34;])
+        self.handle_device_code_response(device_code_response)
+        token_data = self.poll_for_token(device_code_response)
     return token_data</code></pre>
 </details>
 </dd>
@@ -703,7 +730,7 @@ Defaults to True.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L152-L186" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L157-L191" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def validate_token(self, token):
     &#34;&#34;&#34;
@@ -738,8 +765,8 @@ Defaults to True.</dd>
             raise presalytics.lib.exceptions.ApiError(message=&#34;invalid token (likely malformed)&#34;, status_code=401)
         logger.debug(&#34;Access token validated.&#34;)
         return payload
-    
-    raise presalytics.lib.exceptions.ApiError(message=&#34;invalid_header: could not find key in jwks&#34;,status_code=401)</code></pre>
+
+    raise presalytics.lib.exceptions.ApiError(message=&#34;invalid_header: could not find key in jwks&#34;, status_code=401)</code></pre>
 </details>
 </dd>
 <dt id="presalytics.client.oidc.OidcClient.refresh_token"><code class="name flex">
@@ -750,7 +777,7 @@ Defaults to True.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L190-L211" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L193-L214" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def refresh_token(self, refresh_token, scope=None):
     &#34;&#34;&#34;
@@ -770,7 +797,7 @@ Defaults to True.</dd>
     }
 
     token_data = self._post(self.token_endpoint, data)
-    
+
     if self.validate_tokens:
         self.validate_token(token_data[&#34;access_token&#34;])
     return token_data</code></pre>
@@ -784,7 +811,7 @@ Defaults to True.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L255-L268" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L257-L270" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def client_credentials_token(self, audience=None, scope=None):
     if not self.client_secret:
@@ -810,7 +837,7 @@ Defaults to True.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L270-L272" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/client/oidc.py#L272-L274" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_user_id(self, token) -&gt; str:
     payload = presalytics.client.oidc.OidcClient().validate_token(token)
@@ -843,6 +870,8 @@ Defaults to True.</dd>
 <li>
 <h4><code><a title="presalytics.client.oidc.OidcClient" href="/python-client/presalytics/client/oidc.html#presalytics.client.oidc.OidcClient">OidcClient</a></code></h4>
 <ul class="">
+<li><code><a title="presalytics.client.oidc.OidcClient.handle_device_code_response" href="/python-client/presalytics/client/oidc.html#presalytics.client.oidc.OidcClient.handle_device_code_response">handle_device_code_response</a></code></li>
+<li><code><a title="presalytics.client.oidc.OidcClient.poll_for_token" href="/python-client/presalytics/client/oidc.html#presalytics.client.oidc.OidcClient.poll_for_token">poll_for_token</a></code></li>
 <li><code><a title="presalytics.client.oidc.OidcClient.token" href="/python-client/presalytics/client/oidc.html#presalytics.client.oidc.OidcClient.token">token</a></code></li>
 <li><code><a title="presalytics.client.oidc.OidcClient.validate_token" href="/python-client/presalytics/client/oidc.html#presalytics.client.oidc.OidcClient.validate_token">validate_token</a></code></li>
 <li><code><a title="presalytics.client.oidc.OidcClient.refresh_token" href="/python-client/presalytics/client/oidc.html#presalytics.client.oidc.OidcClient.refresh_token">refresh_token</a></code></li>
@@ -856,7 +885,7 @@ Defaults to True.</dd>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

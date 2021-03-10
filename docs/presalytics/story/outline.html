@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.story.outline API documentation</title>
 <meta name="description" content="Module helps serialize and deserialize presalytics story outlines to/from json and yaml source data.
 Classes in this module acts are interfaces …" />
@@ -26,7 +26,7 @@ Classes in this module acts are interfaces between story outlines and <code>comp
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L0-L546" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L0-L550" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
 Module helps serialize and deserialize presalytics story outlines to/from json and yaml source data.
@@ -42,20 +42,21 @@ import dateutil.parser
 import uuid
 import abc
 import typing
-import sys
 import os
 import semantic_version
 import jsonschema
 from presalytics.story.util import to_camel_case, to_snake_case
 from presalytics.lib.exceptions import ValidationError
 
+
 class OutlineEncoder(json.JSONEncoder):
     &#34;&#34;&#34;
     Json encoder for `presalytics.story.outline.OutlineBase` objects
     &#34;&#34;&#34;
+
     def default(self, obj):
         &#34;&#34;&#34;
-        Override method for deserializing objects that inherit from 
+        Override method for deserializing objects that inherit from
         `presalytics.story.outline.OutlineBase`
         &#34;&#34;&#34;
         if issubclass(obj.__class__, OutlineBase):
@@ -65,7 +66,7 @@ class OutlineEncoder(json.JSONEncoder):
         if isinstance(obj, uuid.UUID):
             return str(obj)
         # Generalized numpy encoder/decoder -- for http transport
-        # If input object is an ndarray it will be converted into a dict 
+        # If input object is an ndarray it will be converted into a dict
         # holding dtype, shape and the data, base64 encoded.
         if isinstance(obj, np.ndarray):
             if obj.flags[&#39;C_CONTIGUOUS&#39;]:
@@ -80,6 +81,7 @@ class OutlineEncoder(json.JSONEncoder):
                         shape=obj.shape)
         return json.JSONEncoder.default(self, obj)
 
+
 def json_numpy_obj_hook(dct):
     &#34;&#34;&#34;
     Decodes a previously encoded numpy ndarray with proper shape and dtype.
@@ -92,18 +94,18 @@ def json_numpy_obj_hook(dct):
 
 def get_current_spec_version():
     &#34;&#34;&#34;
-    Get the latest version of the story outline schema via reading foldernames in 
+    Get the latest version of the story outline schema via reading foldernames in
     the schemas subfolder of this file&#39;s directory
     &#34;&#34;&#34;
     schema_dir = os.path.join(os.path.dirname(__file__), &#34;schemas&#34;)
-    major, minor, patch = None, None, None
     latest = None
     for _dir in os.listdir(schema_dir):
-        if not latest: 
+        if not latest:
             latest = semantic_version.Version(_dir)
         elif latest &lt; semantic_version.Version(_dir):
             latest = semantic_version.Version(_dir)
     return str(latest)
+
 
 def load_schema(version_number):
     path = os.path.join(os.path.dirname(__file__), &#34;schemas&#34;, version_number, &#34;story-outline.schema.json&#34;)
@@ -111,10 +113,10 @@ def load_schema(version_number):
         data = json.load(f)
     return data
 
+
 def load_latest_schema():
     version_number = get_current_spec_version()
     return load_schema(version_number)
-
 
 
 class OutlineBase(abc.ABC):
@@ -123,7 +125,7 @@ class OutlineBase(abc.ABC):
 
     Includes methods for validiating, serializing, and deserializing outline classes
     &#34;&#34;&#34;
-    
+
     __annotations__: typing.Dict
     __required__: typing.Sequence[str]
     additional_properties: typing.Dict
@@ -144,7 +146,7 @@ class OutlineBase(abc.ABC):
     def validate(self):
         &#34;&#34;&#34;
         Ensures that the outline component has all required attributes.  Raises
-        a `presalytics.lib.exceptions.ValidationError` if required attributes are 
+        a `presalytics.lib.exceptions.ValidationError` if required attributes are
         missing.  Reads the list of requried objects from the __required__ class
         variable
         &#34;&#34;&#34;
@@ -152,7 +154,6 @@ class OutlineBase(abc.ABC):
             if not hasattr(self, key):
                 err_message = &#39;Could not load {0} object, source data missing &#34;{1}&#34; key&#39;.format(self.__class__.__name__, key)
                 raise ValidationError(err_message)
-
 
     @classmethod
     def deserialize(cls, json_obj: dict):
@@ -163,12 +164,12 @@ class OutlineBase(abc.ABC):
         ----------
         json_obj : dict
             A dictionary containing attributes of the class
-        
+
         Returns
         ----------
             A `class` instance
         &#34;&#34;&#34;
-        if type(json_obj) == cls:
+        if isinstance(json_obj, cls):
             return json_obj
         updated_obj = {}
         for key, val in json_obj.items():
@@ -188,7 +189,7 @@ class OutlineBase(abc.ABC):
         ----------
         json_str : str
             A dictionary containing attributes of the class
-        
+
         Returns
         ----------
         A `class` instance
@@ -205,13 +206,13 @@ class OutlineBase(abc.ABC):
         ----------
         yaml_file : str
             Filepath to the file with yaml representing that class
-        
+
         Returns
         ----------
         A `class` instance
         &#34;&#34;&#34;
         with open(yaml_file, &#39;r&#39;) as file:
-            obj = yaml.unsafe_load(file) # use unsafe loader per: https://github.com/yaml/pyyaml/issues/286, Monitor for fix.
+            obj = yaml.unsafe_load(file)  # use unsafe loader per: https://github.com/yaml/pyyaml/issues/286, Monitor for fix.
         return cls.deserialize(obj)
 
     def export_yaml(self, filename):
@@ -268,22 +269,22 @@ class Info(OutlineBase):
     ----------
     revision : str
         The current revision number of the story outline
-    
+
     date_created : datetime.datetime
-        The creation date of the story in UTC 
-    
+        The creation date of the story in UTC
+
     date_modified : datetime.dataime
-        The last modified  date of the story in UTC 
-    
+        The last modified  date of the story in UTC
+
     created_by : str
         The Presalytics API user id of the user that created the story
-    
+
     modified_by : str
         The Presalytics API user id of the user that last modified the story
-    
+
     revision_notes : str, optional
         Text explaining the changes made during that latest revision to the story
-    
+
     &#34;&#34;&#34;
     revision: str
     date_created: datetime.datetime
@@ -299,7 +300,6 @@ class Info(OutlineBase):
                  created_by,
                  modified_by,
                  revision_notes,
-                 story_id=None,
                  **kwargs):
         super(Info, self).__init__(**kwargs)
         self.revision = revision
@@ -308,6 +308,7 @@ class Info(OutlineBase):
         self.created_by = created_by
         self.modified_by = modified_by
         self.revision_notes = revision_notes
+
 
 class Plugin(OutlineBase):
     &#34;&#34;&#34;
@@ -322,11 +323,11 @@ class Plugin(OutlineBase):
         or &#34;script&#34; for a `presalytics.lib.plugins.base.ScriptPlugin`
 
     name : str
-        The name of the plugin.  A name must be unique within a 
+        The name of the plugin.  A name must be unique within a
         given `presalytics.PLUGINS` registry.
 
     config : dict
-        The configiuration of the plugin.  The keys in this dictionary are unqiue to a given 
+        The configiuration of the plugin.  The keys in this dictionary are unqiue to a given
         plugin.
     &#34;&#34;&#34;
     kind: str
@@ -339,7 +340,6 @@ class Plugin(OutlineBase):
         &#39;name&#39;
     ]
 
-
     def __init__(self, kind, name, config, **kwargs):
         super(Plugin, self).__init__(**kwargs)
         self.kind = kind
@@ -349,7 +349,7 @@ class Plugin(OutlineBase):
 
 class Widget(OutlineBase):
     &#34;&#34;&#34;
-    A represenation of an analytic or graphic object to be rendered within a 
+    A represenation of an analytic or graphic object to be rendered within a
     `presalytics.story.outline.Page`. At render-time, the `presalytics.COMPONENTS`
     registry is queried for a matching class or instance. If found, the widget is
     rendered.
@@ -357,17 +357,17 @@ class Widget(OutlineBase):
     Attributes
     ----------
     kind : str
-        The kind of Widget. Typically corresponds to a class that inherits from 
+        The kind of Widget. Typically corresponds to a class that inherits from
         `presalytics.story.components.WidgetBase`
 
     name : str
-        The name of the Widget.  Correpsonds to a local instance of 
+        The name of the Widget.  Correpsonds to a local instance of
         `presalytics.story.components.WidgetBase` loaded into `presalytics.COMPONENTS`
 
     data : dict
         Widget data required so the corresponding subclass of `presalytics.story.components.WidgetBase`
         can initialize and render
-        
+
     plugins : list of presalytics.story.outline.Plugin
         A list of plugins that must be rendered alongside this widget
     &#34;&#34;&#34;
@@ -378,13 +378,15 @@ class Widget(OutlineBase):
 
     __required__ = [
         &#39;name&#39;,
-        &#39;data&#39;
+        &#39;data&#39;,
+        &#39;id&#39;
     ]
 
-    def __init__(self, name, kind, data, plugins=None, **kwargs):
+    def __init__(self, name, kind, data, id=None, plugins=None, **kwargs):
         super(Widget, self).__init__(**kwargs)
         self.name = name
         self.kind = kind
+        self.id = id if id else uuid.uuid4()
         if data:
             self.data = data
         else:
@@ -405,16 +407,16 @@ class Page(OutlineBase):
     Attributes
     ----------
     kind : str
-        The kind of Page. Typically corresponds to a class that inherits from 
+        The kind of Page. Typically corresponds to a class that inherits from
         `presalytics.story.components.PageTemplateBase`
 
     name : str
-        The name of the Page.  A name must be unique within a 
+        The name of the Page.  A name must be unique within a
         given `presalytics.COMPONENTS` registry
 
     widgets : list of presalytics.story.outline.Widget
-        Widgets that will be rendered along with the page        
-        
+        Widgets that will be rendered along with the page
+
     plugins : list of presalytics.story.outline.Plugin
         A list of plugins that must be rendered alongside this widget
 
@@ -426,13 +428,15 @@ class Page(OutlineBase):
 
     __required__ = [
         &#39;name&#39;,
-        &#39;kind&#39;
+        &#39;kind&#39;,
+        &#39;id&#39;
     ]
 
-    def __init__(self, name, kind, widgets, plugins=None, **kwargs):
+    def __init__(self, name, kind, widgets, id=None, plugins=None, **kwargs):
         super(Page, self).__init__(**kwargs)
         self.name = name
         self.kind = kind
+        self.id = id if id else uuid.uuid4()
         if widgets:
             self.widgets = [Widget.deserialize(x) for x in widgets]
         else:
@@ -445,24 +449,24 @@ class Page(OutlineBase):
 
 class Theme(OutlineBase):
     &#34;&#34;&#34;
-    A container for story properties that persist accross all pages of story. At render-time, 
+    A container for story properties that persist accross all pages of story. At render-time,
     the `presalytics.COMPONENTS` registry is queried for a matching class. If found, the theme is
     incorporated into the story.
 
     Attributes
     ----------
     kind : str
-        The kind of Theme. Typically corresponds to a class that inherits from 
+        The kind of Theme. Typically corresponds to a class that inherits from
         `presalytics.story.components.ThemeBase`
 
     name : str
-        The name of the Theme.  Corresponds to a local instance of 
+        The name of the Theme.  Corresponds to a local instance of
         `presalytics.story.components.ThemeBase` loaded into `presalytics.COMPONENTS`
 
     data : dict
         Widget data required so the corresponding subclass of `presalytics.story.components.ThemeBase`
         can initialize and render
-        
+
     plugins : A list of presalytics.story.outline.Plugin
         A list of plugins that must be rendered alongside this widget
     &#34;&#34;&#34;
@@ -491,7 +495,7 @@ class Theme(OutlineBase):
 
 class StoryOutline(OutlineBase):
     &#34;&#34;&#34;
-    A StoryOutline contains instructions for a `presalytics.story.components.Renderer` 
+    A StoryOutline contains instructions for a `presalytics.story.components.Renderer`
     (e.g., `presalytics.story.revealer.Revealer`) to render an story into html.
 
     A story outline&#39;s `info`, `pages`, `widgets`, and `themes` are intended to be easily editable
@@ -510,22 +514,22 @@ class StoryOutline(OutlineBase):
 
     outline_version : str
         the version of that StoryOuline schema.
-    
+
     info : presalytics.story.outline.Info
         Metadata about this StoryOutline
-    
+
     pages : list of presalytics.story.outline.Page
         The pages that will be rendered in this story
-    
+
     themes : list of presalytics.story.outline.Theme
         The themes that will underlie each `presalytics.story.outline.Page` in the StoryOutline
-    
+
     title : str, optional
         A title for the story
 
     description: str, optional
         A description of the story
-    
+
     story_id : str, optional
         The Presalytics API Story Id.  Automatically added once the story outline has been pushed to
         the server.
@@ -537,16 +541,17 @@ class StoryOutline(OutlineBase):
     description: str
     title: str
     themes: typing.List[Theme]
-    story_id: str
+    id: str
 
     __required__ = [
         &#39;outline_version&#39;,
         &#39;info&#39;,
         &#39;pages&#39;,
         &#39;title&#39;,
+        &#39;id&#39;
     ]
 
-    def __init__(self, info, pages, description, title, themes, plugins=None, story_id=&#34;empty&#34;, **kwargs):
+    def __init__(self, info, pages, description, title, themes, plugins=None, id=None, story_id=&#34;empty&#34;, **kwargs):
         super(StoryOutline, self).__init__(**kwargs)
         self.outline_version = get_current_spec_version()
         self.info = Info.deserialize(info)
@@ -567,14 +572,13 @@ class StoryOutline(OutlineBase):
             self.plugins = [Plugin.deserialize(x) for x in plugins]
         else:
             self.plugins = []
-        self.story_id = story_id
+        self.id = id or story_id
         if not kwargs.get(&#34;validate&#34;, True):
             self.validate()
 
         def validate(self):
             super(StoryOutline, self).validate()
-            jsonschema.validate(instance=self.to_dict(), schema=load_latest_schema())
-        </code></pre>
+            jsonschema.validate(instance=self.to_dict(), schema=load_latest_schema())</code></pre>
 </details>
 </section>
 <section>
@@ -592,7 +596,7 @@ class StoryOutline(OutlineBase):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L53-L60" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L55-L62" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def json_numpy_obj_hook(dct):
     &#34;&#34;&#34;
@@ -613,18 +617,17 @@ the schemas subfolder of this file's directory</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L63-L76" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L65-L77" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def get_current_spec_version():
     &#34;&#34;&#34;
-    Get the latest version of the story outline schema via reading foldernames in 
+    Get the latest version of the story outline schema via reading foldernames in
     the schemas subfolder of this file&#39;s directory
     &#34;&#34;&#34;
     schema_dir = os.path.join(os.path.dirname(__file__), &#34;schemas&#34;)
-    major, minor, patch = None, None, None
     latest = None
     for _dir in os.listdir(schema_dir):
-        if not latest: 
+        if not latest:
             latest = semantic_version.Version(_dir)
         elif latest &lt; semantic_version.Version(_dir):
             latest = semantic_version.Version(_dir)
@@ -639,7 +642,7 @@ the schemas subfolder of this file's directory</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L78-L82" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L80-L84" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def load_schema(version_number):
     path = os.path.join(os.path.dirname(__file__), &#34;schemas&#34;, version_number, &#34;story-outline.schema.json&#34;)
@@ -656,7 +659,7 @@ the schemas subfolder of this file's directory</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L84-L86" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L87-L89" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def load_latest_schema():
     version_number = get_current_spec_version()
@@ -673,7 +676,7 @@ the schemas subfolder of this file's directory</p></section>
 <span>(</span><span>*, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, sort_keys=False, indent=None, separators=None, default=None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Json encoder for <a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase"><code>OutlineBase</code></a> objects</p>
+<section class="desc"><p>Json encoder for <code><a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase">OutlineBase</a></code> objects</p>
 <p>Constructor for JSONEncoder, with sensible defaults.</p>
 <p>If skipkeys is false, then it is a TypeError to attempt
 encoding of keys that are not str, int, float or None.
@@ -713,15 +716,16 @@ version of the object or raise a <code>TypeError</code>.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L22-L51" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L22-L52" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OutlineEncoder(json.JSONEncoder):
     &#34;&#34;&#34;
     Json encoder for `presalytics.story.outline.OutlineBase` objects
     &#34;&#34;&#34;
+
     def default(self, obj):
         &#34;&#34;&#34;
-        Override method for deserializing objects that inherit from 
+        Override method for deserializing objects that inherit from
         `presalytics.story.outline.OutlineBase`
         &#34;&#34;&#34;
         if issubclass(obj.__class__, OutlineBase):
@@ -731,7 +735,7 @@ version of the object or raise a <code>TypeError</code>.</p></section>
         if isinstance(obj, uuid.UUID):
             return str(obj)
         # Generalized numpy encoder/decoder -- for http transport
-        # If input object is an ndarray it will be converted into a dict 
+        # If input object is an ndarray it will be converted into a dict
         # holding dtype, shape and the data, base64 encoded.
         if isinstance(obj, np.ndarray):
             if obj.flags[&#39;C_CONTIGUOUS&#39;]:
@@ -757,15 +761,15 @@ version of the object or raise a <code>TypeError</code>.</p></section>
 </code></dt>
 <dd>
 <section class="desc"><p>Override method for deserializing objects that inherit from
-<a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase"><code>OutlineBase</code></a></p></section>
+<code><a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase">OutlineBase</a></code></p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L26-L51" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L27-L52" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def default(self, obj):
     &#34;&#34;&#34;
-    Override method for deserializing objects that inherit from 
+    Override method for deserializing objects that inherit from
     `presalytics.story.outline.OutlineBase`
     &#34;&#34;&#34;
     if issubclass(obj.__class__, OutlineBase):
@@ -775,7 +779,7 @@ version of the object or raise a <code>TypeError</code>.</p></section>
     if isinstance(obj, uuid.UUID):
         return str(obj)
     # Generalized numpy encoder/decoder -- for http transport
-    # If input object is an ndarray it will be converted into a dict 
+    # If input object is an ndarray it will be converted into a dict
     # holding dtype, shape and the data, base64 encoded.
     if isinstance(obj, np.ndarray):
         if obj.flags[&#39;C_CONTIGUOUS&#39;]:
@@ -803,7 +807,7 @@ version of the object or raise a <code>TypeError</code>.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L90-L230" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L92-L231" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class OutlineBase(abc.ABC):
     &#34;&#34;&#34;
@@ -811,7 +815,7 @@ version of the object or raise a <code>TypeError</code>.</p></section>
 
     Includes methods for validiating, serializing, and deserializing outline classes
     &#34;&#34;&#34;
-    
+
     __annotations__: typing.Dict
     __required__: typing.Sequence[str]
     additional_properties: typing.Dict
@@ -832,7 +836,7 @@ version of the object or raise a <code>TypeError</code>.</p></section>
     def validate(self):
         &#34;&#34;&#34;
         Ensures that the outline component has all required attributes.  Raises
-        a `presalytics.lib.exceptions.ValidationError` if required attributes are 
+        a `presalytics.lib.exceptions.ValidationError` if required attributes are
         missing.  Reads the list of requried objects from the __required__ class
         variable
         &#34;&#34;&#34;
@@ -840,7 +844,6 @@ version of the object or raise a <code>TypeError</code>.</p></section>
             if not hasattr(self, key):
                 err_message = &#39;Could not load {0} object, source data missing &#34;{1}&#34; key&#39;.format(self.__class__.__name__, key)
                 raise ValidationError(err_message)
-
 
     @classmethod
     def deserialize(cls, json_obj: dict):
@@ -851,12 +854,12 @@ version of the object or raise a <code>TypeError</code>.</p></section>
         ----------
         json_obj : dict
             A dictionary containing attributes of the class
-        
+
         Returns
         ----------
             A `class` instance
         &#34;&#34;&#34;
-        if type(json_obj) == cls:
+        if isinstance(json_obj, cls):
             return json_obj
         updated_obj = {}
         for key, val in json_obj.items():
@@ -876,7 +879,7 @@ version of the object or raise a <code>TypeError</code>.</p></section>
         ----------
         json_str : str
             A dictionary containing attributes of the class
-        
+
         Returns
         ----------
         A `class` instance
@@ -893,13 +896,13 @@ version of the object or raise a <code>TypeError</code>.</p></section>
         ----------
         yaml_file : str
             Filepath to the file with yaml representing that class
-        
+
         Returns
         ----------
         A `class` instance
         &#34;&#34;&#34;
         with open(yaml_file, &#39;r&#39;) as file:
-            obj = yaml.unsafe_load(file) # use unsafe loader per: https://github.com/yaml/pyyaml/issues/286, Monitor for fix.
+            obj = yaml.unsafe_load(file)  # use unsafe loader per: https://github.com/yaml/pyyaml/issues/286, Monitor for fix.
         return cls.deserialize(obj)
 
     def export_yaml(self, filename):
@@ -960,6 +963,13 @@ version of the object or raise a <code>TypeError</code>.</p></section>
 <li><a title="presalytics.story.outline.Theme" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Theme">Theme</a></li>
 <li><a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget">Widget</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.story.outline.OutlineBase.additional_properties"><code class="name">var <span class="ident">additional_properties</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Static methods</h3>
 <dl>
 <dt id="presalytics.story.outline.OutlineBase.deserialize"><code class="name flex">
@@ -974,12 +984,12 @@ class instance</p>
 <dd>A dictionary containing attributes of the class</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<pre><code>A `class` instance
+<pre><code>A &lt;code&gt;class&lt;/code&gt; instance
 </code></pre></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L127-L150" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L128-L151" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def deserialize(cls, json_obj: dict):
@@ -990,12 +1000,12 @@ def deserialize(cls, json_obj: dict):
     ----------
     json_obj : dict
         A dictionary containing attributes of the class
-    
+
     Returns
     ----------
         A `class` instance
     &#34;&#34;&#34;
-    if type(json_obj) == cls:
+    if isinstance(json_obj, cls):
         return json_obj
     updated_obj = {}
     for key, val in json_obj.items():
@@ -1023,7 +1033,7 @@ class instance</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L152-L167" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L153-L168" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def load(cls, json_str: str):
@@ -1034,7 +1044,7 @@ def load(cls, json_str: str):
     ----------
     json_str : str
         A dictionary containing attributes of the class
-    
+
     Returns
     ----------
     A `class` instance
@@ -1058,7 +1068,7 @@ def load(cls, json_str: str):
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L169-L185" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L170-L186" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">@classmethod
 def import_yaml(cls, yaml_file: str):
@@ -1069,13 +1079,13 @@ def import_yaml(cls, yaml_file: str):
     ----------
     yaml_file : str
         Filepath to the file with yaml representing that class
-    
+
     Returns
     ----------
     A `class` instance
     &#34;&#34;&#34;
     with open(yaml_file, &#39;r&#39;) as file:
-        obj = yaml.unsafe_load(file) # use unsafe loader per: https://github.com/yaml/pyyaml/issues/286, Monitor for fix.
+        obj = yaml.unsafe_load(file)  # use unsafe loader per: https://github.com/yaml/pyyaml/issues/286, Monitor for fix.
     return cls.deserialize(obj)</code></pre>
 </details>
 </dd>
@@ -1088,19 +1098,19 @@ def import_yaml(cls, yaml_file: str):
 <dd>
 <section class="desc"><p>Ensures that the outline component has all required attributes.
 Raises
-a <a title="presalytics.lib.exceptions.ValidationError" href="/python-client/presalytics/lib/exceptions.html#presalytics.lib.exceptions.ValidationError"><code>ValidationError</code></a> if required attributes are
+a <code><a title="presalytics.lib.exceptions.ValidationError" href="/python-client/presalytics/lib/exceptions.html#presalytics.lib.exceptions.ValidationError">ValidationError</a></code> if required attributes are
 missing.
 Reads the list of requried objects from the <strong>required</strong> class
 variable</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L114-L124" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L116-L126" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def validate(self):
     &#34;&#34;&#34;
     Ensures that the outline component has all required attributes.  Raises
-    a `presalytics.lib.exceptions.ValidationError` if required attributes are 
+    a `presalytics.lib.exceptions.ValidationError` if required attributes are
     missing.  Reads the list of requried objects from the __required__ class
     variable
     &#34;&#34;&#34;
@@ -1123,7 +1133,7 @@ variable</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L187-L197" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L188-L198" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def export_yaml(self, filename):
     &#34;&#34;&#34;
@@ -1148,7 +1158,7 @@ variable</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L199-L207" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L200-L208" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def dump(self):
     &#34;&#34;&#34;
@@ -1172,7 +1182,7 @@ Used for further serialization.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L209-L230" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L210-L231" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">def to_dict(self):
     &#34;&#34;&#34;
@@ -1202,10 +1212,10 @@ Used for further serialization.</p>
 </dd>
 <dt id="presalytics.story.outline.Info"><code class="flex name class">
 <span>class <span class="ident">Info</span></span>
-<span>(</span><span>revision, date_created, date_modified, created_by, modified_by, revision_notes, story_id=None, **kwargs)</span>
+<span>(</span><span>revision, date_created, date_modified, created_by, modified_by, revision_notes, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Carries metadata for a <a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a></p>
+<section class="desc"><p>Carries metadata for a <code><a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline">StoryOutline</a></code></p>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>revision</code></strong> :&ensp;<code>str</code></dt>
@@ -1225,7 +1235,7 @@ date of the story in UTC</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L233-L280" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L234-L280" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Info(OutlineBase):
     &#34;&#34;&#34;
@@ -1235,22 +1245,22 @@ date of the story in UTC</dd>
     ----------
     revision : str
         The current revision number of the story outline
-    
+
     date_created : datetime.datetime
-        The creation date of the story in UTC 
-    
+        The creation date of the story in UTC
+
     date_modified : datetime.dataime
-        The last modified  date of the story in UTC 
-    
+        The last modified  date of the story in UTC
+
     created_by : str
         The Presalytics API user id of the user that created the story
-    
+
     modified_by : str
         The Presalytics API user id of the user that last modified the story
-    
+
     revision_notes : str, optional
         Text explaining the changes made during that latest revision to the story
-    
+
     &#34;&#34;&#34;
     revision: str
     date_created: datetime.datetime
@@ -1266,7 +1276,6 @@ date of the story in UTC</dd>
                  created_by,
                  modified_by,
                  revision_notes,
-                 story_id=None,
                  **kwargs):
         super(Info, self).__init__(**kwargs)
         self.revision = revision
@@ -1281,6 +1290,33 @@ date of the story in UTC</dd>
 <li><a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase">OutlineBase</a></li>
 <li>abc.ABC</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.story.outline.Info.revision"><code class="name">var <span class="ident">revision</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.Info.date_created"><code class="name">var <span class="ident">date_created</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.Info.date_modified"><code class="name">var <span class="ident">date_modified</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.Info.created_by"><code class="name">var <span class="ident">created_by</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.Info.modified_by"><code class="name">var <span class="ident">modified_by</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.Info.revision_notes"><code class="name">var <span class="ident">revision_notes</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase">OutlineBase</a></b></code>:
@@ -1303,18 +1339,18 @@ date of the story in UTC</dd>
 <dd>
 <section class="desc"><p>Represents at plugin to be incorporated in the story during rendering process.
 The information
-contain in this object is passed to subclass of <a title="presalytics.lib.plugins.base.PluginBase" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase"><code>PluginBase</code></a> found
-in the <a title="presalytics.PLUGINS" href="/python-client/presalytics/index.html#presalytics.PLUGINS"><code>PLUGINS</code></a> registry. at render-time.</p>
+contain in this object is passed to subclass of <code><a title="presalytics.lib.plugins.base.PluginBase" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.PluginBase">PluginBase</a></code> found
+in the <code><a title="presalytics.PLUGINS" href="/python-client/presalytics/index.html#presalytics.PLUGINS">PLUGINS</a></code> registry. at render-time.</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>kind</code></strong> :&ensp;<code>str</code></dt>
 <dd>The kind of Plugin.
-Usually either "style" for a <a title="presalytics.lib.plugins.base.StylePlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin"><code>StylePlugin</code></a>
-or "script" for a <a title="presalytics.lib.plugins.base.ScriptPlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.ScriptPlugin"><code>ScriptPlugin</code></a></dd>
+Usually either "style" for a <code><a title="presalytics.lib.plugins.base.StylePlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.StylePlugin">StylePlugin</a></code>
+or "script" for a <code><a title="presalytics.lib.plugins.base.ScriptPlugin" href="/python-client/presalytics/lib/plugins/base.html#presalytics.lib.plugins.base.ScriptPlugin">ScriptPlugin</a></code></dd>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>The name of the plugin.
 A name must be unique within a
-given <a title="presalytics.PLUGINS" href="/python-client/presalytics/index.html#presalytics.PLUGINS"><code>PLUGINS</code></a> registry.</dd>
+given <code><a title="presalytics.PLUGINS" href="/python-client/presalytics/index.html#presalytics.PLUGINS">PLUGINS</a></code> registry.</dd>
 <dt><strong><code>config</code></strong> :&ensp;<code>dict</code></dt>
 <dd>The configiuration of the plugin.
 The keys in this dictionary are unqiue to a given
@@ -1323,7 +1359,7 @@ plugin.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L282-L317" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L283-L317" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Plugin(OutlineBase):
     &#34;&#34;&#34;
@@ -1338,11 +1374,11 @@ plugin.</dd>
         or &#34;script&#34; for a `presalytics.lib.plugins.base.ScriptPlugin`
 
     name : str
-        The name of the plugin.  A name must be unique within a 
+        The name of the plugin.  A name must be unique within a
         given `presalytics.PLUGINS` registry.
 
     config : dict
-        The configiuration of the plugin.  The keys in this dictionary are unqiue to a given 
+        The configiuration of the plugin.  The keys in this dictionary are unqiue to a given
         plugin.
     &#34;&#34;&#34;
     kind: str
@@ -1355,7 +1391,6 @@ plugin.</dd>
         &#39;name&#39;
     ]
 
-
     def __init__(self, kind, name, config, **kwargs):
         super(Plugin, self).__init__(**kwargs)
         self.kind = kind
@@ -1367,6 +1402,21 @@ plugin.</dd>
 <li><a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase">OutlineBase</a></li>
 <li>abc.ABC</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.story.outline.Plugin.kind"><code class="name">var <span class="ident">kind</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.Plugin.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.Plugin.config"><code class="name">var <span class="ident">config</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase">OutlineBase</a></b></code>:
@@ -1384,36 +1434,36 @@ plugin.</dd>
 </dd>
 <dt id="presalytics.story.outline.Widget"><code class="flex name class">
 <span>class <span class="ident">Widget</span></span>
-<span>(</span><span>name, kind, data, plugins=None, **kwargs)</span>
+<span>(</span><span>name, kind, data, id=None, plugins=None, **kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>A represenation of an analytic or graphic object to be rendered within a
-<a title="presalytics.story.outline.Page" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page"><code>Page</code></a>. At render-time, the <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS"><code>COMPONENTS</code></a>
+<code><a title="presalytics.story.outline.Page" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page">Page</a></code>. At render-time, the <code><a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS">COMPONENTS</a></code>
 registry is queried for a matching class or instance. If found, the widget is
 rendered.</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>kind</code></strong> :&ensp;<code>str</code></dt>
 <dd>The kind of Widget. Typically corresponds to a class that inherits from
-<a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase"><code>WidgetBase</code></a></dd>
+<code><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></code></dd>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>The name of the Widget.
 Correpsonds to a local instance of
-<a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase"><code>WidgetBase</code></a> loaded into <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS"><code>COMPONENTS</code></a></dd>
+<code><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></code> loaded into <code><a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS">COMPONENTS</a></code></dd>
 <dt><strong><code>data</code></strong> :&ensp;<code>dict</code></dt>
-<dd>Widget data required so the corresponding subclass of <a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase"><code>WidgetBase</code></a>
+<dd>Widget data required so the corresponding subclass of <code><a title="presalytics.story.components.WidgetBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.WidgetBase">WidgetBase</a></code>
 can initialize and render</dd>
-<dt><strong><code>plugins</code></strong> :&ensp;<code>list</code> of <a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin"><code>Plugin</code></a></dt>
+<dt><strong><code>plugins</code></strong> :&ensp;<code>list</code> of <code><a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin">Plugin</a></code></dt>
 <dd>A list of plugins that must be rendered alongside this widget</dd>
 </dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L320-L365" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L320-L367" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Widget(OutlineBase):
     &#34;&#34;&#34;
-    A represenation of an analytic or graphic object to be rendered within a 
+    A represenation of an analytic or graphic object to be rendered within a
     `presalytics.story.outline.Page`. At render-time, the `presalytics.COMPONENTS`
     registry is queried for a matching class or instance. If found, the widget is
     rendered.
@@ -1421,17 +1471,17 @@ can initialize and render</dd>
     Attributes
     ----------
     kind : str
-        The kind of Widget. Typically corresponds to a class that inherits from 
+        The kind of Widget. Typically corresponds to a class that inherits from
         `presalytics.story.components.WidgetBase`
 
     name : str
-        The name of the Widget.  Correpsonds to a local instance of 
+        The name of the Widget.  Correpsonds to a local instance of
         `presalytics.story.components.WidgetBase` loaded into `presalytics.COMPONENTS`
 
     data : dict
         Widget data required so the corresponding subclass of `presalytics.story.components.WidgetBase`
         can initialize and render
-        
+
     plugins : list of presalytics.story.outline.Plugin
         A list of plugins that must be rendered alongside this widget
     &#34;&#34;&#34;
@@ -1442,13 +1492,15 @@ can initialize and render</dd>
 
     __required__ = [
         &#39;name&#39;,
-        &#39;data&#39;
+        &#39;data&#39;,
+        &#39;id&#39;
     ]
 
-    def __init__(self, name, kind, data, plugins=None, **kwargs):
+    def __init__(self, name, kind, data, id=None, plugins=None, **kwargs):
         super(Widget, self).__init__(**kwargs)
         self.name = name
         self.kind = kind
+        self.id = id if id else uuid.uuid4()
         if data:
             self.data = data
         else:
@@ -1463,6 +1515,25 @@ can initialize and render</dd>
 <li><a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase">OutlineBase</a></li>
 <li>abc.ABC</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.story.outline.Widget.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.Widget.kind"><code class="name">var <span class="ident">kind</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.Widget.data"><code class="name">var <span class="ident">data</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.Widget.plugins"><code class="name">var <span class="ident">plugins</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase">OutlineBase</a></b></code>:
@@ -1480,31 +1551,31 @@ can initialize and render</dd>
 </dd>
 <dt id="presalytics.story.outline.Page"><code class="flex name class">
 <span>class <span class="ident">Page</span></span>
-<span>(</span><span>name, kind, widgets, plugins=None, **kwargs)</span>
+<span>(</span><span>name, kind, widgets, id=None, plugins=None, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>A representation of a canvas on which <a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget"><code>Widget</code></a> objects
-can be rendered. At render-time, the <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS"><code>COMPONENTS</code></a>
+<section class="desc"><p>A representation of a canvas on which <code><a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget">Widget</a></code> objects
+can be rendered. At render-time, the <code><a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS">COMPONENTS</a></code>
 registry is queried for a matching class. If found, the page and its
 widgets are rendered.</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>kind</code></strong> :&ensp;<code>str</code></dt>
 <dd>The kind of Page. Typically corresponds to a class that inherits from
-<a title="presalytics.story.components.PageTemplateBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase"><code>PageTemplateBase</code></a></dd>
+<code><a title="presalytics.story.components.PageTemplateBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.PageTemplateBase">PageTemplateBase</a></code></dd>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>The name of the Page.
 A name must be unique within a
-given <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS"><code>COMPONENTS</code></a> registry</dd>
-<dt><strong><code>widgets</code></strong> :&ensp;<code>list</code> of <a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget"><code>Widget</code></a></dt>
+given <code><a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS">COMPONENTS</a></code> registry</dd>
+<dt><strong><code>widgets</code></strong> :&ensp;<code>list</code> of <code><a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget">Widget</a></code></dt>
 <dd>Widgets that will be rendered along with the page</dd>
-<dt><strong><code>plugins</code></strong> :&ensp;<code>list</code> of <a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin"><code>Plugin</code></a></dt>
+<dt><strong><code>plugins</code></strong> :&ensp;<code>list</code> of <code><a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin">Plugin</a></code></dt>
 <dd>A list of plugins that must be rendered alongside this widget</dd>
 </dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L368-L413" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L370-L417" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Page(OutlineBase):
     &#34;&#34;&#34;
@@ -1516,16 +1587,16 @@ given <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.h
     Attributes
     ----------
     kind : str
-        The kind of Page. Typically corresponds to a class that inherits from 
+        The kind of Page. Typically corresponds to a class that inherits from
         `presalytics.story.components.PageTemplateBase`
 
     name : str
-        The name of the Page.  A name must be unique within a 
+        The name of the Page.  A name must be unique within a
         given `presalytics.COMPONENTS` registry
 
     widgets : list of presalytics.story.outline.Widget
-        Widgets that will be rendered along with the page        
-        
+        Widgets that will be rendered along with the page
+
     plugins : list of presalytics.story.outline.Plugin
         A list of plugins that must be rendered alongside this widget
 
@@ -1537,13 +1608,15 @@ given <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.h
 
     __required__ = [
         &#39;name&#39;,
-        &#39;kind&#39;
+        &#39;kind&#39;,
+        &#39;id&#39;
     ]
 
-    def __init__(self, name, kind, widgets, plugins=None, **kwargs):
+    def __init__(self, name, kind, widgets, id=None, plugins=None, **kwargs):
         super(Page, self).__init__(**kwargs)
         self.name = name
         self.kind = kind
+        self.id = id if id else uuid.uuid4()
         if widgets:
             self.widgets = [Widget.deserialize(x) for x in widgets]
         else:
@@ -1558,6 +1631,25 @@ given <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.h
 <li><a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase">OutlineBase</a></li>
 <li>abc.ABC</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.story.outline.Page.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.Page.kind"><code class="name">var <span class="ident">kind</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.Page.widgets"><code class="name">var <span class="ident">widgets</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.Page.plugins"><code class="name">var <span class="ident">plugins</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase">OutlineBase</a></b></code>:
@@ -1579,48 +1671,48 @@ given <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.h
 </code></dt>
 <dd>
 <section class="desc"><p>A container for story properties that persist accross all pages of story. At render-time,
-the <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS"><code>COMPONENTS</code></a> registry is queried for a matching class. If found, the theme is
+the <code><a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS">COMPONENTS</a></code> registry is queried for a matching class. If found, the theme is
 incorporated into the story.</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>kind</code></strong> :&ensp;<code>str</code></dt>
 <dd>The kind of Theme. Typically corresponds to a class that inherits from
-<a title="presalytics.story.components.ThemeBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ThemeBase"><code>ThemeBase</code></a></dd>
+<code><a title="presalytics.story.components.ThemeBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ThemeBase">ThemeBase</a></code></dd>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>The name of the Theme.
 Corresponds to a local instance of
-<a title="presalytics.story.components.ThemeBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ThemeBase"><code>ThemeBase</code></a> loaded into <a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS"><code>COMPONENTS</code></a></dd>
+<code><a title="presalytics.story.components.ThemeBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ThemeBase">ThemeBase</a></code> loaded into <code><a title="presalytics.COMPONENTS" href="/python-client/presalytics/index.html#presalytics.COMPONENTS">COMPONENTS</a></code></dd>
 <dt><strong><code>data</code></strong> :&ensp;<code>dict</code></dt>
-<dd>Widget data required so the corresponding subclass of <a title="presalytics.story.components.ThemeBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ThemeBase"><code>ThemeBase</code></a>
+<dd>Widget data required so the corresponding subclass of <code><a title="presalytics.story.components.ThemeBase" href="/python-client/presalytics/story/components.html#presalytics.story.components.ThemeBase">ThemeBase</a></code>
 can initialize and render</dd>
-<dt><strong><code>plugins</code></strong> :&ensp;<code>A</code> <code>list</code> of <a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin"><code>Plugin</code></a></dt>
+<dt><strong><code>plugins</code></strong> :&ensp;<code>A list</code> of <code><a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin">Plugin</a></code></dt>
 <dd>A list of plugins that must be rendered alongside this widget</dd>
 </dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L416-L459" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L420-L463" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class Theme(OutlineBase):
     &#34;&#34;&#34;
-    A container for story properties that persist accross all pages of story. At render-time, 
+    A container for story properties that persist accross all pages of story. At render-time,
     the `presalytics.COMPONENTS` registry is queried for a matching class. If found, the theme is
     incorporated into the story.
 
     Attributes
     ----------
     kind : str
-        The kind of Theme. Typically corresponds to a class that inherits from 
+        The kind of Theme. Typically corresponds to a class that inherits from
         `presalytics.story.components.ThemeBase`
 
     name : str
-        The name of the Theme.  Corresponds to a local instance of 
+        The name of the Theme.  Corresponds to a local instance of
         `presalytics.story.components.ThemeBase` loaded into `presalytics.COMPONENTS`
 
     data : dict
         Widget data required so the corresponding subclass of `presalytics.story.components.ThemeBase`
         can initialize and render
-        
+
     plugins : A list of presalytics.story.outline.Plugin
         A list of plugins that must be rendered alongside this widget
     &#34;&#34;&#34;
@@ -1651,6 +1743,25 @@ can initialize and render</dd>
 <li><a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase">OutlineBase</a></li>
 <li>abc.ABC</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.story.outline.Theme.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.Theme.kind"><code class="name">var <span class="ident">kind</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.Theme.data"><code class="name">var <span class="ident">data</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.Theme.plugins"><code class="name">var <span class="ident">plugins</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase">OutlineBase</a></b></code>:
@@ -1668,14 +1779,14 @@ can initialize and render</dd>
 </dd>
 <dt id="presalytics.story.outline.StoryOutline"><code class="flex name class">
 <span>class <span class="ident">StoryOutline</span></span>
-<span>(</span><span>info, pages, description, title, themes, plugins=None, story_id='empty', **kwargs)</span>
+<span>(</span><span>info, pages, description, title, themes, plugins=None, id=None, story_id='empty', **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>A StoryOutline contains instructions for a <a title="presalytics.story.components.Renderer" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer"><code>Renderer</code></a>
-(e.g., <a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer"><code>Revealer</code></a>) to render an story into html.</p>
+<section class="desc"><p>A StoryOutline contains instructions for a <code><a title="presalytics.story.components.Renderer" href="/python-client/presalytics/story/components.html#presalytics.story.components.Renderer">Renderer</a></code>
+(e.g., <code><a title="presalytics.story.revealer.Revealer" href="/python-client/presalytics/story/revealer.html#presalytics.story.revealer.Revealer">Revealer</a></code>) to render an story into html.</p>
 <p>A story outline's <code>info</code>, <code>pages</code>, <code>widgets</code>, and <code>themes</code> are intended to be easily editable
 by both human users and machines via json serialization and deserialization, and the ecosystem
-of tools that can be used to edit json objects. Once a valid <a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline"><code>StoryOutline</code></a> is
+of tools that can be used to edit json objects. Once a valid <code><a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline">StoryOutline</a></code> is
 built, it contains sufficient instructions for this library find the required components in the user's
 workspace and render theme.</p>
 <p>StoryOutlines are stored in the <a href="https://presalytics.io/docs/api-specifications/story/">Presalytics API Story Service</a>.
@@ -1687,12 +1798,12 @@ section of the website.</p>
 <dl>
 <dt><strong><code>outline_version</code></strong> :&ensp;<code>str</code></dt>
 <dd>the version of that StoryOuline schema.</dd>
-<dt><strong><code>info</code></strong> :&ensp;<a title="presalytics.story.outline.Info" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Info"><code>Info</code></a></dt>
+<dt><strong><code>info</code></strong> :&ensp;<code><a title="presalytics.story.outline.Info" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Info">Info</a></code></dt>
 <dd>Metadata about this StoryOutline</dd>
-<dt><strong><code>pages</code></strong> :&ensp;<code>list</code> of <a title="presalytics.story.outline.Page" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page"><code>Page</code></a></dt>
+<dt><strong><code>pages</code></strong> :&ensp;<code>list</code> of <code><a title="presalytics.story.outline.Page" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page">Page</a></code></dt>
 <dd>The pages that will be rendered in this story</dd>
-<dt><strong><code>themes</code></strong> :&ensp;<code>list</code> of <a title="presalytics.story.outline.Theme" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Theme"><code>Theme</code></a></dt>
-<dd>The themes that will underlie each <a title="presalytics.story.outline.Page" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page"><code>Page</code></a> in the StoryOutline</dd>
+<dt><strong><code>themes</code></strong> :&ensp;<code>list</code> of <code><a title="presalytics.story.outline.Theme" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Theme">Theme</a></code></dt>
+<dd>The themes that will underlie each <code><a title="presalytics.story.outline.Page" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page">Page</a></code> in the StoryOutline</dd>
 <dt><strong><code>title</code></strong> :&ensp;<code>str</code>, optional</dt>
 <dd>A title for the story</dd>
 <dt><strong><code>description</code></strong> :&ensp;<code>str</code>, optional</dt>
@@ -1705,11 +1816,11 @@ the server.</dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L462-L546" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/outline.py#L466-L551" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">class StoryOutline(OutlineBase):
     &#34;&#34;&#34;
-    A StoryOutline contains instructions for a `presalytics.story.components.Renderer` 
+    A StoryOutline contains instructions for a `presalytics.story.components.Renderer`
     (e.g., `presalytics.story.revealer.Revealer`) to render an story into html.
 
     A story outline&#39;s `info`, `pages`, `widgets`, and `themes` are intended to be easily editable
@@ -1728,22 +1839,22 @@ the server.</dd>
 
     outline_version : str
         the version of that StoryOuline schema.
-    
+
     info : presalytics.story.outline.Info
         Metadata about this StoryOutline
-    
+
     pages : list of presalytics.story.outline.Page
         The pages that will be rendered in this story
-    
+
     themes : list of presalytics.story.outline.Theme
         The themes that will underlie each `presalytics.story.outline.Page` in the StoryOutline
-    
+
     title : str, optional
         A title for the story
 
     description: str, optional
         A description of the story
-    
+
     story_id : str, optional
         The Presalytics API Story Id.  Automatically added once the story outline has been pushed to
         the server.
@@ -1755,16 +1866,17 @@ the server.</dd>
     description: str
     title: str
     themes: typing.List[Theme]
-    story_id: str
+    id: str
 
     __required__ = [
         &#39;outline_version&#39;,
         &#39;info&#39;,
         &#39;pages&#39;,
         &#39;title&#39;,
+        &#39;id&#39;
     ]
 
-    def __init__(self, info, pages, description, title, themes, plugins=None, story_id=&#34;empty&#34;, **kwargs):
+    def __init__(self, info, pages, description, title, themes, plugins=None, id=None, story_id=&#34;empty&#34;, **kwargs):
         super(StoryOutline, self).__init__(**kwargs)
         self.outline_version = get_current_spec_version()
         self.info = Info.deserialize(info)
@@ -1785,7 +1897,7 @@ the server.</dd>
             self.plugins = [Plugin.deserialize(x) for x in plugins]
         else:
             self.plugins = []
-        self.story_id = story_id
+        self.id = id or story_id
         if not kwargs.get(&#34;validate&#34;, True):
             self.validate()
 
@@ -1798,6 +1910,37 @@ the server.</dd>
 <li><a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase">OutlineBase</a></li>
 <li>abc.ABC</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="presalytics.story.outline.StoryOutline.outline_version"><code class="name">var <span class="ident">outline_version</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.StoryOutline.info"><code class="name">var <span class="ident">info</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.StoryOutline.pages"><code class="name">var <span class="ident">pages</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.StoryOutline.description"><code class="name">var <span class="ident">description</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.StoryOutline.title"><code class="name">var <span class="ident">title</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.StoryOutline.themes"><code class="name">var <span class="ident">themes</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="presalytics.story.outline.StoryOutline.id"><code class="name">var <span class="ident">id</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase">OutlineBase</a></b></code>:
@@ -1845,7 +1988,7 @@ the server.</dd>
 </li>
 <li>
 <h4><code><a title="presalytics.story.outline.OutlineBase" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase">OutlineBase</a></code></h4>
-<ul class="two-column">
+<ul class="">
 <li><code><a title="presalytics.story.outline.OutlineBase.deserialize" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase.deserialize">deserialize</a></code></li>
 <li><code><a title="presalytics.story.outline.OutlineBase.load" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase.load">load</a></code></li>
 <li><code><a title="presalytics.story.outline.OutlineBase.import_yaml" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase.import_yaml">import_yaml</a></code></li>
@@ -1853,25 +1996,66 @@ the server.</dd>
 <li><code><a title="presalytics.story.outline.OutlineBase.export_yaml" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase.export_yaml">export_yaml</a></code></li>
 <li><code><a title="presalytics.story.outline.OutlineBase.dump" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase.dump">dump</a></code></li>
 <li><code><a title="presalytics.story.outline.OutlineBase.to_dict" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase.to_dict">to_dict</a></code></li>
+<li><code><a title="presalytics.story.outline.OutlineBase.additional_properties" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.OutlineBase.additional_properties">additional_properties</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="presalytics.story.outline.Info" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Info">Info</a></code></h4>
+<ul class="two-column">
+<li><code><a title="presalytics.story.outline.Info.revision" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Info.revision">revision</a></code></li>
+<li><code><a title="presalytics.story.outline.Info.date_created" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Info.date_created">date_created</a></code></li>
+<li><code><a title="presalytics.story.outline.Info.date_modified" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Info.date_modified">date_modified</a></code></li>
+<li><code><a title="presalytics.story.outline.Info.created_by" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Info.created_by">created_by</a></code></li>
+<li><code><a title="presalytics.story.outline.Info.modified_by" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Info.modified_by">modified_by</a></code></li>
+<li><code><a title="presalytics.story.outline.Info.revision_notes" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Info.revision_notes">revision_notes</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="presalytics.story.outline.Plugin" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin">Plugin</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.story.outline.Plugin.kind" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin.kind">kind</a></code></li>
+<li><code><a title="presalytics.story.outline.Plugin.name" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin.name">name</a></code></li>
+<li><code><a title="presalytics.story.outline.Plugin.config" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Plugin.config">config</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="presalytics.story.outline.Widget" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget">Widget</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.story.outline.Widget.name" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget.name">name</a></code></li>
+<li><code><a title="presalytics.story.outline.Widget.kind" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget.kind">kind</a></code></li>
+<li><code><a title="presalytics.story.outline.Widget.data" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget.data">data</a></code></li>
+<li><code><a title="presalytics.story.outline.Widget.plugins" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Widget.plugins">plugins</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="presalytics.story.outline.Page" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page">Page</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.story.outline.Page.name" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page.name">name</a></code></li>
+<li><code><a title="presalytics.story.outline.Page.kind" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page.kind">kind</a></code></li>
+<li><code><a title="presalytics.story.outline.Page.widgets" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page.widgets">widgets</a></code></li>
+<li><code><a title="presalytics.story.outline.Page.plugins" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Page.plugins">plugins</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="presalytics.story.outline.Theme" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Theme">Theme</a></code></h4>
+<ul class="">
+<li><code><a title="presalytics.story.outline.Theme.name" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Theme.name">name</a></code></li>
+<li><code><a title="presalytics.story.outline.Theme.kind" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Theme.kind">kind</a></code></li>
+<li><code><a title="presalytics.story.outline.Theme.data" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Theme.data">data</a></code></li>
+<li><code><a title="presalytics.story.outline.Theme.plugins" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.Theme.plugins">plugins</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="presalytics.story.outline.StoryOutline" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline">StoryOutline</a></code></h4>
+<ul class="two-column">
+<li><code><a title="presalytics.story.outline.StoryOutline.outline_version" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline.outline_version">outline_version</a></code></li>
+<li><code><a title="presalytics.story.outline.StoryOutline.info" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline.info">info</a></code></li>
+<li><code><a title="presalytics.story.outline.StoryOutline.pages" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline.pages">pages</a></code></li>
+<li><code><a title="presalytics.story.outline.StoryOutline.description" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline.description">description</a></code></li>
+<li><code><a title="presalytics.story.outline.StoryOutline.title" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline.title">title</a></code></li>
+<li><code><a title="presalytics.story.outline.StoryOutline.themes" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline.themes">themes</a></code></li>
+<li><code><a title="presalytics.story.outline.StoryOutline.id" href="/python-client/presalytics/story/outline.html#presalytics.story.outline.StoryOutline.id">id</a></code></li>
+</ul>
 </li>
 </ul>
 </li>
@@ -1879,7 +2063,7 @@ the server.</dd>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

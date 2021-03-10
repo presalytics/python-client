@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>presalytics.story.util API documentation</title>
-<meta name="description" content="Utility functions for the presalytics.story module" />
+<meta name="description" content="Utility functions for the presalytics.story module
+for backward compatibility" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,50 +21,23 @@
 <h1 class="title">Module <code>presalytics.story.util</code></h1>
 </header>
 <section id="section-intro">
-<p>Utility functions for the presalytics.story module</p>
+<p>Utility functions for the presalytics.story module
+for backward compatibility</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/util.py#L0-L37" class="git-link">Browse git</a>
+<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/util.py#L0-L9" class="git-link">Browse git</a>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
 Utility functions for the presalytics.story module
+for backward compatibility
 &#34;&#34;&#34;
-import re
-import logging
-import typing
-
-logger = logging.getLogger(&#39;presalytics.story.util&#39;)
-
-
-def to_snake_case(camel_case_str):
-    s1 = re.sub(&#39;(.)([A-Z][a-z]+)&#39;, r&#39;\1_\2&#39;, camel_case_str)
-    return re.sub(&#39;([a-z0-9])([A-Z])&#39;, r&#39;\1_\2&#39;, s1).lower()
-
-
-def to_camel_case(snake_str):
-    components = snake_str.split(&#39;_&#39;)
-    return components[0] + &#39;&#39;.join(x.title() for x in components[1:])
-
-
-def to_title_case(name_string):
-    try:
-        components = re.split(&#39;_| &#39;, name_string)
-        return &#39;&#39;.join(x[0].upper() + x[1:] for x in components)
-    except Exception:
-        return name_string.replace(&#34; &#34;, &#34;&#34;)
-
-
-def camel_case_split(str): 
-    words = [[str[0]]] 
-  
-    for c in str[1:]: 
-        if words[-1][-1].islower() and c.isupper(): 
-            words.append(list(c)) 
-        else: 
-            words[-1].append(c) 
-  
-    return [&#39;&#39;.join(word) for word in words] </code></pre>
+from presalytics.lib.util import (  # noqa: F401
+    to_snake_case,
+    to_camel_case,
+    to_title_case,
+    camel_case_split
+)</code></pre>
 </details>
 </section>
 <section>
@@ -71,79 +45,6 @@ def camel_case_split(str):
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
-<dl>
-<dt id="presalytics.story.util.to_snake_case"><code class="name flex">
-<span>def <span class="ident">to_snake_case</span></span>(<span>camel_case_str)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/util.py#L11-L13" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def to_snake_case(camel_case_str):
-    s1 = re.sub(&#39;(.)([A-Z][a-z]+)&#39;, r&#39;\1_\2&#39;, camel_case_str)
-    return re.sub(&#39;([a-z0-9])([A-Z])&#39;, r&#39;\1_\2&#39;, s1).lower()</code></pre>
-</details>
-</dd>
-<dt id="presalytics.story.util.to_camel_case"><code class="name flex">
-<span>def <span class="ident">to_camel_case</span></span>(<span>snake_str)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/util.py#L16-L18" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def to_camel_case(snake_str):
-    components = snake_str.split(&#39;_&#39;)
-    return components[0] + &#39;&#39;.join(x.title() for x in components[1:])</code></pre>
-</details>
-</dd>
-<dt id="presalytics.story.util.to_title_case"><code class="name flex">
-<span>def <span class="ident">to_title_case</span></span>(<span>name_string)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/util.py#L21-L26" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def to_title_case(name_string):
-    try:
-        components = re.split(&#39;_| &#39;, name_string)
-        return &#39;&#39;.join(x[0].upper() + x[1:] for x in components)
-    except Exception:
-        return name_string.replace(&#34; &#34;, &#34;&#34;)</code></pre>
-</details>
-</dd>
-<dt id="presalytics.story.util.camel_case_split"><code class="name flex">
-<span>def <span class="ident">camel_case_split</span></span>(<span>str)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-<a href="https://github.com/presalytics/python-client/blob/master/presalytics/story/util.py#L29-L38" class="git-link">Browse git</a>
-</summary>
-<pre><code class="python">def camel_case_split(str): 
-    words = [[str[0]]] 
-  
-    for c in str[1:]: 
-        if words[-1][-1].islower() and c.isupper(): 
-            words.append(list(c)) 
-        else: 
-            words[-1].append(c) 
-  
-    return [&#39;&#39;.join(word) for word in words] </code></pre>
-</details>
-</dd>
-</dl>
 </section>
 <section>
 </section>
@@ -159,19 +60,11 @@ def camel_case_split(str):
 <li><code><a title="presalytics.story" href="/python-client/presalytics/story/index.html">presalytics.story</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="">
-<li><code><a title="presalytics.story.util.to_snake_case" href="/python-client/presalytics/story/util.html#presalytics.story.util.to_snake_case">to_snake_case</a></code></li>
-<li><code><a title="presalytics.story.util.to_camel_case" href="/python-client/presalytics/story/util.html#presalytics.story.util.to_camel_case">to_camel_case</a></code></li>
-<li><code><a title="presalytics.story.util.to_title_case" href="/python-client/presalytics/story/util.html#presalytics.story.util.to_title_case">to_title_case</a></code></li>
-<li><code><a title="presalytics.story.util.camel_case_split" href="/python-client/presalytics/story/util.html#presalytics.story.util.camel_case_split">camel_case_split</a></code></li>
-</ul>
-</li>
 </ul>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

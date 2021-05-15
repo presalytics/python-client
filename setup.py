@@ -9,7 +9,7 @@ import os
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "presalytics"
-VERSION = "0.6.1"
+VERSION = "0.6.4"
 
 # To install the library, run the following
 #

@@ -86,7 +86,7 @@ class ClientSideRenderer(presalytics.story.components.Renderer):
 
         A dictionary of lists of html fragments with 3 keys: `pages`, `styles` and `scripts`
         """
-        pages = self.render()
+        pages = [lxml.html.tostring(p).decode('utf-8') for p in self.render()]
         scripts = self.plugin_mgr.get_scripts()
         styles = self.plugin_mgr.get_styles()
         if base64:

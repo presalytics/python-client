@@ -5,6 +5,17 @@
 - [ ] Add `presalytics.lib.tools.workflow.create_workspace`
 - [ ] Change file handling support beyond ooxml files
 
+## v0.6.4
+
+- [x] Fix `presalytics.story.renderers.ClientSideRender` bug
+
+## v0.6.3
+
+- [x] Add settings_path environ
+
+## v0.6.2
+
+- [x] Remove pkg_resources
 
 ## v0.6.1
 

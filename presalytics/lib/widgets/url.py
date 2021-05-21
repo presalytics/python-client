@@ -64,7 +64,7 @@ class UrlWidget(presalytics.story.components.WidgetBase):
             'src': self.url,
             'frameborder': "0",
             'scrolling': "auto",
-            'class': 'd3-responsive-frame',
+            'class': 'd3-responsive-frame presalytics-cached',
             'style': 'max-height: none; max-width: none; height:100%; width: 100%;',
             'sandbox': 'allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox'
         })

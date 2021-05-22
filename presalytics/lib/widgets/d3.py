@@ -248,7 +248,7 @@ class D3Widget(presalytics.story.components.WidgetBase):
             </head>
             <body>
                 <script type="text/javascript" src="{{ d3_url }}"></script>
-                <script type="text/javascript" src="{{ events_url }}"></script>
+                <!-- <script type="text/javascript" src="{{ events_url }}"></script> -->
                 <div id="{{ id }}" class="d3-container">{{ html_fragment }}</div>
                 <script type="text/javascript">
 

@@ -222,7 +222,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
             <body>
                 <script type="text/javascript" src="{{ d3_url }}"></script>
                 <script type="text/javascript" src="{{ mpld3_url }}"></script>
-                <script type="text/javascript" src="{{ events_url }}"></script>
+                <!-- <script type="text/javascript" src="{{ events_url }}"></script> -->
                 <div id="{{ figid }}"></div>
                 <script type="text/javascript">
 

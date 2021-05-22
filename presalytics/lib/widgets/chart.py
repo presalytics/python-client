@@ -183,7 +183,7 @@ class ChartWidget(presalytics.story.components.WidgetBase):
                 <link href="{{c3_styles_url}}" rel="stylesheet"/>
                 <script type="text/javascript" src="{{ d3_url }}"></script>
                 <script type="text/javascript" src="{{ c3_script_url }}"></script>
-                <script type="text/javascript" src="{{ events_url }}"></script>
+                <!-- <script type="text/javascript" src="{{ events_url }}"></script> -->
                 <div id="chart" class="chart-container"></div>
                 <script type="text/javascript">
 

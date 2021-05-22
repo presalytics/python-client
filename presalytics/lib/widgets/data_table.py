@@ -183,7 +183,7 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
                 <link href="{{bootstrap4_css_url}}" rel="stylesheet"/>
                 <link href="{{font_awesome_url}}" rel="stylesheet"/>
                 <link href="{{bootstrap_table_css_url}}" rel="stylesheet"/>
-                <script type="text/javascript" src="{{ events_url }}"></script>
+                <!-- <script type="text/javascript" src="{{ events_url }}"></script> -->
                 <div id="table" class="data-table-container"></div>
                 <script type="text/javascript" src="{{ jquery_url }}"></script>
                 <script type="text/javascript" src="{{ popper_url }}"></script>

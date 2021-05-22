@@ -153,6 +153,10 @@
         "id"
       ]
     },
+    "thumbnail": {
+      "type": "string",
+      "format": "uri"
+    },
     "page": {
       "type": "object",
       "title": "Page",
@@ -166,6 +170,9 @@
         },
         "kind": {
           "$ref": "#/definitions/kind"
+        },
+        "thumbnail": {
+          "$ref": "#/definitions/thumbnail"
         },
         "widgets": {
           "title": "Widget List",

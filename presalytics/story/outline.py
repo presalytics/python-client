@@ -393,6 +393,7 @@ class Page(OutlineBase):
     """
     name: str
     kind: str
+    thumbnail: str
     widgets: typing.Sequence[Widget]
     plugins: typing.List[Plugin]
 
@@ -402,10 +403,11 @@ class Page(OutlineBase):
         'id'
     ]
 
-    def __init__(self, name, kind, widgets, id=None, plugins=None, **kwargs):
+    def __init__(self, name, kind, widgets, id=None, plugins=None, thumbnail=None, **kwargs):
         super(Page, self).__init__(**kwargs)
         self.name = name
         self.kind = kind
+        self.thumbnail = thumbnail
         self.id = id if id else uuid.uuid4()
         if widgets:
             self.widgets = [Widget.deserialize(x) for x in widgets]

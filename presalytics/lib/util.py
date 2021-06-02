@@ -43,9 +43,8 @@ def import_string(dotted_path) -> type:
         raise ImportError("%s doesn't look like a module path" % dotted_path) from err
 
     module = importlib.import_module(module_path)
-
     try:
-        return getattr(module, class_name)
+        return getattr(module, class_name)  # type: ignore
     except AttributeError as err:
         raise ImportError('Module "%s" does not define a "%s" attribute/class' % (
             module_path, class_name)
@@ -86,3 +85,27 @@ def list_to_base64(string_list: typing.List[str]) -> typing.List[str]:
         bts = base64.b64encode(item.encode('ascii'))
         return_list.append(bts.decode('ascii'))
     return return_list
+
+
+def dict_to_camelCase(dct: typing.Dict):
+    tmp = dict()
+    for k, v in dct.items():
+        val = v
+        if isinstance(v, dict):
+            val = dict_to_camelCase(v)
+        key = to_camel_case(k)
+        tmp[key] = val
+    return tmp
+
+
+def dict_to_snake_case(dct: typing.Dict):
+    tmp = dict()
+    for k, v in dct.items():
+        val = v
+        if isinstance(v, dict):
+            val = dict_to_snake_case(v)
+        key = to_snake_case(k)
+        tmp[key] = val
+    return tmp
+
+

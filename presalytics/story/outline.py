@@ -15,7 +15,7 @@ import typing
 import os
 import semantic_version
 import jsonschema
-from presalytics.story.util import to_camel_case, to_snake_case
+from presalytics.lib.util import to_camel_case, to_snake_case, dict_to_snake_case
 from presalytics.lib.exceptions import ValidationError
 
 
@@ -165,7 +165,7 @@ class OutlineBase(abc.ABC):
         A `class` instance
         """
         json_obj = json.loads(json_str)
-        return cls.deserialize(json_obj)
+        return cls.deserialize(dict_to_snake_case(json_obj))
 
     @classmethod
     def import_yaml(cls, yaml_file: str):
@@ -393,7 +393,6 @@ class Page(OutlineBase):
     """
     name: str
     kind: str
-    thumbnail: str
     widgets: typing.Sequence[Widget]
     plugins: typing.List[Plugin]
 
@@ -403,11 +402,10 @@ class Page(OutlineBase):
         'id'
     ]
 
-    def __init__(self, name, kind, widgets, id=None, plugins=None, thumbnail=None, **kwargs):
+    def __init__(self, name, kind, widgets, id=None, plugins=None, **kwargs):
         super(Page, self).__init__(**kwargs)
         self.name = name
         self.kind = kind
-        self.thumbnail = thumbnail
         self.id = id if id else uuid.uuid4()
         if widgets:
             self.widgets = [Widget.deserialize(x) for x in widgets]
@@ -551,3 +549,19 @@ class StoryOutline(OutlineBase):
         def validate(self):
             super(StoryOutline, self).validate()
             jsonschema.validate(instance=self.to_dict(), schema=load_latest_schema())
+
+
+class OutlineDecoder(json.JSONDecoder):
+
+    def __init__(self, *args, **kwargs):
+        json.JSONDecoder.__init__(self, object_hook=self.object_hook, *args, **kwargs)
+
+    def object_hook(self, dct):
+        try:
+            snake_case_dict = dict_to_snake_case(dct)
+            is_outline_dict = all(snake_case_dict.get(prop) is not None for prop in StoryOutline.__required__)
+            if is_outline_dict:
+                return StoryOutline(**snake_case_dict)
+        except Exception:
+            pass
+        return dct

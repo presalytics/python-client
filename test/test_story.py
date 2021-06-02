@@ -83,7 +83,7 @@ class TestStory(unittest.TestCase):
         if _debug:
             presalytics.settings.DEBUG = _debug
 
-    def text_replace_transform_test(self):
+    def test_text_replace_transform_test(self):
         test_file = os.path.join(os.path.dirname(__file__), 'files', 'ooxml_test_2.xml')
         test_element = lxml.etree.parse(test_file)
         params = {
@@ -100,7 +100,7 @@ class TestStory(unittest.TestCase):
         for _, val in params.items():
             self.assertTrue(val in updates)
 
-    def upload_from_json(self):
+    def test_upload_from_json(self):
         from presalytics.client.story import FileUpload
 
         test_file = os.path.join(os.path.dirname(__file__), 'files', 'bubblechart.pptx')
@@ -120,7 +120,7 @@ class TestStory(unittest.TestCase):
         from presalytics.client.story import Story
         self.assertTrue(isinstance(story, Story))
 
-    def d3(self):
+    def test_d3(self):
 
         widget = presalytics.lib.widgets.d3.D3Widget(
             'test-widget',
@@ -154,7 +154,14 @@ class TestStory(unittest.TestCase):
 
         # outline = presalytics.lib.tools.component_tools.create_outline_from_widget(widget)
 
-        # client.story.story_post({"outline": outline.dump()})ks
+        # client.story.story_post({"outline": outline.dump()})
+
+    def test_encode_decode(self):
+        test_file = os.path.join(os.path.dirname(__file__), 'files', 'matplotlib-outline.yaml')
+        outline = presalytics.story.outline.StoryOutline.import_yaml(test_file)
+        outline_str = outline.dump()
+        decoded = presalytics.story.outline.OutlineDecoder().decode(outline_str)
+        self.assertIsInstance(decoded, presalytics.story.outline.StoryOutline)
 
     def tearDown(self):
         pass

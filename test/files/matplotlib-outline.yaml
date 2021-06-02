@@ -1,35 +1,36 @@
 outlineVersion: 0.1.1
+id: a7100d48-c96f-41e1-82f3-c63d72554be0
 info:
   revision: 0.1.1
-  dateCreated: '2019-11-7'
-  dateModified: '2019-11-7'
+  dateCreated: "2019-11-7"
+  dateModified: "2019-11-7"
   createdBy: Kevin
   modifiedBy: Kevin
-  revisionNotes: IntialCreate 
+  revisionNotes: IntialCreate
 title: Test-story
 description: tests whether the story revealer can render a matplotlib plot
 pages:
   - name: TestPage
     kind: TitleWithSingleItem
     additionalProperties:
-      title: Example plot 
+      title: Example plot
     widgets:
       - name: test_plot_1
         kind: matplotlib-figure
         data:
           temp: data
         plugins:
-        - name: mpld3
-          kind: script
-          config:
-            temp: data
+          - name: mpld3
+            kind: script
+            config:
+              temp: data
         additionalProperties:
           module: test.files.test_plots
 themes:
-- name: white
-  kind: PluginOnly
-  plugins:
-  - name: external_links
-    kind: style
-    config:
-      approved_styles_key: reveal.themes.white
+  - name: white
+    kind: PluginOnly
+    plugins:
+      - name: external_links
+        kind: style
+        config:
+          approved_styles_key: reveal.themes.white

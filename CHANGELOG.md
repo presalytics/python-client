@@ -8,6 +8,7 @@
 ## v0.6.4
 
 - [x] Fix `presalytics.story.renderers.ClientSideRender` bug
+- [x] Add `presalytics.story.outline.OutlineDecoder`
 
 ## v0.6.3
 

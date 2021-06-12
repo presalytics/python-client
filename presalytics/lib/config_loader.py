@@ -105,6 +105,7 @@ class Settings(object):
     PLUGINS: typing.List[str]
     XML_TRANSFORMS: typing.List[str]
     AUTODISCOVER_PATHS = typing.List[str]
+    SUBDOCUMENT_CACHE_HOOK = typing.Optional[typing.Union[types.FunctionType, str]]
 
     def __init__(self, *args, **kwargs):
         self.get_default_settings()

@@ -3,6 +3,7 @@ import jinja2
 import typing
 import json
 import lxml
+import presalytics
 import presalytics.story.components
 import presalytics.story.outline
 import presalytics.lib.exceptions
@@ -167,8 +168,7 @@ class MatplotlibResponsiveFigure(MatplotlibFigure):
         Wraps the Matplotlib Figure in a SVG endpoint load via `<iframe>` that
         will be rendered inside of a story and rescaled to give repsonsive effect
         """
-        story_host = self.get_client(delegate_login=True).story.api_client.external_root_url
-        source_url = "{0}/cache/{1}".format(story_host, self.nonce)
+        source_url = "{0}/cache/{1}".format(presalytics.settings.HOST_WORKSPACE_API, self.nonce)
         empty_parent_div = lxml.html.Element("div", {
             'class': 'empty-parent bg-light matplotlib-responsive-container',
             'style': 'height: 100%; width: 100%, display: block; text-align: left;'

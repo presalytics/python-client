@@ -263,3 +263,9 @@ A list of string containing the dotted path names of Components that should be i
 Presalytics component registry.  The dotted path name is the same name path used for an import statement
 at the top of a python file
 """
+
+SUBDOCUMENT_CACHE_HOOK: typing.Optional[typing.Callable[[str, str], bool]] = None
+"""
+An override method that get called for caching subdocuments rendered within the Presalytics API.
+Advanced use only.  Supplied for use with self-hosted presalytics api servers.
+"""

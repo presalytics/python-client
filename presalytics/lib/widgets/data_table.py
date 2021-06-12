@@ -96,8 +96,7 @@ class DataTableWidget(presalytics.story.components.WidgetBase):
         Wraps the D3 objects in an endpoint at the story API load via a sandboxed `<iframe>` that
         will be rendered
         """
-        story_host = self.get_client(delegate_login=True).story.api_client.external_root_url
-        source_url = "{0}/cache/{1}".format(story_host, self.nonce)
+        source_url = "{0}/cache/{1}".format(presalytics.settings.HOST_WORKSPACE_API, self.nonce)
         empty_parent_div = lxml.html.Element("div", {
             'class': 'empty-parent bg-light',
             'style': 'height: 100%; width: 100%, display: block; text-align: left;'

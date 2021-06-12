@@ -32,7 +32,7 @@
 - [x] Add CLI commands for websocket
 - [x] Incorporate `requirements.txt` into `setup.py`
 - [x] Standardize linting with mypy and flake8
-- [ ] Add ids to outline pages and widgets for tracking as page and widget order changes
+- [x] Add ids to outline pages and widgets for tracking as page and widget order changes
 
 ## v0.5.24
 

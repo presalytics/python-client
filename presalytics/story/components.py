@@ -7,7 +7,9 @@ import six
 import sys
 import uuid
 import base64
+import types
 import urllib.parse
+import presalytics
 import presalytics.lib
 import presalytics.lib.registry
 import presalytics.lib.exceptions
@@ -142,6 +144,11 @@ class WidgetBase(ComponentBase):
         The nonce is included the Url that pulls the story from the Presalytics Story API.
         This nonce is to be used during the rendering process by the `to_html` method for
         widgets that implement this feature.
+
+    subdocument_cache_hook: typing.Callable[[str, str], bool]        
+        A function used to override the default subdocument caching behavior.  The function must
+        return a Boolean.  This function can be set in `settings.py` via the `SUBDOCUMENT_CACHE_HOOK` setting
+        Takes a document, as a `str` and a `nonce`, to be cached as a an argument.
     """
     outline_widget: typing.Optional['Widget']
 
@@ -153,6 +160,13 @@ class WidgetBase(ComponentBase):
         self.id = kwargs.get('id', None)
         self.outline_widget = None
         self.nonce = str(uuid.uuid4())
+        try:
+            if isinstance(presalytics.settings.SUBDOCUMENT_CACHE_HOOK, types.FunctionType):  # type: ignore
+                self.subdocument_cache_hook = presalytics.settings.SUBDOCUMENT_CACHE_HOOK   # type: ignore
+            else:
+                self.subdocument_cache_hook = presalytics.lib.util.import_string(presalytics.settings.SUBDOCUMENT_CACHE_HOOK)  # type: ignore
+        except Exception as ex:
+            logger.exception(ex, "Could not import function {}".format(str(presalytics.settings.SUBDOCUMENT_CACHE_HOOK)))  # type: ignore
 
     def render(self, **kwargs):
         subdocument = self.create_subdocument(**kwargs)
@@ -164,6 +178,8 @@ class WidgetBase(ComponentBase):
         return self.to_html(**kwargs)
 
     def cache_subdocument(self, subdocument: str) -> bool:
+        if self.subdocument_cache_hook:
+            return self.subdocument_cache_hook(subdocument, self.nonce)  # type: ignore
         subdocument_encoded = base64.b64encode(subdocument.encode('utf-8')).decode('utf-8')
         client = self.get_client()
         access_token = client.token_util.token.get('access_token', None)

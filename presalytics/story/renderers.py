@@ -7,6 +7,7 @@ import lxml.etree
 import datetime
 import six
 import sys
+import uuid
 import presalytics
 import presalytics.lib
 import presalytics.lib.plugins
@@ -86,11 +87,16 @@ class ClientSideRenderer(presalytics.story.components.Renderer):
 
         A dictionary of lists of html fragments with 3 keys: `pages`, `styles` and `scripts`
         """
-        pages = [lxml.html.tostring(p).decode('utf-8') for p in self.render()]
+        pages = {}
+        for p in self.render():
+            id = p.id
+            if not id:
+                p.id = str(uuid.uuid4())
+            pages[id] = lxml.html.tostring(p).decode('utf-8')
         scripts = self.plugin_mgr.get_scripts()
         styles = self.plugin_mgr.get_styles()
         if base64:
-            pages = presalytics.lib.util.list_to_base64(pages)
+            pages = {k: presalytics.lib.util.item_to_base64(v) for (k, v) in pages.items()}
             scripts = presalytics.lib.util.list_to_base64(scripts)
             styles = presalytics.lib.util.list_to_base64(styles)
         return {
